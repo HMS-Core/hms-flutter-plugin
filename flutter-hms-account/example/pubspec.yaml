@@ -1,0 +1,21 @@
+name: huawei_account_example
+description: Demonstrates how to use the Huawei Ads plugin.
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  huawei_account:
+    path: ../
+
+  http: ^0.12.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true

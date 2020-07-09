@@ -1,0 +1,27 @@
+name: huawei_account
+description: HUAWEI Account Kit plugin for Flutter.
+version: 5.0.0
+homepage: https://www.huawei.com
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+  flutter: ">=1.12.0 <2.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.huawei.hms.flutter.account
+        pluginClass: HmsAccountPlugin
+
+  assets:
+    - packages/huawei_account/images/logo.png
+    - packages/huawei_account/images/logored.png
