@@ -1,7 +1,8 @@
 name: huawei_location
-description: Huawei HMS Flutter Location Plugin
+description: HUAWEI Flutter Location Kit plugin combines the GPS, Wi-Fi and base station locations to help you quickly obtain precise user locations & build up global positioning capabilities.
 version: 4.0.4
 homepage: https://www.huawei.com
+repository: https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-location
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
