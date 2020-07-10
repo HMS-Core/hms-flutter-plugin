@@ -18,8 +18,8 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 
-import './constants/method.dart' as Method;
-import './constants/channel.dart' as Channel;
+import 'constants/method.dart' as Method;
+import 'constants/channel.dart' as Channel;
 import 'constants/code.dart';
 
 class Push {
