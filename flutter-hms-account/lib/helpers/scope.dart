@@ -14,7 +14,6 @@
     limitations under the License.
 */
 
-
 class Scope {
   static final String profile = "profile";
 

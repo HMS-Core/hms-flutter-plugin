@@ -14,7 +14,6 @@
     limitations under the License.
 */
 
-
 import 'package:huawei_account/helpers/auth_params.dart';
 
 class AuthParamHelper {

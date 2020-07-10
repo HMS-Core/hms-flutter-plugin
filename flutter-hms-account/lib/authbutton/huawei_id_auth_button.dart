@@ -14,15 +14,13 @@
     limitations under the License.
 */
 
-
 import 'package:flutter/material.dart';
 
-enum AuthButtonTheme {FULL_TITLE, NO_TITLE}
-enum AuthButtonBackground {BLUE, BLACK, GREY, RED, WHITE}
-enum AuthButtonRadius {SMALL, MEDIUM, LARGE}
+enum AuthButtonTheme { FULL_TITLE, NO_TITLE }
+enum AuthButtonBackground { BLUE, BLACK, GREY, RED, WHITE }
+enum AuthButtonRadius { SMALL, MEDIUM, LARGE }
 
 class HuaweiIdAuthButton extends StatelessWidget {
-
   final AuthButtonTheme theme;
   final AuthButtonBackground buttonColor;
   final AuthButtonRadius borderRadius;
@@ -30,7 +28,6 @@ class HuaweiIdAuthButton extends StatelessWidget {
 
   final double width;
   final double padding;
-
 
   final Color textColor;
   final double fontSize;
@@ -54,29 +51,47 @@ class HuaweiIdAuthButton extends StatelessWidget {
     return Container(
       width: width ?? MediaQuery.of(context).size.width / 1.1,
       child: RaisedButton(
-        elevation: 2,
+          elevation: 2,
           padding: EdgeInsets.symmetric(vertical: padding ?? 1),
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(borderRadius == AuthButtonRadius.SMALL ? 8 : borderRadius == AuthButtonRadius.MEDIUM ? 14 : borderRadius == AuthButtonRadius.LARGE ? 20 : 4)),
+              borderRadius: BorderRadius.circular(
+                  borderRadius == AuthButtonRadius.SMALL
+                      ? 8
+                      : borderRadius == AuthButtonRadius.MEDIUM
+                          ? 14
+                          : borderRadius == AuthButtonRadius.LARGE ? 20 : 4)),
           onPressed: onPressed,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              buttonColor == AuthButtonBackground.WHITE ? Image.asset("packages/huawei_account/images/logored.png", height: 45) : Image.asset("packages/huawei_account/images/logo.png", height: 45),
-              theme == AuthButtonTheme.NO_TITLE ? SizedBox()
+              buttonColor == AuthButtonBackground.WHITE
+                  ? Image.asset("packages/huawei_account/images/logored.png",
+                      height: 45)
+                  : Image.asset("packages/huawei_account/images/logo.png",
+                      height: 45),
+              theme == AuthButtonTheme.NO_TITLE
+                  ? SizedBox()
                   : Text("Log in with Huawei",
-                  style: TextStyle(
-                    color: textColor == null ? buttonColor == AuthButtonBackground.WHITE ? Colors.black : Colors.white : textColor,
-                    fontSize: fontSize ?? 17,
-                    fontWeight: fontWeight ?? FontWeight.bold,
-                  )),
+                      style: TextStyle(
+                        color: textColor == null
+                            ? buttonColor == AuthButtonBackground.WHITE
+                                ? Colors.black
+                                : Colors.white
+                            : textColor,
+                        fontSize: fontSize ?? 17,
+                        fontWeight: fontWeight ?? FontWeight.bold,
+                      )),
             ],
           ),
-          color: buttonColor == AuthButtonBackground.BLACK ? Colors.black
-                 : buttonColor == AuthButtonBackground.GREY ? Colors.grey
-                 : buttonColor == AuthButtonBackground.BLUE ? Colors.blue
-                 : buttonColor == AuthButtonBackground.WHITE ? Colors.white
-                 : Colors.red),
+          color: buttonColor == AuthButtonBackground.BLACK
+              ? Colors.black
+              : buttonColor == AuthButtonBackground.GREY
+                  ? Colors.grey
+                  : buttonColor == AuthButtonBackground.BLUE
+                      ? Colors.blue
+                      : buttonColor == AuthButtonBackground.WHITE
+                          ? Colors.white
+                          : Colors.red),
     );
   }
 }

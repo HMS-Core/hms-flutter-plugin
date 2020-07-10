@@ -14,7 +14,6 @@
     limitations under the License.
 */
 
-
 class Account {
   String type;
   String name;
@@ -25,8 +24,5 @@ class Account {
     type = json['type'] ?? null;
     name = json['name'] ?? null;
   }
-  Map<String, dynamic> toJson() => {
-    'type': type,
-    'name': name
-  };
+  Map<String, dynamic> toJson() => {'type': type, 'name': name};
 }

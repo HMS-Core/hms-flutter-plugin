@@ -14,7 +14,6 @@
     limitations under the License.
 */
 
-
 class ErrorCodes {
   static const String SIGN_IN_FAIL = "101";
   static const String SIGN_IN_WITH_AUTHORIZATION_CODE_FAIL = "102";

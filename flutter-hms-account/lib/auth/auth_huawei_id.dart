@@ -14,7 +14,6 @@
     limitations under the License.
 */
 
-
 import 'package:huawei_account/auth/account.dart';
 
 class AuthHuaweiId {
@@ -57,7 +56,8 @@ class AuthHuaweiId {
       this.gender});
 
   AuthHuaweiId.fromJson(Map<String, dynamic> json) {
-    account = json['account'] != null ? new Account.fromJson(json['account']) : null;
+    account =
+        json['account'] != null ? new Account.fromJson(json['account']) : null;
     openId = json['openId'] ?? null;
     email = json['email'] ?? null;
     accessToken = json['accessToken'] ?? null;
@@ -77,22 +77,24 @@ class AuthHuaweiId {
   }
 
   Map<String, dynamic> toJson() => {
-    'account': account == null ? null : account.toJson() != null ? account.toJson() : null,
-    'openId': openId,
-    'email': email,
-    'accessToken': accessToken,
-    'unionId': unionId,
-    'idToken': idToken,
-    'displayName': displayName,
-    'familyName': familyName,
-    'givenName': givenName,
-    'authorizationCode': authorizationCode,
-    'authorizedScopes': authorizedScopes,
-    'avatarUriString': avatarUriString,
-    'gender': gender,
-    'status': status,
-    'countryCode': countryCode,
-    'serviceCountryCode': serviceCountryCode,
-    'uid': uid
-  };
+        'account': account == null
+            ? null
+            : account.toJson() != null ? account.toJson() : null,
+        'openId': openId,
+        'email': email,
+        'accessToken': accessToken,
+        'unionId': unionId,
+        'idToken': idToken,
+        'displayName': displayName,
+        'familyName': familyName,
+        'givenName': givenName,
+        'authorizationCode': authorizationCode,
+        'authorizedScopes': authorizedScopes,
+        'avatarUriString': avatarUriString,
+        'gender': gender,
+        'status': status,
+        'countryCode': countryCode,
+        'serviceCountryCode': serviceCountryCode,
+        'uid': uid
+      };
 }
