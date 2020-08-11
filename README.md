@@ -21,3 +21,12 @@ These are the available plugins in this repository.
 | [flutter-hms-map](./flutter-hms-map) | [![version](https://img.shields.io/pub/v/huawei_map?style=for-the-badge)](./flutter-hms-map) | [Getting Started](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/preparedevenv-0000001050190755) <br/> [API Reference](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-References/bitmap-desc-0000001050430775) |
 | [flutter-hms-analytics](./flutter-hms-analytics) | [![version](https://img.shields.io/pub/v/huawei_analytics?style=for-the-badge)](./flutter-hms-analytics) | [Getting Started](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/preparing-dev-env-0000001050169140) <br/> [API Reference](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-References/overview-0000001050176764) |
 | [flutter-hms-site](./flutter-hms-site) | [![version](https://img.shields.io/pub/v/huawei_site?style=for-the-badge)](./flutter-hms-site) | [Getting Started](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/preparing-dev-environment-0000001050181325) <br/> [API Reference](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-References/search-0000001050285502) |
+
+
+## Question or issues
+If you have questions about how to use HMS samples, try the following options:
+- [Stack Overflow](https://stackoverflow.com/questions/tagged/huawei-mobile-services) is the best place for any programming questions. Be sure to tag your question with 
+**huawei-mobile-services**.
+- [Huawei Developer Forum](https://forums.developer.huawei.com/forumPortal/en/home?fid=0101187876626530001) HMS Core Module is great for general questions, or seeking recommendations and opinions.
+
+If you run into a bug in our samples, please submit an [issue](https://github.com/HMS-Core/hms-flutter-plugin/issues) to the Repository. Even better you can submit a [Pull Request](https://github.com/HMS-Core/hms-flutter-plugin/pulls) with a fix.
