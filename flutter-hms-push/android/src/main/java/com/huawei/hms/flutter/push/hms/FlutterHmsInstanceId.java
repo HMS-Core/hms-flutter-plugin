@@ -16,6 +16,8 @@ Copyright (c) Huawei Technologies Co., Ltd. 2012-2020. All rights reserved.
 
 package com.huawei.hms.flutter.push.hms;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.huawei.agconnect.config.AGConnectServicesConfig;
@@ -62,19 +64,37 @@ public class FlutterHmsInstanceId {
         result.success(appId);
     }
 
-    public static void getToken() {
+    public static void getToken(final Result result) {
         new Thread(() -> {
             String appId = AGConnectServicesConfig.fromContext(PushPlugin.getContext()).getString("client/app_id");
             if (Utils.isEmpty(appId)) appId = "";
-            String token = "";
             try {
-                token = HmsInstanceId.getInstance(PushPlugin.getContext()).getToken(appId, "HCM");
+                final String token = HmsInstanceId.getInstance(PushPlugin.getContext()).getToken(appId, "HCM");
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        result.success(token);
+                    }
+                });
+                Utils.sendIntent(PushIntent.TOKEN_INTENT_ACTION, PushIntent.TOKEN, token);
+
             } catch (ApiException e) {
                 Utils.sendIntent(PushIntent.TOKEN_INTENT_ACTION, PushIntent.TOKEN, e.getLocalizedMessage());
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        result.error(Code.RESULT_FAIL.code(), e.getMessage(), e.getCause());
+                    }
+                });
             } catch (Exception e) {
                 Utils.sendIntent(PushIntent.TOKEN_INTENT_ACTION, PushIntent.TOKEN, e.getLocalizedMessage());
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        result.error(Code.RESULT_FAIL.code(), e.getMessage(), e.getCause());
+                    }
+                });
             }
-            Utils.sendIntent(PushIntent.TOKEN_INTENT_ACTION, PushIntent.TOKEN, token);
         }).start();
     }
 

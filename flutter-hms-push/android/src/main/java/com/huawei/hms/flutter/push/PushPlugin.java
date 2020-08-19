@@ -106,7 +106,7 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler {
     private void onMethodCallToken(@NonNull MethodCall call, @NonNull Result result) {
         switch (Method.valueOf(call.method)) {
             case getToken:
-                FlutterHmsInstanceId.getToken();
+                FlutterHmsInstanceId.getToken(result);
                 break;
             case deleteToken:
                 FlutterHmsInstanceId.deleteToken();
