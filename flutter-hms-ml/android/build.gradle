@@ -1,0 +1,54 @@
+group 'com.huawei.hms.flutter.ml'
+version '1.0'
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        maven { url 'https://developer.huawei.com/repo/' }
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.6.0'
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url 'https://developer.huawei.com/repo/' }
+    }
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 29
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+}
+
+dependencies {
+    implementation 'com.huawei.hms:ml-computer-vision-ocr:2.0.1.300'
+    implementation 'com.huawei.hms:ml-computer-vision-cloud:2.0.1.300'
+    implementation 'com.huawei.hms:ml-computer-card-bcr-plugin:2.0.1.300'
+    implementation 'com.huawei.hms:ml-computer-card-gcr-plugin:2.0.1.300'
+    implementation 'com.huawei.hms:ml-computer-translate:2.0.1.300'
+    implementation 'com.huawei.hms:ml-computer-language-detection:2.0.1.300'
+    implementation 'com.huawei.hms:ml-computer-voice-asr:2.0.1.300'
+    implementation 'com.huawei.hms:ml-computer-voice-tts:2.0.1.302'
+    implementation 'com.huawei.hms:ml-computer-voice-aft:2.0.1.300'
+    implementation 'com.huawei.hms:ml-computer-vision-classification:2.0.1.300'
+    implementation 'com.huawei.hms:ml-computer-vision-object:2.0.1.302'
+    implementation 'com.huawei.hms:ml-computer-vision-face:2.0.1.300'
+    implementation 'com.huawei.hms:ml-computer-vision-segmentation:2.0.1.300'
+    implementation 'com.huawei.hms:ml-computer-vision-image-segmentation-multiclass-model:2.0.1.300'
+    implementation 'com.huawei.hms:ml-computer-vision-image-segmentation-body-model:2.0.1.300'
+}

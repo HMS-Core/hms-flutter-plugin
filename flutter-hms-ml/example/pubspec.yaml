@@ -1,0 +1,41 @@
+name: huawei_ml_example
+description: Demonstrates how to use the huawei_ml plugin.
+publish_to: 'none'
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  huawei_ml:
+    path: ../
+  image_picker: ^0.6.7+4
+  flutter_audio_recorder: ^0.5.5
+  path_provider: ^1.6.11
+  file: ^5.2.1
+  file_picker: ^1.13.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/asr.png
+    - assets/bcr.png
+    - assets/class.png
+    - assets/doc.png
+    - assets/face.png
+    - assets/gcr.png
+    - assets/icr.png
+    - assets/landmark.png
+    - assets/langdetect.png
+    - assets/ml.png
+    - assets/object.png
+    - assets/productsegment.png
+    - assets/segmentation.png
+    - assets/text.png
+    - assets/trans.png
+    - assets/tts.png
