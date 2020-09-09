@@ -25,6 +25,8 @@ These are the available plugins in this repository.
 | [flutter-hms-ml](./flutter-hms-ml) | [![version](https://img.shields.io/pub/v/huawei_ml?style=for-the-badge)](./flutter-hms-ml) | [Getting Started](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/preparing-dev-environment-0000001050181325) <br/> [API Reference](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-References/search-0000001050285502) |
 
 ## Question or issues
+If you want to evaluate more about HMS Core, [r/HMSCore on Reddit](https://www.reddit.com/r/HMSCore/) is for you to keep up with latest news about HMS Core, and to exchange insights with other developers.
+
 If you have questions about how to use HMS samples, try the following options:
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/huawei-mobile-services) is the best place for any programming questions. Be sure to tag your question with 
 **huawei-mobile-services**.
