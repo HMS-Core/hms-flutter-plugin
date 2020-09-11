@@ -231,6 +231,9 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
 
     @Override
     public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+        if( !mResultsForRequests.containsKey(requestCode) && !mResultsForRequests.containsKey(requestCode)){
+            return  true;
+        }
         final Result result = Objects.requireNonNull(mResultsForRequests.get(requestCode)).first;
         final int requestType = Objects.requireNonNull(mResultsForRequests.get(requestCode)).second;
 
