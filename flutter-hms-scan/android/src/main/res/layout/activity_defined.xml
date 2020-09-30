@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:my_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <FrameLayout
+            android:id="@+id/rim"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+    </FrameLayout>
+
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:gravity="center_vertical">
+
+        <ImageView
+                android:id="@+id/flush_btn"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:visibility="gone"
+                android:gravity="center"
+                android:src="@drawable/flashlight_off" />
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
+                android:background="#FF000000"
+                android:alpha="0.1" />
+
+        <TextView
+                android:layout_above="@id/scan_area"
+                android:layout_marginBottom="10dp"
+                android:layout_centerHorizontal="true"
+                android:text="@string/scan_tip"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_height="20dp"
+                android:layout_width="220dp" />
+
+        <ImageView
+                android:id="@+id/scan_area"
+                android:layout_width="240dp"
+                android:layout_height="240dp"
+                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/colors" />
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:gravity="center_vertical">
+
+
+        <TextView
+                android:layout_marginStart="10sp"
+                android:layout_toEndOf="@+id/back_img"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="@string/title"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        <ImageView
+                android:id="@+id/back_img"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="12dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:src="@drawable/back" />
+
+        <ImageView
+                android:id="@+id/img_btn"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="12dp"
+                android:gravity="center"
+                android:padding="12dp"
+                android:src="@drawable/photo"
+                android:visibility="invisible" />
+    </RelativeLayout>
+
+</FrameLayout>
