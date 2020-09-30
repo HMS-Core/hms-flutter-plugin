@@ -17,18 +17,46 @@
 import 'dart:convert';
 
 class TimeOfWeek {
-  int week;
-  String time;
+  static const int _DAY_MIN = 0;
+  static const int _DAY_MAX = 6;
+  static const int _TIME_MIN = 0;
+  static const int _TIME_MAX = 2359;
+
+  int _day;
+  String _time;
 
   TimeOfWeek({
-    this.week,
-    this.time,
-  });
+    int day,
+    String time,
+  })  : _day = day,
+        _time = time;
+
+  int get day => _day;
+
+  set day(int day) {
+    if (day < _DAY_MIN || day > _DAY_MAX) {
+      throw FormatException("TimeOfWeek day param exceeded the range");
+    }
+
+    _day = day;
+  }
+
+  String get time => _time;
+
+  set time(String time) {
+    final int intValue = int.parse(time);
+
+    if (intValue < _TIME_MIN || intValue > _TIME_MAX) {
+      throw FormatException("TimeOfWeek time param exceeded the range");
+    }
+
+    _time = time;
+  }
 
   Map<String, dynamic> toMap() {
     return {
-      'week': week,
-      'time': time,
+      'day': _day,
+      'time': _time,
     };
   }
 
@@ -36,7 +64,7 @@ class TimeOfWeek {
     if (map == null) return null;
 
     return TimeOfWeek(
-      week: map["week"] == null ? null : map["week"],
+      day: map["day"] == null ? null : map["day"],
       time: map["time"] == null ? null : map["time"],
     );
   }
@@ -47,15 +75,15 @@ class TimeOfWeek {
       TimeOfWeek.fromMap(json.decode(source));
 
   @override
-  String toString() => 'TimeOfWeek(week: $week, time: $time)';
+  String toString() => 'TimeOfWeek(day: $_day, time: $_time)';
 
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 
-    return o is TimeOfWeek && o.week == week && o.time == time;
+    return o is TimeOfWeek && o._day == _day && o._time == _time;
   }
 
   @override
-  int get hashCode => week.hashCode ^ time.hashCode;
+  int get hashCode => _day.hashCode ^ _time.hashCode;
 }

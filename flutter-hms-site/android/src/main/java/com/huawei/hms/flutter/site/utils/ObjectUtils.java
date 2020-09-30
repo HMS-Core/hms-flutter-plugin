@@ -14,8 +14,22 @@
     limitations under the License.
 */
 
-package com.huawei.hms.flutter.site_example;
+package com.huawei.hms.flutter.site.utils;
 
-import io.flutter.embedding.android.FlutterActivity;
+public final class ObjectUtils {
+    private ObjectUtils() {
+    }
 
-public class MainActivity extends FlutterActivity { }
+    /**
+     * Utility method that castes given object to given class type
+     *
+     * @param source Source object to be casted
+     * @param clazz  Class that object will be casted to its type
+     * @param <S>    Source object's type
+     * @param <D>    Destination type
+     * @return Object that casted to D type
+     */
+    public static <S, D> D cast(final S source, final Class<D> clazz) {
+        return clazz.cast(source);
+    }
+}

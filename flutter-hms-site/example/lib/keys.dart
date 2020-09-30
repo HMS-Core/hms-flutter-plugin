@@ -27,4 +27,7 @@ class Keys {
   static const String SCREEN_QUERY = "screenQuery";
   static const String SEARCH_QUERY = "searchQuery";
   static const String RESULT_QUERY = "resultQuery";
+  static const String ENABLE_LOGGER = "enableLogger";
+  static const String DISABLE_LOGGER = "disableLogger";
+  static const String SITE_SEARCH = "siteSearch";
 }

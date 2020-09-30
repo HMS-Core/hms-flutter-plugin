@@ -26,6 +26,7 @@ class Poi {
   String phone;
   List<String> photoUrls;
   List<String> poiTypes;
+  List<String> hwPoiTypes;
   double rating;
   String websiteUrl;
 
@@ -35,6 +36,7 @@ class Poi {
     this.phone,
     this.photoUrls,
     this.poiTypes,
+    this.hwPoiTypes,
     this.rating,
     this.websiteUrl,
   });
@@ -46,6 +48,7 @@ class Poi {
       'phone': phone,
       'photoUrls': photoUrls,
       'poiTypes': poiTypes,
+      'hwPoiTypes': hwPoiTypes,
       'rating': rating,
       'websiteUrl': websiteUrl,
     };
@@ -67,6 +70,9 @@ class Poi {
       poiTypes: map["poiTypes"] == null
           ? null
           : List<String>.from(map["poiTypes"].map((x) => x)),
+      hwPoiTypes: map["hwPoiTypes"] == null
+          ? null
+          : List<String>.from(map["hwPoiTypes"].map((x) => x)),
       rating: map["rating"] == null ? null : map["rating"].toDouble(),
       websiteUrl: map["websiteUrl"] == null ? null : map["websiteUrl"],
     );
@@ -78,7 +84,9 @@ class Poi {
 
   @override
   String toString() {
-    return 'Poi(internationalPhone: $internationalPhone, openingHours: $openingHours, phone: $phone, photoUrls: $photoUrls, poiTypes: $poiTypes, rating: $rating, websiteUrl: $websiteUrl)';
+    return 'Poi(internationalPhone: $internationalPhone, openingHours: '
+        '$openingHours, phone: $phone, photoUrls: $photoUrls, poiTypes: '
+        '$poiTypes, hwPoiTypes: $hwPoiTypes, rating: $rating, websiteUrl: $websiteUrl)';
   }
 
   @override
@@ -91,6 +99,7 @@ class Poi {
         o.phone == phone &&
         listEquals(o.photoUrls, photoUrls) &&
         listEquals(o.poiTypes, poiTypes) &&
+        listEquals(o.hwPoiTypes, hwPoiTypes) &&
         o.rating == rating &&
         o.websiteUrl == websiteUrl;
   }
@@ -102,6 +111,7 @@ class Poi {
         phone.hashCode ^
         photoUrls.hashCode ^
         poiTypes.hashCode ^
+        hwPoiTypes.hashCode ^
         rating.hashCode ^
         websiteUrl.hashCode;
   }

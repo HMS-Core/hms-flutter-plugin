@@ -22,6 +22,8 @@ import 'model/nearby_search_request.dart';
 import 'model/nearby_search_response.dart';
 import 'model/query_suggestion_request.dart';
 import 'model/query_suggestion_response.dart';
+import 'model/search_intent.dart';
+import 'model/site.dart';
 import 'model/text_search_request.dart';
 import 'model/text_search_response.dart';
 
@@ -61,5 +63,18 @@ class SearchService {
       QuerySuggestionRequest request) async {
     return QuerySuggestionResponse.fromJson(
         await _methodChannel.invokeMethod('querySuggestion', request.toMap()));
+  }
+
+  Future<Site> startSiteSearchActivity(SearchIntent searchIntent) async {
+    return Site.fromJson(await _methodChannel.invokeMethod(
+        'startSiteSearchActivity', searchIntent.toMap()));
+  }
+
+  Future<void> enableLogger() async {
+    await _methodChannel.invokeMethod('enableLogger');
+  }
+
+  Future<void> disableLogger() async {
+    await _methodChannel.invokeMethod('disableLogger');
   }
 }

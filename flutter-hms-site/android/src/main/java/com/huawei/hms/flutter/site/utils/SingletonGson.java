@@ -14,8 +14,24 @@
     limitations under the License.
 */
 
-package com.huawei.hms.flutter.site_example;
+package com.huawei.hms.flutter.site.utils;
 
-import io.flutter.embedding.android.FlutterActivity;
+import com.google.gson.Gson;
 
-public class MainActivity extends FlutterActivity { }
+public final class SingletonGson {
+    private static volatile Gson instance;
+
+    private SingletonGson() {
+    }
+
+    public static synchronized Gson getInstance() {
+        if (instance == null) {
+            synchronized (SingletonGson.class) {
+                if (instance == null) {
+                    instance = new Gson();
+                }
+            }
+        }
+        return instance;
+    }
+}

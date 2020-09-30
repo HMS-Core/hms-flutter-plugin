@@ -15,6 +15,9 @@
 */
 
 import 'package:flutter/material.dart';
+import 'package:huawei_site/model/search_intent.dart';
+import 'package:huawei_site/model/site.dart';
+import 'package:huawei_site/search_service.dart';
 
 import '../keys.dart';
 import '../widgets/custom_button.dart';
@@ -23,8 +26,33 @@ import 'nearby_search_screen.dart';
 import 'querysuggestion_search_screen.dart';
 import 'text_search_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   static const String id = 'home_screen';
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  void _showAlertDialog({String title, String message}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            FlatButton(
+              child: Text("Close"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +101,20 @@ class HomeScreen extends StatelessWidget {
                 Navigator.pushNamed(
                   context,
                   QuerySuggestionSearchScreen.id,
+                );
+              },
+            ),
+            CustomButton(
+              key: Key(Keys.SITE_SEARCH),
+              text: "Site Search",
+              onPressed: () async {
+                final Site site =
+                    await SearchService().startSiteSearchActivity(SearchIntent()
+                      ..hint = "Enter "
+                          "search term");
+                _showAlertDialog(
+                  title: site.name,
+                  message: site.toString(),
                 );
               },
             ),

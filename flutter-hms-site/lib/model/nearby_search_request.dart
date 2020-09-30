@@ -17,6 +17,7 @@
 import 'dart:convert';
 
 import 'coordinate.dart';
+import 'hwlocation_type.dart';
 import 'location_type.dart';
 
 class NearbySearchRequest {
@@ -28,6 +29,7 @@ class NearbySearchRequest {
   LocationType poiType;
   String language;
   String politicalView;
+  HwLocationType hwPoiType;
 
   NearbySearchRequest({
     this.pageSize,
@@ -38,6 +40,7 @@ class NearbySearchRequest {
     this.poiType,
     this.language,
     this.politicalView,
+    this.hwPoiType,
   });
 
   Map<String, dynamic> toMap() {
@@ -50,6 +53,7 @@ class NearbySearchRequest {
       'poiType': poiType?.toString(),
       'language': language,
       'politicalView': politicalView,
+      'hwPoiType': hwPoiType?.toString(),
     };
   }
 
@@ -65,6 +69,7 @@ class NearbySearchRequest {
       poiType: LocationType.fromString(map['poiType']),
       language: map['language'],
       politicalView: map['politicalView'],
+      hwPoiType: HwLocationType.fromString(map['hwPoiType']),
     );
   }
 
@@ -75,7 +80,7 @@ class NearbySearchRequest {
 
   @override
   String toString() {
-    return 'NearbySearchRequest(pageSize: $pageSize, pageIndex: $pageIndex, query: $query, location: $location, radius: $radius, poiType: $poiType, language: $language, politicalView: $politicalView)';
+    return 'NearbySearchRequest(pageSize: $pageSize, pageIndex: $pageIndex, query: $query, location: $location, radius: $radius, poiType: $poiType, language: $language, politicalView: $politicalView, hwPoiType: $hwPoiType)';
   }
 
   @override
@@ -90,7 +95,8 @@ class NearbySearchRequest {
         o.radius == radius &&
         o.poiType == poiType &&
         o.language == language &&
-        o.politicalView == politicalView;
+        o.politicalView == politicalView &&
+        o.hwPoiType == hwPoiType;
   }
 
   @override
@@ -102,6 +108,7 @@ class NearbySearchRequest {
         radius.hashCode ^
         poiType.hashCode ^
         language.hashCode ^
-        politicalView.hashCode;
+        politicalView.hashCode ^
+        hwPoiType.hashCode;
   }
 }

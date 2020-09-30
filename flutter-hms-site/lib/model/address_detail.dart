@@ -25,6 +25,7 @@ class AddressDetail {
   String subLocality;
   String thoroughfare;
   String postalCode;
+  String streetNumber;
 
   AddressDetail({
     this.countryCode,
@@ -35,6 +36,7 @@ class AddressDetail {
     this.subLocality,
     this.thoroughfare,
     this.postalCode,
+    this.streetNumber,
   });
 
   Map<String, dynamic> toMap() {
@@ -47,6 +49,7 @@ class AddressDetail {
       'subLocality': subLocality,
       'thoroughfare': thoroughfare,
       'postalCode': postalCode,
+      'streetNumber': streetNumber,
     };
   }
 
@@ -62,6 +65,7 @@ class AddressDetail {
       subLocality: map["subLocality"] == null ? null : map["subLocality"],
       thoroughfare: map["thoroughfare"] == null ? null : map["thoroughfare"],
       postalCode: map["postalCode"] == null ? null : map["postalCode"],
+      streetNumber: map["streetNumber"] == null ? null : map["streetNumber"],
     );
   }
 
@@ -72,7 +76,7 @@ class AddressDetail {
 
   @override
   String toString() {
-    return 'AddressDetail(countryCode: $countryCode, country: $country, adminArea: $adminArea, subAdminArea: $subAdminArea, locality: $locality, subLocality: $subLocality, thoroughfare: $thoroughfare, postalCode: $postalCode)';
+    return 'AddressDetail(countryCode: $countryCode, country: $country, adminArea: $adminArea, subAdminArea: $subAdminArea, locality: $locality, subLocality: $subLocality, thoroughfare: $thoroughfare, postalCode: $postalCode, streetNumber: $streetNumber)';
   }
 
   @override
@@ -87,7 +91,8 @@ class AddressDetail {
         o.locality == locality &&
         o.subLocality == subLocality &&
         o.thoroughfare == thoroughfare &&
-        o.postalCode == postalCode;
+        o.postalCode == postalCode &&
+        o.streetNumber == streetNumber;
   }
 
   @override
@@ -99,6 +104,7 @@ class AddressDetail {
         locality.hashCode ^
         subLocality.hashCode ^
         thoroughfare.hashCode ^
-        postalCode.hashCode;
+        postalCode.hashCode ^
+        streetNumber.hashCode;
   }
 }

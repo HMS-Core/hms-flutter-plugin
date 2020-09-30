@@ -3,15 +3,16 @@
 # Run `pod lib lint site.podspec' to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'huwaei_site'
-  s.version          = '4.0.4'
+  s.name             = 'huawei_site'
+  s.version          = '5.0.1+300'
   s.summary          = 'HUAWEI Site Kit plugin for Flutter.'
   s.description      = <<-DESC
-HUAWEI Site Kit plugin for Flutter.
+With Huawei Site Kit plugin for Flutter, your app can provide users with convenient and secure access to diverse, place-related services.
                        DESC
   s.homepage         = 'https://www.huawei.com'
-  s.license          = { :file => '../LICENSE' }
-  s.source           = { :path => '.' }
+  s.license          = { :type => 'Apache 2.0', :file => '../LICENSE' }
+  s.author           = { 'Huawei Technologies' => 'huaweideveloper1@gmail.com' }
+  s.source           = { :git => 'https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-site' }
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'

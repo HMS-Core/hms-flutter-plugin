@@ -17,6 +17,7 @@
 import 'dart:convert';
 
 import 'coordinate.dart';
+import 'hwlocation_type.dart';
 import 'location_type.dart';
 
 class TextSearchRequest {
@@ -26,6 +27,7 @@ class TextSearchRequest {
   int radius;
   int pageSize;
   LocationType poiType;
+  HwLocationType hwPoiType;
   int pageIndex;
   String countryCode;
   String politicalView;
@@ -37,6 +39,7 @@ class TextSearchRequest {
     this.radius,
     this.pageSize,
     this.poiType,
+    this.hwPoiType,
     this.pageIndex,
     this.countryCode,
     this.politicalView,
@@ -50,6 +53,7 @@ class TextSearchRequest {
       'radius': radius,
       'pageSize': pageSize,
       'poiType': poiType?.toString(),
+      'hwPoiType': hwPoiType?.toString(),
       'pageIndex': pageIndex,
       'countryCode': countryCode,
       'politicalView': politicalView,
@@ -66,6 +70,7 @@ class TextSearchRequest {
       radius: map['radius'],
       pageSize: map['pageSize'],
       poiType: LocationType.fromString(map['poiType']),
+      hwPoiType: HwLocationType.fromString(map['hwPoiType']),
       pageIndex: map['pageIndex'],
       countryCode: map['countryCode'],
       politicalView: map['politicalView'],
@@ -79,7 +84,9 @@ class TextSearchRequest {
 
   @override
   String toString() {
-    return 'TextSearchRequest(language: $language, query: $query, location: $location, radius: $radius, pageSize: $pageSize, poiType: $poiType, pageIndex: $pageIndex, countryCode: $countryCode, politicalView: $politicalView)';
+    return 'TextSearchRequest(language: $language, query: $query, location: '
+        '$location, radius: $radius, pageSize: $pageSize, poiType: $poiType, '
+        'hwPoiType: $hwPoiType, pageIndex: $pageIndex, countryCode: $countryCode, politicalView: $politicalView)';
   }
 
   @override
@@ -93,6 +100,7 @@ class TextSearchRequest {
         o.radius == radius &&
         o.pageSize == pageSize &&
         o.poiType == poiType &&
+        o.hwPoiType == hwPoiType &&
         o.pageIndex == pageIndex &&
         o.countryCode == countryCode &&
         o.politicalView == politicalView;
@@ -106,6 +114,7 @@ class TextSearchRequest {
         radius.hashCode ^
         pageSize.hashCode ^
         poiType.hashCode ^
+        hwPoiType.hashCode ^
         pageIndex.hashCode ^
         countryCode.hashCode ^
         politicalView.hashCode;

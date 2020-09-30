@@ -14,8 +14,8 @@
     limitations under the License.
 */
 
-package com.huawei.hms.flutter.site_example;
+package com.huawei.hms.flutter.site.constants;
 
-import io.flutter.embedding.android.FlutterActivity;
-
-public class MainActivity extends FlutterActivity { }
+public interface Channel {
+    String METHOD_SEARCH_SERVICE = "com.huawei.hms.flutter.site/method";
+}
