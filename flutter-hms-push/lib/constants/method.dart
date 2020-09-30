@@ -1,5 +1,5 @@
 /*
-Copyright (c) Huawei Technologies Co., Ltd. 2012-2020. All rights reserved.
+Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -14,12 +14,14 @@ Copyright (c) Huawei Technologies Co., Ltd. 2012-2020. All rights reserved.
     limitations under the License.
 */
 
+/// API Constant Method Name Definitions ///
 const String turnOnPush = "turnOnPush";
 const String turnOffPush = "turnOffPush";
 
 const String getId = "getId";
 const String getAAID = "getAAID";
 const String getAppId = "getAppId";
+const String getOdid = "getOdid";
 const String getToken = "getToken";
 const String getCreationTime = "getCreationTime";
 
@@ -32,5 +34,30 @@ const String unsubscribe = "unsubscribe";
 const String setAutoInitEnabled = "setAutoInitEnabled";
 const String isAutoInitEnabled = "isAutoInitEnabled";
 
+const String send = "send";
+
+const String getInitialNotification = "getInitialNotification";
+const String onNotificationOpenedApp = "onNotificationOpenedApp";
+
 const String getAgConnectValues = "getAgConnectValues";
 const String showToast = "showToast";
+
+const String getInitialIntent = "getInitialIntent";
+
+const String localNotification = "localNotification";
+const String localNotificationSchedule = "localNotificationSchedule";
+const String getNotifications = "getNotifications";
+const String getScheduledNotifications = "getScheduledNotifications";
+const String getChannels = "getChannels";
+const String deleteChannel = "deleteChannel";
+const String channelExists = "channelExists";
+const String channelBlocked = "channelBlocked";
+const String cancelNotifications = "cancelNotifications";
+const String cancelAllNotifications = "cancelAllNotifications";
+const String cancelScheduledNotifications = "cancelScheduledNotifications";
+const String cancelNotificationsWithTag = "cancelNotificationsWithTag";
+const String cancelNotificationsWithId = "cancelNotificationsWithId";
+const String cancelNotificationsWithIdTag = "cancelNotificationsWithIdTag";
+
+const String enableLogger = "enableLogger";
+const String disableLogger = "disableLogger";

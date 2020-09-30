@@ -26,6 +26,7 @@ public enum Method {
     getAppId,
     getToken,
     getCreationTime,
+    getOdid,
 
     deleteAAID,
     deleteToken,
@@ -33,8 +34,31 @@ public enum Method {
     subscribe,
     unsubscribe,
 
+    send,
+
     setAutoInitEnabled,
     isAutoInitEnabled,
+
+    getInitialIntent,
+
+    localNotification,
+    localNotificationSchedule,
+    getInitialNotification,
+    getNotifications,
+    getScheduledNotifications,
+    getChannels,
+    deleteChannel,
+    channelExists,
+    channelBlocked,
+    cancelNotifications,
+    cancelAllNotifications,
+    cancelScheduledNotifications,
+    cancelNotificationsWithTag,
+    cancelNotificationsWithId,
+    cancelNotificationsWithIdTag,
+
+    enableLogger,
+    disableLogger,
 
     getAgConnectValues,
     showToast;

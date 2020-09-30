@@ -19,7 +19,11 @@ package com.huawei.hms.flutter.push.constants;
 public enum Channel {
 
     TOKEN_CHANNEL("com.huawei.flutter.push/token"),
-    DATA_MESSAGE_CHANNEL("com.huawei.flutter.push/data_message"),
+    REMOTE_MESSAGE_RECEIVE_CHANNEL("com.huawei.flutter.push/remote_message_receive"),
+    REMOTE_MESSAGE_SEND_STATUS_CHANNEL("com.huawei.flutter.push/remote_message_send_status"),
+    REMOTE_MESSAGE_NOTIFICATION_INTENT_CHANNEL("com.huawei.flutter.push/remote_message_notification_intent"),
+    NOTIFICATION_OPEN_CHANNEL("com.huawei.flutter.push/notification_open"),
+    LOCAL_NOTIFICATION_CLICK_CHANNEL("com.huawei.flutter.push/local_notification_click"),
     METHOD_CHANNEL("com.huawei.flutter.push/method");
 
     private String id;

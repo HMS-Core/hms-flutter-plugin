@@ -23,12 +23,13 @@ import android.content.IntentFilter;
 import com.huawei.hms.flutter.push.constants.PushIntent;
 import com.huawei.hms.flutter.push.receiver.TokenReceiver;
 
-import io.flutter.plugin.common.EventChannel.StreamHandler;
 import io.flutter.plugin.common.EventChannel.EventSink;
+import io.flutter.plugin.common.EventChannel.StreamHandler;
 
 public class TokenStreamHandler implements StreamHandler {
 
     private Context context;
+    private BroadcastReceiver tokenEventBroadcastReceiver;
 
     public TokenStreamHandler(Context context) {
         this.context = context;
@@ -36,16 +37,14 @@ public class TokenStreamHandler implements StreamHandler {
 
     @Override
     public void onListen(Object arguments, EventSink events) {
-        BroadcastReceiver tokenEventBroadcastReceiver = createTokenEventBroadcastReceiver(events);
-        context.registerReceiver(
-                tokenEventBroadcastReceiver,
-                new IntentFilter(PushIntent.TOKEN_INTENT_ACTION.id())
-        );
+        tokenEventBroadcastReceiver = createTokenEventBroadcastReceiver(events);
+        context.registerReceiver(tokenEventBroadcastReceiver,
+                new IntentFilter(PushIntent.TOKEN_INTENT_ACTION.id()));
     }
 
     @Override
     public void onCancel(Object arguments) {
-
+        context.unregisterReceiver(tokenEventBroadcastReceiver);
     }
 
     private BroadcastReceiver createTokenEventBroadcastReceiver(final EventSink events) {

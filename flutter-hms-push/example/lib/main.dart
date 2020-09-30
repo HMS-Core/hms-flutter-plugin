@@ -1,5 +1,5 @@
 /*
-Copyright (c) Huawei Technologies Co., Ltd. 2012-2020. All rights reserved.
+Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -14,16 +14,19 @@ Copyright (c) Huawei Technologies Co., Ltd. 2012-2020. All rights reserved.
     limitations under the License.
 */
 
-import 'package:flutter/material.dart';
 import 'dart:async';
-//import 'dart:convert';
+import 'dart:math';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:huawei_push/model/remote_message.dart';
 import 'package:huawei_push/push.dart';
-import 'package:huawei_push/constants/channel.dart' as Channel;
+import 'package:huawei_push_example/custom_intent_page.dart';
+import 'package:huawei_push_example/local_notification.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MaterialApp(home: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -35,37 +38,61 @@ class _MyAppState extends State<MyApp> {
   TextEditingController logTextController;
   TextEditingController topicTextController;
 
-  String _token = '';
-  static const EventChannel TokenEventChannel =
-      EventChannel(Channel.TOKEN_CHANNEL);
-  static const EventChannel DataMessageEventChannel =
-      EventChannel(Channel.DATA_MESSAGE_CHANNEL);
+  final padding = EdgeInsets.symmetric(vertical: 1.0, horizontal: 16);
 
-  void _onTokenEvent(Object event) {
-    setState(() {
-      _token = event;
-    });
-    showResult("TokenEvent", event);
+  String _token = '';
+
+  void _onTokenEvent(String event) {
+    _token = event;
+    showResult("TokenEvent", _token);
   }
 
   void _onTokenError(Object error) {
-    setState(() {
-      _token = error;
-    });
-    showResult("TokenEvent", error);
+    PlatformException e = error;
+    showResult("TokenErrorEvent", e.message);
   }
 
-  void _onDataMessageEvent(Object event) {
-    showResult("DataMessageEvent", event);
-//    Map dataMessageMap = json.decode(event);
-//    showResult("DataMessageEvent", dataMessageMap["key"]);
+  void _onMessageReceived(RemoteMessage rm) {
+    String data = rm.data;
+    showResult("onRemoteMessageReceived", "Data: " + data);
   }
 
-  void _onDataMessageError(Object error) {
-    showResult("DataMessageEvent", error);
+  void _onMessageReceiveError(Object error) {
+    showResult("onRemoteMessageReceiveError", error.toString());
   }
 
-  final padding = EdgeInsets.symmetric(vertical: 1.0, horizontal: 16);
+  void _onRemoteMessageSendStatus(String event) {
+    showResult("RemoteMessageSendStatus", "Status: " + event.toString());
+  }
+
+  void _onRemoteMessageSendError(Object error) {
+    PlatformException e = error;
+    showResult("RemoteMessageSendError", "Error: " + e.toString());
+  }
+
+  void _onNewIntent(String intentString) {
+    // For navigating to the custom intent page (deep link) the custom
+    // intent that sent from the push kit console is:
+    // pushkitexample://CustomIntentPage
+    showResult('CustomIntentEvent: ', intentString);
+    List parsedString = intentString.split("://");
+    if (parsedString[1] == "CustomIntentPage") {
+      SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => CustomIntentPage()));
+      });
+    }
+  }
+
+  void _onIntentError(Object err) {
+    PlatformException e = err;
+    print("Error on intent stream: " + e.toString());
+  }
+
+  void _onNotificationOpenedApp(RemoteMessage remoteMessage) {
+    showResult("onNotificationOpenedApp", remoteMessage.toMap().toString());
+    print("[onNotificationOpenedApp]" + remoteMessage.toMap().toString());
+  }
 
   @override
   void initState() {
@@ -77,10 +104,13 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> initPlatformState() async {
     if (!mounted) return;
-    TokenEventChannel.receiveBroadcastStream()
-        .listen(_onTokenEvent, onError: _onTokenError);
-    DataMessageEventChannel.receiveBroadcastStream()
-        .listen(_onDataMessageEvent, onError: _onDataMessageError);
+    Push.getTokenStream.listen(_onTokenEvent, onError: _onTokenError);
+    Push.getIntentStream.listen(_onNewIntent, onError: _onIntentError);
+    Push.onNotificationOpenedApp.listen(_onNotificationOpenedApp);
+    Push.onMessageReceivedStream
+        .listen(_onMessageReceived, onError: _onMessageReceiveError);
+    Push.getRemoteMsgSendStatusStream
+        .listen(_onRemoteMessageSendStatus, onError: _onRemoteMessageSendError);
   }
 
   @override
@@ -91,79 +121,98 @@ class _MyAppState extends State<MyApp> {
   }
 
   void turnOnPush() async {
-    dynamic result = await Push.turnOnPush();
+    String result = await Push.turnOnPush();
     showResult("turnOnPush", result);
   }
 
   void turnOffPush() async {
-    dynamic result = await Push.turnOffPush();
+    String result = await Push.turnOffPush();
     showResult("turnOffPush", result);
   }
 
   void getId() async {
-    dynamic result = await Push.getId();
+    String result = await Push.getId();
     showResult("getId", result);
   }
 
   void getAAID() async {
-    dynamic result = await Push.getAAID();
+    String result = await Push.getAAID();
     showResult("getAAID", result);
   }
 
   void getAppId() async {
-    dynamic result = await Push.getAppId();
+    String result = await Push.getAppId();
     showResult("getAppId", result);
   }
 
-  void getToken() async {
-    dynamic result = await Push.getToken();
-    showResult("getToken", result);
+  void getOdid() async {
+    String result = await Push.getOdid();
+    showResult("getOdid", result);
   }
 
   void getCreationTime() async {
-    dynamic result = await Push.getCreationTime();
+    String result = await Push.getCreationTime();
     showResult("getCreationTime", result);
   }
 
   void deleteAAID() async {
-    dynamic result = await Push.deleteAAID();
+    String result = await Push.deleteAAID();
     showResult("deleteAAID", result);
   }
 
-  void deleteToken() async {
-    dynamic result = await Push.deleteToken();
-    showResult("deleteToken", result);
+  void sendRemoteMsg() async {
+    RemoteMessageBuilder remoteMsg = RemoteMessageBuilder(
+        to: '',
+        data: {"Data": "test"},
+        messageType: "my_type",
+        ttl: 120,
+        messageId: Random().nextInt(10000).toString(),
+        collapseKey: '-1',
+        sendMode: 1,
+        receiptMode: 1);
+    String result = await Push.sendRemoteMessage(remoteMsg);
+    showResult("sendRemoteMessage", result);
   }
 
   void subscribe() async {
     String topic = topicTextController.text;
-    dynamic result = await Push.subscribe(topic);
+    String result = await Push.subscribe(topic);
     showResult("subscribe", result);
   }
 
   void unsubscribe() async {
     String topic = topicTextController.text;
-    dynamic result = await Push.unsubscribe(topic);
+    String result = await Push.unsubscribe(topic);
     showResult("unsubscribe", result);
   }
 
   void enableAutoInit() async {
-    dynamic result = await Push.setAutoInitEnabled(true);
+    String result = await Push.setAutoInitEnabled(true);
     showResult("enableAutoInit", result);
   }
 
   void disableAutoInit() async {
-    dynamic result = await Push.setAutoInitEnabled(false);
+    String result = await Push.setAutoInitEnabled(false);
     showResult("disableAutoInit", result);
   }
 
   void isAutoInitEnabled() async {
-    dynamic result = await Push.isAutoInitEnabled();
+    bool result = await Push.isAutoInitEnabled();
     showResult("isAutoInitEnabled", result ? "Enabled" : "Disabled");
   }
 
+  void getInitialNotification() async {
+    final RemoteMessage remoteMessage = await Push.getInitialNotification();
+    showResult("getInitialNotification", remoteMessage?.toMap().toString());
+  }
+
+  void getInitialIntent() async {
+    final String initialIntent = await Push.getInitialIntent();
+    showResult("getInitialIntent", initialIntent ?? '');
+  }
+
   void getAgConnectValues() async {
-    dynamic result = await Push.getAgConnectValues();
+    String result = await Push.getAgConnectValues();
     showResult("getAgConnectValues", result);
   }
 
@@ -174,8 +223,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   void showResult(String name, [String msg = "Button pressed."]) {
-    appendLog(name + ": " + msg);
-    Push.showToast(msg);
+    appendLog("[" + name + "]" + ": " + msg);
+    if (msg.isNotEmpty) Push.showToast(msg);
   }
 
   void appendLog([String msg = "Button pressed."]) {
@@ -184,97 +233,80 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  Widget expandedButton(
+    int flex,
+    Function func,
+    String txt, {
+    double fontSize = 16.0,
+    Color color,
+  }) {
+    return Expanded(
+      flex: flex,
+      child: Padding(
+        padding: padding,
+        child: RaisedButton(
+          onPressed: func,
+          color: color,
+          child: Text(
+            txt,
+            style: TextStyle(fontSize: fontSize),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('🔔 HMS Push Kit Demo'),
-        ),
-        body: Center(
-            child: ListView(shrinkWrap: true, children: <Widget>[
-          Row(children: <Widget>[
-            Expanded(
-              flex: 5,
-              child: Padding(
-                  padding: padding,
-                  child: RaisedButton(
-                    onPressed: () => turnOnPush(),
-                    child: Text('TurnOnPush', style: TextStyle(fontSize: 20)),
-                  )),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('🔔 HMS Push Kit Demo'),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: ListView(
+          shrinkWrap: true,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                expandedButton(
+                    5,
+                    () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => CustomIntentPage())),
+                    "Open Custom Intent URI Page",
+                    color: Colors.deepOrangeAccent),
+              ],
             ),
-            Expanded(
-              flex: 5,
-              child: Padding(
-                  padding: padding,
-                  child: RaisedButton(
-                    onPressed: () => turnOffPush(),
-                    child: Text('TurnOffPush', style: TextStyle(fontSize: 20)),
-                  )),
-            ),
-          ]),
-          Row(children: <Widget>[
-            Expanded(
-              flex: 5,
-              child: Padding(
-                  padding: padding,
-                  child: RaisedButton(
-                    onPressed: () => getId(),
-                    child: Text('GetID', style: TextStyle(fontSize: 20)),
-                  )),
-            ),
-            Expanded(
-              flex: 5,
-              child: Padding(
-                  padding: padding,
-                  child: RaisedButton(
-                    onPressed: () => getAAID(),
-                    child: Text('GetAAID', style: TextStyle(fontSize: 20)),
-                  )),
-            ),
-          ]),
-          Row(children: <Widget>[
-            Expanded(
-              flex: 5,
-              child: Padding(
-                  padding: padding,
-                  child: RaisedButton(
-                    onPressed: () => getToken(),
-                    child: Text('GetToken', style: TextStyle(fontSize: 20)),
-                  )),
-            ),
-            Expanded(
-              flex: 5,
-              child: Padding(
-                  padding: padding,
-                  child: RaisedButton(
-                    onPressed: () => deleteToken(),
-                    child: Text('DeleteToken', style: TextStyle(fontSize: 20)),
-                  )),
-            ),
-          ]),
-          Row(children: <Widget>[
-            Expanded(
-              flex: 5,
-              child: Padding(
-                  padding: padding,
-                  child: RaisedButton(
-                    onPressed: () => getCreationTime(),
-                    child:
-                        Text('GetCreationTime', style: TextStyle(fontSize: 20)),
-                  )),
-            ),
-            Expanded(
-              flex: 5,
-              child: Padding(
-                  padding: padding,
-                  child: RaisedButton(
-                    onPressed: () => deleteAAID(),
-                    child: Text('DeleteAAID', style: TextStyle(fontSize: 20)),
-                  )),
-            ),
-          ]),
-          Padding(
+            Row(children: <Widget>[
+              expandedButton(
+                  5,
+                  () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => LocalNotificationPage())),
+                  'Local Notification',
+                  color: Colors.blue),
+            ]),
+            Row(children: <Widget>[
+              expandedButton(5, () => turnOnPush(), 'TurnOnPush', fontSize: 20),
+              expandedButton(5, () => turnOffPush(), 'TurnOffPush',
+                  fontSize: 20)
+            ]),
+            Row(children: <Widget>[
+              expandedButton(4, () => getId(), 'GetID', fontSize: 14),
+              expandedButton(4, () => getAAID(), 'GetAAID', fontSize: 14),
+              expandedButton(4, () => getOdid(), 'GetODID', fontSize: 14),
+            ]),
+            Row(children: <Widget>[
+              expandedButton(5, () => Push.getToken(), 'GetToken',
+                  fontSize: 20),
+              expandedButton(5, () => getCreationTime(), 'GetCreationTime',
+                  fontSize: 20)
+            ]),
+            Row(children: <Widget>[
+              expandedButton(5, () => Push.deleteToken(), 'DeleteToken',
+                  fontSize: 20),
+              expandedButton(5, () => deleteAAID(), 'DeleteAAID', fontSize: 20)
+            ]),
+            Padding(
               padding: padding,
               child: TextField(
                 controller: topicTextController,
@@ -289,78 +321,41 @@ class _MyAppState extends State<MyApp> {
                   ),
                   hintText: 'Topic Name',
                 ),
-              )),
-          Row(children: <Widget>[
-            Expanded(
-              flex: 5,
-              child: Padding(
-                  padding: padding,
-                  child: RaisedButton(
-                    onPressed: () => subscribe(),
-                    child: Text('Subsribe', style: TextStyle(fontSize: 20)),
-                  )),
+              ),
             ),
-            Expanded(
-              flex: 5,
-              child: Padding(
-                  padding: padding,
-                  child: RaisedButton(
-                    onPressed: () => unsubscribe(),
-                    child: Text('UnSubscribe', style: TextStyle(fontSize: 20)),
-                  )),
-            ),
-          ]),
-          Row(children: <Widget>[
-            Expanded(
-              flex: 5,
-              child: Padding(
-                  padding: padding,
-                  child: RaisedButton(
-                    onPressed: () => disableAutoInit(),
-                    child: Text('Disable AutoInit',
-                        style: TextStyle(fontSize: 20)),
-                  )),
-            ),
-            Expanded(
-              flex: 5,
-              child: Padding(
-                  padding: padding,
-                  child: RaisedButton(
-                    onPressed: () => enableAutoInit(),
-                    child:
-                        Text('Enable AutoInit', style: TextStyle(fontSize: 20)),
-                  )),
-            ),
-          ]),
-          Row(children: <Widget>[
-            Expanded(
-              flex: 5,
-              child: Padding(
-                  padding: padding,
-                  child: RaisedButton(
-                    onPressed: () => isAutoInitEnabled(),
-                    child: Text('IsAutoInitEnabled',
-                        style: TextStyle(fontSize: 20)),
-                  )),
-            ),
-            Expanded(
-              flex: 5,
-              child: Padding(
-                  padding: padding,
-                  child: RaisedButton(
-                    onPressed: () => clearLog(),
-                    child: Text('ClearLog', style: TextStyle(fontSize: 20)),
-                  )),
-            ),
-          ]),
-          Padding(
-              padding: padding,
-              child: RaisedButton(
-                onPressed: () => getAgConnectValues(),
-                child: Text('Get agconnect values',
-                    style: TextStyle(fontSize: 20)),
-              )),
-          Padding(
+            Row(children: <Widget>[
+              expandedButton(5, () => subscribe(), 'Subscribe', fontSize: 20),
+              expandedButton(5, () => unsubscribe(), 'UnSubscribe',
+                  fontSize: 20),
+            ]),
+            Row(children: <Widget>[
+              expandedButton(5, () => disableAutoInit(), 'Disable AutoInit',
+                  fontSize: 20),
+              expandedButton(5, () => enableAutoInit(), 'Enable AutoInit',
+                  fontSize: 20)
+            ]),
+            Row(children: <Widget>[
+              expandedButton(5, () => isAutoInitEnabled(), 'IsAutoInitEnabled',
+                  fontSize: 20),
+              expandedButton(5, () => sendRemoteMsg(), 'sendRemoteMessage',
+                  fontSize: 20)
+            ]),
+            Row(children: <Widget>[
+              expandedButton(
+                  6, () => getInitialNotification(), 'getInitialNotification',
+                  fontSize: 16),
+              expandedButton(6, () => getInitialIntent(), 'getInitialIntent',
+                  fontSize: 16)
+            ]),
+            Row(children: [
+              expandedButton(5, () => clearLog(), 'Clear Log', fontSize: 20)
+            ]),
+            Row(children: [
+              expandedButton(
+                  5, () => getAgConnectValues(), 'Get agconnect values',
+                  fontSize: 20)
+            ]),
+            Padding(
               padding: padding,
               child: TextField(
                 controller: logTextController,
@@ -376,8 +371,10 @@ class _MyAppState extends State<MyApp> {
                     borderSide: BorderSide(color: Colors.blueGrey, width: 3.0),
                   ),
                 ),
-              )),
-        ])),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

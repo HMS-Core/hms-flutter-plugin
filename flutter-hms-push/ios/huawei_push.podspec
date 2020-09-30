@@ -4,14 +4,15 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'huawei_push'
-  s.version          = '4.0.4'
+  s.version          = '5.0.2.300'
   s.summary          = 'HUAWEI Push Kit plugin for Flutter.'
   s.description      = <<-DESC
-HUAWEI Push Kit plugin for Flutter.
+HUAWEI Push Kit plugin for Flutter that exposes all the functionality provided by the HUAWEI Push Kit SDK.
                        DESC
   s.homepage         = 'https://www.huawei.com'
-  s.license          = { :file => '../LICENSE' }
-  s.source           = { :path => '.' }
+  s.license          = { :type => 'Apache 2.0', :file => '../LICENSE' }
+  s.author           = { 'Huawei Technologies' => 'huaweideveloper1@gmail.com' }
+  s.source           = { :git => 'https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-push' }
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'

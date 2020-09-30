@@ -23,12 +23,13 @@ import android.content.IntentFilter;
 import com.huawei.hms.flutter.push.constants.PushIntent;
 import com.huawei.hms.flutter.push.receiver.DataMessageReceiver;
 
-import io.flutter.plugin.common.EventChannel.StreamHandler;
 import io.flutter.plugin.common.EventChannel.EventSink;
+import io.flutter.plugin.common.EventChannel.StreamHandler;
 
 public class DataMessageStreamHandler implements StreamHandler {
 
     private Context context;
+    private BroadcastReceiver dataMessageEventBroadcastReceiver;
 
     public DataMessageStreamHandler(Context context) {
         this.context = context;
@@ -36,16 +37,14 @@ public class DataMessageStreamHandler implements StreamHandler {
 
     @Override
     public void onListen(Object arguments, EventSink events) {
-        BroadcastReceiver dataMessageEventBroadcastReceiver = createDataMessageEventBroadcastReceiver(events);
-        context.registerReceiver(
-                dataMessageEventBroadcastReceiver,
-                new IntentFilter(PushIntent.DATA_MESSAGE_INTENT_ACTION.id())
-        );
+        dataMessageEventBroadcastReceiver = createDataMessageEventBroadcastReceiver(events);
+        context.registerReceiver(dataMessageEventBroadcastReceiver,
+                new IntentFilter(PushIntent.DATA_MESSAGE_INTENT_ACTION.id()));
     }
 
     @Override
     public void onCancel(Object arguments) {
-
+        context.unregisterReceiver(dataMessageEventBroadcastReceiver);
     }
 
     private BroadcastReceiver createDataMessageEventBroadcastReceiver(final EventSink events) {

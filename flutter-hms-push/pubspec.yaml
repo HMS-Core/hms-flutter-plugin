@@ -1,12 +1,12 @@
 name: huawei_push
-description: HUAWEI Push Kit plugin for Flutter that exposes all the functionalities provided by the HUAWEI Push Kit SDK.
-version: 4.0.4+300
+description: HUAWEI Push Kit plugin for Flutter that exposes all the functionality provided by the HUAWEI Push Kit SDK.
+version: 5.0.2+300
 homepage: https://www.huawei.com
 repository: https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-push
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
-  flutter: ">=1.12.0 <2.0.0"
+  sdk: ">=2.1.0-dev.0.0 <3.0.0"
+  flutter: ">=1.12.13+hotfix.6 <2.0.0"
 
 dependencies:
   flutter:
