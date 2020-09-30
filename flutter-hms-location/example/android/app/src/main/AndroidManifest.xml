@@ -10,7 +10,8 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="HMS Location Demo"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:allowBackup="false">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

@@ -20,23 +20,25 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import com.huawei.hms.flutter.location.logger.HMSLogger;
 import com.huawei.hms.flutter.location.utils.GeofenceUtils;
 import com.huawei.hms.location.GeofenceData;
 
 import io.flutter.plugin.common.EventChannel.EventSink;
 
 public class GeofenceBroadcastReceiver extends BroadcastReceiver {
-    private final EventSink mEventSink;
+    private final EventSink eventSink;
 
     public GeofenceBroadcastReceiver(final EventSink eventSink) {
-        mEventSink = eventSink;
+        this.eventSink = eventSink;
     }
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
         if (intent != null) {
             final GeofenceData geofenceData = GeofenceData.getDataFromIntent(intent);
-            mEventSink.success(GeofenceUtils.fromGeofenceDataToMap(geofenceData));
+            HMSLogger.getInstance(context).sendPeriodicEvent("GeofenceUpdates");
+            eventSink.success(GeofenceUtils.fromGeofenceDataToMap(geofenceData));
         }
     }
 }

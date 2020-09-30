@@ -28,8 +28,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ActivityUtils {
-    public static ActivityConversionRequest fromActivityConversionInfoListToActivityConversionRequest(
+public interface ActivityUtils {
+    /**
+     * Utility method
+     * @param list List of the ActivityConversionInfo
+     * @return ActivityConversionRequest object
+     */
+    static ActivityConversionRequest fromActivityConversionInfoListToActivityConversionRequest(
         final List<Map<String, Object>> list) {
         final List<ActivityConversionInfo> activityConversionInfos = new ArrayList<>();
 
@@ -40,12 +45,22 @@ public class ActivityUtils {
         return new ActivityConversionRequest(activityConversionInfos);
     }
 
-    private static ActivityConversionInfo fromMapToActivityConversionInfo(final Map map) {
+    /**
+     * Utility method
+     * @param map HashMap representation of the ActivityConversionInfo object
+     * @return ActivityConversionInfo object
+     */
+    static ActivityConversionInfo fromMapToActivityConversionInfo(final Map<String, Object> map) {
         return new ActivityConversionInfo(ValueGetter.getInt("activityType", map),
             ValueGetter.getInt("conversionType", map));
     }
 
-    private static Map<String, Object> activityIdentificationDataToMap(final ActivityIdentificationData data) {
+    /**
+     * Utility method
+     * @param data ActivityIdentificationData object
+     * @return HashMap representation of ActivityIdentificationData object
+     */
+    static Map<String, Object> activityIdentificationDataToMap(final ActivityIdentificationData data) {
         final Map<String, Object> map = new HashMap<>();
 
         if (data == null) {
@@ -58,8 +73,12 @@ public class ActivityUtils {
         return map;
     }
 
-    public static Map<String, Object> activityIdentificationResponseToMap(
-        final ActivityIdentificationResponse response) {
+    /**
+     * Utility method
+     * @param response ActivityIdentificationResponse object
+     * @return HashMap representation of ActivityIdentificationResponse object
+     */
+    static Map<String, Object> activityIdentificationResponseToMap(final ActivityIdentificationResponse response) {
         final Map<String, Object> map = new HashMap<>();
 
         if (response == null) {
@@ -78,7 +97,12 @@ public class ActivityUtils {
         return map;
     }
 
-    private static Map<String, Object> activityConversionDataToMap(final ActivityConversionData data) {
+    /**
+     * Utility method
+     * @param data ActivityConversionData object
+     * @return HashMap representation of the ActivityConversionData object
+     */
+    static Map<String, Object> activityConversionDataToMap(final ActivityConversionData data) {
         final Map<String, Object> map = new HashMap<>();
 
         if (data == null) {
@@ -92,7 +116,12 @@ public class ActivityUtils {
         return map;
     }
 
-    public static Map<String, Object> activityConversionResponseToMap(final ActivityConversionResponse response) {
+    /**
+     * Utility method
+     * @param response ActivityConversionResponse object
+     * @return HashMap representation of the ActivityConversionResponse object
+     */
+    static Map<String, Object> activityConversionResponseToMap(final ActivityConversionResponse response) {
         final Map<String, Object> map = new HashMap<>();
 
         if (response == null) {

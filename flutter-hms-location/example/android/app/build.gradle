@@ -22,7 +22,6 @@ if (flutterVersionName == null) {
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'com.huawei.agconnect'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
@@ -43,10 +42,10 @@ android {
 
     signingConfigs {
         config {
-            storeFile file('<keystore_file>.jks')
-            storePassword '<keystore_password>'
-            keyAlias '<key_alias>'
-            keyPassword '<key_password>'
+            storeFile file("<keystore_file>.jks/.keystore")
+            storePassword "<keystore_password>"
+            keyAlias "<key_alias>"
+            keyPassword "<key_password>"
         }
     }
 
@@ -55,10 +54,10 @@ android {
             signingConfig signingConfigs.config
         }
         release {
-            signingConfig signingConfigs.config
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
 }
@@ -66,3 +65,5 @@ android {
 flutter {
     source '../..'
 }
+
+apply plugin: 'com.huawei.agconnect'

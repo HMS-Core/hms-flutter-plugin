@@ -15,8 +15,10 @@
 */
 
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:huawei_location/activity/activity_conversion_data.dart';
 import 'package:huawei_location/activity/activity_conversion_info.dart';
 import 'package:huawei_location/activity/activity_conversion_response.dart';
@@ -26,7 +28,7 @@ import 'package:huawei_location/activity/activity_identification_service.dart';
 import '../widgets/custom_button.dart';
 
 class ActivityConversionScreen extends StatefulWidget {
-  static const String routeName = "ActivityRecognitionScreen";
+  static const String ROUTE_NAME = "ActivityRecognitionScreen";
 
   @override
   _ActivityConversionScreenState createState() =>
@@ -34,12 +36,12 @@ class ActivityConversionScreen extends StatefulWidget {
 }
 
 class _ActivityConversionScreenState extends State<ActivityConversionScreen> {
-  static const int NUM_OF_ACTIVITY = 6;
-  static const double CONT_WIDTH1 = 100;
-  static const double CONT_WIDTH2 = 100;
-  static const double CONT_WIDTH3 = 100;
+  static const int _NUM_OF_ACTIVITY = 6;
+  static const double _CONT_WIDTH1 = 100;
+  static const double _CONT_WIDTH2 = 100;
+  static const double _CONT_WIDTH3 = 100;
 
-  static const List<int> _validTypes = <int>[
+  static const List<int> _VALID_TYPES = <int>[
     ActivityIdentificationData.VEHICLE,
     ActivityIdentificationData.BIKE,
     ActivityIdentificationData.FOOT,
@@ -48,130 +50,111 @@ class _ActivityConversionScreenState extends State<ActivityConversionScreen> {
     ActivityIdentificationData.RUNNING
   ];
 
-  String topText;
-  String bottomText;
-  int requestCode;
-  List<String> _activityTypes;
-  List<bool> _inStates;
-  List<bool> _outStates;
+  static const List<String> _ACTIVITY_TYPES = <String>[
+    "VEHICLE[100]",
+    "BIKE[101]",
+    "FOOT[102]",
+    "STILL[103]",
+    "WALKING[107]",
+    "RUNNING[108]"
+  ];
 
-  ActivityIdentificationService service;
-  StreamSubscription<ActivityConversionResponse> streamSubscription;
+  final ActivityIdentificationService _service =
+      ActivityIdentificationService();
+  final List<bool> _inStates = List.filled(_NUM_OF_ACTIVITY, false);
+  final List<bool> _outStates = List.filled(_NUM_OF_ACTIVITY, false);
 
-  void initServices() {
-    topText = "";
-    bottomText = "";
-    _activityTypes = <String>[
-      "VEHICLE[100]",
-      "BIKE[101]",
-      "FOOT[102]",
-      "STILL[103]",
-      "WALKING[107]",
-      "RUNNING[108]"
-    ];
-    _inStates = List.filled(NUM_OF_ACTIVITY, false);
-    _outStates = List.filled(NUM_OF_ACTIVITY, false);
-    service = ActivityIdentificationService();
-    streamSubscription = service.onActivityConversion.listen(onConversionData);
+  String _topText = "";
+  String _bottomText = "";
+  int _requestCode;
+  StreamSubscription<ActivityConversionResponse> _streamSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _streamSubscription =
+        _service.onActivityConversion.listen(_onConversionData);
   }
 
-  void onConversionData(ActivityConversionResponse response) {
+  void _onConversionData(ActivityConversionResponse response) {
     for (ActivityConversionData data in response.activityConversionDatas) {
-      appendBottomText(data.toString());
+      _appendToBottomText(data.toString());
     }
   }
 
-  List<ActivityConversionInfo> getConversionList() {
+  List<ActivityConversionInfo> _getConversionList() {
     List<ActivityConversionInfo> conversions = <ActivityConversionInfo>[];
 
-    for (int i = 0; i < NUM_OF_ACTIVITY; i++) {
+    for (int i = 0; i < _NUM_OF_ACTIVITY; i++) {
       if (_inStates[i]) {
         conversions.add(ActivityConversionInfo(
-            activityType: _validTypes[i], conversionType: 0));
+            activityType: _VALID_TYPES[i], conversionType: 0));
       }
       if (_outStates[i]) {
         conversions.add(ActivityConversionInfo(
-            activityType: _validTypes[i], conversionType: 1));
+            activityType: _VALID_TYPES[i], conversionType: 1));
       }
     }
     return conversions;
   }
 
-  void createActivityConversionUpdates() async {
-    if (requestCode == null) {
+  void _createActivityConversionUpdates() async {
+    if (_requestCode == null) {
       try {
-        int _requestCode =
-            await service.createActivityConversionUpdates(getConversionList());
-        requestCode = _requestCode;
-        setTopText("Created Activity Conversion Updates successfully.");
-      } catch (e) {
-        setTopText(e.toString());
+        final int requestCode = await _service
+            .createActivityConversionUpdates(_getConversionList());
+        _requestCode = requestCode;
+        _setTopText("Created Activity Conversion Updates successfully.");
+      } on PlatformException catch (e) {
+        _setTopText(e.toString());
       }
     } else {
-      setTopText("Already receiving Activity Conversion Updates.");
+      _setTopText("Already receiving Activity Conversion Updates.");
     }
   }
 
-  void deleteActivityConversionUpdates() async {
-    if (requestCode != null) {
+  void _deleteActivityConversionUpdates() async {
+    if (_requestCode != null) {
       try {
-        await service.deleteActivityConversionUpdates(requestCode);
-        requestCode = null;
-        clearBottomText();
-        setTopText("Deleted Activity Conversion Updates successfully.");
-      } catch (e) {
-        setTopText(e.toString());
+        await _service.deleteActivityConversionUpdates(_requestCode);
+        _requestCode = null;
+        _setBottomText();
+        _setTopText("Deleted Activity Conversion Updates successfully.");
+      } on PlatformException catch (e) {
+        _setTopText(e.toString());
       }
     } else {
-      setTopText("Create Activity Conversion Updates first.");
+      _setTopText("Create Activity Conversion Updates first.");
     }
   }
 
-  void deleteUpdatesOnDispose() async {
-    if (requestCode != null) {
+  void _deleteUpdatesOnDispose() async {
+    if (_requestCode != null) {
       try {
-        await service.deleteActivityConversionUpdates(requestCode);
-        requestCode = null;
-      } catch (e) {
-        print(e.toString());
+        await _service.deleteActivityConversionUpdates(_requestCode);
+        _requestCode = null;
+      } on PlatformException catch (e) {
+        log(e.toString());
       }
     }
   }
 
-  void setTopText(String text) {
+  void _setTopText([String text = ""]) {
     setState(() {
-      topText = text;
+      _topText = text;
     });
   }
 
-  void setBottomText(String text) {
+  void _setBottomText([String text = ""]) {
     setState(() {
-      bottomText = text;
+      _bottomText = text;
     });
   }
 
-  void appendBottomText(String text) {
+  void _appendToBottomText(String text) {
     setState(() {
-      bottomText = "$bottomText\n\n$text";
+      _bottomText = "$_bottomText\n\n$text";
     });
-  }
-
-  void clearTopText() {
-    setState(() {
-      topText = "";
-    });
-  }
-
-  void clearBottomText() {
-    setState(() {
-      bottomText = "";
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    initServices();
   }
 
   @override
@@ -185,36 +168,36 @@ class _ActivityConversionScreenState extends State<ActivityConversionScreen> {
           children: <Widget>[
             Container(
               padding: EdgeInsets.only(top: 15, bottom: 6),
-              child: Text(topText),
+              child: Text(_topText),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Container(width: CONT_WIDTH1, child: Text("Activity")),
-                Container(width: CONT_WIDTH2, child: Text("Transition")),
-                Container(width: CONT_WIDTH3, child: Text("Transition")),
+                Container(width: _CONT_WIDTH1, child: Text("Activity")),
+                Container(width: _CONT_WIDTH2, child: Text("Transition")),
+                Container(width: _CONT_WIDTH3, child: Text("Transition")),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                Container(width: CONT_WIDTH1),
-                Container(width: CONT_WIDTH2, child: Text("IN(0)")),
-                Container(width: CONT_WIDTH3, child: Text("OUT(1)")),
+                Container(width: _CONT_WIDTH1),
+                Container(width: _CONT_WIDTH2, child: Text("IN(0)")),
+                Container(width: _CONT_WIDTH3, child: Text("OUT(1)")),
               ],
             ),
             Container(
               child: Column(
-                children: List.generate(NUM_OF_ACTIVITY, (i) {
+                children: List.generate(_NUM_OF_ACTIVITY, (i) {
                   return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         Container(
-                          width: CONT_WIDTH1,
-                          child: Text(_activityTypes[i]),
+                          width: _CONT_WIDTH1,
+                          child: Text(_ACTIVITY_TYPES[i]),
                         ),
                         Container(
-                          width: CONT_WIDTH2,
+                          width: _CONT_WIDTH2,
                           child: Checkbox(
                             value: _inStates[i],
                             onChanged: (bool value) => setState(() {
@@ -223,7 +206,7 @@ class _ActivityConversionScreenState extends State<ActivityConversionScreen> {
                           ),
                         ),
                         Container(
-                          width: CONT_WIDTH3,
+                          width: _CONT_WIDTH3,
                           child: Checkbox(
                             value: _outStates[i],
                             onChanged: (bool value) => setState(() {
@@ -236,12 +219,12 @@ class _ActivityConversionScreenState extends State<ActivityConversionScreen> {
               ),
             ),
             Btn("createActivityConversionUpdates",
-                createActivityConversionUpdates),
+                _createActivityConversionUpdates),
             Btn("deleteActivityConversionUpdates",
-                deleteActivityConversionUpdates),
+                _deleteActivityConversionUpdates),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 15),
-              child: Text(bottomText),
+              child: Text(_bottomText),
             ),
           ],
         ),
@@ -252,7 +235,7 @@ class _ActivityConversionScreenState extends State<ActivityConversionScreen> {
   @override
   void dispose() {
     super.dispose();
-    deleteUpdatesOnDispose();
-    streamSubscription.cancel();
+    _deleteUpdatesOnDispose();
+    _streamSubscription.cancel();
   }
 }

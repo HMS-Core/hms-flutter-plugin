@@ -19,184 +19,197 @@ package com.huawei.hms.flutter.location.handlers;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Looper;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
 import com.huawei.hms.flutter.location.constants.Action;
-import com.huawei.hms.flutter.location.constants.Errors;
+import com.huawei.hms.flutter.location.constants.Error;
 import com.huawei.hms.flutter.location.listeners.DefaultFailureListener;
 import com.huawei.hms.flutter.location.listeners.DefaultSuccessListener;
 import com.huawei.hms.flutter.location.listeners.LocationSettingsFailureListener;
 import com.huawei.hms.flutter.location.listeners.RemoveUpdatesSuccessListener;
 import com.huawei.hms.flutter.location.listeners.RequestUpdatesFailureListener;
 import com.huawei.hms.flutter.location.listeners.RequestUpdatesSuccessListener;
+import com.huawei.hms.flutter.location.logger.HMSLogger;
 import com.huawei.hms.flutter.location.utils.LocationUtils;
 import com.huawei.hms.location.FusedLocationProviderClient;
-import com.huawei.hms.location.HWLocation;
-import com.huawei.hms.location.LocationAvailability;
+import com.huawei.hms.location.LocationEnhanceService;
 import com.huawei.hms.location.LocationRequest;
 import com.huawei.hms.location.LocationServices;
 import com.huawei.hms.location.LocationSettingsRequest;
-import com.huawei.hms.location.LocationSettingsResponse;
 import com.huawei.hms.location.LocationSettingsStates;
+import com.huawei.hms.location.NavigationRequest;
 import com.huawei.hms.location.SettingsClient;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.PluginRegistry.ActivityResultListener;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class FusedLocationMethodHandler implements MethodChannel.MethodCallHandler, ActivityResultListener {
-    private final Activity mActivity;
+    private final Activity activity;
+    private final MethodChannel channel;
+    private final Map<Integer, LocationCallbackHandler> callbacks;
+    private final Map<Integer, PendingIntent> requests;
+    private final SettingsClient settingsClient;
+    private final FusedLocationProviderClient service;
+    private final LocationEnhanceService enhanceService;
 
-    private final MethodChannel mChannel;
-
-    private final FusedLocationProviderClient mFusedLocationProviderClient;
-
-    private final Map<Integer, LocationCallbackHandler> mCallbacks;
-
-    private final Map<Integer, PendingIntent> mRequests;
-
-    private final SettingsClient mSettingsClient;
-
-    private int mRequestCode = 0;
-
-    private MethodChannel.Result mResult;
+    private int requestCode = 0;
+    private MethodChannel.Result result;
 
     public FusedLocationMethodHandler(final Activity activity, final MethodChannel channel) {
-        mChannel = channel;
-        mActivity = activity;
-        mCallbacks = new HashMap<>();
-        mRequests = new HashMap<>();
-        mSettingsClient = LocationServices.getSettingsClient(mActivity);
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity);
+        this.activity = activity;
+        this.channel = channel;
+        callbacks = new HashMap<>();
+        requests = new HashMap<>();
+        settingsClient = LocationServices.getSettingsClient(activity);
+        service = LocationServices.getFusedLocationProviderClient(activity);
+        enhanceService = LocationServices.getLocationEnhanceService(activity);
     }
 
     private void checkLocationSettings(final MethodCall call, final MethodChannel.Result result) {
-        mResult = result;
+        final LocationSettingsRequest request = LocationUtils.fromMapToLocationSettingsRequest(call.arguments());
+        this.result = result;
 
-        final LocationSettingsRequest request = LocationUtils.fromMapToLocationSettingsRequest(
-            call.<Map<String, Object>>arguments());
-        mSettingsClient.checkLocationSettings(request)
-            .addOnSuccessListener(new DefaultSuccessListener<LocationSettingsResponse>(result))
-            .addOnFailureListener(new LocationSettingsFailureListener(result, mActivity));
+        settingsClient.checkLocationSettings(request)
+            .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
+            .addOnFailureListener(new LocationSettingsFailureListener(result, activity));
     }
 
-    private void getLastLocation(final MethodChannel.Result result) {
-        mFusedLocationProviderClient.getLastLocation()
-            .addOnSuccessListener(new DefaultSuccessListener<Location>(result))
-            .addOnFailureListener(new DefaultFailureListener(result));
+    private void getLastLocation(final MethodCall call, final MethodChannel.Result result) {
+        service.getLastLocation()
+            .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
+            .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
     }
 
     private void getLastLocationWithAddress(final MethodCall call, final MethodChannel.Result result) {
-        mFusedLocationProviderClient.getLastLocationWithAddress(
+        service.getLastLocationWithAddress(
             LocationUtils.fromMapToLocationRequest(call.<Map<String, Object>>arguments()))
-            .addOnSuccessListener(new DefaultSuccessListener<HWLocation>(result))
-            .addOnFailureListener(new DefaultFailureListener(result));
+            .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
+            .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
     }
 
-    private void getLocationAvailability(final MethodChannel.Result result) {
-        mFusedLocationProviderClient.getLocationAvailability()
-            .addOnSuccessListener(new DefaultSuccessListener<LocationAvailability>(result))
-            .addOnFailureListener(new DefaultFailureListener(result));
+    private void getLocationAvailability(final MethodCall call, final MethodChannel.Result result) {
+        service.getLocationAvailability()
+            .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
+            .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
     }
 
     private void setMockMode(final MethodCall call, final MethodChannel.Result result) {
-        mFusedLocationProviderClient.setMockMode(call.<Boolean>arguments())
-            .addOnSuccessListener(new DefaultSuccessListener<Void>(result))
-            .addOnFailureListener(new DefaultFailureListener(result));
+        service.setMockMode(call.<Boolean>arguments())
+            .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
+            .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
     }
 
     private void setMockLocation(final MethodCall call, final MethodChannel.Result result) {
-        mFusedLocationProviderClient.setMockLocation(
-            LocationUtils.fromMapToLocation(call.<Map<String, Object>>arguments()))
-            .addOnSuccessListener(new DefaultSuccessListener<Void>(result))
-            .addOnFailureListener(new DefaultFailureListener(result));
+        service.setMockLocation(LocationUtils.fromMapToLocation(call.arguments()))
+            .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
+            .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
     }
 
     private void requestLocationUpdates(final MethodCall call, final MethodChannel.Result result) {
-        final Pair<Integer, PendingIntent> intentData = buildPendingIntent();
+        final Pair<Integer, PendingIntent> intentData = buildLocationIntent();
         final LocationRequest request = LocationUtils.fromMapToLocationRequest(call.<Map<String, Object>>arguments());
-        mFusedLocationProviderClient.requestLocationUpdates(request, intentData.second)
-            .addOnSuccessListener(new RequestUpdatesSuccessListener(result, intentData.first))
-            .addOnFailureListener(new RequestUpdatesFailureListener<>(result, intentData.first, mRequests));
+
+        service.requestLocationUpdates(request, intentData.second)
+            .addOnSuccessListener(new RequestUpdatesSuccessListener(call.method, activity, result, intentData.first))
+            .addOnFailureListener(
+                new RequestUpdatesFailureListener<>(call.method, activity, result, intentData.first, requests));
     }
 
     private void requestLocationUpdatesCb(final MethodCall call, final MethodChannel.Result result) {
         final LocationRequest request = LocationUtils.fromMapToLocationRequest(call.<Map<String, Object>>arguments());
-        final Pair<Integer, LocationCallbackHandler> callbackData = buildCallback();
-        mFusedLocationProviderClient.requestLocationUpdates(request, callbackData.second, Looper.getMainLooper())
-            .addOnSuccessListener(new RequestUpdatesSuccessListener(result, callbackData.first))
-            .addOnFailureListener(new RequestUpdatesFailureListener<>(result, callbackData.first, mCallbacks));
+        final Pair<Integer, LocationCallbackHandler> callbackData = buildCallback(call.method);
+
+        service.requestLocationUpdates(request, callbackData.second, Looper.getMainLooper())
+            .addOnSuccessListener(new RequestUpdatesSuccessListener(call.method, activity, result, callbackData.first))
+            .addOnFailureListener(
+                new RequestUpdatesFailureListener<>(call.method, activity, result, callbackData.first, callbacks));
     }
 
     private void requestLocationUpdatesExCb(final MethodCall call, final MethodChannel.Result result) {
         final LocationRequest request = LocationUtils.fromMapToLocationRequest(call.<Map<String, Object>>arguments());
-        final Pair<Integer, LocationCallbackHandler> callbackData = buildCallback();
+        final Pair<Integer, LocationCallbackHandler> callbackData = buildCallback(call.method);
 
-        mFusedLocationProviderClient.requestLocationUpdatesEx(request, callbackData.second, Looper.getMainLooper())
-            .addOnSuccessListener(new RequestUpdatesSuccessListener(result, callbackData.first))
-            .addOnFailureListener(new RequestUpdatesFailureListener<>(result, callbackData.first, mCallbacks));
+        service.requestLocationUpdatesEx(request, callbackData.second, Looper.getMainLooper())
+            .addOnSuccessListener(new RequestUpdatesSuccessListener(call.method, activity, result, callbackData.first))
+            .addOnFailureListener(
+                new RequestUpdatesFailureListener<>(call.method, activity, result, callbackData.first, callbacks));
     }
 
     private void removeLocationUpdates(final MethodCall call, final MethodChannel.Result result) {
-        final int requestCode = call.<Integer>arguments();
-        if (!mRequests.containsKey(requestCode)) {
-            result.error(Errors.NON_EXISTING_REQUEST_ID.name(), Errors.NON_EXISTING_REQUEST_ID.message(), null);
+        final int incomingRequestCode = call.<Integer>arguments();
+
+        if (!requests.containsKey(incomingRequestCode)) {
+            result.error(Error.NON_EXISTING_REQUEST_ID.name(), Error.NON_EXISTING_REQUEST_ID.message(), null);
         } else {
-            mFusedLocationProviderClient.removeLocationUpdates(mRequests.get(requestCode))
-                .addOnSuccessListener(new RemoveUpdatesSuccessListener<>(result, requestCode, mRequests))
-                .addOnFailureListener(new DefaultFailureListener(result));
+            service.removeLocationUpdates(requests.get(incomingRequestCode))
+                .addOnSuccessListener(
+                    new RemoveUpdatesSuccessListener<>(call.method, activity, result, incomingRequestCode, requests))
+                .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
         }
     }
 
     private void removeLocationUpdatesCb(final MethodCall call, final MethodChannel.Result result) {
         final int callbackId = call.<Integer>arguments();
-        if (!mCallbacks.containsKey(callbackId)) {
-            result.error(Errors.NON_EXISTING_REQUEST_ID.name(), Errors.NON_EXISTING_REQUEST_ID.message(), null);
+
+        if (!callbacks.containsKey(callbackId)) {
+            result.error(Error.NON_EXISTING_REQUEST_ID.name(), Error.NON_EXISTING_REQUEST_ID.message(), null);
         } else {
-            mFusedLocationProviderClient.removeLocationUpdates(mCallbacks.get(callbackId))
-                .addOnSuccessListener(new RemoveUpdatesSuccessListener<>(result, callbackId, mCallbacks))
-                .addOnFailureListener(new DefaultFailureListener(result));
+            service.removeLocationUpdates(callbacks.get(callbackId))
+                .addOnSuccessListener(
+                    new RemoveUpdatesSuccessListener<>(call.method, activity, result, callbackId, callbacks))
+                .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
         }
     }
 
-    private Pair<Integer, LocationCallbackHandler> buildCallback() {
-        mRequestCode++;
-        final LocationCallbackHandler callBack = new LocationCallbackHandler(mRequestCode, mChannel);
-        mCallbacks.put(mRequestCode, callBack);
-        return Pair.create(mRequestCode, callBack);
+    private void getNavigationContextState(final MethodCall call, final MethodChannel.Result result) {
+        final NavigationRequest request = LocationUtils.fromMapToNavigationRequest(call.arguments());
+
+        enhanceService.getNavigationState(request)
+            .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
+            .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
     }
 
-    private Pair<Integer, PendingIntent> buildPendingIntent() {
+    private Pair<Integer, LocationCallbackHandler> buildCallback(final String methodName) {
+        final LocationCallbackHandler callBack = new LocationCallbackHandler(activity.getApplicationContext(),
+            methodName, ++requestCode, channel);
+        callbacks.put(requestCode, callBack);
+        return Pair.create(requestCode, callBack);
+    }
+
+    private Pair<Integer, PendingIntent> buildLocationIntent() {
         final Intent intent = new Intent();
-        intent.setPackage(mActivity.getPackageName());
-        intent.setAction(Action.PROCESS_LOCATION.id());
-        final PendingIntent pendingIntent = PendingIntent.getBroadcast(mActivity.getApplicationContext(),
-            mRequestCode++, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mRequests.put(mRequestCode, pendingIntent);
-        return Pair.create(mRequestCode, pendingIntent);
+        intent.setPackage(activity.getPackageName());
+        intent.setAction(Action.PROCESS_LOCATION);
+
+        final PendingIntent pendingIntent = PendingIntent.getBroadcast(activity.getApplicationContext(), ++requestCode,
+            intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        requests.put(requestCode, pendingIntent);
+        return Pair.create(requestCode, pendingIntent);
     }
 
     @Override
     public void onMethodCall(@NonNull final MethodCall call, @NonNull final MethodChannel.Result result) {
+        HMSLogger.getInstance(activity.getApplicationContext()).startMethodExecutionTimer(call.method);
+
         switch (call.method) {
             case "checkLocationSettings":
                 checkLocationSettings(call, result);
                 break;
             case "getLastLocation":
-                getLastLocation(result);
+                getLastLocation(call, result);
                 break;
             case "getLastLocationWithAddress":
                 getLastLocationWithAddress(call, result);
                 break;
             case "getLocationAvailability":
-                getLocationAvailability(result);
+                getLocationAvailability(call, result);
                 break;
             case "setMockMode":
                 setMockMode(call, result);
@@ -219,6 +232,9 @@ public class FusedLocationMethodHandler implements MethodChannel.MethodCallHandl
             case "removeLocationUpdatesCb":
                 removeLocationUpdatesCb(call, result);
                 break;
+            case "getNavigationContextState":
+                getNavigationContextState(call, result);
+                break;
             default:
                 result.notImplemented();
                 break;
@@ -226,17 +242,21 @@ public class FusedLocationMethodHandler implements MethodChannel.MethodCallHandl
     }
 
     @Override
-    public boolean onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        final MethodChannel.Result result = mResult;
-        mResult = null;
+    public boolean onActivityResult(final int requestCode, final int resultCode, final Intent intent) {
+        final MethodChannel.Result incomingResult = result;
+        result = null;
 
-        if (result != null && requestCode == 0) {
+        if (incomingResult != null && requestCode == 0) {
             if (resultCode == Activity.RESULT_OK) {
-                final LocationSettingsStates states = LocationSettingsStates.fromIntent(data);
-                result.success(LocationUtils.fromLocationSettingsStatesToMap(states));
+                final LocationSettingsStates states = LocationSettingsStates.fromIntent(intent);
+                HMSLogger.getInstance(activity.getApplicationContext())
+                    .sendSingleEvent("checkLocationSettings.onActivityResult");
+                incomingResult.success(LocationUtils.fromLocationSettingsStatesToMap(states));
             } else {
-                result.error(Errors.LOCATION_SETTINGS_NOT_AVAILABLE.name(),
-                    Errors.LOCATION_SETTINGS_NOT_AVAILABLE.message(), null);
+                HMSLogger.getInstance(activity.getApplicationContext())
+                    .sendSingleEvent("checkLocationSettings" + ".onActivityResult", "-1");
+                incomingResult.error(Error.LOCATION_SETTINGS_NOT_AVAILABLE.name(),
+                    Error.LOCATION_SETTINGS_NOT_AVAILABLE.message(), null);
             }
         }
 

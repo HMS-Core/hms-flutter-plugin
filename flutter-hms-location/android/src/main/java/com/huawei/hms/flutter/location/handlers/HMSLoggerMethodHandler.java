@@ -14,32 +14,38 @@
     limitations under the License.
 */
 
-package com.huawei.hms.flutter.location.listeners;
+package com.huawei.hms.flutter.location.handlers;
 
 import android.content.Context;
 
-import com.huawei.hmf.tasks.OnSuccessListener;
+import androidx.annotation.NonNull;
+
 import com.huawei.hms.flutter.location.logger.HMSLogger;
 
+import io.flutter.plugin.common.MethodCall;
+import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 
-public class RequestUpdatesSuccessListener implements OnSuccessListener<Void> {
-    private final Result result;
-    private final Integer requestCode;
+public class HMSLoggerMethodHandler implements MethodCallHandler {
     private final Context context;
-    private final String methodName;
 
-    public RequestUpdatesSuccessListener(final String methodName, final Context context, final Result result,
-        final Integer requestCode) {
-        this.methodName = methodName;
+    public HMSLoggerMethodHandler(final Context context) {
         this.context = context;
-        this.result = result;
-        this.requestCode = requestCode;
     }
 
     @Override
-    public void onSuccess(final Void avoid) {
-        HMSLogger.getInstance(context).sendSingleEvent(methodName);
-        result.success(requestCode);
+    public void onMethodCall(final MethodCall call, @NonNull final Result result) {
+        switch (call.method) {
+            case "enableLogger":
+                HMSLogger.getInstance(context).enableLogger();
+                result.success(null);
+                break;
+            case "disableLogger":
+                HMSLogger.getInstance(context).disableLogger();
+                result.success(null);
+                break;
+            default:
+                break;
+        }
     }
 }

@@ -21,29 +21,33 @@ import android.content.Context;
 import android.content.IntentFilter;
 
 import com.huawei.hms.flutter.location.constants.Action;
+import com.huawei.hms.flutter.location.logger.HMSLogger;
 import com.huawei.hms.flutter.location.receivers.ActivityIdentificationBroadcastReceiver;
 
 import io.flutter.plugin.common.EventChannel.EventSink;
 import io.flutter.plugin.common.EventChannel.StreamHandler;
 
 public class ActivityIdentificationStreamHandler implements StreamHandler {
-    private final Context mContext;
-
-    private BroadcastReceiver mBroadcastReceiver;
+    private final Context context;
+    private BroadcastReceiver broadcastReceiver;
 
     public ActivityIdentificationStreamHandler(final Context context) {
-        mContext = context;
+        this.context = context;
     }
 
     @Override
     public void onListen(final Object arguments, final EventSink events) {
-        mBroadcastReceiver = new ActivityIdentificationBroadcastReceiver(events);
-        mContext.registerReceiver(mBroadcastReceiver, new IntentFilter(Action.PROCESS_IDENTIFICATION.id()));
+        broadcastReceiver = new ActivityIdentificationBroadcastReceiver(events);
+        context.registerReceiver(broadcastReceiver, new IntentFilter(Action.PROCESS_IDENTIFICATION));
+
+        HMSLogger.getInstance(context).sendSingleEvent("ActivityIdentificationStreamHandler.onListen");
     }
 
     @Override
     public void onCancel(final Object arguments) {
-        mContext.unregisterReceiver(mBroadcastReceiver);
-        mBroadcastReceiver = null;
+        context.unregisterReceiver(broadcastReceiver);
+        broadcastReceiver = null;
+
+        HMSLogger.getInstance(context).sendSingleEvent("ActivityIdentificationStreamHandler.onCancel");
     }
 }

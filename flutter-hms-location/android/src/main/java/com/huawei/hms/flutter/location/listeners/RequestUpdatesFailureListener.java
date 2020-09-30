@@ -16,31 +16,40 @@
 
 package com.huawei.hms.flutter.location.listeners;
 
+import android.content.Context;
+
 import com.huawei.hmf.tasks.OnFailureListener;
 import com.huawei.hms.common.ApiException;
+import com.huawei.hms.flutter.location.logger.HMSLogger;
 import com.huawei.hms.flutter.location.utils.ObjectUtils;
-
-import io.flutter.plugin.common.MethodChannel.Result;
 
 import java.util.Map;
 
+import io.flutter.plugin.common.MethodChannel.Result;
+
 public class RequestUpdatesFailureListener<T> implements OnFailureListener {
-    private final Result mResult;
+    private final String methodName;
+    private final Context context;
+    private final Result result;
+    private final Integer id;
+    private final Map<Integer, T> map;
 
-    private final Integer mId;
-
-    private final Map<Integer, T> mMap;
-
-    public RequestUpdatesFailureListener(final Result result, final Integer id, final Map<Integer, T> map) {
-        mResult = result;
-        mId = id;
-        mMap = map;
+    public RequestUpdatesFailureListener(final String methodName, final Context context, final Result result,
+        final Integer id, final Map<Integer, T> map) {
+        this.methodName = methodName;
+        this.context = context;
+        this.result = result;
+        this.id = id;
+        this.map = map;
     }
 
     @Override
     public void onFailure(final Exception e) {
-        mMap.remove(mId);
         final ApiException ex = ObjectUtils.cast(e, ApiException.class);
-        mResult.error(Integer.toString(ex.getStatusCode()), ex.getMessage(), null);
+        final String statusCodeString = Integer.toString(ex.getStatusCode());
+
+        map.remove(id);
+        HMSLogger.getInstance(context).sendSingleEvent(methodName, statusCodeString);
+        result.error(statusCodeString, ex.getMessage(), null);
     }
 }

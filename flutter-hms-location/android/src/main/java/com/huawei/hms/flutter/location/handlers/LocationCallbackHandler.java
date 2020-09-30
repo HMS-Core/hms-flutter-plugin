@@ -16,33 +16,43 @@
 
 package com.huawei.hms.flutter.location.handlers;
 
+import android.content.Context;
+
+import com.huawei.hms.flutter.location.logger.HMSLogger;
 import com.huawei.hms.flutter.location.utils.LocationUtils;
 import com.huawei.hms.location.LocationAvailability;
 import com.huawei.hms.location.LocationCallback;
 import com.huawei.hms.location.LocationResult;
 
-import io.flutter.plugin.common.MethodChannel;
-
 import java.util.HashMap;
 import java.util.Map;
 
+import io.flutter.plugin.common.MethodChannel;
+
 public class LocationCallbackHandler extends LocationCallback {
-    private final int mCallbackId;
+    private final Context context;
+    private final String methodName;
+    private final int callbackId;
+    private final MethodChannel channel;
 
-    private final MethodChannel mChannel;
-
-    LocationCallbackHandler(final int callbackId, final MethodChannel channel) {
-        mCallbackId = callbackId;
-        mChannel = channel;
+    LocationCallbackHandler(final Context context, final String methodName, final int callbackId,
+        final MethodChannel channel) {
+        this.context = context;
+        this.methodName = methodName;
+        this.callbackId = callbackId;
+        this.channel = channel;
     }
 
     @Override
     public void onLocationResult(final LocationResult locationResult) {
         if (locationResult != null) {
             final Map<String, Object> map = new HashMap<>();
-            map.put("callbackId", mCallbackId);
+
+            map.put("callbackId", callbackId);
             map.put("locationResult", LocationUtils.fromLocationResultToMap(locationResult));
-            mChannel.invokeMethod("onLocationResult", map);
+
+            HMSLogger.getInstance(context).sendPeriodicEvent(methodName + ".onLocationResult");
+            channel.invokeMethod("onLocationResult", map);
         }
     }
 
@@ -50,9 +60,12 @@ public class LocationCallbackHandler extends LocationCallback {
     public void onLocationAvailability(final LocationAvailability locationAvailability) {
         if (locationAvailability != null) {
             final Map<String, Object> map = new HashMap<>();
-            map.put("callbackId", mCallbackId);
+
+            map.put("callbackId", callbackId);
             map.put("locationAvailability", LocationUtils.fromLocationAvailabilityToMap(locationAvailability));
-            mChannel.invokeMethod("onLocationAvailability", map);
+
+            HMSLogger.getInstance(context).sendPeriodicEvent(methodName + ".onLocationAvailability");
+            channel.invokeMethod("onLocationAvailability", map);
         }
     }
 }

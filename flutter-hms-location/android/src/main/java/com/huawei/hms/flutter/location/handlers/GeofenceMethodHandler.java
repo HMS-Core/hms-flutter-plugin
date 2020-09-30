@@ -24,78 +24,83 @@ import android.util.Pair;
 import androidx.annotation.NonNull;
 
 import com.huawei.hms.flutter.location.constants.Action;
-import com.huawei.hms.flutter.location.constants.Errors;
+import com.huawei.hms.flutter.location.constants.Error;
 import com.huawei.hms.flutter.location.listeners.DefaultFailureListener;
 import com.huawei.hms.flutter.location.listeners.DefaultSuccessListener;
 import com.huawei.hms.flutter.location.listeners.RemoveUpdatesSuccessListener;
 import com.huawei.hms.flutter.location.listeners.RequestUpdatesFailureListener;
 import com.huawei.hms.flutter.location.listeners.RequestUpdatesSuccessListener;
+import com.huawei.hms.flutter.location.logger.HMSLogger;
 import com.huawei.hms.flutter.location.utils.GeofenceUtils;
 import com.huawei.hms.location.GeofenceRequest;
 import com.huawei.hms.location.GeofenceService;
 import com.huawei.hms.location.LocationServices;
 
-import io.flutter.plugin.common.MethodCall;
-import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
-import io.flutter.plugin.common.MethodChannel.Result;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.flutter.plugin.common.MethodCall;
+import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
+import io.flutter.plugin.common.MethodChannel.Result;
+
 public class GeofenceMethodHandler implements MethodCallHandler {
-    private final Activity mActivity;
+    private final Activity activity;
+    private final GeofenceService service;
+    private final Map<Integer, PendingIntent> requests;
 
-    private final GeofenceService mGeofenceService;
-
-    private final Map<Integer, PendingIntent> mRequests;
-
-    private int mRequestCode = 0;
+    private int requestCode = 0;
 
     public GeofenceMethodHandler(final Activity activity) {
-        mActivity = activity;
-        mGeofenceService = LocationServices.getGeofenceService(activity);
-        mRequests = new HashMap<>();
+        this.activity = activity;
+        service = LocationServices.getGeofenceService(activity);
+        requests = new HashMap<>();
     }
 
     private void createGeofenceList(@NonNull final MethodCall call, @NonNull final Result result) {
-        final GeofenceRequest geofenceRequest = GeofenceUtils.fromMapToGeofenceRequest(
-            call.<Map<String, Object>>arguments());
-        final Pair<Integer, PendingIntent> intentData = buildPendingIntent();
-        mGeofenceService.createGeofenceList(geofenceRequest, intentData.second)
-            .addOnSuccessListener(new RequestUpdatesSuccessListener(result, intentData.first))
-            .addOnFailureListener(new RequestUpdatesFailureListener<>(result, intentData.first, mRequests));
+        final GeofenceRequest geofenceRequest = GeofenceUtils.fromMapToGeofenceRequest(call.arguments());
+        final Pair<Integer, PendingIntent> intentData = buildGeofenceIntent();
+
+        service.createGeofenceList(geofenceRequest, intentData.second)
+            .addOnSuccessListener(new RequestUpdatesSuccessListener(call.method, activity, result, intentData.first))
+            .addOnFailureListener(
+                new RequestUpdatesFailureListener<>(call.method, activity, result, intentData.first, requests));
     }
 
     private void deleteGeofenceList(@NonNull final MethodCall call, @NonNull final Result result) {
-        final int requestCode = call.<Integer>arguments();
-        if (!mRequests.containsKey(requestCode)) {
-            result.error(Errors.NON_EXISTING_REQUEST_ID.name(), Errors.NON_EXISTING_REQUEST_ID.message(), null);
+        final int incomingRequestCode = call.<Integer>arguments();
+
+        if (!requests.containsKey(incomingRequestCode)) {
+            result.error(Error.NON_EXISTING_REQUEST_ID.name(), Error.NON_EXISTING_REQUEST_ID.message(), null);
         } else {
-            mGeofenceService.deleteGeofenceList(mRequests.get(requestCode))
-                .addOnSuccessListener(new RemoveUpdatesSuccessListener<>(result, requestCode, mRequests))
-                .addOnFailureListener(new DefaultFailureListener(result));
+            service.deleteGeofenceList(requests.get(incomingRequestCode))
+                .addOnSuccessListener(
+                    new RemoveUpdatesSuccessListener<>(call.method, activity, result, incomingRequestCode, requests))
+                .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
         }
     }
 
     private void deleteGeofenceListWithIds(@NonNull final MethodCall call, @NonNull final Result result) {
-        mGeofenceService.deleteGeofenceList(call.<List<String>>arguments())
-            .addOnSuccessListener(new DefaultSuccessListener<Void>(result))
-            .addOnFailureListener(new DefaultFailureListener(result));
+        service.deleteGeofenceList(call.<List<String>>arguments())
+            .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
+            .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
     }
 
-    private Pair<Integer, PendingIntent> buildPendingIntent() {
+    private Pair<Integer, PendingIntent> buildGeofenceIntent() {
         final Intent intent = new Intent();
-        intent.setPackage(mActivity.getPackageName());
-        intent.setAction(Action.PROCESS_GEOFENCE.id());
-        final PendingIntent pendingIntent = PendingIntent.getBroadcast(mActivity.getApplicationContext(),
-            mRequestCode++, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mRequests.put(mRequestCode, pendingIntent);
-        return Pair.create(mRequestCode, pendingIntent);
+        intent.setPackage(activity.getPackageName());
+        intent.setAction(Action.PROCESS_GEOFENCE);
+
+        final PendingIntent pendingIntent = PendingIntent.getBroadcast(activity.getApplicationContext(), ++requestCode,
+            intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        requests.put(requestCode, pendingIntent);
+        return Pair.create(requestCode, pendingIntent);
     }
 
     @Override
     public void onMethodCall(@NonNull final MethodCall call, @NonNull final Result result) {
+        HMSLogger.getInstance(activity.getApplicationContext()).startMethodExecutionTimer(call.method);
+
         switch (call.method) {
             case "createGeofenceList":
                 createGeofenceList(call, result);

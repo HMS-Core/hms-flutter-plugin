@@ -19,7 +19,13 @@ package com.huawei.hms.flutter.location.utils;
 import java.util.Map;
 import java.util.Objects;
 
-class ValueGetter {
+public interface ValueGetter {
+    /**
+     * Utility method
+     * @param key Lookup key for the map
+     * @param map Map that contains argument keys and values
+     * @return The "int" value for the corresponding key.
+     */
     static int getInt(final String key, final Map map) {
         final Object value = Objects.requireNonNull(map.get(key));
         if (value instanceof Number) {
@@ -29,6 +35,12 @@ class ValueGetter {
         }
     }
 
+    /**
+     * Utility method
+     * @param key Lookup key for the map
+     * @param map Map that contains argument keys and values
+     * @return The "long" value for the corresponding key.
+     */
     static long getLong(final String key, final Map map) {
         final Object value = Objects.requireNonNull(map.get(key));
         if (value instanceof Number) {
@@ -38,6 +50,12 @@ class ValueGetter {
         }
     }
 
+    /**
+     * Utility method
+     * @param key Lookup key for the map
+     * @param map Map that contains argument keys and values
+     * @return The "float" value for the corresponding key.
+     */
     static float getFloat(final String key, final Map map) {
         final Object value = Objects.requireNonNull(map.get(key));
         if (value instanceof Number) {
@@ -47,6 +65,12 @@ class ValueGetter {
         }
     }
 
+    /**
+     * Utility method
+     * @param key Lookup key for the map
+     * @param map Map that contains argument keys and values
+     * @return The "double" value for the corresponding key.
+     */
     static double getDouble(final String key, final Map map) {
         final Object value = Objects.requireNonNull(map.get(key));
         if (value instanceof Number) {
@@ -56,6 +80,12 @@ class ValueGetter {
         }
     }
 
+    /**
+     * Utility method
+     * @param key Lookup key for the map
+     * @param map Map that contains argument keys and values
+     * @return The "boolean" value for the corresponding key.
+     */
     static boolean getBoolean(final String key, final Map map) {
         final Object value = Objects.requireNonNull(map.get(key));
         if (value instanceof Boolean) {
@@ -65,6 +95,12 @@ class ValueGetter {
         }
     }
 
+    /**
+     * Utility method
+     * @param key Lookup key for the map
+     * @param map Map that contains argument keys and values
+     * @return The "String" value for the corresponding key.
+     */
     static String getString(final String key, final Map map) {
         final Object value = Objects.requireNonNull(map.get(key));
         if (value instanceof String) {

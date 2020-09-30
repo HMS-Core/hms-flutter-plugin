@@ -16,50 +16,64 @@
 
 package com.huawei.hms.flutter.location.listeners;
 
+import android.content.Context;
 import android.location.Location;
 
 import com.huawei.hmf.tasks.OnSuccessListener;
+import com.huawei.hms.flutter.location.logger.HMSLogger;
 import com.huawei.hms.flutter.location.utils.LocationUtils;
 import com.huawei.hms.flutter.location.utils.ObjectUtils;
 import com.huawei.hms.location.HWLocation;
 import com.huawei.hms.location.LocationAvailability;
 import com.huawei.hms.location.LocationSettingsResponse;
 import com.huawei.hms.location.LocationSettingsStates;
+import com.huawei.hms.location.NavigationResult;
 
 import io.flutter.plugin.common.MethodChannel.Result;
 
 public class DefaultSuccessListener<T> implements OnSuccessListener<T> {
-    private final Result mResult;
+    private final String methodName;
+    private final Context context;
+    private final Result result;
 
-    public DefaultSuccessListener(final Result result) {
-        mResult = result;
+    public DefaultSuccessListener(final String methodName, final Context context, final Result result) {
+        this.methodName = methodName;
+        this.context = context;
+        this.result = result;
     }
 
     @Override
     public void onSuccess(final T o) {
+        HMSLogger.getInstance(context).sendSingleEvent(methodName);
+
         if (o instanceof Void || o == null) {
-            mResult.success(null);
+            result.success(null);
         }
 
         if (o instanceof Location) {
             final Location location = ObjectUtils.cast(o, Location.class);
-            mResult.success(LocationUtils.fromLocationToMap(location));
+            result.success(LocationUtils.fromLocationToMap(location));
         }
 
         if (o instanceof HWLocation) {
             final HWLocation hwLocation = ObjectUtils.cast(o, HWLocation.class);
-            mResult.success(LocationUtils.fromHWLocationToMap(hwLocation));
+            result.success(LocationUtils.fromHWLocationToMap(hwLocation));
         }
 
         if (o instanceof LocationAvailability) {
             final LocationAvailability locationAvailability = ObjectUtils.cast(o, LocationAvailability.class);
-            mResult.success(LocationUtils.fromLocationAvailabilityToMap(locationAvailability));
+            result.success(LocationUtils.fromLocationAvailabilityToMap(locationAvailability));
         }
 
         if (o instanceof LocationSettingsResponse) {
             final LocationSettingsResponse response = ObjectUtils.cast(o, LocationSettingsResponse.class);
             final LocationSettingsStates locationSettingsStates = response.getLocationSettingsStates();
-            mResult.success(LocationUtils.fromLocationSettingsStatesToMap(locationSettingsStates));
+            result.success(LocationUtils.fromLocationSettingsStatesToMap(locationSettingsStates));
+        }
+
+        if (o instanceof NavigationResult) {
+            final NavigationResult navigationResult = ObjectUtils.cast(o, NavigationResult.class);
+            result.success(LocationUtils.fromNavigationResultToMap(navigationResult));
         }
     }
 }

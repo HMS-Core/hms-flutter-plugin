@@ -4,14 +4,15 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'huawei_location'
-  s.version          = '4.0.4'
+  s.version          = '5.0.0+301'
   s.summary          = 'HUAWEI Flutter Location Kit plugin.'
   s.description      = <<-DESC
-  HUAWEI Flutter Location Kit plugin.
+  HUAWEI Flutter Location Kit plugin combines the GPS, Wi-Fi and base station locations to help you quickly obtain precise user locations & build up global positioning capabilities.
                        DESC
   s.homepage         = 'https://www.huawei.com'
-  s.license          = { :file => '../LICENSE' }
-  s.source           = { :path => '.' }
+  s.license          = { :type => 'Apache 2.0', :file => '../LICENSE' }
+  s.author           = { 'Huawei Technologies' => 'huaweideveloper1@gmail.com' }
+  s.source           = { :git => 'https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-location' }
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'

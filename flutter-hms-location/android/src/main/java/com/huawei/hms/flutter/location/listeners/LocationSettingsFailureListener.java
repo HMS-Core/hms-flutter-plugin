@@ -16,41 +16,47 @@
 
 package com.huawei.hms.flutter.location.listeners;
 
+import static com.huawei.hms.location.LocationSettingsStatusCodes.RESOLUTION_REQUIRED;
+
 import android.app.Activity;
 import android.content.IntentSender.SendIntentException;
 
 import com.huawei.hmf.tasks.OnFailureListener;
 import com.huawei.hms.common.ApiException;
 import com.huawei.hms.common.ResolvableApiException;
-import com.huawei.hms.flutter.location.constants.Errors;
+import com.huawei.hms.flutter.location.constants.Error;
+import com.huawei.hms.flutter.location.logger.HMSLogger;
 import com.huawei.hms.flutter.location.utils.ObjectUtils;
-import com.huawei.hms.location.LocationSettingsStatusCodes;
 
 import io.flutter.plugin.common.MethodChannel.Result;
 
 public class LocationSettingsFailureListener implements OnFailureListener {
-    private final Result mResult;
-
-    private final Activity mActivity;
+    private final Result result;
+    private final Activity activity;
 
     public LocationSettingsFailureListener(final Result result, final Activity activity) {
-        mResult = result;
-        mActivity = activity;
+        this.result = result;
+        this.activity = activity;
     }
 
     @Override
     public void onFailure(final Exception e) {
         final ApiException apiException = ObjectUtils.cast(e, ApiException.class);
+        final int statusCode = apiException.getStatusCode();
+        final String statusCodeString = Integer.toString(statusCode);
 
-        if (apiException.getStatusCode() == LocationSettingsStatusCodes.RESOLUTION_REQUIRED) {
+        if (statusCode == RESOLUTION_REQUIRED) {
             try {
                 final ResolvableApiException resolvableApiException = ObjectUtils.cast(e, ResolvableApiException.class);
-                resolvableApiException.startResolutionForResult(mActivity, 0);
+                resolvableApiException.startResolutionForResult(activity, 0);
             } catch (final SendIntentException ex) {
-                mResult.error(Errors.SEND_INTENT_EXCEPTION.name(), ex.getMessage(), null);
+                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent("checkLocationSettings", "-1");
+                result.error(Error.SEND_INTENT_EXCEPTION.name(), ex.getMessage(), null);
             }
         } else {
-            mResult.error(Integer.toString(apiException.getStatusCode()), apiException.getMessage(), null);
+            HMSLogger.getInstance(activity.getApplicationContext())
+                .sendSingleEvent("checkLocationSettings", statusCodeString);
+            result.error(statusCodeString, apiException.getMessage(), null);
         }
     }
 }

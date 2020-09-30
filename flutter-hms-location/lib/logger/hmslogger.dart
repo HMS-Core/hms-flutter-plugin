@@ -14,18 +14,17 @@
     limitations under the License.
 */
 
-package com.huawei.hms.flutter.location.utils;
+import 'package:flutter/services.dart';
 
-public interface ObjectUtils {
-    /**
-     * Utility method that castes given object to given class type
-     * @param source Source object to be casted
-     * @param clazz  Class that object will be casted to its type
-     * @param <S>    Source object's type
-     * @param <D>    Destination type
-     * @return Object that casted to D type
-     */
-    static <S, D> D cast(final S source, final Class<D> clazz) {
-        return clazz.cast(source);
-    }
+class HMSLogger {
+  static const MethodChannel _methodChannel =
+      MethodChannel("com.huawei.flutter.location/hmslogger_methodchannel");
+
+  static Future<void> enableLogger() async {
+    return _methodChannel.invokeMethod<void>('enableLogger');
+  }
+
+  static Future<void> disableLogger() async {
+    return _methodChannel.invokeMethod<void>('disableLogger');
+  }
 }

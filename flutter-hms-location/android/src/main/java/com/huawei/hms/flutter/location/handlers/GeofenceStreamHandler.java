@@ -21,29 +21,33 @@ import android.content.Context;
 import android.content.IntentFilter;
 
 import com.huawei.hms.flutter.location.constants.Action;
+import com.huawei.hms.flutter.location.logger.HMSLogger;
 import com.huawei.hms.flutter.location.receivers.GeofenceBroadcastReceiver;
 
 import io.flutter.plugin.common.EventChannel.EventSink;
 import io.flutter.plugin.common.EventChannel.StreamHandler;
 
 public class GeofenceStreamHandler implements StreamHandler {
-    private final Context mContext;
-
-    private BroadcastReceiver mBroadcastReceiver;
+    private final Context context;
+    private BroadcastReceiver broadcastReceiver;
 
     public GeofenceStreamHandler(final Context context) {
-        mContext = context;
+        this.context = context;
     }
 
     @Override
     public void onListen(final Object arguments, final EventSink events) {
-        mBroadcastReceiver = new GeofenceBroadcastReceiver(events);
-        mContext.registerReceiver(mBroadcastReceiver, new IntentFilter(Action.PROCESS_GEOFENCE.id()));
+        broadcastReceiver = new GeofenceBroadcastReceiver(events);
+        context.registerReceiver(broadcastReceiver, new IntentFilter(Action.PROCESS_GEOFENCE));
+
+        HMSLogger.getInstance(context).sendSingleEvent("GeofenceStreamHandler.onListen");
     }
 
     @Override
     public void onCancel(final Object arguments) {
-        mContext.unregisterReceiver(mBroadcastReceiver);
-        mBroadcastReceiver = null;
+        context.unregisterReceiver(broadcastReceiver);
+        broadcastReceiver = null;
+
+        HMSLogger.getInstance(context).sendSingleEvent("GeofenceStreamHandler.onCancel");
     }
 }

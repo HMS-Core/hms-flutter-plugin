@@ -35,10 +35,10 @@ class LocationRequest {
   int _numUpdates;
   double _smallestDisplacement;
   int _maxWaitTime;
-  bool _needAddress;
-  String _language;
-  String _countryCode;
-  Map<String, String> _extras;
+  bool needAddress;
+  String language;
+  String countryCode;
+  Map<String, String> extras;
 
   LocationRequest._create(
     this._priority,
@@ -49,10 +49,10 @@ class LocationRequest {
     this._numUpdates,
     this._smallestDisplacement,
     this._maxWaitTime,
-    this._needAddress,
-    this._language,
-    this._countryCode,
-    this._extras,
+    this.needAddress,
+    this.language,
+    this.countryCode,
+    this.extras,
   );
 
   LocationRequest() {
@@ -64,9 +64,9 @@ class LocationRequest {
     _numUpdates = 2147483647;
     _smallestDisplacement = 0.0;
     _maxWaitTime = 0;
-    _needAddress = false;
-    _language = '';
-    _countryCode = '';
+    needAddress = false;
+    language = '';
+    countryCode = '';
   }
 
   int get priority => _priority;
@@ -139,27 +139,11 @@ class LocationRequest {
 
   set maxWaitTime(int value) => _maxWaitTime = value;
 
-  bool get needAddress => _needAddress;
-
-  set needAddress(bool value) => _needAddress = value;
-
-  String get language => _language;
-
-  set language(String value) => _language = value;
-
-  String get countryCode => _countryCode;
-
-  set countryCode(String value) => _countryCode = value;
-
-  Map<String, String> get extras => _extras;
-
-  set extras(Map<String, String> value) => _extras = value;
-
   void putExtras(String key, String value) {
-    if (_extras == null) {
-      _extras = Map<String, String>();
+    if (extras == null) {
+      extras = Map<String, String>();
     }
-    _extras.putIfAbsent(key, () => value);
+    extras.putIfAbsent(key, () => value);
   }
 
   Map<String, dynamic> toMap() {
@@ -172,10 +156,10 @@ class LocationRequest {
       'numUpdates': _numUpdates,
       'smallestDisplacement': _smallestDisplacement,
       'maxWaitTime': _maxWaitTime,
-      'needAddress': _needAddress,
-      'language': _language,
-      'countryCode': _countryCode,
-      'extras': _extras,
+      'needAddress': needAddress,
+      'language': language,
+      'countryCode': countryCode,
+      'extras': extras,
     };
   }
 
@@ -205,7 +189,7 @@ class LocationRequest {
 
   @override
   String toString() {
-    return 'LocationRequest(_priority: $_priority, _interval: $_interval, _fastestInterval: $_fastestInterval, _isFastestIntervalExplicitlySet: $_isFastestIntervalExplicitlySet, _expirationTime: $_expirationTime, _numUpdates: $_numUpdates, _smallestDisplacement: $_smallestDisplacement, _maxWaitTime: $_maxWaitTime, _needAddress: $_needAddress, _language: $_language, _countryCode: $_countryCode, _extras: $_extras)';
+    return 'LocationRequest(_priority: $_priority, _interval: $_interval, _fastestInterval: $_fastestInterval, _isFastestIntervalExplicitlySet: $_isFastestIntervalExplicitlySet, _expirationTime: $_expirationTime, _numUpdates: $_numUpdates, _smallestDisplacement: $_smallestDisplacement, _maxWaitTime: $_maxWaitTime, _needAddress: $needAddress, _language: $language, _countryCode: $countryCode, _extras: $extras)';
   }
 
   @override
@@ -221,10 +205,10 @@ class LocationRequest {
         o._numUpdates == _numUpdates &&
         o._smallestDisplacement == _smallestDisplacement &&
         o._maxWaitTime == _maxWaitTime &&
-        o._needAddress == _needAddress &&
-        o._language == _language &&
-        o._countryCode == _countryCode &&
-        mapEquals(o._extras, _extras);
+        o.needAddress == needAddress &&
+        o.language == language &&
+        o.countryCode == countryCode &&
+        mapEquals(o.extras, extras);
   }
 
   @override
@@ -238,10 +222,10 @@ class LocationRequest {
       _numUpdates,
       _smallestDisplacement,
       _maxWaitTime,
-      _needAddress,
-      _language,
-      _countryCode,
-      _extras,
+      needAddress,
+      language,
+      countryCode,
+      extras,
     ]);
   }
 }

@@ -24,91 +24,102 @@ import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 
 import com.huawei.hms.flutter.location.constants.Action;
-import com.huawei.hms.flutter.location.constants.Errors;
+import com.huawei.hms.flutter.location.constants.Error;
 import com.huawei.hms.flutter.location.listeners.DefaultFailureListener;
 import com.huawei.hms.flutter.location.listeners.RemoveUpdatesSuccessListener;
 import com.huawei.hms.flutter.location.listeners.RequestUpdatesFailureListener;
 import com.huawei.hms.flutter.location.listeners.RequestUpdatesSuccessListener;
+import com.huawei.hms.flutter.location.logger.HMSLogger;
 import com.huawei.hms.flutter.location.utils.ActivityUtils;
 import com.huawei.hms.location.ActivityConversionRequest;
 import com.huawei.hms.location.ActivityIdentification;
 import com.huawei.hms.location.ActivityIdentificationService;
 
-import io.flutter.plugin.common.MethodCall;
-import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
-import io.flutter.plugin.common.MethodChannel.Result;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.flutter.plugin.common.MethodCall;
+import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
+import io.flutter.plugin.common.MethodChannel.Result;
+
 public class ActivityIdentificationMethodHandler implements MethodCallHandler {
-    private final ActivityIdentificationService mActivityIdentificationService;
+    private final Activity activity;
+    private final Map<Integer, PendingIntent> requests;
+    private final ActivityIdentificationService service;
 
-    private final Activity mActivity;
-
-    private final Map<Integer, PendingIntent> mRequests;
-
-    private int mRequestCode = 0;
+    private int requestCode = 0;
 
     public ActivityIdentificationMethodHandler(final Activity activity) {
-        mActivityIdentificationService = ActivityIdentification.getService(activity);
-        mActivity = activity;
-        mRequests = new HashMap<>();
+        this.activity = activity;
+        service = ActivityIdentification.getService(activity);
+        requests = new HashMap<>();
     }
 
     private void createActivityIdentificationUpdates(final MethodCall call, final Result result) {
-        final Pair<Integer, PendingIntent> intentData = buildPendingIntent(Action.PROCESS_IDENTIFICATION.id());
-        mActivityIdentificationService.createActivityIdentificationUpdates(call.<Integer>arguments(), intentData.second)
-            .addOnSuccessListener(new RequestUpdatesSuccessListener(result, intentData.first))
-            .addOnFailureListener(new RequestUpdatesFailureListener<>(result, intentData.first, mRequests));
+        final Pair<Integer, PendingIntent> intentData = buildPendingIntent(Action.PROCESS_IDENTIFICATION);
+
+        service.createActivityIdentificationUpdates(call.<Integer>arguments(), intentData.second)
+            .addOnSuccessListener(new RequestUpdatesSuccessListener(call.method, activity, result, intentData.first))
+            .addOnFailureListener(
+                new RequestUpdatesFailureListener<>(call.method, activity, result, intentData.first, requests));
     }
 
     private void createActivityConversionUpdates(final MethodCall call, final Result result) {
         final List<Map<String, Object>> args = call.arguments();
-        final Pair<Integer, PendingIntent> intentData = buildPendingIntent(Action.PROCESS_CONVERSION.id());
+        final Pair<Integer, PendingIntent> intentData = buildPendingIntent(Action.PROCESS_CONVERSION);
         final ActivityConversionRequest request
             = ActivityUtils.fromActivityConversionInfoListToActivityConversionRequest(args);
 
-        mActivityIdentificationService.createActivityConversionUpdates(request, intentData.second)
-            .addOnSuccessListener(new RequestUpdatesSuccessListener(result, intentData.first))
-            .addOnFailureListener(new RequestUpdatesFailureListener<>(result, intentData.first, mRequests));
+        service.createActivityConversionUpdates(request, intentData.second)
+            .addOnSuccessListener(new RequestUpdatesSuccessListener(call.method, activity, result, intentData.first))
+            .addOnFailureListener(
+                new RequestUpdatesFailureListener<>(call.method, activity, result, intentData.first, requests));
     }
 
     private void deleteActivityIdentificationUpdates(final MethodCall call, final Result result) {
-        final int requestCode = call.<Integer>arguments();
-        if (!mRequests.containsKey(requestCode)) {
-            result.error(Errors.NON_EXISTING_REQUEST_ID.name(), Errors.NON_EXISTING_REQUEST_ID.message(), null);
+        final int incomingRequestCode = call.<Integer>arguments();
+
+        if (!requests.containsKey(incomingRequestCode)) {
+            result.error(Error.NON_EXISTING_REQUEST_ID.name(), Error.NON_EXISTING_REQUEST_ID.message(), null);
         } else {
-            mActivityIdentificationService.deleteActivityIdentificationUpdates(mRequests.get(requestCode))
-                .addOnSuccessListener(new RemoveUpdatesSuccessListener<>(result, requestCode, mRequests))
-                .addOnFailureListener(new DefaultFailureListener(result));
+            service.deleteActivityIdentificationUpdates(requests.get(incomingRequestCode))
+                .addOnSuccessListener(
+                    new RemoveUpdatesSuccessListener<>(call.method, activity, result, incomingRequestCode, requests))
+                .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
         }
     }
 
     private void deleteActivityConversionUpdates(final MethodCall call, final Result result) {
-        final int requestCode = call.<Integer>arguments();
-        if (!mRequests.containsKey(requestCode)) {
-            result.error(Errors.NON_EXISTING_REQUEST_ID.name(), Errors.NON_EXISTING_REQUEST_ID.message(), null);
+        final int incomingRequestCode = call.<Integer>arguments();
+
+        if (!requests.containsKey(incomingRequestCode)) {
+            result.error(Error.NON_EXISTING_REQUEST_ID.name(), Error.NON_EXISTING_REQUEST_ID.message(), null);
         } else {
-            mActivityIdentificationService.deleteActivityConversionUpdates(mRequests.get(requestCode))
-                .addOnSuccessListener(new RemoveUpdatesSuccessListener<>(result, requestCode, mRequests))
-                .addOnFailureListener(new DefaultFailureListener(result));
+            service.deleteActivityConversionUpdates(requests.get(incomingRequestCode))
+                .addOnSuccessListener(
+                    new RemoveUpdatesSuccessListener<>(call.method, activity, result, incomingRequestCode, requests))
+                .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
         }
     }
 
     private Pair<Integer, PendingIntent> buildPendingIntent(final String action) {
         final Intent intent = new Intent();
-        intent.setPackage(mActivity.getPackageName());
+
+        intent.setPackage(activity.getPackageName());
         intent.setAction(action);
-        final PendingIntent pendingIntent = PendingIntent.getBroadcast(mActivity.getApplicationContext(),
-            mRequestCode++, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mRequests.put(mRequestCode, pendingIntent);
-        return Pair.create(mRequestCode, pendingIntent);
+
+        final PendingIntent pendingIntent = PendingIntent.getBroadcast(activity.getApplicationContext(), ++requestCode,
+            intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        requests.put(requestCode, pendingIntent);
+        return Pair.create(requestCode, pendingIntent);
     }
 
     @Override
     public void onMethodCall(@NonNull final MethodCall call, @NonNull final Result result) {
+        HMSLogger.getInstance(activity).startMethodExecutionTimer(call.method);
+
         switch (call.method) {
             case "createActivityIdentificationUpdates":
                 createActivityIdentificationUpdates(call, result);

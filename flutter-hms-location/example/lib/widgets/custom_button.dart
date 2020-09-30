@@ -17,10 +17,10 @@
 import 'package:flutter/material.dart';
 
 class Btn extends StatelessWidget {
-  final String text;
-  final VoidCallback onPressed;
+  final String _text;
+  final VoidCallback _onPressed;
 
-  Btn(this.text, this.onPressed);
+  Btn(this._text, this._onPressed);
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +29,8 @@ class Btn extends StatelessWidget {
       textColor: Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 10),
       splashColor: Colors.blueAccent,
-      child: Text(text, style: TextStyle(fontSize: 14)),
-      onPressed: onPressed,
+      child: Text(_text, style: TextStyle(fontSize: 14)),
+      onPressed: _onPressed,
     );
   }
 }

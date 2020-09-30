@@ -16,14 +16,14 @@
 
 package com.huawei.hms.flutter.location.constants;
 
-public enum Errors {
+public enum Error {
     LOCATION_SETTINGS_NOT_AVAILABLE("Unable to get location settings"),
     NON_EXISTING_REQUEST_ID("Request ID does not exists"),
     SEND_INTENT_EXCEPTION("Unable to send intent");
 
     private final String message;
 
-    Errors(final String message) {
+    Error(final String message) {
         this.message = message;
     }
 

@@ -15,8 +15,10 @@
 */
 
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:huawei_location/activity/activity_identification_data.dart';
 import 'package:huawei_location/activity/activity_identification_response.dart';
 import 'package:huawei_location/activity/activity_identification_service.dart';
@@ -25,7 +27,7 @@ import '../widgets/custom_button.dart';
 import '../widgets/custom_progressbar.dart';
 
 class ActivityIdentificationScreen extends StatefulWidget {
-  static const String routeName = "ActivityIdentificationScreen";
+  static const String ROUTE_NAME = "ActivityIdentificationScreen";
 
   @override
   _ActivityIdentificationScreenState createState() =>
@@ -34,98 +36,85 @@ class ActivityIdentificationScreen extends StatefulWidget {
 
 class _ActivityIdentificationScreenState
     extends State<ActivityIdentificationScreen> {
-  String topText;
-  String bottomText;
-  int requestCode;
-  int _vehicle;
-  int _bike;
-  int _foot;
-  int _still;
-  int _others;
-  int _tilting;
-  int _walking;
-  int _running;
-  ActivityIdentificationService service;
-  StreamSubscription<ActivityIdentificationResponse> streamSubscription;
+  final ActivityIdentificationService _service =
+      ActivityIdentificationService();
+
+  int _requestCode;
+
+  String _topText = "";
+  String _bottomText = "";
+
+  int _progressVehicle = 0;
+  int _progressBike = 0;
+  int _progressFoot = 0;
+  int _progressStill = 0;
+  int _progressOthers = 0;
+  int _progressTilting = 0;
+  int _progressWalking = 0;
+  int _progressRunning = 0;
+
+  StreamSubscription<ActivityIdentificationResponse> _streamSubscription;
 
   @override
   void initState() {
     super.initState();
-    setInitialValues();
+    _streamSubscription =
+        _service.onActivityIdentification.listen(_onIdentificationResponse);
   }
 
-  void setInitialValues() {
-    topText = "";
-    bottomText = "";
-
-    _vehicle = 0;
-    _bike = 0;
-    _foot = 0;
-    _still = 0;
-    _others = 0;
-    _tilting = 0;
-    _walking = 0;
-    _running = 0;
-
-    service = ActivityIdentificationService();
-
-    streamSubscription =
-        service.onActivityIdentification.listen(onIdentificationResponse);
-  }
-
-  void resetProgressBars() {
+  void _resetProgressBars() {
     setState(() {
-      _vehicle = 0;
-      _bike = 0;
-      _foot = 0;
-      _still = 0;
-      _others = 0;
-      _tilting = 0;
-      _walking = 0;
-      _running = 0;
+      _progressVehicle = 0;
+      _progressBike = 0;
+      _progressFoot = 0;
+      _progressStill = 0;
+      _progressOthers = 0;
+      _progressTilting = 0;
+      _progressWalking = 0;
+      _progressRunning = 0;
     });
   }
 
-  void setProgress(int activity, int possibility) {
+  void _setProgress(int activity, int possibility) {
     switch (activity) {
       case ActivityIdentificationData.VEHICLE:
         setState(() {
-          _vehicle = possibility;
+          _progressVehicle = possibility;
         });
         break;
       case ActivityIdentificationData.BIKE:
         setState(() {
-          _bike = possibility;
+          _progressBike = possibility;
         });
         break;
       case ActivityIdentificationData.FOOT:
         setState(() {
-          _foot = possibility;
+          _progressFoot = possibility;
         });
         break;
       case ActivityIdentificationData.STILL:
         setState(() {
-          _still = possibility;
+          _progressStill = possibility;
         });
         break;
       case ActivityIdentificationData.OTHERS:
         setState(() {
-          _others = possibility;
+          _progressOthers = possibility;
         });
         break;
       case ActivityIdentificationData.TILTING:
         setState(() {
-          _tilting = possibility;
+          _progressTilting = possibility;
         });
         break;
       case ActivityIdentificationData.WALKING:
         setState(() {
-          _walking = possibility;
+          _progressWalking = possibility;
         });
         break;
       case ActivityIdentificationData.RUNNING:
         setState(() {
-          _running = possibility;
+          _progressRunning = possibility;
         });
         break;
       default:
@@ -133,83 +122,71 @@ class _ActivityIdentificationScreenState
     }
   }
 
-  void onIdentificationResponse(ActivityIdentificationResponse response) {
-    resetProgressBars();
-    appendBottomText(response.toString());
+  void _onIdentificationResponse(ActivityIdentificationResponse response) {
+    _resetProgressBars();
+    _appendBottomText(response.toString());
     for (ActivityIdentificationData data
         in response.activityIdentificationDatas) {
-      setProgress(data.identificationActivity, data.possibility);
+      _setProgress(data.identificationActivity, data.possibility);
     }
   }
 
-  void setTopText(String text) {
+  void _setTopText([String text = ""]) {
     setState(() {
-      topText = text;
+      _topText = text;
     });
   }
 
-  void setBottomText(String text) {
+  void _setBottomText([String text = ""]) {
     setState(() {
-      bottomText = text;
+      _bottomText = text;
     });
   }
 
-  void appendBottomText(String text) {
+  void _appendBottomText([String text = ""]) {
     setState(() {
-      bottomText = "$bottomText\n\n$text";
+      _bottomText = "$_bottomText\n\n$text";
     });
   }
 
-  void clearTopText() {
-    setState(() {
-      topText = "";
-    });
-  }
-
-  void clearBottomText() {
-    setState(() {
-      bottomText = "";
-    });
-  }
-
-  void createActivityIdentificationUpdates() async {
-    if (requestCode == null) {
+  void _createActivityIdentificationUpdates() async {
+    if (_requestCode == null) {
       try {
-        int _requestCode =
-            await service.createActivityIdentificationUpdates(5000);
-        requestCode = _requestCode;
-        setTopText("Created Activity Identification Updates successfully.");
-      } catch (e) {
-        setTopText(e.toString());
+        final int _responseRequestCode =
+            await _service.createActivityIdentificationUpdates(1000);
+        _requestCode = _responseRequestCode;
+        _setTopText("Created Activity Identification Updates successfully.");
+      } on PlatformException catch (e) {
+        _setTopText(e.toString());
       }
     } else {
-      setTopText("Already receiving Activity Identification Updates.");
+      _setTopText("Already receiving Activity Identification Updates.");
     }
   }
 
-  void deleteActivityIdentificationUpdates() async {
-    if (requestCode != null) {
+  void _deleteActivityIdentificationUpdates() async {
+    if (_requestCode != null) {
       try {
-        await service.deleteActivityIdentificationUpdates(requestCode);
-        requestCode = null;
-        resetProgressBars();
-        clearBottomText();
-        setTopText("Deleted Activity Identification Updates successfully.");
-      } catch (e) {
-        setTopText(e.toString());
+        await _service.deleteActivityIdentificationUpdates(_requestCode);
+        _requestCode = null;
+        _resetProgressBars();
+        _setBottomText();
+        _setTopText("Deleted Activity Identification Updates successfully.");
+      } on PlatformException catch (e) {
+        _setTopText(e.toString());
       }
     } else {
-      setTopText("Create Activity Identification Updates first.");
+      _setTopText("Create Activity Identification Updates first.");
     }
   }
 
-  void deleteUpdatesOnDispose() async {
-    if (requestCode != null) {
+  void _deleteUpdatesOnDispose() async {
+    if (_requestCode != null) {
       try {
-        await service.deleteActivityIdentificationUpdates(requestCode);
-        requestCode = null;
-      } catch (e) {
-        print(e.toString());
+        await _service.deleteActivityIdentificationUpdates(_requestCode);
+        _requestCode = null;
+      } on PlatformException catch (e) {
+        log(e.toString());
       }
     }
   }
@@ -225,7 +202,7 @@ class _ActivityIdentificationScreenState
             children: <Widget>[
               Container(
                 padding: EdgeInsets.only(top: 15, bottom: 6),
-                child: Text(topText),
+                child: Text(_topText),
               ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 30),
@@ -233,51 +210,51 @@ class _ActivityIdentificationScreenState
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     Btn("createActivityIdentificationUpdates",
-                        createActivityIdentificationUpdates),
+                        _createActivityIdentificationUpdates),
                     Btn("deleteActivityIdentificationUpdates",
-                        deleteActivityIdentificationUpdates),
+                        _deleteActivityIdentificationUpdates),
                     Container(
                       padding: EdgeInsets.only(top: 15),
                       child: Column(
                         children: <Widget>[
                           ProgressBar(
                             label: "VEHICLE[100]",
-                            value: _vehicle,
+                            value: _progressVehicle,
                             color: Colors.redAccent,
                           ),
                           ProgressBar(
                             label: "BIKE[101]",
-                            value: _bike,
+                            value: _progressBike,
                             color: Colors.black54,
                           ),
                           ProgressBar(
                             label: "FOOT[102]",
-                            value: _foot,
+                            value: _progressFoot,
                             color: Colors.pinkAccent,
                           ),
                           ProgressBar(
                             label: "STILL[103]",
-                            value: _still,
+                            value: _progressStill,
                             color: Colors.red,
                           ),
                           ProgressBar(
                             label: "OTHERS[104]",
-                            value: _others,
+                            value: _progressOthers,
                             color: Colors.blueGrey,
                           ),
                           ProgressBar(
                             label: "TILTING[105]",
-                            value: _tilting,
+                            value: _progressTilting,
                             color: Colors.amber,
                           ),
                           ProgressBar(
                             label: "WALKING[107]",
-                            value: _walking,
+                            value: _progressWalking,
                             color: Colors.deepPurple,
                           ),
                           ProgressBar(
                             label: "RUNNING[108]",
-                            value: _running,
+                            value: _progressRunning,
                             color: Colors.lightBlue,
                           ),
                         ],
@@ -285,7 +262,7 @@ class _ActivityIdentificationScreenState
                     ),
                     Container(
                       padding: EdgeInsets.only(top: 5),
-                      child: Text(bottomText),
+                      child: Text(_bottomText),
                     ),
                   ],
                 ),
@@ -298,7 +275,7 @@ class _ActivityIdentificationScreenState
   @override
   void dispose() {
     super.dispose();
-    deleteUpdatesOnDispose();
-    streamSubscription.cancel();
+    _deleteUpdatesOnDispose();
+    _streamSubscription.cancel();
   }
 }

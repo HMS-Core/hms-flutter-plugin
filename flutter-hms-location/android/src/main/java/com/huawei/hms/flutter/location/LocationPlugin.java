@@ -29,6 +29,7 @@ import com.huawei.hms.flutter.location.handlers.FusedLocationMethodHandler;
 import com.huawei.hms.flutter.location.handlers.FusedLocationStreamHandler;
 import com.huawei.hms.flutter.location.handlers.GeofenceMethodHandler;
 import com.huawei.hms.flutter.location.handlers.GeofenceStreamHandler;
+import com.huawei.hms.flutter.location.handlers.HMSLoggerMethodHandler;
 import com.huawei.hms.flutter.location.handlers.PermissionHandler;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
@@ -40,37 +41,25 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 public class LocationPlugin implements FlutterPlugin, ActivityAware {
-    private MethodChannel mPermissionMethodChannel;
-
-    private MethodChannel mFusedLocationMethodChannel;
-
-    private MethodChannel mGeofenceMethodChannel;
-
-    private MethodChannel mActivityIdentificationMethodChannel;
-
+    private MethodChannel permissionMethodChannel;
+    private MethodChannel fusedLocationMethodChannel;
+    private MethodChannel geofenceMethodChannel;
+    private MethodChannel activityIdentificationMethodChannel;
+    private MethodChannel locationEnhanceMethodChannel;
+    private MethodChannel hmsLoggerMethodChannel;
     private EventChannel mFusedLocationEventChannel;
-
     private EventChannel mGeofenceEventChannel;
-
     private EventChannel mActivityIdentificationEventChannel;
-
     private EventChannel mActivityConversionEventChannel;
-
-    private PermissionHandler mPermissionHandler;
-
+    private PermissionHandler permissionHandler;
     private EventChannel.StreamHandler mFusedLocationStreamHandler;
-
     private EventChannel.StreamHandler mGeofenceStreamHandler;
-
     private EventChannel.StreamHandler mActivityIdentificationStreamHandler;
-
     private EventChannel.StreamHandler mActivityConversionStreamHandler;
-
-    private FusedLocationMethodHandler mFusedLocationMethodHandler;
-
-    private GeofenceMethodHandler mGeofenceMethodHandler;
-
-    private ActivityIdentificationMethodHandler mActivityIdentificationMethodHandler;
+    private FusedLocationMethodHandler fusedLocationMethodHandler;
+    private GeofenceMethodHandler geofenceMethodHandler;
+    private ActivityIdentificationMethodHandler activityIdentificationMethodHandler;
+    private HMSLoggerMethodHandler hmsLoggerMethodHandler;
 
     public static void registerWith(final Registrar registrar) {
         final LocationPlugin instance = new LocationPlugin();
@@ -79,26 +68,28 @@ public class LocationPlugin implements FlutterPlugin, ActivityAware {
         final BinaryMessenger messenger = registrar.messenger();
 
         instance.onAttachedToEngine(context, messenger);
-        instance.mPermissionHandler = new PermissionHandler(activity);
-        instance.mPermissionMethodChannel.setMethodCallHandler(instance.mPermissionHandler);
-        instance.mFusedLocationMethodHandler = new FusedLocationMethodHandler(activity,
-            instance.mFusedLocationMethodChannel);
-        instance.mFusedLocationMethodChannel.setMethodCallHandler(instance.mFusedLocationMethodHandler);
-        instance.mGeofenceMethodHandler = new GeofenceMethodHandler(activity);
-        instance.mGeofenceMethodChannel.setMethodCallHandler(instance.mGeofenceMethodHandler);
-        instance.mActivityIdentificationMethodHandler = new ActivityIdentificationMethodHandler(activity);
-        instance.mActivityIdentificationMethodChannel.setMethodCallHandler(
-            instance.mActivityIdentificationMethodHandler);
-        registrar.addRequestPermissionsResultListener(instance.mPermissionHandler);
-        registrar.addActivityResultListener(instance.mFusedLocationMethodHandler);
+        instance.permissionHandler = new PermissionHandler(activity);
+        instance.permissionMethodChannel.setMethodCallHandler(instance.permissionHandler);
+        instance.fusedLocationMethodHandler = new FusedLocationMethodHandler(activity,
+            instance.fusedLocationMethodChannel);
+        instance.fusedLocationMethodChannel.setMethodCallHandler(instance.fusedLocationMethodHandler);
+        instance.geofenceMethodHandler = new GeofenceMethodHandler(activity);
+        instance.geofenceMethodChannel.setMethodCallHandler(instance.geofenceMethodHandler);
+        instance.activityIdentificationMethodHandler = new ActivityIdentificationMethodHandler(activity);
+        instance.activityIdentificationMethodChannel.setMethodCallHandler(instance.activityIdentificationMethodHandler);
+        instance.hmsLoggerMethodHandler = new HMSLoggerMethodHandler(context);
+        instance.hmsLoggerMethodChannel.setMethodCallHandler(instance.hmsLoggerMethodHandler);
+        registrar.addRequestPermissionsResultListener(instance.permissionHandler);
+        registrar.addActivityResultListener(instance.fusedLocationMethodHandler);
     }
 
     private void initChannels(final BinaryMessenger messenger) {
-        mPermissionMethodChannel = new MethodChannel(messenger, Channel.PERMISSON_METHOD.id());
-        mFusedLocationMethodChannel = new MethodChannel(messenger, Channel.FUSED_LOCATION_METHOD.id());
-        mGeofenceMethodChannel = new MethodChannel(messenger, Channel.GEOFENCE_METHOD.id());
-        mActivityIdentificationMethodChannel = new MethodChannel(messenger,
-            Channel.ACTIVITY_IDENTIFICATION_METHOD.id());
+        permissionMethodChannel = new MethodChannel(messenger, Channel.PERMISSON_METHOD.id());
+        fusedLocationMethodChannel = new MethodChannel(messenger, Channel.FUSED_LOCATION_METHOD.id());
+        geofenceMethodChannel = new MethodChannel(messenger, Channel.GEOFENCE_METHOD.id());
+        activityIdentificationMethodChannel = new MethodChannel(messenger, Channel.ACTIVITY_IDENTIFICATION_METHOD.id());
+        locationEnhanceMethodChannel = new MethodChannel(messenger, Channel.LOCATION_ENHANCE_METHOD.id());
+        hmsLoggerMethodChannel = new MethodChannel(messenger, Channel.HMSLOGGER_METHOD.id());
         mFusedLocationEventChannel = new EventChannel(messenger, Channel.FUSED_LOCATION_EVENT.id());
         mGeofenceEventChannel = new EventChannel(messenger, Channel.GEOFENCE_EVENT.id());
         mActivityIdentificationEventChannel = new EventChannel(messenger, Channel.ACTIVITY_IDENTIFICATION_EVENT.id());
@@ -134,10 +125,12 @@ public class LocationPlugin implements FlutterPlugin, ActivityAware {
     }
 
     private void removeChannels() {
-        mPermissionMethodChannel = null;
-        mFusedLocationMethodChannel = null;
-        mGeofenceMethodChannel = null;
-        mActivityIdentificationMethodChannel = null;
+        permissionMethodChannel = null;
+        fusedLocationMethodChannel = null;
+        geofenceMethodChannel = null;
+        activityIdentificationMethodChannel = null;
+        locationEnhanceMethodChannel = null;
+        hmsLoggerMethodChannel = null;
         mFusedLocationEventChannel = null;
         mGeofenceEventChannel = null;
         mActivityIdentificationEventChannel = null;
@@ -166,18 +159,20 @@ public class LocationPlugin implements FlutterPlugin, ActivityAware {
     public void onAttachedToActivity(@NonNull final ActivityPluginBinding binding) {
         final Activity activity = binding.getActivity();
 
-        mPermissionHandler = new PermissionHandler(activity);
-        mFusedLocationMethodHandler = new FusedLocationMethodHandler(activity, mFusedLocationMethodChannel);
-        mGeofenceMethodHandler = new GeofenceMethodHandler(activity);
-        mActivityIdentificationMethodHandler = new ActivityIdentificationMethodHandler(activity);
+        permissionHandler = new PermissionHandler(activity);
+        fusedLocationMethodHandler = new FusedLocationMethodHandler(activity, fusedLocationMethodChannel);
+        geofenceMethodHandler = new GeofenceMethodHandler(activity);
+        activityIdentificationMethodHandler = new ActivityIdentificationMethodHandler(activity);
+        hmsLoggerMethodHandler = new HMSLoggerMethodHandler(activity.getApplicationContext());
 
-        binding.addRequestPermissionsResultListener(mPermissionHandler);
-        binding.addActivityResultListener(mFusedLocationMethodHandler);
+        binding.addRequestPermissionsResultListener(permissionHandler);
+        binding.addActivityResultListener(fusedLocationMethodHandler);
 
-        mPermissionMethodChannel.setMethodCallHandler(mPermissionHandler);
-        mFusedLocationMethodChannel.setMethodCallHandler(mFusedLocationMethodHandler);
-        mGeofenceMethodChannel.setMethodCallHandler(mGeofenceMethodHandler);
-        mActivityIdentificationMethodChannel.setMethodCallHandler(mActivityIdentificationMethodHandler);
+        permissionMethodChannel.setMethodCallHandler(permissionHandler);
+        fusedLocationMethodChannel.setMethodCallHandler(fusedLocationMethodHandler);
+        geofenceMethodChannel.setMethodCallHandler(geofenceMethodHandler);
+        activityIdentificationMethodChannel.setMethodCallHandler(activityIdentificationMethodHandler);
+        hmsLoggerMethodChannel.setMethodCallHandler(hmsLoggerMethodHandler);
     }
 
     @Override
@@ -192,12 +187,15 @@ public class LocationPlugin implements FlutterPlugin, ActivityAware {
 
     @Override
     public void onDetachedFromActivity() {
-        mActivityIdentificationMethodChannel.setMethodCallHandler(null);
-        mGeofenceMethodChannel.setMethodCallHandler(null);
-        mFusedLocationMethodChannel.setMethodCallHandler(null);
-        mActivityIdentificationMethodHandler = null;
-        mGeofenceMethodHandler = null;
-        mFusedLocationMethodHandler = null;
-        mPermissionHandler = null;
+        activityIdentificationMethodChannel.setMethodCallHandler(null);
+        geofenceMethodChannel.setMethodCallHandler(null);
+        fusedLocationMethodChannel.setMethodCallHandler(null);
+        locationEnhanceMethodChannel.setMethodCallHandler(null);
+        hmsLoggerMethodChannel.setMethodCallHandler(null);
+        activityIdentificationMethodHandler = null;
+        geofenceMethodHandler = null;
+        fusedLocationMethodHandler = null;
+        permissionHandler = null;
+        hmsLoggerMethodHandler = null;
     }
 }

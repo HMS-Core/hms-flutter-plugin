@@ -15,8 +15,10 @@
 */
 
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:huawei_location/location/fused_location_provider_client.dart';
 import 'package:huawei_location/location/location.dart';
 import 'package:huawei_location/location/location_request.dart';
@@ -24,92 +26,88 @@ import 'package:huawei_location/location/location_request.dart';
 import '../widgets/custom_button.dart' show Btn;
 
 class LocationUpdatesScreen extends StatefulWidget {
-  static const String routeName = "LocationUpdatesScreen";
+  static const String ROUTE_NAME = "LocationUpdatesScreen";
 
   @override
   _LocationUpdatesScreenState createState() => _LocationUpdatesScreenState();
 }
 
 class _LocationUpdatesScreenState extends State<LocationUpdatesScreen> {
-  FusedLocationProviderClient locationService;
-  LocationRequest locationRequest;
-  StreamSubscription<Location> streamSubs;
+  final FusedLocationProviderClient _locationService =
+      FusedLocationProviderClient();
+  final LocationRequest _locationRequest = LocationRequest()..interval = 500;
 
-  String topText;
-  String bottomText;
-  int requestCode;
+  String _topText = "";
+  String _bottomText = "";
+  int _requestCode;
+  StreamSubscription<Location> _streamSubscription;
 
   @override
   void initState() {
     super.initState();
-    initServices();
-  }
-
-  void initServices() {
-    topText = "";
-    bottomText = "";
-    locationService = FusedLocationProviderClient();
-    locationRequest = LocationRequest();
-    locationRequest.interval = 5000;
-    streamSubs = locationService.onLocationData.listen((location) {
-      setState(() {
-        bottomText = bottomText + '\n' + location.toString();
-      });
+    _streamSubscription = _locationService.onLocationData.listen((location) {
+      _appendToBottomText(location.toString());
     });
   }
 
-  void requestLocationUpdates() async {
-    if (requestCode == null) {
+  void _requestLocationUpdates() async {
+    if (_requestCode == null) {
       try {
-        int _requestCode =
-            await locationService.requestLocationUpdates(locationRequest);
-        requestCode = _requestCode;
-        setState(() {
-          topText = "Location updates requested successfully";
-        });
-      } catch (e) {
-        setState(() {
-          topText = e.toString();
-        });
+        final int requestCode =
+            await _locationService.requestLocationUpdates(_locationRequest);
+        _requestCode = requestCode;
+        _setTopText("Location updates requested successfully");
+      } on PlatformException catch (e) {
+        _setTopText(e.toString());
       }
     } else {
-      setState(() {
-        topText =
-            "Already requested location updates. Try removing location updates";
-      });
+      _setTopText(
+          "Already requested location updates. Try removing location updates");
     }
   }
 
-  void removeLocationUpdates() async {
-    if (requestCode != null) {
+  void _removeLocationUpdates() async {
+    if (_requestCode != null) {
       try {
-        await locationService.removeLocationUpdates(requestCode);
-        requestCode = null;
-        setState(() {
-          topText = "Location updates are removed successfully";
-          bottomText = "";
-        });
-      } catch (e) {
-        setState(() {
-          topText = e.toString();
-        });
+        await _locationService.removeLocationUpdates(_requestCode);
+        _requestCode = null;
+        _setTopText("Location updates are removed successfully");
+        _setBottomText();
+      } on PlatformException catch (e) {
+        _setTopText(e.toString());
       }
     } else {
-      setState(() {
-        topText = "requestCode does not exist. Request location updates first";
-      });
+      _setTopText("requestCode does not exist. Request location updates first");
     }
   }
 
-  void removeLocationUpdatesOnDispose() async {
-    if (requestCode != null) {
+  void _removeLocationUpdatesOnDispose() async {
+    if (_requestCode != null) {
       try {
-        await locationService.removeLocationUpdates(requestCode);
-        requestCode = null;
-      } catch (e) {
-        print(e.toString());
+        await _locationService.removeLocationUpdates(_requestCode);
+        _requestCode = null;
+      } on PlatformException catch (e) {
+        log(e.toString());
       }
     }
+  }
+
+  void _setTopText([String text = ""]) {
+    setState(() {
+      _topText = text;
+    });
+  }
+
+  void _setBottomText([String text = ""]) {
+    setState(() {
+      _bottomText = text;
+    });
+  }
+
+  void _appendToBottomText(String text) {
+    setState(() {
+      _bottomText = "$_bottomText\n\n$text";
+    });
   }
 
   @override
@@ -128,18 +126,18 @@ class _LocationUpdatesScreenState extends State<LocationUpdatesScreen> {
                 top: 10,
               ),
               height: 90,
-              child: Text(topText),
+              child: Text(_topText),
             ),
             Divider(
               thickness: 0.1,
               color: Colors.black,
             ),
-            Btn("Request Location Updates", requestLocationUpdates),
-            Btn("Remove Location Updates", removeLocationUpdates),
+            Btn("Request Location Updates", _requestLocationUpdates),
+            Btn("Remove Location Updates", _removeLocationUpdates),
             Expanded(
               child: new SingleChildScrollView(
                 child: Text(
-                  bottomText,
+                  _bottomText,
                   style: const TextStyle(
                     fontSize: 12.0,
                   ),
@@ -155,7 +153,7 @@ class _LocationUpdatesScreenState extends State<LocationUpdatesScreen> {
   @override
   void dispose() {
     super.dispose();
-    removeLocationUpdatesOnDispose();
-    streamSubs.cancel();
+    _removeLocationUpdatesOnDispose();
+    _streamSubscription.cancel();
   }
 }

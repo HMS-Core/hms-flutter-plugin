@@ -20,25 +20,26 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import com.huawei.hms.flutter.location.logger.HMSLogger;
 import com.huawei.hms.flutter.location.utils.ActivityUtils;
 import com.huawei.hms.location.ActivityConversionResponse;
 
 import io.flutter.plugin.common.EventChannel.EventSink;
 
 public class ActivityConversionBroadcastReceiver extends BroadcastReceiver {
-    private final EventSink mEventSink;
+    private final EventSink eventSink;
 
     public ActivityConversionBroadcastReceiver(final EventSink eventSink) {
-        mEventSink = eventSink;
+        this.eventSink = eventSink;
     }
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
-        if (intent != null) {
-            if (ActivityConversionResponse.containDataFromIntent(intent)) {
-                final ActivityConversionResponse response = ActivityConversionResponse.getDataFromIntent(intent);
-                mEventSink.success(ActivityUtils.activityConversionResponseToMap(response));
-            }
+        if (ActivityConversionResponse.containDataFromIntent(intent)) {
+            final ActivityConversionResponse response = ActivityConversionResponse.getDataFromIntent(intent);
+
+            HMSLogger.getInstance(context).sendPeriodicEvent("ActivityConversionUpdates");
+            eventSink.success(ActivityUtils.activityConversionResponseToMap(response));
         }
     }
 }

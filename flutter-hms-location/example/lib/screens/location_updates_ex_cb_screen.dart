@@ -14,17 +14,18 @@
     limitations under the License.
 */
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:huawei_location/location/fused_location_provider_client.dart';
-import 'package:huawei_location/location/location_availability.dart';
 import 'package:huawei_location/location/location_callback.dart';
 import 'package:huawei_location/location/location_request.dart';
-import 'package:huawei_location/location/location_result.dart';
 
 import '../widgets/custom_button.dart' show Btn;
 
 class LocationUpdatesExCbScreen extends StatefulWidget {
-  static const String routeName = "LocationUpdatesExCbScreen";
+  static const String ROUTE_NAME = "LocationUpdatesExCbScreen";
 
   @override
   _LocationUpdatesExCbScreenState createState() =>
@@ -32,98 +33,81 @@ class LocationUpdatesExCbScreen extends StatefulWidget {
 }
 
 class _LocationUpdatesExCbScreenState extends State<LocationUpdatesExCbScreen> {
-  String topText;
-  String bottomText;
-  int callbackId;
-  FusedLocationProviderClient locationService;
-  LocationRequest locationRequest;
-  LocationCallback locationCallback;
+  final FusedLocationProviderClient _locationService =
+      FusedLocationProviderClient();
+  final LocationRequest _locationRequest = LocationRequest()..interval = 500;
+
+  String _topText = "";
+  String _bottomText = "";
+  int _callbackId;
+  LocationCallback _locationCallback;
 
   @override
   void initState() {
     super.initState();
-    initServices();
-  }
 
-  void initServices() {
-    topText = "";
-    bottomText = "";
-    locationService = FusedLocationProviderClient();
-    locationRequest = LocationRequest();
-    locationRequest.interval = 5000;
-    locationCallback = LocationCallback(
-      onLocationResult: _onLocationResult,
-      onLocationAvailability: _onLocationAvailability,
+    _locationCallback = LocationCallback(
+      onLocationResult: _onCallbackResult,
+      onLocationAvailability: _onCallbackResult,
     );
   }
 
-  void _onLocationResult(LocationResult res) {
-    setState(() {
-      bottomText = bottomText + res.toString();
-    });
+  void _onCallbackResult(result) {
+    _appendToBottomText(result.toString());
   }
 
-  void _onLocationAvailability(LocationAvailability availability) {
-    setState(() {
-      bottomText = bottomText + availability.toString();
-    });
-  }
-
-  void requestLocationUpdatesExCb() async {
-    if (callbackId == null) {
+  void _requestLocationUpdatesExCb() async {
+    if (_callbackId == null) {
       try {
-        int _callbackId = await locationService.requestLocationUpdatesExCb(
-            locationRequest, locationCallback);
-        callbackId = _callbackId;
-        setState(() {
-          topText = "Location updates are requested successfully";
-        });
-      } catch (e) {
-        setState(() {
-          topText = e.toString();
-        });
+        final int callbackId = await _locationService
+            .requestLocationUpdatesExCb(_locationRequest, _locationCallback);
+        _callbackId = callbackId;
+        _setTopText("Location updates are requested successfully.");
+      } on PlatformException catch (e) {
+        _setTopText(e.toString());
       }
     } else {
-      setState(() {
-        topText =
-            "Already requested location updates. Try removing location updates";
-      });
+      _setTopText(
+          "Already requested location updates. Try removing location updates");
     }
   }
 
-  void removeLocationUpdatesExCb() async {
-    setState(() {
-      topText = "";
-    });
-    if (callbackId != null) {
+  void _removeLocationUpdatesExCb() async {
+    _setTopText();
+    if (_callbackId != null) {
       try {
-        await locationService.removeLocationUpdatesCb(callbackId);
-        callbackId = null;
-        setState(() {
-          topText = "Location updates are removed successfully";
-          bottomText = "";
-        });
-      } catch (e) {
-        setState(() {
-          topText = e.toString();
-        });
+        await _locationService.removeLocationUpdatesCb(_callbackId);
+        _callbackId = null;
+        _setTopText("Location updates are removed successfully");
+      } on PlatformException catch (e) {
+        _setTopText(e.toString());
       }
     } else {
-      setState(() {
-        topText = "callbackId does not exist. Request location updates first";
-      });
+      _setTopText("callbackId does not exist. Request location updates first");
     }
   }
 
-  void removeLocationUpdatesOnDispose() async {
-    if (callbackId != null) {
+  void _removeLocationUpdatesOnDispose() async {
+    if (_callbackId != null) {
       try {
-        await locationService.removeLocationUpdatesCb(callbackId);
-        callbackId = null;
-      } catch (e) {
-        print(e.toString());
+        await _locationService.removeLocationUpdatesCb(_callbackId);
+        _callbackId = null;
+      } on PlatformException catch (e) {
+        log(e.toString());
       }
     }
+  }
+
+  void _setTopText([String text = ""]) {
+    setState(() {
+      _topText = text;
+    });
+  }
+
+  void _appendToBottomText(String text) {
+    setState(() {
+      _bottomText = "$_bottomText\n\n$text";
+    });
   }
 
   @override
@@ -142,19 +126,19 @@ class _LocationUpdatesExCbScreenState extends State<LocationUpdatesExCbScreen> {
                 top: 10,
               ),
               height: 90,
-              child: Text(topText),
+              child: Text(_topText),
             ),
             Divider(
               thickness: 0.1,
               color: Colors.black,
             ),
             Btn("Request Location Updates Ex with Callback",
-                requestLocationUpdatesExCb),
-            Btn("Remove Location Updates", removeLocationUpdatesExCb),
+                _requestLocationUpdatesExCb),
+            Btn("Remove Location Updates", _removeLocationUpdatesExCb),
             Expanded(
               child: new SingleChildScrollView(
                 child: Text(
-                  bottomText,
+                  _bottomText,
                   style: const TextStyle(
                     fontSize: 12.0,
                   ),
@@ -170,6 +154,6 @@ class _LocationUpdatesExCbScreenState extends State<LocationUpdatesExCbScreen> {
   @override
   void dispose() {
     super.dispose();
-    removeLocationUpdatesOnDispose();
+    _removeLocationUpdatesOnDispose();
   }
 }

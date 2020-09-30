@@ -16,22 +16,32 @@
 
 package com.huawei.hms.flutter.location.listeners;
 
+import android.content.Context;
+
 import com.huawei.hmf.tasks.OnFailureListener;
 import com.huawei.hms.common.ApiException;
+import com.huawei.hms.flutter.location.logger.HMSLogger;
 import com.huawei.hms.flutter.location.utils.ObjectUtils;
 
 import io.flutter.plugin.common.MethodChannel.Result;
 
 public class DefaultFailureListener implements OnFailureListener {
-    private final Result mResult;
+    private final String methodName;
+    private final Context context;
+    private final Result result;
 
-    public DefaultFailureListener(final Result result) {
-        mResult = result;
+    public DefaultFailureListener(final String methodName, final Context context, final Result result) {
+        this.methodName = methodName;
+        this.context = context;
+        this.result = result;
     }
 
     @Override
     public void onFailure(final Exception e) {
         final ApiException ex = ObjectUtils.cast(e, ApiException.class);
-        mResult.error(Integer.toString(ex.getStatusCode()), ex.getMessage(), null);
+        final String statusCodeString = Integer.toString(ex.getStatusCode());
+
+        HMSLogger.getInstance(context).sendSingleEvent(methodName, statusCodeString);
+        result.error(statusCodeString, ex.getMessage(), null);
     }
 }

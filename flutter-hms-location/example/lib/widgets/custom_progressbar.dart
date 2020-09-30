@@ -26,22 +26,24 @@ class ProgressBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Flexible(
-            flex: 4,
-            child: Text(
-              label,
-              style: TextStyle(fontWeight: FontWeight.w700),
-            ),
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Flexible(
+          flex: 4,
+          child: Text(
+            label,
+            style: TextStyle(fontWeight: FontWeight.w700),
           ),
-          Flexible(
-              flex: 6,
-              child: LinearProgressIndicator(
-                backgroundColor: Colors.black12,
-                value: value / 100,
-                valueColor: AlwaysStoppedAnimation<Color>(color),
-              ))
-        ]);
+        ),
+        Flexible(
+          flex: 6,
+          child: LinearProgressIndicator(
+            backgroundColor: Colors.black12,
+            value: value / 100,
+            valueColor: AlwaysStoppedAnimation<Color>(color),
+          ),
+        )
+      ],
+    );
   }
 }

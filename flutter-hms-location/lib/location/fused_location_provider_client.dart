@@ -14,8 +14,6 @@
     limitations under the License.
 */
 
-import 'dart:async' show Future;
-
 import 'package:flutter/services.dart';
 
 import 'hwlocation.dart';
@@ -26,6 +24,8 @@ import 'location_request.dart';
 import 'location_result.dart';
 import 'location_settings_request.dart';
 import 'location_settings_states.dart';
+import 'navigation_request.dart';
+import 'navigation_result.dart';
 
 class FusedLocationProviderClient {
   static FusedLocationProviderClient _instance;
@@ -122,7 +122,9 @@ class FusedLocationProviderClient {
   Future<int> requestLocationUpdatesExCb(LocationRequest locationRequest,
       LocationCallback locationCallback) async {
     int callbackId = await _methodChannel.invokeMethod<int>(
-        'requestLocationUpdatesExCb', locationRequest.toMap());
+        'requestLocationUpdatesExCb',
+        (locationRequest..priority = LocationRequest.PRIORITY_HD_ACCURACY)
+            .toMap());
     _callbacks.putIfAbsent(callbackId, () => locationCallback);
     return callbackId;
   }
@@ -136,6 +138,13 @@ class FusedLocationProviderClient {
     await _methodChannel.invokeMethod<void>(
         'removeLocationUpdatesCb', callbackId);
     _callbacks.remove(callbackId);
+  }
+
+  Future<NavigationResult> getNavigationContextState(
+      NavigationRequest navigationRequest) async {
+    return NavigationResult.fromMap(
+        await _methodChannel.invokeMapMethod<String, dynamic>(
+            'getNavigationContextState', navigationRequest.toMap()));
   }
 
   Stream<Location> get onLocationData {

@@ -11,5 +11,5 @@
     -->
     <uses-permission
         android:name="android.permission.ACCESS_MOCK_LOCATION"
-        tools:ignore="ProtectedPermissions" />
+        tools:ignore="MockLocation,ProtectedPermissions" />
 </manifest>

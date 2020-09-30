@@ -14,8 +14,6 @@
     limitations under the License.
 */
 
-import 'dart:async' show Future;
-
 import 'package:flutter/services.dart';
 
 class PermissionHandler {

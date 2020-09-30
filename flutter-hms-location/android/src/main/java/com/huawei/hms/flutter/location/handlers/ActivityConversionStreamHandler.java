@@ -21,29 +21,33 @@ import android.content.Context;
 import android.content.IntentFilter;
 
 import com.huawei.hms.flutter.location.constants.Action;
+import com.huawei.hms.flutter.location.logger.HMSLogger;
 import com.huawei.hms.flutter.location.receivers.ActivityConversionBroadcastReceiver;
 
 import io.flutter.plugin.common.EventChannel.EventSink;
 import io.flutter.plugin.common.EventChannel.StreamHandler;
 
 public class ActivityConversionStreamHandler implements StreamHandler {
-    private final Context mContext;
-
-    private BroadcastReceiver mBroadcastReceiver;
+    private final Context context;
+    private BroadcastReceiver broadcastReceiver;
 
     public ActivityConversionStreamHandler(final Context context) {
-        mContext = context;
+        this.context = context;
     }
 
     @Override
     public void onListen(final Object arguments, final EventSink events) {
-        mBroadcastReceiver = new ActivityConversionBroadcastReceiver(events);
-        mContext.registerReceiver(mBroadcastReceiver, new IntentFilter(Action.PROCESS_CONVERSION.id()));
+        broadcastReceiver = new ActivityConversionBroadcastReceiver(events);
+        context.registerReceiver(broadcastReceiver, new IntentFilter(Action.PROCESS_CONVERSION));
+
+        HMSLogger.getInstance(context).sendSingleEvent("ActivityConversionStreamHandler.onListen");
     }
 
     @Override
     public void onCancel(final Object arguments) {
-        mContext.unregisterReceiver(mBroadcastReceiver);
-        mBroadcastReceiver = null;
+        context.unregisterReceiver(broadcastReceiver);
+        broadcastReceiver = null;
+
+        HMSLogger.getInstance(context).sendSingleEvent("ActivityConversionStreamHandler.onCancel");
     }
 }

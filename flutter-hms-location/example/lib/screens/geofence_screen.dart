@@ -15,216 +15,183 @@
 */
 
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:huawei_location/geofence/geofence.dart';
 import 'package:huawei_location/geofence/geofence_data.dart';
 import 'package:huawei_location/geofence/geofence_request.dart';
 import 'package:huawei_location/geofence/geofence_service.dart';
-import 'package:huawei_location/location/fused_location_provider_client.dart';
 import 'package:huawei_location/permission/permission_handler.dart';
 
-import '../screens/add_geofence_screen.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_textinput.dart';
+import 'add_geofence_screen.dart';
 
 class GeofenceScreen extends StatefulWidget {
-  static const String routeName = "GeofenceScreen";
+  static const String ROUTE_NAME = "GeofenceScreen";
 
   @override
   _GeofenceScreenState createState() => _GeofenceScreenState();
 }
 
 class _GeofenceScreenState extends State<GeofenceScreen> {
-  String topText;
-  String geofenceText;
-  String bottomText;
-  int fenceCount;
-  int requestCode;
+  String _topText = "";
+  String _bottomText = "";
 
-  List<Geofence> geofenceList;
-  List<String> geofenceIdList;
-  PermissionHandler permissionHandler;
-  GeofenceService geofenceService;
-  GeofenceRequest geofenceRequest;
-  FusedLocationProviderClient locationService;
-  StreamSubscription<GeofenceData> geofenceStreamSub;
-  TextEditingController _uid;
-  TextEditingController _trigger;
+  int _fenceCount;
+  int _requestCode;
+  String _geofenceListText;
+  StreamSubscription<GeofenceData> _streamSubscription;
+
+  final List<Geofence> _geofenceList = <Geofence>[];
+  final List<String> _geofenceIdList = <String>[];
+  final GeofenceService _geofenceService = GeofenceService();
+  final GeofenceRequest _geofenceRequest = GeofenceRequest();
+  final TextEditingController _uniqueId = TextEditingController();
+  final PermissionHandler _permissionHandler = PermissionHandler();
 
   @override
   void initState() {
     super.initState();
-    initialValues();
-  }
-
-  void initialValues() {
-    topText = "";
-    geofenceText = "";
-    bottomText = "";
-    fenceCount = 0;
-    geofenceList = <Geofence>[];
-    geofenceIdList = <String>[];
-    permissionHandler = PermissionHandler();
-    geofenceService = GeofenceService();
-    geofenceRequest = GeofenceRequest();
-    locationService = FusedLocationProviderClient();
-    _uid = TextEditingController();
-    _trigger = TextEditingController(text: "5");
-    geofenceStreamSub = geofenceService.onGeofenceData.listen((data) {
-      setState(() {
-        bottomText = bottomText + '\n\n' + data.toString();
-      });
+    _fenceCount = _geofenceList.length;
+    _geofenceListText = _geofenceIdList.toString();
+    _streamSubscription = _geofenceService.onGeofenceData.listen((data) {
+      _appendToBottomText(data.toString());
     });
-
-    geofenceText = geofenceIdList.toString();
-    fenceCount = geofenceList.length;
   }
 
-  void hasPermission() async {
+  void _hasPermission() async {
     try {
-      bool status = await permissionHandler.hasBackgroundLocationPermission();
-      setState(() {
-        topText = "Has permission: $status";
-      });
-    } catch (e) {
-      setState(() {
-        topText = e.toString();
-      });
+      final bool status =
+          await _permissionHandler.hasBackgroundLocationPermission();
+      _setTopText("Has permission: $status");
+    } on PlatformException catch (e) {
+      _setTopText(e.toString());
     }
   }
 
-  void requestPermission() async {
+  void _requestPermission() async {
     try {
-      bool status =
-          await permissionHandler.requestBackgroundLocationPermission();
-      setState(() {
-        topText = "Is permission granted $status";
-      });
-    } catch (e) {
-      setState(() {
-        topText = e.toString();
-      });
+      final bool status =
+          await _permissionHandler.requestBackgroundLocationPermission();
+      _setTopText("Is permission granted: $status");
+    } on PlatformException catch (e) {
+      _setTopText(e.toString());
     }
   }
 
-  void createGeofenceList() async {
-    if (requestCode != null) {
-      setState(() {
-        topText =
-            "Already created geofence list. Call deleteGeofenceList method first.";
-      });
-    } else if (geofenceList.isEmpty) {
-      setState(() {
-        topText = "Add Geofence first.";
-      });
+  void _createGeofenceList() async {
+    if (_requestCode != null) {
+      _setTopText(
+          "Already created Geofence list. Call deleteGeofenceList method first.");
+    } else if (_geofenceList.isEmpty) {
+      _setTopText("Add Geofence first.");
     } else {
-      geofenceRequest.geofenceList = geofenceList;
-      geofenceRequest.initConversions = 5;
+      _geofenceRequest.geofenceList = _geofenceList;
+      _geofenceRequest.initConversions = 5;
       try {
-        requestCode = await geofenceService.createGeofenceList(geofenceRequest);
-        setState(() {
-          topText = "Created geofence list successfully.";
-        });
-      } catch (e) {
-        setState(() {
-          topText = e.toString();
-        });
+        _requestCode =
+            await _geofenceService.createGeofenceList(_geofenceRequest);
+        _setTopText("Created geofence list successfully.");
+      } on PlatformException catch (e) {
+        _setTopText(e.toString());
       }
     }
   }
 
-  void deleteGeofenceList() async {
-    if (requestCode == null) {
-      setState(() {
-        topText = "Call createGeofenceList method first.";
-      });
+  void _deleteGeofenceList() async {
+    if (_requestCode == null) {
+      _setTopText("Call createGeofenceList method first.");
     } else {
       try {
-        await geofenceService.deleteGeofenceList(requestCode);
-        requestCode = null;
-        setState(() {
-          topText = "Deleted geofence list successfully.";
-          bottomText = "";
-        });
-      } catch (e) {
-        setState(() {
-          topText = e.toString();
-        });
+        await _geofenceService.deleteGeofenceList(_requestCode);
+        _requestCode = null;
+        _setBottomText();
+        _setTopText("");
+      } on PlatformException catch (e) {
+        _setTopText(e.toString());
       }
     }
   }
 
-  void deleteGeofenceListWithIds() async {
-    if (requestCode == null) {
-      setState(() {
-        topText = "Call createGeofenceList method first.";
-      });
+  void _deleteGeofenceListWithIds() async {
+    if (_requestCode == null) {
+      _setTopText("Call createGeofenceList method first.");
     } else {
       try {
-        await geofenceService.deleteGeofenceListWithIds(geofenceIdList);
-        requestCode = null;
-        setState(() {
-          topText = "Deleted geofence list successfully.";
-          bottomText = "";
-        });
-      } catch (e) {
-        setState(() {
-          topText = e.toString();
-        });
+        await _geofenceService.deleteGeofenceListWithIds(_geofenceIdList);
+        _requestCode = null;
+        _setBottomText();
+        _setTopText("Geofence list is successfully deleted.");
+      } on PlatformException catch (e) {
+        _setTopText(e.toString());
       }
     }
   }
 
-  void deleteGeofenceListOnDispose() async {
-    if (requestCode != null) {
+  void _deleteGeofenceListOnDispose() async {
+    if (_requestCode != null) {
       try {
-        await geofenceService.deleteGeofenceList(requestCode);
-        requestCode = null;
-      } catch (e) {
-        print(e.toString());
+        await _geofenceService.deleteGeofenceList(_requestCode);
+        _requestCode = null;
+      } on PlatformException catch (e) {
+        log(e.toString());
       }
+    }
+  }
+
+  void _removeGeofence() {
+    if (_geofenceList.isEmpty) {
+      _setTopText("Geofence list is empty. Add geofence first.");
+    }
+
+    final String uniqueId = _uniqueId.text;
+
+    if (uniqueId.isEmpty) {
+      _setTopText("Enter unique id of the Geofence to remove it.");
+    } else if (!_geofenceIdList.contains(uniqueId)) {
+      _setTopText("Id '$uniqueId' does not exist on Geofence list.");
+    } else {
+      _geofenceIdList.remove(uniqueId);
+      _geofenceList.removeWhere((e) => e.uniqueId == uniqueId);
+      setState(() {
+        _fenceCount = _geofenceList.length;
+        _geofenceListText = _geofenceIdList.toString();
+      });
     }
   }
 
   void _navigateAndWaitData(BuildContext context) async {
     final dynamic result = await Navigator.pushNamed(
-        context, AddGeofenceScreen.routeName,
+        context, AddGeofenceScreen.ROUTE_NAME,
         arguments: {
-          'geofenceList': geofenceList,
-          'geofenceIdList': geofenceIdList,
+          'geofenceList': _geofenceList,
+          'geofenceIdList': _geofenceIdList,
         });
     setState(() {
-      fenceCount = geofenceList.length;
-      geofenceText = result['geofenceIdList'].toString();
+      _fenceCount = _geofenceList.length;
+      _geofenceListText = result['geofenceIdList'].toString();
     });
   }
 
-  void removeGeofence() {
-    if (geofenceList.isEmpty) {
-      setState(() {
-        topText = "Geofence list is empty. Add geofence first.";
-      });
-    }
-    String uniqueId = _uid.text;
+  void _setTopText([String text = ""]) {
+    setState(() {
+      _topText = text;
+    });
+  }
 
-    if (uniqueId == '') {
-      setState(() {
-        topText = "Enter unique id of the geofence to remove it.";
-      });
-    } else if (!geofenceIdList.contains(uniqueId)) {
-      setState(() {
-        topText = "Id '$uniqueId' does not exist on geofence list.";
-      });
-    } else {
-      geofenceIdList.remove(uniqueId);
-      geofenceList.removeWhere((e) => e.uniqueId == uniqueId);
+  void _setBottomText([String text = ""]) {
+    setState(() {
+      _bottomText = text;
+    });
+  }
 
-      setState(() {
-        fenceCount = geofenceList.length;
-        geofenceText = geofenceIdList.toString();
-      });
-    }
+  void _appendToBottomText(String text) {
+    setState(() {
+      _bottomText = "$_bottomText\n\n$text";
+    });
   }
 
   @override
@@ -242,7 +209,7 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
               children: <Widget>[
                 Container(
                   padding: EdgeInsets.only(top: 5),
-                  child: Text(topText),
+                  child: Text(_topText),
                 ),
                 Divider(
                   thickness: 0.1,
@@ -252,9 +219,9 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
                   child: Center(
                     child: Column(
                       children: <Widget>[
-                        Text("Geofences: $fenceCount"),
+                        Text("Geofences: $_fenceCount"),
                         SizedBox(height: 15),
-                        Text(geofenceText),
+                        Text(_geofenceListText),
                       ],
                     ),
                   ),
@@ -266,8 +233,8 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Btn("hasPermission", hasPermission),
-                    Btn("requestPermission", requestPermission),
+                    Btn("hasPermission", _hasPermission),
+                    Btn("requestPermission", _requestPermission),
                   ],
                 ),
                 Btn("Add Geofence", () {
@@ -285,7 +252,7 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
                         flex: 9,
                         child: CustomTextInput(
                           padding: EdgeInsets.all(0),
-                          controller: _uid,
+                          controller: _uniqueId,
                           labelText: "Geofence UniqueId",
                           keyboardType: TextInputType.text,
                         ),
@@ -294,7 +261,7 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
                         flex: 6,
                         child: Container(
                           height: 45,
-                          child: Btn("Remove Geofence", removeGeofence),
+                          child: Btn("Remove Geofence", _removeGeofence),
                         ),
                       ),
                     ],
@@ -304,10 +271,10 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
                   thickness: 0.1,
                   color: Colors.black,
                 ),
-                Btn("createGeofenceList", createGeofenceList),
-                Btn("deleteGeofenceList", deleteGeofenceList),
-                Btn("deleteGeofenceListWithIds", deleteGeofenceListWithIds),
-                Text(bottomText),
+                Btn("createGeofenceList", _createGeofenceList),
+                Btn("deleteGeofenceList", _deleteGeofenceList),
+                Btn("deleteGeofenceListWithIds", _deleteGeofenceListWithIds),
+                Text(_bottomText),
               ],
             ),
           ),
@@ -319,7 +286,7 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
   @override
   void dispose() {
     super.dispose();
-    deleteGeofenceListOnDispose();
-    geofenceStreamSub.cancel();
+    _deleteGeofenceListOnDispose();
+    _streamSubscription.cancel();
   }
 }

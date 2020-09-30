@@ -23,6 +23,7 @@ import 'screens/add_geofence_screen.dart';
 import 'screens/fusedlocation_screen.dart';
 import 'screens/geofence_screen.dart';
 import 'screens/home_screen.dart';
+import 'screens/location_enhance_screen.dart';
 import 'screens/location_updates_cb_screen.dart';
 import 'screens/location_updates_ex_cb_screen.dart';
 import 'screens/location_updates_screen.dart';
@@ -35,20 +36,21 @@ class LocationKitDemoApp extends StatelessWidget {
     return MaterialApp(
       home: HomeScreen(),
       routes: {
-        HomeScreen.routeName: (context) => HomeScreen(),
-        FusedLocationScreen.routeName: (context) => FusedLocationScreen(),
-        ActivityScreen.routeName: (context) => ActivityScreen(),
-        GeofenceScreen.routeName: (context) => GeofenceScreen(),
-        AddGeofenceScreen.routeName: (context) => AddGeofenceScreen(),
-        ActivityIdentificationScreen.routeName: (context) =>
+        HomeScreen.ROUTE_NAME: (context) => HomeScreen(),
+        FusedLocationScreen.ROUTE_NAME: (context) => FusedLocationScreen(),
+        ActivityScreen.ROUTE_NAME: (context) => ActivityScreen(),
+        GeofenceScreen.ROUTE_NAME: (context) => GeofenceScreen(),
+        AddGeofenceScreen.ROUTE_NAME: (context) => AddGeofenceScreen(),
+        ActivityIdentificationScreen.ROUTE_NAME: (context) =>
             ActivityIdentificationScreen(),
-        ActivityConversionScreen.routeName: (context) =>
+        ActivityConversionScreen.ROUTE_NAME: (context) =>
             ActivityConversionScreen(),
-        LocationUpdatesScreen.routeName: (context) => LocationUpdatesScreen(),
-        LocationUpdatesCbScreen.routeName: (context) =>
+        LocationUpdatesScreen.ROUTE_NAME: (context) => LocationUpdatesScreen(),
+        LocationUpdatesCbScreen.ROUTE_NAME: (context) =>
             LocationUpdatesCbScreen(),
-        LocationUpdatesExCbScreen.routeName: (context) =>
+        LocationUpdatesExCbScreen.ROUTE_NAME: (context) =>
             LocationUpdatesExCbScreen(),
+        LocationEnhanceScreen.ROUTE_NAME: (context) => LocationEnhanceScreen(),
       },
     );
   }

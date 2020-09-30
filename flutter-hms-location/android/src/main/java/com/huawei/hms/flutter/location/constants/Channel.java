@@ -24,7 +24,9 @@ public enum Channel {
     GEOFENCE_EVENT("com.huawei.flutter.location/geofence_eventchannel"),
     ACTIVITY_IDENTIFICATION_METHOD("com.huawei.flutter.location/activityidentification_methodchannel"),
     ACTIVITY_IDENTIFICATION_EVENT("com.huawei.flutter.location/activityidentification_eventchannel"),
-    ACTIVITY_CONVERSION_EVENT("com.huawei.flutter.location/activityconversion_eventchannel");
+    ACTIVITY_CONVERSION_EVENT("com.huawei.flutter.location/activityconversion_eventchannel"),
+    LOCATION_ENHANCE_METHOD("com.huawei.flutter.location/locationenhance_methodchannel"),
+    HMSLOGGER_METHOD("com.huawei.flutter.location/hmslogger_methodchannel");
 
     private final String id;
 

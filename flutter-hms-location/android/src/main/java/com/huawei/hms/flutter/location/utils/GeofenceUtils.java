@@ -21,18 +21,23 @@ import com.huawei.hms.location.GeofenceData;
 import com.huawei.hms.location.GeofenceRequest;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GeofenceUtils {
-    public static Map<String, Object> fromGeofenceDataToMap(final GeofenceData geofenceData) {
-        final Map<String, Object> map = new HashMap<>();
-
+public interface GeofenceUtils {
+    /**
+     * Utility method
+     * @param geofenceData GeofenceData object
+     * @return HashMap representation of the GeofenceData object
+     */
+    static Map<String, Object> fromGeofenceDataToMap(final GeofenceData geofenceData) {
         if (geofenceData == null) {
-            return map;
+            return Collections.emptyMap();
         }
 
+        final Map<String, Object> map = new HashMap<>();
         final List<String> convertingGeofenceIdList = new ArrayList<>();
 
         for (final Geofence geofence : geofenceData.getConvertingGeofenceList()) {
@@ -47,7 +52,12 @@ public class GeofenceUtils {
         return map;
     }
 
-    private static Geofence fromMapToGeofence(final Map map) {
+    /**
+     * Utility method
+     * @param map HashMap representation of the Geofence object
+     * @return Geofence object
+     */
+    static Geofence fromMapToGeofence(final Map map) {
         final Geofence.Builder builder = new Geofence.Builder();
 
         final double lat = ValueGetter.getDouble("latitude", map);
@@ -64,7 +74,12 @@ public class GeofenceUtils {
         return builder.build();
     }
 
-    public static GeofenceRequest fromMapToGeofenceRequest(final Map map) {
+    /**
+     * Utility method
+     * @param map HashMap representation of the GeofenceRequest object
+     * @return GeofenceRequest object
+     */
+    static GeofenceRequest fromMapToGeofenceRequest(final Map<String, Object> map) {
         final GeofenceRequest.Builder builder = new GeofenceRequest.Builder();
         final List geofenceMapList = ObjectUtils.cast(map.get("geofenceList"), List.class);
 

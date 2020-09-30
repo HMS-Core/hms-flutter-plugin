@@ -24,6 +24,8 @@ class CRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween, children: children);
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: children,
+    );
   }
 }

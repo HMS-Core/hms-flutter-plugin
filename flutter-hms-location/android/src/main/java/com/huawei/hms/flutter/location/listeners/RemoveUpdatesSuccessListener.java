@@ -16,28 +16,35 @@
 
 package com.huawei.hms.flutter.location.listeners;
 
-import com.huawei.hmf.tasks.OnSuccessListener;
+import android.content.Context;
 
-import io.flutter.plugin.common.MethodChannel.Result;
+import com.huawei.hmf.tasks.OnSuccessListener;
+import com.huawei.hms.flutter.location.logger.HMSLogger;
 
 import java.util.Map;
 
+import io.flutter.plugin.common.MethodChannel.Result;
+
 public class RemoveUpdatesSuccessListener<T> implements OnSuccessListener<Void> {
-    private final Result mResult;
+    private final String methodName;
+    private final Context context;
+    private final Result result;
+    private final Integer id;
+    private final Map<Integer, T> map;
 
-    private final Integer mId;
-
-    private final Map<Integer, T> mMap;
-
-    public RemoveUpdatesSuccessListener(final Result result, final Integer id, final Map<Integer, T> map) {
-        mResult = result;
-        mId = id;
-        mMap = map;
+    public RemoveUpdatesSuccessListener(final String methodName, final Context context, final Result result,
+        final Integer id, final Map<Integer, T> map) {
+        this.methodName = methodName;
+        this.context = context;
+        this.result = result;
+        this.id = id;
+        this.map = map;
     }
 
     @Override
     public void onSuccess(final Void avoid) {
-        mMap.remove(mId);
-        mResult.success(null);
+        map.remove(id);
+        HMSLogger.getInstance(context).sendSingleEvent(methodName);
+        result.success(null);
     }
 }

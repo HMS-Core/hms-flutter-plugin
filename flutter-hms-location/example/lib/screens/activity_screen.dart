@@ -15,7 +15,6 @@
 */
 
 import 'package:flutter/material.dart';
-import 'package:huawei_location/activity/activity_identification_service.dart';
 import 'package:huawei_location/permission/permission_handler.dart';
 
 import '../screens/activity_conversion_screen.dart';
@@ -24,41 +23,32 @@ import '../widgets/custom_button.dart';
 import '../widgets/custom_row.dart';
 
 class ActivityScreen extends StatefulWidget {
-  static const String routeName = "ActivityScreen";
+  static const String ROUTE_NAME = "ActivityScreen";
 
   @override
   _ActivityScreenState createState() => _ActivityScreenState();
 }
 
 class _ActivityScreenState extends State<ActivityScreen> {
-  String topText;
-  PermissionHandler permissionHandler;
-  ActivityIdentificationService service;
+  final PermissionHandler _permissionHandler = PermissionHandler();
 
-  void initServices() {
-    topText = "";
-    permissionHandler = PermissionHandler();
-    service = ActivityIdentificationService();
+  String _topText = "";
+
+  void _hasPermission() async {
+    final bool status =
+        await _permissionHandler.hasActivityRecognitionPermission();
+    _setTopText("Has permission: $status");
   }
 
-  @override
-  void initState() {
-    super.initState();
-    initServices();
+  void _requestPermission() async {
+    final bool status =
+        await _permissionHandler.requestActivityRecognitionPermission();
+    _setTopText("Is permission granted: $status");
   }
 
-  void hasPermission() async {
-    bool status = await permissionHandler.hasActivityRecognitionPermission();
+  void _setTopText([String text = ""]) {
     setState(() {
-      topText = "Has permission: $status";
-    });
-  }
-
-  void requestPermission() async {
-    bool status =
-        await permissionHandler.requestActivityRecognitionPermission();
-    setState(() {
-      topText = "Is permission granted: $status";
+      _topText = text;
     });
   }
 
@@ -78,26 +68,26 @@ class _ActivityScreenState extends State<ActivityScreen> {
                 top: 10,
               ),
               height: 90,
-              child: Text(topText),
+              child: Text(_topText),
             ),
             Divider(
               thickness: 0.1,
               color: Colors.black,
             ),
             CRow(children: <Widget>[
-              Btn("hasPermission", hasPermission),
-              Btn("requestPermission", requestPermission),
+              Btn("hasPermission", _hasPermission),
+              Btn("requestPermission", _requestPermission),
             ]),
             Btn("Activity Identification", () {
               Navigator.pushNamed(
                 context,
-                ActivityIdentificationScreen.routeName,
+                ActivityIdentificationScreen.ROUTE_NAME,
               );
             }),
             Btn("Activity Conversion", () {
               Navigator.pushNamed(
                 context,
-                ActivityConversionScreen.routeName,
+                ActivityConversionScreen.ROUTE_NAME,
               );
             }),
           ],

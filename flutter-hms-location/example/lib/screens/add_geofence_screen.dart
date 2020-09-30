@@ -15,112 +15,104 @@
 */
 
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:huawei_location/geofence/geofence.dart';
 import 'package:huawei_location/location/fused_location_provider_client.dart';
-import 'package:huawei_location/location/location_callback.dart';
+import 'package:huawei_location/location/location.dart';
 import 'package:huawei_location/location/location_request.dart';
 
 import '../widgets/custom_button.dart';
 import '../widgets/custom_textinput.dart';
 
 class AddGeofenceScreen extends StatefulWidget {
-  static const String routeName = "AddGeofenceScreen";
+  static const String ROUTE_NAME = "AddGeofenceScreen";
 
   @override
   _AddGeofenceScreenState createState() => _AddGeofenceScreenState();
 }
 
 class _AddGeofenceScreenState extends State<AddGeofenceScreen> {
-  String topText;
-  String bottomText;
-  int fenceCount;
-  int callbackId;
+  String _topText = "";
+  String _bottomText = "";
+  int _fenceCount = 0;
+  int _requestCode;
+  List<Geofence> _geofenceList;
+  List<String> _geofenceIdList;
 
-  TextEditingController _lat;
-  TextEditingController _lng;
-  TextEditingController _rad;
-  TextEditingController _uid;
-  TextEditingController _conversions;
-  TextEditingController _validTime;
-  TextEditingController _dwellTime;
-  TextEditingController _notifInterval;
+  final TextEditingController _lat = TextEditingController();
+  final TextEditingController _lng = TextEditingController();
+  final TextEditingController _rad = TextEditingController(text: "60");
+  final TextEditingController _uid = TextEditingController();
+  final TextEditingController _conversions = TextEditingController(text: "5");
+  final TextEditingController _validTime =
+      TextEditingController(text: "1000000");
+  final TextEditingController _dwellTime = TextEditingController(text: "10000");
+  final TextEditingController _notifInterval =
+      TextEditingController(text: "100");
 
-  List<Geofence> geofenceList;
-  List<String> geofenceIdList;
-
-  List<TextInputFormatter> numWithDecimalFormatter = <TextInputFormatter>[
+  final List<TextInputFormatter> _numWithDecimalFormatter =
+      <TextInputFormatter>[
     WhitelistingTextInputFormatter(
-        RegExp(r"[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)")),
+      RegExp(r"[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)"),
+    ),
   ];
 
-  List<TextInputFormatter> digitsOnlyFormatter = <TextInputFormatter>[
+  final List<TextInputFormatter> _digitsOnlyFormatter = <TextInputFormatter>[
     WhitelistingTextInputFormatter.digitsOnly,
   ];
 
-  FusedLocationProviderClient locationService;
-  LocationCallback locCallback;
+  final FusedLocationProviderClient _locationService =
+      FusedLocationProviderClient();
+  StreamSubscription<Location> _streamSubscription;
 
   @override
   void initState() {
     super.initState();
-    initialValues();
-    getGeofenceFromRoute();
+    _getGeofenceListFromRoute();
+    _subscribeLocationUpdates();
   }
 
-  void initialValues() {
-    topText = "";
-    bottomText = "";
-    fenceCount = 0;
-    _lat = TextEditingController();
-    _lng = TextEditingController();
-    _rad = TextEditingController(text: "60");
-    _uid = TextEditingController();
-    _conversions = TextEditingController(text: "5");
-    _validTime = TextEditingController(text: "1000000");
-    _dwellTime = TextEditingController(text: "10000");
-    _notifInterval = TextEditingController(text: "100");
-    locationService = FusedLocationProviderClient();
-    locCallback = LocationCallback(onLocationResult: (locationRes) {
-      _lat.text = locationRes.locations.last.latitude.toString();
-      _lng.text = locationRes.locations.last.longitude.toString();
-    });
-  }
-
-  void getGeofenceFromRoute() {
+  void _getGeofenceListFromRoute() {
     Future.delayed(Duration.zero, () {
       Map<String, Object> args = ModalRoute.of(context).settings.arguments;
-      geofenceList = args['geofenceList'];
-      geofenceIdList = args['geofenceIdList'];
+      _geofenceList = args['geofenceList'];
+      _geofenceIdList = args['geofenceIdList'];
       setState(() {
-        bottomText = geofenceIdList.toString();
-        fenceCount = geofenceIdList.length;
+        _bottomText = _geofenceIdList.toString();
+        _fenceCount = _geofenceIdList.length;
       });
     });
   }
 
-  void addGeofence() {
+  void _subscribeLocationUpdates() {
+    _streamSubscription = _locationService.onLocationData.listen((location) {
+      setState(() {
+        _lat.text = location.latitude.toString();
+        _lng.text = location.longitude.toString();
+      });
+      _removeLocationUpdates(_requestCode);
+    });
+  }
+
+  void _addGeofence() {
     try {
-      String uniqueId = _uid.text;
+      final String uniqueId = _uid.text;
 
       if (uniqueId == '') {
-        setState(() {
-          topText = "UniqueId cannot be empty.";
-        });
-      } else if (geofenceIdList.contains(uniqueId)) {
-        setState(() {
-          topText = "Geofence with this UniqueId already exists.";
-        });
+        _setTopText("UniqueId cannot be empty.");
+      } else if (_geofenceIdList.contains(uniqueId)) {
+        _setTopText("Geofence with this UniqueId already exists.");
       } else {
-        int conversions = int.parse(_conversions.text);
-        int validDuration = int.parse(_validTime.text);
-        double latitude = double.parse(_lat.text);
-        double longitude = double.parse(_lng.text);
-        double radius = double.parse(_rad.text);
-        int notificationInterval = int.parse(_notifInterval.text);
-        int dwellDelayTime = int.parse(_dwellTime.text);
+        final int conversions = int.parse(_conversions.text);
+        final int validDuration = int.parse(_validTime.text);
+        final double latitude = double.parse(_lat.text);
+        final double longitude = double.parse(_lng.text);
+        final double radius = double.parse(_rad.text);
+        final int notificationInterval = int.parse(_notifInterval.text);
+        final int dwellDelayTime = int.parse(_dwellTime.text);
 
         Geofence geofence = Geofence(
           uniqueId: uniqueId,
@@ -133,46 +125,45 @@ class _AddGeofenceScreenState extends State<AddGeofenceScreen> {
           dwellDelayTime: dwellDelayTime,
         );
 
-        geofenceList.add(geofence);
-        geofenceIdList.add(geofence.uniqueId);
+        _geofenceList.add(geofence);
+        _geofenceIdList.add(geofence.uniqueId);
 
         setState(() {
-          fenceCount++;
-          bottomText = geofenceIdList.toString();
-          topText = "Geofence added successfully.";
+          _fenceCount++;
+          _bottomText = _geofenceIdList.toString();
+          _topText = "Geofence added successfully.";
         });
       }
-    } catch (e) {
-      setState(() {
-        topText = e.toString();
-      });
+    } on PlatformException catch (e) {
+      _setTopText(e.toString());
     }
   }
 
-  void removeLocationUpdatesCb(int callbackId) async {
+  void _requestLocationUpdates() async {
+    final LocationRequest _locationRequest = LocationRequest()..interval = 500;
     try {
-      await locationService.removeLocationUpdatesCb(callbackId);
-      print("Removed location updates with callback id $callbackId");
-    } catch (e) {
-      print(e.toString());
+      _requestCode =
+          await _locationService.requestLocationUpdates(_locationRequest);
+      log("Requested location updates with request code: $_requestCode");
+      log("Now removing location updates");
+    } on PlatformException catch (e) {
+      log(e.toString());
     }
   }
 
-  void requestLocationUpdatesCb() async {
-    LocationRequest locationRequest;
-    locationService = FusedLocationProviderClient();
-    locationRequest = LocationRequest();
-    locationRequest.interval = 1000;
-
+  void _removeLocationUpdates(int requestCode) async {
     try {
-      callbackId = await locationService.requestLocationUpdatesCb(
-          locationRequest, locCallback);
-      print("Requested location updates with callback id $callbackId");
-      print("Now removing location updates");
-      removeLocationUpdatesCb(callbackId);
-    } catch (e) {
-      print(e.toString());
+      await _locationService.removeLocationUpdates(requestCode);
+      log("Removed location updates with request code: $requestCode");
+    } on PlatformException catch (e) {
+      log(e.toString());
     }
+  }
+
+  void _setTopText([String text = ""]) {
+    setState(() {
+      _topText = text;
+    });
   }
 
   @override
@@ -180,8 +171,8 @@ class _AddGeofenceScreenState extends State<AddGeofenceScreen> {
     return WillPopScope(
       onWillPop: () async {
         Navigator.pop(context, {
-          'geofenceList': geofenceList,
-          'geofenceIdList': geofenceIdList,
+          'geofenceList': _geofenceList,
+          'geofenceIdList': _geofenceIdList,
         });
         return false;
       },
@@ -194,7 +185,7 @@ class _AddGeofenceScreenState extends State<AddGeofenceScreen> {
               children: <Widget>[
                 Container(
                   padding: EdgeInsets.only(top: 5),
-                  child: Text(topText),
+                  child: Text(_topText),
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 60),
@@ -205,7 +196,7 @@ class _AddGeofenceScreenState extends State<AddGeofenceScreen> {
                         controller: _lat,
                         labelText: "Latitude",
                         hintText: "[-90,90]",
-                        inputFormatters: numWithDecimalFormatter,
+                        inputFormatters: _numWithDecimalFormatter,
                         keyboardType: TextInputType.numberWithOptions(
                             signed: true, decimal: true),
                       ),
@@ -213,7 +204,7 @@ class _AddGeofenceScreenState extends State<AddGeofenceScreen> {
                         controller: _lng,
                         labelText: "Longitude",
                         hintText: "[-180,180]",
-                        inputFormatters: numWithDecimalFormatter,
+                        inputFormatters: _numWithDecimalFormatter,
                         keyboardType: TextInputType.numberWithOptions(
                             signed: true, decimal: true),
                       ),
@@ -221,7 +212,7 @@ class _AddGeofenceScreenState extends State<AddGeofenceScreen> {
                         controller: _rad,
                         labelText: "Radius",
                         hintText: "in meters",
-                        inputFormatters: numWithDecimalFormatter,
+                        inputFormatters: _numWithDecimalFormatter,
                         keyboardType: TextInputType.numberWithOptions(
                             signed: false, decimal: true),
                       ),
@@ -233,39 +224,39 @@ class _AddGeofenceScreenState extends State<AddGeofenceScreen> {
                       CustomTextInput(
                         controller: _conversions,
                         labelText: "Conversions",
-                        inputFormatters: digitsOnlyFormatter,
+                        inputFormatters: _digitsOnlyFormatter,
                         keyboardType: TextInputType.number,
                       ),
                       CustomTextInput(
                         controller: _validTime,
                         labelText: "ValidTime",
-                        inputFormatters: digitsOnlyFormatter,
+                        inputFormatters: _digitsOnlyFormatter,
                         keyboardType: TextInputType.number,
                       ),
                       CustomTextInput(
                         controller: _dwellTime,
                         labelText: "DwellDelayTime",
-                        inputFormatters: digitsOnlyFormatter,
+                        inputFormatters: _digitsOnlyFormatter,
                         keyboardType: TextInputType.number,
                       ),
                       CustomTextInput(
                         controller: _notifInterval,
                         labelText: "NotificationInterval",
-                        inputFormatters: digitsOnlyFormatter,
+                        inputFormatters: _digitsOnlyFormatter,
                         keyboardType: TextInputType.number,
                       ),
-                      Btn("Get Current Location", requestLocationUpdatesCb),
+                      Btn("Get Current Location", _requestLocationUpdates),
                       Btn("Add Geofence", () {
-                        addGeofence();
+                        _addGeofence();
                       }),
                       Container(
                         padding: EdgeInsets.only(top: 15),
                         child: Center(
                           child: Column(
                             children: <Widget>[
-                              Text("Geofences: $fenceCount"),
+                              Text("Geofences: $_fenceCount"),
                               SizedBox(height: 15),
-                              Text(bottomText),
+                              Text(_bottomText),
                             ],
                           ),
                         ),
@@ -277,5 +268,12 @@ class _AddGeofenceScreenState extends State<AddGeofenceScreen> {
             ),
           )),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _streamSubscription.cancel();
+    _removeLocationUpdates(_requestCode);
   }
 }
