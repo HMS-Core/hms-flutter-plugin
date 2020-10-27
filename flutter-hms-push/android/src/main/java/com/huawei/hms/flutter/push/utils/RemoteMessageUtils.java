@@ -1,11 +1,11 @@
 /*
-Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,13 +23,19 @@ import com.huawei.hms.push.RemoteMessage;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import io.flutter.plugin.common.MethodCall;
 
 public class RemoteMessageUtils {
-    public static HashMap<String, Object> fromMap(RemoteMessage message) {
-        HashMap<String, Object> content = new HashMap<>();
-        HashMap<String, Object> notificationContent = new HashMap<>();
+
+    private RemoteMessageUtils() {
+        throw new IllegalStateException("Utility class");
+    }
+
+    public static Map<String, Object> toMap(RemoteMessage message) {
+        Map<String, Object> content = new HashMap<>();
+        Map<String, Object> notificationContent = new HashMap<>();
 
         content.put(RemoteMessageAttributes.COLLAPSE_KEY, message.getCollapseKey());
         content.put(RemoteMessageAttributes.DATA, message.getData());

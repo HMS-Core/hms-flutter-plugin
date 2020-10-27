@@ -1,11 +1,11 @@
 /*
-Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,11 +18,14 @@ package com.huawei.hms.flutter.push;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.huawei.hms.flutter.push.constants.Channel;
+import com.huawei.hms.flutter.push.constants.Core;
 import com.huawei.hms.flutter.push.constants.Method;
 import com.huawei.hms.flutter.push.constants.Param;
 import com.huawei.hms.flutter.push.event.DataMessageStreamHandler;
@@ -48,6 +51,7 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
+import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 
@@ -57,12 +61,15 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
  * @since 4.0.4
  */
 public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAware {
+    private static String TAG = "HmsFlutterPush";
+
     private MethodChannel channel;
     private static volatile Context context;
     private HmsLocalNotification hmsLocalNotification;
     private NotificationIntentListener notificationIntentListener;
 
     private Activity activity;
+
 
     public static Context getContext() {
         return PushPlugin.context;
@@ -115,8 +122,10 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
     public static void registerWith(Registrar registrar) {
         PushPlugin instance = new PushPlugin();
         instance.onAttachedToEngine(registrar.messenger(), registrar.context());
-        registrar.addNewIntentListener(instance.notificationIntentListener);
-        instance.notificationIntentListener.handleIntent(registrar.activity().getIntent());
+        if (registrar.activity() != null) {
+            registrar.addNewIntentListener(instance.notificationIntentListener);
+            instance.notificationIntentListener.handleIntent(registrar.activity().getIntent());
+        }
     }
 
     @Override
@@ -166,6 +175,12 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
             case deleteAAID:
                 FlutterHmsInstanceId.deleteAAID(result);
                 break;
+            case registerBackgroundMessageHandler:
+                registerBackgroundMessageHandler((long) call.argument("rawHandle"), (long) call.argument("rawCallback"), result);
+                break;
+            case removeBackgroundMessageHandler:
+                removeBackgroundMessageHandler(result);
+                break;
             default:
                 onMethodCallToken(call, result);
         }
@@ -174,10 +189,10 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
     private void onMethodCallToken(@NonNull MethodCall call, @NonNull Result result) {
         switch (Method.valueOf(call.method)) {
             case getToken:
-                FlutterHmsInstanceId.getToken();
+                FlutterHmsInstanceId.getToken(Utils.getStringArgument(call, Param.SCOPE.code()));
                 break;
             case deleteToken:
-                FlutterHmsInstanceId.deleteToken();
+                FlutterHmsInstanceId.deleteToken(Utils.getStringArgument(call, Param.SCOPE.code()));
                 break;
             default:
                 onMethodCallOpenDevice(call, result);
@@ -302,6 +317,40 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
         if (Method.valueOf(call.method) == Method.getInitialIntent) {
             notificationIntentListener.getInitialIntent(result);
         } else result.notImplemented();
+    }
+
+
+    private void registerBackgroundMessageHandler(long handlerRaw, long callbackRaw, Result result) {
+
+        try {
+            SharedPreferences prefs = context.getSharedPreferences(Core.PREFERENCE_NAME, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putLong(HeadlessPushPlugin.KEY_HANDLER, handlerRaw);
+            editor.putLong(HeadlessPushPlugin.KEY_CALLBACK, callbackRaw);
+            editor.apply();
+
+            Log.i(TAG, "BackgroundMessageHandler registered ✔");
+            result.success(1);
+        } catch (SecurityException e) {
+            result.success(0);
+        }
+    }
+
+    private void removeBackgroundMessageHandler(Result result) {
+
+        SharedPreferences prefs = context.getSharedPreferences(Core.PREFERENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putLong(HeadlessPushPlugin.KEY_HANDLER, -1);
+        editor.putLong(HeadlessPushPlugin.KEY_CALLBACK, -1);
+
+        editor.apply();
+
+        Log.i(TAG, "BackgroundMessageHandler removed ✔");
+        result.success(1);
+    }
+
+    public static void setPluginRegistrant(PluginRegistry.PluginRegistrantCallback callback) {
+        HeadlessPushPlugin.setPluginRegistrant(callback);
     }
 
 }

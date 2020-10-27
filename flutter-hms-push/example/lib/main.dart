@@ -1,11 +1,11 @@
 /*
-Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,9 +21,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:huawei_push/model/remote_message.dart';
+import 'package:huawei_push/local_notification/local_notification.dart';
 import 'package:huawei_push/push.dart';
-import 'package:huawei_push_example/custom_intent_page.dart';
-import 'package:huawei_push_example/local_notification.dart';
+import 'custom_intent_page.dart';
+import 'local_notification.dart';
 
 void main() {
   runApp(MaterialApp(home: MyApp()));
@@ -52,8 +53,22 @@ class _MyAppState extends State<MyApp> {
     showResult("TokenErrorEvent", e.message);
   }
 
-  void _onMessageReceived(RemoteMessage rm) {
-    String data = rm.data;
+  static void backgroundMessageCallback(RemoteMessage remoteMessage) async {
+    String data = remoteMessage.data;
+
+    Push.localNotification({
+      HMSLocalNotificationAttr.TITLE: '[Headless] DataMessage Received',
+      HMSLocalNotificationAttr.MESSAGE: data
+    });
+  }
+
+  void _onMessageReceived(RemoteMessage remoteMessage) {
+    String data = remoteMessage.data;
+
+    Push.localNotification({
+      HMSLocalNotificationAttr.TITLE: 'DataMessage Received',
+      HMSLocalNotificationAttr.MESSAGE: data
+    });
     showResult("onRemoteMessageReceived", "Data: " + data);
   }
 
@@ -73,14 +88,17 @@ class _MyAppState extends State<MyApp> {
   void _onNewIntent(String intentString) {
     // For navigating to the custom intent page (deep link) the custom
     // intent that sent from the push kit console is:
-    // pushkitexample://CustomIntentPage
-    showResult('CustomIntentEvent: ', intentString);
-    List parsedString = intentString.split("://");
-    if (parsedString[1] == "CustomIntentPage") {
-      SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => CustomIntentPage()));
-      });
+    // app://app2
+    intentString = intentString ?? '';
+    if (intentString != '') {
+      showResult('CustomIntentEvent: ', intentString);
+      List parsedString = intentString.split("://");
+      if (parsedString[1] == "app2") {
+        SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => CustomIntentPage()));
+        });
+      }
     }
   }
 
@@ -89,9 +107,9 @@ class _MyAppState extends State<MyApp> {
     print("Error on intent stream: " + e.toString());
   }
 
-  void _onNotificationOpenedApp(RemoteMessage remoteMessage) {
-    showResult("onNotificationOpenedApp", remoteMessage.toMap().toString());
-    print("[onNotificationOpenedApp]" + remoteMessage.toMap().toString());
+  void _onNotificationOpenedApp(dynamic initialNotification) {
+    showResult("onNotificationOpenedApp", initialNotification.toString());
+    print("[onNotificationOpenedApp]" + initialNotification.toString());
   }
 
   @override
@@ -107,10 +125,21 @@ class _MyAppState extends State<MyApp> {
     Push.getTokenStream.listen(_onTokenEvent, onError: _onTokenError);
     Push.getIntentStream.listen(_onNewIntent, onError: _onIntentError);
     Push.onNotificationOpenedApp.listen(_onNotificationOpenedApp);
+    var initialNotification = await Push.getInitialNotification();
+    _onNotificationOpenedApp(initialNotification);
+    String intent = await Push.getInitialIntent();
+    _onNewIntent(intent);
     Push.onMessageReceivedStream
         .listen(_onMessageReceived, onError: _onMessageReceiveError);
     Push.getRemoteMsgSendStatusStream
         .listen(_onRemoteMessageSendStatus, onError: _onRemoteMessageSendError);
+    bool backgroundMessageHandler =
+        await Push.registerBackgroundMessageHandler(backgroundMessageCallback);
+    print("backgroundMessageHandler registered: $backgroundMessageHandler");
+  }
+
+  void removeBackgroundMessageHandler() async {
+    await Push.removeBackgroundMessageHandler();
   }
 
   @override
@@ -202,8 +231,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   void getInitialNotification() async {
-    final RemoteMessage remoteMessage = await Push.getInitialNotification();
-    showResult("getInitialNotification", remoteMessage?.toMap().toString());
+    final dynamic initialNotification = await Push.getInitialNotification();
+    showResult("getInitialNotification", initialNotification.toString());
   }
 
   void getInitialIntent() async {
@@ -296,13 +325,13 @@ class _MyAppState extends State<MyApp> {
               expandedButton(4, () => getOdid(), 'GetODID', fontSize: 14),
             ]),
             Row(children: <Widget>[
-              expandedButton(5, () => Push.getToken(), 'GetToken',
+              expandedButton(5, () => Push.getToken(""), 'GetToken',
                   fontSize: 20),
               expandedButton(5, () => getCreationTime(), 'GetCreationTime',
                   fontSize: 20)
             ]),
             Row(children: <Widget>[
-              expandedButton(5, () => Push.deleteToken(), 'DeleteToken',
+              expandedButton(5, () => Push.deleteToken(""), 'DeleteToken',
                   fontSize: 20),
               expandedButton(5, () => deleteAAID(), 'DeleteAAID', fontSize: 20)
             ]),

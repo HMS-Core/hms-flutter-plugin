@@ -1,11 +1,11 @@
 /*
-Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,11 +20,16 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.huawei.hms.flutter.push.constants.PushIntent;
+import com.huawei.hms.flutter.push.utils.BundleUtils;
+import com.huawei.hms.flutter.push.utils.MapUtils;
 import com.huawei.hms.flutter.push.utils.RemoteMessageUtils;
 import com.huawei.hms.flutter.push.utils.Utils;
 import com.huawei.hms.push.RemoteMessage;
 
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import io.flutter.Log;
 import io.flutter.plugin.common.MethodChannel;
@@ -32,13 +37,13 @@ import io.flutter.plugin.common.PluginRegistry.NewIntentListener;
 
 /**
  * class NotificationIntentListener
- *
+ * <p>
  * Description: Listens and Handles Notification Open App Intents and Remote Message Notification Custom Intents
  *
  * @since 5.0.2
  */
 public class NotificationIntentListener implements NewIntentListener {
-    private static RemoteMessage initialNotification;
+    private static Map<String, Object> initialNotification;
 
     private String initialIntent;
 
@@ -48,12 +53,12 @@ public class NotificationIntentListener implements NewIntentListener {
         return false;
     }
 
-    public static RemoteMessage getInitialNotification() {
+    public static Map<String, Object> getInitialNotification() {
         return NotificationIntentListener.initialNotification;
     }
 
-    private static synchronized void setInitialNotification(RemoteMessage remoteMessage) {
-        initialNotification = remoteMessage;
+    private static synchronized void setInitialNotification(Map<String, Object> initialNotification) {
+        NotificationIntentListener.initialNotification = initialNotification;
     }
 
     public void getInitialIntent(final MethodChannel.Result result) {
@@ -63,22 +68,31 @@ public class NotificationIntentListener implements NewIntentListener {
     public void handleIntent(Intent intent) {
         String action = intent.getAction();
         String dataString = intent.getDataString();
-        Bundle extras = intent.getExtras();
+        Bundle bundleExtras = intent.getExtras();
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("uriPage", intent.getDataString());
+        if (bundleExtras != null) {
+            RemoteMessage remoteMessage = new RemoteMessage(bundleExtras);
+            map.put("remoteMessage", RemoteMessageUtils.toMap(remoteMessage));
+            Map<String,Object> extras = MapUtils.toMap(BundleUtils.convertJSONObject(bundleExtras));
+            map.put("extras", extras);
+        }
         if (Intent.ACTION_VIEW.equals(action)) {
             initialIntent = dataString;
             Utils.sendIntent(PushIntent.REMOTE_MESSAGE_NOTIFICATION_INTENT_ACTION, PushIntent.CUSTOM_INTENT,
                     initialIntent);
-            if (extras != null) sendNotificationOpenedAppEvent(extras);
+            if (bundleExtras != null) sendNotificationOpenedAppEvent(map);
         } else if (Intent.ACTION_MAIN.equals(action) || PushIntent.LOCAL_NOTIFICATION_ACTION.name().equals(action)) {
-            if (extras != null) sendNotificationOpenedAppEvent(extras);
+            if (bundleExtras != null) sendNotificationOpenedAppEvent(map);
         } else {
             Log.i("NotificationIntentListener", "Unsupported action intent:" + action);
         }
     }
 
-    private void sendNotificationOpenedAppEvent(Bundle extras) {
-        setInitialNotification(new RemoteMessage(extras));
-        JSONObject jsonObject = new JSONObject(RemoteMessageUtils.fromMap(initialNotification));
+    private void sendNotificationOpenedAppEvent(Map<String, Object> initialNotification) {
+        setInitialNotification(initialNotification);
+        JSONObject jsonObject = new JSONObject(initialNotification);
         Utils.sendIntent(PushIntent.NOTIFICATION_OPEN_ACTION, PushIntent.NOTIFICATION_OPEN, jsonObject.toString());
     }
 

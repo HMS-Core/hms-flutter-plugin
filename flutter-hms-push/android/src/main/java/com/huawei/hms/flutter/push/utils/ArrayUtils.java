@@ -16,29 +16,35 @@
 
 package com.huawei.hms.flutter.push.utils;
 
-import android.os.Bundle;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import com.huawei.hms.flutter.push.config.NotificationAttributes;
-import com.huawei.hms.flutter.push.constants.Code;
 
-import io.flutter.plugin.common.MethodCall;
-import io.flutter.plugin.common.MethodChannel;
+public class ArrayUtils {
 
-public class LocalNotificationUtils {
-
-    private LocalNotificationUtils() {
+    private ArrayUtils() {
         throw new IllegalStateException("Utility class");
     }
 
-    public static Bundle callArgsToBundle(MethodCall call, MethodChannel.Result result) {
-        if (call.arguments == null) {
-            result.error(Code.NULL_BUNDLE.code(), "Arguments are empty", "");
-            return null;
+
+    public static Object[] toArray(JSONArray jsonArray) throws JSONException {
+        Object[] array = new Object[jsonArray.length()];
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            Object value = jsonArray.get(i);
+
+            if (value instanceof JSONObject) {
+                value = MapUtils.toMap((JSONObject) value);
+            }
+            if (value instanceof JSONArray) {
+                value = ArrayUtils.toArray((JSONArray) value);
+            }
+
+            array[i] = value;
         }
-        try {
-            return new NotificationAttributes(call).toBundle();
-        } catch (Exception e) {
-            return null;
-        }
+
+        return array;
     }
+
 }

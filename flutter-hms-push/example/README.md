@@ -1,8 +1,9 @@
-## ![logo](../.docs/logo.png)  Huawei Push Kit Flutter Plugin - Demo
+## ![logo](https://github.com/HMS-Core/hms-flutter-plugin/raw/master/flutter-hms-push/.docs/logo.png)  Huawei Push Kit Flutter Plugin - Demo
 
 ---
 
 ## Contents
+
   - [Introduction](#1-introduction)
   - [Installation](#2-installation)
   - [Configuration](#3-configuration)
@@ -12,9 +13,9 @@
 
 ## 1. Introduction
 
-This demo project is an example to demonstrate the features of the Huawei Push Kit Flutter Plugin.
+This demo project is an example to demonstrate the features of the **Huawei Flutter Push Kit** Plugin.
 
-<img src=".docs/mainPage.jpg" width = 40% height = 40% style="margin:1.5em"><img src=".docs/localNotification.jpg" width = 40% height = 40% style="margin:1.5em">
+<img src="https://github.com/HMS-Core/hms-flutter-plugin/raw/master/flutter-hms-push/example/.docs/mainPage.jpg" width = 40% height = 40% style="margin:1.5em"><img src="https://github.com/HMS-Core/hms-flutter-plugin/raw/master/flutter-hms-push/example/.docs/localNotification.jpg" width = 40% height = 40% style="margin:1.5em">
 
 ---
 
@@ -23,6 +24,7 @@ This demo project is an example to demonstrate the features of the Huawei Push K
 Before you get started, you must register as a HUAWEI developer and complete identity verification on the [HUAWEI Developer](https://developer.huawei.com/consumer/en/) website. For details, please refer to [Register a HUAWEI ID](https://developer.huawei.com/consumer/en/doc/10104).
 
 ### Creating a Project in AppGallery Connect
+
 Creating an app in AppGallery Connect is required in order to communicate with the Huawei services. To create an app, perform the following steps:
 
 **Step 1.** Set an unique **Application ID** on the app level build gradle file located on **example/android/app/build.gradle**. You should also change the **package names** for the manifest files in the **/example/android/app/src/** directory to match with the Application ID. 
@@ -54,10 +56,11 @@ A signing certificate fingerprint is used to verify the authenticity of an app w
 **Step 2:**  After completing the configuration, click **OK** to save the changes. (Check mark icon)
 
 **Step 3:** Enter the properties of the key you generated to the **key.properties** file located on **example/android/key.properties**.
+
 ```
 storePassword=<your keystore password>
 keyPassword=<your key password>
-keyAlias=key
+keyAlias=<key>
 storeFile=<location of the keystore file, for example: D:/Users/<user_name>/key.jks>
 ```
 
@@ -80,11 +83,13 @@ storeFile=<location of the keystore file, for example: D:/Users/<user_name>/key.
 [project_path]> flutter run
 ```
 ---
+
 ## 3. Configuration
+
 No.
 
 ---
 
 ## 4. Licensing and Terms
 
-Huawei Push Kit Flutter Plugin - Demo uses the Apache 2.0 license.
+Huawei Push Kit Flutter Plugin - is licensed under [Apache 2.0 license](LICENSE)

@@ -1,11 +1,11 @@
 /*
-Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,6 +19,7 @@ package com.huawei.hms.flutter.push.constants;
 public interface Core {
     String RAW = "raw";
 
+    String CLIENT_APP_ID = "client/app_id";
     String DEFAULT_TOKEN_SCOPE = "HCM";
     String REMOTE_MESSAGE_UPLINK_TO = "push.hcm.upstream";
 

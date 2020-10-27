@@ -1,3 +1,9 @@
+## 5.0.2+301
+* Added the registerBackgroundMessageHandler and removeBackgroundMessageHandler methods for handling data messages when application at background/killed state.
+* Added the "scope" parameter to getToken and deleteToken methods.
+* Change responses of onNotificationOpenedApp listener and getInitialNotification method, added "extra" and "uriPage" keys to result object.
+* Bug fixes and improvements.
+
 ## 5.0.2+300
 * Support for ODID and added the getOdid() method.
 * Support for Uplink Message Sending with sendRemoteMessage() method.
@@ -8,10 +14,7 @@
 * Fix minor issues.
 
 ## 4.0.4+300
-
 * Fix minor issues. 
 
-
 ## 4.0.4
-
 * Initial release.

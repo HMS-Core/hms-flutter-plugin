@@ -1,11 +1,11 @@
 /*
-Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -74,19 +74,23 @@ public class FlutterHmsInstanceId {
     }
 
     public static void getAppId(final Result result) {
-        String appId = AGConnectServicesConfig.fromContext(PushPlugin.getContext()).getString("client/app_id");
+        String appId = AGConnectServicesConfig.fromContext(PushPlugin.getContext()).getString(Core.CLIENT_APP_ID);
         if (Utils.isEmpty(appId)) appId = "";
         result.success(appId);
     }
 
-    public static void getToken() {
+    public static void getToken(final String scope) {
         new Thread(() -> {
-            String appId = AGConnectServicesConfig.fromContext(PushPlugin.getContext()).getString("client/app_id");
+            String appId = AGConnectServicesConfig.fromContext(PushPlugin.getContext()).getString(Core.CLIENT_APP_ID);
             if (Utils.isEmpty(appId)) appId = "";
             String token = "";
             hmsLogger.startMethodExecutionTimer("getToken");
             try {
-                token = HmsInstanceId.getInstance(PushPlugin.getContext()).getToken(appId, Core.DEFAULT_TOKEN_SCOPE);
+                String defaultScope = scope == null ? Core.DEFAULT_TOKEN_SCOPE : scope;
+                if (defaultScope.trim().isEmpty()) {
+                    defaultScope = Core.DEFAULT_TOKEN_SCOPE;
+                }
+                token = HmsInstanceId.getInstance(PushPlugin.getContext()).getToken(appId, defaultScope);
                 hmsLogger.sendSingleEvent("getToken");
                 Utils.sendIntent(PushIntent.TOKEN_INTENT_ACTION, PushIntent.TOKEN, token);
             } catch (ApiException e) {
@@ -119,15 +123,19 @@ public class FlutterHmsInstanceId {
         result.success(Code.RESULT_SUCCESS.code());
     }
 
-    public static void deleteToken() {
+    public static void deleteToken(final String scope) {
         // Since operation on main thread is prohibited for this method, results will be returned on
         // token event channel's onError callback
         new Thread(() -> {
-            String appId = AGConnectServicesConfig.fromContext(PushPlugin.getContext()).getString("client/app_id");
+            String appId = AGConnectServicesConfig.fromContext(PushPlugin.getContext()).getString(Core.CLIENT_APP_ID);
             if (Utils.isEmpty(appId)) appId = "";
             hmsLogger.startMethodExecutionTimer("deleteToken");
             try {
-                HmsInstanceId.getInstance(PushPlugin.getContext()).deleteToken(appId, Core.DEFAULT_TOKEN_SCOPE);
+                String defaultScope = scope == null ? Core.DEFAULT_TOKEN_SCOPE : scope;
+                if (defaultScope.trim().isEmpty()) {
+                    defaultScope = Core.DEFAULT_TOKEN_SCOPE;
+                }
+                HmsInstanceId.getInstance(PushPlugin.getContext()).deleteToken(appId, defaultScope);
                 hmsLogger.sendSingleEvent("deleteToken");
                 Utils.sendIntent(PushIntent.TOKEN_INTENT_ACTION, PushIntent.TOKEN_ERROR, Code.RESULT_SUCCESS.code());
             } catch (ApiException e) {

@@ -14,8 +14,24 @@
     limitations under the License.
 */
 
-export 'attributes.dart';
-export 'importance.dart';
-export 'priority.dart';
-export 'visibility.dart';
-export 'repeat_type.dart';
+package com.huawei.hms.flutter.push_example;
+
+import com.huawei.hms.flutter.push.PushPlugin;
+
+import io.flutter.app.FlutterApplication;
+import io.flutter.plugin.common.PluginRegistry;
+import io.flutter.plugins.GeneratedPluginRegistrant;
+
+
+public class Application extends FlutterApplication implements PluginRegistry.PluginRegistrantCallback {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        PushPlugin.setPluginRegistrant(this);
+    }
+
+    @Override
+    public void registerWith(PluginRegistry registry) {
+        GeneratedPluginRegistrant.registerWith(registry);
+    }
+}
