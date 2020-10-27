@@ -1,17 +1,17 @@
 /*
-Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+    Licensed under the Apache License, Version 2.0 (the "License")
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-     http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 import 'package:flutter/material.dart';
@@ -124,13 +124,18 @@ class MyHomePage extends StatelessWidget {
     _showDialog(context, "clearCachedData success");
   }
 
+  Future<void> _setAnalyticsEnabled(BuildContext context) async {
+    await hmsAnalytics.setAnalyticsEnabled(true);
+    _showDialog(context, "setAnalyticsEnabled success");
+  }
+
   Future<void> _getAAID(BuildContext context) async {
     String aaid = await hmsAnalytics.getAAID();
     _showDialog(context, "AAID : " + aaid);
   }
 
   Future<void> _getUserProfiles(BuildContext context) async {
-    Map<String, String> profiles = await hmsAnalytics.getUserProfiles(true);
+    Map<String, dynamic> profiles = await hmsAnalytics.getUserProfiles(true);
     _showDialog(context, "User Profiles : " + profiles.toString());
   }
 
@@ -142,6 +147,11 @@ class MyHomePage extends StatelessWidget {
   Future<void> _pageEnd(BuildContext context) async {
     await hmsAnalytics.pageEnd("pageName");
     _showDialog(context, "pageEnd success");
+  }
+
+  Future<void> _setReportPolicies(BuildContext context) async {
+    await hmsAnalytics.setReportPolicies(scheduledTime: 90);
+    _showDialog(context, "setReportPolicies success");
   }
 
   @override
@@ -171,11 +181,15 @@ class MyHomePage extends StatelessWidget {
                 Key(Keys.PREDEFINED_EVENT)),
             MyBtn("Clear Cached Data", _clearCachedData,
                 Key(Keys.CLEAR_CACHED_DATA)),
+            MyBtn("SetAnalyticsEnabled", _setAnalyticsEnabled,
+                Key(Keys.SET_ANALYTICS_ENABLED)),
             MyBtn("Get AAID", _getAAID, Key(Keys.GET_AAID)),
             MyBtn("Get User Profiles", _getUserProfiles,
                 Key(Keys.GET_USER_PROFILES)),
             MyBtn("Page Start", _pageStart, Key(Keys.PAGE_START)),
             MyBtn("Page End", _pageEnd, Key(Keys.PAGE_END)),
+            MyBtn("setReportPolicies", _setReportPolicies,
+                Key(Keys.SET_REPORT_POLICIES)),
           ],
         ),
       ),

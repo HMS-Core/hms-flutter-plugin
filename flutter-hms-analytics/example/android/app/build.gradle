@@ -22,8 +22,8 @@ if (flutterVersionName == null) {
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'com.huawei.agconnect'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+apply plugin: 'com.huawei.agconnect'
 
 android {
     compileSdkVersion 29
@@ -43,7 +43,7 @@ android {
 
     signingConfigs {
         config {
-            storeFile file('<keystore_file>.jks')
+            storeFile file('<keystore_file>')
             storePassword '<keystore_password>'
             keyAlias '<key_alias>'
             keyPassword '<key_password>'
@@ -55,6 +55,12 @@ android {
             signingConfig signingConfigs.config
         }
         release {
+            // Enables code shrinking, obfuscation and optimization for release builds
+            minifyEnabled true
+            // Unused resources will be removed, resources defined in the res/raw/keep.xml will be kept.
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
             signingConfig signingConfigs.config
         }
     }

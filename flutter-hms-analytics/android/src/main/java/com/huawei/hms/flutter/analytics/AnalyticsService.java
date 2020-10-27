@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,194 +23,210 @@ import android.util.Log;
 import com.huawei.hms.analytics.HiAnalytics;
 import com.huawei.hms.analytics.HiAnalyticsInstance;
 import com.huawei.hms.analytics.HiAnalyticsTools;
+import com.huawei.hms.flutter.analytics.logger.HMSLogger;
+import com.huawei.hms.flutter.analytics.utils.MapUtils;
 
+import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
 import java.util.Map;
-import java.util.Set;
 
-public class AnalyticsService {
-
-    private String TAG = AnalyticsService.class.getSimpleName();
+class AnalyticsService {
+    private static final String TAG = AnalyticsService.class.getSimpleName();
 
     private HiAnalyticsInstance instance;
 
-    public AnalyticsService(Context context) {
-        this.instance = HiAnalytics.getInstance(context);
+    private Context context;
+
+    AnalyticsService(Context mContext) {
+        this.instance = HiAnalytics.getInstance(mContext);
+        context = mContext;
     }
 
-    public void clearCachedData(MethodChannel.Result cb) {
+    void clearCachedData(MethodChannel.Result cb) {
         Log.i(TAG, "clearCachedData is running");
+        HMSLogger.getInstance(context).startMethodExecutionTimer("clearCachedData");
 
         instance.clearCachedData();
+        HMSLogger.getInstance(context).sendSingleEvent("clearCachedData");
         cb.success(null);
     }
 
-    public void setAnalyticsEnabled(Map<String, Object> params, MethodChannel.Result cb) {
+    void setAnalyticsEnabled(MethodCall call, MethodChannel.Result cb) {
         Log.i(TAG, "setAnalyticsEnabled is running");
+        HMSLogger.getInstance(context).startMethodExecutionTimer("setAnalyticsEnabled");
 
-        boolean enabled = (boolean) params.get("enabled");
+        boolean enabled = MapUtils.toBoolean("enabled", call.argument("enabled"));
         instance.setAnalyticsEnabled(enabled);
+        HMSLogger.getInstance(context).sendSingleEvent("setAnalyticsEnabled");
+        cb.success(null);
     }
 
-    public void getAAID(MethodChannel.Result cb) {
+    void getAAID(MethodChannel.Result cb) {
         Log.i(TAG, "getAAID is running");
+        HMSLogger.getInstance(context).startMethodExecutionTimer("getAAID");
 
         instance.getAAID().addOnSuccessListener(aaid -> {
             cb.success(aaid);
+            HMSLogger.getInstance(context).sendSingleEvent("getAAID");
         }).addOnFailureListener(ex -> {
-            cb.error(ex.getMessage(), null, null);
+            HMSLogger.getInstance(context).sendSingleEvent("getAAID", ex.getMessage());
+            cb.error(ex.getMessage(), ex.getMessage(), null);
         });
     }
 
-    public void getUserProfiles(Map<String, Object> params, MethodChannel.Result cb) {
+    void getUserProfiles(MethodCall call, MethodChannel.Result cb) {
         Log.i(TAG, "getUserProfiles is running");
+        HMSLogger.getInstance(context).startMethodExecutionTimer("getUserProfiles");
 
-        boolean predefined = (boolean) params.get("predefined");
+        boolean predefined = MapUtils.toBoolean("predefined", call.argument("predefined"));
         Map<String, String> userProfiles = instance.getUserProfiles(predefined);
+        HMSLogger.getInstance(context).sendSingleEvent("getUserProfiles");
         cb.success(userProfiles);
     }
 
-    public void pageStart(Map<String, Object> params, MethodChannel.Result cb) {
+    void pageStart(MethodCall call, MethodChannel.Result cb) {
         Log.i(TAG, "pageStart is running");
+        HMSLogger.getInstance(context).startMethodExecutionTimer("pageStart");
 
-        String pageName = (String) params.get("pageName");
-        String pageClassOverride = (String) params.get("pageClassOverride");
+        String pageName = call.argument("pageName");
+        String pageClassOverride = call.argument("pageClassOverride");
         instance.pageStart(pageName, pageClassOverride);
+        HMSLogger.getInstance(context).sendSingleEvent("pageStart");
         cb.success(null);
     }
 
-    public void pageEnd(Map<String, Object> params, MethodChannel.Result cb) {
+    void pageEnd(MethodCall call, MethodChannel.Result cb) {
         Log.i(TAG, "pageEnd is running");
+        HMSLogger.getInstance(context).startMethodExecutionTimer("pageEnd");
 
-        String pageName = (String) params.get("pageName");
+        String pageName = call.argument("pageName");
         instance.pageEnd(pageName);
+        HMSLogger.getInstance(context).sendSingleEvent("pageEnd");
         cb.success(null);
     }
 
-    public void regHmsSvcEvent(MethodChannel.Result cb) {
-        Log.i(TAG, "regHmsSvcEvent is running");
-
-        instance.regHmsSvcEvent();
-        cb.success(null);
-    }
-
-    public void unRegHmsSvcEvent(MethodChannel.Result cb) {
-        Log.i(TAG, "unRegHmsSvcEvent is running");
-
-        instance.unRegHmsSvcEvent();
-        if (cb != null) {
-            cb.success(null);
-        }
-    }
-
-    public void setMinActivitySessions(Map<String, Object> params, MethodChannel.Result cb) {
+    void setMinActivitySessions(MethodCall call, MethodChannel.Result cb) {
         Log.i(TAG, "setMinActivitySessions is running");
+        HMSLogger.getInstance(context).startMethodExecutionTimer("setMinActivitySessions");
 
-        long milliseconds = Long.valueOf((int) params.get("interval"));
-        instance.setMinActivitySessions(milliseconds);
-        cb.success(null);
+        Long milliseconds = MapUtils.toLong("interval", call.argument("interval"));
+        if (milliseconds != null) {
+            instance.setMinActivitySessions(milliseconds);
+            HMSLogger.getInstance(context).sendSingleEvent("setMinActivitySessions");
+            cb.success(null);
+        } else {
+            Log.e(TAG, "interval was null.");
+            HMSLogger.getInstance(context).sendSingleEvent("setMinActivitySessions", "NULL_PARAM");
+            cb.error("NULL_PARAM", "interval was null.", null);
+        }
     }
 
-    public void setPushToken(Map<String, Object> params, MethodChannel.Result cb) {
+    void setPushToken(MethodCall call, MethodChannel.Result cb) {
         Log.i(TAG, "setPushToken is running");
+        HMSLogger.getInstance(context).startMethodExecutionTimer("setPushToken");
 
-        String token = (String) params.get("token");
+        String token = call.argument("token");
         instance.setPushToken(token);
+        HMSLogger.getInstance(context).sendSingleEvent("setPushToken");
         cb.success(null);
     }
 
-    public void setSessionDuration(Map<String, Object> params, MethodChannel.Result cb) {
+    void setSessionDuration(MethodCall call, MethodChannel.Result cb) {
         Log.i(TAG, "setSessionDuration is running");
+        HMSLogger.getInstance(context).startMethodExecutionTimer("setSessionDuration");
 
-        long milliseconds = Long.valueOf((int) params.get("duration"));
-        instance.setSessionDuration(milliseconds);
-        cb.success(null);
+        Long milliseconds = MapUtils.toLong("duration", call.argument("duration"));
+        if (milliseconds != null) {
+            instance.setSessionDuration(milliseconds);
+            HMSLogger.getInstance(context).sendSingleEvent("setSessionDuration");
+            cb.success(null);
+        } else {
+            Log.e(TAG, "duration was null.");
+            HMSLogger.getInstance(context).sendSingleEvent("setSessionDuration", "NULL_PARAM");
+            cb.error("NULL_PARAM", "duration was null.", null);
+        }
     }
 
-    public void setUserId(Map<String, Object> params, MethodChannel.Result cb) {
+    void setUserId(MethodCall call, MethodChannel.Result cb) {
         Log.i(TAG, "setUserId is running");
+        HMSLogger.getInstance(context).startMethodExecutionTimer("setUserId");
 
-        String userId = (String) params.get("userId");
+        String userId = call.argument("userId");
         instance.setUserId(userId);
+        HMSLogger.getInstance(context).sendSingleEvent("setUserId");
         cb.success(null);
     }
 
-    public void setUserProfile(Map<String, Object> params, MethodChannel.Result cb) {
+    void setUserProfile(MethodCall call, MethodChannel.Result cb) {
         Log.i(TAG, "setUserProfile is running");
+        HMSLogger.getInstance(context).startMethodExecutionTimer("setUserProfile");
 
-        String key = (String) params.get("key");
-        String value = (String) params.get("value");
+        String key = call.argument("key");
+        String value = call.argument("value");
         instance.setUserProfile(key, value);
+        HMSLogger.getInstance(context).sendSingleEvent("setUserProfile");
         cb.success(null);
     }
 
-    public void onEvent(Map<String, Object> params, MethodChannel.Result cb) {
+    void onEvent(MethodCall call, MethodChannel.Result cb) {
         Log.i(TAG, "onEvent is running");
+        HMSLogger.getInstance(context).startMethodExecutionTimer("onEvent");
 
-        String key = (String) params.get("key");
-        Map<String, Object> val = (Map<String, Object>) params.get("value");
-        Bundle bundle = mapToBundle(val);
+        String key = call.argument("key");
+        Map<String, Object> val = MapUtils.objectToMap(call.argument("value"));
+        Bundle bundle = MapUtils.mapToBundle(val);
         instance.onEvent(key, bundle);
+        HMSLogger.getInstance(context).sendSingleEvent("onEvent");
         cb.success(null);
     }
 
-    private Bundle mapToBundle(Map<String, Object> map) {
-        Bundle bundle = new Bundle();
+    void enableLogger(MethodChannel.Result cb) {
+        Log.i(TAG, "enableLogger is running");
 
-        if (map == null) {
-            return bundle;
-        }
+        HMSLogger.getInstance(context).enableLogger();
+        cb.success(null);
+    }
 
-        Set<Map.Entry<String, Object>> entries = map.entrySet();
-        for (Map.Entry<String, Object> entry : entries) {
-            String key = entry.getKey();
-            Object val = entry.getValue();
+    void disableLogger(MethodChannel.Result cb) {
+        Log.i(TAG, "disableLogger is running");
 
-            if (val instanceof String) {
-                bundle.putString(key, (String) val);
-            } else if (val instanceof Boolean) {
-                bundle.putBoolean(key, (Boolean) val);
-            } else if (val instanceof Integer) {
-                bundle.putInt(key, (Integer) val);
-            } else if (val instanceof Long) {
-                bundle.putLong(key, (Long) val);
-            } else if (val instanceof Double) {
-                bundle.putDouble(key, (Double) val);
-            } else {
-                throw new IllegalArgumentException(
-                    "Illegal value type. Key :" + key + ", valueType : " + val.getClass().getSimpleName());
-            }
-        }
-        return bundle;
+        HMSLogger.getInstance(context).disableLogger();
+        cb.success(null);
     }
 
     //-------------------------------------------------------------------------
     // HiAnalyticsTools
     //-------------------------------------------------------------------------
 
-    public void enableLog(MethodChannel.Result cb) {
+    void enableLog(MethodChannel.Result cb) {
         Log.i(TAG, "enableLog is running");
+        HMSLogger.getInstance(context).startMethodExecutionTimer("enableLog");
 
         HiAnalyticsTools.enableLog();
+        HMSLogger.getInstance(context).sendSingleEvent("enableLog");
         cb.success(null);
     }
 
-    public void enableLogWithLevel(Map<String, Object> params, MethodChannel.Result cb) {
+    void enableLogWithLevel(MethodCall call, MethodChannel.Result cb) {
         Log.i(TAG, "enableLogWithLevel is running");
+        HMSLogger.getInstance(context).startMethodExecutionTimer("enableLogWithLevel");
 
-        String level = (String) params.get("logLevel");
+        String level = call.argument("logLevel");
         Integer intValueOfLevel = null;
 
         try {
             intValueOfLevel = LogLevel.valueOf(level).intValue;
         } catch (IllegalArgumentException ex) {
+            HMSLogger.getInstance(context).sendSingleEvent("enableLogWithLevel", "Invalid log level. level = " + level);
+
             Log.e(TAG, "Invalid log level. level = " + level);
-            cb.error("Invalid log level. level = " + level, null, null);
+            cb.error("INVALID_PARAM", "Invalid log level. level = " + level, null);
             return;
         }
 
         HiAnalyticsTools.enableLog(intValueOfLevel);
+        HMSLogger.getInstance(context).sendSingleEvent("enableLogWithLevel");
         cb.success(null);
     }
 

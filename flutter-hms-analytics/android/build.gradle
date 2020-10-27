@@ -9,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.2'
+        classpath 'com.android.tools.build:gradle:3.6.0'
     }
 }
 
@@ -25,9 +25,11 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 29
+    buildToolsVersion "29.0.3"
 
     defaultConfig {
         minSdkVersion 19
+        targetSdkVersion 29
     }
     lintOptions {
         disable 'InvalidPackage'
@@ -39,5 +41,5 @@ android {
 }
 
 dependencies {
-    implementation 'com.huawei.hms:hianalytics:4.0.3.300'
+    implementation 'com.huawei.hms:hianalytics:5.0.3.300'
 }

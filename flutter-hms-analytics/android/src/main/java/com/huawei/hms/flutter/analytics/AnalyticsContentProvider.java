@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,14 +26,17 @@ import com.huawei.hms.analytics.HiAnalytics;
 import com.huawei.hms.analytics.HiAnalyticsInstance;
 
 public class AnalyticsContentProvider extends ContentProvider {
-    private String TAG = AnalyticsContentProvider.class.getSimpleName();
+    private static final String TAG = AnalyticsContentProvider.class.getSimpleName();
 
     @Override
     public boolean onCreate() {
         Log.i(TAG, "AnalyticsContentProvider -> onCreate");
-        HiAnalyticsInstance instance = HiAnalytics.getInstance(this.getContext().getApplicationContext());
-        instance.setAnalyticsEnabled(true);
-        instance.regHmsSvcEvent();
+        if (this.getContext() != null) {
+            HiAnalyticsInstance instance = HiAnalytics.getInstance(this.getContext().getApplicationContext());
+            instance.setAnalyticsEnabled(true);
+        } else {
+            Log.e(TAG, "Context was null. Couldn't enable analytics.");
+        }
         return false;
     }
 

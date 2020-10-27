@@ -1,4 +1,5 @@
 name: huawei_analytics_example
+version: 5.0.3+300
 description: Demonstrates how to use the Huawei Analytics plugin.
 
 environment:
@@ -17,3 +18,4 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
