@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,41 +23,36 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.huawei.hms.flutter.iap.listeners.DefaultFailureListener;
 import com.huawei.hms.flutter.iap.listeners.DefaultSuccessListener;
 import com.huawei.hms.flutter.iap.listeners.IapActivitySuccessListener;
 import com.huawei.hms.flutter.iap.listeners.IsEnvReadyFailureListener;
 import com.huawei.hms.flutter.iap.listeners.PurchaseIntentSuccessListener;
+import com.huawei.hms.flutter.iap.logger.HMSLogger;
 import com.huawei.hms.flutter.iap.utils.Errors;
+import com.huawei.hms.flutter.iap.utils.JSONUtils;
 import com.huawei.hms.flutter.iap.utils.ValueGetter;
 import com.huawei.hms.iap.Iap;
 import com.huawei.hms.iap.IapClient;
 import com.huawei.hms.iap.entity.ConsumeOwnedPurchaseReq;
-import com.huawei.hms.iap.entity.ConsumeOwnedPurchaseResult;
-import com.huawei.hms.iap.entity.IsEnvReadyResult;
 import com.huawei.hms.iap.entity.IsSandboxActivatedReq;
-import com.huawei.hms.iap.entity.IsSandboxActivatedResult;
 import com.huawei.hms.iap.entity.OwnedPurchasesReq;
-import com.huawei.hms.iap.entity.OwnedPurchasesResult;
 import com.huawei.hms.iap.entity.ProductInfoReq;
-import com.huawei.hms.iap.entity.ProductInfoResult;
 import com.huawei.hms.iap.entity.PurchaseIntentReq;
 import com.huawei.hms.iap.entity.PurchaseResultInfo;
 import com.huawei.hms.iap.entity.StartIapActivityReq;
 import com.huawei.hms.support.api.client.Status;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.ActivityResultListener;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultListener {
     private static final int REQUEST_CREATE_PURCHASE_INTENT = 111;
@@ -66,28 +61,35 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
     private final IapClient mIapClient;
     private final Gson mGson;
     private int mRequestNumber = 0;
-    private Map<Integer, Pair<Result, Integer>> mResultsForRequests;
+    private final Map<Integer, Pair<Result, Integer>> mResultsForRequests;
+    private final HMSLogger hmsLogger;
 
-    MethodCallHandlerImpl(Activity activity) {
+    MethodCallHandlerImpl(final Activity activity) {
         mActivity = activity;
         mIapClient = Iap.getIapClient(activity);
-        mGson = new GsonBuilder().setPrettyPrinting().create();
+        mGson = new GsonBuilder().create();
         mResultsForRequests = new HashMap<>();
+        hmsLogger = HMSLogger.getInstance(mActivity.getApplicationContext());
     }
 
-    private void isEnvReady(@NonNull Result result) {
+    private void isEnvReady(@NonNull final Result result) {
+        final String isEnvReadyMethodName = "isEnvReady";
+        hmsLogger.startMethodExecutionTimer(isEnvReadyMethodName);
         mIapClient.isEnvReady()
-            .addOnSuccessListener(new DefaultSuccessListener<IsEnvReadyResult>(result, mGson))
-            .addOnFailureListener(new IsEnvReadyFailureListener(this, result, REQUEST_IS_ENVIRONMENT_READY));
+            .addOnSuccessListener(new DefaultSuccessListener<>(result, mGson, hmsLogger, isEnvReadyMethodName))
+            .addOnFailureListener(new IsEnvReadyFailureListener(this, result, REQUEST_IS_ENVIRONMENT_READY, hmsLogger));
     }
 
-    private void isSandboxActivated(@NonNull Result result) {
+    private void isSandboxActivated(@NonNull final Result result) {
+        final String isSandboxActivatedMethodName = "isSandboxActivated";
+        hmsLogger.startMethodExecutionTimer(isSandboxActivatedMethodName);
         mIapClient.isSandboxActivated(new IsSandboxActivatedReq())
-            .addOnSuccessListener(new DefaultSuccessListener<IsSandboxActivatedResult>(result, mGson))
-            .addOnFailureListener(new DefaultFailureListener(result, Errors.isSandbocReady.getErrorCode()));
+            .addOnSuccessListener(new DefaultSuccessListener<>(result, mGson, hmsLogger, isSandboxActivatedMethodName))
+            .addOnFailureListener(new DefaultFailureListener(result, Errors.IS_SANDBOX_READY.getErrorCode(), hmsLogger,
+                isSandboxActivatedMethodName));
     }
 
-    private void obtainProductInfo(@NonNull MethodCall call, @NonNull Result result) {
+    private void obtainProductInfo(@NonNull final MethodCall call, @NonNull final Result result) {
         //Arguments from call
         final List<String> productIdList = call.argument("skuIds");
         final int priceType = ValueGetter.getInt("priceType", call);
@@ -98,33 +100,50 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
         request.setProductIds(productIdList);
 
         //Obtain product info from IAP service
+        final String obtainProductInfoMethodName = "obtainProductInfo";
+        hmsLogger.startMethodExecutionTimer(obtainProductInfoMethodName);
         mIapClient.obtainProductInfo(request)
-            .addOnSuccessListener(new DefaultSuccessListener<ProductInfoResult>(result, mGson))
-            .addOnFailureListener(new DefaultFailureListener(result, Errors.obtainProductInfo.getErrorCode()));
+            .addOnSuccessListener(new DefaultSuccessListener<>(result, mGson, hmsLogger, obtainProductInfoMethodName))
+            .addOnFailureListener(
+                new DefaultFailureListener(result, Errors.OBTAIN_PRODUCT_INFO.getErrorCode(), hmsLogger,
+                    obtainProductInfoMethodName));
     }
 
-    private void createPurchaseIntent(@NonNull MethodCall call, @NonNull Result result) {
+    private void createPurchaseIntent(@NonNull final MethodCall call, @NonNull final Result result) {
         //Arguments from call
-        final String productId = call.argument("productId");
+        final String productId = ValueGetter.getString("productId", call);
         final int priceType = ValueGetter.getInt("priceType", call);
-        final String developerPayload = call.argument("developerPayload");
+        final String developerPayload = call.argument("developerPayload") == null
+            ? null
+            : ValueGetter.getString("developerPayload", call);
+        final String reservedInfor = call.argument("reservedInfor") == null
+            ? null
+            : ValueGetter.getString("reservedInfor", call);
 
         //Constructing request
         final PurchaseIntentReq request = new PurchaseIntentReq();
         request.setProductId(productId);
         request.setPriceType(priceType);
         request.setDeveloperPayload(developerPayload);
+        request.setReservedInfor(reservedInfor);
 
         //Create purchase intent from IAP service
+        final String createPurchaseIntentMethodName = "createPurchaseIntent";
+        hmsLogger.startMethodExecutionTimer(createPurchaseIntentMethodName);
         mIapClient.createPurchaseIntent(request)
-            .addOnSuccessListener(new PurchaseIntentSuccessListener(this, result, REQUEST_CREATE_PURCHASE_INTENT))
-            .addOnFailureListener(new DefaultFailureListener(result, Errors.purchaseIntentException.getErrorCode()));
+            .addOnSuccessListener(
+                new PurchaseIntentSuccessListener(this, result, REQUEST_CREATE_PURCHASE_INTENT, hmsLogger))
+            .addOnFailureListener(
+                new DefaultFailureListener(result, Errors.PURCHASE_INTENT_EXCEPTION.getErrorCode(), hmsLogger,
+                    createPurchaseIntentMethodName));
     }
 
-    private void consumeOwnedPurchase(@NonNull MethodCall call, @NonNull Result result) {
+    private void consumeOwnedPurchase(@NonNull final MethodCall call, @NonNull final Result result) {
         //Arguments
-        final String purchaseToken = call.argument("purchaseToken");
-        final String developerChallenge = call.argument("developerChallenge");
+        final String purchaseToken = ValueGetter.getString("purchaseToken", call);
+        final String developerChallenge = call.argument("developerChallenge") == null
+            ? null
+            : ValueGetter.getString("developerChallenge", call);
 
         //Constructing request
         final ConsumeOwnedPurchaseReq request = new ConsumeOwnedPurchaseReq();
@@ -132,15 +151,22 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
         request.setPurchaseToken(purchaseToken);
 
         // Call service from IAP service
+        final String consumeOwnedPurchaseMethodName = "consumeOwnedPurchase";
+        hmsLogger.startMethodExecutionTimer(consumeOwnedPurchaseMethodName);
         mIapClient.consumeOwnedPurchase(request)
-            .addOnSuccessListener(new DefaultSuccessListener<ConsumeOwnedPurchaseResult>(result, mGson))
-            .addOnFailureListener(new DefaultFailureListener(result, Errors.consumeOwnedPurchase.getErrorCode()));
+            .addOnSuccessListener(
+                new DefaultSuccessListener<>(result, mGson, hmsLogger, consumeOwnedPurchaseMethodName))
+            .addOnFailureListener(
+                new DefaultFailureListener(result, Errors.CONSUME_OWNED_PURCHASE.getErrorCode(), hmsLogger,
+                    consumeOwnedPurchaseMethodName));
     }
 
-    private void obtainOwnedPurchaseRecord(@NonNull MethodCall call, @NonNull Result result) {
+    private void obtainOwnedPurchaseRecord(@NonNull final MethodCall call, @NonNull final Result result) {
         //Arguments
         final int priceType = ValueGetter.getInt("priceType", call);
-        final String continuationToken = call.argument("continuationToken");
+        final String continuationToken = call.argument("continuationToken") == null
+            ? null
+            : ValueGetter.getString("continuationToken", call);
 
         //Constructing request
         final OwnedPurchasesReq request = new OwnedPurchasesReq();
@@ -148,15 +174,22 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
         request.setPriceType(priceType);
 
         //Obtain record from IAP service
+        final String obtainOwnedPurchaseRecordMethodName = "obtainOwnedPurchaseRecord";
+        hmsLogger.startMethodExecutionTimer(obtainOwnedPurchaseRecordMethodName);
         mIapClient.obtainOwnedPurchaseRecord(request)
-            .addOnSuccessListener(new DefaultSuccessListener<OwnedPurchasesResult>(result, mGson))
-            .addOnFailureListener(new DefaultFailureListener(result, Errors.obtainOwnedPurchases.getErrorCode()));
+            .addOnSuccessListener(
+                new DefaultSuccessListener<>(result, mGson, hmsLogger, obtainOwnedPurchaseRecordMethodName))
+            .addOnFailureListener(
+                new DefaultFailureListener(result, Errors.OBTAIN_OWNED_PURCHASES.getErrorCode(), hmsLogger,
+                    obtainOwnedPurchaseRecordMethodName));
     }
 
-    private void obtainOwnedPurchases(@NonNull MethodCall call, @NonNull Result result) {
+    private void obtainOwnedPurchases(@NonNull final MethodCall call, @NonNull final Result result) {
         //Arguments
         final int priceType = ValueGetter.getInt("priceType", call);
-        final String continuationToken = call.argument("continuationToken");
+        final String continuationToken = call.argument("continuationToken") == null
+            ? null
+            : ValueGetter.getString("continuationToken", call);
 
         //Constructing request
         final OwnedPurchasesReq request = new OwnedPurchasesReq();
@@ -164,15 +197,20 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
         request.setPriceType(priceType);
 
         //Obtain owned purchase from IAP service
+        final String obtainOwnedPurchasesMethodName = "obtainOwnedPurchases";
+        hmsLogger.startMethodExecutionTimer(obtainOwnedPurchasesMethodName);
         mIapClient.obtainOwnedPurchases(request)
-            .addOnSuccessListener(new DefaultSuccessListener<OwnedPurchasesResult>(result, mGson))
-            .addOnFailureListener(new DefaultFailureListener(result, Errors.obtainOwnedPurchases.getErrorCode()));
+            .addOnSuccessListener(
+                new DefaultSuccessListener<>(result, mGson, hmsLogger, obtainOwnedPurchasesMethodName))
+            .addOnFailureListener(
+                new DefaultFailureListener(result, Errors.OBTAIN_OWNED_PURCHASES.getErrorCode(), hmsLogger,
+                    obtainOwnedPurchasesMethodName));
     }
 
-    private void startIapActivity(@NonNull MethodCall call, Result result) {
+    private void startIapActivity(@NonNull final MethodCall call, final Result result) {
         //Arguments
         final int type = ValueGetter.getInt("type", call);
-        final String productId = call.argument("productId");
+        final String productId = call.argument("productId") == null ? null : ValueGetter.getString("productId", call);
 
         //Constructing request
         final StartIapActivityReq request = new StartIapActivityReq();
@@ -180,13 +218,17 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
         request.setSubscribeProductId(productId);
 
         //start activity using IAP service
+        final String startIapActivityMethodName = "startIapActivity";
+        hmsLogger.startMethodExecutionTimer(startIapActivityMethodName);
         mIapClient.startIapActivity(request)
-            .addOnSuccessListener(new IapActivitySuccessListener(mActivity))
-            .addOnFailureListener(new DefaultFailureListener(result, Errors.startIapActivity.getErrorCode()));
+            .addOnSuccessListener(new IapActivitySuccessListener(mActivity, hmsLogger))
+            .addOnFailureListener(
+                new DefaultFailureListener(result, Errors.START_IAP_ACTIVITY.getErrorCode(), hmsLogger,
+                    startIapActivityMethodName));
     }
 
     @Override
-    public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
+    public void onMethodCall(@NonNull final MethodCall call, @NonNull final Result result) {
         switch (call.method) {
             case "isEnvReady":
                 isEnvReady(result);
@@ -212,49 +254,66 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
             case "startIapActivity":
                 startIapActivity(call, result);
                 break;
+            case "disableLogger":
+                hmsLogger.disableLogger();
+                break;
+            case "enableLogger":
+                hmsLogger.enableLogger();
+                break;
             default:
                 result.notImplemented();
                 break;
         }
     }
 
-    public synchronized void handleResolution(Status status, Result result, Integer requestType) {
+    public synchronized void handleResolution(final Status status, final Result result, final Integer requestType) {
+        final String handleResolutionMethodName = "handleResolution";
         mRequestNumber++;
         mResultsForRequests.put(mRequestNumber, Pair.create(result, requestType));
+        hmsLogger.startMethodExecutionTimer(handleResolutionMethodName);
         try {
             status.startResolutionForResult(mActivity, mRequestNumber);
-        } catch (IntentSender.SendIntentException exp) {
+            hmsLogger.sendSingleEvent(handleResolutionMethodName);
+        } catch (final IntentSender.SendIntentException exp) {
             mResultsForRequests.remove(mRequestNumber);
-            result.error(Errors.purchaseIntentResolution.getErrorCode(), exp.getMessage(), null);
+            hmsLogger.sendSingleEvent(handleResolutionMethodName, Errors.PURCHASE_INTENT_RESOLUTION.getErrorCode());
+            result.error(Errors.PURCHASE_INTENT_RESOLUTION.getErrorCode(), exp.getMessage(), null);
         }
     }
 
     @Override
-    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-        final Result result = Objects.requireNonNull(mResultsForRequests.get(requestCode)).first;
-        final int requestType = Objects.requireNonNull(mResultsForRequests.get(requestCode)).second;
+    public boolean onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        final Pair<Result, Integer> pair = mResultsForRequests.get(requestCode);
+        if (pair == null) {
+            return false;
+        }
+
+        final Result result = pair.first;
+        final int requestType = pair.second;
 
         if (result != null) {
             if (resultCode == Activity.RESULT_OK) {
                 switch (requestType) {
                     case REQUEST_CREATE_PURCHASE_INTENT:
+                        hmsLogger.startMethodExecutionTimer("parsePurchaseResultInfoFromIntent");
                         final PurchaseResultInfo purchaseResultInfo = mIapClient.parsePurchaseResultInfoFromIntent(
                             data);
-                        result.success(mGson.toJson(purchaseResultInfo));
+                        hmsLogger.sendSingleEvent("parsePurchaseResultInfoFromIntent");
+                        result.success(JSONUtils.getJSONFromPurchaseResultInfo(purchaseResultInfo).toString());
                         break;
                     case REQUEST_IS_ENVIRONMENT_READY:
                         final int returnCode = data.getIntExtra("returnCode", 1);
                         if (returnCode != 0) {
-                            result.error(Errors.logIn.getErrorCode(), Errors.logIn.getErrorMessage(), null);
+                            result.error(Errors.LOG_IN.getErrorCode(), Errors.LOG_IN.getErrorMessage(), null);
                         }
                         break;
                     default:
-                        result.error(Errors.unkownRequestCode.getErrorCode(),
-                            Errors.unkownRequestCode.getErrorMessage(), null);
+                        result.error(Errors.UNKNOWN_REQUEST_CODE.getErrorCode(),
+                            Errors.UNKNOWN_REQUEST_CODE.getErrorMessage(), null);
                         break;
                 }
             } else {
-                result.error(Errors.activityResult.getErrorCode(), Errors.activityResult.getErrorMessage(), null);
+                result.error(Errors.ACTIVITY_RESULT.getErrorCode(), Errors.ACTIVITY_RESULT.getErrorMessage(), null);
             }
         }
         return true;

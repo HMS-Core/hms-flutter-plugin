@@ -1,8 +1,9 @@
 name: huawei_iap_example
 description: Demonstrates how to use the Huawei IAP plugin.
+version: 5.0.2+300
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -17,3 +18,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/HUAWEI_IAP_icon.png

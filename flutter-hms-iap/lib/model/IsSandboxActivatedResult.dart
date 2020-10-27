@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,15 +13,14 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import 'dart:convert';
-
+import 'dart:convert' show json;
 import 'Status.dart';
 
 class IsSandboxActivatedResult {
   String errMsg;
   bool isSandboxApk;
   bool isSandboxUser;
-  int returnCode;
+  String returnCode;
   String versionFrMarket;
   String versionInApk;
   Status status;
@@ -36,38 +35,61 @@ class IsSandboxActivatedResult {
     this.status,
   });
 
-  factory IsSandboxActivatedResult.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-    return IsSandboxActivatedResult(
-      errMsg: map["errMsg"] == null ? null : map["errMsg"],
-      isSandboxApk: map["isSandboxApk"] == null ? null : map["isSandboxApk"],
-      isSandboxUser: map["isSandboxUser"] == null ? null : map["isSandboxUser"],
-      returnCode: map["returnCode"] == null ? null : map["returnCode"],
-      versionFrMarket:
-          map["versionFrMarket"] == null ? null : map["versionFrMarket"],
-      versionInApk: map["versionInApk"] == null ? null : map["versionInApk"],
-      status: Status.fromJson(map["status"]) == null
-          ? null
-          : Status.fromJson(map["status"]),
-    );
-  }
-
-  factory IsSandboxActivatedResult.fromJson(String source) =>
-      IsSandboxActivatedResult.fromMap(json.decode(source));
-
-  Map<String, dynamic> toMap() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['errMsg'] = this.errMsg;
-    data['isSandboxApk'] = this.isSandboxApk;
-    data['isSandboxUser'] = this.isSandboxUser;
-    data['returnCode'] = this.returnCode;
-    data['versionFrMarket'] = this.versionFrMarket;
-    data['versionInApk'] = this.versionInApk;
-    if (this.status != null) {
-      data['status'] = this.status.toJson();
-    }
-    return data;
-  }
+  factory IsSandboxActivatedResult.fromJson(String str) =>
+      IsSandboxActivatedResult.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
+
+  factory IsSandboxActivatedResult.fromMap(Map<dynamic, dynamic> json) =>
+      IsSandboxActivatedResult(
+        errMsg: json["errMsg"] == null ? null : json["errMsg"],
+        isSandboxApk:
+            json["isSandboxApk"] == null ? null : json["isSandboxApk"],
+        isSandboxUser:
+            json["isSandboxUser"] == null ? null : json["isSandboxUser"],
+        returnCode:
+            json["returnCode"] == null ? null : json["returnCode"].toString(),
+        versionFrMarket:
+            json["versionFrMarket"] == null ? null : json["versionFrMarket"],
+        versionInApk:
+            json["versionInApk"] == null ? null : json["versionInApk"],
+        status: json["status"] == null ? null : Status.fromMap(json["status"]),
+      );
+
+  Map<String, dynamic> toMap() {
+    return {
+      'errMsg': errMsg,
+      'isSandboxApk': isSandboxApk,
+      'isSandboxUser': isSandboxUser,
+      'returnCode': returnCode,
+      'versionFrMarket': versionFrMarket,
+      'versionInApk': versionInApk,
+      'status': status == null ? null : status.toMap(),
+    };
+  }
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+    if (runtimeType != o.runtimeType) return false;
+    final IsSandboxActivatedResult check = o;
+    return o is IsSandboxActivatedResult &&
+        check.errMsg == errMsg &&
+        check.isSandboxApk == isSandboxApk &&
+        check.isSandboxUser == isSandboxUser &&
+        check.returnCode == returnCode &&
+        check.versionFrMarket == versionFrMarket &&
+        check.versionInApk == versionInApk &&
+        check.status == status;
+  }
+
+  @override
+  int get hashCode =>
+      errMsg.hashCode ^
+      isSandboxApk.hashCode ^
+      isSandboxUser.hashCode ^
+      returnCode.hashCode ^
+      versionFrMarket.hashCode ^
+      versionInApk.hashCode ^
+      status.hashCode;
 }

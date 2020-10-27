@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import 'dart:convert';
+import 'dart:convert' show json;
 
 class ConsumePurchaseData {
   int applicationId;
@@ -67,74 +67,139 @@ class ConsumePurchaseData {
       this.payOrderId,
       this.payType});
 
-  factory ConsumePurchaseData.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-    return ConsumePurchaseData(
-      applicationId: map["applicationId"] == null ? null : map["applicationId"],
-      autoRenewing: map["autoRenewing"] == null ? null : map["autoRenewing"],
-      orderId: map["orderId"] == null ? null : map["orderId"],
-      packageName: map["packageName"] == null ? null : map["packageName"],
-      productId: map["productId"] == null ? null : map["productId"],
-      purchaseTime: map["purchaseTime"] == null ? null : map["purchaseTime"],
-      purchaseState: map["purchaseState"] == null ? null : map["purchaseState"],
-      developerPayload:
-          map["developerPayload"] == null ? null : map["developerPayload"],
-      purchaseToken: map["purchaseToken"] == null ? null : map["purchaseToken"],
-      developerChallenge:
-          map["developerChallenge"] == null ? null : map["developerChallenge"],
-      consumptionState:
-          map["consumptionState"] == null ? null : map["consumptionState"],
-      acknowledged: map["acknowledged"] == null ? null : map["acknowledged"],
-      currency: map["currency"] == null ? null : map["currency"],
-      price: map["price"] == null ? null : map["price"],
-      country: map["country"] == null ? null : map["country"],
-      responseCode: map["responseCode"] == null ? null : map["responseCode"],
-      responseMessage:
-          map["responseMessage"] == null ? null : map["responseMessage"],
-      kind: map["kind"] == null ? null : map["kind"],
-      productName: map["productName"] == null ? null : map["productName"],
-      purchaseTimeMillis:
-          map["purchaseTimeMillis"] == null ? null : map["purchaseTimeMillis"],
-      confirmed: map["confirmed"] == null ? null : map["confirmed"],
-      purchaseType: map["purchaseType"] == null ? null : map["purchaseType"],
-      payOrderId: map["payOrderId"] == null ? null : map["payOrderId"],
-      payType: map["payType"] == null ? null : map["payType"],
-    );
-  }
-
-  factory ConsumePurchaseData.fromJson(String source) {
-    if (source == null) return null;
-    return ConsumePurchaseData.fromMap(json.decode(source));
-  }
-
-  Map<String, dynamic> toMap() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['autoRenewing'] = this.autoRenewing;
-    data['orderId'] = this.orderId;
-    data['packageName'] = this.packageName;
-    data['applicationId'] = this.applicationId;
-    data['productId'] = this.productId;
-    data['purchaseTime'] = this.purchaseTime;
-    data['purchaseState'] = this.purchaseState;
-    data['developerPayload'] = this.developerPayload;
-    data['purchaseToken'] = this.purchaseToken;
-    data['consumptionState'] = this.consumptionState;
-    data['currency'] = this.currency;
-    data['price'] = this.price;
-    data['country'] = this.country;
-    data['developerChallenge'] = this.developerChallenge;
-    data['acknowledged'] = this.acknowledged;
-    data['responseCode'] = this.responseCode;
-    data['responseMessage'] = this.responseMessage;
-    data['kind'] = this.kind;
-    data['productName'] = this.productName;
-    data['purchaseTimeMillis'] = this.purchaseTimeMillis;
-    data['confirmed'] = this.confirmed;
-    data['purchaseType'] = this.purchaseType;
-    data['payOrderId'] = this.payOrderId;
-    data['payType'] = this.payType;
-    return data;
-  }
+  factory ConsumePurchaseData.fromJson(String str) =>
+      ConsumePurchaseData.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
+
+  factory ConsumePurchaseData.fromMap(Map<dynamic, dynamic> json) =>
+      ConsumePurchaseData(
+        applicationId:
+            json["applicationId"] == null ? null : json["applicationId"],
+        autoRenewing:
+            json["autoRenewing"] == null ? null : json["autoRenewing"],
+        orderId: json["orderId"] == null ? null : json["orderId"],
+        packageName: json["packageName"] == null ? null : json["packageName"],
+        productId: json["productId"] == null ? null : json["productId"],
+        purchaseTime:
+            json["purchaseTime"] == null ? null : json["purchaseTime"],
+        purchaseState:
+            json["purchaseState"] == null ? null : json["purchaseState"],
+        developerPayload:
+            json["developerPayload"] == null ? null : json["developerPayload"],
+        purchaseToken:
+            json["purchaseToken"] == null ? null : json["purchaseToken"],
+        developerChallenge: json["developerChallenge"] == null
+            ? null
+            : json["developerChallenge"],
+        consumptionState:
+            json["consumptionState"] == null ? null : json["consumptionState"],
+        acknowledged:
+            json["acknowledged"] == null ? null : json["acknowledged"],
+        currency: json["currency"] == null ? null : json["currency"],
+        price: json["price"] == null ? null : json["price"],
+        country: json["country"] == null ? null : json["country"],
+        responseCode:
+            json["responseCode"] == null ? null : json["responseCode"],
+        responseMessage:
+            json["responseMessage"] == null ? null : json["responseMessage"],
+        kind: json["kind"] == null ? null : json["kind"],
+        productName: json["productName"] == null ? null : json["productName"],
+        purchaseTimeMillis: json["purchaseTimeMillis"] == null
+            ? null
+            : json["purchaseTimeMillis"],
+        confirmed: json["confirmed"] == null ? null : json["confirmed"],
+        purchaseType:
+            json["purchaseType"] == null ? null : json["purchaseType"],
+        payOrderId: json["payOrderId"] == null ? null : json["payOrderId"],
+        payType: json["payType"] == null ? null : json["payType"],
+      );
+
+  Map<String, dynamic> toMap() {
+    return {
+      'autoRenewing': autoRenewing,
+      'orderId': orderId,
+      'packageName': packageName,
+      'applicationId': applicationId,
+      'productId': productId,
+      'purchaseTime': purchaseTime,
+      'purchaseState': purchaseState,
+      'developerPayload': developerPayload,
+      'purchaseToken': purchaseToken,
+      'consumptionState': consumptionState,
+      'currency': currency,
+      'price': price,
+      'country': country,
+      'developerChallenge': developerChallenge,
+      'acknowledged': acknowledged,
+      'responseCode': responseCode,
+      'responseMessage': responseMessage,
+      'kind': kind,
+      'productName': productName,
+      'purchaseTimeMillis': purchaseTimeMillis,
+      'confirmed': confirmed,
+      'purchaseType': purchaseType,
+      'payOrderId': payOrderId,
+      'payType': payType,
+    };
+  }
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+    if (runtimeType != o.runtimeType) return false;
+    final ConsumePurchaseData check = o;
+    return o is ConsumePurchaseData &&
+        check.autoRenewing == autoRenewing &&
+        check.orderId == orderId &&
+        check.packageName == packageName &&
+        check.applicationId == applicationId &&
+        check.productId == productId &&
+        check.purchaseTime == purchaseTime &&
+        check.purchaseState == purchaseState &&
+        check.developerPayload == developerPayload &&
+        check.purchaseToken == purchaseToken &&
+        check.consumptionState == consumptionState &&
+        check.currency == currency &&
+        check.price == price &&
+        check.country == country &&
+        check.developerChallenge == developerChallenge &&
+        check.acknowledged == acknowledged &&
+        check.responseCode == responseCode &&
+        check.responseMessage == responseMessage &&
+        check.kind == kind &&
+        check.productName == productName &&
+        check.purchaseTimeMillis == purchaseTimeMillis &&
+        check.confirmed == confirmed &&
+        check.purchaseType == purchaseType &&
+        check.payOrderId == payOrderId &&
+        check.payType == payType;
+  }
+
+  @override
+  int get hashCode =>
+      autoRenewing.hashCode ^
+      orderId.hashCode ^
+      packageName.hashCode ^
+      applicationId.hashCode ^
+      productId.hashCode ^
+      purchaseTime.hashCode ^
+      purchaseState.hashCode ^
+      developerPayload.hashCode ^
+      purchaseToken.hashCode ^
+      consumptionState.hashCode ^
+      currency.hashCode ^
+      price.hashCode ^
+      country.hashCode ^
+      developerChallenge.hashCode ^
+      acknowledged.hashCode ^
+      responseCode.hashCode ^
+      responseMessage.hashCode ^
+      kind.hashCode ^
+      productName.hashCode ^
+      purchaseTimeMillis.hashCode ^
+      confirmed.hashCode ^
+      purchaseType.hashCode ^
+      payOrderId.hashCode ^
+      payType.hashCode;
 }

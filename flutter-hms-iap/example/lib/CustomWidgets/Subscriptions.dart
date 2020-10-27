@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,19 +13,13 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import 'dart:developer';
-
+import 'dart:developer' show log;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:huawei_iap/IapClient.dart';
-import 'package:huawei_iap/model/InAppPurchaseData.dart';
-import 'package:huawei_iap/model/OwnedPurchasesReq.dart';
-import 'package:huawei_iap/model/OwnedPurchasesResult.dart';
-import 'package:huawei_iap/model/ProductInfo.dart';
-import 'package:huawei_iap/model/ProductInfoReq.dart';
-import 'package:huawei_iap/model/ProductInfoResult.dart';
-import 'package:huawei_iap/model/PurchaseIntentReq.dart';
-import 'package:huawei_iap/model/PurchaseResultInfo.dart';
+import 'package:flutter/services.dart' show PlatformException;
+
+import 'package:huawei_iap/HmsIapLibrary.dart';
+
+import 'package:huawei_iap_example/utils/CustomButton.dart';
 
 class Subscriptions extends StatefulWidget {
   @override
@@ -47,9 +41,10 @@ class _SubscriptionsState extends State<Subscriptions> {
 
   loadProducts() async {
     try {
-      ProductInfoResult result = await IapClient.obtainProductInfo(
-          ProductInfoReq(priceType: 2, skuIds: ["p05", "p15"]));
-
+      ProductInfoResult result = await IapClient.obtainProductInfo(ProductInfoReq(
+          priceType: 2,
+          //Make sure that the product IDs are the same as those defined in AppGallery Connect.
+          skuIds: ["xxx", "xxxxxx"]));
       setState(() {
         available = [];
         for (int i = 0; i < result.productInfoList.length; i++) {
@@ -57,7 +52,11 @@ class _SubscriptionsState extends State<Subscriptions> {
         }
       });
     } on PlatformException catch (e) {
-      log(e.toString());
+      if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+      } else {
+        log(e.toString());
+      }
     }
   }
 
@@ -66,11 +65,19 @@ class _SubscriptionsState extends State<Subscriptions> {
       PurchaseResultInfo result = await IapClient.createPurchaseIntent(
           PurchaseIntentReq(
               priceType: 2, developerPayload: "Test", productId: productID));
-      loadProducts();
-      ownedPurchases();
-      purchaseHistory();
+      if (result.returnCode == HmsIapResults.ORDER_STATE_SUCCESS.resultCode) {
+        loadProducts();
+        ownedPurchases();
+        purchaseHistory();
+      } else {
+        log(result.errMsg);
+      }
     } on PlatformException catch (e) {
-      log(e.toString());
+      if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+      } else {
+        log(e.toString());
+      }
     }
   }
 
@@ -85,7 +92,11 @@ class _SubscriptionsState extends State<Subscriptions> {
         }
       });
     } on PlatformException catch (e) {
-      log(e.toString());
+      if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+      } else {
+        log(e.toString());
+      }
     }
   }
 
@@ -100,7 +111,24 @@ class _SubscriptionsState extends State<Subscriptions> {
         }
       });
     } on PlatformException catch (e) {
-      log(e.toString());
+      if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+      } else {
+        log(e.toString());
+      }
+    }
+  }
+
+  manageSubscriptions() async {
+    try {
+      await IapClient.startIapActivity(StartIapActivityReq(
+          type: StartIapActivityReq.TYPE_SUBSCRIBE_MANAGER_ACTIVITY));
+    } on PlatformException catch (e) {
+      if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+      } else {
+        log(e.toString());
+      }
     }
   }
 
@@ -203,7 +231,7 @@ class _SubscriptionsState extends State<Subscriptions> {
           Row(
             children: <Widget>[
               Text(
-                "Purchased Record",
+                "Purchased Record  - Last 5",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
               )
             ],
@@ -211,7 +239,8 @@ class _SubscriptionsState extends State<Subscriptions> {
           ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: purchasedRecord.length,
+              itemCount:
+                  purchasedRecord.length >= 5 ? 5 : purchasedRecord.length,
               itemBuilder: (BuildContext ctxt, int i) {
                 return Card(
                   child: Column(
@@ -233,6 +262,11 @@ class _SubscriptionsState extends State<Subscriptions> {
                   ),
                 );
               }),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CustomButton(
+                onPressed: manageSubscriptions, text: "Manage Subscriptions"),
+          )
         ],
       ),
     );

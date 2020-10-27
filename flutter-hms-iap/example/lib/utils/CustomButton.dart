@@ -14,17 +14,30 @@
     limitations under the License.
 */
 
-package com.huawei.hms.flutter.iap_example;
+import 'package:flutter/material.dart';
 
-import androidx.annotation.NonNull;
+class CustomButton extends StatelessWidget {
+  final String text;
+  final VoidCallback onPressed;
 
-import io.flutter.embedding.android.FlutterActivity;
-import io.flutter.embedding.engine.FlutterEngine;
-import io.flutter.plugins.GeneratedPluginRegistrant;
+  const CustomButton({
+    @required this.text,
+    @required this.onPressed,
+  });
 
-public class MainActivity extends FlutterActivity {
-    @Override
-    public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
-        GeneratedPluginRegistrant.registerWith(flutterEngine);
-    }
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(30.0))),
+      onPressed: onPressed,
+      color: Colors.red,
+      textColor: Colors.white,
+      splashColor: Colors.redAccent,
+      padding: EdgeInsets.all(12.0),
+      child: Text(
+        text,
+      ),
+    );
+  }
 }

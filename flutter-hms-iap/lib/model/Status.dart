@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,6 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import 'dart:convert' show json;
+
 class Status {
   int statusCode;
   String statusMessage;
@@ -24,21 +26,40 @@ class Status {
     this.status,
   });
 
-  Status.fromJson(Map<String, dynamic> json) {
-    statusCode = json['statusCode'];
-    statusMessage =
-        json['statusMessage'] != null ? json['statusMessage'] : null;
-    status =
-        json['status'] != null ? new Status.fromJson(json['status']) : null;
-  }
+  factory Status.fromJson(String str) => Status.fromMap(json.decode(str));
 
-  Map<String, dynamic> toJson() {
+  String toJson() => json.encode(toMap());
+
+  factory Status.fromMap(Map<String, dynamic> json) => Status(
+        statusCode: json['statusCode'],
+        statusMessage:
+            json['statusMessage'] == null ? null : json['statusMessage'],
+        status:
+            json['status'] == null ? null : new Status.fromMap(json['status']),
+      );
+
+  Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['statusCode'] = this.statusCode;
     data['statusMessage'] = this.statusMessage;
     if (this.status != null) {
-      data['status'] = this.status.toJson();
+      data['status'] = this.status.toMap();
     }
     return data;
   }
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+    if (runtimeType != o.runtimeType) return false;
+    final Status check = o;
+    return o is Status &&
+        check.statusCode == statusCode &&
+        check.statusMessage == statusMessage &&
+        check.status == status;
+  }
+
+  @override
+  int get hashCode =>
+      statusCode.hashCode ^ statusMessage.hashCode ^ status.hashCode;
 }

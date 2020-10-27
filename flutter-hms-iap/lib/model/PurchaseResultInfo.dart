@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,45 +13,72 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import 'dart:convert';
-
+import 'dart:convert' show json;
 import 'InAppPurchaseData.dart';
 
 class PurchaseResultInfo {
-  int returnCode;
+  String returnCode;
   InAppPurchaseData inAppPurchaseData;
   String inAppDataSignature;
   String errMsg;
+  String rawValue;
 
   PurchaseResultInfo({
     this.inAppDataSignature,
     this.inAppPurchaseData,
     this.returnCode,
     this.errMsg,
+    this.rawValue,
   });
 
-  factory PurchaseResultInfo.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-    return PurchaseResultInfo(
-        returnCode: map['a'] == null ? null : map['a'],
-        inAppPurchaseData: InAppPurchaseData.fromJson(map['b']) == null
-            ? null
-            : InAppPurchaseData.fromJson(map['b']),
-        inAppDataSignature: map['c'] == null ? null : map['c'],
-        errMsg: map['d'] == null ? null : map['d']);
-  }
-
-  factory PurchaseResultInfo.fromJson(String source) =>
-      PurchaseResultInfo.fromMap(json.decode(source));
-
-  Map<String, dynamic> toMap() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['a'] = this.returnCode;
-    data['b'] = this.inAppPurchaseData.toJson();
-    data['c'] = this.inAppDataSignature;
-    data['d'] = this.errMsg;
-    return data;
-  }
+  factory PurchaseResultInfo.fromJson(String str) =>
+      PurchaseResultInfo.fromMap(str);
 
   String toJson() => json.encode(toMap());
+
+  factory PurchaseResultInfo.fromMap(String source) {
+    Map<dynamic, dynamic> jsonMap = json.decode(source);
+    return PurchaseResultInfo(
+      returnCode: jsonMap["returnCode"] == null
+          ? null
+          : jsonMap["returnCode"].toString(),
+      inAppPurchaseData: jsonMap["inAppPurchaseData"] == null
+          ? null
+          : InAppPurchaseData.fromJson(jsonMap["inAppPurchaseData"]),
+      inAppDataSignature: jsonMap["inAppDataSignature"] == null
+          ? null
+          : jsonMap["inAppDataSignature"],
+      errMsg: jsonMap["errMsg"] == null ? null : jsonMap["errMsg"],
+      rawValue: source,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      "returnCode": returnCode,
+      "inAppPurchaseData":
+          inAppPurchaseData == null ? null : inAppPurchaseData.toJson(),
+      "inAppDataSignature": inAppDataSignature,
+      "errMsg": errMsg,
+    };
+  }
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+    if (runtimeType != o.runtimeType) return false;
+    final PurchaseResultInfo check = o;
+    return o is PurchaseResultInfo &&
+        check.returnCode == returnCode &&
+        check.inAppPurchaseData == inAppPurchaseData &&
+        check.inAppDataSignature == inAppDataSignature &&
+        check.errMsg == errMsg;
+  }
+
+  @override
+  int get hashCode =>
+      returnCode.hashCode ^
+      inAppPurchaseData.hashCode ^
+      inAppDataSignature.hashCode ^
+      errMsg.hashCode;
 }

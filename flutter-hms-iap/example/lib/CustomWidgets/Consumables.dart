@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,21 +13,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import 'dart:developer';
-
+import 'dart:developer' show log;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:huawei_iap/IapClient.dart';
-import 'package:huawei_iap/model/ConsumeOwnedPurchaseReq.dart';
-import 'package:huawei_iap/model/ConsumeOwnedPurchaseResult.dart';
-import 'package:huawei_iap/model/InAppPurchaseData.dart';
-import 'package:huawei_iap/model/OwnedPurchasesReq.dart';
-import 'package:huawei_iap/model/OwnedPurchasesResult.dart';
-import 'package:huawei_iap/model/ProductInfo.dart';
-import 'package:huawei_iap/model/ProductInfoReq.dart';
-import 'package:huawei_iap/model/ProductInfoResult.dart';
-import 'package:huawei_iap/model/PurchaseIntentReq.dart';
-import 'package:huawei_iap/model/PurchaseResultInfo.dart';
+import 'package:flutter/services.dart' show PlatformException;
+
+import 'package:huawei_iap/HmsIapLibrary.dart';
 
 class Consumables extends StatefulWidget {
   @override
@@ -49,9 +39,10 @@ class _ConsumablesState extends State<Consumables> {
 
   loadProducts() async {
     try {
-      ProductInfoResult result = await IapClient.obtainProductInfo(
-          ProductInfoReq(priceType: IapClient.IN_APP_CONSUMABLE, skuIds: ["p01", "p02"]));
-
+      ProductInfoResult result = await IapClient.obtainProductInfo(ProductInfoReq(
+          priceType: IapClient.IN_APP_CONSUMABLE,
+          //Make sure that the product IDs are the same as those defined in AppGallery Connect.
+          skuIds: ["xxx", "xxxxxx"]));
       setState(() {
         available = [];
         for (int i = 0; i < result.productInfoList.length; i++) {
@@ -59,7 +50,11 @@ class _ConsumablesState extends State<Consumables> {
         }
       });
     } on PlatformException catch (e) {
-      log(e.toString());
+      if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+      } else {
+        log(e.toString());
+      }
     }
   }
 
@@ -67,18 +62,26 @@ class _ConsumablesState extends State<Consumables> {
     try {
       PurchaseResultInfo result = await IapClient.createPurchaseIntent(
           PurchaseIntentReq(
-              priceType: IapClient.IN_APP_CONSUMABLE, developerPayload: "Test", productId: productID));
-      loadProducts();
-      ownedPurchases();
+              priceType: IapClient.IN_APP_CONSUMABLE, productId: productID));
+      if (result.returnCode == HmsIapResults.ORDER_STATE_SUCCESS.resultCode) {
+        loadProducts();
+        ownedPurchases();
+      } else {
+        log(result.errMsg);
+      }
     } on PlatformException catch (e) {
-      log(e.toString());
+      if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+      } else {
+        log(e.toString());
+      }
     }
   }
 
   ownedPurchases() async {
     try {
-      OwnedPurchasesResult result =
-          await IapClient.obtainOwnedPurchases(OwnedPurchasesReq(priceType: IapClient.IN_APP_CONSUMABLE));
+      OwnedPurchasesResult result = await IapClient.obtainOwnedPurchases(
+          OwnedPurchasesReq(priceType: IapClient.IN_APP_CONSUMABLE));
       setState(() {
         purchased = [];
         for (int i = 0; i < result.inAppPurchaseDataList.length; i++) {
@@ -86,7 +89,11 @@ class _ConsumablesState extends State<Consumables> {
         }
       });
     } on PlatformException catch (e) {
-      log(e.toString());
+      if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+      } else {
+        log(e.toString());
+      }
     }
   }
 
@@ -94,10 +101,18 @@ class _ConsumablesState extends State<Consumables> {
     try {
       ConsumeOwnedPurchaseResult result = await IapClient.consumeOwnedPurchase(
           ConsumeOwnedPurchaseReq(purchaseToken: purchaseToken));
-      ownedPurchases();
-      purchaseHistory();
+      if (result.returnCode == HmsIapResults.ORDER_STATE_SUCCESS.resultCode) {
+        ownedPurchases();
+        purchaseHistory();
+      } else {
+        log(result.errMsg);
+      }
     } on PlatformException catch (e) {
-      log(e.toString());
+      if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+      } else {
+        log(e.toString());
+      }
     }
   }
 
@@ -112,7 +127,11 @@ class _ConsumablesState extends State<Consumables> {
         }
       });
     } on PlatformException catch (e) {
-      log(e.toString());
+      if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+      } else {
+        log(e.toString());
+      }
     }
   }
 
@@ -220,7 +239,7 @@ class _ConsumablesState extends State<Consumables> {
           Row(
             children: <Widget>[
               Text(
-                "Purchased Record",
+                "Purchased Record - Last 5",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
               )
             ],
@@ -228,7 +247,8 @@ class _ConsumablesState extends State<Consumables> {
           ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: purchasedRecord.length,
+              itemCount:
+                  purchasedRecord.length >= 5 ? 5 : purchasedRecord.length,
               itemBuilder: (BuildContext ctxt, int i) {
                 return Card(
                   child: Column(

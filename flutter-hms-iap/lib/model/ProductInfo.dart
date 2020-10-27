@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import 'dart:convert';
+import 'dart:convert' show json;
 
 class ProductInfo {
   String productId;
@@ -58,55 +58,117 @@ class ProductInfo {
     this.subSpecialPrice,
   });
 
-  factory ProductInfo.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-    return ProductInfo(
-      productId: map["a"] == null ? null : map["a"],
-      priceType: map["b"] == null ? null : map["b"],
-      price: map["c"] == null ? null : map["c"],
-      microsPrice: map["d"] == null ? null : map["d"],
-      originalLocalPrice: map["e"] == null ? null : map["e"],
-      originalMicroPrice: map["f"] == null ? null : map["f"],
-      currency: map["g"] == null ? null : map["g"],
-      productName: map["h"] == null ? null : map["h"],
-      productDesc: map["i"] == null ? null : map["i"],
-      subSpecialPriceMicros: map["l"] == null ? null : map["l"],
-      subSpecialPeriodCycles: map["n"] == null ? null : map["n"],
-      subProductLevel: map["r"] == null ? null : map["r"],
-      status: map["status"] == null ? null : map["status"],
-      subFreeTrialPeriod: map["o"] == null ? null : map["o"],
-      subGroupId: map["p"] == null ? null : map["p"],
-      subGroupTitle: map["q"] == null ? null : map["q"],
-      subSpecialPeriod: map["m"] == null ? null : map["m"],
-      subPeriod: map["j"] == null ? null : map["j"],
-      subSpecialPrice: map["k"] == null ? null : map["k"],
-    );
+  factory ProductInfo.fromJson(String str) =>
+      ProductInfo.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory ProductInfo.fromMap(Map<dynamic, dynamic> map) => ProductInfo(
+        productId: map["productId"] == null ? null : map["productId"],
+        priceType: map["priceType"] == null ? null : map["priceType"],
+        price: map["price"] == null ? null : map["price"],
+        microsPrice: map["microsPrice"] == null ? null : map["microsPrice"],
+        originalLocalPrice: map["originalLocalPrice"] == null
+            ? null
+            : map["originalLocalPrice"],
+        originalMicroPrice: map["originalMicroPrice"] == null
+            ? null
+            : map["originalMicroPrice"],
+        currency: map["currency"] == null ? null : map["currency"],
+        productName: map["productName"] == null ? null : map["productName"],
+        productDesc: map["productDesc"] == null ? null : map["productDesc"],
+        subSpecialPriceMicros: map["subSpecialPriceMicros"] == null
+            ? null
+            : map["subSpecialPriceMicros"],
+        subSpecialPeriodCycles: map["subSpecialPeriodCycles"] == null
+            ? null
+            : map["subSpecialPeriodCycles"],
+        subProductLevel:
+            map["subProductLevel"] == null ? null : map["subProductLevel"],
+        status: map["status"] == null ? null : map["status"],
+        subFreeTrialPeriod: map["subFreeTrialPeriod"] == null
+            ? null
+            : map["subFreeTrialPeriod"],
+        subGroupId: map["subGroupId"] == null ? null : map["subGroupId"],
+        subGroupTitle:
+            map["subGroupTitle"] == null ? null : map["subGroupTitle"],
+        subSpecialPeriod:
+            map["subSpecialPeriod"] == null ? null : map["subSpecialPeriod"],
+        subPeriod: map["subPeriod"] == null ? null : map["subPeriod"],
+        subSpecialPrice:
+            map["subSpecialPrice"] == null ? null : map["subSpecialPrice"],
+      );
+
+  Map<String, dynamic> toMap() {
+    return {
+      'productId': productId,
+      'priceType': priceType,
+      'price': price,
+      'microsPrice': microsPrice,
+      'originalLocalPrice': originalLocalPrice,
+      'originalMicroPrice': originalMicroPrice,
+      'currency': currency,
+      'productName': productName,
+      'productDesc': productDesc,
+      'subSpecialPriceMicros': subSpecialPriceMicros,
+      'subSpecialPeriodCycles': subSpecialPeriodCycles,
+      'subProductLevel': subProductLevel,
+      'status': status,
+      'subPeriod': subPeriod,
+      'subSpecialPrice': subSpecialPrice,
+      'subSpecialPeriod': subSpecialPeriod,
+      'subFreeTrialPeriod': subFreeTrialPeriod,
+      'subGroupId': subGroupId,
+      'subGroupTitle': subGroupTitle,
+    };
   }
 
-  factory ProductInfo.fromJson(String source) =>
-      ProductInfo.fromMap(json.decode(source));
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['a'] = this.productId;
-    data['b'] = this.priceType;
-    data['c'] = this.price;
-    data['d'] = this.microsPrice;
-    data['e'] = this.originalLocalPrice;
-    data['f'] = this.originalMicroPrice;
-    data['g'] = this.currency;
-    data['h'] = this.productName;
-    data['i'] = this.productDesc;
-    data['l'] = this.subSpecialPriceMicros;
-    data['n'] = this.subSpecialPeriodCycles;
-    data['r'] = this.subProductLevel;
-    data['status'] = this.status;
-    data['j'] = this.subPeriod;
-    data['k'] = this.subSpecialPrice;
-    data['m'] = this.subSpecialPeriod;
-    data['o'] = this.subFreeTrialPeriod;
-    data['p'] = this.subGroupId;
-    data['q'] = this.subGroupTitle;
-    return data;
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+    if (runtimeType != o.runtimeType) return false;
+    final ProductInfo check = o;
+    return o is ProductInfo &&
+        check.productId == productId &&
+        check.priceType == priceType &&
+        check.price == price &&
+        check.microsPrice == microsPrice &&
+        check.originalLocalPrice == originalLocalPrice &&
+        check.originalMicroPrice == originalMicroPrice &&
+        check.currency == currency &&
+        check.productName == productName &&
+        check.productDesc == productDesc &&
+        check.subSpecialPriceMicros == subSpecialPriceMicros &&
+        check.subSpecialPeriodCycles == subSpecialPeriodCycles &&
+        check.subProductLevel == subProductLevel &&
+        check.status == status &&
+        check.subFreeTrialPeriod == subFreeTrialPeriod &&
+        check.subGroupId == subGroupId &&
+        check.subGroupTitle == subGroupTitle &&
+        check.subSpecialPeriod == subSpecialPeriod &&
+        check.subPeriod == subPeriod &&
+        check.subSpecialPrice == subSpecialPrice;
   }
+
+  @override
+  int get hashCode =>
+      productId.hashCode ^
+      priceType.hashCode ^
+      price.hashCode ^
+      microsPrice.hashCode ^
+      originalLocalPrice.hashCode ^
+      originalMicroPrice.hashCode ^
+      currency.hashCode ^
+      productName.hashCode ^
+      productDesc.hashCode ^
+      subSpecialPriceMicros.hashCode ^
+      subSpecialPeriodCycles.hashCode ^
+      subProductLevel.hashCode ^
+      status.hashCode ^
+      subFreeTrialPeriod.hashCode ^
+      subGroupId.hashCode ^
+      subGroupTitle.hashCode ^
+      subSpecialPeriod.hashCode ^
+      subPeriod.hashCode ^
+      subSpecialPrice.hashCode;
 }
