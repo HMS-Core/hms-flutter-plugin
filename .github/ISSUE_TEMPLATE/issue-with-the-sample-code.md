@@ -23,12 +23,14 @@ If applicable, add screenshots to help explain your issue
 Post logs here or paste them to [Ghostbin](https://ghostbin.co) and insert the link here.
 
 **Environment**
- - Platform: [e.g. native Android/Cordova/Flutter/…]
- - Architecture: [arm-v7a, arm-v7a-neon, arm64-v8a, x86, x86_64, armv7, armv7s, arm64, i386, x86_64]
- - OS Version (if applicable) [e.g. Android 11]
- - Source branch (if applicable) [e.g. master, dev-v2.x]
+ - Platform: [e.g. React-Native/Cordova/Flutter/Xamarin]
+ - Kit: [e.g. Push/Map/Ads/Account/IAP]
+ - Kit Version [e.g. 5.0.3]
+ - OS Version [e.g. Android 11]
  - Android Studio version (if applicable) [e.g. 4.1]
- - Android NDK version (if applicable) [e.g. 16b, 17c]
+ - Platform version (if applicable)
+ - Node Version (if applicable)
+ - Your Location/Region (if applicable) 
 
 **Other**
 Add any other context about the problem here
