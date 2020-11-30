@@ -4,14 +4,15 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'huawei_account'
-  s.version          = '5.0.0'
+  s.version          = '5.0.3+302'
   s.summary          = 'HUAWEI Account Kit plugin for Flutter.'
   s.description      = <<-DESC
-  HUAWEI Account Kit plugin for Flutter.
+  It enables user login processes to be carried out quickly and easily with HUAWEI Account Kit's two factor authentication.
                        DESC
   s.homepage         = 'https://www.huawei.com'
-  s.license          = { :file => '../LICENSE' }
-  s.source           = { :path => '.' }
+  s.license          = { :type => 'Apache 2.0', :file => '../LICENSE' }
+  s.author           = { 'Huawei Technologies' => 'huaweideveloper1@gmail.com' }
+  s.source           = { :git => 'https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-account' }
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'

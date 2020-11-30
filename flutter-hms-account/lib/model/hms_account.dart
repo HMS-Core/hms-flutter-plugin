@@ -14,19 +14,35 @@
     limitations under the License.
 */
 
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 
-Widget authButton(String text, Function function) {
-  return Container(
-    width: double.infinity,
-    margin: EdgeInsets.fromLTRB(15, 15, 15, 0),
-    child: RaisedButton(
-      color: Colors.blueAccent,
-      textColor: Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
-      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 25),
-      child: Text(text.toUpperCase()),
-      onPressed: function,
-    ),
-  );
+class HmsAccount {
+  String type;
+  String name;
+
+  HmsAccount({this.name, this.type});
+
+  factory HmsAccount.fromMap(LinkedHashMap<dynamic, dynamic> map) {
+    if (map == null) return null;
+
+    return HmsAccount(type: map['type'] ?? null, name: map['name'] ?? null);
+  }
+
+  Map<String, dynamic> toMap() => {'type': type, 'name': name};
+
+  String toString() => 'Account(name: $name, type: $type)';
+
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
+
+    return o is HmsAccount && o.name == name && o.type == type;
+  }
+
+  @override
+  int get hashCode {
+    return hashList([name, type]);
+  }
 }

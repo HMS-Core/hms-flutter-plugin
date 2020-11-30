@@ -14,10 +14,22 @@
     limitations under the License.
 */
 
-package com.huawei.hms.flutter.account_example;
+import 'package:flutter/material.dart';
 
-import io.flutter.embedding.android.FlutterActivity;
+class HmsAuthParams {
+  int defaultAuthRequestParam = 0;
+  int defaultAuthRequestParamGame = 1;
 
-public class MainActivity extends FlutterActivity {
+  @override
+  bool operator ==(Object o) {
+    if (identical(this, o)) return true;
 
+    return o is HmsAuthParams &&
+        o.defaultAuthRequestParam == defaultAuthRequestParam &&
+        o.defaultAuthRequestParamGame == defaultAuthRequestParamGame;
+  }
+
+  @override
+  int get hashCode =>
+      hashList([defaultAuthRequestParam, defaultAuthRequestParamGame]);
 }

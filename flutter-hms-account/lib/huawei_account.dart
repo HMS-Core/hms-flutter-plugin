@@ -14,10 +14,15 @@
     limitations under the License.
 */
 
-package com.huawei.hms.flutter.account_example;
-
-import io.flutter.embedding.android.FlutterActivity;
-
-public class MainActivity extends FlutterActivity {
-
-}
+export './constants/hms_account_error_codes.dart';
+export './helpers/hms_auth_param_helper.dart';
+export './helpers/hms_auth_params.dart';
+export './helpers/hms_scope.dart';
+export './hmsauthbutton/hms_auth_button.dart';
+export './hmsauthmanager/hms_auth_manager.dart';
+export './hmsauthservice/hms_auth_service.dart';
+export './hmsauthtool/hms_auth_tool.dart';
+export './hmsnetworktool/hms_network_tool.dart';
+export './hmssmsmanager/hms_sms_manager.dart';
+export './model/hms_account.dart';
+export './model/hms_auth_huawei_id.dart';

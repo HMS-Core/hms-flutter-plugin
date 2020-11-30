@@ -14,10 +14,12 @@
     limitations under the License.
 */
 
-package com.huawei.hms.flutter.account_example;
+class HmsScope {
+  static const String profile = "profile";
 
-import io.flutter.embedding.android.FlutterActivity;
+  static const String email = "email";
 
-public class MainActivity extends FlutterActivity {
+  static const String openId = "openid";
 
+  static const String game = "https://www.huawei.com/auth/games";
 }
