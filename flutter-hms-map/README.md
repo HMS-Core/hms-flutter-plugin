@@ -262,7 +262,7 @@ A *Stateful Widget* which displays a map with data obtained from the Huawei Map 
 
 #### Public Constructors
 
-##### HuaweiMap({Key key, CameraPosition initialCameraPosition, MapType mapType, Set\<Factory\<OneSequenceGestureRecognizers>> gestureRecognizers, bool compassEnabled, bool mapToolbarEnabled, CameraTargetBounds cameraTargetBounds, MinMaxZoomPreference minMaxZoomPreference, bool rotateGesturesEnabled, bool scrollGesturesEnabled, bool zoomControlsEnabled, bool zoomGesturesEnabled, bool tiltGesturesEnabled, bool myLocationEnabled, bool myLocationButtonEnabled, EdgeInsets padding, bool trafficEnabled, bool markersClusteringEnabled, bool buildingsEnabled, Set\<Marker> markers, Set\<Polygon> polygons, Set\<Polyline> polylines, Set\<Circle> circles, Set\<GroundOverlay> groundOverlays, Set\<TileOverlay> tileOverlays, MapCreatedCallback onMapCreated, VoidCallback onCameraMoveStarted, CameraPositionCallback onCameraMove, VoidCallback onCameraIdle, ArgumentCallback\<LatLng> onClick, ArgumentCallback\<LatLng> onLongPress})
+##### HuaweiMap
 
 Constructor for *HuaweiMap* widget.
 
@@ -381,22 +381,22 @@ Map controller for Huawei Map.
 
 #### Public Method Summary
 
-| Method                                                       | Return Type                                      | Description                                                  |
-| ------------------------------------------------------------ | ------------------------------------------------ | ------------------------------------------------------------ |
-| [clearTileCache(TileOverlay tileOverlay)](#futurevoid-cleartilecachetileoverlay-tileoverlay-async) | Future\<void>                                    | Clears the cache of a tile overlay.                          |
-| [startAnimationOnMarker(Marker marker)](#futurevoid-startanimationonmarkermarker-marker-async) | Future\<void>                                    | Starts the animation of a marker.                            |
-| [animateCamera(CameraUpdate cameraUpdate)](#futurevoid-animatecameracameraupdate-cameraupdate-async) | Future\<void>                                    | Updates the camera position in animation mode.               |
-| [moveCamera(CameraUpdate cameraUpdate)](#futurevoid-movecameracameraupdate-cameraupdate-async) | Future\<void>                                    | Updates the camera position. The movement is instantaneous.  |
-| [setMapStyle(String mapStyle)](#futurevoid-setmapstylestring-mapstyle-async) | Future\<void>                                    | Sets the map style.                                          |
-| [getVisibleRegion()](#futurelatlngbounds-getvisibleregion-async) | Future\<[*LatLngBounds*](#latlngbounds)>         | Obtains the visible region after conversion between the screen coordinates and longitude/latitude coordinates. |
-| [getScreenCoordinate(LatLng latLng)](#futurescreencoordinate-getscreencoordinatelatlng-latlng-async) | Future\<[*ScreenCoordinate*](#screencoordinate)> | Obtains a location on the screen corresponding to the specified longitude/latitude coordinates. The location on the screen is specified in screen pixels (instead of display pixels) relative to the top left corner of the map (instead of the top left corner of the screen). |
-| [getLatLng(ScreenCoordinate screenCoordinate)](#futurelatlng-getlatlngscreencoordinate-screencoordinate-async) | Future\<[*LatLng*](#latlng)>                     | Obtains the longitude and latitude of a location on the screen. The location on the screen is specified in screen pixels (instead of display pixels) relative to the top left corner of the map (instead of the top left corner of the screen). |
-| [showMarkerInfoWindow(MarkerId markerId)](#futurevoid-showmarkerinfowindowmarkerid-markerid-async) | Future\<void>                                    | Displays the information window for a marker.                |
-| [hideMarkerInfoWindow(MarkerId markerId)](#futurevoid-hidemarkerinfowindowmarkerid-markerid-async) | Future\<void>                                    | Hides the information window that is displayed for a marker. This method is invalid for invisible markers. |
-| [isMarkerInfoWindowShown(MarkerId markerId)](#futurebool-ismarkerinfowindowshownmarkerid-markerid-async) | Future\<bool>                                    | Checks whether an information window is currently displayed for a marker. This method will not consider whether the information window is actually visible on the screen. |
-| [isMarkerClusterable(MarkerId markerId)](#futurebool-ismarkerclusterablemarkerid-markerid-async) | Future\<bool>                                    | Checks whether a marker can be clustered.                    |
-| [getZoomLevel()](#futuredouble-getzoomlevel-async)           | Future\<double>                                  | Obtains zoom level of a map.                                 |
-| [takeSnapshot()](#futureuint8list-takesnapshot-async)        | Future\<*Uint8List*>                             | Takes a snapshot of a map.                                   |
+| Method                                                       | Return Type                              | Description                                                  |
+| ------------------------------------------------------------ | ---------------------------------------- | ------------------------------------------------------------ |
+| [clearTileCache(TileOverlay tileOverlay)](#futurevoid-cleartilecachetileoverlay-tileoverlay-async) | Future\<void>                            | Clears the cache of a tile overlay.                          |
+| [startAnimationOnMarker(Marker marker)](#futurevoid-startanimationonmarkermarker-marker-async) | Future\<void>                            | Starts the animation of a marker.                            |
+| [animateCamera(CameraUpdate cameraUpdate)](#futurevoid-animatecameracameraupdate-cameraupdate-async) | Future\<void>                            | Updates the camera position in animation mode.               |
+| [moveCamera(CameraUpdate cameraUpdate)](#futurevoid-movecameracameraupdate-cameraupdate-async) | Future\<void>                            | Updates the camera position. The movement is instantaneous.  |
+| [setMapStyle(String mapStyle)](#futurevoid-setmapstylestring-mapstyle-async) | Future\<void>                            | Sets the map style.                                          |
+| [getVisibleRegion()](#futurelatlngbounds-getvisibleregion-async) | Future\<[*LatLngBounds*](#latlngbounds)> | Obtains the visible region after conversion between the screen coordinates and longitude/latitude coordinates. |
+| [getScreenCoordinate(LatLng latLng)](#futurescreencoordinate-getscreencoordinatelatlng-latlng-async) | Future\<*ScreenCoordinate*>              | Obtains a location on the screen corresponding to the specified longitude/latitude coordinates. The location on the screen is specified in screen pixels (instead of display pixels) relative to the top left corner of the map (instead of the top left corner of the screen). |
+| [getLatLng(ScreenCoordinate screenCoordinate)](#futurelatlng-getlatlngscreencoordinate-screencoordinate-async) | Future\<[*LatLng*](#latlng)>             | Obtains the longitude and latitude of a location on the screen. The location on the screen is specified in screen pixels (instead of display pixels) relative to the top left corner of the map (instead of the top left corner of the screen). |
+| [showMarkerInfoWindow(MarkerId markerId)](#futurevoid-showmarkerinfowindowmarkerid-markerid-async) | Future\<void>                            | Displays the information window for a marker.                |
+| [hideMarkerInfoWindow(MarkerId markerId)](#futurevoid-hidemarkerinfowindowmarkerid-markerid-async) | Future\<void>                            | Hides the information window that is displayed for a marker. This method is invalid for invisible markers. |
+| [isMarkerInfoWindowShown(MarkerId markerId)](#futurebool-ismarkerinfowindowshownmarkerid-markerid-async) | Future\<bool>                            | Checks whether an information window is currently displayed for a marker. This method will not consider whether the information window is actually visible on the screen. |
+| [isMarkerClusterable(MarkerId markerId)](#futurebool-ismarkerclusterablemarkerid-markerid-async) | Future\<bool>                            | Checks whether a marker can be clustered.                    |
+| [getZoomLevel()](#futuredouble-getzoomlevel-async)           | Future\<double>                          | Obtains zoom level of a map.                                 |
+| [takeSnapshot()](#futureuint8list-takesnapshot-async)        | Future\<*Uint8List*>                     | Takes a snapshot of a map.                                   |
 
 #### Public Methods
 
@@ -566,9 +566,9 @@ Obtains a location on the screen corresponding to the specified longitude/latitu
 
 ###### Return Type
 
-| Type                                             | Description                                         |
-| ------------------------------------------------ | --------------------------------------------------- |
-| Future\<[*ScreenCoordinate*](#screencoordinate)> | Coordinates of a location on the screen, in pixels. |
+| Type                        | Description                                         |
+| --------------------------- | --------------------------------------------------- |
+| Future\<*ScreenCoordinate*> | Coordinates of a location on the screen, in pixels. |
 
 ###### Call Example:
 
@@ -762,39 +762,41 @@ Uint8List imageData = await mapController.takeSnapshot();
 
 | Class                                                        | Description                                                  |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| [*BitmapDescriptor*](#bitmapdescriptor)                      | Defines a Bitmap image. A Bitmap image can be used as a marker icon or for a ground overlay. |
+| [*BitmapDescriptor*](#bitmapdescriptor)                      | Defines a Bitmap image.                                      |
 | [*CameraPosition*](#cameraposition)                          | A class that encapsulates all camera attributes.             |
 | [*CameraTargetBounds*](#cameratargetbounds)                  | A class that encapsulates bound attribute.                   |
 | [*CameraUpdate*](#cameraupdate)                              | Provides various constructors for creating [*CameraUpdate*](#cameraupdate) objects that modify the camera of a map. |
-| [*Cap*](#cap)                                                | Defines a cap that is applied at the start or end vertex of a polyline. |
+| *Cap*                                                        | Defines a cap that is applied at the start or end vertex of a polyline. |
 | [*InfoWindow*](#infowindow)                                  | Defines an information window that shows up when a Marker is tapped. |
-| [*JointType*](#jointtype)                                    | Defines the joint type for a polyline.                       |
+| *JointType*                                                  | Defines the joint type for a polyline.                       |
 | [*LatLng*](#latlng)                                          | Represents the longitude and latitude, in degrees.           |
 | [*LatLngBounds*](#latlngbounds)                              | Represents a longitude/latitude aligned rectangle.           |
 | [*MinMaxZoomPreference*](#minmaxzoompreference)              | A class that encapsulates minimum and maximum zoom attributes. |
-| [*PatternItem*](#patternitem)                                | An immutable class that describes the stroke pattern of a polyline. |
-| [*ScreenCoordinate*](#screencoordinate)                      | A class that encapsulates x and y attributes.                |
+| *PatternItem*                                                | An immutable class that describes the stroke pattern of a polyline. |
+| *ScreenCoordinate*                                           | A class that encapsulates x and y attributes.                |
 | [*Circle*](#circle)                                          | Defines a circle on a map.                                   |
-| [*CircleId*](#circleid)                                      | Represents the immutable circle id class.                    |
+| *CircleId*                                                   | Represents the immutable circle id class.                    |
 | [*Marker*](#marker)                                          | Defines an icon placed at a specified position on a map.     |
-| [*MarkerId*](#markerid)                                      | Represents the immutable marker id class.                    |
+| *MarkerId*                                                   | Represents the immutable marker id class.                    |
 | [*Polygon*](#polygon)                                        | Defines a polygon on a map.                                  |
-| [*PolygonId*](#polygonid)                                    | Represents the immutable polygon id class.                   |
+| *PolygonId*                                                  | Represents the immutable polygon id class.                   |
 | [*Polyline*](#polyline)                                      | Defines a polyline on a map.                                 |
-| [*PolylineId*](#polylineid)                                  | Represents the immutable polyline id class.                  |
+| *PolylineId*                                                 | Represents the immutable polyline id class.                  |
 | [*GroundOverlay*](#groundoverlay)                            | Class that defines an image on the map.                      |
-| [*GroundOverlayId*](#groundoverlayid)                        | Represents the immutable ground overlay id class.            |
-| [*TileOverlay*](#tileoverlay)                                | Represents a tile overlay. A tile overlay is a set of images to be displayed on a map. It can be transparent and enable you to add new functions to an existing map. |
-| [*TileOverlayId*](#tileoverlayid)                            | Represents the immutable tile overlay id class.              |
-| [*Tile*](#tile)                                              | Provides tile images for [*TileOverlay*](#tileoverlay).      |
-| [UrlTile](#urltile)                                          | Provides tile images for [*TileOverlay*](#tileoverlay) from URL. |
-| [RepetitiveTile](#repetitivetile)                            | Provides repetitive tile images for [*TileOverlay*](#tileoverlay). |
+| *GroundOverlayId*                                            | Represents the immutable ground overlay id class.            |
+| [*TileOverlay*](#tileoverlay)                                | Represents a tile overlay.                                   |
+| *TileOverlayId*                                              | Represents the immutable tile overlay id class.              |
+| [*Tile*](#tile)                                              | Provides tile images for *TileOverlay*.                      |
+| [UrlTile](#urltile)                                          | Provides tile images for *TileOverlay* from URL.             |
+| [RepetitiveTile](#repetitivetile)                            | Provides repetitive tile images for *TileOverlay*.           |
 | [*HmsMarkerAnimation*](#hmsmarkeranimation)                  | An abstract class for supporting marker animation.           |
 | [*HmsMarkerAlphaAnimation*](#hmsmarkeralphaanimation)        | An animation class that controls the transparency.           |
 | [*HmsMarkerRotateAnimation*](#hmsmarkerrotateanimation)      | A class that controls the animation rotation.                |
 | [*HmsMarkerScaleAnimation*](#hmsmarkerscaleanimation)        | A class for controlling the animation scale.                 |
 | [*HmsMarkerTranslateAnimation*](#hmsmarkertranslateanimation) | A class that controls the animation movement.                |
-| [*MapType*](#enum-maptype)                                   | Map types.                                                   |
+| *MapType*                                                    | Map types.                                                   |
+
+You may find and read more about the APIs and classes that provided by the Huawei Map Kit Flutter Plugin on **Huawei Developer Website**.
 
 #### BitmapDescriptor
 
@@ -802,19 +804,19 @@ Defines a *Bitmap* image. A *Bitmap* image can be used as a [*Marker*](#marker) 
 
 ##### Public Constants
 
-| Constant      | Type                 | Value | Description     |
-| ------------- | -------------------- | ----- | --------------- |
-| hueRed        | double               | 0.0   | Red.            |
-| hueOrange     | double               | 30.0  | Orange.         |
-| hueYellow     | double               | 60.0  | Yellow.         |
-| hueGreen      | double               | 120.0 | Green.          |
-| hueCyan       | double               | 180.0 | Cyan.           |
-| hueAzure      | double               | 210.0 | Azure.          |
-| hueBlue       | double               | 240.0 | Blue.           |
-| hueViolet     | double               | 270.0 | Violet.         |
-| hueMagenta    | double               | 300.0 | Magenta.        |
-| hueRose       | double               | 330.0 | Rose.           |
-| defaultMarker | **BitmapDescriptor** | -     | Default marker. |
+| Constant      | Type                 | Description     |
+| ------------- | -------------------- | --------------- |
+| hueRed        | double               | Red.            |
+| hueOrange     | double               | Orange.         |
+| hueYellow     | double               | Yellow.         |
+| hueGreen      | double               | Green.          |
+| hueCyan       | double               | Cyan.           |
+| hueAzure      | double               | Azure.          |
+| hueBlue       | double               | Blue.           |
+| hueViolet     | double               | Violet.         |
+| hueMagenta    | double               | Magenta.        |
+| hueRose       | double               | Rose.           |
+| defaultMarker | **BitmapDescriptor** | Default marker. |
 
 ##### Public Constructor Summary
 
@@ -827,7 +829,7 @@ Defines a *Bitmap* image. A *Bitmap* image can be used as a [*Marker*](#marker) 
 
 ##### Public Constructors
 
-###### BitmapDescriptor.defaultMarkerWithHue(double hue)
+###### BitmapDescriptor.defaultMarkerWithHue
 
 Creates a **BitmapDescriptor** objects for default marker icons in different colors using different hue values. This class provides 10 hue values. You can call this method by passing a hue value.
 
@@ -837,7 +839,7 @@ Creates a **BitmapDescriptor** objects for default marker icons in different col
 | ---- | ----------- |
 | hue  | Hue value.  |
 
-###### BitmapDescriptor.fromBytes(Uint8List byteData)
+###### BitmapDescriptor.fromBytes
 
 Creates a **BitmapDescriptor** object from a *Uint8List*. 
 
@@ -847,7 +849,7 @@ Creates a **BitmapDescriptor** object from a *Uint8List*.
 | -------- | ----------------------- |
 | byteData | *Uint8List* image data. |
 
-###### BitmapDescriptor.fromAsset(String assetName, String package)
+###### BitmapDescriptor.fromAsset
 
 Creates a **BitmapDescriptor** object from an asset. 
 
@@ -858,7 +860,7 @@ Creates a **BitmapDescriptor** object from an asset.
 | assetName | Asset name.   |
 | package   | Package name. |
 
-###### BitmapDescriptor.fromAssetImage(ImageConfiguration configuration, String assetName, AssetBundle bundle, String package, bool mipmaps)
+###### BitmapDescriptor.fromAssetImage
 
 Creates a **BitmapDescriptor** object from an image asset.
 
@@ -894,7 +896,7 @@ A class that encapsulates all camera attributes.
 
 ##### Public Constructors
 
-###### CameraPosition({double bearing, LatLng target, double tilt, double zoom})
+###### CameraPosition
 
 Constructor for **CameraPosition** object.
 
@@ -905,7 +907,7 @@ Constructor for **CameraPosition** object.
 | tilt      | double              | Angle of the camera from the nadir (directly facing the Earth's surface). |
 | zoom      | double              | Zoom level near the center of the screen.                    |
 
-###### CameraPosition.fromMap({dynamic json})
+###### CameraPosition.fromMap
 
 Creates a **CameraPosition** object from a Map. 
 
@@ -937,7 +939,7 @@ A class that encapsulates bound attribute.
 
 ##### Public Constructors
 
-###### CameraTargetBounds({LatLngBounds bounds})
+###### CameraTargetBounds
 
 Constructor for **CameraTargetBounds** object.
 
@@ -953,19 +955,19 @@ Provides various constructors for creating **CameraUpdate** objects that modify 
 
 | Constructor                                                  | Description                                                  |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| [CameraUpdate.newLatLng(LatLng latLng)](#cameraupdatenewlatlnglatlng-latlng) | Creates a **CameraUpdate** object pointed to a specific coordinate (latitude and longitude). |
-| [CameraUpdate.zoomIn()](#cameraupdatezoomin)                 | Creates a **CameraUpdate** object that zooms the camera in.  |
-| [CameraUpdate.zoomOut()](#cameraupdatezoomout)               | Creates a **CameraUpdate** object that zooms the camera out. |
-| [CameraUpdate.zoomTo(double zoom)](#cameraupdatezoomtodouble-zoom) | Creates a **CameraUpdate** object that sets the camera zoom level. |
-| [CameraUpdate.zoomBy({double amount, Offset focus})](#cameraupdatezoombydouble-amount-offset-focus) | Creates a **CameraUpdate** object that modifies the camera zoom level by the specified amount. |
-| [CameraUpdate.newLatLngBounds({LatLngBounds bounds, double padding})](#cameraupdatenewlatlngboundslatlngbounds-bounds-double-padding) | Creates a **CameraUpdate** object pointed to specific bounds and padding. |
-| [CameraUpdate.newLatLngZoom({LatLng latLng, double zoom})](#cameraupdatenewlatlngzoomlatlng-latlng-double-zoom) | Creates a **CameraUpdate** object pointed to a specific coordinate (latitude and longitude) and zoom level. |
-| [CameraUpdate.newCameraPosition({CameraPosition cameraPosition})](#cameraupdatenewcamerapositioncameraposition-cameraposition) | Creates a **CameraUpdate** object using the [CameraPosition](#cameraposition) object. |
-| [CameraUpdate.scrollBy({double dx, double dy})](#cameraupdatescrollbydouble-dx-double-dy) | Creates a **CameraUpdate** object that moves the camera by the specified distance on the screen. |
+| CameraUpdate.newLatLng(LatLng latLng)                        | Creates a **CameraUpdate** object pointed to a specific coordinate (latitude and longitude). |
+| CameraUpdate.zoomIn()                                        | Creates a **CameraUpdate** object that zooms the camera in.  |
+| CameraUpdate.zoomOut()                                       | Creates a **CameraUpdate** object that zooms the camera out. |
+| CameraUpdate.zoomTo(double zoom)                             | Creates a **CameraUpdate** object that sets the camera zoom level. |
+| CameraUpdate.zoomBy({double amount, Offset focus})           | Creates a **CameraUpdate** object that modifies the camera zoom level by the specified amount. |
+| CameraUpdate.newLatLngBounds({LatLngBounds bounds, double padding}) | Creates a **CameraUpdate** object pointed to specific bounds and padding. |
+| CameraUpdate.newLatLngZoom({LatLng latLng, double zoom})     | Creates a **CameraUpdate** object pointed to a specific coordinate (latitude and longitude) and zoom level. |
+| CameraUpdate.newCameraPosition({CameraPosition cameraPosition}) | Creates a **CameraUpdate** object using the [CameraPosition](#cameraposition) object. |
+| CameraUpdate.scrollBy({double dx, double dy})                | Creates a **CameraUpdate** object that moves the camera by the specified distance on the screen. |
 
 ##### Public Constructors
 
-###### CameraUpdate.newLatLng(LatLng latLng)
+###### CameraUpdate.newLatLng
 
 Creates a **CameraUpdate** object pointed to a specific coordinate (latitude and longitude).
 
@@ -975,15 +977,15 @@ Creates a **CameraUpdate** object pointed to a specific coordinate (latitude and
 | ------ | ------------------------------- |
 | latLng | Desired longitude and latitude. |
 
-###### CameraUpdate.zoomIn()
+###### CameraUpdate.zoomIn
 
 Creates a **CameraUpdate** object that zooms the camera in.
 
-###### CameraUpdate.zoomOut()
+###### CameraUpdate.zoomOut
 
 Creates a **CameraUpdate** object that zooms the camera out.
 
-###### CameraUpdate.zoomTo(double zoom)
+###### CameraUpdate.zoomTo
 
 Creates a **CameraUpdate** object that sets the camera zoom level.
 
@@ -993,7 +995,7 @@ Creates a **CameraUpdate** object that sets the camera zoom level.
 | ---- | ------------------------------------------------------------ |
 | zoom | Zoom level of the map camera. The value range is [3, 20]. If the passed value exceeds the maximum, the maximum value will be used as the value. |
 
-###### CameraUpdate.zoomBy({double amount, Offset focus})
+###### CameraUpdate.zoomBy
 
 Creates a **CameraUpdate** object that modifies the camera zoom level by the specified amount.
 
@@ -1006,7 +1008,7 @@ Incrementally moves the map camera based on the map center's coordinates on the 
 | amount | Incremental value to change the zoom level. |
 | focus  | Map center's coordinates on the screen.     |
 
-###### CameraUpdate.newLatLngBounds({LatLngBounds bounds, double padding})
+###### CameraUpdate.newLatLngBounds
 
 Creates a **CameraUpdate** object pointed to specific bounds and padding.
 
@@ -1019,7 +1021,7 @@ Centers a region on the screen by setting the longitude and latitude bounds and 
 | bounds  | Longitude and latitude bounds to be displayed.               |
 | padding | Space between the region edges and bounding box edges, in pixels. |
 
-###### CameraUpdate.newLatLngZoom({LatLng latLng, double zoom})
+###### CameraUpdate.newLatLngZoom
 
 Creates a **CameraUpdate** object pointed to a specific coordinate (latitude and longitude) and zoom level.
 
@@ -1030,7 +1032,7 @@ Creates a **CameraUpdate** object pointed to a specific coordinate (latitude and
 | latLng | Longitude and latitude of the center of a map's view.        |
 | zoom   | Zoom level of the map camera. The value range is [3, 20]. If the passed value exceeds the maximum, the maximum value will be used as the value. |
 
-###### CameraUpdate.newCameraPosition({CameraPosition cameraPosition})
+###### CameraUpdate.newCameraPosition
 
 Creates a **CameraUpdate** object using the [CameraPosition](#cameraposition) object.
 
@@ -1040,7 +1042,7 @@ Creates a **CameraUpdate** object using the [CameraPosition](#cameraposition) ob
 | -------------- | ---------------------------- |
 | cameraPosition | Camera position information. |
 
-###### CameraUpdate.scrollBy({double dx, double dy})
+###### CameraUpdate.scrollBy
 
 Creates a **CameraUpdate** object that moves the camera by the specified distance on the screen.
 
@@ -1051,35 +1053,6 @@ Creates a **CameraUpdate** object that moves the camera by the specified distanc
 | dx   | Number of pixels moved horizontally. A positive value indicates to move the center to the right, while a negative value indicates to move the center to the left. |
 | dy   | Number of pixels moved vertically. A positive value indicates to move the center up, while a negative value indicates to move the center down. |
 
- #### Cap
-
-Defines a cap that is applied at the start or end vertex of a polyline.
-
-##### Public Constants
-
-| Constant  | Type    | Description                                                  |
-| --------- | ------- | ------------------------------------------------------------ |
-| squareCap | **Cap** | Sets the start or end vertex of a polyline to the square type. |
-| buttCap   | **Cap** | Defines a cap that is squared off exactly at the start or end vertex of a polyline. |
-| roundCap  | **Cap** | Represents a semicircle with a radius equal to a half of the stroke width. The semicircle will be centered at the start or end vertex of a polyline. |
-
-##### Public Constructor Summary
-
-| Constructor                                                  | Description                              |
-| ------------------------------------------------------------ | ---------------------------------------- |
-| Cap.customCapFromBitmap({BitmapDescriptor bitmapDescriptor, double refWidth}) | Customizes the cap style for a polyline. |
-
-##### Public Constructors
-
-###### Cap.customCapFromBitmap({BitmapDescriptor bitmapDescriptor, double refWidth})
-
-Customizes the cap style for a [*Polyline*](#polyline).
-
-| Parameter        | Type                                    | Description                                                  |
-| ---------------- | --------------------------------------- | ------------------------------------------------------------ |
-| bitmapDescriptor | [*BitmapDescriptor*](#bitmapdescriptor) | Definition of a Bitmap to be overlaid at the start or end vertex of a polyline. |
-| refWidth         | double                                  | Reference stroke width, in pixels.                           |
-
 #### InfoWindow
 
 Defines an information window that shows up when a [*Marker*](#marker) is tapped.
@@ -1088,8 +1061,8 @@ Defines an information window that shows up when a [*Marker*](#marker) is tapped
 
 | Name    | Type           | Description                                                  |
 | ------- | -------------- | ------------------------------------------------------------ |
-| title   | String         | Title of a [*Marker*](#marker). By default, the title is empty. |
-| snippet | String         | Snippet of a [*Marker*](#marker).                            |
+| title   | String         | Title of a *Marker*. By default, the title is empty.         |
+| snippet | String         | Snippet of a *Marker*.                                       |
 | anchor  | *Offset*       | Offset of an information window.                             |
 | onClick | *VoidCallback* | Function to be executed when an information window is tapped. |
 
@@ -1107,14 +1080,14 @@ Defines an information window that shows up when a [*Marker*](#marker) is tapped
 
 ##### Public Constructors
 
-###### InfoWindow({String title, String snippet, Offset anchor, VoidCallback onClick})
+###### InfoWindow
 
 Default constructor for **InfoWindow** object.
 
 | Parameter | Type           | Description                                                  |
 | --------- | -------------- | ------------------------------------------------------------ |
-| title     | String         | Title of a [*Marker*](#marker). By default, the title is empty. |
-| snippet   | String         | Snippet of a [*Marker*](#marker).                            |
+| title     | String         | Title of a *Marker*. By default, the title is empty.         |
+| snippet   | String         | Snippet of a *Marker*.                                       |
 | anchor    | *Offset*       | Offset of an information window.                             |
 | onClick   | *VoidCallback* | Function to be executed when an information window is tapped. |
 
@@ -1134,8 +1107,8 @@ Copies an existing **InfoWindow** object and updates the specified attributes.
 
 | Name    | Description                                                  |
 | ------- | ------------------------------------------------------------ |
-| title   | Title of a [*Marker*](#marker). By default, the title is empty. |
-| snippet | Snippet of a [*Marker*](#marker).                            |
+| title   | Title of a *Marker*. By default, the title is empty.         |
+| snippet | Snippet of a *Marker*.                                       |
 | anchor  | Offset of an information window.                             |
 | onClick | Function to be executed when an information window is tapped. |
 
@@ -1154,24 +1127,6 @@ InfoWindow infoWindow;
 //Call updateCopy method.
 infoWindow = infoWindow.updateCopy(title: "XXX");
 ```
-
-#### JointType
-
-Defines the joint type for a [*Polyline*](#polyline).
-
-##### Public Properties
-
-| Name | Type | Description                                                  |
-| ---- | ---- | ------------------------------------------------------------ |
-| type | int  | Type of the joint. The options include **0**, **1**, and **2**. |
-
-##### Public Constants
-
-| Constant | Type          | Value | Description   |
-| -------- | ------------- | ----- | ------------- |
-| mitered  | **JointType** | 0     | Default type. |
-| bevel    | **JointType** | 1     | Flat bevel.   |
-| round    | **JointType** | 2     | Round.        |
 
 #### LatLng
 
@@ -1193,7 +1148,7 @@ Defines the longitude and latitude, in degrees.
 
 ##### Public Constructors
 
-###### LatLng({double lat, double lng})
+###### LatLng
 
 Constructor for **LatLng** object.
 
@@ -1202,7 +1157,7 @@ Constructor for **LatLng** object.
 | lat       | double | Longitude. The value ranges from **–180** to **180** (excluded). |
 | lng       | double | Latitude. The value ranges from **–90** to **90**.           |
 
-###### LatLng.fromJson(dynamic json)
+###### LatLng.fromJson
 
 Creates **LatLng** object from Map.
 
@@ -1230,7 +1185,7 @@ Defines a rectangular area using a pair of longitude and latitude.
 
 ##### Public Constructors
 
-###### LatLngBounds({LatLng southwest, LatLng northeast})
+###### LatLngBounds
 
 Constructor for **LatLngBounds** object.
 
@@ -1239,7 +1194,7 @@ Constructor for **LatLngBounds** object.
 | southwest | [*LatLng*](#latlng) | Coordinates of the southwest corner of the bound. |
 | northeast | [*LatLng*](#latlng) | Coordinates of the northeast corner of the bound. |
 
-###### LatLngBounds.fromList(dynamic json)
+###### LatLngBounds.fromList
 
  Creates **LatLngBounds** object from Map.
 
@@ -1307,7 +1262,7 @@ A class that encapsulates attributes for setting the minimum and maximum zoom le
 
 ##### Public Constructors
 
-###### MinMaxZoomPreference({double minZoom, double maxZoom})
+###### MinMaxZoomPreference
 
 Constructor for **MinMaxZoomPreference** object.
 
@@ -1316,87 +1271,24 @@ Constructor for **MinMaxZoomPreference** object.
 | minZoom   | double | Minimum zoom level. |
 | maxZoom   | double | Maximum zoom level. |
 
- #### PatternItem
-
-An immutable class that describes the stroke pattern of a [*Polyline*](#polyline).
-
-##### Public Constants
-
-| Constant | Type            | Description |
-| -------- | --------------- | ----------- |
-| dot      | **PatternItem** | Dot type.   |
-
-##### Public Constructor Summary
-
-| Constructor                     | Description                                                  |
-| ------------------------------- | ------------------------------------------------------------ |
-| PatternItem.dash(double length) | Obtains a dash-type **PatternItem** object with a specified length. |
-| PatternItem.gap(double length)  | Obtains a gap-type **PatternItem** object with a specified length. |
-
-##### Public Constructors
-
-###### PatternItem.dash(double length)
-
-Obtains a dash-type **PatternItem** object with a specified length.
-
-| Parameter | Type   | Description  |
-| --------- | ------ | ------------ |
-| length    | double | Dash length. |
-
-###### PatternItem.gap(double length)
-
-Obtains a gap-type **PatternItem** object with a specified length.
-
-| Parameter | Type   | Description |
-| --------- | ------ | ----------- |
-| length    | double | Gap length. |
-
-#### ScreenCoordinate
-
-A class that encapsulates x and y attributes.
-
-##### Public Properties
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| x    | int  | X value.    |
-| y    | int  | Y value.    |
-
-##### Public Constructor Summary
-
-| Constructor                      | Description          |
-| -------------------------------- | -------------------- |
-| ScreenCoordinate({int x, int y}) | Default constructor. |
-
-##### Public Constructors
-
-###### ScreenCoordinate({int x, int y})
-
-Constructor for **ScreenCoordinate** object.
-
-| Parameter | Type | Description |
-| --------- | ---- | ----------- |
-| x         | int  | X value.    |
-| y         | int  | Y value.    |
-
 #### Circle
 
 Defines a circle on a map.
 
 ##### Public Properties
 
-| Name        | Type                    | Description                                                  |
-| ----------- | ----------------------- | ------------------------------------------------------------ |
-| circleId    | [*CircleId*](#circleid) | Unique circle ID.                                            |
-| clickable   | bool                    | Indicates whether a circle is tappable.                      |
-| fillColor   | *Color*                 | Fill color.                                                  |
-| center      | [*LatLng*](#latlng)     | Longitude and latitude of the center of a circle.            |
-| radius      | double                  | Radius of a circle.                                          |
-| strokeColor | *Color*                 | Stroke color.                                                |
-| strokeWidth | int                     | Stroke width of a circle's outline.                          |
-| visible     | bool                    | Visibility of a circle.                                      |
-| zIndex      | int                     | Z-index of a circle, which indicates the overlapping order of the circle. |
-| onClick     | *VoidCallback*          | Function to be executed when a circle is tapped.             |
+| Name        | Type                | Description                                                  |
+| ----------- | ------------------- | ------------------------------------------------------------ |
+| circleId    | *CircleId*          | Unique circle ID.                                            |
+| clickable   | bool                | Indicates whether a circle is tappable.                      |
+| fillColor   | *Color*             | Fill color.                                                  |
+| center      | [*LatLng*](#latlng) | Longitude and latitude of the center of a circle.            |
+| radius      | double              | Radius of a circle.                                          |
+| strokeColor | *Color*             | Stroke color.                                                |
+| strokeWidth | int                 | Stroke width of a circle's outline.                          |
+| visible     | bool                | Visibility of a circle.                                      |
+| zIndex      | int                 | Z-index of a circle, which indicates the overlapping order of the circle. |
+| onClick     | *VoidCallback*      | Function to be executed when a circle is tapped.             |
 
 ##### Public Constructor Summary
 
@@ -1406,22 +1298,22 @@ Defines a circle on a map.
 
 ##### Public Constructors
 
-###### Circle({CircleId circleId, bool clickable, Color fillColor, LatLng center, double radius, Color strokeColor, int strokeWidth, bool visible, int zIndex, VoidCallback onClick})
+###### Circle
 
 Constructor for **Circle** object.
 
-| Parameter   | Type                    | Description                                                  |
-| ----------- | ----------------------- | ------------------------------------------------------------ |
-| circleId    | [*CircleId*](#circleid) | Unique circle ID.                                            |
-| clickable   | bool                    | Indicates whether a circle is tappable.                      |
-| fillColor   | *Color*                 | Fill color.                                                  |
-| center      | [*LatLng*](#latlng)     | Longitude and latitude of the center of a circle.            |
-| radius      | double                  | Radius of a circle.                                          |
-| strokeColor | *Color*                 | Stroke color.                                                |
-| strokeWidth | int                     | Stroke width of a circle's outline.                          |
-| visible     | bool                    | Visibility of a circle.                                      |
-| zIndex      | int                     | Z-index of a circle, which indicates the overlapping order of the circle. |
-| onClick     | *VoidCallback*          | Function to be executed when a circle is tapped.             |
+| Parameter   | Type                | Description                                                  |
+| ----------- | ------------------- | ------------------------------------------------------------ |
+| circleId    | *CircleId*          | Unique circle ID.                                            |
+| clickable   | bool                | Indicates whether a circle is tappable.                      |
+| fillColor   | *Color*             | Fill color.                                                  |
+| center      | [*LatLng*](#latlng) | Longitude and latitude of the center of a circle.            |
+| radius      | double              | Radius of a circle.                                          |
+| strokeColor | *Color*             | Stroke color.                                                |
+| strokeWidth | int                 | Stroke width of a circle's outline.                          |
+| visible     | bool                | Visibility of a circle.                                      |
+| zIndex      | int                 | Z-index of a circle, which indicates the overlapping order of the circle. |
+| onClick     | *VoidCallback*      | Function to be executed when a circle is tapped.             |
 
 ##### Public Method Summary
 
@@ -1487,32 +1379,6 @@ Circle circle2;
 circle2 = circle.clone();
 ```
 
-#### CircleId
-
-Represents the immutable circle ID.
-
-##### Public Properties
-
-| Name | Type   | Description       |
-| ---- | ------ | ----------------- |
-| id   | String | Unique circle ID. |
-
-##### Public Constructor Summary
-
-| Constructor           | Description          |
-| --------------------- | -------------------- |
-| CircleId({String id}) | Default constructor. |
-
-##### Public Constructors
-
-###### CircleId({String id})
-
-Constructor for **CircleId** object.
-
-| Parameter | Type   | Description       |
-| --------- | ------ | ----------------- |
-| id        | String | Unique circle ID. |
-
 #### Marker
 
 Defines an icon placed at a specified position on a map.
@@ -1521,7 +1387,7 @@ Defines an icon placed at a specified position on a map.
 
 | Name         | Type                                    | Description                                                  |
 | ------------ | --------------------------------------- | ------------------------------------------------------------ |
-| markerId     | [*MarkerId*](#markerid)                 | Unique marker ID.                                            |
+| markerId     | *MarkerId*                              | Unique marker ID.                                            |
 | position     | [*LatLng*](#latlng)                     | Position of a marker.                                        |
 | infoWindow   | [*InfoWindow*](#infowindow)             | Information window of a marker.                              |
 | anchor       | *Offset*                                | Anchor point of a marker.                                    |
@@ -1546,13 +1412,13 @@ Defines an icon placed at a specified position on a map.
 
 ##### Public Constructors
 
-###### Marker({MarkerId markerId, LatLng position, InfoWindow infoWindow, Offset anchor, bool draggable, bool flat, BitmapDescriptor icon, double rotation, double alpha, bool visible, double zIndex, bool clickable, bool clusterable, VoidCallback onClick, ValueChanged\<LatLng> onDragEnd, List\<dynamic> animationSet})
+###### Marker
 
 Constructor for **Marker** object. 
 
 | Parameter    | Type                                    | Description                                                  |
 | ------------ | --------------------------------------- | ------------------------------------------------------------ |
-| markerId     | [*MarkerId*](#markerid)                 | Unique marker ID.                                            |
+| markerId     | *MarkerId*                              | Unique marker ID.                                            |
 | position     | [*LatLng*](#latlng)                     | Position of a marker.                                        |
 | infoWindow   | [*InfoWindow*](#infowindow)             | Information window of a marker.                              |
 | anchor       | *Offset*                                | Anchor point of a marker.                                    |
@@ -1639,32 +1505,6 @@ Marker marker2;
 marker2 = marker.clone();
 ```
 
-#### MarkerId
-
-Defines an immutable marker ID.
-
-##### Public Properties
-
-| Name | Type   | Description       |
-| ---- | ------ | ----------------- |
-| id   | String | Unique marker ID. |
-
-##### Public Constructor Summary
-
-| Constructor           | Description          |
-| --------------------- | -------------------- |
-| MarkerId({String id}) | Default constructor. |
-
-##### Public Constructors
-
-###### MarkerId({String id})
-
-Constructor for **MarkerId** object.
-
-| Parameter | Type   | Description       |
-| --------- | ------ | ----------------- |
-| id        | String | Unique marker ID. |
-
 #### Polygon
 
 Defines a polygon on a map.
@@ -1673,7 +1513,7 @@ Defines a polygon on a map.
 
 | Name        | Type                       | Description                                                  |
 | ----------- | -------------------------- | ------------------------------------------------------------ |
-| polygonId   | [*PolygonId*](#polygonid)  | Unique polygon ID.                                           |
+| polygonId   | *PolygonId*                | Unique polygon ID.                                           |
 | clickable   | bool                       | Indicates whether a polygon is tappable.                     |
 | fillColor   | *Color*                    | Fill color.                                                  |
 | geodesic    | bool                       | Indicates whether to draw each segment of a polygon as a geodesic. The options are **true** (yes) and **false** (no). |
@@ -1692,13 +1532,13 @@ Defines a polygon on a map.
 
 ##### Public Constructors
 
-###### Polygon({PolygonId polygonId, bool clickable, Color fillColor, bool geodesic, List\<LatLng> points, bool visible, Color strokeColor, int strokeWidth, int zIndex, VoidCallback onClick})
+###### Polygon
 
 Constructor for **Polygon** object.
 
 | Parameter   | Type                       | Description                                                  |
 | ----------- | -------------------------- | ------------------------------------------------------------ |
-| polygonId   | [*PolygonId*](#polygonid)  | Unique polygon ID.                                           |
+| polygonId   | *PolygonId*                | Unique polygon ID.                                           |
 | clickable   | bool                       | Indicates whether a polygon is tappable.                     |
 | fillColor   | *Color*                    | Fill color.                                                  |
 | geodesic    | bool                       | Indicates whether to draw each segment of a polygon as a geodesic. The options are **true** (yes) and **false** (no). |
@@ -1771,53 +1611,27 @@ Polygon polygon2;
 polygon2 = polygon.clone();
 ```
 
-#### PolygonId
-
-Defines an immutable polygon ID.
-
-##### Public Properties
-
-| Name | Type   | Description        |
-| ---- | ------ | ------------------ |
-| id   | String | Unique polygon ID. |
-
-##### Public Constructor Summary
-
-| Constructor            | Description          |
-| ---------------------- | -------------------- |
-| PolygonId({String id}) | Default constructor. |
-
-##### Public Constructors
-
-###### PolygonId({String id})
-
-Constructor for **PolygonId** object.
-
-| Parameter | Type   | Description        |
-| --------- | ------ | ------------------ |
-| id        | String | Unique polygon ID. |
-
 #### Polyline
 
 Defines a polyline on a map.
 
 ##### Public Properties
 
-| Name       | Type                                 | Description                                                  |
-| ---------- | ------------------------------------ | ------------------------------------------------------------ |
-| polylineId | [*PolylineId*](#polylineid)          | Unique polyline ID.                                          |
-| clickable  | bool                                 | Indicates whether a polyline is tappable.                    |
-| color      | *Color*                              | Stroke color.                                                |
-| geodesic   | bool                                 | Indicates whether to draw each segment of a polyline as a geodesic. The options are **true** (yes) and **false** (no). |
-| jointType  | [*JointType*](#jointtype)            | [*JointType*](#jointtype) of all vertices of a polyline, except the start and end vertices. |
-| patterns   | List\<[*PatternItem*](#patternitem)> | Stroke pattern of a polyline. The default value is **null**, indicating that the stroke pattern is solid. |
-| points     | List\<[*LatLng*](#latlng)>           | Vertices of a polyline. Line segments are drawn between consecutive points. A polyline is not closed by default. To form a closed polyline, the start and end vertices must be the same. |
-| startCap   | [*Cap*](#cap)                        | Start vertex of a polyline.                                  |
-| endCap     | [*Cap*](#cap)                        | End vertex of a polyline.                                    |
-| visible    | bool                                 | Visibility of a polyline.                                    |
-| width      | int                                  | Stroke width of a polyline.                                  |
-| zIndex     | int                                  | Z-index of a polyline, which indicates the overlapping order of the polyline. |
-| onClick    | *VoidCallback*                       | Function to be executed when a polyline is tapped.           |
+| Name       | Type                       | Description                                                  |
+| ---------- | -------------------------- | ------------------------------------------------------------ |
+| polylineId | *PolylineId*               | Unique polyline ID.                                          |
+| clickable  | bool                       | Indicates whether a polyline is tappable.                    |
+| color      | *Color*                    | Stroke color.                                                |
+| geodesic   | bool                       | Indicates whether to draw each segment of a polyline as a geodesic. The options are **true** (yes) and **false** (no). |
+| jointType  | *JointType*                | *JointType* of all vertices of a polyline, except the start and end vertices. |
+| patterns   | List\<*PatternItem*>       | Stroke pattern of a polyline. The default value is **null**, indicating that the stroke pattern is solid. |
+| points     | List\<[*LatLng*](#latlng)> | Vertices of a polyline. Line segments are drawn between consecutive points. A polyline is not closed by default. To form a closed polyline, the start and end vertices must be the same. |
+| startCap   | *Cap*                      | Start vertex of a polyline.                                  |
+| endCap     | *Cap*                      | End vertex of a polyline.                                    |
+| visible    | bool                       | Visibility of a polyline.                                    |
+| width      | int                        | Stroke width of a polyline.                                  |
+| zIndex     | int                        | Z-index of a polyline, which indicates the overlapping order of the polyline. |
+| onClick    | *VoidCallback*             | Function to be executed when a polyline is tapped.           |
 
 ##### Public Constructor Summary
 
@@ -1827,25 +1641,25 @@ Defines a polyline on a map.
 
 ##### Public Constructors
 
-###### Polyline({PolylineId polylineId, bool clickable, Color color, bool geodesic, JointType jointType, List\<PatternItem> patterns, List\<LatLng> points, Cap startCap, Cap endCap, bool visible, int width, int zIndex, VoidCallback onClick})
+###### Polyline
 
 Constructor for **Polyline** object.
 
-| Parameter  | Type                                 | Description                                                  |
-| ---------- | ------------------------------------ | ------------------------------------------------------------ |
-| polylineId | [*PolylineId*](#polylineid)          | Unique polyline ID.                                          |
-| clickable  | bool                                 | Indicates whether a polyline is tappable.                    |
-| color      | *Color*                              | Stroke color.                                                |
-| geodesic   | bool                                 | Indicates whether to draw each segment of a polyline as a geodesic. The options are **true** (yes) and **false** (no). |
-| jointType  | [*JointType*](#jointtype)            | [*JointType*](#jointtype) of all vertices of a polyline, except the start and end vertices. |
-| patterns   | List\<[*PatternItem*](#patternitem)> | Stroke pattern of a polyline. The default value is **null**, indicating that the stroke pattern is solid. |
-| points     | List\<[*LatLng*](#latlng)>           | Vertices of a polyline. Line segments are drawn between consecutive points. A polyline is not closed by default. To form a closed polyline, the start and end vertices must be the same. |
-| startCap   | [*Cap*](#cap)                        | Start vertex of a polyline.                                  |
-| endCap     | [*Cap*](#cap)                        | End vertex of a polyline.                                    |
-| visible    | bool                                 | Visibility of a polyline.                                    |
-| width      | int                                  | Stroke width of a polyline.                                  |
-| zIndex     | int                                  | Z-index of a polyline, which indicates the overlapping order of the polyline. |
-| onClick    | *VoidCallback*                       | Function to be executed when a polyline is tapped.           |
+| Parameter  | Type                       | Description                                                  |
+| ---------- | -------------------------- | ------------------------------------------------------------ |
+| polylineId | *PolylineId*               | Unique polyline ID.                                          |
+| clickable  | bool                       | Indicates whether a polyline is tappable.                    |
+| color      | *Color*                    | Stroke color.                                                |
+| geodesic   | bool                       | Indicates whether to draw each segment of a polyline as a geodesic. The options are **true** (yes) and **false** (no). |
+| jointType  | *JointType*                | *JointType* of all vertices of a polyline, except the start and end vertices. |
+| patterns   | List\<*PatternItem*>       | Stroke pattern of a polyline. The default value is **null**, indicating that the stroke pattern is solid. |
+| points     | List\<[*LatLng*](#latlng)> | Vertices of a polyline. Line segments are drawn between consecutive points. A polyline is not closed by default. To form a closed polyline, the start and end vertices must be the same. |
+| startCap   | *Cap*                      | Start vertex of a polyline.                                  |
+| endCap     | *Cap*                      | End vertex of a polyline.                                    |
+| visible    | bool                       | Visibility of a polyline.                                    |
+| width      | int                        | Stroke width of a polyline.                                  |
+| zIndex     | int                        | Z-index of a polyline, which indicates the overlapping order of the polyline. |
+| onClick    | *VoidCallback*             | Function to be executed when a polyline is tapped.           |
 
 ##### Public Method Summary
 
@@ -1867,7 +1681,7 @@ Copies an existing **Polyline** object and updates the specified attributes.
 | clickable | Indicates whether a polyline is tappable.                    |
 | color     | Stroke color.                                                |
 | geodesic  | Indicates whether to draw each segment of a polyline as a geodesic. The options are **true** (yes) and **false** (no). |
-| jointType | [*JointType*](#jointtype) of all vertices of a polyline, except the start and end vertices. |
+| jointType | *JointType* of all vertices of a polyline, except the start and end vertices. |
 | patterns  | Stroke pattern of a polyline. The default value is **null**, indicating that the stroke pattern is solid. |
 | points    | Vertices of a polyline. Line segments are drawn between consecutive points. A polyline is not closed by default. To form a closed polyline, the start and end vertices must be the same. |
 | startCap  | Start vertex of a polyline.                                  |
@@ -1914,32 +1728,6 @@ Polyline polyline2;
 polyline2 = polyline.clone();
 ```
 
-#### PolylineId
-
-Defines an immutable polyline ID.
-
-##### Public Properties
-
-| Name | Type   | Description         |
-| ---- | ------ | ------------------- |
-| id   | String | Unique polyline ID. |
-
-##### Public Constructor Summary
-
-| Constructor             | Description         |
-| ----------------------- | ------------------- |
-| PolylineId({String id}) | Default constructor |
-
-##### Public Constructors
-
-###### PolylineId({String id})
-
-Constructor for **PolylineId** object.
-
-| Parameter | Type   | Description         |
-| --------- | ------ | ------------------- |
-| id        | String | Unique polyline ID. |
-
 #### GroundOverlay
 
 Class that defines an image on the map.
@@ -1948,7 +1736,7 @@ Class that defines an image on the map.
 
 | Name            | Type                                    | Description                                                  |
 | --------------- | --------------------------------------- | ------------------------------------------------------------ |
-| groundOverlayId | [*GroundOverlayId*](#groundoverlayid)   | Unique Ground Overlay ID.                                    |
+| groundOverlayId | *GroundOverlayId*                       | Unique Ground Overlay ID.                                    |
 | bearing         | double                                  | Sets the bearing of a ground overlay, in degrees clockwise from north. |
 | clickable       | bool                                    | Sets whether a ground overlay is tappable.                   |
 | width           | double                                  | Width of a ground overlay, in meters.                        |
@@ -1970,13 +1758,13 @@ Class that defines an image on the map.
 
 ##### Public Constructors
 
-###### GroundOverlay({GroundOverlayId groundOverlayId, double bearing, bool clickable, double width, double height, BitmapDescriptor imageDescriptor, LatLng position, LatLngBounds bounds, Offset anchor, double transparency, bool visible, double zIndex})
+###### GroundOverlay
 
 Constructor for **GroundOverlay** object. 
 
 | Parameter       | Type                                    | Description                                                  |
 | --------------- | --------------------------------------- | ------------------------------------------------------------ |
-| groundOverlayId | [*GroundOverlayId*](#groundoverlayid)   | Unique Ground Overlay ID.                                    |
+| groundOverlayId | *GroundOverlayId*                       | Unique Ground Overlay ID.                                    |
 | bearing         | double                                  | Sets the bearing of a ground overlay, in degrees clockwise from north. |
 | clickable       | bool                                    | Sets whether a ground overlay is tappable.                   |
 | width           | double                                  | Width of a ground overlay, in meters.                        |
@@ -2057,47 +1845,21 @@ GroundOverlay groundOverlay2;
 groundOverlay2 = groundOverlay.clone();
 ```
 
-#### GroundOverlayId
-
-Defines an immutable ground overlay ID.
-
-##### Public Properties
-
-| Name | Type   | Description               |
-| ---- | ------ | ------------------------- |
-| id   | String | Unique ground overlay ID. |
-
-##### Public Constructor Summary
-
-| Constructor                  | Description         |
-| ---------------------------- | ------------------- |
-| GroundOverlayId({String id}) | Default constructor |
-
-##### Public Constructors
-
-###### GroundOverlayId({String id})
-
-Constructor for **GroundOverlayId** object.
-
-| Parameter | Type   | Description               |
-| --------- | ------ | ------------------------- |
-| id        | String | Unique ground overlay ID. |
-
 #### TileOverlay
 
 A tile overlay is a set of images to be displayed on a map. It can be transparent and enable you to add new functions to an existing map.
 
 ##### Public Properties
 
-| Name          | Type                              | Description                                                  |
-| ------------- | --------------------------------- | ------------------------------------------------------------ |
-| tileOverlayId | [*TileOverlayId*](#tileoverlayid) | Unique Tile Overlay ID.                                      |
-| fadeIn        | bool                              | Sets whether a tile overlay fades in.                        |
-| transparency  | double                            | Sets the transparency of a tile overlay.                     |
-| visible       | bool                              | Sets whether a tile overlay is visible. If the tile overlay is invisible, it will not be drawn but all other states will be preserved. By default, a tile overlay is visible. |
-| zIndex        | double                            | Sets the z-index of a tile overlay. The z-index indicates the overlapping order of a tile overlay. A tile overlay with a larger z-index overlaps that with a smaller z-index. Tile overlays with the same z-index overlap each other in any order. |
-| tileProvider  | dynamic                           | Sets the provider of a tile overlay.                         |
-| type          | String                            | Type of providers.                                           |
+| Name          | Type            | Description                                                  |
+| ------------- | --------------- | ------------------------------------------------------------ |
+| tileOverlayId | *TileOverlayId* | Unique Tile Overlay ID.                                      |
+| fadeIn        | bool            | Sets whether a tile overlay fades in.                        |
+| transparency  | double          | Sets the transparency of a tile overlay.                     |
+| visible       | bool            | Sets whether a tile overlay is visible. If the tile overlay is invisible, it will not be drawn but all other states will be preserved. By default, a tile overlay is visible. |
+| zIndex        | double          | Sets the z-index of a tile overlay. The z-index indicates the overlapping order of a tile overlay. A tile overlay with a larger z-index overlaps that with a smaller z-index. Tile overlays with the same z-index overlap each other in any order. |
+| tileProvider  | dynamic         | Sets the provider of a tile overlay.                         |
+| type          | String          | Type of providers.                                           |
 
 ##### Public Constructor Summary
 
@@ -2107,19 +1869,19 @@ A tile overlay is a set of images to be displayed on a map. It can be transparen
 
 ##### Public Constructors
 
-###### TileOverlay({TileOverlayId tileOverlayId, String type, dynamic tileProvider, bool fadeIn, double transparency, bool visible, double zIndex})
+###### TileOverlay
 
 Constructor for **TileOverlay** object.
 
-| Parameter     | Type                              | Description                                                  |
-| ------------- | --------------------------------- | ------------------------------------------------------------ |
-| tileOverlayId | [*TileOverlayId*](#tileoverlayid) | Unique Tile Overlay ID.                                      |
-| fadeIn        | bool                              | Sets whether a tile overlay fades in.                        |
-| transparency  | double                            | Sets the transparency of a tile overlay.                     |
-| visible       | bool                              | Sets whether a tile overlay is visible. If the tile overlay is invisible, it will not be drawn but all other states will be preserved. By default, a tile overlay is visible. |
-| zIndex        | double                            | Sets the z-index of a tile overlay. The z-index indicates the overlapping order of a tile overlay. A tile overlay with a larger z-index overlaps that with a smaller z-index. Tile overlays with the same z-index overlap each other in any order. |
-| tileProvider  | dynamic                           | Sets the provider of a tile overlay.                         |
-| type          | String                            | Type of providers.                                           |
+| Parameter     | Type            | Description                                                  |
+| ------------- | --------------- | ------------------------------------------------------------ |
+| tileOverlayId | *TileOverlayId* | Unique Tile Overlay ID.                                      |
+| fadeIn        | bool            | Sets whether a tile overlay fades in.                        |
+| transparency  | double          | Sets the transparency of a tile overlay.                     |
+| visible       | bool            | Sets whether a tile overlay is visible. If the tile overlay is invisible, it will not be drawn but all other states will be preserved. By default, a tile overlay is visible. |
+| zIndex        | double          | Sets the z-index of a tile overlay. The z-index indicates the overlapping order of a tile overlay. A tile overlay with a larger z-index overlaps that with a smaller z-index. Tile overlays with the same z-index overlap each other in any order. |
+| tileProvider  | dynamic         | Sets the provider of a tile overlay.                         |
+| type          | String          | Type of providers.                                           |
 
 ##### Public Method Summary
 
@@ -2182,33 +1944,9 @@ TileOverlay tileOverlay2;
 tileOverlay2 = tileOverlay.clone();
 ```
 
- #### TileOverlayId
-
-##### Public Properties
-
-| Name | Type   | Description             |
-| ---- | ------ | ----------------------- |
-| id   | String | Unique tile overlay ID. |
-
-##### Public Constructor Summary
-
-| Constructor                | Description          |
-| -------------------------- | -------------------- |
-| TileOverlayId({String id}) | Default constructor. |
-
-##### Public Constructors
-
-###### TileOverlayId({String id})
-
-Constructor for **TileOverlayId** object.
-
-| Parameter | Type   | Description             |
-| --------- | ------ | ----------------------- |
-| id        | String | Unique tile overlay ID. |
-
 #### Tile
 
-Provides tile images for [*TileOverlay*](#tileoverlay).
+Provides tile images for *TileOverlay*.
 
 ##### Public Properties
 
@@ -2240,7 +1978,7 @@ Constructor for **Tile** object.
 
 #### UrlTile
 
-Provides tile images for [*TileOverlay*](#tileoverlay) from URL.
+Provides tile images for *TileOverlay* from URL.
 
 ##### Public Properties
 
@@ -2256,7 +1994,7 @@ Provides tile images for [*TileOverlay*](#tileoverlay) from URL.
 
 ##### Public Constructors
 
-###### UrlTile({String uri})
+###### UrlTile
 
 Constructor for **UrlTile** object.
 
@@ -2266,7 +2004,7 @@ Constructor for **UrlTile** object.
 
 #### RepetitiveTile
 
-Provides repetitive tile images for [*TileOverlay*](#tileoverlay).
+Provides repetitive tile images for *TileOverlay*.
 
 ##### Public Properties
 
@@ -2283,7 +2021,7 @@ Provides repetitive tile images for [*TileOverlay*](#tileoverlay).
 
 ##### Public Constructors
 
-###### RepetitiveTile({Uint8List imageData, List\<int> zoom})
+###### RepetitiveTile
 
 Constructor for **RepetitiveTile** object.
 
@@ -2336,7 +2074,7 @@ An abstract class for supporting marker animation.
 
 ##### Public Constructors
 
-###### HmsMarkerAnimation({String animationId, String type, int duration, int fillMode, int repeatCount, int repeatMode, int interpolator})
+###### HmsMarkerAnimation
 
 Constructor for **HmsMarkerAnimation** object.
 
@@ -2377,7 +2115,7 @@ An animation class that controls the transparency. The transparency value range 
 
 ##### Public Constructors
 
-###### HmsMarkerAlphaAnimation({String animationId, double fromAlpha, double toAlpha, int duration, int fillMode, int repeatCount, int repeatMode, int interpolator, Function onAnimationStart, Function onAnimationEnd})
+###### HmsMarkerAlphaAnimation
 
 Constructor for **HmsMarkerAlphaAnimation** object.
 
@@ -2421,7 +2159,7 @@ A class that controls the animation rotation.
 
 ##### Public Constructors
 
-###### HmsMarkerRotateAnimation({String animationId, double fromDegree, double toDegree, int duration, int fillMode, int repeatCount, int repeatMode, int interpolator, Function onAnimationStart, Function onAnimationEnd})
+###### HmsMarkerRotateAnimation
 
 Constructor for **HmsMarkerRotateAnimation** object. 
 
@@ -2467,7 +2205,7 @@ A class for controlling the animation scale.
 
 ##### Public Constructors
 
-###### HmsMarkerScaleAnimation({String animationId, double fromX, double toX, double fromY, double toY, int duration, int fillMode, int repeatCount, int repeatMode, int interpolator, Function onAnimationStart, Function onAnimationEnd})
+###### HmsMarkerScaleAnimation
 
 Constructor for **HmMarkerScaleAnimation** object.
 
@@ -2512,7 +2250,7 @@ A class that controls the animation movement.
 
 ##### Public Constructors
 
-###### HmsMarkerTranslateAnimation({String animationId, LatLng target, int duration, int fillMode, int repeatCount, int repeatMode, int interpolator, Function onAnimationStart, Function onAnimationEnd})
+###### HmsMarkerTranslateAnimation
 
 Constructor for **HmsMarkerTranslateAnimation** object.
 
@@ -2527,15 +2265,6 @@ Constructor for **HmsMarkerTranslateAnimation** object.
 | interpolator     | int                 | Sets an animation interpolator.                              |
 | onAnimationStart | Function            | Function to be executed when an animation starts.             |
 | onAnimationEnd   | Function            | Function to be executed when an animation ends.               |
-
-#### enum MapType
-
-Map types.
-
-| Value  | Description            |
-| ------ | ---------------------- |
-| none   | Empty map.             |
-| normal | Basic Huawei Map type. |
 
 ---
 
