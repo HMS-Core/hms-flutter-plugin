@@ -1,11 +1,11 @@
 /*
-Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,13 +16,17 @@ Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
 package com.huawei.hms.flutter.map.map;
 
+import android.app.Application;
+
 import androidx.annotation.Nullable;
 
 import com.huawei.hms.flutter.map.constants.Method;
 import com.huawei.hms.flutter.map.constants.Param;
+import com.huawei.hms.flutter.map.logger.HMSLogger;
 import com.huawei.hms.flutter.map.utils.ToJson;
 import com.huawei.hms.maps.HuaweiMap;
 import com.huawei.hms.maps.model.Circle;
+import com.huawei.hms.maps.model.GroundOverlay;
 import com.huawei.hms.maps.model.LatLng;
 import com.huawei.hms.maps.model.Marker;
 import com.huawei.hms.maps.model.Polygon;
@@ -35,115 +39,169 @@ import java.util.Map;
 import io.flutter.plugin.common.MethodChannel;
 
 public class MapListenerHandler implements MapListener {
-    private int id;
+    private final int id;
     private HuaweiMap huaweiMap;
     private final MethodChannel mChannel;
     private final MapUtils mapUtils;
     private boolean trackCameraPosition = false;
 
-    MapListenerHandler(int id, MapUtils mapUtils, MethodChannel mChannel) {
+    private final HMSLogger logger;
+
+    MapListenerHandler(final int id, final MapUtils mapUtils, final MethodChannel mChannel,
+        final Application application) {
         this.id = id;
         this.mChannel = mChannel;
         this.mapUtils = mapUtils;
+        logger = HMSLogger.getInstance(application);
     }
 
-    void init(HuaweiMap huaweiMap) {
+    void init(final HuaweiMap huaweiMap) {
         this.huaweiMap = huaweiMap;
         setMapListener(this);
     }
 
-    void setTrackCameraPosition(boolean trackCameraPosition) {
+    void setTrackCameraPosition(final boolean trackCameraPosition) {
         this.trackCameraPosition = trackCameraPosition;
     }
 
-    void setMapListener(@Nullable MapListener listener) {
+    void setMapListener(@Nullable final MapListener listener) {
+        logger.startMethodExecutionTimer("setOnInfoWindowClickListener");
         huaweiMap.setOnInfoWindowClickListener(this);
+        logger.sendSingleEvent("setOnInfoWindowClickListener");
+
+        logger.startMethodExecutionTimer("setOnCameraMoveListener");
         huaweiMap.setOnCameraMoveListener(listener);
+        logger.sendSingleEvent("setOnCameraMoveListener");
+
+        logger.startMethodExecutionTimer("setOnCameraMoveStartedListener");
         huaweiMap.setOnCameraMoveStartedListener(listener);
+        logger.sendSingleEvent("setOnCameraMoveStartedListener");
+
+        logger.startMethodExecutionTimer("setOnCameraIdleListener");
         huaweiMap.setOnCameraIdleListener(listener);
+        logger.sendSingleEvent("setOnCameraIdleListener");
+
+        logger.startMethodExecutionTimer("setOnMarkerClickListener");
         huaweiMap.setOnMarkerClickListener(listener);
+        logger.sendSingleEvent("setOnMarkerClickListener");
+
+        logger.startMethodExecutionTimer("setOnMarkerDragListener");
         huaweiMap.setOnMarkerDragListener(listener);
+        logger.sendSingleEvent("setOnMarkerDragListener");
+
+        logger.startMethodExecutionTimer("setOnPolygonClickListener");
         huaweiMap.setOnPolygonClickListener(listener);
+        logger.sendSingleEvent("setOnPolygonClickListener");
+
+        logger.startMethodExecutionTimer("setOnPolylineClickListener");
         huaweiMap.setOnPolylineClickListener(listener);
+        logger.sendSingleEvent("setOnPolylineClickListener");
+
+        logger.startMethodExecutionTimer("setOnCircleClickListener");
         huaweiMap.setOnCircleClickListener(listener);
+        logger.sendSingleEvent("setOnCircleClickListener");
+
+        logger.startMethodExecutionTimer("setOnMapClickListener");
         huaweiMap.setOnMapClickListener(listener);
+        logger.sendSingleEvent("setOnMapClickListener");
+
+        logger.startMethodExecutionTimer("setOnMapLongClickListener");
         huaweiMap.setOnMapLongClickListener(listener);
+        logger.sendSingleEvent("setOnMapLongClickListener");
+
+        logger.startMethodExecutionTimer("setOnGroundOverlayClickListener");
+        huaweiMap.setOnGroundOverlayClickListener(listener);
+        logger.sendSingleEvent("setOnGroundOverlayClickListener");
     }
 
-
     @Override
-    public void onMapClick(LatLng latLng) {
+    public void onMapClick(final LatLng latLng) {
+        logger.startMethodExecutionTimer(Method.MAP_CLICK);
         final Map<String, Object> arguments = new HashMap<>();
         arguments.put(Param.POSITION, ToJson.latLng(latLng));
         mChannel.invokeMethod(Method.MAP_CLICK, arguments);
+        logger.sendSingleEvent(Method.MAP_CLICK);
     }
 
     @Override
-    public void onMapLongClick(LatLng latLng) {
+    public void onMapLongClick(final LatLng latLng) {
+        logger.startMethodExecutionTimer(Method.MAP_ON_LONG_PRESS);
         final Map<String, Object> arguments = new HashMap<>();
         arguments.put(Param.POSITION, ToJson.latLng(latLng));
         mChannel.invokeMethod(Method.MAP_ON_LONG_PRESS, arguments);
+        logger.sendSingleEvent(Method.MAP_ON_LONG_PRESS);
     }
 
     @Override
-    public void onCameraMoveStarted(int reason) {
+    public void onCameraMoveStarted(final int reason) {
+        logger.startMethodExecutionTimer(Method.CAMERA_ON_MOVE_STARTED);
         final Map<String, Object> arguments = new HashMap<>();
-        boolean isGesture = reason == HuaweiMap.OnCameraMoveStartedListener.REASON_GESTURE;
+        final boolean isGesture = reason == HuaweiMap.OnCameraMoveStartedListener.REASON_GESTURE;
         arguments.put(Param.IS_GESTURE, isGesture);
         mChannel.invokeMethod(Method.CAMERA_ON_MOVE_STARTED, arguments);
+        logger.sendSingleEvent(Method.CAMERA_ON_MOVE_STARTED);
     }
 
     @Override
-    public void onInfoWindowClick(Marker marker) {
+    public void onInfoWindowClick(final Marker marker) {
         mapUtils.onInfoWindowClick(marker.getId());
     }
 
     @Override
     public void onCameraMove() {
-        if (!trackCameraPosition) return;
-
+        if (!trackCameraPosition) {
+            return;
+        }
+        logger.startMethodExecutionTimer(Method.CAMERA_ON_MOVE);
         final Map<String, Object> arguments = new HashMap<>();
         arguments.put(Param.POSITION, ToJson.cameraPosition(huaweiMap.getCameraPosition()));
         mChannel.invokeMethod(Method.CAMERA_ON_MOVE, arguments);
+        logger.sendPeriodicEvent(Method.CAMERA_ON_MOVE);
     }
 
     @Override
     public void onCameraIdle() {
+        logger.startMethodExecutionTimer(Method.CAMERA_ON_IDLE);
         mChannel.invokeMethod(Method.CAMERA_ON_IDLE, Collections.singletonMap(Param.MAP, id));
+        logger.sendPeriodicEvent(Method.CAMERA_ON_IDLE);
     }
 
     @Override
-    public boolean onMarkerClick(Marker marker) {
+    public boolean onMarkerClick(final Marker marker) {
         return mapUtils.onMarkerClick(marker.getId());
     }
 
     @Override
-    public void onMarkerDragStart(Marker marker) {
+    public void onMarkerDragStart(final Marker marker) {
     }
 
     @Override
-    public void onMarkerDrag(Marker marker) {
+    public void onMarkerDrag(final Marker marker) {
     }
 
     @Override
-    public void onMarkerDragEnd(Marker marker) {
+    public void onMarkerDragEnd(final Marker marker) {
         mapUtils.onMarkerDragEnd(marker.getId(), marker.getPosition());
     }
 
     @Override
-    public void onPolygonClick(Polygon polygon) {
+    public void onPolygonClick(final Polygon polygon) {
         mapUtils.onPolygonClick(polygon.getId());
     }
 
     @Override
-    public void onPolylineClick(Polyline polyline) {
+    public void onPolylineClick(final Polyline polyline) {
         mapUtils.onPolylineClick(polyline.getId());
     }
 
     @Override
-    public void onCircleClick(Circle circle) {
+    public void onCircleClick(final Circle circle) {
         mapUtils.onCircleClick(circle.getId());
     }
 
+    @Override
+    public void onGroundOverlayClick(final GroundOverlay groundOverlay) {
+        mapUtils.onGroundOverlayClick(groundOverlay.getId());
+    }
 
 }

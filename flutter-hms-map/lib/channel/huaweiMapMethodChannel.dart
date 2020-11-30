@@ -1,35 +1,35 @@
 /*
-Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+    Licensed under the Apache License, Version 2.0 (the "License")
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-     http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
-import 'dart:async';
-import 'dart:typed_data';
+import 'dart:async' show StreamController;
+import 'dart:typed_data' show Uint8List;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show Factory;
 import 'package:flutter/services.dart';
-import 'package:flutter/gestures.dart';
+import 'package:flutter/gestures.dart' show OneSequenceGestureRecognizer;
+
+import 'package:stream_transform/stream_transform.dart';
 
 import 'package:huawei_map/components/components.dart';
-import 'package:huawei_map/constants/channel.dart';
+import 'package:huawei_map/constants/channel.dart' as Channel;
 import 'package:huawei_map/constants/method.dart';
 import 'package:huawei_map/constants/param.dart';
 import 'package:huawei_map/events/events.dart';
 import 'package:huawei_map/utils/toJson.dart';
-
-import 'package:stream_transform/stream_transform.dart';
 
 class HuaweiMapMethodChannel {
   final Map<int, MethodChannel> _channels = {};
@@ -86,6 +86,11 @@ class HuaweiMapMethodChannel {
 
   Stream<MarkerDragEndEvent> onMarkerDragEnd({@required int mapId}) =>
       _events(mapId).whereType<MarkerDragEndEvent>();
+
+  // GROUND OVERLAY
+
+  Stream<GroundOverlayClickEvent> onGroundOverlayClick({@required int mapId}) =>
+      _events(mapId).whereType<GroundOverlayClickEvent>();
 
   // POLYLINE
 
@@ -165,6 +170,12 @@ class HuaweiMapMethodChannel {
           LatLng.fromJson(call.arguments[Param.position]),
         ));
         break;
+      case Method.GroundOverlayClick:
+        _streamController.add(GroundOverlayClickEvent(
+          mapId,
+          GroundOverlayId(call.arguments[Param.groundOverlayId]),
+        ));
+        break;
       default:
         throw MissingPluginException();
     }
@@ -190,6 +201,34 @@ class HuaweiMapMethodChannel {
       Method.MarkersUpdate,
       markerUpdatesToJson(markerUpdates),
     );
+  }
+
+  Future<void> updateGroundOverlays(
+    GroundOverlayUpdates groundOverlayUpdates, {
+    @required int mapId,
+  }) {
+    return setChannel(mapId).invokeMethod<void>(Method.GroundOverlaysUpdate,
+        groundOverlayUpdatesToJson(groundOverlayUpdates));
+  }
+
+  Future<void> updateTileOverlays(
+    TileOverlayUpdates tileOverlayUpdates, {
+    @required int mapId,
+  }) {
+    return setChannel(mapId).invokeMethod<void>(Method.TileOverlaysUpdate,
+        tileOverlayUpdatesToJson(tileOverlayUpdates));
+  }
+
+  Future<void> clearTileCache(TileOverlayId tileOverlayId,
+      {@required int mapId}) {
+    return setChannel(mapId).invokeMethod<void>(Method.ClearTileCache,
+        <String, String>{Param.tileOverlayId: tileOverlayId.id});
+  }
+
+  Future<void> startAnimationOnMarker(MarkerId markerId,
+      {@required int mapId}) {
+    return setChannel(mapId).invokeMethod<void>(Method.MarkerStartAnimation,
+        <String, String>{Param.markerId: markerId.id});
   }
 
   Future<void> updatePolygons(
@@ -305,6 +344,14 @@ class HuaweiMapMethodChannel {
     @required int mapId,
   }) {
     return setChannel(mapId).invokeMethod<bool>(Method.MarkersIsInfoWindowShown,
+        <String, String>{Param.markerId: markerId.id});
+  }
+
+  Future<bool> isMarkerClusterable(
+    MarkerId markerId, {
+    @required int mapId,
+  }) {
+    return setChannel(mapId).invokeMethod<bool>(Method.MarkerIsClusterable,
         <String, String>{Param.markerId: markerId.id});
   }
 

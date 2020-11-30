@@ -1,17 +1,17 @@
 /*
-Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+    Licensed under the Apache License, Version 2.0 (the "License")
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-     http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 import 'dart:async';
@@ -81,6 +81,9 @@ class HuaweiMapController {
         .listen((MapClickEvent e) => _huaweiMapState.onClick(e.position));
     mChannel.onLongPress(mapId: mapId).listen(
         (MapLongPressEvent e) => _huaweiMapState.onLongPress(e.position));
+    mChannel.onGroundOverlayClick(mapId: mapId).listen(
+        (GroundOverlayClickEvent e) =>
+            _huaweiMapState.onGroundOverlayClick(e.value));
     if (_huaweiMapState.widget.onCameraMoveStarted != null) {
       mChannel
           .onCameraMoveStarted(mapId: mapId)
@@ -115,6 +118,23 @@ class HuaweiMapController {
 
   Future<void> _updateCircles(CircleUpdates circleUpdates) {
     return mChannel.updateCircles(circleUpdates, mapId: mapId);
+  }
+
+  Future<void> _updateGroundOverlays(
+      GroundOverlayUpdates groundOverlayUpdates) {
+    return mChannel.updateGroundOverlays(groundOverlayUpdates, mapId: mapId);
+  }
+
+  Future<void> _updateTileOverlays(TileOverlayUpdates tileOverlayUpdates) {
+    return mChannel.updateTileOverlays(tileOverlayUpdates, mapId: mapId);
+  }
+
+  Future<void> clearTileCache(TileOverlay tileOverlay) {
+    return mChannel.clearTileCache(tileOverlay.tileOverlayId, mapId: mapId);
+  }
+
+  Future<void> startAnimationOnMarker(Marker marker) {
+    return mChannel.startAnimationOnMarker(marker.markerId, mapId: mapId);
   }
 
   Future<void> animateCamera(CameraUpdate cameraUpdate) {
@@ -153,6 +173,10 @@ class HuaweiMapController {
     return mChannel.isMarkerInfoWindowShown(markerId, mapId: mapId);
   }
 
+  Future<bool> isMarkerClusterable(MarkerId markerId) {
+    return mChannel.isMarkerClusterable(markerId, mapId: mapId);
+  }
+
   Future<double> getZoomLevel() {
     return mChannel.getZoomLevel(mapId: mapId);
   }
@@ -179,10 +203,13 @@ class HuaweiMap extends StatefulWidget {
   final Set<Polygon> polygons;
   final Set<Polyline> polylines;
   final Set<Circle> circles;
+  final Set<GroundOverlay> groundOverlays;
+  final Set<TileOverlay> tileOverlays;
   final bool myLocationEnabled;
   final bool myLocationButtonEnabled;
   final bool trafficEnabled;
   final bool buildingsEnabled;
+  final bool markersClusteringEnabled;
 
   final MapCreatedCallback onMapCreated;
   final VoidCallback onCameraMoveStarted;
@@ -209,11 +236,14 @@ class HuaweiMap extends StatefulWidget {
     this.myLocationButtonEnabled = true,
     this.padding = const EdgeInsets.all(0),
     this.trafficEnabled = false,
+    this.markersClusteringEnabled = false,
     this.buildingsEnabled = true,
     this.markers,
     this.polygons,
     this.polylines,
     this.circles,
+    this.groundOverlays,
+    this.tileOverlays,
     this.onMapCreated,
     this.onCameraMoveStarted,
     this.onCameraMove,
@@ -233,6 +263,13 @@ class _HuaweiMapState extends State<HuaweiMap> {
   Map<PolylineId, Polyline> _polylines = <PolylineId, Polyline>{};
   Map<PolygonId, Polygon> _polygons = <PolygonId, Polygon>{};
   Map<CircleId, Circle> _circles = <CircleId, Circle>{};
+
+  Map<GroundOverlayId, GroundOverlay> _groundOverlays =
+      <GroundOverlayId, GroundOverlay>{};
+
+  Map<TileOverlayId, TileOverlay> _tileOverlays =
+      <TileOverlayId, TileOverlay>{};
+
   HuaweiMapOptions _huaweiMapOptions;
 
   final Completer<HuaweiMapController> _controller =
@@ -247,6 +284,8 @@ class _HuaweiMapState extends State<HuaweiMap> {
       Param.polylinesToInsert: polylineToList(widget.polylines),
       Param.polygonsToInsert: polygonToList(widget.polygons),
       Param.circlesToInsert: circleToList(widget.circles),
+      Param.groundOverlaysToInsert: groundOverlayToList(widget.groundOverlays),
+      Param.tileOverlaysToInsert: tileOverlayToList(widget.tileOverlays),
     };
     return mChannel.buildView(
       creationParams,
@@ -263,6 +302,8 @@ class _HuaweiMapState extends State<HuaweiMap> {
     _polylines = polylineToMap(widget.polylines);
     _polygons = polygonToMap(widget.polygons);
     _circles = circleToMap(widget.circles);
+    _groundOverlays = groundOverlayToMap(widget.groundOverlays);
+    _tileOverlays = tileOverlayToMap(widget.tileOverlays);
   }
 
   Future<void> onPlatformViewCreated(int id) async {
@@ -297,6 +338,8 @@ class _HuaweiMapState extends State<HuaweiMap> {
     _updatePolylines();
     _updatePolygons();
     _updateCircles();
+    _updateGroundOverlays();
+    _updateTileOverlays();
   }
 
   void _updateMarkers() async {
@@ -325,6 +368,20 @@ class _HuaweiMapState extends State<HuaweiMap> {
     controller._updateCircles(
         CircleUpdates.update(_circles.values.toSet(), widget.circles));
     _circles = circleToMap(widget.circles);
+  }
+
+  void _updateGroundOverlays() async {
+    final HuaweiMapController controller = await _controller.future;
+    controller._updateGroundOverlays(GroundOverlayUpdates.update(
+        _groundOverlays.values.toSet(), widget.groundOverlays));
+    _groundOverlays = groundOverlayToMap(widget.groundOverlays);
+  }
+
+  void _updateTileOverlays() async {
+    final HuaweiMapController controller = await _controller.future;
+    controller._updateTileOverlays(TileOverlayUpdates.update(
+        _tileOverlays.values.toSet(), widget.tileOverlays));
+    _tileOverlays = tileOverlayToMap(widget.tileOverlays);
   }
 
   void onClick(LatLng position) {
@@ -360,5 +417,10 @@ class _HuaweiMapState extends State<HuaweiMap> {
   void onInfoWindowClick(MarkerId markerId) {
     if (_markers[markerId]?.infoWindow?.onClick != null)
       _markers[markerId].infoWindow.onClick();
+  }
+
+  void onGroundOverlayClick(GroundOverlayId groundOverlayId) {
+    if (_groundOverlays[groundOverlayId]?.onClick != null)
+      _groundOverlays[groundOverlayId].onClick();
   }
 }

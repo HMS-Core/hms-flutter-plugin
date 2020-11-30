@@ -1,11 +1,11 @@
 /*
-Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,17 +19,20 @@ package com.huawei.hms.flutter.map.marker;
 import com.huawei.hms.maps.model.BitmapDescriptor;
 import com.huawei.hms.maps.model.LatLng;
 import com.huawei.hms.maps.model.Marker;
+import com.huawei.hms.maps.model.animation.AnimationSet;
 
 class MarkerController implements MarkerMethods {
 
     private final Marker marker;
     private final String mapMarkerId;
     private boolean clickable;
+    private final boolean clusterable;
 
-    MarkerController(Marker marker, boolean clickable) {
+    MarkerController(final Marker marker, final boolean clickable, final boolean clusterable) {
         this.marker = marker;
         this.clickable = clickable;
-        this.mapMarkerId = marker.getId();
+        mapMarkerId = marker.getId();
+        this.clusterable = clusterable;
     }
 
     @Override
@@ -38,64 +41,78 @@ class MarkerController implements MarkerMethods {
     }
 
     @Override
-    public void setAlpha(float alpha) {
+    public void setAlpha(final float alpha) {
         marker.setAlpha(alpha);
     }
 
     @Override
-    public void setAnchor(float u, float v) {
-        marker.setAnchor(u, v);
+    public void setClusterable(final boolean isClusterable) {
     }
 
     @Override
-    public void setClickable(boolean clickable) {
+    public void setAnchor(final float u, final float v) {
+        marker.setMarkerAnchor(u, v);
+    }
+
+    @Override
+    public void setClickable(final boolean clickable) {
         this.clickable = clickable;
     }
 
     @Override
-    public void setDraggable(boolean draggable) {
+    public void setDraggable(final boolean draggable) {
         marker.setDraggable(draggable);
     }
 
     @Override
-    public void setFlat(boolean flat) {
+    public void setFlat(final boolean flat) {
         marker.setFlat(flat);
     }
 
     @Override
-    public void setIcon(BitmapDescriptor bitmapDescriptor) {
+    public void setIcon(final BitmapDescriptor bitmapDescriptor) {
         marker.setIcon(bitmapDescriptor);
     }
 
     @Override
-    public void setInfoWindowAnchor(float u, float v) {
+    public void setInfoWindowAnchor(final float u, final float v) {
         marker.setInfoWindowAnchor(u, v);
     }
 
     @Override
-    public void setInfoWindowText(String title, String snippet) {
+    public void setInfoWindowText(final String title, final String snippet) {
         marker.setTitle(title);
         marker.setSnippet(snippet);
     }
 
     @Override
-    public void setPosition(LatLng position) {
+    public void setPosition(final LatLng position) {
         marker.setPosition(position);
     }
 
     @Override
-    public void setRotation(float rotation) {
+    public void setRotation(final float rotation) {
         marker.setRotation(rotation);
     }
 
     @Override
-    public void setVisible(boolean visible) {
+    public void setVisible(final boolean visible) {
         marker.setVisible(visible);
     }
 
     @Override
-    public void setZIndex(float zIndex) {
+    public void setZIndex(final float zIndex) {
         marker.setZIndex(zIndex);
+    }
+
+    @Override
+    public void setAnimationSet(final AnimationSet animationSet) {
+        marker.setAnimation(animationSet);
+    }
+
+    @Override
+    public void startAnimation() {
+        marker.startAnimation();
     }
 
     String getMapMarkerId() {
@@ -104,6 +121,10 @@ class MarkerController implements MarkerMethods {
 
     boolean isClickable() {
         return clickable;
+    }
+
+    boolean isClusterable() {
+        return clusterable;
     }
 
     void showInfoWindow() {

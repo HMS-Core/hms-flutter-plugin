@@ -1,11 +1,11 @@
 /*
-Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * The interface Map methods.
  *
- * @since v.4.0.4
+ * @since v.5.0.3
  */
 public interface MapMethods {
 
@@ -55,6 +55,20 @@ public interface MapMethods {
      * @param initCircles the initial circles
      */
     void setCircles(List<HashMap<String, Object>> initCircles);
+
+    /**
+     * Sets ground overlays.
+     *
+     * @param initGroundOverlays the initial ground overlays
+     */
+    void setGroundOverlays(List<HashMap<String, Object>> initGroundOverlays);
+
+    /**
+     * Sets tile overlays.
+     *
+     * @param initTileOverlays the initial tile overlays
+     */
+    void setTileOverlays(List<HashMap<String, Object>> initTileOverlays);
 
     /**
      * Sets camera target bounds.
@@ -115,6 +129,13 @@ public interface MapMethods {
      * @param trafficEnabled the traffic enabled
      */
     void setTrafficEnabled(boolean trafficEnabled);
+
+    /**
+     * Sets marker clustering enabled.
+     *
+     * @param markersClustering the clustering markers.
+     */
+    void setMarkersClustering(boolean markersClustering);
 
     /**
      * Sets buildings enabled.

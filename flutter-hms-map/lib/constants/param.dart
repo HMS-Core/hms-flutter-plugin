@@ -1,17 +1,17 @@
 /*
-Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+    Licensed under the Apache License, Version 2.0 (the "License")
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-     http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 class Param {
@@ -101,4 +101,53 @@ class Param {
   static const String dot = "dot";
   static const String dash = "dash";
   static const String gap = "gap";
+
+  //Ground Overlays
+  static const String groundOverlaysToInsert = "groundOverlaysToAdd";
+  static const String groundOverlaysToUpdate = "groundOverlaysToChange";
+  static const String groundOverlaysToDelete = "groundOverlayIdsToRemove";
+  static const String groundOverlayId = "groundOverlayId";
+  static const String height = "height";
+  static const String imageDescriptor = "imageDescriptor";
+  static const String bounds = "bounds";
+  static const String transparency = "transparency";
+
+  //Marker Clustering
+  static const String markersClusteringEnabled = "markersClusteringEnabled";
+  static const String clusterable = "clusterable";
+
+  //Tile Overlay
+  static const String tileOverlaysToInsert = "tileOverlaysToAdd";
+  static const String tileOverlaysToUpdate = "tileOverlaysToChange";
+  static const String tileOverlaysToDelete = "tileOverlayIdsToRemove";
+  static const String tileOverlayId = "tileOverlayId";
+  static const String fadeIn = "fadeIn";
+  static const String tileProvider = "tileProvider";
+  static const String uri = "uri";
+  static const String imageData = "imageData";
+  static const String tileOverlaysToClearCache = "tileOverlaysToClearCache";
+
+  //Animation
+  static const String animationId = "animationId";
+  static const String animation = "animation";
+
+  static const String duration = "duration";
+  static const String fillMode = "fillMode";
+  static const String repeatCount = "repeatCount";
+  static const String repeatMode = "repeatMode";
+  static const String interpolator = "interpolator";
+  static const String animationType = "animationType";
+
+  static const String fromAlpha = "fromAlpha";
+  static const String toAlpha = "toAlpha";
+
+  static const String fromDegree = "fromDegree";
+  static const String toDegree = "toDegree";
+
+  static const String fromX = "fromX";
+  static const String fromY = "fromY";
+  static const String toX = "toX";
+  static const String toY = "toY";
+
+  static const String lat_lng = "latLng";
 }

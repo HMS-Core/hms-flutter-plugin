@@ -1,11 +1,11 @@
 /*
-Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -109,4 +109,39 @@ public interface Param {
     String FLAT = "flat";
     String DRAGGABLE = "draggable";
     String ALPHA = "alpha";
+    String GROUND_OVERLAYS_TO_INSERT = "groundOverlaysToAdd";
+    String GROUND_OVERLAYS_TO_UPDATE = "groundOverlaysToChange";
+    String GROUND_OVERLAYS_TO_DELETE = "groundOverlayIdsToRemove";
+    String GROUND_OVERLAY_ID = "groundOverlayId";
+    String HEIGHT = "height";
+    String IMAGE_DESCRIPTOR = "imageDescriptor";
+    String BOUNDS = "bounds";
+    String TRANSPARENCY = "transparency";
+    String MARKERS_CLUSTERING_ENABLED = "markersClusteringEnabled";
+    String CLUSTERABLE = "clusterable";
+    String TILE_OVERLAY_ID = "tileOverlayId";
+    String FADE_IN = "fadeIn";
+    String TILE_OVERLAYS_TO_INSERT = "tileOverlaysToAdd";
+    String TILE_OVERLAYS_TO_UPDATE = "tileOverlaysToChange";
+    String TILE_OVERLAYS_TO_DELETE = "tileOverlayIdsToRemove";
+    String TILE_PROVIDER = "tileProvider";
+    String URI = "uri";
+    String IMAGE_DATA = "imageData";
+    String ANIMATION_ID = "animationId";
+    String ANIMATION = "animation";
+    String FROM_ALPHA = "fromAlpha";
+    String TO_ALPHA = "toAlpha";
+    String FROM_DEGREE = "fromDegree";
+    String TO_DEGREE = "toDegree";
+    String FROM_X = "fromX";
+    String FROM_Y = "fromY";
+    String TO_X = "toX";
+    String TO_Y = "toY";
+    String LAT_LNG = "latLng";
+    String DURATION = "duration";
+    String FILL_MODE = "fillMode";
+    String REPEAT_COUNT = "repeatCount";
+    String REPEAT_MODE = "repeatMode";
+    String INTERPOLATOR = "interpolator";
+    String ANIMATION_TYPE = "animationType";
 }

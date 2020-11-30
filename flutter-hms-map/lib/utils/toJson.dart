@@ -1,22 +1,26 @@
 /*
-Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+    Licensed under the Apache License, Version 2.0 (the "License")
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-     http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
+import 'dart:convert';
 import 'dart:ui';
 
+import 'package:huawei_map/components/animations/animation.dart';
 import 'package:huawei_map/components/components.dart';
+import 'package:huawei_map/components/tileProviders/repetitiveTile.dart';
+import 'package:huawei_map/components/tileProviders/urlTile.dart';
 import 'package:huawei_map/constants/param.dart';
 import 'package:huawei_map/utils/utils.dart';
 
@@ -63,6 +67,78 @@ Map<String, dynamic> markerToJson(Marker marker) {
   addJson(json, Param.rotation, marker.rotation);
   addJson(json, Param.visible, marker.visible);
   addJson(json, Param.zIndex, marker.zIndex);
+  addJson(json, Param.clusterable, marker.clusterable);
+  addJson(json, Param.animation, animationSetToJson(marker.animationSet));
+  return json;
+}
+
+String animationSetToJson(List<dynamic> animationSet) {
+  return json.encode(List<dynamic>.from(animationSet.map((e) {
+    switch (e.type) {
+      case HmsMarkerAnimation.ALPHA:
+        return alphaAnimationToJson(e);
+      case HmsMarkerAnimation.ROTATE:
+        return rotateAnimationToJson(e);
+      case HmsMarkerAnimation.SCALE:
+        return scaleAnimationToJson(e);
+      case HmsMarkerAnimation.TRANSLATE:
+        return translateAnimationToJson(e);
+    }
+  })));
+}
+
+Map<String, dynamic> animationBaseToJson(
+    final Map<String, dynamic> json, HmsMarkerAnimation animation) {
+  addJson(json, Param.animationId, animation.animationId);
+  addJson(json, Param.animationType, animation.type);
+  addJson(json, Param.duration, animation.duration);
+  addJson(json, Param.fillMode, animation.fillMode);
+  addJson(json, Param.repeatCount, animation.repeatCount);
+  addJson(json, Param.repeatMode, animation.repeatMode);
+  addJson(json, Param.interpolator, animation.interpolator);
+
+  return json;
+}
+
+Map<String, dynamic> alphaAnimationToJson(HmsMarkerAlphaAnimation animation) {
+  Map<String, dynamic> json = <String, dynamic>{};
+
+  json = animationBaseToJson(json, animation);
+  addJson(json, Param.fromAlpha, animation.fromAlpha);
+  addJson(json, Param.toAlpha, animation.toAlpha);
+
+  return json;
+}
+
+Map<String, dynamic> rotateAnimationToJson(HmsMarkerRotateAnimation animation) {
+  Map<String, dynamic> json = <String, dynamic>{};
+
+  json = animationBaseToJson(json, animation);
+  addJson(json, Param.fromDegree, animation.fromDegree);
+  addJson(json, Param.toDegree, animation.toDegree);
+
+  return json;
+}
+
+Map<String, dynamic> scaleAnimationToJson(HmsMarkerScaleAnimation animation) {
+  Map<String, dynamic> json = <String, dynamic>{};
+
+  json = animationBaseToJson(json, animation);
+  addJson(json, Param.fromX, animation.fromX);
+  addJson(json, Param.toX, animation.toX);
+  addJson(json, Param.fromY, animation.fromY);
+  addJson(json, Param.toY, animation.toY);
+
+  return json;
+}
+
+Map<String, dynamic> translateAnimationToJson(
+    HmsMarkerTranslateAnimation animation) {
+  Map<String, dynamic> json = <String, dynamic>{};
+
+  json = animationBaseToJson(json, animation);
+  addJson(json, Param.lat_lng, latLngToJson(animation.target));
+
   return json;
 }
 
@@ -143,6 +219,50 @@ dynamic circleToJson(Circle circle) {
   return json;
 }
 
+Map<String, dynamic> groundOverlayToJson(GroundOverlay groundOverlay) {
+  final Map<String, dynamic> json = <String, dynamic>{};
+
+  addJson(json, Param.groundOverlayId, groundOverlay.groundOverlayId.id);
+  addJson(json, Param.bearing, groundOverlay.bearing);
+  addJson(json, Param.clickable, groundOverlay.clickable);
+  addJson(json, Param.width, groundOverlay.width);
+  addJson(json, Param.height, groundOverlay.height);
+  addJson(json, Param.imageDescriptor, groundOverlay.imageDescriptor?.toJson());
+  addJson(
+      json,
+      Param.position,
+      groundOverlay.position != null
+          ? latLngToJson(groundOverlay.position)
+          : null);
+  addJson(
+      json,
+      Param.bounds,
+      groundOverlay.bounds != null
+          ? latLngBoundsToJson(groundOverlay.bounds)
+          : null);
+  addJson(json, Param.transparency, groundOverlay.transparency);
+  addJson(json, Param.visible, groundOverlay.visible);
+  addJson(json, Param.zIndex, groundOverlay.zIndex);
+  addJson(json, Param.anchor,
+      groundOverlay.anchor != null ? offsetToJson(groundOverlay.anchor) : null);
+
+  return json;
+}
+
+Map<String, dynamic> tileOverlayToJson(TileOverlay tileOverlay) {
+  final Map<String, dynamic> json = <String, dynamic>{};
+
+  addJson(json, Param.tileOverlayId, tileOverlay.tileOverlayId.id);
+  addJson(
+      json, Param.tileProvider, tileProviderToJson(tileOverlay.tileProvider));
+  addJson(json, Param.fadeIn, tileOverlay.fadeIn);
+  addJson(json, Param.transparency, tileOverlay.transparency);
+  addJson(json, Param.visible, tileOverlay.visible);
+  addJson(json, Param.zIndex, tileOverlay.zIndex);
+
+  return json;
+}
+
 Map<String, dynamic> polylineUpdatesToJson(PolylineUpdates polylineUpdates) {
   final Map<String, dynamic> updateMap = <String, dynamic>{};
 
@@ -164,6 +284,30 @@ dynamic latLngBoundsToJson(LatLngBounds latLngBounds) {
     latLngToJson(latLngBounds.southwest),
     latLngToJson(latLngBounds.northeast)
   ];
+}
+
+dynamic tileProviderToJson(dynamic tileProviders) {
+  if (tileProviders is List<Tile>) {
+    final List<dynamic> result = <dynamic>[];
+    for (final Tile tileProvider in tileProviders) {
+      if (tileProvider != null) {
+        result.add(tileProvider.toJson());
+      }
+    }
+    return result;
+  } else if (tileProviders is RepetitiveTile || tileProviders is UrlTile) {
+    return tileProviders.toJson();
+  } else {
+    throw ArgumentError(
+        "Please provide a tile provider type (RepetitiveTile, UrlTile or List<Tile>).");
+  }
+}
+
+dynamic latLngStartEndToJson(LatLng start, LatLng end) {
+  if (start == null && end == null) {
+    return null;
+  }
+  return <dynamic>[latLngToJson(start), latLngToJson(end)];
 }
 
 dynamic latLngToJson(LatLng latLng) {
@@ -222,6 +366,42 @@ Map<String, dynamic> circleUpdatesToJson(CircleUpdates circleUpdates) {
       updateMap, Param.circlesToUpdate, circleToList(circleUpdates.updateSet));
   addToMap(updateMap, Param.circlesToDelete,
       circleUpdates.deleteSet.map<dynamic>((CircleId m) => m.id).toList());
+
+  return updateMap;
+}
+
+Map<String, dynamic> groundOverlayUpdatesToJson(
+    GroundOverlayUpdates groundOverlayUpdates) {
+  final Map<String, dynamic> updateMap = <String, dynamic>{};
+
+  addToMap(updateMap, Param.groundOverlaysToInsert,
+      groundOverlayToList(groundOverlayUpdates.insertSet));
+  addToMap(updateMap, Param.groundOverlaysToUpdate,
+      groundOverlayToList(groundOverlayUpdates.updateSet));
+  addToMap(
+      updateMap,
+      Param.groundOverlaysToDelete,
+      groundOverlayUpdates.deleteSet
+          .map<dynamic>((GroundOverlayId g) => g.id)
+          .toList());
+
+  return updateMap;
+}
+
+Map<String, dynamic> tileOverlayUpdatesToJson(
+    TileOverlayUpdates tileOverlayUpdates) {
+  final Map<String, dynamic> updateMap = <String, dynamic>{};
+
+  addToMap(updateMap, Param.tileOverlaysToInsert,
+      tileOverlayToList(tileOverlayUpdates.insertSet));
+  addToMap(updateMap, Param.tileOverlaysToUpdate,
+      tileOverlayToList(tileOverlayUpdates.updateSet));
+  addToMap(
+      updateMap,
+      Param.tileOverlaysToDelete,
+      tileOverlayUpdates.deleteSet
+          .map<dynamic>((TileOverlayId t) => t.id)
+          .toList());
 
   return updateMap;
 }

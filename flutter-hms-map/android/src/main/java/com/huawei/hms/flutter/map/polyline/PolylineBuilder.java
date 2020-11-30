@@ -1,11 +1,11 @@
 /*
-Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,8 +28,8 @@ class PolylineBuilder implements PolylineMethods {
     private boolean clickable;
     private final float compactness;
 
-    PolylineBuilder(float compactness) {
-        this.polylineOptions = new PolylineOptions();
+    PolylineBuilder(final float compactness) {
+        polylineOptions = new PolylineOptions();
         this.compactness = compactness;
     }
 
@@ -42,63 +42,62 @@ class PolylineBuilder implements PolylineMethods {
     }
 
     @Override
-    public void setColor(int color) {
+    public void setColor(final int color) {
         polylineOptions.color(color);
     }
 
     @Override
-    public void setEndCap(Cap endCap) {
+    public void setEndCap(final Cap endCap) {
         polylineOptions.endCap(endCap);
     }
 
     @Override
-    public void setJointType(int jointType) {
+    public void setJointType(final int jointType) {
         polylineOptions.jointType(jointType);
     }
 
     @Override
-    public void setPattern(List<PatternItem> pattern) {
+    public void setPattern(final List<PatternItem> pattern) {
         polylineOptions.pattern(pattern);
     }
 
     @Override
-    public void setPoints(List<LatLng> points) {
+    public void setPoints(final List<LatLng> points) {
         polylineOptions.addAll(points);
     }
 
     @Override
     public void delete() {
-
     }
 
     @Override
-    public void setClickable(boolean clickable) {
+    public void setClickable(final boolean clickable) {
         this.clickable = clickable;
         polylineOptions.clickable(clickable);
     }
 
     @Override
-    public void setGeodesic(boolean geodisc) {
+    public void setGeodesic(final boolean geodisc) {
         polylineOptions.geodesic(geodisc);
     }
 
     @Override
-    public void setStartCap(Cap startCap) {
+    public void setStartCap(final Cap startCap) {
         polylineOptions.startCap(startCap);
     }
 
     @Override
-    public void setVisible(boolean visible) {
+    public void setVisible(final boolean visible) {
         polylineOptions.visible(visible);
     }
 
     @Override
-    public void setWidth(float width) {
+    public void setWidth(final float width) {
         polylineOptions.width(width * compactness);
     }
 
     @Override
-    public void setZIndex(float zIndex) {
+    public void setZIndex(final float zIndex) {
         polylineOptions.zIndex(zIndex);
     }
 }

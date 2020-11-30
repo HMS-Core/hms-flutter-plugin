@@ -1,21 +1,22 @@
 /*
-Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+    Licensed under the Apache License, Version 2.0 (the "License")
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-     http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 import 'dart:ui' show Offset;
-import 'package:flutter/foundation.dart' show ValueChanged, VoidCallback;
+import 'package:flutter/foundation.dart'
+    show ValueChanged, VoidCallback, listEquals;
 import 'package:meta/meta.dart' show immutable, required;
 
 import 'package:huawei_map/components/components.dart';
@@ -34,8 +35,10 @@ class Marker {
   final bool visible;
   final double zIndex;
   final bool clickable;
+  final bool clusterable;
   final VoidCallback onClick;
   final ValueChanged<LatLng> onDragEnd;
+  final List<dynamic> animationSet;
 
   const Marker({
     @required this.markerId,
@@ -50,8 +53,10 @@ class Marker {
     this.visible = true,
     this.zIndex = 0.0,
     this.clickable = false,
+    this.clusterable = false,
     this.onClick,
     this.onDragEnd,
+    this.animationSet = const [],
   });
 
   Marker updateCopy({
@@ -66,8 +71,10 @@ class Marker {
     bool visible,
     double zIndex,
     bool clickable,
+    bool clusterable,
     VoidCallback onClick,
     ValueChanged<LatLng> onDragEnd,
+    List<dynamic> animations,
   }) {
     return Marker(
       markerId: markerId,
@@ -82,8 +89,10 @@ class Marker {
       visible: visible ?? this.visible,
       zIndex: zIndex ?? this.zIndex,
       clickable: clickable ?? this.clickable,
+      clusterable: clusterable ?? this.clusterable,
       onClick: onClick ?? this.onClick,
       onDragEnd: onDragEnd ?? this.onDragEnd,
+      animationSet: animations ?? this.animationSet,
     );
   }
 
@@ -105,6 +114,8 @@ class Marker {
         alpha == check.alpha &&
         visible == check.visible &&
         clickable == check.clickable &&
+        clusterable == check.clusterable &&
+        listEquals(animationSet, check.animationSet) &&
         zIndex == check.zIndex;
   }
 

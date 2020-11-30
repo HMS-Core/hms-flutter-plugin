@@ -1,11 +1,11 @@
 /*
-Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,12 +29,14 @@ import java.util.List;
 
 public class ToJson {
 
-    public static List<Double> latLng(LatLng latLng) {
+    public static List<Double> latLng(final LatLng latLng) {
         return Arrays.asList(latLng.latitude, latLng.longitude);
     }
 
-    public static HashMap<String, Object> cameraPosition(CameraPosition position) {
-        if (position == null) return null;
+    public static HashMap<String, Object> cameraPosition(final CameraPosition position) {
+        if (position == null) {
+            return null;
+        }
 
         final HashMap<String, Object> args = new HashMap<>();
         args.put(Param.BEARING, position.bearing);
@@ -44,8 +46,10 @@ public class ToJson {
         return args;
     }
 
-    public static HashMap<String, Object> latlngBounds(LatLngBounds latLngBounds) {
-        if (latLngBounds == null) return null;
+    public static HashMap<String, Object> latlngBounds(final LatLngBounds latLngBounds) {
+        if (latLngBounds == null) {
+            return null;
+        }
 
         final HashMap<String, Object> args = new HashMap<>();
         args.put(Param.SOUTHWEST, ToJson.latLng(latLngBounds.southwest));
@@ -53,34 +57,50 @@ public class ToJson {
         return args;
     }
 
-
-    public static HashMap<String, Object> polygonId(String polygonId) {
-        if (polygonId == null) return null;
+    public static HashMap<String, Object> polygonId(final String polygonId) {
+        if (polygonId == null) {
+            return null;
+        }
 
         final HashMap<String, Object> args = new HashMap<>();
         args.put(Param.POLYGON_ID, polygonId);
         return args;
     }
 
-    public static HashMap<String, Object> polylineId(String polylineId) {
-        if (polylineId == null) return null;
+    public static HashMap<String, Object> polylineId(final String polylineId) {
+        if (polylineId == null) {
+            return null;
+        }
 
         final HashMap<String, Object> args = new HashMap<>();
         args.put(Param.POLYLINE_ID, polylineId);
         return args;
     }
 
-    public static HashMap<String, Object> circleId(String id) {
-        if (id == null) return null;
+    public static HashMap<String, Object> circleId(final String id) {
+        if (id == null) {
+            return null;
+        }
 
         final HashMap<String, Object> args = new HashMap<>();
         args.put(Param.CIRCLE_ID, id);
         return args;
     }
 
+    public static HashMap<String, Object> groundOverlayId(final String id) {
+        if (id == null) {
+            return null;
+        }
 
-    public static HashMap<String, Integer> point(Point point) {
-        if (point == null) return null;
+        final HashMap<String, Object> args = new HashMap<>();
+        args.put(Param.GROUND_OVERLAY_ID, id);
+        return args;
+    }
+
+    public static HashMap<String, Integer> point(final Point point) {
+        if (point == null) {
+            return null;
+        }
 
         final HashMap<String, Integer> args = new HashMap<>();
         args.put(Param.X, point.x);

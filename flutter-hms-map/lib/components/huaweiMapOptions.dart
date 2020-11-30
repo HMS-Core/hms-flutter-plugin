@@ -1,17 +1,17 @@
 /*
-Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
+    Licensed under the Apache License, Version 2.0 (the "License")
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-     http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 */
 
 import 'package:flutter/material.dart';
@@ -37,6 +37,7 @@ class HuaweiMapOptions {
   final bool myLocationButtonEnabled;
   final EdgeInsets padding;
   final bool trafficEnabled;
+  final bool markersClusteringEnabled;
   final bool buildingsEnabled;
 
   HuaweiMapOptions({
@@ -55,6 +56,7 @@ class HuaweiMapOptions {
     this.myLocationButtonEnabled,
     this.padding,
     this.trafficEnabled,
+    this.markersClusteringEnabled,
     this.buildingsEnabled,
   });
 
@@ -75,6 +77,7 @@ class HuaweiMapOptions {
       myLocationButtonEnabled: map.myLocationButtonEnabled,
       padding: map.padding,
       trafficEnabled: map.trafficEnabled,
+      markersClusteringEnabled: map.markersClusteringEnabled,
       buildingsEnabled: map.buildingsEnabled,
     );
   }
@@ -113,6 +116,8 @@ class HuaweiMapOptions {
       padding?.right,
     ]);
     addToMap(optionsMap, Param.trafficEnabled, trafficEnabled);
+    addToMap(
+        optionsMap, Param.markersClusteringEnabled, markersClusteringEnabled);
     addToMap(optionsMap, Param.buildingsEnabled, buildingsEnabled);
     return optionsMap;
   }

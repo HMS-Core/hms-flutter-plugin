@@ -1,11 +1,11 @@
 /*
-Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -56,4 +56,13 @@ public interface Method {
     String MAP_IS_BUILDINGS_ENABLED = "[Map]isBuildingsEnabled";
     String MAP_GET_ZOOM_LEVEL = "[Map]getZoomLevel";
     String MAP_SET_STYLE = "[Map]setStyle";
+    String GROUND_OVERLAY_CLICK = "[GroundOverlay]click";
+    String GROUND_OVERLAYS_UPDATE = "[GroundOverlays]update";
+    String DISTANCE_CALCULATOR = "[MapUtil]distanceCalculator";
+    String ENABLE_LOGGER = "[MapUtil]enableLogger";
+    String DISABLE_LOGGER = "[MapUtil]disableLogger";
+    String TILE_OVERLAYS_UPDATE = "[TileOverlays]update";
+    String CLEAR_TILE_CACHE = "clearTileCache";
+    String MARKER_START_ANIMATION = "MarkerStartAnimation";
+    String MARKER_IS_CLUSTERABLE = "[Markers]isMarkerClusterable";
 }

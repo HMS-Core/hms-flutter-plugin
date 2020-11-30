@@ -1,11 +1,11 @@
 /*
-Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,22 +26,30 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleOwner;
 
 import com.huawei.hms.flutter.map.constants.Channel;
+import com.huawei.hms.flutter.map.constants.Method;
+import com.huawei.hms.flutter.map.logger.HMSLogger;
 import com.huawei.hms.flutter.map.map.MapFactory;
+import com.huawei.hms.flutter.map.utils.Convert;
+import com.huawei.hms.maps.common.util.DistanceCalculator;
+import com.huawei.hms.maps.model.LatLng;
+
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.embedding.engine.plugins.lifecycle.FlutterLifecycleAdapter;
+import io.flutter.plugin.common.BinaryMessenger;
+import io.flutter.plugin.common.MethodCall;
+import io.flutter.plugin.common.MethodChannel;
+import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
+import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
-
 public class HmsMap
-        implements Application.ActivityLifecycleCallbacks,
-        FlutterPlugin,
-        ActivityAware,
-        DefaultLifecycleObserver {
+    implements Application.ActivityLifecycleCallbacks, FlutterPlugin, ActivityAware, DefaultLifecycleObserver,
+    MethodCallHandler {
     public static final int CREATED = 1;
     public static final int STARTED = 2;
     public static final int RESUMED = 3;
@@ -52,72 +60,75 @@ public class HmsMap
     private int registrarActivityHashCode;
     private FlutterPluginBinding pluginBinding;
     private Lifecycle lifecycle;
+    private MethodChannel mapUtils;
 
     private static final String VIEW_TYPE = Channel.CHANNEL;
 
-    public static void registerWith(PluginRegistry.Registrar registrar) {
+    public HmsMap() {
+    }
+
+    private void initChannels(final BinaryMessenger messenger) {
+        mapUtils = new MethodChannel(messenger, Channel.MAP_UTILS);
+        mapUtils.setMethodCallHandler(this);
+    }
+
+    public static void registerWith(final PluginRegistry.Registrar registrar) {
         if (registrar.activity() == null) {
             return;
         }
-        final HmsMap plugin = new HmsMap(registrar.activity());
-        registrar.activity().getApplication().registerActivityLifecycleCallbacks(plugin);
-        registrar
-                .platformViewRegistry()
-                .registerViewFactory(
-                        VIEW_TYPE,
-                        new MapFactory(plugin.state, registrar.messenger(), null, null, registrar, -1));
-    }
-
-    public HmsMap() {
+        final HmsMap instance = new HmsMap(registrar.activity());
+        instance.initChannels(registrar.messenger());
+        registrar.activity().getApplication().registerActivityLifecycleCallbacks(instance);
+        registrar.platformViewRegistry()
+            .registerViewFactory(VIEW_TYPE,
+                new MapFactory(instance.state, registrar.messenger(), null, null, registrar, -1));
     }
 
     // FlutterPlugin
 
     @Override
-    public void onAttachedToEngine(FlutterPluginBinding binding) {
+    public void onAttachedToEngine(final FlutterPluginBinding binding) {
         pluginBinding = binding;
+        initChannels(binding.getBinaryMessenger());
     }
 
     @Override
-    public void onDetachedFromEngine(FlutterPluginBinding binding) {
+    public void onDetachedFromEngine(final FlutterPluginBinding binding) {
         pluginBinding = null;
+        mapUtils = null;
     }
 
     // ActivityAware
 
     @Override
-    public void onAttachedToActivity(ActivityPluginBinding binding) {
-        if (pluginBinding == null) return;
-
+    public void onAttachedToActivity(final ActivityPluginBinding binding) {
+        if (pluginBinding == null) {
+            return;
+        }
         lifecycle = FlutterLifecycleAdapter.getActivityLifecycle(binding);
         lifecycle.addObserver(this);
-        pluginBinding
-                .getPlatformViewRegistry()
-                .registerViewFactory(
-                        VIEW_TYPE,
-                        new MapFactory(
-                                state,
-                                pluginBinding.getBinaryMessenger(),
-                                binding.getActivity().getApplication(),
-                                lifecycle,
-                                null,
-                                binding.getActivity().hashCode()));
+        pluginBinding.getPlatformViewRegistry()
+            .registerViewFactory(VIEW_TYPE,
+                new MapFactory(state, pluginBinding.getBinaryMessenger(), binding.getActivity().getApplication(),
+                    lifecycle, null, binding.getActivity().hashCode()));
     }
 
     @Override
     public void onDetachedFromActivity() {
-        if (lifecycle == null) return;
+        if (lifecycle == null) {
+            return;
+        }
 
         lifecycle.removeObserver(this);
     }
 
     @Override
     public void onDetachedFromActivityForConfigChanges() {
-        this.onDetachedFromActivity();
+        onDetachedFromActivity();
     }
 
     @Override
-    public void onReattachedToActivityForConfigChanges(ActivityPluginBinding binding) {
+    public void onReattachedToActivityForConfigChanges(final ActivityPluginBinding binding) {
         lifecycle = FlutterLifecycleAdapter.getActivityLifecycle(binding);
         lifecycle.addObserver(this);
     }
@@ -125,39 +136,39 @@ public class HmsMap
     // DefaultLifecycleObserver methods
 
     @Override
-    public void onCreate(@NonNull LifecycleOwner owner) {
+    public void onCreate(@NonNull final LifecycleOwner owner) {
         state.set(CREATED);
     }
 
     @Override
-    public void onStart(@NonNull LifecycleOwner owner) {
+    public void onStart(@NonNull final LifecycleOwner owner) {
         state.set(STARTED);
     }
 
     @Override
-    public void onResume(@NonNull LifecycleOwner owner) {
+    public void onResume(@NonNull final LifecycleOwner owner) {
         state.set(RESUMED);
     }
 
     @Override
-    public void onPause(@NonNull LifecycleOwner owner) {
+    public void onPause(@NonNull final LifecycleOwner owner) {
         state.set(PAUSED);
     }
 
     @Override
-    public void onStop(@NonNull LifecycleOwner owner) {
+    public void onStop(@NonNull final LifecycleOwner owner) {
         state.set(STOPPED);
     }
 
     @Override
-    public void onDestroy(@NonNull LifecycleOwner owner) {
+    public void onDestroy(@NonNull final LifecycleOwner owner) {
         state.set(DESTROYED);
     }
 
     // Application.ActivityLifecycleCallbacks methods
 
     @Override
-    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+    public void onActivityCreated(final Activity activity, final Bundle savedInstanceState) {
         if (activity.hashCode() != registrarActivityHashCode) {
             return;
         }
@@ -165,7 +176,7 @@ public class HmsMap
     }
 
     @Override
-    public void onActivityStarted(Activity activity) {
+    public void onActivityStarted(final Activity activity) {
         if (activity.hashCode() != registrarActivityHashCode) {
             return;
         }
@@ -173,7 +184,7 @@ public class HmsMap
     }
 
     @Override
-    public void onActivityResumed(Activity activity) {
+    public void onActivityResumed(final Activity activity) {
         if (activity.hashCode() != registrarActivityHashCode) {
             return;
         }
@@ -181,7 +192,7 @@ public class HmsMap
     }
 
     @Override
-    public void onActivityPaused(Activity activity) {
+    public void onActivityPaused(final Activity activity) {
         if (activity.hashCode() != registrarActivityHashCode) {
             return;
         }
@@ -189,7 +200,7 @@ public class HmsMap
     }
 
     @Override
-    public void onActivityStopped(Activity activity) {
+    public void onActivityStopped(final Activity activity) {
         if (activity.hashCode() != registrarActivityHashCode) {
             return;
         }
@@ -197,11 +208,11 @@ public class HmsMap
     }
 
     @Override
-    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+    public void onActivitySaveInstanceState(final Activity activity, final Bundle outState) {
     }
 
     @Override
-    public void onActivityDestroyed(Activity activity) {
+    public void onActivityDestroyed(final Activity activity) {
         if (activity.hashCode() != registrarActivityHashCode) {
             return;
         }
@@ -209,7 +220,36 @@ public class HmsMap
         state.set(DESTROYED);
     }
 
-    private HmsMap(Activity activity) {
-        this.registrarActivityHashCode = activity.hashCode();
+    private HmsMap(final Activity activity) {
+        registrarActivityHashCode = activity.hashCode();
+    }
+
+    @Override
+    public void onMethodCall(@NonNull final MethodCall call, @NonNull final Result result) {
+        switch (call.method) {
+            case Method.ENABLE_LOGGER:
+                if (pluginBinding != null) {
+                    HMSLogger.getInstance(pluginBinding.getApplicationContext()).enableLogger();
+                }
+                break;
+            case Method.DISABLE_LOGGER:
+                if (pluginBinding != null) {
+                    HMSLogger.getInstance(pluginBinding.getApplicationContext()).disableLogger();
+                }
+                break;
+            case Method.DISTANCE_CALCULATOR: {
+                final List<LatLng> request = Convert.toLatLngStartEnd(call.arguments);
+                if (pluginBinding != null) {
+                    HMSLogger.getInstance(pluginBinding.getApplicationContext())
+                        .startMethodExecutionTimer(Method.DISTANCE_CALCULATOR);
+                    result.success(DistanceCalculator.computeDistanceBetween(request.get(0), request.get(1)));
+                    HMSLogger.getInstance(pluginBinding.getApplicationContext())
+                        .sendSingleEvent(Method.DISTANCE_CALCULATOR);
+                }
+                break;
+            }
+            default:
+                result.notImplemented();
+        }
     }
 }

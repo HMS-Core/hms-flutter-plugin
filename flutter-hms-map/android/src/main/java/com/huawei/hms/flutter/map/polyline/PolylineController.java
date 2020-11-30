@@ -1,11 +1,11 @@
 /*
-Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,11 +29,11 @@ class PolylineController implements PolylineMethods {
     private boolean clickable;
     private final float compactness;
 
-    PolylineController(Polyline polyline, boolean clickable, float compactness) {
+    PolylineController(final Polyline polyline, final boolean clickable, final float compactness) {
         this.polyline = polyline;
         this.clickable = clickable;
         this.compactness = compactness;
-        this.mapPolylineId = polyline.getId();
+        mapPolylineId = polyline.getId();
     }
 
     @Override
@@ -42,58 +42,58 @@ class PolylineController implements PolylineMethods {
     }
 
     @Override
-    public void setClickable(boolean clickable) {
+    public void setClickable(final boolean clickable) {
         this.clickable = clickable;
         polyline.setClickable(clickable);
     }
 
     @Override
-    public void setColor(int color) {
+    public void setColor(final int color) {
         polyline.setColor(color);
     }
 
     @Override
-    public void setEndCap(Cap endCap) {
+    public void setEndCap(final Cap endCap) {
         polyline.setEndCap(endCap);
     }
 
     @Override
-    public void setGeodesic(boolean geodesic) {
+    public void setGeodesic(final boolean geodesic) {
         polyline.setGeodesic(geodesic);
     }
 
     @Override
-    public void setJointType(int jointType) {
+    public void setJointType(final int jointType) {
         polyline.setJointType(jointType);
     }
 
     @Override
-    public void setPattern(List<PatternItem> pattern) {
+    public void setPattern(final List<PatternItem> pattern) {
         polyline.setPattern(pattern);
     }
 
     @Override
-    public void setPoints(List<LatLng> points) {
+    public void setPoints(final List<LatLng> points) {
         polyline.setPoints(points);
     }
 
     @Override
-    public void setStartCap(Cap startCap) {
+    public void setStartCap(final Cap startCap) {
         polyline.setStartCap(startCap);
     }
 
     @Override
-    public void setVisible(boolean visible) {
+    public void setVisible(final boolean visible) {
         polyline.setVisible(visible);
     }
 
     @Override
-    public void setWidth(float width) {
+    public void setWidth(final float width) {
         polyline.setWidth(width * compactness);
     }
 
     @Override
-    public void setZIndex(float zIndex) {
+    public void setZIndex(final float zIndex) {
         polyline.setZIndex(zIndex);
     }
 

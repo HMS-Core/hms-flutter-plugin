@@ -1,11 +1,11 @@
 /*
-Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,8 +26,8 @@ class PolygonBuilder implements PolygonMethods {
     private final float compactness;
     private boolean clickable;
 
-    PolygonBuilder(float compactness) {
-        this.polygonOptions = new PolygonOptions();
+    PolygonBuilder(final float compactness) {
+        polygonOptions = new PolygonOptions();
         this.compactness = compactness;
     }
 
@@ -40,48 +40,47 @@ class PolygonBuilder implements PolygonMethods {
     }
 
     @Override
-    public void setFillColor(int color) {
+    public void setFillColor(final int color) {
         polygonOptions.fillColor(color);
     }
 
     @Override
-    public void setStrokeColor(int color) {
+    public void setStrokeColor(final int color) {
         polygonOptions.strokeColor(color);
     }
 
     @Override
-    public void setPoints(List<LatLng> points) {
+    public void setPoints(final List<LatLng> points) {
         polygonOptions.addAll(points);
     }
 
     @Override
     public void delete() {
-
     }
 
     @Override
-    public void setClickable(boolean clickable) {
+    public void setClickable(final boolean clickable) {
         this.clickable = clickable;
         polygonOptions.clickable(clickable);
     }
 
     @Override
-    public void setGeodesic(boolean geodisc) {
+    public void setGeodesic(final boolean geodisc) {
         polygonOptions.geodesic(geodisc);
     }
 
     @Override
-    public void setVisible(boolean visible) {
+    public void setVisible(final boolean visible) {
         polygonOptions.visible(visible);
     }
 
     @Override
-    public void setStrokeWidth(float width) {
+    public void setStrokeWidth(final float width) {
         polygonOptions.strokeWidth(width * compactness);
     }
 
     @Override
-    public void setZIndex(float zIndex) {
+    public void setZIndex(final float zIndex) {
         polygonOptions.zIndex(zIndex);
     }
 }

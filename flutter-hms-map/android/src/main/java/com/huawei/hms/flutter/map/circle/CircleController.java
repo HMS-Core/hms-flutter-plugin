@@ -1,11 +1,11 @@
 /*
-Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,11 +25,11 @@ class CircleController implements CircleMethods {
     private final float compactness;
     private boolean isClickable;
 
-    CircleController(Circle circle, boolean clickable, float compactness) {
+    CircleController(final Circle circle, final boolean clickable, final float compactness) {
         this.circle = circle;
-        this.isClickable = clickable;
+        isClickable = clickable;
         this.compactness = compactness;
-        this.idOnMap = circle.getId();
+        idOnMap = circle.getId();
     }
 
     @Override
@@ -43,49 +43,47 @@ class CircleController implements CircleMethods {
     }
 
     @Override
-    public void setClickable(boolean isClickable) {
+    public void setClickable(final boolean isClickable) {
         this.isClickable = isClickable;
         circle.setClickable(isClickable);
     }
 
     @Override
-    public void setStrokeColor(int strokeColor) {
+    public void setStrokeColor(final int strokeColor) {
         circle.setStrokeColor(strokeColor);
     }
 
     @Override
-    public void setFillColor(int fillColor) {
+    public void setFillColor(final int fillColor) {
         circle.setFillColor(fillColor);
     }
 
     @Override
-    public void setCenter(LatLng center) {
+    public void setCenter(final LatLng center) {
         circle.setCenter(center);
     }
 
     @Override
-    public void setRadius(double radius) {
+    public void setRadius(final double radius) {
         circle.setRadius(radius);
     }
 
     @Override
-    public void setVisible(boolean visible) {
+    public void setVisible(final boolean visible) {
         circle.setVisible(visible);
     }
 
     @Override
-    public void setStrokeWidth(float strokeWidth) {
+    public void setStrokeWidth(final float strokeWidth) {
         circle.setStrokeWidth(strokeWidth * compactness);
     }
 
     @Override
-    public void setZIndex(float zIndex) {
+    public void setZIndex(final float zIndex) {
         circle.setZIndex(zIndex);
     }
 
     String getIdOnMap() {
         return idOnMap;
     }
-
-
 }

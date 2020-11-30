@@ -1,11 +1,11 @@
 /*
-Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,19 +16,22 @@ Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
 package com.huawei.hms.flutter.map.circle;
 
+import android.app.Application;
+
 import com.huawei.hms.flutter.map.constants.Method;
 import com.huawei.hms.flutter.map.constants.Param;
+import com.huawei.hms.flutter.map.logger.HMSLogger;
 import com.huawei.hms.flutter.map.utils.Convert;
 import com.huawei.hms.flutter.map.utils.ToJson;
 import com.huawei.hms.maps.HuaweiMap;
 import com.huawei.hms.maps.model.Circle;
 import com.huawei.hms.maps.model.CircleOptions;
 
-import io.flutter.plugin.common.MethodChannel;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import io.flutter.plugin.common.MethodChannel;
 
 public class CircleUtils {
     private HuaweiMap huaweiMap;
@@ -38,81 +41,109 @@ public class CircleUtils {
     private final Map<String, CircleController> idsOnMap;
     private final Map<String, String> ids;
 
-    public CircleUtils(MethodChannel mChannel, float compactness) {
-        this.idsOnMap = new HashMap<>();
-        this.ids = new HashMap<>();
+    private final HMSLogger logger;
+
+    public CircleUtils(final MethodChannel mChannel, final float compactness, final Application application) {
+        idsOnMap = new HashMap<>();
+        ids = new HashMap<>();
         this.mChannel = mChannel;
         this.compactness = compactness;
+        logger = HMSLogger.getInstance(application);
     }
 
-    public void setMap(HuaweiMap huaweiMap) {
+    public void setMap(final HuaweiMap huaweiMap) {
         this.huaweiMap = huaweiMap;
     }
 
-    private void insert(HashMap<String, Object> circle) {
-        if (huaweiMap == null) return;
-        if (circle == null) return;
+    private void insert(final HashMap<String, Object> circle) {
+        if (huaweiMap == null) {
+            return;
+        }
+        if (circle == null) {
+            return;
+        }
 
-        CircleBuilder circleBuilder = new CircleBuilder(compactness);
-        String circleId = Convert.processCircleOptions(circle, circleBuilder);
-        CircleOptions options = circleBuilder.build();
+        final CircleBuilder circleBuilder = new CircleBuilder(compactness);
+        final String circleId = Convert.processCircleOptions(circle, circleBuilder);
+        final CircleOptions options = circleBuilder.build();
 
+        logger.startMethodExecutionTimer("addCircle");
         final Circle newCircle = huaweiMap.addCircle(options);
-        CircleController controller = new CircleController(newCircle, circleBuilder.isClickable(), compactness);
+        logger.sendSingleEvent("addCircle");
+
+        final CircleController controller = new CircleController(newCircle, circleBuilder.isClickable(), compactness);
         idsOnMap.put(circleId, controller);
         ids.put(newCircle.getId(), circleId);
     }
 
-    public void insertMulti(List<HashMap<String, Object>> circlesToAdd) {
-        if (circlesToAdd == null) return;
+    public void insertMulti(final List<HashMap<String, Object>> circlesToAdd) {
+        if (circlesToAdd == null) {
+            return;
+        }
 
-        for (HashMap<String, Object> circleToAdd : circlesToAdd) {
+        for (final HashMap<String, Object> circleToAdd : circlesToAdd) {
             insert(circleToAdd);
         }
 
     }
 
-    private void update(HashMap<String, Object> circle) {
-        if (circle == null) return;
+    private void update(final HashMap<String, Object> circle) {
+        if (circle == null) {
+            return;
+        }
 
-        String circleId = getId(circle);
-        CircleController circleController = idsOnMap.get(circleId);
+        final String circleId = getId(circle);
+        final CircleController circleController = idsOnMap.get(circleId);
         if (circleController != null) {
             Convert.processCircleOptions(circle, circleController);
         }
     }
 
-    public void updateMulti(List<HashMap<String, Object>> circleList) {
-        if (circleList == null) return;
-        for (HashMap<String, Object> circleToChange : circleList) {
+    public void updateMulti(final List<HashMap<String, Object>> circleList) {
+        if (circleList == null) {
+            return;
+        }
+        for (final HashMap<String, Object> circleToChange : circleList) {
             update(circleToChange);
         }
     }
 
-    public void deleteMulti(List<String> circleList) {
-        if (circleList == null) return;
+    public void deleteMulti(final List<String> circleList) {
+        if (circleList == null) {
+            return;
+        }
 
-        for (String id : circleList) {
-            if (id == null) continue;
+        for (final String id : circleList) {
+            if (id == null) {
+                continue;
+            }
 
             final CircleController circleController = idsOnMap.remove(id);
-            if (circleController == null) continue;
+            if (circleController == null) {
+                continue;
+            }
+
+            logger.startMethodExecutionTimer("removeCircle");
             circleController.delete();
+            logger.sendSingleEvent("removeCircle");
+
             ids.remove(circleController.getIdOnMap());
         }
     }
 
-    public boolean onCircleClick(String mapCircleId) {
-        String circleId = ids.get(mapCircleId);
-        if (circleId == null) return false;
+    public boolean onCircleClick(final String mapCircleId) {
+        final String circleId = ids.get(mapCircleId);
+        if (circleId == null) {
+            return false;
+        }
 
         mChannel.invokeMethod(Method.CIRCLE_CLICK, ToJson.circleId(circleId));
-        CircleController circleController = idsOnMap.get(circleId);
+        final CircleController circleController = idsOnMap.get(circleId);
 
         return circleController != null && circleController.isClickable();
     }
 
-    private static String getId(HashMap<String, Object> circle) {
+    private static String getId(final HashMap<String, Object> circle) {
         return (String) circle.get(Param.CIRCLE_ID);
     }
 }

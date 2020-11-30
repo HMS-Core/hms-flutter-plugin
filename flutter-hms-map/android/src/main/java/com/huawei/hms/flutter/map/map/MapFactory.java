@@ -1,11 +1,11 @@
 /*
-Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,16 +25,16 @@ import com.huawei.hms.flutter.map.constants.Param;
 import com.huawei.hms.flutter.map.utils.Convert;
 import com.huawei.hms.maps.model.CameraPosition;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.StandardMessageCodec;
 import io.flutter.plugin.platform.PlatformView;
 import io.flutter.plugin.platform.PlatformViewFactory;
-
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class MapFactory extends PlatformViewFactory {
 
@@ -45,13 +45,8 @@ public class MapFactory extends PlatformViewFactory {
     private final Lifecycle lifecycle;
     private final PluginRegistry.Registrar registrar;
 
-    public MapFactory(
-            AtomicInteger state,
-            BinaryMessenger binaryMessenger,
-            Application application,
-            Lifecycle lifecycle,
-            PluginRegistry.Registrar registrar,
-            int activityHashCode) {
+    public MapFactory(final AtomicInteger state, final BinaryMessenger binaryMessenger, final Application application,
+        final Lifecycle lifecycle, final PluginRegistry.Registrar registrar, final int activityHashCode) {
         super(StandardMessageCodec.INSTANCE);
         mActivityState = state;
         this.binaryMessenger = binaryMessenger;
@@ -61,15 +56,14 @@ public class MapFactory extends PlatformViewFactory {
         this.registrar = registrar;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public PlatformView create(Context context, int id, Object args) {
-        Map<String, Object> params = (Map<String, Object>) args;
-        final MapBuilder builder = new MapBuilder();
+    public PlatformView create(final Context context, final int id, final Object args) {
+        final Map<String, Object> params = (Map<String, Object>) args;
+        final MapBuilder builder = new MapBuilder(application);
 
         Convert.processHuaweiMapOptions(params.get(Param.OPTIONS), builder);
         if (params.containsKey(Param.INITIAL_CAMERA_POSITION)) {
-            CameraPosition position = Convert.toCameraPosition(params.get(Param.INITIAL_CAMERA_POSITION));
+            final CameraPosition position = Convert.toCameraPosition(params.get(Param.INITIAL_CAMERA_POSITION));
             builder.setInitialCameraPosition(position);
         }
         if (params.containsKey(Param.MARKERS_TO_INSERT)) {
@@ -84,14 +78,13 @@ public class MapFactory extends PlatformViewFactory {
         if (params.containsKey(Param.CIRCLES_TO_INSERT)) {
             builder.setCircles((List<HashMap<String, Object>>) params.get(Param.CIRCLES_TO_INSERT));
         }
-        return builder.build(
-                id,
-                context,
-                mActivityState,
-                binaryMessenger,
-                application,
-                lifecycle,
-                registrar,
-                activityHashCode);
+        if (params.containsKey(Param.GROUND_OVERLAYS_TO_INSERT)) {
+            builder.setGroundOverlays((List<HashMap<String, Object>>) params.get(Param.GROUND_OVERLAYS_TO_INSERT));
+        }
+        if (params.containsKey(Param.TILE_OVERLAYS_TO_INSERT)) {
+            builder.setTileOverlays((List<HashMap<String, Object>>) params.get(Param.TILE_OVERLAYS_TO_INSERT));
+        }
+        return builder.build(id, context, mActivityState, binaryMessenger, application, lifecycle, registrar,
+            activityHashCode);
     }
 }
