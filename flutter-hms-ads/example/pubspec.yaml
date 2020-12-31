@@ -1,9 +1,10 @@
 name: huawei_ads_example
 description: Demonstrates how to use the HUAWEI Ads plugin.
+version: 13.4.35+300
 publish_to: 'none'
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
   flutter:

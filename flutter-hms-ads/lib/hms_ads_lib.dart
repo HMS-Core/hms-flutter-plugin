@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,6 +23,7 @@ export 'adslite/consent/ad_provider.dart';
 export 'adslite/consent/consent.dart';
 export 'adslite/banner/banner_ad.dart';
 export 'adslite/banner/banner_ad_size.dart';
+export 'adslite/banner/banner_view.dart';
 export 'adslite/interstitial/interstitial_ad.dart';
 export 'adslite/nativead/native_ad.dart';
 export 'adslite/nativead/native_ad_controller.dart';
@@ -32,6 +33,10 @@ export 'adslite/nativead/dislike_ad_reason.dart';
 export 'adslite/reward/reward_ad.dart';
 export 'adslite/reward/reward_verify_config.dart';
 export 'adslite/splash/splash_ad.dart';
+export 'adslite/instream/instream_ad.dart';
+export 'adslite/instream/instream_ad_loader.dart';
+export 'adslite/instream/instream_ad_view.dart';
+export 'adslite/instream/instream_ad_view_elements.dart';
 export 'adslite/ad_param.dart';
 export 'adslite/ad_size.dart';
 export 'adslite/hw_ads.dart';

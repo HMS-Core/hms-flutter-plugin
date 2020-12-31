@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.huawei.hms.flutter.ads">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application android:usesCleartextTraffic="true">
         <service
             android:name="com.huawei.hms.flutter.ads.installreferrer.PpsChannelInfoService"

@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,7 +25,10 @@ import android.util.SparseArray;
 import com.huawei.hms.ads.installreferrer.api.InstallReferrerClient;
 import com.huawei.hms.ads.installreferrer.api.InstallReferrerStateListener;
 import com.huawei.hms.ads.installreferrer.api.ReferrerDetails;
+import com.huawei.hms.flutter.ads.HmsAdsPlugin;
+import com.huawei.hms.flutter.ads.logger.HMSLogger;
 import com.huawei.hms.flutter.ads.utils.ToMap;
+import com.huawei.hms.flutter.ads.utils.constants.ErrorCodes;
 import com.huawei.hms.flutter.ads.utils.constants.ReferrerStatus;
 
 import java.io.IOException;
@@ -89,7 +92,9 @@ public class InstallReferrerSdkUtil extends HmsInstallReferrer {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
+                        HMSLogger.getInstance(context).startMethodExecutionTimer("onInstallReferrerSetupFinished");
                         channel.invokeMethod("onInstallReferrerSetupFinished", ToMap.fromArgs(id, "responseCode", responseCode));
+                        HMSLogger.getInstance(context).sendSingleEvent("onInstallReferrerSetupFinished");
                     }
                 });
             }
@@ -101,7 +106,9 @@ public class InstallReferrerSdkUtil extends HmsInstallReferrer {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
+                        HMSLogger.getInstance(context).startMethodExecutionTimer("onInstallReferrerServiceDisconnected");
                         channel.invokeMethod("onInstallReferrerSetupDisconnected", ToMap.fromArgs(id));
+                        HMSLogger.getInstance(context).sendSingleEvent("onInstallReferrerServiceDisconnected");
                     }
                 });
             }
@@ -124,25 +131,30 @@ public class InstallReferrerSdkUtil extends HmsInstallReferrer {
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
+                    HMSLogger.getInstance(context).startMethodExecutionTimer("onInstallReferrerSetupConnectionEnded");
                     channel.invokeMethod("onInstallReferrerSetupConnectionEnded", ToMap.fromArgs(id));
+                    HMSLogger.getInstance(context).sendSingleEvent("onInstallReferrerSetupConnectionEnded");
                 }
             });
         }
     }
 
     public void getReferrerDetails(final MethodChannel.Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("getReferrerDetails");
         if (referrerClient != null) {
             try {
                 ReferrerDetails referrerDetails = referrerClient.getInstallReferrer();
                 Log.i(TAG, "Referrer details retrieved successfully");
                 final Map<String, Object> response =
-                    ToMap.fromArgs(
-                        ReferrerDetails.KEY_INSTALL_REFERRER, referrerDetails.getInstallReferrer(),
-                        ReferrerDetails.KEY_REFERRER_CLICK_TIMESTAMP, referrerDetails.getReferrerClickTimestampMillisecond(),
-                        ReferrerDetails.KEY_INSTALL_BEGIN_TIMESTAMP, referrerDetails.getInstallBeginTimestampMillisecond());
+                ToMap.fromArgs(
+                    ReferrerDetails.KEY_INSTALL_REFERRER, referrerDetails.getInstallReferrer(),
+                    ReferrerDetails.KEY_REFERRER_CLICK_TIMESTAMP, referrerDetails.getReferrerClickTimestampMillisecond(),
+                    ReferrerDetails.KEY_INSTALL_BEGIN_TIMESTAMP, referrerDetails.getInstallBeginTimestampMillisecond());
                 new ReferrerDetailsHandler(Looper.getMainLooper(), response, result).backToMain();
+                HMSLogger.getInstance(context).sendSingleEvent("getReferrerDetails");
             } catch (RemoteException | IOException e) {
                 Log.e(TAG, "getInstallReferrer exception: " + e.getClass() + " | " + e.getMessage());
+                HMSLogger.getInstance(context).sendSingleEvent("getReferrerDetails", ErrorCodes.NOT_FOUND);
             }
         }
     }

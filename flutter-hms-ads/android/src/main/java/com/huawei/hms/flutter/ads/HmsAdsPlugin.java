@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -31,6 +31,9 @@ import com.huawei.hms.ads.identifier.AdIdVerifyException;
 import com.huawei.hms.ads.identifier.AdvertisingIdClient;
 import com.huawei.hms.flutter.ads.adslite.banner.Banner;
 import com.huawei.hms.flutter.ads.adslite.banner.BannerMethodHandler;
+import com.huawei.hms.flutter.ads.adslite.bannerad.BannerViewFactory;
+import com.huawei.hms.flutter.ads.adslite.instream.InstreamMethodHandler;
+import com.huawei.hms.flutter.ads.adslite.instream.InstreamViewFactory;
 import com.huawei.hms.flutter.ads.adslite.interstitial.InterstitialMethodHandler;
 import com.huawei.hms.flutter.ads.adslite.nativead.NativeAdStreamHandler;
 import com.huawei.hms.flutter.ads.adslite.reward.HmsRewardAd;
@@ -45,6 +48,7 @@ import com.huawei.hms.flutter.ads.consent.ConsentStreamHandler;
 import com.huawei.hms.flutter.ads.factory.EventChannelFactory;
 import com.huawei.hms.flutter.ads.installreferrer.HmsInstallReferrer;
 import com.huawei.hms.flutter.ads.installreferrer.InstallReferrerMethodHandler;
+import com.huawei.hms.flutter.ads.logger.HMSLogger;
 import com.huawei.hms.flutter.ads.utils.FromMap;
 import com.huawei.hms.flutter.ads.utils.ToMap;
 import com.huawei.hms.flutter.ads.utils.constants.Channels;
@@ -66,6 +70,8 @@ import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.plugin.platform.PlatformViewRegistry;
 
+import static com.huawei.hms.flutter.ads.utils.constants.ViewTypes.BANNER_VIEW;
+import static com.huawei.hms.flutter.ads.utils.constants.ViewTypes.INSTREAM_VIEW;
 import static com.huawei.hms.flutter.ads.utils.constants.ViewTypes.NATIVE_VIEW;
 
 /**
@@ -88,6 +94,7 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
     private MethodChannel bannerMethodChannel;
     private MethodChannel rewardMethodChannel;
     private MethodChannel interstitialMethodChannel;
+    private MethodChannel instreamMethodChannel;
     private MethodChannel referrerMethodChannel;
     private MethodChannel consentMethodChannel;
 
@@ -95,6 +102,7 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
     private BannerMethodHandler bannerMethodHandler;
     private RewardMethodHandler rewardMethodHandler;
     private InterstitialMethodHandler interstitialMethodHandler;
+    private InstreamMethodHandler instreamMethodHandler;
     private InstallReferrerMethodHandler installReferrerMethodHandler;
     private ConsentMethodHandler consentMethodHandler;
     private EventChannel.StreamHandler consentStreamHandler;
@@ -113,6 +121,8 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
 
     private void onAttachedToEngine(PlatformViewRegistry registry, MethodChannel channel, Context applicationContext, BinaryMessenger messenger, Activity activity) {
         registry.registerViewFactory(NATIVE_VIEW, new NativeAdPlatformViewFactory(activity));
+        registry.registerViewFactory(BANNER_VIEW, new BannerViewFactory(messenger));
+        registry.registerViewFactory(INSTREAM_VIEW, new InstreamViewFactory(messenger));
         this.activity = activity;
         this.context = applicationContext;
         this.methodChannel = channel;
@@ -129,39 +139,43 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
         bannerMethodChannel = new MethodChannel(messenger, Channels.BANNER_METHOD_CHANNEL);
         rewardMethodChannel = new MethodChannel(messenger, Channels.REWARD_METHOD_CHANNEL);
         interstitialMethodChannel = new MethodChannel(messenger, Channels.INTERSTITIAL_METHOD_CHANNEL);
+        instreamMethodChannel = new MethodChannel(messenger, Channels.INSTREAM_METHOD_CHANNEL);
         referrerMethodChannel = new MethodChannel(messenger, Channels.REFERRER_METHOD_CHANNEL);
         consentMethodChannel = new MethodChannel(messenger, Channels.CONSENT_METHOD_CHANNEL);
         consentEventChannel = new EventChannel(messenger, Channels.CONSENT_EVENT_CHANNEL);
     }
 
     private void initAdHandlers() {
-        splashMethodHandler = new SplashMethodHandler(messenger, activity);
-        bannerMethodHandler = new BannerMethodHandler(messenger, activity);
-        rewardMethodHandler = new RewardMethodHandler(messenger, activity);
-        interstitialMethodHandler = new InterstitialMethodHandler(messenger, activity);
+        splashMethodHandler = new SplashMethodHandler(messenger, activity, context);
+        bannerMethodHandler = new BannerMethodHandler(messenger, activity, context);
+        rewardMethodHandler = new RewardMethodHandler(messenger, activity, context);
+        interstitialMethodHandler = new InterstitialMethodHandler(messenger, activity, context);
+        instreamMethodHandler = new InstreamMethodHandler(messenger, context);
         installReferrerMethodHandler = new InstallReferrerMethodHandler(activity, referrerMethodChannel);
         consentMethodHandler = new ConsentMethodHandler(context, consentInfo);
-        consentStreamHandler = new ConsentStreamHandler(consentInfo);
+        consentStreamHandler = new ConsentStreamHandler(consentInfo, context);
     }
 
     private void setAdHandlers() {
-        splashMethodChannel.setMethodCallHandler(splashMethodHandler);
-        bannerMethodChannel.setMethodCallHandler(bannerMethodHandler);
-        rewardMethodChannel.setMethodCallHandler(rewardMethodHandler);
-        interstitialMethodChannel.setMethodCallHandler(interstitialMethodHandler);
-        referrerMethodChannel.setMethodCallHandler(installReferrerMethodHandler);
-        consentMethodChannel.setMethodCallHandler(consentMethodHandler);
-        consentEventChannel.setStreamHandler(consentStreamHandler);
+        if (splashMethodChannel != null) splashMethodChannel.setMethodCallHandler(splashMethodHandler);
+        if (bannerMethodChannel != null) bannerMethodChannel.setMethodCallHandler(bannerMethodHandler);
+        if (rewardMethodChannel != null) rewardMethodChannel.setMethodCallHandler(rewardMethodHandler);
+        if (interstitialMethodChannel != null) interstitialMethodChannel.setMethodCallHandler(interstitialMethodHandler);
+        if (instreamMethodChannel != null) instreamMethodChannel.setMethodCallHandler(instreamMethodHandler);
+        if (referrerMethodChannel != null) referrerMethodChannel.setMethodCallHandler(installReferrerMethodHandler);
+        if (consentMethodChannel != null) consentMethodChannel.setMethodCallHandler(consentMethodHandler);
+        if (consentEventChannel != null) consentEventChannel.setStreamHandler(consentStreamHandler);
     }
 
     private void resetAdHandlers() {
-        splashMethodChannel.setMethodCallHandler(null);
-        bannerMethodChannel.setMethodCallHandler(null);
-        rewardMethodChannel.setMethodCallHandler(null);
-        interstitialMethodChannel.setMethodCallHandler(null);
-        referrerMethodChannel.setMethodCallHandler(null);
-        consentMethodChannel.setMethodCallHandler(null);
-        consentEventChannel.setStreamHandler(null);
+        if (splashMethodChannel != null) splashMethodChannel.setMethodCallHandler(null);
+        if (bannerMethodChannel != null) bannerMethodChannel.setMethodCallHandler(null);
+        if (rewardMethodChannel != null) rewardMethodChannel.setMethodCallHandler(null);
+        if (interstitialMethodChannel != null) interstitialMethodChannel.setMethodCallHandler(null);
+        if (instreamMethodChannel != null) instreamMethodChannel.setMethodCallHandler(null);
+        if (referrerMethodChannel != null) referrerMethodChannel.setMethodCallHandler(null);
+        if (consentMethodChannel != null) consentMethodChannel.setMethodCallHandler(null);
+        if (consentEventChannel != null) consentEventChannel.setStreamHandler(null);
     }
 
     private void removeAdHandlers() {
@@ -169,6 +183,7 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
         bannerMethodHandler = null;
         rewardMethodHandler = null;
         interstitialMethodHandler = null;
+        instreamMethodHandler = null;
         installReferrerMethodHandler = null;
         consentMethodHandler = null;
         consentStreamHandler = null;
@@ -179,6 +194,7 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
         bannerMethodChannel = null;
         rewardMethodChannel = null;
         interstitialMethodChannel = null;
+        instreamMethodChannel = null;
         referrerMethodChannel = null;
         consentMethodChannel = null;
         consentEventChannel = null;
@@ -218,6 +234,9 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
             case "HwAds-setRequestOptions":
                 setRequestOptions(call, result);
                 break;
+            case "HwAds-setConsent":
+                setConsent(call, result);
+                break;
             // AdvertisingId METHODS
             case "getAdvertisingIdInfo":
                 getAdvertisingIdInfo(result);
@@ -231,95 +250,127 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
             case "destroyNativeAdController":
                 destroyNativeAdController(call, result);
                 break;
+            case "enableLogger":
+                HMSLogger.getInstance(context).enableLogger();
+                result.success(true);
+                break;
+            case "disableLogger":
+                HMSLogger.getInstance(context).disableLogger();
+                result.success(true);
+                break;
             default:
                 result.notImplemented();
         }
     }
 
     private void getHeightPx(MethodCall call, Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("getHeightPx");
         Integer width;
         Integer height;
         width = FromMap.toInteger("width", call.argument("width"));
         height = FromMap.toInteger("height", call.argument("height"));
         if (width != null && height != null) {
             result.success(new BannerAdSize(width, height).getHeightPx(activity));
+            HMSLogger.getInstance(context).sendSingleEvent("getHeightPx");
         } else {
             result.error(ErrorCodes.NULL_PARAM, "Null parameter provided for the method. getHeightPx failed.", "");
+            HMSLogger.getInstance(context).sendSingleEvent("getHeightPx", ErrorCodes.NULL_PARAM);
         }
     }
 
     private void getWidthPx(MethodCall call, Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("getWidthPx");
         Integer width;
         Integer height;
         width = FromMap.toInteger("width", call.argument("width"));
         height = FromMap.toInteger("height", call.argument("height"));
         if (width != null && height != null) {
             result.success(new BannerAdSize(width, height).getWidthPx(activity));
+            HMSLogger.getInstance(context).sendSingleEvent("getWidthPx");
         } else {
             result.error(ErrorCodes.NULL_PARAM, "Null parameter provided for the method. getWidthPx failed.", "");
+            HMSLogger.getInstance(context).sendSingleEvent("getHeightPx", ErrorCodes.NULL_PARAM);
         }
     }
 
     private void getCurrentDirectionBannerSize(MethodCall call, Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("getCurrentDirectionBannerSize");
         Integer width;
         width = FromMap.toInteger("width", call.argument("width"));
         if (width != null) {
             BannerAdSize bannerAdSize = BannerAdSize.getCurrentDirectionBannerSize(activity, width);
             result.success(ToMap.fromArgs("width", bannerAdSize.getWidth(), "height", bannerAdSize.getHeight()));
+            HMSLogger.getInstance(context).sendSingleEvent("getCurrentDirectionBannerSize");
         } else {
             result.error(ErrorCodes.NULL_PARAM, "Null parameter provided for the method. getCurrentDirectionBannerSize failed.", "");
+            HMSLogger.getInstance(context).sendSingleEvent("getCurrentDirectionBannerSize", ErrorCodes.NULL_PARAM);
         }
     }
 
     private void getLandScapeBannerSize(MethodCall call, Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("getLandScapeBannerSize");
         Integer width;
         width = FromMap.toInteger("width", call.argument("width"));
         if (width != null) {
             BannerAdSize bannerAdSize = BannerAdSize.getLandscapeBannerSize(activity, width);
+            HMSLogger.getInstance(context).sendSingleEvent("getLandScapeBannerSize");
             result.success(ToMap.fromArgs("width", bannerAdSize.getWidth(), "height", bannerAdSize.getHeight()));
+            HMSLogger.getInstance(context).sendSingleEvent("getLandScapeBannerSize");
         } else {
             result.error(ErrorCodes.NULL_PARAM, "Null parameter provided for the method. getLandScapeBannerSize failed.", "");
+            HMSLogger.getInstance(context).sendSingleEvent("getLandScapeBannerSize", ErrorCodes.NULL_PARAM);
         }
     }
 
     private void getPortraitBannerSize(MethodCall call, Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("getPortraitBannerSize");
         Integer width;
         width = FromMap.toInteger("width", call.argument("width"));
         if (width != null) {
             BannerAdSize bannerAdSize = BannerAdSize.getPortraitBannerSize(activity, width);
             result.success(ToMap.fromArgs("width", bannerAdSize.getWidth(), "height", bannerAdSize.getHeight()));
+            HMSLogger.getInstance(context).sendSingleEvent("getPortraitBannerSize");
         } else {
             result.error(ErrorCodes.NULL_PARAM, "Null parameter provided for the method. getPortraitBannerSize failed.", "");
+            HMSLogger.getInstance(context).sendSingleEvent("getPortraitBannerSize", ErrorCodes.NULL_PARAM);
         }
     }
 
     private void adsInit(Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("adsInit");
         try {
             HwAds.init(activity);
             Log.i(TAG, "HW Ads Kit initialized");
             result.success(true);
+            HMSLogger.getInstance(context).sendSingleEvent("adsInit");
         } catch (Exception e) {
             Log.e(TAG, "HW Ads initialization failed.");
             result.error(ErrorCodes.INNER, "HW Ads initialization failed.", e.getMessage());
+            HMSLogger.getInstance(context).sendSingleEvent("adsInit", ErrorCodes.INNER);
         }
     }
 
     private void adsInitWithAppCode(MethodCall call, Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("adsInitWithAppCode");
         try {
             String appCode = FromMap.toString("appCode", call.argument("appCode"));
             if (appCode != null) {
                 HwAds.init(context, appCode);
                 Log.i(TAG, "HW Ads Kit initialized.");
+                HMSLogger.getInstance(context).sendSingleEvent("adsInitWithAppCode");
                 result.success(true);
             } else {
                 result.error(ErrorCodes.NULL_PARAM, "Null parameter provided for the method. HW Ads init failed.", "");
+                HMSLogger.getInstance(context).sendSingleEvent("adsInitWithAppCode", ErrorCodes.NULL_PARAM);
             }
         } catch (Exception e) {
             result.error(ErrorCodes.INNER, "HW Ads initialization failed.", e.getMessage());
+            HMSLogger.getInstance(context).sendSingleEvent("adsInitWithAppCode", ErrorCodes.INNER);
         }
     }
 
     private void setRequestOptions(MethodCall call, Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("setRequestOptions");
         String adContentClassification = FromMap.toString("adContentClassification", call.argument("adContentClassification"));
         Integer tagForUnderAge = FromMap.toInteger("tagForUnderAgeOfPromise", call.argument("tagForUnderAgeOfPromise"));
         Integer tagForChildProtection = FromMap.toInteger("tagForChildProtection", call.argument("tagForChildProtection"));
@@ -330,7 +381,7 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
         RequestOptions options = new RequestOptions().toBuilder()
             .setAdContentClassification(adContentClassification)
             .setTagForUnderAgeOfPromise(tagForUnderAge)
-            .setTagForUnderAgeOfPromise(tagForChildProtection)
+            .setTagForChildProtection(tagForChildProtection)
             .setNonPersonalizedAd(nonPersonalizedAd)
             .setAppCountry(appCountry)
             .setAppLang(appLang)
@@ -339,9 +390,20 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
         HwAds.setRequestOptions(options);
         Log.i(TAG, "Request Options set");
         result.success(true);
+        HMSLogger.getInstance(context).sendSingleEvent("setRequestOptions");
+    }
+
+    private void setConsent(MethodCall call, Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("setConsent");
+        String consent = FromMap.toString("consent", call.argument("consent"));
+        HwAds.setConsent(consent);
+        Log.i(TAG, "Consent set");
+        result.success(true);
+        HMSLogger.getInstance(context).sendSingleEvent("setConsent");
     }
 
     private void getRequestOptions(Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("getRequestOptions");
         RequestOptions options = HwAds.getRequestOptions();
         Map<String, Object> arguments = new HashMap<>();
         if (options != null) {
@@ -356,9 +418,11 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
             Log.w(TAG, "Request Options null");
             result.success(null);
         }
+        HMSLogger.getInstance(context).sendSingleEvent("getRequestOptions");
     }
 
     private void getAdvertisingIdInfo(Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("getAdvertisingIdInfo");
         Map<String, Object> arguments = new HashMap<>();
         try {
             AdvertisingIdClient.Info clientInfo = AdvertisingIdClient.getAdvertisingIdInfo(activity);
@@ -366,9 +430,11 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
             arguments.put("advertisingId", clientInfo.getId());
             arguments.put("limitAdTrackingEnabled", clientInfo.isLimitAdTrackingEnabled());
             result.success(arguments);
+            HMSLogger.getInstance(context).sendSingleEvent("getAdvertisingIdInfo");
         } catch (IOException e) {
             Log.e(TAG, "Ad id information retrieval failed.");
             result.error(ErrorCodes.INNER, "Ad id information retrieval failed.", e.getMessage());
+            HMSLogger.getInstance(context).sendSingleEvent("getAdvertisingIdInfo", ErrorCodes.INNER);
         }
     }
 
@@ -377,24 +443,30 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
     }
 
     private void initNativeAdController(MethodCall call, Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("initNativeAdController");
         Integer id = FromMap.toInteger("id", call.argument("id"));
         if (id != null) {
             EventChannelFactory.create(id, Channels.NATIVE_EVENT_CHANNEL, messenger);
-            EventChannelFactory.setup(id, new NativeAdStreamHandler());
+            EventChannelFactory.setup(id, new NativeAdStreamHandler(context));
             NativeAdControllerFactory.createController(id, messenger, context);
             result.success(true);
+            HMSLogger.getInstance(context).sendSingleEvent("initNativeAdController");
         } else {
             result.error(ErrorCodes.NULL_PARAM, "Null parameter provided for the method. Controller init failed.", "");
+            HMSLogger.getInstance(context).sendSingleEvent("initNativeAdController", ErrorCodes.NULL_PARAM);
         }
     }
 
     private void destroyNativeAdController(MethodCall call, Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("destroyNativeAdController");
         Integer id = FromMap.toInteger("id", call.argument("id"));
         if (id != null && NativeAdControllerFactory.dispose(id)) {
             EventChannelFactory.dispose(id);
             result.success(true);
+            HMSLogger.getInstance(context).sendSingleEvent("destroyNativeAdController");
         } else {
             result.error(ErrorCodes.NOT_FOUND, "No controller for provided id. Destroy controller failed. | Controller id : " + id, "");
+            HMSLogger.getInstance(context).sendSingleEvent("destroyNativeAdController", ErrorCodes.NOT_FOUND);
         }
     }
 
@@ -479,6 +551,7 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
 
         @Override
         public void run() {
+            HMSLogger.getInstance(context).startMethodExecutionTimer("verifyAdId");
             String adId = FromMap.toString("adId", call.argument("adId"));
             Boolean limitTracking = FromMap.toBoolean("limitTracking", call.argument("limitTracking"));
             try {
@@ -488,6 +561,7 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
                     @Override
                     public void run() {
                         result.success(isVerified);
+                        HMSLogger.getInstance(context).sendSingleEvent("verifyAdId");
                     }
                 });
             } catch (final AdIdVerifyException e) {
@@ -496,6 +570,7 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
                     @Override
                     public void run() {
                         result.error(ErrorCodes.VERIFY_FAILED, "Ad id verification failed.", e.getMessage());
+                        HMSLogger.getInstance(context).sendSingleEvent("verifyAdId", ErrorCodes.VERIFY_FAILED);
                     }
                 });
             }

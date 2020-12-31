@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'huawei_ads'
-  s.version          = '13.4.32'
+  s.version          = '13.4.35+300'
   s.summary          = 'HUAWEI Ads Kit plugin for Flutter.'
   s.description      = <<-DESC
 HUAWEI Ads Kit plugin for Flutter utilizes Huawei&#x27;s vast user base and extensive data capabilities to deliver targeted, high quality ad content to users.

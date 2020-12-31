@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -134,24 +134,21 @@ class SplashAd {
 
   void _startListening() {
     _listenerSub?.cancel();
-    if (displayListener != null || loadListener != null) {
-      _listenerSub =
-          _streamSplash.receiveBroadcastStream(id).listen((channelEvent) {
-        final Map<dynamic, dynamic> argumentsMap = channelEvent;
-        final SplashAdLoadEvent loadEvent = _toLoadEvent(argumentsMap['event']);
-        final SplashAdDisplayEvent displayEvent =
-            _toDisplayEvent(argumentsMap['event']);
-        if (displayEvent != null) {
-          displayListener(displayEvent);
-        } else if (loadEvent != null) {
-          loadEvent == SplashAdLoadEvent.failedToLoad
-              ? loadListener(loadEvent, errorCode: argumentsMap['errorCode'])
-              : loadListener(loadEvent);
-        }
-      });
-    } else {
-      _listenerSub = null;
-    }
+    _listenerSub =
+        _streamSplash.receiveBroadcastStream(id).listen((channelEvent) {
+      final Map<dynamic, dynamic> argumentsMap = channelEvent;
+      final SplashAdLoadEvent loadEvent = _toLoadEvent(argumentsMap['event']);
+      final SplashAdDisplayEvent displayEvent =
+          _toDisplayEvent(argumentsMap['event']);
+      if (displayEvent != null) {
+        displayListener?.call(displayEvent);
+      } else if (loadEvent != null) {
+        loadEvent == SplashAdLoadEvent.failedToLoad
+            ? loadListener?.call(loadEvent,
+                errorCode: argumentsMap['errorCode'])
+            : loadListener?.call(loadEvent);
+      }
+    });
   }
 
   SplashAdLoadEvent _toLoadEvent(String event) => _loadEventMap[event];

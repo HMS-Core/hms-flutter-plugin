@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -51,6 +51,7 @@ class RewardAd {
   static final String _adType = 'Reward';
   String userId;
   String data;
+  bool openInHmsCore;
   RewardVerifyConfig rewardVerifyConfig;
   RewardAdListener _listener;
   EventChannel _streamReward;
@@ -59,6 +60,7 @@ class RewardAd {
   RewardAd({
     this.userId,
     this.data,
+    this.openInHmsCore,
     RewardAdListener listener,
   }) {
     rewardAds[id] = this;
@@ -75,13 +77,13 @@ class RewardAd {
 
   set setRewardAdListener(RewardAdListener listener) {
     _listener = listener;
-    _startListening();
   }
 
   Future<bool> _initAd() async {
     return Ads.instance.channelReward
         .invokeMethod("initRewardAd", <String, dynamic>{
       'id': id,
+      'openInHmsCore': openInHmsCore,
     });
   }
 
@@ -126,23 +128,19 @@ class RewardAd {
 
   void _startListening() {
     _listenerSub?.cancel();
-    if (_listener != null) {
-      _listenerSub =
-          _streamReward.receiveBroadcastStream(id).listen((channelEvent) {
-        final Map<dynamic, dynamic> argumentsMap = channelEvent;
-        final RewardAdEvent rewardAdEvent =
-            toRewardAdEvent(argumentsMap['event']);
-        if (rewardAdEvent == RewardAdEvent.failedToLoad) {
-          _listener(rewardAdEvent, errorCode: argumentsMap["errorCode"]);
-        } else if (rewardAdEvent == RewardAdEvent.rewarded) {
-          _listener(rewardAdEvent, reward: Reward.fromJson(argumentsMap));
-        } else {
-          _listener(rewardAdEvent);
-        }
-      });
-    } else {
-      _listenerSub = null;
-    }
+    _listenerSub =
+        _streamReward.receiveBroadcastStream(id).listen((channelEvent) {
+      final Map<dynamic, dynamic> argumentsMap = channelEvent;
+      final RewardAdEvent rewardAdEvent =
+          toRewardAdEvent(argumentsMap['event']);
+      if (rewardAdEvent == RewardAdEvent.failedToLoad) {
+        _listener?.call(rewardAdEvent, errorCode: argumentsMap["errorCode"]);
+      } else if (rewardAdEvent == RewardAdEvent.rewarded) {
+        _listener?.call(rewardAdEvent, reward: Reward.fromJson(argumentsMap));
+      } else {
+        _listener?.call(rewardAdEvent);
+      }
+    });
   }
 
   static RewardAdEvent toRewardAdEvent(String event) =>

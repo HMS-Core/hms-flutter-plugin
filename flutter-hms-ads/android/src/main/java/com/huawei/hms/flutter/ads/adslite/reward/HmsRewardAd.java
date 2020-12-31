@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,6 +16,7 @@
 package com.huawei.hms.flutter.ads.adslite.reward;
 
 import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 import android.util.SparseArray;
 
@@ -24,10 +25,13 @@ import com.huawei.hms.ads.reward.RewardAd;
 import com.huawei.hms.ads.reward.RewardAdListener;
 import com.huawei.hms.ads.reward.RewardVerifyConfig;
 import com.huawei.hms.flutter.ads.factory.AdParamFactory;
+import com.huawei.hms.flutter.ads.logger.HMSLogger;
 import com.huawei.hms.flutter.ads.utils.FromMap;
 import com.huawei.hms.flutter.ads.utils.constants.AdStatus;
 
 import java.util.Map;
+
+import io.flutter.plugin.common.EventChannel;
 
 public class HmsRewardAd {
     private static final String TAG = "HmsRewardAd";
@@ -37,14 +41,24 @@ public class HmsRewardAd {
     private RewardAdListener rewardAdListener;
     private final int id;
     private String status;
+    private EventChannel.EventSink event;
+    private final boolean openInHmsCore;
+    private final Activity activity;
+    private final Context context;
 
-
-    HmsRewardAd(int id, Activity activity) {
+    HmsRewardAd(int id, boolean openInHmsCore, Activity activity, Context context) {
+        this.activity = activity;
         this.id = id;
+        this.openInHmsCore = openInHmsCore;
+        this.context = context;
         allRewardAds.put(id, this);
         this.rewardAdInstance = RewardAd.createRewardAdInstance(activity);
         Log.i(TAG, "Reward ad initialized");
         setStatus(AdStatus.CREATED);
+    }
+
+    public void setEvent(EventChannel.EventSink event){
+        this.event = event;
     }
 
     void setRewardVerifyConfig(Map<String, Object> options) {
@@ -110,7 +124,7 @@ public class HmsRewardAd {
 
     void loadAd(String adSlotId, Map<String, Object> adParam) {
         setStatus(AdStatus.LOADING);
-        rewardAdInstance.setRewardAdListener(rewardAdListener != null ? rewardAdListener : new RewardAdDefaultListener(this));
+        rewardAdInstance.setRewardAdListener(rewardAdListener != null ? rewardAdListener : new RewardAdDefaultListener(context, this));
         AdParamFactory factory = new AdParamFactory(adParam);
         rewardAdInstance.loadAd(adSlotId, factory.createAdParam());
     }
@@ -125,7 +139,12 @@ public class HmsRewardAd {
             Log.e(TAG, "Reward ad is not loaded!");
             return;
         }
-        rewardAdInstance.show();
+        if(openInHmsCore){
+            rewardAdInstance.show();
+        } else {
+            HmsRewardAdStatusListener rewardAdStatusListener = new HmsRewardAdStatusListener(this, event, context);
+            rewardAdInstance.show(activity, rewardAdStatusListener);
+        }
     }
 
     void pause() {
@@ -152,23 +171,27 @@ public class HmsRewardAd {
     }
 
     static class RewardAdDefaultListener implements RewardAdListener {
-
+        private final Context context;
         HmsRewardAd hmsRewardAd;
 
-        RewardAdDefaultListener(HmsRewardAd hmsRewardAd) {
+        RewardAdDefaultListener(Context context, HmsRewardAd hmsRewardAd) {
+            this.context = context;
             this.hmsRewardAd = hmsRewardAd;
         }
 
         @Override
         public void onRewardAdFailedToLoad(int errorCode) {
+            HMSLogger.getInstance(context).startMethodExecutionTimer("onRewardAdFailedToLoad");
             Log.w(TAG, "onRewardAdFailedToLoad: " + errorCode);
             if (hmsRewardAd != null) {
                 hmsRewardAd.setStatus(AdStatus.FAILED);
             }
+            HMSLogger.getInstance(context).sendSingleEvent("onRewardAdFailedToLoad", String.valueOf(errorCode));
         }
 
         @Override
         public void onRewardAdLoaded() {
+            HMSLogger.getInstance(context).startMethodExecutionTimer("onRewardAdLoaded");
             Log.i(TAG, "onRewardAdLoaded");
             if (hmsRewardAd == null) {
                 return;
@@ -178,36 +201,25 @@ public class HmsRewardAd {
             if (wasPreparing) {
                 hmsRewardAd.show();
             }
+            HMSLogger.getInstance(context).sendSingleEvent("onRewardAdLoaded");
         }
 
         @Override
-        public void onRewarded(Reward reward) {
-
-        }
+        public void onRewarded(Reward reward) { }
 
         @Override
-        public void onRewardAdClosed() {
-
-        }
+        public void onRewardAdClosed() { }
 
         @Override
-        public void onRewardAdLeftApp() {
-
-        }
+        public void onRewardAdLeftApp() { }
 
         @Override
-        public void onRewardAdOpened() {
-
-        }
+        public void onRewardAdOpened() { }
 
         @Override
-        public void onRewardAdCompleted() {
-
-        }
+        public void onRewardAdCompleted() { }
 
         @Override
-        public void onRewardAdStarted() {
-
-        }
+        public void onRewardAdStarted() { }
     }
 }

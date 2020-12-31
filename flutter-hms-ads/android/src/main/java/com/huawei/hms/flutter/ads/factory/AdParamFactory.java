@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -49,6 +49,7 @@ public class AdParamFactory {
         String appCountry = FromMap.toString("appCountry", adParamMap.get("appCountry"));
         String appLang = FromMap.toString("appLang", adParamMap.get("appLang"));
         String countryCode = FromMap.toString("countryCode", adParamMap.get("countryCode"));
+        String consent = FromMap.toString("consent", adParamMap.get("consent"));
 
         if (gender != null && (gender >= 0 && gender < 3)) {
             Log.i(TAG, "set gender");
@@ -83,7 +84,11 @@ public class AdParamFactory {
         }
         if (countryCode != null) {
             Log.i(TAG, "set countryCode");
-            builder.setAppLang(countryCode);
+            builder.setBelongCountryCode(countryCode);
+        }
+        if (consent != null) {
+            Log.i(TAG, "set consent");
+            builder.setConsent(consent);
         }
         return builder.build();
     }

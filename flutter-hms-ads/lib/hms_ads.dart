@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,6 +23,7 @@ class Ads {
   final MethodChannel channelBanner;
   final MethodChannel channelReward;
   final MethodChannel channelInterstitial;
+  final MethodChannel channelInstream;
   final MethodChannel channelConsent;
   final MethodChannel channelReferrer;
   final EventChannel streamConsent;
@@ -33,6 +34,7 @@ class Ads {
     this.channelBanner,
     this.channelReward,
     this.channelInterstitial,
+    this.channelInstream,
     this.streamConsent,
     this.channelConsent,
     this.channelReferrer,
@@ -46,6 +48,7 @@ class Ads {
     channelBanner: const MethodChannel(BANNER_METHOD_CHANNEL),
     channelReward: const MethodChannel(REWARD_METHOD_CHANNEL),
     channelInterstitial: const MethodChannel(INTERSTITIAL_METHOD_CHANNEL),
+    channelInstream: const MethodChannel(INSTREAM_METHOD_CHANNEL),
     streamConsent: const EventChannel(CONSENT_EVENT_CHANNEL),
     channelConsent: const MethodChannel(CONSENT_METHOD_CHANNEL),
     channelReferrer: const MethodChannel(REFERRER_METHOD_CHANNEL),

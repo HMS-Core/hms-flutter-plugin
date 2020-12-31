@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,11 +16,13 @@
 package com.huawei.hms.flutter.ads.adslite.banner;
 
 import android.app.Activity;
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 
 import com.huawei.hms.ads.BannerAdSize;
 import com.huawei.hms.flutter.ads.factory.EventChannelFactory;
+import com.huawei.hms.flutter.ads.logger.HMSLogger;
 import com.huawei.hms.flutter.ads.utils.FromMap;
 import com.huawei.hms.flutter.ads.utils.ToMap;
 import com.huawei.hms.flutter.ads.utils.constants.AdGravity;
@@ -37,10 +39,12 @@ import io.flutter.plugin.common.MethodChannel.Result;
 public class BannerMethodHandler implements MethodChannel.MethodCallHandler {
     private final BinaryMessenger messenger;
     private final Activity activity;
+    private final Context context;
 
-    public BannerMethodHandler(final BinaryMessenger messenger, final Activity activity) {
+    public BannerMethodHandler(final BinaryMessenger messenger, final Activity activity, final Context context) {
         this.messenger = messenger;
         this.activity = activity;
+        this.context = context;
     }
 
     @Override
@@ -73,6 +77,7 @@ public class BannerMethodHandler implements MethodChannel.MethodCallHandler {
     }
 
     private void initBannerAd(Activity activity, MethodCall call, Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("initBannerAd");
         Integer id = FromMap.toInteger("id", call.argument("id"));
         final Integer width = FromMap.toInteger("width", call.argument("width"));
         final Integer height = FromMap.toInteger("height", call.argument("height"));
@@ -80,16 +85,18 @@ public class BannerMethodHandler implements MethodChannel.MethodCallHandler {
 
         if (id == null) {
             result.error(ErrorCodes.NULL_PARAM, "Ad id is null. Init failed.", "");
+            HMSLogger.getInstance(context).sendSingleEvent("initBannerAd", ErrorCodes.NULL_PARAM);
             return;
         }
 
         if ((width == null || height == null) || (width == 0 || height == 0)) {
             result.error(ErrorCodes.INVALID_PARAM, "BannerAdSize is invalid. Init failed. | Ad id : " + id, "");
+            HMSLogger.getInstance(context).sendSingleEvent("initBannerAd", ErrorCodes.INVALID_PARAM);
             return;
         }
 
         EventChannelFactory.create(id, Channels.BANNER_EVENT_CHANNEL, messenger);
-        EventChannelFactory.setup(id, new BannerStreamHandler());
+        EventChannelFactory.setup(id, new BannerStreamHandler(context));
 
         BannerAdSize adSize;
         if (width == BannerAdSize.BANNER_SIZE_SMART.getWidth() &&
@@ -104,27 +111,33 @@ public class BannerMethodHandler implements MethodChannel.MethodCallHandler {
 
         new Banner(id, adSize, bannerRefresh, activity);
         result.success(true);
+        HMSLogger.getInstance(context).sendSingleEvent("initBannerAd");
     }
 
     private void loadBannerAd(MethodCall call, Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("loadBannerAd");
         Integer id = FromMap.toInteger("id", call.argument("id"));
         String adSlotId = call.argument("adSlotId");
         if (adSlotId == null || adSlotId.isEmpty()) {
             result.error(ErrorCodes.NULL_PARAM, "adSlotId is either null or empty. Load failed. | Ad id : " + id, "");
+            HMSLogger.getInstance(context).sendSingleEvent("loadBannerAd", ErrorCodes.NULL_PARAM);
             return;
         }
 
         Banner banner = Banner.get(id);
         if (banner == null) {
             result.error(ErrorCodes.NOT_FOUND, "No ad for given id. Load failed. | Ad id : " + id, "");
+            HMSLogger.getInstance(context).sendSingleEvent("loadBannerAd", ErrorCodes.NOT_FOUND);
             return;
         }
 
         if (!banner.isCreated()) {
             if (banner.isFailed()) {
                 result.error(ErrorCodes.LOAD_FAILED, "Failed ad. Load failed. | Ad id : " + id, "");
+                HMSLogger.getInstance(context).sendSingleEvent("loadBannerAd", ErrorCodes.LOAD_FAILED);
             } else {
                 result.success(true);
+                HMSLogger.getInstance(context).sendSingleEvent("loadBannerAd");
             }
             return;
         }
@@ -132,13 +145,16 @@ public class BannerMethodHandler implements MethodChannel.MethodCallHandler {
         Map<String, Object> adParam = ToMap.fromObject(call.argument("adParam"));
         banner.loadAd(adSlotId, adParam);
         result.success(true);
+        HMSLogger.getInstance(context).sendSingleEvent("loadBannerAd");
     }
 
     private void showBannerAd(MethodCall call, Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("showBannerAd");
         Integer id = FromMap.toInteger("id", call.argument("id"));
         Banner bannerAd = Banner.get(id);
         if (bannerAd == null) {
             result.error(ErrorCodes.NOT_FOUND, "No ad for given id. Show failed. | Ad id: " + id, null);
+            HMSLogger.getInstance(context).sendSingleEvent("showBannerAd", ErrorCodes.NOT_FOUND);
             return;
         }
         String offset = FromMap.toString("offset", call.argument("offset"));
@@ -151,68 +167,84 @@ public class BannerMethodHandler implements MethodChannel.MethodCallHandler {
         }
         bannerAd.show();
         result.success(true);
+        HMSLogger.getInstance(context).sendSingleEvent("showBannerAd");
     }
 
     private void destroyAd(MethodCall call, Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("destroyBannerAd");
         Integer id = FromMap.toInteger("id", call.argument("id"));
         Banner banner = Banner.get(id);
         if (id == null || banner == null) {
             result.error(ErrorCodes.NOT_FOUND, "No ad for given id. Destroy failed. | Ad id : " + id, null);
+            HMSLogger.getInstance(context).sendSingleEvent("destroyBannerAd", ErrorCodes.NOT_FOUND);
             return;
         }
         EventChannelFactory.dispose(id);
         banner.destroy();
         result.success(true);
+        HMSLogger.getInstance(context).sendSingleEvent("destroyBannerAd");
     }
 
     private void isAdLoading(MethodCall call, Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("isBannerAdLoading");
         Integer id = FromMap.toInteger("id", call.argument("id"));
         String adType = FromMap.toString("adType", call.argument("adType"));
         Banner banner = Banner.get(id);
         if (id == null || banner == null) {
             result.error(ErrorCodes.NULL_PARAM, "Null parameter provided for the method. isAdLoading failed. | Ad id : " + id, "");
+            HMSLogger.getInstance(context).sendSingleEvent("isBannerAdLoading", ErrorCodes.NULL_PARAM);
             return;
         }
 
         if (adType != null && adType.equals("Banner")) {
             result.success(banner.isLoading());
+            HMSLogger.getInstance(context).sendSingleEvent("isBannerAdLoading");
         } else {
             result.error(ErrorCodes.INVALID_PARAM, "Ad type parameter is invalid. isAdLoading failed. | Ad id : " + id, "");
+            HMSLogger.getInstance(context).sendSingleEvent("isBannerAdLoading", ErrorCodes.INVALID_PARAM);
         }
     }
 
     private void pauseAd(MethodCall call, Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("pauseBannerAd");
         Integer id = FromMap.toInteger("id", call.argument("id"));
         String adType = FromMap.toString("adType", call.argument("adType"));
         Banner banner = Banner.get(id);
         if (id == null || banner == null) {
             result.error(ErrorCodes.NOT_FOUND, "No ad for given id. Pause failed. | Ad id : " + id, "");
+            HMSLogger.getInstance(context).sendSingleEvent("pauseBannerAd", ErrorCodes.NULL_PARAM);
             return;
         }
 
         if (adType != null && adType.equals("Banner")) {
             banner.getBannerView().pause();
             result.success(true);
+            HMSLogger.getInstance(context).sendSingleEvent("pauseBannerAd");
         } else {
             result.error(ErrorCodes.INVALID_PARAM, "Ad type parameter is invalid. Pause failed. | Ad id : " + id, "");
+            HMSLogger.getInstance(context).sendSingleEvent("pauseBannerAd", ErrorCodes.INVALID_PARAM);
         }
     }
 
     private void resumeAd(MethodCall call, Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("resumeBannerAd");
         Integer id = FromMap.toInteger("id", call.argument("id"));
         String adType = FromMap.toString("adType", call.argument("adType"));
         Banner banner = Banner.get(id);
 
         if (id == null || banner == null) {
             result.error(ErrorCodes.NOT_FOUND, "No ad for given id. Resume failed. | Ad id : " + id, "");
+            HMSLogger.getInstance(context).sendSingleEvent("resumeBannerAd", ErrorCodes.NULL_PARAM);
             return;
         }
 
         if (adType != null && adType.equals("Banner")) {
             banner.getBannerView().resume();
             result.success(true);
+            HMSLogger.getInstance(context).sendSingleEvent("resumeBannerAd");
         } else {
             result.error(ErrorCodes.INVALID_PARAM, "Ad type parameter is invalid. Pause failed. | Ad id : " + id, "");
+            HMSLogger.getInstance(context).sendSingleEvent("resumeBannerAd", ErrorCodes.INVALID_PARAM);
         }
     }
 }

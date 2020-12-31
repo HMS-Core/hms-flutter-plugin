@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,6 +28,7 @@ class InterstitialAd {
   static final Map<int, InterstitialAd> interstitialAds =
       <int, InterstitialAd>{};
   static final _rId = UniqueKey();
+  bool openInHmsCore;
   int get id => hashCode;
   int get rId => _rId.hashCode;
 
@@ -43,6 +44,7 @@ class InterstitialAd {
 
   InterstitialAd({
     @required this.adSlotId,
+    this.openInHmsCore,
     AdParam adParam,
     AdListener listener,
     RewardAdListener rewardAdListener,
@@ -59,6 +61,7 @@ class InterstitialAd {
         .invokeMethod("initInterstitialAd", <String, dynamic>{
       'id': id,
       'rId': rId,
+      'openInHmsCore': openInHmsCore,
     });
   }
 
@@ -76,14 +79,12 @@ class InterstitialAd {
 
   set setAdListener(AdListener listener) {
     _listener = listener;
-    _startListening();
   }
 
   AdListener get getAdListener => this._listener;
 
   set setRewardAdListener(RewardAdListener rewardAdListener) {
     _rewardAdListener = rewardAdListener;
-    _startListeningReward();
   }
 
   RewardAdListener get getRewardAdListener => this._rewardAdListener;
@@ -114,42 +115,38 @@ class InterstitialAd {
 
   void _startListening() {
     _listenerSub?.cancel();
-    if (_listener != null) {
-      _listenerSub =
-          _streamInterstitial.receiveBroadcastStream(id).listen((channelEvent) {
-        final Map<dynamic, dynamic> argumentsMap = channelEvent;
-        final AdEvent event = Ads.toAdEvent(argumentsMap['event']);
-        if (event != null) {
-          event == AdEvent.failed
-              ? _listener(event, errorCode: argumentsMap['errorCode'])
-              : _listener(event);
-        }
-      });
-    } else {
-      _listenerSub = null;
-    }
+    _listenerSub =
+        _streamInterstitial.receiveBroadcastStream(id).listen((channelEvent) {
+      final Map<dynamic, dynamic> argumentsMap = channelEvent;
+      final AdEvent event = Ads.toAdEvent(argumentsMap['event']);
+      if (event != null) {
+        event == AdEvent.failed
+            ? _listener?.call(event, errorCode: argumentsMap['errorCode'])
+            : _listener?.call(event);
+      }
+    });
   }
 
   void _startListeningReward() {
     _rewardAdListenerSub?.cancel();
-    if (_rewardAdListener != null) {
-      _rewardAdListenerSub =
-          _streamReward.receiveBroadcastStream(rId).listen((channelEvent) {
-        final Map<dynamic, dynamic> argumentsMap = channelEvent;
-        final RewardAdEvent rewardAdEvent =
-            RewardAd.toRewardAdEvent(argumentsMap['event']);
-        if (rewardAdEvent == RewardAdEvent.failedToLoad) {
-          _rewardAdListener(rewardAdEvent,
-              errorCode: argumentsMap["errorCode"]);
-        } else if (rewardAdEvent == RewardAdEvent.rewarded) {
-          _rewardAdListener(rewardAdEvent,
-              reward: Reward.fromJson(argumentsMap));
-        } else {
-          _rewardAdListener(rewardAdEvent);
-        }
-      });
-    } else {
-      _rewardAdListenerSub = null;
-    }
+    _rewardAdListenerSub =
+        _streamReward.receiveBroadcastStream(rId).listen((channelEvent) {
+      final Map<dynamic, dynamic> argumentsMap = channelEvent;
+      final RewardAdEvent rewardAdEvent =
+          RewardAd.toRewardAdEvent(argumentsMap['event']);
+      if (rewardAdEvent == RewardAdEvent.failedToLoad) {
+        _rewardAdListener?.call(
+          rewardAdEvent,
+          errorCode: argumentsMap["errorCode"],
+        );
+      } else if (rewardAdEvent == RewardAdEvent.rewarded) {
+        _rewardAdListener?.call(
+          rewardAdEvent,
+          reward: Reward.fromJson(argumentsMap),
+        );
+      } else {
+        _rewardAdListener?.call(rewardAdEvent);
+      }
+    });
   }
 }

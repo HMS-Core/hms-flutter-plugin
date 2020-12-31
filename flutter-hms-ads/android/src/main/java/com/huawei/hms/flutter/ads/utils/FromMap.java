@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class FromMap {
@@ -103,7 +104,7 @@ public class FromMap {
         return (Integer) value;
     }
 
-    private static ArrayList<Integer> toIntegerArrayList(String key, Object value) {
+    public static ArrayList<Integer> toIntegerArrayList(String key, Object value) {
         ArrayList<Integer> arrList = new ArrayList<>();
         if (value instanceof ArrayList) {
             Object[] objArr = ((ArrayList) value).toArray();
@@ -156,6 +157,14 @@ public class FromMap {
             }
         }
         return bundle;
+    }
+
+    public static HashMap<String, Object> toHashMap(String key, Object value){
+        if (!(value instanceof HashMap)) {
+            Log.w(TAG, "toMap | HashMap<String, Object> value expected for " + key);
+            return null;
+        }
+        return (HashMap<String, Object>) value;
     }
 
     private static void addSingle(String type, Map<String, Object> item, Map.Entry<String, Object> entry, Bundle bundle) {

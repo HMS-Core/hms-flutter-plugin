@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,6 +20,7 @@ class RequestOptions {
   int nonPersonalizedAd;
   String appCountry;
   String appLang;
+  String consent;
 
   RequestOptions({
     this.adContentClassification,
@@ -28,6 +29,7 @@ class RequestOptions {
     this.nonPersonalizedAd,
     this.appCountry,
     this.appLang,
+    this.consent,
   });
 
   Map<String, dynamic> toJson() {
@@ -42,6 +44,7 @@ class RequestOptions {
       json['nonPersonalizedAd'] = nonPersonalizedAd;
     if (appCountry != null) json['appCountry'] = appCountry;
     if (appLang != null) json['appLang'] = appLang;
+    if (consent != null) json['consent'] = consent;
 
     return json;
   }
@@ -54,6 +57,7 @@ class RequestOptions {
     options.nonPersonalizedAd = args['nonPersonalizedAd'] ?? null;
     options.appCountry = args['appCountry'] ?? null;
     options.appLang = args['appLang'] ?? null;
+    options.consent = args['consent'] ?? null;
 
     return options;
   }

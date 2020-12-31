@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,6 +22,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.huawei.hms.flutter.ads.logger.HMSLogger;
 import com.huawei.hms.flutter.ads.utils.FromMap;
 import com.huawei.hms.flutter.ads.utils.constants.ErrorCodes;
 
@@ -30,7 +31,6 @@ import io.flutter.plugin.common.MethodChannel;
 
 public class InstallReferrerMethodHandler implements MethodChannel.MethodCallHandler {
     private static final String TAG = "ReferrerMethodHandler";
-
     private final Context context;
     private final MethodChannel methodChannel;
 
@@ -60,58 +60,67 @@ public class InstallReferrerMethodHandler implements MethodChannel.MethodCallHan
     }
 
     private void referrerStartConnection(MethodCall call, MethodChannel.Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("referrerStartConnection");
         Integer id = FromMap.toInteger("id", call.argument("id"));
         String callMode = FromMap.toString("callMode", call.argument("callMode"));
         if (callMode != null) {
             new StartConnectionThread(id, callMode, call).start();
         } else {
             result.error(ErrorCodes.NULL_PARAM, "Call mode is null. Start connection failed. | Referrer id : " + id, "");
+            HMSLogger.getInstance(context).sendSingleEvent("referrerStartConnection", ErrorCodes.NULL_PARAM);
         }
     }
 
     private void referrerEndConnection(MethodCall call, MethodChannel.Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("referrerEndConnection");
         final Integer id = FromMap.toInteger("id", call.argument("id"));
         String callMode = FromMap.toString("callMode", call.argument("callMode"));
         final HmsInstallReferrer referrer = HmsInstallReferrer.get(id);
         if (referrer != null && callMode != null) {
             if (referrer.isConnected()) {
-                new EndConnectionThread(referrer).start();
+                new EndConnectionThread(referrer, context).start();
             } else {
                 Log.i(TAG, "Referrer already disconnected.");
             }
         } else {
             result.error(ErrorCodes.NULL_PARAM, "Referrer or callMode is null. End connection failed. | Referrer id : " + id + " - Call mode : " + callMode, "");
+            HMSLogger.getInstance(context).sendSingleEvent("referrerEndConnection", ErrorCodes.NULL_PARAM);
         }
     }
 
     private void getInstallReferrer(MethodCall call, final MethodChannel.Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("getInstallReferrer");
         Integer id = FromMap.toInteger("id", call.argument("id"));
         String callMode = FromMap.toString("callMode", call.argument("callMode"));
         final HmsInstallReferrer referrer = HmsInstallReferrer.get(id);
         if (referrer != null && callMode != null) {
             if (referrer.isConnected()) {
-                new ReferrerDetailsThread(referrer, result).start();
+                new ReferrerDetailsThread(referrer, result, context).start();
             } else {
                 Log.i(TAG, "Referrer already is not connected");
             }
         } else {
             result.error(ErrorCodes.NULL_PARAM, "Referrer or callMode is null. getInstallReferrer failed. | Referrer id : " + id + " - Call mode : " + callMode, "");
+            HMSLogger.getInstance(context).sendSingleEvent("getInstallReferrer", ErrorCodes.NULL_PARAM);
         }
     }
 
     private void referrerIsReady(MethodCall call, final MethodChannel.Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("referrerIsReady");
         Integer id = FromMap.toInteger("id", call.argument("id"));
         String callMode = FromMap.toString("callMode", call.argument("callMode"));
         final HmsInstallReferrer referrer = HmsInstallReferrer.get(id);
         if (referrer == null || callMode == null) {
             result.error(ErrorCodes.NULL_PARAM, "Referrer or callMode is null. isReady failed. | Referrer id : " + id + " - Call mode : " + callMode, "");
+            HMSLogger.getInstance(context).sendSingleEvent("referrerIsReady", ErrorCodes.NULL_PARAM);
             return;
         }
 
         if (callMode.equals("sdk")) {
-            new IsReadyThread(referrer, result).start();
+            new IsReadyThread(referrer, result, context).start();
         } else {
             result.error(ErrorCodes.INVALID_PARAM, "Call mode parameter is invalid. isReady failed. | Referrer id : " + id, "");
+            HMSLogger.getInstance(context).sendSingleEvent("referrerIsReady", ErrorCodes.INVALID_PARAM);
         }
     }
 
@@ -134,53 +143,64 @@ public class InstallReferrerMethodHandler implements MethodChannel.MethodCallHan
                 InstallReferrerSdkUtil sdkUtil = HmsInstallReferrer.createSdkReferrer(id, context, methodChannel);
                 if (sdkUtil.isCreated() || sdkUtil.isDisconnected()) {
                     sdkUtil.startConnection(isTest);
+                    HMSLogger.getInstance(context).sendSingleEvent("referrerStartConnection");
                 } else {
                     Log.i(TAG, "Referrer client already connected.");
+                    HMSLogger.getInstance(context).sendSingleEvent("referrerStartConnection", ErrorCodes.LOAD_FAILED);
                 }
             } else {
                 Log.e(TAG, "Call mode parameter is invalid. Start connection failed. | Referrer id : " + id);
+                HMSLogger.getInstance(context).sendSingleEvent("referrerStartConnection", ErrorCodes.INVALID_PARAM);
             }
         }
     }
 
     static class EndConnectionThread extends Thread {
         private final HmsInstallReferrer referrer;
+        private final Context context;
 
-        EndConnectionThread(HmsInstallReferrer referrer) {
+        EndConnectionThread(HmsInstallReferrer referrer, Context context) {
             super("endConnection");
             this.referrer = referrer;
+            this.context = context;
         }
 
         @Override
         public void run() {
             referrer.endConnection();
+            HMSLogger.getInstance(context).sendSingleEvent("referrerEndConnection");
         }
     }
 
     static class ReferrerDetailsThread extends Thread {
         private final HmsInstallReferrer referrer;
         private final MethodChannel.Result result;
+        private final Context context;
 
-        ReferrerDetailsThread(HmsInstallReferrer referrer, MethodChannel.Result result) {
+        ReferrerDetailsThread(HmsInstallReferrer referrer, MethodChannel.Result result, Context context) {
             super("getReferrerDetails");
             this.referrer = referrer;
             this.result = result;
+            this.context = context;
         }
 
         @Override
         public void run() {
             referrer.getReferrerDetails(result);
+            HMSLogger.getInstance(context).sendSingleEvent("getInstallReferrer");
         }
     }
 
     static class IsReadyThread extends Thread {
         private final HmsInstallReferrer referrer;
         private final MethodChannel.Result result;
+        private final Context context;
 
-        IsReadyThread(HmsInstallReferrer referrer, MethodChannel.Result result) {
+        IsReadyThread(HmsInstallReferrer referrer, MethodChannel.Result result, Context context) {
             super("isReady");
             this.referrer = referrer;
             this.result = result;
+            this.context = context;
         }
 
         @Override
@@ -190,6 +210,7 @@ public class InstallReferrerMethodHandler implements MethodChannel.MethodCallHan
                 @Override
                 public void run() {
                     result.success(isReady);
+                    HMSLogger.getInstance(context).sendSingleEvent("referrerIsReady");
                 }
             });
         }

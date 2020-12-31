@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -75,6 +75,7 @@ class AdParamErrorCode {
   static const int lowApi = 5;
   static const int bannerAdExpire = 6;
   static const int bannerAdCancel = 7;
+  static const int hmsNotSupportedSetApp = 8;
 }
 
 class RewardAdErrorCode {
@@ -130,4 +131,7 @@ class ErrorCodes {
   static const String LOAD_FAILED = "903";
   static const String VERIFY_FAILED = "904";
   static const String INNER = "905";
+  static const String NULL_VIEW = "906";
+  static const String NULL_AD = "907";
+  static const String NOT_READY = "908";
 }

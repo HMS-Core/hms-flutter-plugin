@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,6 +33,8 @@ public interface Channels {
     // Native Ads
     String NATIVE_EVENT_CHANNEL = "com.huawei.hms.flutter.ads/native/event";
     String NATIVE_METHOD_CHANNEL = "com.huawei.hms.flutter.ads/native/method";
+    // Instream Ads
+    String INSTREAM_METHOD_CHANNEL = "com.huawei.hms.flutter.ads/instream/method";
     // Consent
     String CONSENT_EVENT_CHANNEL = "com.huawei.hms.flutter.ads/consent/event";
     String CONSENT_METHOD_CHANNEL = "com.huawei.hms.flutter.ads/consent/method";

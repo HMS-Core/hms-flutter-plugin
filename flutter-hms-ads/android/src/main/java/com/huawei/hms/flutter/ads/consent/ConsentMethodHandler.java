@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,6 +24,8 @@ import androidx.annotation.NonNull;
 import com.huawei.hms.ads.consent.constant.ConsentStatus;
 import com.huawei.hms.ads.consent.constant.DebugNeedConsent;
 import com.huawei.hms.ads.consent.inter.Consent;
+import com.huawei.hms.flutter.ads.HmsAdsPlugin;
+import com.huawei.hms.flutter.ads.logger.HMSLogger;
 import com.huawei.hms.flutter.ads.utils.FromMap;
 import com.huawei.hms.flutter.ads.utils.constants.ConsentConst;
 import com.huawei.hms.flutter.ads.utils.constants.ErrorCodes;
@@ -34,7 +36,6 @@ import io.flutter.plugin.common.MethodChannel.Result;
 
 public class ConsentMethodHandler implements MethodChannel.MethodCallHandler {
     private static final String TAG = "ConsentMethodHandler";
-
     private final Context context;
     private Consent consentInfo;
 
@@ -74,28 +75,35 @@ public class ConsentMethodHandler implements MethodChannel.MethodCallHandler {
     }
 
     private void getTestDeviceId(Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("getTestDeviceId");
         if (consentInfo != null) {
             result.success(consentInfo.getTestDeviceId());
+            HMSLogger.getInstance(context).sendSingleEvent("getTestDeviceId");
         } else {
             result.error(ErrorCodes.INNER, "Consent instance is null. getTestDeviceId failed.", "");
+            HMSLogger.getInstance(context).sendSingleEvent("getTestDeviceId", ErrorCodes.INNER);
         }
     }
 
     private void addTestDeviceId(MethodCall call, MethodChannel.Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("addTestDeviceId");
         String deviceId = FromMap.toString("deviceId", call.argument("deviceId"));
         if (deviceId != null && consentInfo != null) {
             Log.i(TAG, "SDK addTestDeviceId begin");
             consentInfo.addTestDeviceId(deviceId);
             Log.i(TAG, "SDK addTestDeviceId end");
             result.success(true);
+            HMSLogger.getInstance(context).sendSingleEvent("addTestDeviceId");
         } else {
             result.error(ErrorCodes.NULL_PARAM,
                 "Test deviceId is null? : " + (deviceId == null) + ". | Consent initialized? : " + (consentInfo != null) + ". addTestDevice failed.",
                 "");
+            HMSLogger.getInstance(context).sendSingleEvent("addTestDeviceId", ErrorCodes.NULL_PARAM);
         }
     }
 
     private void setDebugNeedConsent(MethodCall call, MethodChannel.Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("setDebugNeedConsent");
         String consentStr = FromMap.toString("needConsent", call.argument("needConsent"));
         if (consentStr != null) {
             DebugNeedConsent needConsent = DebugNeedConsent.valueOf(consentStr);
@@ -103,20 +111,25 @@ public class ConsentMethodHandler implements MethodChannel.MethodCallHandler {
             consentInfo.setDebugNeedConsent(needConsent);
             Log.i(TAG, "SDK setDebugNeedConsent end");
             result.success(true);
+            HMSLogger.getInstance(context).sendSingleEvent("setDebugNeedConsent");
         } else {
             result.error(ErrorCodes.NULL_PARAM,
                 "Null parameter provided. setDebugNeedConsent failed.",
                 "");
+            HMSLogger.getInstance(context).sendSingleEvent("setDebugNeedConsent", ErrorCodes.NULL_PARAM);
         }
     }
 
     private void setUnderAgeOfPromise(MethodCall call, MethodChannel.Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("setUnderAgeOfPromise");
         Boolean ageOfPromise = FromMap.toBoolean("ageOfPromise", call.argument("ageOfPromise"));
         consentInfo.setUnderAgeOfPromise(ageOfPromise);
         result.success(true);
+        HMSLogger.getInstance(context).sendSingleEvent("setUnderAgeOfPromise");
     }
 
     private void setConsentStatus(MethodCall call, MethodChannel.Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("setConsentStatus");
         String status = FromMap.toString("status", call.argument("status"));
         if (status != null) {
             ConsentStatus consentStatus = ConsentStatus.valueOf(status);
@@ -124,14 +137,17 @@ public class ConsentMethodHandler implements MethodChannel.MethodCallHandler {
             consentInfo.setConsentStatus(consentStatus);
             Log.i(TAG, "setConsentStatus end");
             result.success(true);
+            HMSLogger.getInstance(context).sendSingleEvent("setConsentStatus");
         } else {
             result.error(ErrorCodes.NULL_PARAM,
                 "Null parameter provided. setConsentStatus failed.",
                 "");
+            HMSLogger.getInstance(context).sendSingleEvent("setConsentStatus", ErrorCodes.NULL_PARAM);
         }
     }
 
     private void updateConsentSharedPreferences(MethodCall call, MethodChannel.Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("updateConsentSharedPreferences");
         String prefKey = FromMap.toString("key", call.argument("key"));
         if (prefKey != null &&
             (prefKey.equals(ConsentConst.SP_CONSENT_KEY) || prefKey.equals(ConsentConst.SP_PROTOCOL_KEY))) {
@@ -142,19 +158,23 @@ public class ConsentMethodHandler implements MethodChannel.MethodCallHandler {
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putInt(ConsentConst.SP_PROTOCOL_KEY, prefValue).commit();
                 result.success(true);
+                HMSLogger.getInstance(context).sendSingleEvent("updateConsentSharedPreferences");
             } else {
                 result.error(ErrorCodes.NULL_PARAM,
                     "Value for the Shared Preference is null.",
                     "");
+                HMSLogger.getInstance(context).sendSingleEvent("updateConsentSharedPreferences", ErrorCodes.NULL_PARAM);
             }
         } else {
             result.error(ErrorCodes.INVALID_PARAM,
                 "Key for the Shared Preference is either invalid or null.",
                 "");
+            HMSLogger.getInstance(context).sendSingleEvent("updateConsentSharedPreferences", ErrorCodes.INVALID_PARAM);
         }
     }
 
     private void getConsentSharedPreferences(MethodCall call, MethodChannel.Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("getConsentSharedPreferences");
         String prefKey = FromMap.toString("key", call.argument("key"));
         int defValue;
         if (prefKey != null &&
@@ -169,10 +189,12 @@ public class ConsentMethodHandler implements MethodChannel.MethodCallHandler {
                 context.getSharedPreferences(ConsentConst.SP_NAME, Context.MODE_PRIVATE);
             int value = preferences.getInt(prefKey, defValue);
             result.success(value);
+            HMSLogger.getInstance(context).sendSingleEvent("getConsentSharedPreferences");
         } else {
             result.error(ErrorCodes.INVALID_PARAM,
                 "Key for the Shared Preference is either invalid or null. Key: " + prefKey,
                 "");
+            HMSLogger.getInstance(context).sendSingleEvent("getConsentSharedPreferences", ErrorCodes.NULL_PARAM);
         }
     }
 }

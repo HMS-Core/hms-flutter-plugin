@@ -1,11 +1,11 @@
 /*
     Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,10 +22,12 @@ class Routes {
   static const String consent = '/consent';
   static const String publisherService = '/publisher-service';
   static const String bannerAd = '/banner-ad';
+  static const String bannerAdPlatformView = '/banner-ad-platform-view';
   static const String rewardAd = '/reward-ad';
   static const String interstitialAd = '/interstitial-ad';
   static const String nativeAd = '/native-ad';
   static const String splashAd = '/splash-ad';
+  static const String instreamAd = '/instream-ad';
 
   static const String identifierOaid = '/oaid-sdk';
 
