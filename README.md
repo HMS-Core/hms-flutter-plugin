@@ -29,6 +29,7 @@ These are the available plugins in this repository.
 | [flutter-hms-safetydetect](./flutter-hms-safetydetect) | [![version](https://img.shields.io/pub/v/huawei_safetydetect?style=for-the-badge)](./flutter-hms-safetydetect) | [Getting Started](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/prep-dev-env-0000001061376620) <br/> [API Reference](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-References/overview-0000001060304308) |
 | [flutter-hms-contact-shield](./flutter-hms-contact-shield) | [![version](https://img.shields.io/pub/v/huawei_contactshield?style=for-the-badge)](./flutter-hms-contact-shield) | [Getting Started](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/prepare-dev-env-0000001063534692) <br/> [API Reference](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-References/flutter-apis-overview-0000001063989606) |
 | [flutter-hms-awareness](./flutter-hms-awareness) | [![version](https://img.shields.io/pub/v/huawei_awareness?style=for-the-badge)](./flutter-hms-awareness) | [Getting Started]() <br/> [API Reference]() |
+| [flutter-hms-health](./flutter-hms-health) | [![version](https://img.shields.io/pub/v/huawei_health?style=for-the-badge)](./flutter-hms-health) | [Getting Started]() <br/> [API Reference]() |
 
 
 ## Question or issues
