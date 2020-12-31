@@ -1,9 +1,9 @@
 name: huawei_ml_example
-description: Demonstrates how to use the huawei_ml plugin.
-publish_to: 'none'
+description: Demonstrates how to use the Huawei ML plugin.
+version: 2.0.5+300
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -11,11 +11,10 @@ dependencies:
 
   huawei_ml:
     path: ../
-  image_picker: ^0.6.7+4
-  flutter_audio_recorder: ^0.5.5
-  path_provider: ^1.6.11
-  file: ^5.2.1
-  file_picker: ^1.13.3
+  image_picker: 0.6.7+4
+  flutter_audio_recorder: 0.5.5
+  path_provider: 1.6.11
+  file_picker: 1.13.3
 
 dev_dependencies:
   flutter_test:
@@ -29,13 +28,23 @@ flutter:
     - assets/doc.png
     - assets/face.png
     - assets/gcr.png
+    - assets/handkey.png
     - assets/icr.png
+    - assets/isr.png
     - assets/landmark.png
     - assets/langdetect.png
+    - assets/liveness.png
     - assets/ml.png
+    - assets/model.png
     - assets/object.png
     - assets/productsegment.png
+    - assets/rtt.png
+    - assets/scene.png
     - assets/segmentation.png
+    - assets/skeleton.png
+    - assets/sounddetect.png
     - assets/text.png
+    - assets/textembed.png
+    - assets/tisr.png
     - assets/trans.png
     - assets/tts.png

@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'huawei_ml'
-  s.version          = '2.0.1+300'
+  s.version          = '2.0.5+300'
   s.summary          = 'HUAWEI Ml Kit plugin for Flutter.'
   s.author           = { 'Huawei Technologies' => 'huaweideveloper1@gmail.com' }
   s.description      = <<-DESC

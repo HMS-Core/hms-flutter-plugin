@@ -1,0 +1,53 @@
+/*
+    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+
+    Licensed under the Apache License, Version 2.0 (the "License")
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        https://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
+import 'package:huawei_ml/models/ml_skeleton.dart';
+import 'package:huawei_ml/utils/channels.dart';
+import 'ml_skeleton_analyzer_setting.dart';
+
+class MLSkeletonAnalyzer {
+  final MethodChannel _channel = Channels.skeletonAnalyzerMethodChannel;
+
+  Future<List<MLSkeleton>> asyncSkeletonDetection(
+      MLSkeletonAnalyzerSetting setting) async {
+    var res = json.decode(
+        await _channel.invokeMethod("asyncSkeletonAnalyze", setting.toMap()));
+    return (res as List).map((e) => MLSkeleton.fromJson(e)).toList();
+  }
+
+  Future<List<MLSkeleton>> syncSkeletonDetection(
+      MLSkeletonAnalyzerSetting setting) async {
+    var res = json.decode(
+        await _channel.invokeMethod("syncSkeletonAnalyze", setting.toMap()));
+    return (res as List).map((e) => MLSkeleton.fromJson(e)).toList();
+  }
+
+  Future<double> calculateSimilarity(
+      List<MLSkeleton> list1, List<MLSkeleton> list2) async {
+    return await _channel.invokeMethod(
+        "calculateSkeletonSimilarity", <String, dynamic>{
+      'list1': json.encode(list1),
+      'list2': json.encode(list2)
+    });
+  }
+
+  Future<bool> stopSkeletonDetection() async {
+    return await _channel.invokeMethod("stopSkeletonDetection");
+  }
+}
