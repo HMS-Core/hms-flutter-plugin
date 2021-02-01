@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -17,15 +17,22 @@
 import Flutter
 import UIKit
 import Foundation
+import HiAnalytics
 
-public class AnalyticsPluginSwift: NSObject, FlutterPlugin {
+public class HMSAnalyticsMethodCallHandler: NSObject, FlutterPlugin {
     let analytics: Analytics = Analytics.init()
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "com.huawei.hms.flutter.analytics", binaryMessenger: registrar.messenger())
-        let instance = AnalyticsPluginSwift()
+        let instance = HMSAnalyticsMethodCallHandler()
         registrar.addMethodCallDelegate(instance, channel: channel)
+        registrar.addApplicationDelegate(instance)
     }
-    
+
+    public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [AnyHashable: Any] = [:]) -> Bool {
+        HiAnalytics.config()
+        return true
+    }
+
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         guard let args = call.arguments as? [String: Any] else {
             return
@@ -49,19 +56,29 @@ public class AnalyticsPluginSwift: NSObject, FlutterPlugin {
         case method.SET_USER_PROFILE:
             guard let name = args["key"] as? String else { return }
             guard let value = args["value"] as? String else { return }
-            analytics.setUserProfile(name, value: value , resolve: result)
+            analytics.setUserProfile(name, value: value, resolve: result)
         case method.ON_EVENT:
             guard let name = args["key"] as? String else { return }
             guard let value = args["value"] as? NSDictionary else { return }
-            analytics.onEvent(name, params: value,resolve: result)
+            analytics.onEvent(name, params: value, resolve: result)
         case method.SET_USER_ID:
             guard let userId = args["userId"] as? String else { return }
-            analytics.setUserId(userId,resolve: result)
+            analytics.setUserId(userId, resolve: result)
         case method.SET_REPORT_POLICIES:
             guard let policyType = args["policyType"] as? NSDictionary else { return }
             analytics.setReportPolicies(policyType, resolve: result)
+        case method.SET_RESTRICTION_ENABLED:
+            guard let bool = args["enabled"] as? Bool else { return }
+            analytics.setRestrictionEnabled(bool, resolve: result)
+        case method.IS_RESTRICTION_ENABLED:
+            analytics.isRestrictionEnabled(result)
+        case method.DELETE_USER_PROFILE:
+            guard let name = args["key"] as? String else { return }
+            analytics.deleteUserProfile(name, resolve: result)
+        case method.DELETE_USER_ID:
+            analytics.deleteUserId(resolve: result)
         default:
-            result(FlutterError(code: "platformError", message: "Not supported on iOS platform", details: ""));
+            result(FlutterError(code: "platformError", message: "Not supported on iOS platform", details: ""))
         }
     }
 
@@ -74,14 +91,10 @@ public class AnalyticsPluginSwift: NSObject, FlutterPlugin {
         let SET_USER_ID = "setUserId"
         let SET_USER_PROFILE = "setUserProfile"
         let ON_EVENT = "onEvent"
-        let PAGE_START = "pageStart"
-        let PAGE_END = "pageEnd"
-        let SET_MIN_ACTIVITY_SESSIONS = "setMinActivitySessions"
-        let SET_PUSH_TOKEN = "setPushToken"
-        let ENABLE_LOG = "enableLog"
-        let ENABLE_LOG_WITH_LEVEL = "enableLogWithLevel"
         let SET_REPORT_POLICIES = "setReportPolicies"
-        let ENABLE_LOGGER = "enableLogger"
-        let DISABLE_LOGGER = "disableLogger"
+        let SET_RESTRICTION_ENABLED = "setRestrictionEnabled"
+        let IS_RESTRICTION_ENABLED = "isRestrictionEnabled"
+        let DELETE_USER_PROFILE = "deleteUserProfile"
+         let DELETE_USER_ID = "deleteUserId"
     }
 }

@@ -7,8 +7,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="HMS Analytics Demo"
-        android:icon="@mipmap/ic_launcher">
+        android:label="HMS Analytics Demo">
         <provider
             android:authorities="${applicationId}.HMSContentProvider"
             android:name="com.huawei.hms.flutter.analytics.AnalyticsContentProvider"/>

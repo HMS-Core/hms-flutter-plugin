@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -34,4 +34,9 @@ class Keys {
   static const String DIALOG_CLOSE = "dialogClose";
   static const String SET_REPORT_POLICIES = "setReportPolicies";
   static const String SET_ANALYTICS_ENABLED = "setAnalyticsEnabled";
+  static const String GET_REPORT_POLICY_THRESHOLD = "getReportPolicyThreshold";
+  static const String SET_RESTRICTION_ENABLED = "setRestrictionEnabled";
+  static const String IS_RESTRICTION_ENABLED = "isRestrictionEnabled";
+  static const String DELETE_USER_PROFILE = "deleteUserProfile";
+  static const String DELETE_USER_ID = "deleteUserId";
 }

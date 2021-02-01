@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -26,20 +26,49 @@ import java.util.Set;
 public class MapUtils {
     private static final String TAG = "MapUtils";
 
-    public static Long toLong(String key, Object value) {
-        if (!(value instanceof Integer)) {
-            Log.w(TAG, "toLong | Long value expected for " + key);
-            return null;
+    /**
+     * Converts a Object into a String.
+     *
+     * @param key:   String key.
+     * @param value: Object value.
+     * @return value
+     */
+    public static String getString(String key, Object value) {
+        if (!(value instanceof String)) {
+            Log.w(TAG, "toString | String value expected for " + key + ". ");
+            return "";
         }
-        return ((Integer) value).longValue();
+        return (String) value;
     }
 
+    /**
+     * Converts a Object into a Boolean.
+     *
+     * @param key:   String key.
+     * @param value: Object value.
+     * @return value
+     */
     public static Boolean toBoolean(String key, Object value) {
         if (!(value instanceof Boolean)) {
             Log.w(TAG, "toBoolean | Boolean value expected for " + key + ". Returning false as default.");
             return false;
         }
         return (Boolean) value;
+    }
+
+    /**
+     * Converts a Object into a Long.
+     *
+     * @param key:   String key.
+     * @param value: Object value.
+     * @return value
+     */
+    public static Long toLong(String key, Object value) {
+        if (!(value instanceof Integer)) {
+            Log.w(TAG, "toLong | Long value expected for " + key);
+            return null;
+        }
+        return ((Integer) value).longValue();
     }
 
     public static Map<String, Object> objectToMap(Object args) {

@@ -1,4 +1,4 @@
-# Huawei Analytics Kit Flutter Plugin - Demo
+# Huawei Analytics Flutter Plugin - Demo
 
 ---
 
@@ -13,11 +13,7 @@
 
 ## 1. Introduction
 
-This demo project is an example to demonstrate the features of the **Huawei Flutter Analytics Kit** Plugin.
-
-<img src="https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-analytics/.docs/images/ios.jpg" width
- = 40% height = 40% style="margin:1.5em">
-<img src="https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-analytics/.docs/images/android.jpg" width = 40% height = 40% style="margin:1.5em">
+This demo project is an example to demonstrate the features of the **Huawei Flutter Analytics ** Plugin.
 
 ---
 
@@ -121,4 +117,4 @@ No.
 
 ## 4. Licensing and Terms
 
-Huawei Analytics Kit Flutter Plugin - is licensed under [Apache 2.0 license](LICENSE)
+Huawei Analytics Flutter Plugin - is licensed under [Apache 2.0 license](LICENSE)

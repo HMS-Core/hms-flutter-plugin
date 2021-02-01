@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 import Foundation
 import HiAnalytics
 
-///Handling blueprint and declerations.
+/// Handling blueprint and declerations.
 protocol Handling {
   func handle(resolve: @escaping FlutterResult, _ isSuccess: Bool?, _ message: String?)
   func handle<T>(resolve: FlutterResult, _ instance: T)
@@ -33,7 +33,7 @@ extension Handling {
     Result.shared.resolve(resolve: resolve, instance: instance)
   }
 
-  func fail(with message: String, resolve: @escaping FlutterResult){
+  func fail(with message: String, resolve: @escaping FlutterResult) {
     Result.shared.resolve(resolve: resolve, false, message)
   }
 }
@@ -51,9 +51,8 @@ class Result {
     guard let success = isSuccess else { return }
     if success {
         resolve(success)
-    }else {
+    } else {
         resolve(FlutterError(code: "", message: message, details: ""))
     }
   }
 }
-

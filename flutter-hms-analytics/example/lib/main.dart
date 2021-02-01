@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -154,6 +154,32 @@ class MyHomePage extends StatelessWidget {
     _showDialog(context, "setReportPolicies success");
   }
 
+  Future<void> _getReportPolicyThreshold(BuildContext context) async {
+    int type = await hmsAnalytics
+        .getReportPolicyThreshold(ReportPolicyType.ON_SCHEDULED_TIME_POLICY);
+    _showDialog(context, "getReportPolicyThreshold $type");
+  }
+
+  Future<void> _isRestrictionEnabled(BuildContext context) async {
+    bool enabled = await hmsAnalytics.isRestrictionEnabled();
+    _showDialog(context, "isRestrictionEnabled $enabled");
+  }
+
+  Future<void> _setRestrictionEnabled(BuildContext context) async {
+    await hmsAnalytics.setRestrictionEnabled(true);
+    _showDialog(context, "setRestrictionEnabled success");
+  }
+
+  Future<void> _deleteUserProfile(BuildContext context) async {
+    await hmsAnalytics.deleteUserProfile("key");
+    _showDialog(context, "deleteUserProfile success");
+  }
+
+  Future<void> _deleteUserId(BuildContext context) async {
+    await hmsAnalytics.deleteUserId();
+    _showDialog(context, "deleteUserId success");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -181,6 +207,10 @@ class MyHomePage extends StatelessWidget {
                 Key(Keys.PREDEFINED_EVENT)),
             MyBtn("Clear Cached Data", _clearCachedData,
                 Key(Keys.CLEAR_CACHED_DATA)),
+            MyBtn("Delete User Profile", _deleteUserProfile,
+                Key(Keys.DELETE_USER_PROFILE)),
+            MyBtn("Delete UserId", _deleteUserId,
+                Key(Keys.DELETE_USER_ID)),
             MyBtn("SetAnalyticsEnabled", _setAnalyticsEnabled,
                 Key(Keys.SET_ANALYTICS_ENABLED)),
             MyBtn("Get AAID", _getAAID, Key(Keys.GET_AAID)),
@@ -190,6 +220,12 @@ class MyHomePage extends StatelessWidget {
             MyBtn("Page End", _pageEnd, Key(Keys.PAGE_END)),
             MyBtn("setReportPolicies", _setReportPolicies,
                 Key(Keys.SET_REPORT_POLICIES)),
+            MyBtn("getReportPolicyThreshold", _getReportPolicyThreshold,
+                Key(Keys.GET_REPORT_POLICY_THRESHOLD)),
+            MyBtn("setRestrictionEnabled", _setRestrictionEnabled,
+                Key(Keys.SET_RESTRICTION_ENABLED)),
+            MyBtn("isRestrictionEnabled", _isRestrictionEnabled,
+                Key(Keys.IS_RESTRICTION_ENABLED)),
           ],
         ),
       ),
