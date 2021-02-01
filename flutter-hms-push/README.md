@@ -20,7 +20,6 @@ Please see [pub.dev](https://pub.dev/packages/huawei_push/install) and [AppGalle
 - [Reference](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-References/overview-0000001057463088)
 
 ### Additional Topics
-- [Basic Capabilities](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/basiccapabilities-0000001050417999)
 - [Topic-based Message Sending](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/topicbased-message-0000001050190681)
 - [Receiving Data Messages](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/receiving-data-messages-at-killed-state-0000001058199547)
 - [Deep Linking with Custom Intent URIs](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/deeplinking-custom-0000001055875857)
