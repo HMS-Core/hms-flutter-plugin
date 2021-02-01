@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -21,9 +21,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-import com.google.gson.Gson;
 import com.huawei.hms.contactshield.ContactShieldSetting;
 import com.huawei.hms.contactshield.DiagnosisConfiguration;
+import com.huawei.hms.contactshield.SharedKeyFileProvider;
+import com.huawei.hms.contactshield.SharedKeysDataMapping;
 import com.huawei.hms.flutter.contactshield.constants.IntentAction;
 
 import java.io.File;
@@ -50,14 +51,24 @@ public final class ObjectProvider {
         return Collections.emptyList();
     }
 
-    public static DiagnosisConfiguration getDiagnosisConfiguration(final MethodCall call, final Gson gson) {
+    public static SharedKeyFileProvider getSharedKeyFileProvider(final MethodCall call) {
+        final List<File> files = getFileList(call);
+        return new SharedKeyFileProvider(files);
+    }
+
+    public static DiagnosisConfiguration getDiagnosisConfiguration(final MethodCall call) {
         final String diagnosisConfigJson = call.argument("diagnosisConfiguration");
-        return gson.fromJson(diagnosisConfigJson, DiagnosisConfiguration.class);
+        return ObjectSerializer.INSTANCE.fromJson(diagnosisConfigJson, DiagnosisConfiguration.class);
     }
 
     public static ContactShieldSetting getContactShieldSetting(final MethodCall call) {
         final int incubationPeriod = call.arguments();
         return new ContactShieldSetting.Builder().setIncubationPeriod(incubationPeriod).build();
+    }
+
+    public static SharedKeysDataMapping getSharedKeysDataMapping(final MethodCall call) {
+        final String sharedKeysDataMappingJson = call.arguments();
+        return ObjectSerializer.INSTANCE.fromJson(sharedKeysDataMappingJson, SharedKeysDataMapping.class);
     }
 
     public static PendingIntent getPendingIntent(final Context context, final String action, final int requestCode) {
@@ -67,8 +78,10 @@ public final class ObjectProvider {
 
     public static IntentFilter getIntentFilter() {
         final IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(IntentAction.CHECK_CONTACT_STATUS_OLD);
-        intentFilter.addAction(IntentAction.CHECK_CONTACT_STATUS);
+        intentFilter.addAction(IntentAction.START_CONTACT_SHIELD_CB);
+        intentFilter.addAction(IntentAction.PUT_SHARED_KEY_FILES_CB);
+        intentFilter.addAction(IntentAction.PUT_SHARED_KEY_FILES_CB_WITH_PROVIDER);
+        intentFilter.addAction(IntentAction.PUT_SHARED_KEY_FILES_CB_WITH_KEYS);
         return intentFilter;
     }
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -17,8 +17,14 @@
 package com.huawei.hms.flutter.contactshield.constants;
 
 public final class IntentAction {
-    public static final String CHECK_CONTACT_STATUS = "com.huawei.hms.flutter.contactshield.CheckContactStatus";
-    public static final String CHECK_CONTACT_STATUS_OLD = "com.huawei.hms.flutter.contactshield.CheckContactStatusOld";
+    public static final String START_CONTACT_SHIELD_CB = "com.huawei.hms.flutter.contactshield." +
+        "startContactShieldCb";
+    public static final String PUT_SHARED_KEY_FILES_CB = "com.huawei.hms.flutter.contactshield." +
+        "putSharedKeyFilesCb";
+    public static final String PUT_SHARED_KEY_FILES_CB_WITH_PROVIDER = "com.huawei.hms.flutter.contactshield." +
+        "putSharedKeyFilesCbWithProvider";
+    public static final String PUT_SHARED_KEY_FILES_CB_WITH_KEYS = "com.huawei.hms.flutter.contactshield." +
+        "putSharedKeyFilesCbWithKeys";
 
     private IntentAction() {
     }

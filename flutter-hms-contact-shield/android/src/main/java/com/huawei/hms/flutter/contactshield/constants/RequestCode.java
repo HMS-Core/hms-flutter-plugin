@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -17,8 +17,10 @@
 package com.huawei.hms.flutter.contactshield.constants;
 
 public final class RequestCode {
-    public static final int PUT_SHARED_KEY_FILES = 1;
-    public static final int START_CONTACT_SHIELD_OLD = 2;
+    public static final int START_CONTACT_SHIELD_CB = 1;
+    public static final int PUT_SHARED_KEY_FILES_CB = 2;
+    public static final int PUT_SHARED_KEY_FILES_CB_WITH_PROVIDER = 3;
+    public static final int PUT_SHARED_KEY_FILES_CB_WITH_KEYS = 4;
 
     private RequestCode() {
     }

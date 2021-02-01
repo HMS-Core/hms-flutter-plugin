@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import android.util.Log;
 
 import com.huawei.agconnect.config.AGConnectServicesConfig;
 import com.huawei.hms.support.hianalytics.HiAnalyticsUtils;
+import com.huawei.hms.utils.HMSBIInitializer;
 
 import java.lang.ref.WeakReference;
 import java.util.Collections;
@@ -35,7 +36,7 @@ import java.util.Map;
 public final class HMSLogger {
     private static final String TAG = "HMSLogger";
 
-    private static final String VERSION = "5.0.4.300";
+    private static final String VERSION = "5.1.0.300";
     private static final String SERVICE = "FlutterContactShield";
 
     private static final String SUCCESS = "0";
@@ -77,6 +78,7 @@ public final class HMSLogger {
             ConnectivityManager.class);
 
         hiAnalyticsUtils.enableLog();
+        HMSBIInitializer.getInstance(context).initBI();
         setupEventMap(singleEventMap);
         setupEventMap(periodicEventMap);
         enableLogger();
@@ -86,14 +88,13 @@ public final class HMSLogger {
      * Returns the instance of this class
      *
      * @param context Application's context
-     *
      * @return HMSLogger instance
      */
     public static synchronized HMSLogger getInstance(final Context context) {
         if (instance == null) {
             synchronized (HMSLogger.class) {
                 if (instance == null) {
-                    instance = new HMSLogger(context);
+                    instance = new HMSLogger(context.getApplicationContext());
                 }
             }
         }
@@ -105,7 +106,7 @@ public final class HMSLogger {
      *
      * @return Actual context reference
      */
-    private Context getContext() {
+    private synchronized Context getContext() {
         return weakContext.get();
     }
 
@@ -147,7 +148,7 @@ public final class HMSLogger {
      * Sends unsuccessful single event
      *
      * @param methodName The name of the method called
-     * @param errorCode API error code
+     * @param errorCode  API error code
      */
     public synchronized void sendSingleEvent(final String methodName, final String errorCode) {
         sendEvent(SINGLE_EVENT_ID, methodName, errorCode);
@@ -166,7 +167,7 @@ public final class HMSLogger {
      * Sends unsuccessful periodic event
      *
      * @param methodName The name of the method called
-     * @param errorCode API error code
+     * @param errorCode  API error code
      */
     public synchronized void sendPeriodicEvent(final String methodName, final String errorCode) {
         sendEvent(PERIODIC_EVENT_ID, methodName, errorCode);
@@ -175,7 +176,7 @@ public final class HMSLogger {
     /**
      * Sends the event based on eventId, methodName, and resultCode
      *
-     * @param eventId Constant id of the event
+     * @param eventId    Constant id of the event
      * @param methodName The name of the method called
      * @param resultCode Code of the method's result. "0" for success, others for error
      */
@@ -202,7 +203,7 @@ public final class HMSLogger {
      *
      * @return app_id value or NOT_AVAILABLE if not found
      */
-    private String getAppId() {
+    private synchronized String getAppId() {
         try {
             return AGConnectServicesConfig.fromContext(getContext()).getString("client/app_id");
         } catch (final NullPointerException e) {
@@ -215,10 +216,9 @@ public final class HMSLogger {
      * Gets app version name
      *
      * @param packageName Package name of the app
-     *
      * @return App version name in String type
      */
-    private String getAppVersionName(final String packageName) {
+    private synchronized String getAppVersionName(final String packageName) {
         try {
             return getContext().getPackageManager().getPackageInfo(packageName, 0).versionName;
         } catch (final PackageManager.NameNotFoundException e) {
@@ -232,7 +232,7 @@ public final class HMSLogger {
      *
      * @return Human readable network type; such as WIFI, 4G
      */
-    private String getNetworkType() {
+    private synchronized String getNetworkType() {
         if (connectivityManager != null) {
             final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
             if (networkInfo != null && networkInfo.isConnected()) {
@@ -258,7 +258,7 @@ public final class HMSLogger {
      *
      * @param map HashMap to put default values
      */
-    private void setupEventMap(final Map<String, Object> map) {
+    private synchronized void setupEventMap(final Map<String, Object> map) {
         map.put("version", VERSION);
         map.put("service", SERVICE);
         map.put("appid", getAppId());
@@ -270,11 +270,12 @@ public final class HMSLogger {
     /**
      * Prepares sing-event map according to input parameters
      *
-     * @param methodName The name of the method called
-     * @param resultCode Code of the method's result. "0" for success, others for error
+     * @param methodName  The name of the method called
+     * @param resultCode  Code of the method's result. "0" for success, others for error
      * @param currentTime Current timestamp in millisecond
      */
-    private void putToSingleEventMap(final String methodName, final String resultCode, final long currentTime) {
+    private synchronized void putToSingleEventMap(final String methodName, final String resultCode,
+        final long currentTime) {
         final long startTime = getOrDefault(startTimeMap, methodName, currentTime);
         final int costTime = (int) (currentTime - startTime);
         singleEventMap.put("apiName", methodName);
@@ -287,11 +288,12 @@ public final class HMSLogger {
     /**
      * Prepares periodic-event map according to input parameters
      *
-     * @param methodName The name of the method called
-     * @param resultCode Code of the method's result. "0" for success, others for error
+     * @param methodName  The name of the method called
+     * @param resultCode  Code of the method's result. "0" for success, others for error
      * @param currentTime Current timestamp in millisecond
      */
-    private void putToPeriodicEventMap(final String methodName, final String resultCode, final long currentTime) {
+    private synchronized void putToPeriodicEventMap(final String methodName, final String resultCode,
+        final long currentTime) {
         increaseResultCodeCount(methodName, resultCode);
         increaseMapValue(methodName, allCountMap);
 
@@ -327,7 +329,7 @@ public final class HMSLogger {
      *
      * @return HashMap of human readable network type names
      */
-    private Map<Integer, String> createNetworkTypeMap() {
+    private synchronized Map<Integer, String> createNetworkTypeMap() {
         final Map<Integer, String> map = new HashMap<>();
 
         map.put(0, UNKNOWN);
@@ -361,7 +363,7 @@ public final class HMSLogger {
      * @param methodName Name of the calling method
      * @param resultCode Code of the method's result. "0" for success, others for error
      */
-    private void increaseResultCodeCount(final String methodName, final String resultCode) {
+    private synchronized void increaseResultCodeCount(final String methodName, final String resultCode) {
         final Map<String, Long> map = getOrDefault(resultCodeCountMap, methodName, new HashMap<>());
 
         increaseMapValue(resultCode, map);
@@ -374,35 +376,34 @@ public final class HMSLogger {
      * @param key Key for map lookup
      * @param map The Map that contains the key and its corresponding value
      */
-    private void increaseMapValue(final String key, final Map<String, Long> map) {
+    private synchronized void increaseMapValue(final String key, final Map<String, Long> map) {
         map.put(key, getOrDefault(map, key, 0L) + 1);
     }
 
     /**
      * Get the corresponding value of the key. If the key does not exist in the map then the default value is returned.
      *
-     * @param map The Map
-     * @param key Lookup key
+     * @param map          The Map
+     * @param key          Lookup key
      * @param defaultValue The default value will be returned if the key is absent
-     * @param <K> Generic type of the key
-     * @param <V> Generic type of the value
-     *
+     * @param <K>          Generic type of the key
+     * @param <V>          Generic type of the value
      * @return Corresponding value or default value
      */
-    private <K, V> V getOrDefault(final Map<K, V> map, final K key, final V defaultValue) {
+    private synchronized <K, V> V getOrDefault(final Map<K, V> map, final K key, final V defaultValue) {
         return map.containsKey(key) ? map.get(key) : defaultValue;
     }
 
     /**
      * Put key-value pair to map if the key is absent
      *
-     * @param map The Map
-     * @param key Lookup key
+     * @param map   The Map
+     * @param key   Lookup key
      * @param value The value will be put to the map if the key is absent
-     * @param <K> Generic type of the key
-     * @param <V> Generic type of the value
+     * @param <K>   Generic type of the key
+     * @param <V>   Generic type of the value
      */
-    private <K, V> void putIfAbsent(final Map<K, V> map, final K key, final V value) {
+    private synchronized <K, V> void putIfAbsent(final Map<K, V> map, final K key, final V value) {
         if (!map.containsKey(key)) {
             map.put(key, value);
         }
@@ -412,13 +413,12 @@ public final class HMSLogger {
      * Utility method that castes given object to given class type
      *
      * @param source Source object to be casted
-     * @param clazz Class that object will be casted to its type
-     * @param <S> Source object's type
-     * @param <D> Destination type
-     *
+     * @param clazz  Class that object will be casted to its type
+     * @param <S>    Source object's type
+     * @param <D>    Destination type
      * @return Object that casted to D type
      */
-    private <S, D> D objectCast(final S source, final Class<D> clazz) {
+    private synchronized <S, D> D objectCast(final S source, final Class<D> clazz) {
         return clazz.cast(source);
     }
 }

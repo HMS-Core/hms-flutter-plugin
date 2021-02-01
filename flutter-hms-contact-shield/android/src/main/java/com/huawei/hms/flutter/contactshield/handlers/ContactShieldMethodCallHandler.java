@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -33,58 +33,85 @@ public class ContactShieldMethodCallHandler implements MethodCallHandler {
     private final HMSLogger hmsLogger;
 
     public ContactShieldMethodCallHandler(final Activity activity) {
-        this.service = new ContactShieldService(activity);
-        this.hmsLogger = HMSLogger.getInstance(activity.getApplicationContext());
+        service = new ContactShieldService(activity);
+        hmsLogger = HMSLogger.getInstance(activity.getApplicationContext());
     }
 
     @Override
     public void onMethodCall(@NonNull final MethodCall call, @NonNull final Result result) {
-        this.service.setCall(call);
-        this.service.setResult(result);
-        this.hmsLogger.startMethodExecutionTimer(call.method);
+        service.setCall(call);
+        service.setResult(result);
+        hmsLogger.startMethodExecutionTimer(call.method);
 
         switch (call.method) {
             case Method.IS_CONTACT_SHIELD_RUNNING:
-                this.service.isContactShieldRunning();
+                service.isContactShieldRunning();
                 break;
-            case Method.START_CONTACT_SHIELD_OLD:
-                this.service.startContactShieldOld();
+            case Method.START_CONTACT_SHIELD_CB:
+                service.startContactShieldCb();
                 break;
             case Method.START_CONTACT_SHIELD:
-                this.service.startContactShield();
+                service.startContactShield();
                 break;
             case Method.START_CONTACT_SHIELD_NON_PERSISTENT:
-                this.service.startContactShieldNoPersistent();
+                service.startContactShieldNoPersistent();
                 break;
             case Method.GET_PERIODIC_KEY:
-                this.service.getPeriodicKey();
-                break;
-            case Method.PUT_SHARED_KEY_FILES_OLD:
-                this.service.putSharedKeyFilesOld();
+                service.getPeriodicKey();
                 break;
             case Method.PUT_SHARED_KEY_FILES:
-                this.service.putSharedKeyFiles();
+                service.putSharedKeyFiles();
+                break;
+            case Method.PUT_SHARED_KEY_FILES_CB:
+                service.putSharedKeyFilesCb();
+                break;
+            case Method.PUT_SHARED_KEY_FILES_CB_WITH_PROVIDER:
+                service.putSharedKeyFilesCbWithProvider();
+                break;
+            case Method.PUT_SHARED_KEY_FILES_CB_WITH_KEYS:
+                service.putSharedKeyFilesCbWithKeys();
                 break;
             case Method.GET_CONTACT_DETAIL:
-                this.service.getContactDetail();
+                service.getContactDetail();
                 break;
             case Method.GET_CONTACT_SKETCH:
-                this.service.getContactSketch();
+                service.getContactSketch();
                 break;
             case Method.GET_CONTACT_WINDOW:
-                this.service.getContactWindow();
+                service.getContactWindow();
+                break;
+            case Method.SET_SHARED_KEYS_DATA_MAPPING:
+                service.setSharedKeysDataMapping();
+                break;
+            case Method.GET_SHARED_KEYS_DATA_MAPPING:
+                service.getSharedKeysDataMapping();
+                break;
+            case Method.GET_DAILY_SKETCH:
+                service.getDailySketch();
+                break;
+            case Method.GET_CONTACT_SHIELD_VERSION:
+                service.getContactShieldVersion();
+                break;
+            case Method.GET_DEVICE_CALIBRATION_CONFIDENCE:
+                service.getDeviceCalibrationConfidence();
+                break;
+            case Method.IS_SUPPORT_SCANNING_WITHOUT_LOCATION:
+                service.isSupportScanningWithoutLocation();
+                break;
+            case Method.GET_STATUS:
+                service.getStatus();
                 break;
             case Method.CLEAR_DATA:
-                this.service.clearData();
+                service.clearData();
                 break;
             case Method.STOP_CONTACT_SHIELD:
-                this.service.stopContactShield();
+                service.stopContactShield();
                 break;
             case Method.ENABLE_LOGGER:
-                this.service.enableLogger();
+                service.enableLogger();
                 break;
             case Method.DISABLE_LOGGER:
-                this.service.disableLogger();
+                service.disableLogger();
                 break;
             default:
                 result.notImplemented();

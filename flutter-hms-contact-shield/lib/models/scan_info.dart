@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -17,15 +17,17 @@
 import 'dart:convert';
 
 class ScanInfo {
-  ScanInfo({
-    this.averageAttenuation = 0,
-    this.minimumAttenuation = 0,
-    this.secondsSinceLastScan = 0,
-  });
-
   int averageAttenuation;
   int minimumAttenuation;
   int secondsSinceLastScan;
+
+  ScanInfo({
+    int averageAttenuation,
+    int minimumAttenuation,
+    int secondsSinceLastScan,
+  })  : averageAttenuation = averageAttenuation ?? 0,
+        minimumAttenuation = minimumAttenuation ?? 0,
+        secondsSinceLastScan = secondsSinceLastScan ?? 0;
 
   factory ScanInfo.fromJson(String str) => ScanInfo.fromMap(json.decode(str));
 

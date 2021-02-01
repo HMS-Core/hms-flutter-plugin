@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,6 +14,9 @@
     limitations under the License.
 */
 
+import 'package:flutter/foundation.dart';
+
+@immutable
 class RiskLevel {
   static const int RISK_LEVEL_INVALID = 0;
   static const int RISK_LEVEL_LOWEST = 1;

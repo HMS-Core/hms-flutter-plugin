@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -19,6 +19,17 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 class DiagnosisConfiguration {
+  List<int> attenuationDurationThresholds;
+  List<int> attenuationRiskValues;
+  int attenuationWeight;
+  List<int> daysAfterContactedRiskValues;
+  int daysAfterContactedWeight;
+  List<int> durationRiskValues;
+  int durationWeight;
+  List<int> initialRiskLevelRiskValues;
+  int initialRiskLevelWeight;
+  int minimumRiskValueThreshold;
+
   DiagnosisConfiguration({
     List<int> attenuationDurationThresholds,
     List<int> attenuationRiskValues,
@@ -40,17 +51,6 @@ class DiagnosisConfiguration {
             durationRiskValues ?? <int>[4, 4, 4, 4, 4, 4, 4, 4],
         initialRiskLevelRiskValues =
             initialRiskLevelRiskValues ?? <int>[4, 4, 4, 4, 4, 4, 4, 4];
-
-  List<int> attenuationDurationThresholds;
-  List<int> attenuationRiskValues;
-  int attenuationWeight;
-  List<int> daysAfterContactedRiskValues;
-  int daysAfterContactedWeight;
-  List<int> durationRiskValues;
-  int durationWeight;
-  List<int> initialRiskLevelRiskValues;
-  int initialRiskLevelWeight;
-  int minimumRiskValueThreshold;
 
   factory DiagnosisConfiguration.fromJson(String str) =>
       DiagnosisConfiguration.fromMap(json.decode(str));

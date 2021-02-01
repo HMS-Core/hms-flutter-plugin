@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -20,19 +20,21 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 
 class PeriodicKey {
+  Int8List content;
+  int initialRiskLevel;
+  int periodicKeyLifeTime;
+  int periodicKeyValidTime;
+  int reportType;
+  int daysSinceStartOfSymptoms;
+
   PeriodicKey({
     this.content,
     this.initialRiskLevel = 0,
     this.periodicKeyLifeTime = 0,
     this.periodicKeyValidTime = 0,
     this.reportType = 0,
+    this.daysSinceStartOfSymptoms = 0,
   });
-
-  Uint8List content;
-  int initialRiskLevel;
-  int periodicKeyLifeTime;
-  int periodicKeyValidTime;
-  int reportType;
 
   factory PeriodicKey.fromJson(String str) =>
       PeriodicKey.fromMap(json.decode(str));
@@ -43,7 +45,7 @@ class PeriodicKey {
     return PeriodicKey(
       content: json["content"] == null
           ? null
-          : _parseIntListAsUint8List(json["content"]),
+          : _parseIntListAsInt8List(json["content"]),
       initialRiskLevel:
           json["initialRiskLevel"] == null ? null : json["initialRiskLevel"],
       periodicKeyLifeTime: json["periodicKeyLifeTime"] == null
@@ -53,23 +55,25 @@ class PeriodicKey {
           ? null
           : json["periodicKeyValidTime"],
       reportType: json["reportType"] == null ? null : json["reportType"],
+      daysSinceStartOfSymptoms: json["daysSinceStartOfSymptoms"] == null
+          ? null
+          : json["daysSinceStartOfSymptoms"],
     );
   }
 
   Map<String, dynamic> toMap() => {
         "content":
             content == null ? null : List<dynamic>.from(content.map((x) => x)),
-        "initialRiskLevel": initialRiskLevel == null ? null : initialRiskLevel,
-        "periodicKeyLifeTime":
-            periodicKeyLifeTime == null ? null : periodicKeyLifeTime,
-        "periodicKeyValidTime":
-            periodicKeyValidTime == null ? null : periodicKeyValidTime,
-        "reportType": reportType == null ? null : reportType,
+        "initialRiskLevel": initialRiskLevel,
+        "periodicKeyLifeTime": periodicKeyLifeTime,
+        "periodicKeyValidTime": periodicKeyValidTime,
+        "reportType": reportType,
+        "daysSinceStartOfSymptoms": daysSinceStartOfSymptoms,
       };
 
   @override
   String toString() {
-    return 'PeriodicKey(content: $content, initialRiskLevel: $initialRiskLevel, periodicKeyLifeTime: $periodicKeyLifeTime, periodicKeyValidTime: $periodicKeyValidTime, reportType: $reportType)';
+    return 'PeriodicKey(content: $content, initialRiskLevel: $initialRiskLevel, periodicKeyLifeTime: $periodicKeyLifeTime, periodicKeyValidTime: $periodicKeyValidTime, reportType: $reportType, daysSinceStartOfSymptoms: $daysSinceStartOfSymptoms)';
   }
 
   @override
@@ -81,7 +85,8 @@ class PeriodicKey {
         o.initialRiskLevel == initialRiskLevel &&
         o.periodicKeyLifeTime == periodicKeyLifeTime &&
         o.periodicKeyValidTime == periodicKeyValidTime &&
-        o.reportType == reportType;
+        o.reportType == reportType &&
+        o.daysSinceStartOfSymptoms == daysSinceStartOfSymptoms;
   }
 
   @override
@@ -90,11 +95,12 @@ class PeriodicKey {
         initialRiskLevel.hashCode ^
         periodicKeyLifeTime.hashCode ^
         periodicKeyValidTime.hashCode ^
-        reportType.hashCode;
+        reportType.hashCode ^
+        daysSinceStartOfSymptoms.hashCode;
   }
 
-  static Uint8List _parseIntListAsUint8List(List<dynamic> items) {
+  static Int8List _parseIntListAsInt8List(List<dynamic> items) {
     List<int> intList = List<int>.from(items);
-    return Uint8List.fromList(intList);
+    return Int8List.fromList(intList);
   }
 }

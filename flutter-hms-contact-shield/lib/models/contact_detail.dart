@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -19,15 +19,6 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 class ContactDetail {
-  ContactDetail({
-    List<int> attenuationDurations,
-    this.attenuationRiskValue = 0,
-    this.dayNumber = 0,
-    this.durationMinutes = 0,
-    this.initialRiskLevel = 0,
-    this.totalRiskValue = 0,
-  }) : attenuationDurations = attenuationDurations ?? <int>[0, 0, 0];
-
   List<int> attenuationDurations;
   int attenuationRiskValue;
   int dayNumber;
@@ -35,25 +26,39 @@ class ContactDetail {
   int initialRiskLevel;
   int totalRiskValue;
 
+  ContactDetail({
+    List<int> attenuationDurations,
+    attenuationRiskValue,
+    dayNumber,
+    durationMinutes,
+    initialRiskLevel,
+    totalRiskValue,
+  })  : attenuationDurations = attenuationDurations ?? <int>[0, 0, 0],
+        attenuationRiskValue = attenuationRiskValue ?? 0,
+        dayNumber = dayNumber ?? 0,
+        durationMinutes = durationMinutes ?? 0,
+        initialRiskLevel = initialRiskLevel ?? 0,
+        totalRiskValue = totalRiskValue ?? 0;
+
   factory ContactDetail.fromJson(String str) =>
       ContactDetail.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory ContactDetail.fromMap(Map<String, dynamic> json) => ContactDetail(
-        attenuationDurations: json["attenuationDurations"] == null
+  factory ContactDetail.fromMap(Map<String, dynamic> map) => ContactDetail(
+        attenuationDurations: map["attenuationDurations"] == null
             ? null
-            : List<int>.from(json["attenuationDurations"].map((x) => x)),
-        attenuationRiskValue: json["attenuationRiskValue"] == null
+            : List<int>.from(map["attenuationDurations"].map((x) => x)),
+        attenuationRiskValue: map["attenuationRiskValue"] == null
             ? null
-            : json["attenuationRiskValue"],
-        dayNumber: json["dayNumber"] == null ? null : json["dayNumber"],
+            : map["attenuationRiskValue"],
+        dayNumber: map["dayNumber"] == null ? null : map["dayNumber"],
         durationMinutes:
-            json["durationMinutes"] == null ? null : json["durationMinutes"],
+            map["durationMinutes"] == null ? null : map["durationMinutes"],
         initialRiskLevel:
-            json["initialRiskLevel"] == null ? null : json["initialRiskLevel"],
+            map["initialRiskLevel"] == null ? null : map["initialRiskLevel"],
         totalRiskValue:
-            json["totalRiskValue"] == null ? null : json["totalRiskValue"],
+            map["totalRiskValue"] == null ? null : map["totalRiskValue"],
       );
 
   Map<String, dynamic> toMap() => {

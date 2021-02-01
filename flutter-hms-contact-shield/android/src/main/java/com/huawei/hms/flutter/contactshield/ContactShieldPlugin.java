@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -33,7 +33,6 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 
 public class ContactShieldPlugin implements FlutterPlugin, ActivityAware {
-    private static final String TAG = "ContactShieldPlugin";
     private MethodChannel channel;
     private MethodCallHandler handler;
     private BroadcastReceiver receiver;
@@ -41,26 +40,26 @@ public class ContactShieldPlugin implements FlutterPlugin, ActivityAware {
 
     @Override
     public void onAttachedToEngine(@NonNull final FlutterPluginBinding binding) {
-        this.channel = new MethodChannel(binding.getBinaryMessenger(),
-            "com.huawei.hms.flutter.contactshield_MethodChannel");
-        this.callback = new ContactShieldCallbackHandler(this.channel);
-        this.receiver = new ContactShieldBroadcastReceiver(binding.getApplicationContext(), this.callback);
-        binding.getApplicationContext().registerReceiver(this.receiver, ObjectProvider.getIntentFilter());
+        channel = new MethodChannel(binding.getBinaryMessenger(),
+                "com.huawei.hms.flutter.contactshield_MethodChannel");
+        callback = new ContactShieldCallbackHandler(channel);
+        receiver = new ContactShieldBroadcastReceiver(binding.getApplicationContext(), callback);
+        binding.getApplicationContext().registerReceiver(receiver, ObjectProvider.getIntentFilter());
     }
 
     @Override
     public void onDetachedFromEngine(@NonNull final FlutterPluginBinding binding) {
-        binding.getApplicationContext().unregisterReceiver(this.receiver);
-        this.receiver = null;
-        this.callback = null;
-        this.channel = null;
+        binding.getApplicationContext().unregisterReceiver(receiver);
+        receiver = null;
+        callback = null;
+        channel = null;
     }
 
     @Override
     public void onAttachedToActivity(@NonNull final ActivityPluginBinding binding) {
-        this.handler = new ContactShieldMethodCallHandler(binding.getActivity());
-        if (this.channel != null) {
-            this.channel.setMethodCallHandler(this.handler);
+        handler = new ContactShieldMethodCallHandler(binding.getActivity());
+        if (channel != null) {
+            channel.setMethodCallHandler(handler);
         }
     }
 
@@ -76,9 +75,9 @@ public class ContactShieldPlugin implements FlutterPlugin, ActivityAware {
 
     @Override
     public void onDetachedFromActivity() {
-        if (this.channel != null) {
-            this.channel.setMethodCallHandler(null);
+        if (channel != null) {
+            channel.setMethodCallHandler(null);
         }
-        this.handler = null;
+        handler = null;
     }
 }

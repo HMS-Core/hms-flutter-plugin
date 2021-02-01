@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -17,20 +17,29 @@
 package com.huawei.hms.flutter.contactshield.constants;
 
 public final class Method {
-    public static final String CLEAR_DATA = "clearData";
     public static final String GET_CONTACT_DETAIL = "getContactDetail";
     public static final String GET_CONTACT_SKETCH = "getContactSketch";
     public static final String GET_CONTACT_WINDOW = "getContactWindow";
     public static final String GET_PERIODIC_KEY = "getPeriodicKey";
     public static final String IS_CONTACT_SHIELD_RUNNING = "isContactShieldRunning";
     public static final String PUT_SHARED_KEY_FILES = "putSharedKeyFiles";
-    public static final String PUT_SHARED_KEY_FILES_OLD = "putSharedKeyFilesOld";
+    public static final String PUT_SHARED_KEY_FILES_CB = "putSharedKeyFilesCb";
+    public static final String PUT_SHARED_KEY_FILES_CB_WITH_PROVIDER = "putSharedKeyFilesCbWithProvider";
+    public static final String PUT_SHARED_KEY_FILES_CB_WITH_KEYS = "putSharedKeyFilesCbWithKeys";
+    public static final String SET_SHARED_KEYS_DATA_MAPPING = "setSharedKeysDataMapping";
+    public static final String GET_SHARED_KEYS_DATA_MAPPING = "getSharedKeysDataMapping";
+    public static final String GET_DAILY_SKETCH = "getDailySketch";
+    public static final String START_CONTACT_SHIELD_CB = "startContactShieldCb";
     public static final String START_CONTACT_SHIELD = "startContactShield";
-    public static final String START_CONTACT_SHIELD_OLD = "startContactShieldOld";
     public static final String START_CONTACT_SHIELD_NON_PERSISTENT = "startContactShieldNonPersistent";
     public static final String STOP_CONTACT_SHIELD = "stopContactShield";
     public static final String ON_HAS_CONTACT = "onHasContact";
     public static final String ON_NO_CONTACT = "onNoContact";
+    public static final String GET_CONTACT_SHIELD_VERSION = "getContactShieldVersion";
+    public static final String GET_DEVICE_CALIBRATION_CONFIDENCE = "getDeviceCalibrationConfidence";
+    public static final String IS_SUPPORT_SCANNING_WITHOUT_LOCATION = "isSupportScanningWithoutLocation";
+    public static final String GET_STATUS = "getStatus";
+    public static final String CLEAR_DATA = "clearData";
     public static final String ENABLE_LOGGER = "enableLogger";
     public static final String DISABLE_LOGGER = "disableLogger";
 

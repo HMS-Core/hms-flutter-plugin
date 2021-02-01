@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -26,21 +26,23 @@ import com.huawei.hms.contactshield.ContactShieldEngine;
 import com.huawei.hms.flutter.contactshield.constants.IntentAction;
 
 public class ContactShieldBroadcastReceiver extends BroadcastReceiver {
-    public final ContactShieldCallback callback;
-    public final ContactShieldEngine engine;
+    private final ContactShieldCallback callback;
+    private final ContactShieldEngine engine;
 
     public ContactShieldBroadcastReceiver(final Context context, final ContactShieldCallback callback) {
         this.callback = callback;
-        this.engine = ContactShield.getContactShieldEngine(context);
+        engine = ContactShield.getContactShieldEngine(context);
     }
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
         if (intent != null) {
             switch (intent.getAction()) {
-                case IntentAction.CHECK_CONTACT_STATUS_OLD:
-                case IntentAction.CHECK_CONTACT_STATUS:
-                    this.engine.handleIntent(intent, this.callback);
+                case IntentAction.START_CONTACT_SHIELD_CB:
+                case IntentAction.PUT_SHARED_KEY_FILES_CB:
+                case IntentAction.PUT_SHARED_KEY_FILES_CB_WITH_PROVIDER:
+                case IntentAction.PUT_SHARED_KEY_FILES_CB_WITH_KEYS:
+                    engine.handleIntent(intent, callback);
                     break;
                 default:
                     break;

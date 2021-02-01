@@ -14,25 +14,25 @@
     limitations under the License.
 */
 
-import 'package:flutter/material.dart';
+package com.huawei.hms.flutter.contactshield.utils;
 
-class CustomButton extends StatelessWidget {
-  final String _text;
-  final Function _onPressed;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
-  CustomButton(this._text, this._onPressed);
+public enum ObjectSerializer {
+    INSTANCE;
 
-  @override
-  Widget build(BuildContext context) {
-    return RaisedButton(
-      color: Colors.blueGrey,
-      textColor: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      splashColor: Colors.blueAccent,
-      child: Text(_text, style: TextStyle(fontSize: 14)),
-      onPressed: () async {
-        _onPressed(context);
-      },
-    );
-  }
+    private final Gson gson;
+
+    ObjectSerializer() {
+        gson = new GsonBuilder().serializeNulls().create();
+    }
+
+    public final <T> String toJson(final T obj) {
+        return gson.toJson(obj);
+    }
+
+    public final <T> T fromJson(final String json, final Class<T> cls) {
+        return gson.fromJson(json, cls);
+    }
 }

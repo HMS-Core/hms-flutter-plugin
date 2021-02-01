@@ -1,6 +1,6 @@
 name: huawei_contactshield_example
 description: Demonstrates how to use the Huawei Contact Shield plugin.
-version: 5.0.4+300
+version: 5.1.0+300
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -8,7 +8,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  file_picker: ^1.13.3
+  file_picker: 1.13.3
 
   huawei_contactshield:
     path: ../

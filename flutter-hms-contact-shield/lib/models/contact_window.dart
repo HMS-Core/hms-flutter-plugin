@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -21,15 +21,23 @@ import 'package:flutter/foundation.dart';
 import 'scan_info.dart';
 
 class ContactWindow {
-  ContactWindow({
-    this.dateMillis = 0,
-    this.reportType = 0,
-    List<ScanInfo> scanInfos,
-  }) : scanInfos = scanInfos ?? <ScanInfo>[ScanInfo(), ScanInfo()];
-
   int dateMillis;
   int reportType;
   List<ScanInfo> scanInfos;
+  int contagiousness;
+  int calibrationConfidence;
+
+  ContactWindow({
+    final int dateMillis,
+    final reportType,
+    final List<ScanInfo> scanInfos,
+    final contagiousness,
+    final calibrationConfidence,
+  })  : dateMillis = 0,
+        reportType = 0,
+        scanInfos = scanInfos ?? <ScanInfo>[],
+        contagiousness = 0,
+        calibrationConfidence = 0;
 
   factory ContactWindow.fromJson(String str) =>
       ContactWindow.fromMap(json.decode(str));
@@ -43,6 +51,11 @@ class ContactWindow {
             ? null
             : List<ScanInfo>.from(
                 json["mScanInfos"].map((x) => ScanInfo.fromMap(x))),
+        contagiousness:
+            json["mContagiousness"] == null ? null : json["mContagiousness"],
+        calibrationConfidence: json["mCalibrationConfidence"] == null
+            ? null
+            : json["mCalibrationConfidence"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -51,11 +64,14 @@ class ContactWindow {
         "mScanInfos": scanInfos == null
             ? null
             : List<dynamic>.from(scanInfos.map((x) => x.toMap())),
+        "mContagiousness": contagiousness == null ? null : contagiousness,
+        "mCalibrationConfidence":
+            calibrationConfidence == null ? null : calibrationConfidence,
       };
 
   @override
   String toString() =>
-      'ContactWindow(dateMillis: $dateMillis, reportType: $reportType, scanInfos: $scanInfos)';
+      'ContactWindow(dateMillis: $dateMillis, reportType: $reportType, scanInfos: $scanInfos, contagiousness: $contagiousness, calibrationConfidence: $calibrationConfidence)';
 
   @override
   bool operator ==(Object o) {
@@ -64,10 +80,16 @@ class ContactWindow {
     return o is ContactWindow &&
         o.dateMillis == dateMillis &&
         o.reportType == reportType &&
-        listEquals(o.scanInfos, scanInfos);
+        listEquals(o.scanInfos, scanInfos) &&
+        o.contagiousness == contagiousness &&
+        o.calibrationConfidence == calibrationConfidence;
   }
 
   @override
   int get hashCode =>
-      dateMillis.hashCode ^ reportType.hashCode ^ scanInfos.hashCode;
+      dateMillis.hashCode ^
+      reportType.hashCode ^
+      scanInfos.hashCode ^
+      contagiousness.hashCode ^
+      calibrationConfidence.hashCode;
 }

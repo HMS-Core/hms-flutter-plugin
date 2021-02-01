@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,18 +14,11 @@
     limitations under the License.
 */
 
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
-class CustomRow extends StatelessWidget {
-  final List<Widget> children;
-
-  CustomRow({this.children});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: children,
-    );
-  }
+@immutable
+class Contagiousness {
+  static const int NONE = 0;
+  static const int STANDARD = 1;
+  static const int HIGH = 2;
 }

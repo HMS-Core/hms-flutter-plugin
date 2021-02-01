@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -34,11 +34,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   static const String _TOKEN = 'TOKEN_TEST';
 
-  static const String _RUNNING_TEXT = 'ContactShield engine is RUNNING';
-  static const String _NOT_RUNNING_TEXT = 'ContactShield engine is NOT RUNNING';
-
-  bool _engineStatus = false;
-  String _engineStatusText = '';
   String _exposureText = 'Click the following buttons ' +
       'if you want to check the exposures in the past 14 days';
 
@@ -51,7 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
     _engine = ContactShieldEngine();
     _callback = createCallback();
     _engine.contactShieldCallback = _callback;
-    _isContactShieldRunning();
   }
 
   ContactShieldCallback createCallback() {
@@ -80,69 +74,39 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _isContactShieldRunning() async {
+  void _isContactShieldRunning(BuildContext context) async {
     try {
-      final bool status = await _engine.isContactShieldRunning();
-      setState(() {
-        _engineStatus = status;
-        _engineStatusText = _engineStatus ? _RUNNING_TEXT : _NOT_RUNNING_TEXT;
-      });
+      final bool isRunning = await _engine.isContactShieldRunning();
+      _showDialog(context, 'Is Contact Shield running: $isRunning');
     } on PlatformException catch (e) {
-      setState(() {
-        _engineStatusText = e.toString();
-      });
+      _showDialog(context, e.toString());
     }
   }
 
   void _startContactShield(BuildContext context) async {
-    if (!_engineStatus) {
-      try {
-        await _engine.startContactShield();
-        setState(() {
-          _engineStatus = true;
-          _engineStatusText = _RUNNING_TEXT;
-        });
-        _showDialog(context, 'Contact Shield is started.');
-      } on PlatformException catch (e) {
-        _showDialog(context, e.toString());
-      }
-    } else {
-      _showDialog(context, 'Contact Shield is already running.');
+    try {
+      await _engine.startContactShield();
+      _showDialog(context, 'Contact Shield is started.');
+    } on PlatformException catch (e) {
+      _showDialog(context, e.toString());
     }
   }
 
-  void _startContactShieldOld(BuildContext context) async {
-    if (!_engineStatus) {
-      try {
-        await _engine.startContactShieldOld();
-        setState(() {
-          _engineStatus = true;
-          _engineStatusText = _RUNNING_TEXT;
-        });
-        _showDialog(context, 'Contact Shield is started (Old method).');
-      } on PlatformException catch (e) {
-        _showDialog(context, e.toString());
-      }
-    } else {
-      _showDialog(context, 'Contact Shield is already running.');
+  void _startContactShieldCb(BuildContext context) async {
+    try {
+      await _engine.startContactShieldCb();
+      _showDialog(context, 'Contact Shield is started (Old method).');
+    } on PlatformException catch (e) {
+      _showDialog(context, e.toString());
     }
   }
 
   void _startContactShieldNonPersistent(BuildContext context) async {
-    if (!_engineStatus) {
-      try {
-        await _engine.startContactShieldNonPersistent();
-        setState(() {
-          _engineStatus = true;
-          _engineStatusText = _RUNNING_TEXT;
-        });
-        _showDialog(
-            context, 'Contact Shield is started in non persistent mode.');
-      } on PlatformException catch (e) {
-        _showDialog(context, e.toString());
-      }
-    } else {
-      _showDialog(context, 'Contact Shield is already running.');
+    try {
+      await _engine.startContactShieldNonPersistent();
+      _showDialog(context, 'Contact Shield is started in non persistent mode.');
+    } on PlatformException catch (e) {
+      _showDialog(context, e.toString());
     }
   }
 
@@ -161,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
       final files = await _pickFiles(context);
       if (files != null) {
         await _engine.putSharedKeyFiles(files, config, _TOKEN);
-        _showDialog(context, 'putSharedKeyFiles Success.');
+        _showDialog(context, 'putSharedKeyFiles success (Deprecated method).');
       } else {
         _showDialog(context, 'You have not selected any file(s).');
       }
@@ -170,13 +134,44 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _putSharedKeyFilesOld(BuildContext context) async {
+  void _putSharedKeyFilesCb(BuildContext context) async {
     try {
       final DiagnosisConfiguration config = DiagnosisConfiguration();
       final files = await _pickFiles(context);
       if (files != null) {
-        await _engine.putSharedKeyFilesOld(files, config, _TOKEN);
-        _showDialog(context, 'putSharedKeyFilesOld Success (Old method).');
+        await _engine.putSharedKeyFilesCb(files, config, _TOKEN);
+        _showDialog(context, 'putSharedKeyFilesCb success.');
+      } else {
+        _showDialog(context, 'You have not selected any file(s).');
+      }
+    } on PlatformException catch (e) {
+      _showDialog(context, e.toString());
+    }
+  }
+
+  void _putSharedKeyFilesCbWithProvider(BuildContext context) async {
+    try {
+      final files = await _pickFiles(context);
+      if (files != null) {
+        await _engine.putSharedKeyFilesCbWithProvider(files);
+        _showDialog(context, 'putSharedKeyFilesCbWithProvider success.');
+      } else {
+        _showDialog(context, 'You have not selected any file(s).');
+      }
+    } on PlatformException catch (e) {
+      _showDialog(context, e.toString());
+    }
+  }
+
+  void _putSharedKeyFilesCbWithKeys(BuildContext context) async {
+    try {
+      final DiagnosisConfiguration config = DiagnosisConfiguration();
+      final List<String> publicKeys = <String>["0", "1", "2"];
+      final files = await _pickFiles(context);
+      if (files != null) {
+        await _engine.putSharedKeyFilesCbWithKeys(
+            files, publicKeys, config, _TOKEN);
+        _showDialog(context, 'putSharedKeyFilesCbWithKeys success.');
       } else {
         _showDialog(context, 'You have not selected any file(s).');
       }
@@ -215,29 +210,91 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void _setSharedKeysDataMapping(BuildContext context) async {
+    try {
+      final SharedKeysDataMapping sharedKeysDataMapping =
+          SharedKeysDataMapping();
+      await _engine.setSharedKeysDataMapping(sharedKeysDataMapping);
+      _showDialog(context, 'setSharedKeysDataMapping success.');
+    } on PlatformException catch (e) {
+      _showDialog(context, e.toString());
+    }
+  }
+
+  void _getSharedKeysDataMapping(BuildContext context) async {
+    try {
+      final SharedKeysDataMapping sharedKeysDataMapping =
+          await _engine.getSharedKeysDataMapping();
+      _showDialog(context, sharedKeysDataMapping.toString());
+    } on PlatformException catch (e) {
+      _showDialog(context, e.toString());
+    }
+  }
+
+  void _getDailySketch(BuildContext context) async {
+    try {
+      final DailySketchConfiguration configuration = DailySketchConfiguration();
+      final List<DailySketch> dailySketch =
+          await _engine.getDailySketch(configuration);
+      _showDialog(context, dailySketch.toString());
+    } on PlatformException catch (e) {
+      _showDialog(context, e.toString());
+    }
+  }
+
+  void _getContactShieldVersion(BuildContext context) async {
+    try {
+      final int version = await _engine.getContactShieldVersion();
+      _showDialog(context, 'Contact Shield version: $version');
+    } on PlatformException catch (e) {
+      _showDialog(context, e.toString());
+    }
+  }
+
+  void _getDeviceCalibrationConfidence(BuildContext context) async {
+    try {
+      final int confidence = await _engine.getDeviceCalibrationConfidence();
+      _showDialog(context, 'Device calibration confidence: $confidence');
+    } on PlatformException catch (e) {
+      _showDialog(context, e.toString());
+    }
+  }
+
+  void _isSupportScanningWithoutLocation(BuildContext context) async {
+    try {
+      final bool isSupported = await _engine.isSupportScanningWithoutLocation();
+      _showDialog(
+          context, 'Is support scanning without location: $isSupported');
+    } on PlatformException catch (e) {
+      _showDialog(context, e.toString());
+    }
+  }
+
+  void _getStatus(BuildContext context) async {
+    try {
+      final Set<ContactShieldStatus> statusSet = await _engine.getStatus();
+
+      _showDialog(context, statusSet.toString());
+    } on PlatformException catch (e) {
+      _showDialog(context, e.toString());
+    }
+  }
+
   void _clearData(BuildContext context) async {
     try {
       await _engine.clearData();
-      _showDialog(context, 'clearData Success.');
+      _showDialog(context, 'clearData success.');
     } on PlatformException catch (e) {
       _showDialog(context, e.toString());
     }
   }
 
   void _stopContactShield(BuildContext context) async {
-    if (_engineStatus) {
-      try {
-        await _engine.stopContactShield();
-        setState(() {
-          _engineStatus = false;
-          _engineStatusText = _NOT_RUNNING_TEXT;
-        });
-        _showDialog(context, 'Contact Shieled is stopped.');
-      } on PlatformException catch (e) {
-        _showDialog(context, e.toString());
-      }
-    } else {
-      _showDialog(context, 'Contact Shield is not running. No action needed.');
+    try {
+      await _engine.stopContactShield();
+      _showDialog(context, 'Contact Shieled is stopped.');
+    } on PlatformException catch (e) {
+      _showDialog(context, e.toString());
     }
   }
 
@@ -247,60 +304,78 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('Huawei Contact Shield Flutter Demo'),
       ),
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(
-                top: 6,
-              ),
-              child: Container(
-                child: Text(_engineStatusText),
-                alignment: Alignment.center,
-              ),
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints viewportConstraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints:
+                  BoxConstraints(minHeight: viewportConstraints.maxHeight),
+              child: Column(children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      CustomButton('Is Contact Shield running?',
+                          _isContactShieldRunning),
+                      CustomButton('Start Contact Shield', _startContactShield),
+                      CustomButton('Start Contact Shield Callback (Old method)',
+                          _startContactShieldCb),
+                      CustomButton('Start Contact Shield Non Persistent',
+                          _startContactShieldNonPersistent),
+                      Divider(
+                        thickness: 0.1,
+                        color: Colors.black,
+                      ),
+                      CustomButton('Report Periodic Keys (getPeriodicKey)',
+                          _getPeriodicKey),
+                      Divider(
+                        thickness: 0.1,
+                        color: Colors.black,
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(),
+                        height: 32,
+                        child: Container(
+                          child: Text(_exposureText),
+                          alignment: Alignment.center,
+                        ),
+                      ),
+                      Divider(
+                        thickness: 0.1,
+                        color: Colors.black,
+                      ),
+                      CustomButton('putSharedKeyFiles', _putSharedKeyFiles),
+                      CustomButton('putSharedKeyFilesCb', _putSharedKeyFilesCb),
+                      CustomButton('putSharedKeyFilesCbWithProvider',
+                          _putSharedKeyFilesCbWithProvider),
+                      CustomButton('putSharedKeyFilesCbWithKeys',
+                          _putSharedKeyFilesCbWithKeys),
+                      CustomButton('Get Contact Detail', _getContactDetail),
+                      CustomButton('Get Contact Sketch', _getContactSketch),
+                      CustomButton('Get Contact Window', _getContactWindow),
+                      CustomButton('Set Shared Keys Data Mapping',
+                          _setSharedKeysDataMapping),
+                      CustomButton('Get Shared Keys Data Mapping',
+                          _getSharedKeysDataMapping),
+                      CustomButton('Get Daily Sketch', _getDailySketch),
+                      CustomButton('Get Contact Shield Version',
+                          _getContactShieldVersion),
+                      CustomButton('Get Device Calibartion Confidence',
+                          _getDeviceCalibrationConfidence),
+                      CustomButton('Is Support Scanning w/o Location',
+                          _isSupportScanningWithoutLocation),
+                      CustomButton('Get Contact Shield Status', _getStatus),
+                      CustomButton('Clear Data', _clearData),
+                      CustomButton('Stop Contact Shield', _stopContactShield),
+                    ],
+                  ),
+                )
+                // remaining stuffs
+              ]),
             ),
-            Divider(
-              thickness: 0.1,
-              color: Colors.black,
-            ),
-            CustomButton('Start Contact Shield', _startContactShield),
-            CustomButton(
-                'Start Contact Shield (Old method)', _startContactShieldOld),
-            CustomButton('Start Contact Shield Non Persistent',
-                _startContactShieldNonPersistent),
-            Divider(
-              thickness: 0.1,
-              color: Colors.black,
-            ),
-            CustomButton(
-                'Report Periodic Keys (getPeriodicKey)', _getPeriodicKey),
-            Divider(
-              thickness: 0.1,
-              color: Colors.black,
-            ),
-            Container(
-              padding: EdgeInsets.only(),
-              height: 32,
-              child: Container(
-                child: Text(_exposureText),
-                alignment: Alignment.center,
-              ),
-            ),
-            Divider(
-              thickness: 0.1,
-              color: Colors.black,
-            ),
-            CustomButton('Check (putSharedKeyFiles)', _putSharedKeyFiles),
-            CustomButton('Check (putSharedKeyFilesOld)', _putSharedKeyFilesOld),
-            CustomButton('Get Contact Detail', _getContactDetail),
-            CustomButton('Get Contact Sketch', _getContactSketch),
-            CustomButton('Get Contact Window', _getContactWindow),
-            CustomButton('Clear Data', _clearData),
-            CustomButton('Stop Contact Shield', _stopContactShield),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -20,18 +20,20 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.huawei.hms.common.ApiException;
 import com.huawei.hms.contactshield.ContactShield;
 import com.huawei.hms.contactshield.ContactShieldEngine;
 import com.huawei.hms.contactshield.ContactShieldSetting;
+import com.huawei.hms.contactshield.DailySketchConfiguration;
 import com.huawei.hms.contactshield.DiagnosisConfiguration;
+import com.huawei.hms.contactshield.SharedKeyFileProvider;
+import com.huawei.hms.contactshield.SharedKeysDataMapping;
 import com.huawei.hms.flutter.contactshield.constants.IntentAction;
 import com.huawei.hms.flutter.contactshield.constants.Method;
 import com.huawei.hms.flutter.contactshield.constants.RequestCode;
 import com.huawei.hms.flutter.contactshield.logger.HMSLogger;
-import com.huawei.hms.flutter.contactshield.utils.ErrorProvider;
 import com.huawei.hms.flutter.contactshield.utils.ObjectProvider;
+import com.huawei.hms.flutter.contactshield.utils.ObjectSerializer;
 
 import java.io.File;
 import java.util.List;
@@ -42,17 +44,15 @@ import io.flutter.plugin.common.MethodChannel.Result;
 public class ContactShieldService {
     private final Context context;
     private final ContactShieldEngine engine;
-    private final Gson gson;
     private final HMSLogger hmsLogger;
 
     private MethodCall call;
     private Result result;
 
     public ContactShieldService(final Activity activity) {
-        this.context = activity.getApplicationContext();
-        this.engine = ContactShield.getContactShieldEngine(activity);
-        this.gson = new GsonBuilder().serializeNulls().create();
-        this.hmsLogger = HMSLogger.getInstance(activity.getApplicationContext());
+        context = activity.getApplicationContext();
+        engine = ContactShield.getContactShieldEngine(activity);
+        hmsLogger = HMSLogger.getInstance(activity.getApplicationContext());
     }
 
     public void setCall(final MethodCall call) {
@@ -64,132 +64,217 @@ public class ContactShieldService {
     }
 
     public void isContactShieldRunning() {
-        this.engine.isContactShieldRunning()
-            .addOnSuccessListener(aBoolean -> handleSuccess(Method.IS_CONTACT_SHIELD_RUNNING, aBoolean))
-            .addOnFailureListener(e -> handleError(Method.IS_CONTACT_SHIELD_RUNNING, e));
+        engine.isContactShieldRunning()
+            .addOnSuccessListener(aBoolean -> returnSuccess(Method.IS_CONTACT_SHIELD_RUNNING, aBoolean))
+            .addOnFailureListener(e -> returnError(Method.IS_CONTACT_SHIELD_RUNNING, e));
     }
 
-    @Deprecated
-    public void startContactShieldOld() {
-        final PendingIntent pendingIntent = ObjectProvider.getPendingIntent(this.context,
-            IntentAction.CHECK_CONTACT_STATUS_OLD, RequestCode.START_CONTACT_SHIELD_OLD);
-        final ContactShieldSetting setting = ObjectProvider.getContactShieldSetting(this.call);
+    public void startContactShieldCb() {
+        final ContactShieldSetting setting = ObjectProvider.getContactShieldSetting(call);
 
-        this.engine.startContactShield(pendingIntent, setting)
-            .addOnSuccessListener(aVoid -> handleVoidSuccess(Method.START_CONTACT_SHIELD_OLD))
-            .addOnFailureListener(e -> handleError(Method.START_CONTACT_SHIELD_OLD, e));
+        final PendingIntent pendingIntent = ObjectProvider.getPendingIntent(context,
+            IntentAction.START_CONTACT_SHIELD_CB, RequestCode.START_CONTACT_SHIELD_CB);
+
+        engine.startContactShield(pendingIntent, setting)
+            .addOnSuccessListener(aVoid -> returnSuccess(Method.START_CONTACT_SHIELD_CB, null))
+            .addOnFailureListener(e -> returnError(Method.START_CONTACT_SHIELD_CB, e));
     }
 
     public void startContactShield() {
-        final ContactShieldSetting setting = ObjectProvider.getContactShieldSetting(this.call);
+        final ContactShieldSetting setting = ObjectProvider.getContactShieldSetting(call);
 
-        this.engine.startContactShield(setting)
-            .addOnSuccessListener(aVoid -> handleVoidSuccess(Method.START_CONTACT_SHIELD))
-            .addOnFailureListener(e -> handleError(Method.START_CONTACT_SHIELD, e));
+        engine.startContactShield(setting)
+            .addOnSuccessListener(aVoid -> returnSuccess(Method.START_CONTACT_SHIELD, null))
+            .addOnFailureListener(e -> returnError(Method.START_CONTACT_SHIELD, e));
     }
 
     public void startContactShieldNoPersistent() {
-        final ContactShieldSetting setting = ObjectProvider.getContactShieldSetting(this.call);
+        final ContactShieldSetting setting = ObjectProvider.getContactShieldSetting(call);
 
-        this.engine.startContactShieldNoPersistent(setting)
-            .addOnSuccessListener(aVoid -> handleVoidSuccess(Method.START_CONTACT_SHIELD_NON_PERSISTENT))
-            .addOnFailureListener(e -> handleError(Method.START_CONTACT_SHIELD_NON_PERSISTENT, e));
+        engine.startContactShieldNoPersistent(setting)
+            .addOnSuccessListener(aVoid -> returnSuccess(Method.START_CONTACT_SHIELD_NON_PERSISTENT, null))
+            .addOnFailureListener(e -> returnError(Method.START_CONTACT_SHIELD_NON_PERSISTENT, e));
     }
 
     public void getPeriodicKey() {
-        this.engine.getPeriodicKey()
+        engine.getPeriodicKey()
             .addOnSuccessListener(
-                periodicKeys -> handleSuccess(Method.GET_PERIODIC_KEY, this.gson.toJson(periodicKeys)))
-            .addOnFailureListener(e -> handleError(Method.GET_PERIODIC_KEY, e));
-    }
-
-    @Deprecated
-    public void putSharedKeyFilesOld() {
-        final List<File> files = ObjectProvider.getFileList(this.call);
-        final DiagnosisConfiguration diagnosisConfig = ObjectProvider.getDiagnosisConfiguration(this.call, this.gson);
-        final String token = this.call.argument("token");
-
-        this.engine.putSharedKeyFiles(files, diagnosisConfig, token)
-            .addOnSuccessListener(aVoid -> handleVoidSuccess(Method.PUT_SHARED_KEY_FILES_OLD))
-            .addOnFailureListener(e -> handleError(Method.PUT_SHARED_KEY_FILES_OLD, e));
+                periodicKeys ->
+                    returnSuccess(Method.GET_PERIODIC_KEY, ObjectSerializer.INSTANCE.toJson(periodicKeys)))
+            .addOnFailureListener(e -> returnError(Method.GET_PERIODIC_KEY, e));
     }
 
     public void putSharedKeyFiles() {
-        final PendingIntent pendingIntent = ObjectProvider.getPendingIntent(this.context,
-            IntentAction.CHECK_CONTACT_STATUS, RequestCode.PUT_SHARED_KEY_FILES);
+        final List<File> files = ObjectProvider.getFileList(call);
+        final DiagnosisConfiguration diagnosisConfig = ObjectProvider.getDiagnosisConfiguration(call);
+        final String token = call.argument("token");
 
-        final List<File> files = ObjectProvider.getFileList(this.call);
-        final DiagnosisConfiguration diagnosisConfig = ObjectProvider.getDiagnosisConfiguration(this.call, this.gson);
-        final String token = this.call.argument("token");
-
-        this.engine.putSharedKeyFiles(pendingIntent, files, diagnosisConfig, token)
-            .addOnSuccessListener(aVoid -> handleVoidSuccess(Method.PUT_SHARED_KEY_FILES))
-            .addOnFailureListener(e -> handleError(Method.PUT_SHARED_KEY_FILES, e));
+        engine.putSharedKeyFiles(files, diagnosisConfig, token)
+            .addOnSuccessListener(aVoid -> returnSuccess(Method.PUT_SHARED_KEY_FILES, null))
+            .addOnFailureListener(e -> returnError(Method.PUT_SHARED_KEY_FILES, e));
     }
 
-    @Deprecated
-    public void getContactDetail() {
-        final String token = this.call.arguments();
+    public void putSharedKeyFilesCb() {
+        final List<File> files = ObjectProvider.getFileList(call);
+        final DiagnosisConfiguration diagnosisConfig = ObjectProvider.getDiagnosisConfiguration(call);
+        final String token = call.argument("token");
 
-        this.engine.getContactDetail(token)
+        final PendingIntent pendingIntent = ObjectProvider.getPendingIntent(context,
+            IntentAction.PUT_SHARED_KEY_FILES_CB, RequestCode.PUT_SHARED_KEY_FILES_CB);
+
+        engine.putSharedKeyFiles(pendingIntent, files, diagnosisConfig, token)
+            .addOnSuccessListener(aVoid -> returnSuccess(Method.PUT_SHARED_KEY_FILES_CB, null))
+            .addOnFailureListener(e -> returnError(Method.PUT_SHARED_KEY_FILES_CB, e));
+    }
+
+    public void putSharedKeyFilesCbWithProvider() {
+        final SharedKeyFileProvider sharedKeyFileProvider = ObjectProvider.getSharedKeyFileProvider(call);
+
+        final PendingIntent pendingIntent = ObjectProvider.getPendingIntent(context,
+            IntentAction.PUT_SHARED_KEY_FILES_CB_WITH_PROVIDER, RequestCode.PUT_SHARED_KEY_FILES_CB_WITH_PROVIDER);
+
+        engine.putSharedKeyFiles(pendingIntent, sharedKeyFileProvider).addOnSuccessListener(aVoid ->
+            returnSuccess(Method.PUT_SHARED_KEY_FILES_CB_WITH_PROVIDER, null))
+            .addOnFailureListener(e ->
+                returnError(Method.PUT_SHARED_KEY_FILES_CB_WITH_PROVIDER, e));
+    }
+
+    public void putSharedKeyFilesCbWithKeys() {
+        final List<File> files = ObjectProvider.getFileList(call);
+        final List<String> publicKeys = call.argument("publicKeys");
+        final DiagnosisConfiguration diagnosisConfig = ObjectProvider.getDiagnosisConfiguration(call);
+        final String token = call.argument("token");
+
+        final PendingIntent pendingIntent = ObjectProvider.getPendingIntent(context,
+            IntentAction.PUT_SHARED_KEY_FILES_CB_WITH_KEYS, RequestCode.PUT_SHARED_KEY_FILES_CB_WITH_KEYS);
+
+        engine.putSharedKeyFiles(pendingIntent, files, publicKeys, diagnosisConfig, token).addOnSuccessListener(aVoid ->
+            returnSuccess(Method.PUT_SHARED_KEY_FILES_CB_WITH_KEYS, null))
+            .addOnFailureListener(e ->
+                returnError(Method.PUT_SHARED_KEY_FILES_CB_WITH_KEYS, e));
+    }
+
+    public void getContactDetail() {
+        final String token = call.arguments();
+
+        engine.getContactDetail(token)
             .addOnSuccessListener(
-                contactDetails -> handleSuccess(Method.GET_CONTACT_DETAIL, this.gson.toJson(contactDetails)))
-            .addOnFailureListener(e -> handleError(Method.GET_CONTACT_DETAIL, e));
+                contactDetails ->
+                    returnSuccess(Method.GET_CONTACT_DETAIL, ObjectSerializer.INSTANCE.toJson(contactDetails)))
+            .addOnFailureListener(e -> returnError(Method.GET_CONTACT_DETAIL, e));
     }
 
     public void getContactSketch() {
-        final String token = this.call.arguments();
+        final String token = call.arguments();
 
-        this.engine.getContactSketch(token)
+        engine.getContactSketch(token)
             .addOnSuccessListener(
-                contactSketch -> handleSuccess(Method.GET_CONTACT_SKETCH, this.gson.toJson(contactSketch)))
-            .addOnFailureListener(e -> handleError(Method.GET_CONTACT_SKETCH, e));
+                contactSketch ->
+                    returnSuccess(Method.GET_CONTACT_SKETCH, ObjectSerializer.INSTANCE.toJson(contactSketch)))
+            .addOnFailureListener(e -> returnError(Method.GET_CONTACT_SKETCH, e));
     }
 
     public void getContactWindow() {
-        final String token = this.call.arguments();
+        final String token = call.arguments();
 
-        this.engine.getContactWindow(token)
+        engine.getContactWindow(token)
             .addOnSuccessListener(
-                contactWindows -> handleSuccess(Method.GET_CONTACT_WINDOW, this.gson.toJson(contactWindows)))
-            .addOnFailureListener(e -> handleError(Method.GET_CONTACT_WINDOW, e));
+                contactWindows ->
+                    returnSuccess(Method.GET_CONTACT_WINDOW, ObjectSerializer.INSTANCE.toJson(contactWindows)))
+            .addOnFailureListener(e -> returnError(Method.GET_CONTACT_WINDOW, e));
+    }
+
+    public void setSharedKeysDataMapping() {
+        final SharedKeysDataMapping sharedKeysDataMapping = ObjectProvider.getSharedKeysDataMapping(call);
+
+        engine.setSharedKeysDataMapping(sharedKeysDataMapping).addOnSuccessListener(aVoid ->
+            returnSuccess(Method.SET_SHARED_KEYS_DATA_MAPPING, null))
+            .addOnFailureListener(e ->
+                returnError(Method.SET_SHARED_KEYS_DATA_MAPPING, e));
+    }
+
+    public void getSharedKeysDataMapping() {
+        engine.getSharedKeysDataMapping().addOnSuccessListener(
+            sharedKeysDataMapping ->
+                returnSuccess(Method.GET_SHARED_KEYS_DATA_MAPPING,
+                    ObjectSerializer.INSTANCE.toJson(sharedKeysDataMapping)))
+            .addOnFailureListener(e -> returnError(Method.GET_SHARED_KEYS_DATA_MAPPING, e));
+    }
+
+    public void getDailySketch() {
+        final String dailySketchConfigurationJson = call.arguments();
+        final DailySketchConfiguration config = ObjectSerializer.INSTANCE
+            .fromJson(dailySketchConfigurationJson, DailySketchConfiguration.class);
+
+        engine.getDailySketch(config).addOnSuccessListener(
+            dailySketches -> returnSuccess(Method.GET_DAILY_SKETCH, ObjectSerializer.INSTANCE.toJson(dailySketches)))
+            .addOnFailureListener(e -> returnError(Method.GET_DAILY_SKETCH, e));
+    }
+
+    public void getContactShieldVersion() {
+        engine.getContactShieldVersion()
+            .addOnSuccessListener(version -> returnSuccess(Method.GET_CONTACT_SHIELD_VERSION, version))
+            .addOnFailureListener(e -> returnError(Method.GET_CONTACT_SHIELD_VERSION, e));
+    }
+
+    public void getDeviceCalibrationConfidence() {
+        engine.getDeviceCalibrationConfidence()
+            .addOnSuccessListener(confidence -> returnSuccess(Method.GET_DEVICE_CALIBRATION_CONFIDENCE, confidence))
+            .addOnFailureListener(e -> returnError(Method.GET_DEVICE_CALIBRATION_CONFIDENCE, e));
+    }
+
+    public void isSupportScanningWithoutLocation() {
+        final boolean isSupported = engine.isSupportScanningWithoutLocation();
+        returnSuccess(Method.IS_SUPPORT_SCANNING_WITHOUT_LOCATION, isSupported);
+    }
+
+    public void getStatus() {
+        engine.getStatus().addOnSuccessListener(
+            status -> returnSuccess(Method.GET_STATUS, ObjectSerializer.INSTANCE.toJson(status)))
+            .addOnFailureListener(e -> returnError(Method.GET_STATUS, e));
     }
 
     public void clearData() {
-        this.engine.clearData()
-            .addOnSuccessListener(aVoid -> handleVoidSuccess(Method.CLEAR_DATA))
-            .addOnFailureListener(e -> handleError(Method.CLEAR_DATA, e));
+        engine.clearData()
+            .addOnSuccessListener(aVoid -> returnSuccess(Method.CLEAR_DATA, null))
+            .addOnFailureListener(e -> returnError(Method.CLEAR_DATA, e));
     }
 
     public void stopContactShield() {
-        this.engine.stopContactShield()
-            .addOnSuccessListener(aVoid -> handleVoidSuccess(Method.STOP_CONTACT_SHIELD))
-            .addOnFailureListener(e -> handleError(Method.STOP_CONTACT_SHIELD, e));
+        engine.stopContactShield()
+            .addOnSuccessListener(aVoid -> returnSuccess(Method.STOP_CONTACT_SHIELD, null))
+            .addOnFailureListener(e -> returnError(Method.STOP_CONTACT_SHIELD, e));
     }
 
     public void enableLogger() {
-        this.hmsLogger.enableLogger();
-        this.result.success(null);
+        hmsLogger.enableLogger();
+        result.success(null);
     }
 
     public void disableLogger() {
-        this.hmsLogger.disableLogger();
-        this.result.success(null);
+        hmsLogger.disableLogger();
+        result.success(null);
     }
 
-    private <T> void handleSuccess(final String methodName, final T response) {
-        this.result.success(response);
-        this.hmsLogger.sendSingleEvent(methodName);
+    private <T> void returnSuccess(final String methodName, final T response) {
+        result.success(response);
+        hmsLogger.sendSingleEvent(methodName);
     }
 
-    private void handleVoidSuccess(final String methodName) {
-        this.result.success(null);
-        this.hmsLogger.sendSingleEvent(methodName);
-    }
+    private void returnError(final String methodName, final Exception e) {
+        final int statusCode;
+        final String statusMessage;
 
-    private void handleError(final String methodName, final Exception e) {
-        final String errorCode = ErrorProvider.getErrorCode(methodName);
-        this.result.error(errorCode, e.toString(), null);
-        this.hmsLogger.sendSingleEvent(methodName, "-1");
+        if (e instanceof ApiException) {
+            final ApiException exception = ((ApiException) e);
+            statusCode = exception.getStatusCode();
+            statusMessage = exception.getStatusMessage();
+        } else {
+            statusCode = -1;
+            statusMessage = "Unknown error";
+        }
+
+        result.error(String.valueOf(statusCode), statusMessage, null);
+        hmsLogger.sendSingleEvent(methodName, String.valueOf(statusCode));
     }
 }
