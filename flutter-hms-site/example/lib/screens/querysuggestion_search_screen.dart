@@ -1,11 +1,11 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,6 +21,7 @@ import 'package:huawei_site/model/coordinate.dart';
 import 'package:huawei_site/model/query_suggestion_request.dart';
 import 'package:huawei_site/model/query_suggestion_response.dart';
 import 'package:huawei_site/search_service.dart';
+import 'package:huawei_site_example/screens/home_screen.dart';
 
 import '../keys.dart';
 import '../widgets/custom_button.dart';
@@ -36,50 +37,56 @@ class QuerySuggestionSearchScreen extends StatefulWidget {
 
 class _QuerySuggestionSearchScreenState
     extends State<QuerySuggestionSearchScreen> {
-  String results;
-
-  final SearchService searchService = SearchService();
-  final QuerySuggestionRequest request = QuerySuggestionRequest();
-
-  final TextEditingController queryTextController =
+  final TextEditingController _queryTextController =
       TextEditingController(text: "Paris");
-  final TextEditingController languageTextController =
+  final TextEditingController _languageTextController =
       TextEditingController(text: "en");
-  final TextEditingController countryTextController =
+  final TextEditingController _countryTextController =
       TextEditingController(text: "FR");
-  final TextEditingController latTextController =
+  final TextEditingController _latTextController =
       TextEditingController(text: "48.893478");
-  final TextEditingController lngTextController =
+  final TextEditingController _lngTextController =
       TextEditingController(text: "2.334595");
-  final TextEditingController radiusTextController =
+  final TextEditingController _radiusTextController =
       TextEditingController(text: "5000");
+
+  final QuerySuggestionRequest _request = QuerySuggestionRequest();
+
+  String _results;
+  SearchService _searchService;
 
   @override
   void initState() {
     super.initState();
-    results = "";
+    initService();
+    _results = "";
+  }
+
+  void initService() async {
+    _searchService = await SearchService.create(HomeScreen.API_KEY);
   }
 
   void runSearch() async {
-    request.query = queryTextController.text;
-    request.location = Coordinate(
-      lat: double.parse(latTextController.text),
-      lng: double.parse(lngTextController.text),
+    _request.query = _queryTextController.text;
+    _request.location = Coordinate(
+      lat: double.parse(_latTextController.text),
+      lng: double.parse(_lngTextController.text),
     );
-    request.language = languageTextController.text;
-    request.countryCode = countryTextController.text;
-    request.radius = int.parse(radiusTextController.text);
+    _request.language = _languageTextController.text;
+    _request.countryCode = _countryTextController.text;
+    _request.radius = int.parse(_radiusTextController.text);
+    _request.children = true;
 
     try {
       QuerySuggestionResponse response =
-          await searchService.querySuggestion(request);
+          await _searchService.querySuggestion(_request);
       setState(() {
-        results = response.toJson();
-        log(results);
+        _results = response.toJson();
+        log(_results);
       });
     } catch (e) {
       setState(() {
-        results = e.toString();
+        _results = e.toString();
       });
     }
   }
@@ -101,27 +108,27 @@ class _QuerySuggestionSearchScreenState
                   children: <Widget>[
                     CustomTextFormField(
                       labelText: "Query Text",
-                      controller: queryTextController,
+                      controller: _queryTextController,
                     ),
                     CustomTextFormField(
                       labelText: "Language",
-                      controller: languageTextController,
+                      controller: _languageTextController,
                     ),
                     CustomTextFormField(
                       labelText: "Country Code",
-                      controller: countryTextController,
+                      controller: _countryTextController,
                     ),
                     CustomTextFormField(
                       labelText: "Latitude",
-                      controller: latTextController,
+                      controller: _latTextController,
                     ),
                     CustomTextFormField(
                       labelText: "Longitude",
-                      controller: lngTextController,
+                      controller: _lngTextController,
                     ),
                     CustomTextFormField(
                       labelText: "Radius",
-                      controller: radiusTextController,
+                      controller: _radiusTextController,
                     ),
                     CustomButton(
                       key: Key(Keys.SEARCH_QUERY),
@@ -136,7 +143,7 @@ class _QuerySuggestionSearchScreenState
             ),
             Container(
               child: Text(
-                results,
+                _results,
                 key: Key(Keys.RESULT_QUERY),
                 style: TextStyle(
                   fontSize: 12.0,

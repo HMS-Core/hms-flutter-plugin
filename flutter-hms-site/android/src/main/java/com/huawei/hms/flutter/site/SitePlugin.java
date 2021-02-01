@@ -1,11 +1,11 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,15 +18,12 @@ package com.huawei.hms.flutter.site;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
-import com.huawei.agconnect.config.AGConnectServicesConfig;
-import com.huawei.hms.flutter.site.constants.Channel;
-import com.huawei.hms.flutter.site.handlers.ActivityAwareMethodCallHandlerImpl;
-import com.huawei.hms.site.api.SearchService;
-import com.huawei.hms.site.api.SearchServiceFactory;
+import com.huawei.hms.flutter.site.handlers.MethodCallHandlerImp;
+import com.huawei.hms.flutter.site.services.SiteService;
+import com.huawei.hms.flutter.site.utils.HMSLogger;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -36,44 +33,38 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 public class SitePlugin implements FlutterPlugin, ActivityAware {
-    private SearchService searchService;
     private MethodChannel methodChannel;
-    private ActivityAwareMethodCallHandlerImpl methodCallHandler;
+    private MethodChannel.MethodCallHandler methodCallHandler;
+    private HMSLogger hmsLogger;
+    private SiteService service;
 
     public static void registerWith(final Registrar registrar) {
         final SitePlugin instance = new SitePlugin();
-        final Activity activity = registrar.activity();
-        final Context context = registrar.context();
-
-        // When context is available
-        // searchService and methodChannel are instantiated
-        instance.onAttachedToEngine(registrar.context(), registrar.messenger());
-
-        // When activity is available
-        // methodCallHandler is instantiated
-        instance.methodCallHandler = new ActivityAwareMethodCallHandlerImpl(activity, instance.searchService,
-            instance.getApiKey(context));
-        instance.methodChannel.setMethodCallHandler(instance.methodCallHandler);
+        instance.onAttachedToEngine(registrar.messenger(), registrar.activeContext());
+        instance.onAttachedToActivity(registrar.activity());
     }
 
-    private String getApiKey(Context context) {
-        final String rawApiKey = AGConnectServicesConfig.fromContext(context).getString("client/api_key");
-        return Uri.encode(rawApiKey);
-    }
-
-    private void onAttachedToEngine(final Context context, final BinaryMessenger messenger) {
-        searchService = SearchServiceFactory.create(context, getApiKey(context));
-        methodChannel = new MethodChannel(messenger, Channel.METHOD_SEARCH_SERVICE);
+    private void onAttachedToEngine(@NonNull final BinaryMessenger messenger, @NonNull final Context context) {
+        methodChannel = new MethodChannel(messenger, "com.huawei.hms.flutter.site/MethodChannel");
+        hmsLogger = HMSLogger.getInstance(context);
     }
 
     private void onDetachedFromEngine() {
-        searchService = null;
+        hmsLogger = null;
         methodChannel = null;
+    }
+
+    private void onAttachedToActivity(@NonNull final Activity activity) {
+        service = new SiteService(activity);
+        methodCallHandler = new MethodCallHandlerImp(hmsLogger, service);
+        if (methodChannel != null) {
+            methodChannel.setMethodCallHandler(methodCallHandler);
+        }
     }
 
     @Override
     public void onAttachedToEngine(@NonNull final FlutterPluginBinding binding) {
-        onAttachedToEngine(binding.getApplicationContext(), binding.getBinaryMessenger());
+        onAttachedToEngine(binding.getBinaryMessenger(), binding.getApplicationContext());
     }
 
     @Override
@@ -83,11 +74,8 @@ public class SitePlugin implements FlutterPlugin, ActivityAware {
 
     @Override
     public void onAttachedToActivity(@NonNull final ActivityPluginBinding binding) {
-        final Activity activity = binding.getActivity();
-        methodCallHandler = new ActivityAwareMethodCallHandlerImpl(activity, searchService,
-            getApiKey(activity.getApplicationContext()));
-        methodChannel.setMethodCallHandler(methodCallHandler);
-        binding.addActivityResultListener(methodCallHandler);
+        onAttachedToActivity(binding.getActivity());
+        binding.addActivityResultListener(service);
     }
 
     @Override
@@ -102,7 +90,10 @@ public class SitePlugin implements FlutterPlugin, ActivityAware {
 
     @Override
     public void onDetachedFromActivity() {
-        methodChannel.setMethodCallHandler(null);
+        if (methodChannel != null) {
+            methodChannel.setMethodCallHandler(null);
+        }
         methodCallHandler = null;
+        service = null;
     }
 }

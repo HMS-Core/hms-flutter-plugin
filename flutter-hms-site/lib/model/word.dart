@@ -16,49 +16,46 @@
 
 import 'dart:convert';
 
-class SearchStatus {
-  String errorCode;
-  String errorMessage;
+class Word {
+  int offset;
+  String value;
 
-  SearchStatus({
-    this.errorCode,
-    this.errorMessage,
-  });
+  Word({
+    int offset,
+    String value,
+  })  : offset = offset ?? 0,
+        value = value ?? '';
 
   Map<String, dynamic> toMap() {
     return {
-      'errorCode': errorCode,
-      'errorMessage': errorMessage,
+      'offset': offset,
+      'value': value,
     };
   }
 
-  factory SearchStatus.fromMap(Map<String, dynamic> map) {
+  factory Word.fromMap(Map<String, dynamic> map) {
     if (map == null) return null;
 
-    return SearchStatus(
-      errorCode: map['errorCode'] == null ? null : map['errorCode'],
-      errorMessage: map['errorMessage'] == null ? null : map['errorMessage'],
+    return Word(
+      offset: map['offset'] == null ? 0 : map['offset'],
+      value: map['value'] == null ? '' : map['value'],
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory SearchStatus.fromJson(String source) =>
-      SearchStatus.fromMap(json.decode(source));
+  factory Word.fromJson(String source) => Word.fromMap(json.decode(source));
 
   @override
-  String toString() =>
-      'SearchStatus(errorCode: $errorCode, errorMessage: $errorMessage)';
+  String toString() => 'Word(offset: $offset, value: $value)';
 
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 
-    return o is SearchStatus &&
-        o.errorCode == errorCode &&
-        o.errorMessage == errorMessage;
+    return o is Word && o.offset == offset && o.value == value;
   }
 
   @override
-  int get hashCode => errorCode.hashCode ^ errorMessage.hashCode;
+  int get hashCode => offset.hashCode ^ value.hashCode;
 }

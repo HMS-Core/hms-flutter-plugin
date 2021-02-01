@@ -1,11 +1,11 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,19 +19,27 @@ import 'dart:convert';
 class DetailSearchRequest {
   String siteId;
   String language;
-  String politicalView;
+  final String politicalView;
+  bool children;
 
   DetailSearchRequest({
     this.siteId,
     this.language,
-    this.politicalView,
-  });
+    @deprecated String politicalView,
+    this.children,
+  }) : politicalView = null;
+
+  @deprecated
+  set politicalView(String politicalView) {
+    this.politicalView = null;
+  }
 
   Map<String, dynamic> toMap() {
     return {
       'siteId': siteId,
       'language': language,
-      'politicalView': politicalView,
+      'politicalView': null,
+      'children': children,
     };
   }
 
@@ -41,7 +49,7 @@ class DetailSearchRequest {
     return DetailSearchRequest(
       siteId: map['siteId'],
       language: map['language'],
-      politicalView: map['politicalView'],
+      children: map['children'],
     );
   }
 
@@ -52,7 +60,7 @@ class DetailSearchRequest {
 
   @override
   String toString() =>
-      'DetailSearchRequest(siteId: $siteId, language: $language, politicalView: $politicalView)';
+      'DetailSearchRequest(siteId: $siteId, language: $language, politicalView: $politicalView, children: $children)';
 
   @override
   bool operator ==(Object o) {
@@ -61,10 +69,9 @@ class DetailSearchRequest {
     return o is DetailSearchRequest &&
         o.siteId == siteId &&
         o.language == language &&
-        o.politicalView == politicalView;
+        o.children == children;
   }
 
   @override
-  int get hashCode =>
-      siteId.hashCode ^ language.hashCode ^ politicalView.hashCode;
+  int get hashCode => siteId.hashCode ^ language.hashCode ^ children.hashCode;
 }

@@ -14,9 +14,27 @@
     limitations under the License.
 */
 
-package com.huawei.hms.flutter.site_example;
+package com.huawei.hms.flutter.site.utils;
 
-import io.flutter.embedding.android.FlutterActivity;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
-public class MainActivity extends FlutterActivity {
+public enum ObjectSerializer {
+    INSTANCE;
+
+    private final Gson gson;
+
+    ObjectSerializer() {
+        gson = new GsonBuilder()
+                .serializeSpecialFloatingPointValues()
+                .create();
+    }
+
+    public final <T> String toJson(final T obj) {
+        return gson.toJson(obj).replace(":NaN", ":null");
+    }
+
+    public final <T> T fromJson(final String json, final Class<T> cls) {
+        return gson.fromJson(json, cls);
+    }
 }

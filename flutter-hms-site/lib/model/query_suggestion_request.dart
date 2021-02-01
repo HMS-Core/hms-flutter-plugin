@@ -1,11 +1,11 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,7 +30,9 @@ class QuerySuggestionRequest {
   List<LocationType> poiTypes;
   String countryCode;
   String language;
-  String politicalView;
+  final String politicalView;
+  bool children;
+  bool strictBounds;
 
   QuerySuggestionRequest({
     this.query,
@@ -40,8 +42,15 @@ class QuerySuggestionRequest {
     this.poiTypes,
     this.countryCode,
     this.language,
-    this.politicalView,
-  });
+    @deprecated String politicalView,
+    this.children,
+    this.strictBounds,
+  }) : politicalView = null;
+
+  @deprecated
+  set politicalView(String politicalView) {
+    this.politicalView = null;
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -52,7 +61,9 @@ class QuerySuggestionRequest {
       'poiTypes': poiTypes?.map((t) => t?.toString())?.toList(),
       'countryCode': countryCode,
       'language': language,
-      'politicalView': politicalView,
+      'politicalView': null,
+      'children': children,
+      'strictBounds': strictBounds,
     };
   }
 
@@ -68,7 +79,8 @@ class QuerySuggestionRequest {
           map['poiTypes']?.map((x) => LocationType.fromString(x))),
       countryCode: map['countryCode'],
       language: map['language'],
-      politicalView: map['politicalView'],
+      children: map['children'],
+      strictBounds: map['strictBounds'],
     );
   }
 
@@ -79,7 +91,7 @@ class QuerySuggestionRequest {
 
   @override
   String toString() {
-    return 'QuerySuggestionRequest(query: $query, location: $location, radius: $radius, bounds: $bounds, poiTypes: $poiTypes, countryCode: $countryCode, language: $language, politicalView: $politicalView)';
+    return 'QuerySuggestionRequest(query: $query, location: $location, radius: $radius, bounds: $bounds, poiTypes: $poiTypes, countryCode: $countryCode, language: $language, politicalView: $politicalView, children: $children, strictBounds: $strictBounds)';
   }
 
   @override
@@ -94,7 +106,8 @@ class QuerySuggestionRequest {
         listEquals(o.poiTypes, poiTypes) &&
         o.countryCode == countryCode &&
         o.language == language &&
-        o.politicalView == politicalView;
+        o.children == children &&
+        o.strictBounds == strictBounds;
   }
 
   @override
@@ -106,6 +119,7 @@ class QuerySuggestionRequest {
         poiTypes.hashCode ^
         countryCode.hashCode ^
         language.hashCode ^
-        politicalView.hashCode;
+        children.hashCode ^
+        strictBounds.hashCode;
   }
 }

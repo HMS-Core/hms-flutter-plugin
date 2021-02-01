@@ -18,53 +18,57 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
+import 'auto_complete_prediction.dart';
 import 'site.dart';
 
-class NearbySearchResponse {
-  int totalCount;
+class QueryAutocompleteResponse {
   List<Site> sites;
+  List<AutoCompletePrediction> predictions;
 
-  NearbySearchResponse({
-    this.totalCount,
+  QueryAutocompleteResponse({
     this.sites,
+    this.predictions,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'totalCount': totalCount,
       'sites': sites?.map((x) => x?.toMap())?.toList(),
+      'predictions': predictions?.map((x) => x?.toMap())?.toList(),
     };
   }
 
-  factory NearbySearchResponse.fromMap(Map<String, dynamic> map) {
+  factory QueryAutocompleteResponse.fromMap(Map<String, dynamic> map) {
     if (map == null) return null;
 
-    return NearbySearchResponse(
-      totalCount: map["totalCount"] == null ? null : map["totalCount"],
-      sites: map["sites"] == null
+    return QueryAutocompleteResponse(
+      sites: map['sites'] == null
           ? null
-          : List<Site>.from(map["sites"].map((x) => Site.fromMap(x))),
+          : List<Site>.from(map['sites']?.map((x) => Site.fromMap(x))),
+      predictions: map['predictions'] == null
+          ? null
+          : List<AutoCompletePrediction>.from(map['predictions']
+              ?.map((x) => AutoCompletePrediction.fromMap(x))),
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory NearbySearchResponse.fromJson(String source) =>
-      NearbySearchResponse.fromMap(json.decode(source));
+  factory QueryAutocompleteResponse.fromJson(String source) =>
+      QueryAutocompleteResponse.fromMap(json.decode(source));
 
   @override
   String toString() =>
-      'NearbySearchResponse(totalCount: $totalCount, sites: $sites)';
+      'QueryAutocompleteResponse(sites: $sites, predictions: $predictions)';
 
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 
-    return o is NearbySearchResponse &&
-        o.totalCount == totalCount &&
-        listEquals(o.sites, sites);
+    return o is QueryAutocompleteResponse &&
+        listEquals(o.sites, sites) &&
+        listEquals(o.predictions, predictions);
   }
 
   @override
-  int get hashCode => totalCount.hashCode ^ sites.hashCode;
+  int get hashCode => sites.hashCode ^ predictions.hashCode;
 }

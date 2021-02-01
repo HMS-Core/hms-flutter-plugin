@@ -1,11 +1,11 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,6 +17,7 @@
 import 'dart:convert';
 
 import 'address_detail.dart';
+import 'auto_complete_prediction.dart';
 import 'coordinate.dart';
 import 'coordinate_bounds.dart';
 import 'poi.dart';
@@ -30,6 +31,8 @@ class Site {
   CoordinateBounds viewport;
   double distance;
   Poi poi;
+  AutoCompletePrediction prediction;
+  int utcOffset;
 
   Site({
     this.siteId,
@@ -40,7 +43,9 @@ class Site {
     this.viewport,
     this.distance,
     this.poi,
-  });
+    this.prediction,
+    int utcOffset,
+  }) : utcOffset = utcOffset ?? 0;
 
   Map<String, dynamic> toMap() {
     return {
@@ -52,6 +57,8 @@ class Site {
       'viewport': viewport?.toMap(),
       'distance': distance,
       'poi': poi?.toMap(),
+      'prediction': prediction?.toMap(),
+      'utcOffset': utcOffset,
     };
   }
 
@@ -71,6 +78,10 @@ class Site {
       viewport: map["viewport"] == null
           ? null
           : CoordinateBounds.fromMap(map["viewport"]),
+      prediction: map["prediction"] == null
+          ? null
+          : AutoCompletePrediction.fromMap(map["prediction"]),
+      utcOffset: map["utcOffset"] == null ? null : map["utcOffset"],
     );
   }
 
@@ -80,7 +91,7 @@ class Site {
 
   @override
   String toString() {
-    return 'Site(siteId: $siteId, name: $name, formatAddress: $formatAddress, address: $address, location: $location, viewport: $viewport, distance: $distance, poi: $poi)';
+    return 'Site(siteId: $siteId, name: $name, formatAddress: $formatAddress, address: $address, location: $location, viewport: $viewport, distance: $distance, poi: $poi, prediction: $prediction, utcOffset: $utcOffset)';
   }
 
   @override
@@ -95,7 +106,9 @@ class Site {
         o.location == location &&
         o.viewport == viewport &&
         o.distance == distance &&
-        o.poi == poi;
+        o.poi == poi &&
+        o.prediction == prediction &&
+        o.utcOffset == utcOffset;
   }
 
   @override
@@ -107,6 +120,8 @@ class Site {
         location.hashCode ^
         viewport.hashCode ^
         distance.hashCode ^
-        poi.hashCode;
+        poi.hashCode ^
+        prediction.hashCode ^
+        utcOffset.hashCode;
   }
 }

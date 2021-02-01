@@ -1,11 +1,11 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,9 +28,11 @@ class SearchFilter {
   String language;
   Coordinate location;
   List<LocationType> poiType;
-  String politicalView;
+  final String politicalView;
   String query;
   int radius;
+  bool children;
+  bool strictBounds;
 
   SearchFilter({
     this.bounds,
@@ -38,10 +40,17 @@ class SearchFilter {
     this.language,
     this.location,
     this.poiType,
-    this.politicalView,
+    @deprecated String politicalView,
     this.query,
     this.radius,
-  });
+    this.children,
+    this.strictBounds,
+  }) : politicalView = null;
+
+  @deprecated
+  set politicalView(String politicalView) {
+    this.politicalView = null;
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -50,9 +59,11 @@ class SearchFilter {
       'language': language,
       'location': location?.toMap(),
       'poiType': poiType?.map((t) => t?.toString())?.toList(),
-      'politicalView': politicalView,
+      'politicalView': null,
       'query': query,
       'radius': radius,
+      'children': children,
+      'strictBounds': strictBounds,
     };
   }
 
@@ -71,9 +82,10 @@ class SearchFilter {
           ? null
           : List<LocationType>.from(
               map['poiType'].map((x) => LocationType.fromString(x))),
-      politicalView: map["politicalView"] == null ? null : map["politicalView"],
       query: map["query"] == null ? null : map["query"],
       radius: map["radius"] == null ? null : map["radius"],
+      children: map["children"] == null ? null : map["children"],
+      strictBounds: map["strictBounds"] == null ? null : map["strictBounds"],
     );
   }
 
@@ -84,7 +96,7 @@ class SearchFilter {
 
   @override
   String toString() {
-    return 'SearchResult(bounds: $bounds, countryCode: $countryCode, language: $language, location: $location, poiType: $poiType, politicalView: $politicalView, query: $query, radius: ${radius.toString()}) ';
+    return 'SearchFilter(bounds: $bounds, countryCode: $countryCode, language: $language, location: $location, poiType: $poiType, politicalView: $politicalView, query: $query, radius: $radius, children: $children, strictBounds: $strictBounds) ';
   }
 
   @override
@@ -97,9 +109,10 @@ class SearchFilter {
         o.language == language &&
         o.location == location &&
         listEquals(o.poiType, poiType) &&
-        o.politicalView == politicalView &&
         o.query == query &&
-        o.radius == radius;
+        o.radius == radius &&
+        o.children == children &&
+        o.strictBounds == strictBounds;
   }
 
   @override
@@ -109,8 +122,9 @@ class SearchFilter {
         language.hashCode ^
         location.hashCode ^
         poiType.hashCode ^
-        politicalView.hashCode ^
         query.hashCode ^
-        radius.hashCode;
+        radius.hashCode ^
+        children.hashCode ^
+        strictBounds.hashCode;
   }
 }

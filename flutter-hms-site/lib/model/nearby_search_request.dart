@@ -1,11 +1,11 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,8 +28,9 @@ class NearbySearchRequest {
   int radius;
   LocationType poiType;
   String language;
-  String politicalView;
+  final String politicalView;
   HwLocationType hwPoiType;
+  bool strictBounds;
 
   NearbySearchRequest({
     this.pageSize,
@@ -39,9 +40,15 @@ class NearbySearchRequest {
     this.radius,
     this.poiType,
     this.language,
-    this.politicalView,
+    @deprecated String politicalView,
     this.hwPoiType,
-  });
+    this.strictBounds,
+  }) : politicalView = null;
+
+  @deprecated
+  set politicalView(String politicalView) {
+    this.politicalView = null;
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -52,8 +59,9 @@ class NearbySearchRequest {
       'radius': radius,
       'poiType': poiType?.toString(),
       'language': language,
-      'politicalView': politicalView,
+      'politicalView': null,
       'hwPoiType': hwPoiType?.toString(),
+      'strictBounds': strictBounds,
     };
   }
 
@@ -68,8 +76,8 @@ class NearbySearchRequest {
       radius: map['radius'],
       poiType: LocationType.fromString(map['poiType']),
       language: map['language'],
-      politicalView: map['politicalView'],
       hwPoiType: HwLocationType.fromString(map['hwPoiType']),
+      strictBounds: map['strictBounds'],
     );
   }
 
@@ -80,7 +88,7 @@ class NearbySearchRequest {
 
   @override
   String toString() {
-    return 'NearbySearchRequest(pageSize: $pageSize, pageIndex: $pageIndex, query: $query, location: $location, radius: $radius, poiType: $poiType, language: $language, politicalView: $politicalView, hwPoiType: $hwPoiType)';
+    return 'NearbySearchRequest(pageSize: $pageSize, pageIndex: $pageIndex, query: $query, location: $location, radius: $radius, poiType: $poiType, language: $language, politicalView: $politicalView, hwPoiType: $hwPoiType, strictBounds: $strictBounds)';
   }
 
   @override
@@ -95,8 +103,8 @@ class NearbySearchRequest {
         o.radius == radius &&
         o.poiType == poiType &&
         o.language == language &&
-        o.politicalView == politicalView &&
-        o.hwPoiType == hwPoiType;
+        o.hwPoiType == hwPoiType &&
+        o.strictBounds == strictBounds;
   }
 
   @override
@@ -108,7 +116,7 @@ class NearbySearchRequest {
         radius.hashCode ^
         poiType.hashCode ^
         language.hashCode ^
-        politicalView.hashCode ^
-        hwPoiType.hashCode;
+        hwPoiType.hashCode ^
+        strictBounds.hashCode;
   }
 }

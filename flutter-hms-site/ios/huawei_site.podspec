@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'huawei_site'
-  s.version          = '5.0.1+300'
+  s.version          = '5.1.0+300'
   s.summary          = 'HUAWEI Site Kit plugin for Flutter.'
   s.description      = <<-DESC
 With Huawei Site Kit plugin for Flutter, your app can provide users with convenient and secure access to diverse, place-related services.

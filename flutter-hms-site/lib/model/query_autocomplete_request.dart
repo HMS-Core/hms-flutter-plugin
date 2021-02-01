@@ -17,34 +17,22 @@
 import 'dart:convert';
 
 import 'coordinate.dart';
-import 'hwlocation_type.dart';
-import 'location_type.dart';
 
-class TextSearchRequest {
-  String language;
+class QueryAutocompleteRequest {
   String query;
   Coordinate location;
   int radius;
-  int pageSize;
-  LocationType poiType;
-  HwLocationType hwPoiType;
-  int pageIndex;
-  String countryCode;
+  String language;
   final String politicalView;
   bool children;
 
-  TextSearchRequest({
-    this.language,
+  QueryAutocompleteRequest({
     this.query,
     this.location,
     this.radius,
-    this.pageSize,
-    this.poiType,
-    this.hwPoiType,
-    this.pageIndex,
-    this.countryCode,
+    this.language,
     @deprecated String politicalView,
-    this.children,
+    bool children,
   }) : politicalView = null;
 
   @deprecated
@@ -54,77 +42,55 @@ class TextSearchRequest {
 
   Map<String, dynamic> toMap() {
     return {
-      'language': language,
       'query': query,
       'location': location?.toMap(),
       'radius': radius,
-      'pageSize': pageSize,
-      'poiType': poiType?.toString(),
-      'hwPoiType': hwPoiType?.toString(),
-      'pageIndex': pageIndex,
-      'countryCode': countryCode,
+      'language': language,
       'politicalView': null,
       'children': children,
     };
   }
 
-  factory TextSearchRequest.fromMap(Map<String, dynamic> map) {
+  factory QueryAutocompleteRequest.fromMap(Map<String, dynamic> map) {
     if (map == null) return null;
 
-    return TextSearchRequest(
-      language: map['language'],
+    return QueryAutocompleteRequest(
       query: map['query'],
       location: Coordinate.fromMap(map['location']),
       radius: map['radius'],
-      pageSize: map['pageSize'],
-      poiType: LocationType.fromString(map['poiType']),
-      hwPoiType: HwLocationType.fromString(map['hwPoiType']),
-      pageIndex: map['pageIndex'],
-      countryCode: map['countryCode'],
+      language: map['language'],
       children: map['children'],
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory TextSearchRequest.fromJson(String source) =>
-      TextSearchRequest.fromMap(json.decode(source));
+  factory QueryAutocompleteRequest.fromJson(String source) =>
+      QueryAutocompleteRequest.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'TextSearchRequest(language: $language, query: $query, location: '
-        '$location, radius: $radius, pageSize: $pageSize, poiType: $poiType, '
-        'hwPoiType: $hwPoiType, pageIndex: $pageIndex, countryCode: $countryCode, politicalView: $politicalView)';
+    return 'QueryAutocompleteRequest(query: $query, location: $location, radius: $radius, language: $language, politicalView: $politicalView, children: $children)';
   }
 
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 
-    return o is TextSearchRequest &&
-        o.language == language &&
+    return o is QueryAutocompleteRequest &&
         o.query == query &&
         o.location == location &&
         o.radius == radius &&
-        o.pageSize == pageSize &&
-        o.poiType == poiType &&
-        o.hwPoiType == hwPoiType &&
-        o.pageIndex == pageIndex &&
-        o.countryCode == countryCode &&
+        o.language == language &&
         o.children == children;
   }
 
   @override
   int get hashCode {
-    return language.hashCode ^
-        query.hashCode ^
+    return query.hashCode ^
         location.hashCode ^
         radius.hashCode ^
-        pageSize.hashCode ^
-        poiType.hashCode ^
-        hwPoiType.hashCode ^
-        pageIndex.hashCode ^
-        countryCode.hashCode ^
+        language.hashCode ^
         children.hashCode;
   }
 }

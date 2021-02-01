@@ -1,11 +1,11 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,17 +20,20 @@ import 'search_filter.dart';
 
 class SearchIntent {
   String hint;
-  SearchFilter filter;
+  SearchFilter searchFilter;
+  String apiKey;
 
-  SearchIntent({
+  SearchIntent(
+    this.apiKey, {
     this.hint,
-    this.filter,
+    this.searchFilter,
   });
 
   Map<String, dynamic> toMap() {
     return {
       'hint': hint,
-      'filter': filter?.toMap(),
+      'searchFilter': searchFilter?.toMap(),
+      'apiKey': apiKey,
     };
   }
 
@@ -38,9 +41,11 @@ class SearchIntent {
     if (map == null) return null;
 
     return SearchIntent(
-      hint: map["hint"] == null ? null : map["hint"],
-      filter:
-          map["filter"] == null ? null : SearchFilter.fromMap(map["filter"]),
+      map['apiKey'] == null ? null : map['apiKey'],
+      hint: map['hint'] == null ? null : map['hint'],
+      searchFilter: map['searchFilter'] == null
+          ? null
+          : SearchFilter.fromMap(map['searchFilter']),
     );
   }
 
@@ -51,18 +56,21 @@ class SearchIntent {
 
   @override
   String toString() {
-    return 'SearchIntent(hint: $hint, filter: $filter)';
+    return 'SearchIntent(hint: $hint, searchFilter: $searchFilter, apiKey: ***)';
   }
 
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 
-    return o is SearchIntent && o.hint == hint && o.filter == filter;
+    return o is SearchIntent &&
+        o.hint == hint &&
+        o.searchFilter == searchFilter &&
+        o.apiKey == apiKey;
   }
 
   @override
   int get hashCode {
-    return hint.hashCode ^ filter.hashCode;
+    return hint.hashCode ^ searchFilter.hashCode ^ apiKey.hashCode;
   }
 }

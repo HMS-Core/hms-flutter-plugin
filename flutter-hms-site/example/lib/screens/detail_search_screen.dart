@@ -1,11 +1,11 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:huawei_site/model/detail_search_request.dart';
 import 'package:huawei_site/model/detail_search_response.dart';
 import 'package:huawei_site/search_service.dart';
+import 'package:huawei_site_example/screens/home_screen.dart';
 
 import '../keys.dart';
 import '../widgets/custom_button.dart';
@@ -33,35 +34,41 @@ class DetailSearchScreen extends StatefulWidget {
 }
 
 class _DetailSearchScreenState extends State<DetailSearchScreen> {
-  String results;
-
-  final SearchService searchService = SearchService();
-  final DetailSearchRequest request = DetailSearchRequest();
-
-  final TextEditingController siteIdTextController =
+  final TextEditingController _siteIdTextController =
       TextEditingController(text: "977B75943A9F01D561FF2073AE1D9353");
-  final TextEditingController languageTextController =
+  final TextEditingController _languageTextController =
       TextEditingController(text: "en");
+
+  final DetailSearchRequest _request = DetailSearchRequest();
+
+  String _results;
+  SearchService _searchService;
 
   @override
   void initState() {
     super.initState();
-    results = "";
+    initService();
+    _results = "";
+  }
+
+  void initService() async {
+    _searchService = await SearchService.create(HomeScreen.API_KEY);
   }
 
   void runSearch() async {
-    request.siteId = siteIdTextController.text;
-    request.language = languageTextController.text;
+    _request.siteId = _siteIdTextController.text;
+    _request.language = _languageTextController.text;
 
     try {
-      DetailSearchResponse response = await searchService.detailSearch(request);
+      DetailSearchResponse response =
+          await _searchService.detailSearch(_request);
       setState(() {
-        results = response.toJson();
-        log(results);
+        _results = response.toJson();
+        log(_results);
       });
     } catch (e) {
       setState(() {
-        results = e.toString();
+        _results = e.toString();
       });
     }
   }
@@ -83,11 +90,11 @@ class _DetailSearchScreenState extends State<DetailSearchScreen> {
                   children: <Widget>[
                     CustomTextFormField(
                       labelText: "Site ID",
-                      controller: siteIdTextController,
+                      controller: _siteIdTextController,
                     ),
                     CustomTextFormField(
                       labelText: "Language",
-                      controller: languageTextController,
+                      controller: _languageTextController,
                     ),
                     CustomButton(
                       key: Key(Keys.SEARCH_DETAIL),
@@ -102,7 +109,7 @@ class _DetailSearchScreenState extends State<DetailSearchScreen> {
             ),
             Container(
               child: new Text(
-                results,
+                _results,
                 key: Key(Keys.RESULT_DETAIL),
                 style: new TextStyle(
                   fontSize: 12.0,
