@@ -1,3 +1,7 @@
+## 5.0.2+302
+* Updated documentation comments for push.dart.
+* Bug fixes and improvements.
+
 ## 5.0.2+301
 * Added the registerBackgroundMessageHandler and removeBackgroundMessageHandler methods for handling data messages when application at background/killed state.
 * Added the "scope" parameter to getToken and deleteToken methods.

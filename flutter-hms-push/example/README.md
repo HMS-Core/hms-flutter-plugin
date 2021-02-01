@@ -1,4 +1,4 @@
-## ![logo](https://github.com/HMS-Core/hms-flutter-plugin/raw/master/flutter-hms-push/.docs/logo.png)  Huawei Push Kit Flutter Plugin - Demo
+## Huawei Push Kit Flutter Plugin - Demo
 
 ---
 

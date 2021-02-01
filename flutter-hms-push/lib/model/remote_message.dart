@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -139,7 +139,7 @@ class RemoteMessage {
           ? null
           : map[RemoteMessage.COLLAPSE_KEY],
       data: map[RemoteMessage.DATA] == null ? null : map[RemoteMessage.DATA],
-      dataOfMap: map[RemoteMessage.DATA] == null
+      dataOfMap: map[RemoteMessage.DATA_OF_MAP] == null
           ? null
           : Map.from(json.decode(map[RemoteMessage.DATA_OF_MAP])),
       notification: map[RemoteMessage.NOTIFICATION] == null
@@ -167,7 +167,7 @@ class RemoteMessage {
       MESSAGE_TYPE: this.type ?? '',
       COLLAPSE_KEY: this.collapseKey ?? '',
       DATA: this.data ?? '',
-      DATA_OF_MAP: this.data ?? {},
+      DATA_OF_MAP: this.dataOfMap ?? {},
       NOTIFICATION: this.notification != null ? this.notification.toMap() : '',
       SEND_MODE: this.sendMode != null ? this.sendMode : '',
       RECEIPT_MODE: this.receiptMode != null ? this.receiptMode : '',

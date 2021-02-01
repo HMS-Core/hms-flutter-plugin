@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ import java.util.Objects;
 public final class HMSLogger {
     private static final String TAG = "HMSLogger";
 
-    private static final String VERSION = "5.0.2.301";
+    private static final String VERSION = "5.0.2.302";
     private static final String SERVICE = "FlutterPush";
 
     private static final String SUCCESS = "0";

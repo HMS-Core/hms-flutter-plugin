@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -253,7 +253,7 @@ class _MyAppState extends State<MyApp> {
 
   void showResult(String name, [String msg = "Button pressed."]) {
     appendLog("[" + name + "]" + ": " + msg);
-    if (msg.isNotEmpty) Push.showToast(msg);
+    if (msg.isNotEmpty) Push.showToast("[" + name + "]: " + msg);
   }
 
   void appendLog([String msg = "Button pressed."]) {
