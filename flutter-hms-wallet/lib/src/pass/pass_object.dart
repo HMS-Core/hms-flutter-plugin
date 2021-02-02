@@ -17,14 +17,6 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:huawei_wallet/huawei_wallet.dart';
-
-import 'package:huawei_wallet/src/pass/common_field.dart';
-
-import 'append_field.dart';
-import 'bar_code.dart';
-import 'location.dart';
-import 'related_pass_info.dart';
-
 class PassObject {
   String passTypeIdentifier;
   String passStyleIdentifier;

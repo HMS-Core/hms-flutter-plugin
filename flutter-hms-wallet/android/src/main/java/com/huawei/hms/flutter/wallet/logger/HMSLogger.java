@@ -38,7 +38,7 @@ import java.util.Map;
 public final class HMSLogger {
     private static final String TAG = "HMSLogger";
 
-    private static final String VERSION = "4.0.4.301";
+    private static final String VERSION = "4.0.4.301.1";
     private static final String SERVICE = "FlutterWallet";
 
     private static final String SUCCESS = "0";
