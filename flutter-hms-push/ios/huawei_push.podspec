@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'huawei_push'
-  s.version          = '5.0.2.302'
+  s.version          = '5.0.2+303'
   s.summary          = 'HUAWEI Push Kit plugin for Flutter.'
   s.description      = <<-DESC
 HUAWEI Push Kit plugin for Flutter that exposes all the functionality provided by the HUAWEI Push Kit SDK.

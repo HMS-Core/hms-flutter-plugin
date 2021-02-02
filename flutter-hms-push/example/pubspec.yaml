@@ -1,6 +1,6 @@
 name: huawei_push_example
 description: Demonstrates how to use the Huawei Push plugin.
-version: 5.0.2+302
+version: 5.0.2+303
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
