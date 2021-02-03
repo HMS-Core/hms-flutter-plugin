@@ -17,6 +17,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:huawei_wallet/huawei_wallet.dart';
+
 class PassObject {
   String passTypeIdentifier;
   String passStyleIdentifier;

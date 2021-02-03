@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'huawei_wallet'
-  s.version          = '4.0.4+301.1'
+  s.version          = '4.0.4+301.2'
   s.summary          = 'HUAWEI Wallet Kit Plugin for Flutter.'
   s.description      = <<-DESC
 HUAWEI Wallet Kit provides easy-to-access digital passes such as cards, coupons etc. on an integrated platform.

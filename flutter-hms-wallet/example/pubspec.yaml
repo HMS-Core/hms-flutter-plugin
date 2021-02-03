@@ -1,6 +1,6 @@
 name: huawei_wallet_example
 description: Demonstrates how to use the huawei_wallet plugin.
-version: 4.0.4+301.1
+version: 4.0.4+301.2
 
 publish_to: 'none'
 
