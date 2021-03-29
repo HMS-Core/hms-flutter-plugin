@@ -20,15 +20,15 @@ import 'InAppPurchaseData.dart';
 import 'Status.dart';
 
 class OwnedPurchasesResult {
-  String continuationToken;
-  String errMsg;
-  List<InAppPurchaseData> inAppPurchaseDataList;
-  List<String> inAppSignature;
-  List<String> itemList;
-  String returnCode;
-  Status status;
-  List<String> placedInappPurchaseDataList;
-  List<String> placedInappSignatureList;
+  String? continuationToken;
+  String? errMsg;
+  List<InAppPurchaseData>? inAppPurchaseDataList;
+  List<String>? inAppSignature;
+  List<String>? itemList;
+  String? returnCode;
+  Status? status;
+  List<String>? placedInappPurchaseDataList;
+  List<String>? placedInappSignatureList;
   String rawValue;
 
   OwnedPurchasesResult({
@@ -41,7 +41,7 @@ class OwnedPurchasesResult {
     this.status,
     this.placedInappPurchaseDataList,
     this.placedInappSignatureList,
-    this.rawValue,
+    required this.rawValue,
   });
 
   factory OwnedPurchasesResult.fromJson(String str) =>
@@ -52,10 +52,8 @@ class OwnedPurchasesResult {
   factory OwnedPurchasesResult.fromMap(String source) {
     Map<String, dynamic> jsonMap = json.decode(source);
     return OwnedPurchasesResult(
-      continuationToken: jsonMap["continuationToken"] == null
-          ? null
-          : jsonMap["continuationToken"],
-      errMsg: jsonMap["errMsg"] == null ? null : jsonMap["errMsg"],
+      continuationToken: jsonMap["continuationToken"],
+      errMsg: jsonMap["errMsg"],
       inAppPurchaseDataList: jsonMap["inAppPurchaseDataList"] == null
           ? null
           : List<InAppPurchaseData>.from(jsonMap["inAppPurchaseDataList"]
@@ -66,9 +64,7 @@ class OwnedPurchasesResult {
       itemList: jsonMap["itemList"] == null
           ? null
           : List<String>.from(jsonMap["itemList"].map((x) => x)),
-      returnCode: jsonMap["returnCode"] == null
-          ? null
-          : jsonMap["returnCode"].toString(),
+      returnCode: jsonMap["returnCode"]?.toString(),
       status:
           jsonMap["status"] == null ? null : Status.fromMap(jsonMap["status"]),
       placedInappPurchaseDataList:
@@ -88,20 +84,20 @@ class OwnedPurchasesResult {
       "errMsg": errMsg == null ? null : errMsg,
       "inAppPurchaseDataList": inAppPurchaseDataList == null
           ? null
-          : List<dynamic>.from(inAppPurchaseDataList.map((x) => x)),
+          : List<dynamic>.from(inAppPurchaseDataList!.map((x) => x)),
       "inAppSignature": inAppSignature == null
           ? null
-          : List<dynamic>.from(inAppSignature.map((x) => x)),
+          : List<dynamic>.from(inAppSignature!.map((x) => x)),
       "itemList":
-          itemList == null ? null : List<dynamic>.from(itemList.map((x) => x)),
+          itemList == null ? null : List<dynamic>.from(itemList!.map((x) => x)),
       "returnCode": returnCode == null ? null : returnCode,
-      "status": status == null ? null : status.toMap(),
+      "status": status?.toMap(),
       "placedInappPurchaseDataList": placedInappPurchaseDataList == null
           ? null
-          : List<String>.from(placedInappPurchaseDataList.map((x) => x)),
+          : List<String>.from(placedInappPurchaseDataList!.map((x) => x)),
       "placedInappSignatureList": placedInappSignatureList == null
           ? null
-          : List<String>.from(placedInappSignatureList.map((x) => x)),
+          : List<String>.from(placedInappSignatureList!.map((x) => x)),
     };
   }
 
@@ -109,18 +105,17 @@ class OwnedPurchasesResult {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final OwnedPurchasesResult check = o;
     return o is OwnedPurchasesResult &&
-        check.continuationToken == continuationToken &&
-        check.errMsg == errMsg &&
-        listEquals(check.inAppPurchaseDataList, inAppPurchaseDataList) &&
-        listEquals(check.inAppSignature, inAppSignature) &&
-        listEquals(check.itemList, itemList) &&
-        check.returnCode == returnCode &&
-        check.status == status &&
+        o.continuationToken == continuationToken &&
+        o.errMsg == errMsg &&
+        listEquals(o.inAppPurchaseDataList, inAppPurchaseDataList) &&
+        listEquals(o.inAppSignature, inAppSignature) &&
+        listEquals(o.itemList, itemList) &&
+        o.returnCode == returnCode &&
+        o.status == status &&
         listEquals(
-            check.placedInappPurchaseDataList, placedInappPurchaseDataList) &&
-        listEquals(check.placedInappSignatureList, placedInappSignatureList);
+            o.placedInappPurchaseDataList, placedInappPurchaseDataList) &&
+        listEquals(o.placedInappSignatureList, placedInappSignatureList);
   }
 
   @override

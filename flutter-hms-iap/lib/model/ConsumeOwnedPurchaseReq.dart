@@ -14,14 +14,13 @@
     limitations under the License.
 */
 import 'dart:convert' show json;
-import 'package:flutter/foundation.dart' show required;
 
 class ConsumeOwnedPurchaseReq {
-  String purchaseToken;
-  String developerChallenge;
+  String? purchaseToken;
+  String? developerChallenge;
 
   ConsumeOwnedPurchaseReq({
-    @required this.purchaseToken,
+    required this.purchaseToken,
     this.developerChallenge,
   });
 
@@ -32,11 +31,8 @@ class ConsumeOwnedPurchaseReq {
 
   factory ConsumeOwnedPurchaseReq.fromMap(Map<String, dynamic> json) =>
       ConsumeOwnedPurchaseReq(
-        purchaseToken:
-            json['purchaseToken'] == null ? null : json['purchaseToken'],
-        developerChallenge: json['developerChallange'] == null
-            ? null
-            : json['developerChallange'],
+        purchaseToken: json['purchaseToken'],
+        developerChallenge: json['developerChallange'],
       );
 
   Map<String, dynamic> toMap() {
@@ -50,10 +46,9 @@ class ConsumeOwnedPurchaseReq {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final ConsumeOwnedPurchaseReq check = o;
     return o is ConsumeOwnedPurchaseReq &&
-        check.purchaseToken == purchaseToken &&
-        check.developerChallenge == developerChallenge;
+        o.purchaseToken == purchaseToken &&
+        o.developerChallenge == developerChallenge;
   }
 
   @override

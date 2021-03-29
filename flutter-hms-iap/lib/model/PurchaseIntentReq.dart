@@ -14,17 +14,16 @@
     limitations under the License.
 */
 import 'dart:convert' show json;
-import 'package:flutter/foundation.dart' show required;
 
 class PurchaseIntentReq {
-  int priceType;
-  String productId;
-  String developerPayload;
-  String reservedInfor;
+  int? priceType;
+  String? productId;
+  String? developerPayload;
+  String? reservedInfor;
 
   PurchaseIntentReq({
-    @required this.priceType,
-    @required this.productId,
+    required this.priceType,
+    required this.productId,
     this.developerPayload,
     this.reservedInfor,
   });
@@ -36,12 +35,10 @@ class PurchaseIntentReq {
 
   factory PurchaseIntentReq.fromMap(Map<String, dynamic> json) =>
       PurchaseIntentReq(
-        priceType: json['priceType'] == null ? null : json['priceType'],
-        productId: json['productId'] == null ? null : json['productId'],
-        developerPayload:
-            json['developerPayload'] == null ? null : json['developerPayload'],
-        reservedInfor:
-            json['reservedInfor'] == null ? null : json['reservedInfor'],
+        priceType: json['priceType'],
+        productId: json['productId'],
+        developerPayload: json['developerPayload'],
+        reservedInfor: json['reservedInfor'],
       );
 
   Map<String, dynamic> toMap() {
@@ -57,12 +54,11 @@ class PurchaseIntentReq {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final PurchaseIntentReq check = o;
     return o is PurchaseIntentReq &&
-        check.priceType == priceType &&
-        check.productId == productId &&
-        check.developerPayload == developerPayload &&
-        check.reservedInfor == reservedInfor;
+        o.priceType == priceType &&
+        o.productId == productId &&
+        o.developerPayload == developerPayload &&
+        o.reservedInfor == reservedInfor;
   }
 
   @override

@@ -44,13 +44,13 @@ class _NonConsumablesState extends State<NonConsumables> {
 
       setState(() {
         available = [];
-        for (int i = 0; i < result.productInfoList.length; i++) {
-          available.add(result.productInfoList[i]);
+        for (int i = 0; i < result.productInfoList!.length; i++) {
+          available.add(result.productInfoList![i]);
         }
       });
     } on PlatformException catch (e) {
       if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
-        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage!);
       } else {
         log(e.toString());
       }
@@ -65,11 +65,11 @@ class _NonConsumablesState extends State<NonConsumables> {
         loadProducts();
         ownedPurchases();
       } else {
-        log(result.errMsg);
+        log(result.errMsg!);
       }
     } on PlatformException catch (e) {
       if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
-        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage!);
       } else {
         log(e.toString());
       }
@@ -82,13 +82,13 @@ class _NonConsumablesState extends State<NonConsumables> {
           await IapClient.obtainOwnedPurchases(OwnedPurchasesReq(priceType: 1));
       setState(() {
         purchased = [];
-        for (int i = 0; i < result.inAppPurchaseDataList.length; i++) {
-          purchased.add(result.inAppPurchaseDataList[i]);
+        for (int i = 0; i < result.inAppPurchaseDataList!.length; i++) {
+          purchased.add(result.inAppPurchaseDataList![i]);
         }
       });
     } on PlatformException catch (e) {
       if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
-        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage!);
       } else {
         log(e.toString());
       }
@@ -135,7 +135,7 @@ class _NonConsumablesState extends State<NonConsumables> {
                       Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: Text(
-                          purchased[i].productName,
+                          purchased[i].productName!,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               decoration: TextDecoration.underline),
@@ -143,7 +143,7 @@ class _NonConsumablesState extends State<NonConsumables> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(4.0),
-                        child: Text(purchased[i].productId),
+                        child: Text(purchased[i].productId!),
                       )
                     ],
                   ),
@@ -164,7 +164,7 @@ class _NonConsumablesState extends State<NonConsumables> {
               itemBuilder: (BuildContext ctxt, int i) {
                 return InkWell(
                   onTap: () {
-                    buyProduct(available[i].productId);
+                    buyProduct(available[i].productId!);
                   },
                   child: Card(
                     child: Column(
@@ -172,7 +172,7 @@ class _NonConsumablesState extends State<NonConsumables> {
                         Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: Text(
-                            available[i].productName,
+                            available[i].productName!,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 decoration: TextDecoration.underline),
@@ -180,11 +180,11 @@ class _NonConsumablesState extends State<NonConsumables> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(4.0),
-                          child: Text(available[i].productDesc),
+                          child: Text(available[i].productDesc!),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(4.0),
-                          child: Text(available[i].price),
+                          child: Text(available[i].price!),
                         )
                       ],
                     ),

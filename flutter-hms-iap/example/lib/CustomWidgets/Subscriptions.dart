@@ -47,13 +47,13 @@ class _SubscriptionsState extends State<Subscriptions> {
           skuIds: ["xxx", "xxxxxx"]));
       setState(() {
         available = [];
-        for (int i = 0; i < result.productInfoList.length; i++) {
-          available.add(result.productInfoList[i]);
+        for (int i = 0; i < result.productInfoList!.length; i++) {
+          available.add(result.productInfoList![i]);
         }
       });
     } on PlatformException catch (e) {
       if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
-        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage!);
       } else {
         log(e.toString());
       }
@@ -70,11 +70,11 @@ class _SubscriptionsState extends State<Subscriptions> {
         ownedPurchases();
         purchaseHistory();
       } else {
-        log(result.errMsg);
+        log(result.errMsg!);
       }
     } on PlatformException catch (e) {
       if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
-        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage!);
       } else {
         log(e.toString());
       }
@@ -87,13 +87,13 @@ class _SubscriptionsState extends State<Subscriptions> {
           await IapClient.obtainOwnedPurchases(OwnedPurchasesReq(priceType: 2));
       setState(() {
         purchased = [];
-        for (int i = 0; i < result.inAppPurchaseDataList.length; i++) {
-          purchased.add(result.inAppPurchaseDataList[i]);
+        for (int i = 0; i < result.inAppPurchaseDataList!.length; i++) {
+          purchased.add(result.inAppPurchaseDataList![i]);
         }
       });
     } on PlatformException catch (e) {
       if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
-        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage!);
       } else {
         log(e.toString());
       }
@@ -106,13 +106,13 @@ class _SubscriptionsState extends State<Subscriptions> {
           OwnedPurchasesReq(priceType: 2));
       setState(() {
         purchasedRecord = [];
-        for (int i = 0; i < result.inAppPurchaseDataList.length; i++) {
-          purchasedRecord.add(result.inAppPurchaseDataList[i]);
+        for (int i = 0; i < result.inAppPurchaseDataList!.length; i++) {
+          purchasedRecord.add(result.inAppPurchaseDataList![i]);
         }
       });
     } on PlatformException catch (e) {
       if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
-        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage!);
       } else {
         log(e.toString());
       }
@@ -125,7 +125,7 @@ class _SubscriptionsState extends State<Subscriptions> {
           type: StartIapActivityReq.TYPE_SUBSCRIBE_MANAGER_ACTIVITY));
     } on PlatformException catch (e) {
       if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
-        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage!);
       } else {
         log(e.toString());
       }
@@ -172,7 +172,7 @@ class _SubscriptionsState extends State<Subscriptions> {
                       Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: Text(
-                          purchased[i].productName,
+                          purchased[i].productName!,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               decoration: TextDecoration.underline),
@@ -180,7 +180,7 @@ class _SubscriptionsState extends State<Subscriptions> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(4.0),
-                        child: Text(purchased[i].productId),
+                        child: Text(purchased[i].productId!),
                       )
                     ],
                   ),
@@ -201,7 +201,7 @@ class _SubscriptionsState extends State<Subscriptions> {
               itemBuilder: (BuildContext ctxt, int i) {
                 return InkWell(
                   onTap: () {
-                    buyProduct(available[i].productId);
+                    buyProduct(available[i].productId!);
                   },
                   child: Card(
                     child: Column(
@@ -209,7 +209,7 @@ class _SubscriptionsState extends State<Subscriptions> {
                         Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: Text(
-                            available[i].productName,
+                            available[i].productName!,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 decoration: TextDecoration.underline),
@@ -217,11 +217,11 @@ class _SubscriptionsState extends State<Subscriptions> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(4.0),
-                          child: Text(available[i].productDesc),
+                          child: Text(available[i].productDesc!),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(4.0),
-                          child: Text(available[i].price),
+                          child: Text(available[i].price!),
                         )
                       ],
                     ),
@@ -248,7 +248,7 @@ class _SubscriptionsState extends State<Subscriptions> {
                       Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: Text(
-                          purchasedRecord[i].productName,
+                          purchasedRecord[i].productName!,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               decoration: TextDecoration.underline),
@@ -256,7 +256,7 @@ class _SubscriptionsState extends State<Subscriptions> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(4.0),
-                        child: Text(purchasedRecord[i].productId),
+                        child: Text(purchasedRecord[i].productId!),
                       )
                     ],
                   ),

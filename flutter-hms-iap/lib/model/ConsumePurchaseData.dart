@@ -16,30 +16,30 @@
 import 'dart:convert' show json;
 
 class ConsumePurchaseData {
-  int applicationId;
-  bool autoRenewing;
-  String orderId;
-  String packageName;
-  String productId;
-  int purchaseTime;
-  int purchaseState;
-  String developerPayload;
-  String purchaseToken;
-  String developerChallenge;
-  int consumptionState;
-  int acknowledged;
-  String currency;
-  int price;
-  String country;
-  String responseCode;
-  String responseMessage;
-  int kind;
-  String productName;
-  int purchaseTimeMillis;
-  int confirmed;
-  int purchaseType;
-  String payOrderId;
-  String payType;
+  int? applicationId;
+  bool? autoRenewing;
+  String? orderId;
+  String? packageName;
+  String? productId;
+  int? purchaseTime;
+  int? purchaseState;
+  String? developerPayload;
+  String? purchaseToken;
+  String? developerChallenge;
+  int? consumptionState;
+  int? acknowledged;
+  String? currency;
+  int? price;
+  String? country;
+  String? responseCode;
+  String? responseMessage;
+  int? kind;
+  String? productName;
+  int? purchaseTimeMillis;
+  int? confirmed;
+  int? purchaseType;
+  String? payOrderId;
+  String? payType;
 
   ConsumePurchaseData(
       {this.autoRenewing,
@@ -74,45 +74,30 @@ class ConsumePurchaseData {
 
   factory ConsumePurchaseData.fromMap(Map<dynamic, dynamic> json) =>
       ConsumePurchaseData(
-        applicationId:
-            json["applicationId"] == null ? null : json["applicationId"],
-        autoRenewing:
-            json["autoRenewing"] == null ? null : json["autoRenewing"],
-        orderId: json["orderId"] == null ? null : json["orderId"],
-        packageName: json["packageName"] == null ? null : json["packageName"],
-        productId: json["productId"] == null ? null : json["productId"],
-        purchaseTime:
-            json["purchaseTime"] == null ? null : json["purchaseTime"],
-        purchaseState:
-            json["purchaseState"] == null ? null : json["purchaseState"],
-        developerPayload:
-            json["developerPayload"] == null ? null : json["developerPayload"],
-        purchaseToken:
-            json["purchaseToken"] == null ? null : json["purchaseToken"],
-        developerChallenge: json["developerChallenge"] == null
-            ? null
-            : json["developerChallenge"],
-        consumptionState:
-            json["consumptionState"] == null ? null : json["consumptionState"],
-        acknowledged:
-            json["acknowledged"] == null ? null : json["acknowledged"],
-        currency: json["currency"] == null ? null : json["currency"],
-        price: json["price"] == null ? null : json["price"],
-        country: json["country"] == null ? null : json["country"],
-        responseCode:
-            json["responseCode"] == null ? null : json["responseCode"],
-        responseMessage:
-            json["responseMessage"] == null ? null : json["responseMessage"],
-        kind: json["kind"] == null ? null : json["kind"],
-        productName: json["productName"] == null ? null : json["productName"],
-        purchaseTimeMillis: json["purchaseTimeMillis"] == null
-            ? null
-            : json["purchaseTimeMillis"],
-        confirmed: json["confirmed"] == null ? null : json["confirmed"],
-        purchaseType:
-            json["purchaseType"] == null ? null : json["purchaseType"],
-        payOrderId: json["payOrderId"] == null ? null : json["payOrderId"],
-        payType: json["payType"] == null ? null : json["payType"],
+        applicationId: json["applicationId"],
+        autoRenewing: json["autoRenewing"],
+        orderId: json["orderId"],
+        packageName: json["packageName"],
+        productId: json["productId"],
+        purchaseTime: json["purchaseTime"],
+        purchaseState: json["purchaseState"],
+        developerPayload: json["developerPayload"],
+        purchaseToken:  json["purchaseToken"],
+        developerChallenge: json["developerChallenge"],
+        consumptionState: json["consumptionState"],
+        acknowledged: json["acknowledged"],
+        currency: json["currency"],
+        price: json["price"],
+        country: json["country"],
+        responseCode: json["responseCode"],
+        responseMessage: json["responseMessage"],
+        kind: json["kind"],
+        productName: json["productName"],
+        purchaseTimeMillis: json["purchaseTimeMillis"],
+        confirmed: json["confirmed"],
+        purchaseType: json["purchaseType"],
+        payOrderId: json["payOrderId"],
+        payType: json["payType"],
       );
 
   Map<String, dynamic> toMap() {
@@ -148,32 +133,31 @@ class ConsumePurchaseData {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final ConsumePurchaseData check = o;
     return o is ConsumePurchaseData &&
-        check.autoRenewing == autoRenewing &&
-        check.orderId == orderId &&
-        check.packageName == packageName &&
-        check.applicationId == applicationId &&
-        check.productId == productId &&
-        check.purchaseTime == purchaseTime &&
-        check.purchaseState == purchaseState &&
-        check.developerPayload == developerPayload &&
-        check.purchaseToken == purchaseToken &&
-        check.consumptionState == consumptionState &&
-        check.currency == currency &&
-        check.price == price &&
-        check.country == country &&
-        check.developerChallenge == developerChallenge &&
-        check.acknowledged == acknowledged &&
-        check.responseCode == responseCode &&
-        check.responseMessage == responseMessage &&
-        check.kind == kind &&
-        check.productName == productName &&
-        check.purchaseTimeMillis == purchaseTimeMillis &&
-        check.confirmed == confirmed &&
-        check.purchaseType == purchaseType &&
-        check.payOrderId == payOrderId &&
-        check.payType == payType;
+        o.autoRenewing == autoRenewing &&
+        o.orderId == orderId &&
+        o.packageName == packageName &&
+        o.applicationId == applicationId &&
+        o.productId == productId &&
+        o.purchaseTime == purchaseTime &&
+        o.purchaseState == purchaseState &&
+        o.developerPayload == developerPayload &&
+        o.purchaseToken == purchaseToken &&
+        o.consumptionState == consumptionState &&
+        o.currency == currency &&
+        o.price == price &&
+        o.country == country &&
+        o.developerChallenge == developerChallenge &&
+        o.acknowledged == acknowledged &&
+        o.responseCode == responseCode &&
+        o.responseMessage == responseMessage &&
+        o.kind == kind &&
+        o.productName == productName &&
+        o.purchaseTimeMillis == purchaseTimeMillis &&
+        o.confirmed == confirmed &&
+        o.purchaseType == purchaseType &&
+        o.payOrderId == payOrderId &&
+        o.payType == payType;
   }
 
   @override

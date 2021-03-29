@@ -30,8 +30,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String isEnvReadyStatus;
-  String sandboxReadyStatus;
+  String? isEnvReadyStatus;
+  String? sandboxReadyStatus;
   bool hmsLoggerStatus = true;
 
   environmentCheck() async {
@@ -39,11 +39,11 @@ class _MyAppState extends State<MyApp> {
     try {
       IsEnvReadyResult response = await IapClient.isEnvReady();
       setState(() {
-        isEnvReadyStatus = response.status.statusMessage;
+        isEnvReadyStatus = response.status!.statusMessage;
       });
     } on PlatformException catch (e) {
       if (e.code == HmsIapResults.LOG_IN_ERROR.resultCode) {
-        log(HmsIapResults.LOG_IN_ERROR.resultMessage);
+        log(HmsIapResults.LOG_IN_ERROR.resultMessage!);
       } else {
         log(e.toString());
       }
@@ -59,7 +59,7 @@ class _MyAppState extends State<MyApp> {
       });
     } on PlatformException catch (e) {
       if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
-        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage!);
       } else {
         log(e.toString());
       }
@@ -137,7 +137,7 @@ class _MyAppState extends State<MyApp> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            "Environment Status: " + isEnvReadyStatus,
+                            "Environment Status: $isEnvReadyStatus",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -174,7 +174,7 @@ class _MyAppState extends State<MyApp> {
                   : Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        "Is Sandbox User: " + sandboxReadyStatus,
+                        "Is Sandbox User: $sandboxReadyStatus",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),

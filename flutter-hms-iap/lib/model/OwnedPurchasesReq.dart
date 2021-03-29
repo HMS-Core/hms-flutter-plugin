@@ -14,14 +14,13 @@
     limitations under the License.
 */
 import 'dart:convert' show json;
-import 'package:flutter/foundation.dart' show required;
 
 class OwnedPurchasesReq {
-  String continuationToken;
-  int priceType;
+  String? continuationToken;
+  int? priceType;
 
   OwnedPurchasesReq({
-    @required this.priceType,
+    required this.priceType,
     this.continuationToken,
   });
 
@@ -32,10 +31,8 @@ class OwnedPurchasesReq {
 
   factory OwnedPurchasesReq.fromMap(Map<String, dynamic> json) =>
       OwnedPurchasesReq(
-        continuationToken: json['continuationToken'] == null
-            ? null
-            : json['continuationToken'],
-        priceType: json['priceType'] == null ? null : json['priceType'],
+        continuationToken: json['continuationToken'],
+        priceType: json['priceType'],
       );
 
   Map<String, dynamic> toMap() {
@@ -49,10 +46,9 @@ class OwnedPurchasesReq {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final OwnedPurchasesReq check = o;
     return o is OwnedPurchasesReq &&
-        check.continuationToken == continuationToken &&
-        check.priceType == priceType;
+        o.continuationToken == continuationToken &&
+        o.priceType == priceType;
   }
 
   @override

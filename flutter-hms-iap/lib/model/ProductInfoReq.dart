@@ -14,15 +14,15 @@
     limitations under the License.
 */
 import 'dart:convert' show json;
-import 'package:flutter/foundation.dart' show listEquals, required;
+import 'package:flutter/foundation.dart' show listEquals;
 
 class ProductInfoReq {
-  int priceType;
-  List<String> skuIds;
+  int? priceType;
+  List<String>? skuIds;
 
   ProductInfoReq({
-    @required this.priceType,
-    @required this.skuIds,
+    required this.priceType,
+    required this.skuIds,
   });
 
   factory ProductInfoReq.fromJson(String str) =>
@@ -31,8 +31,8 @@ class ProductInfoReq {
   String toJson() => json.encode(toMap());
 
   factory ProductInfoReq.fromMap(Map<String, dynamic> json) => ProductInfoReq(
-        priceType: json['priceType'] == null ? null : json['priceType'],
-        skuIds: json['skuIds'] == null ? null : json['skuIds'].cast<String>(),
+        priceType: json['priceType'],
+        skuIds: json['skuIds']?.cast<String>(),
       );
 
   Map<String, dynamic> toMap() {
@@ -43,10 +43,9 @@ class ProductInfoReq {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final ProductInfoReq check = o;
     return o is ProductInfoReq &&
-        check.priceType == priceType &&
-        listEquals(check.skuIds, skuIds);
+        o.priceType == priceType &&
+        listEquals(o.skuIds, skuIds);
   }
 
   @override

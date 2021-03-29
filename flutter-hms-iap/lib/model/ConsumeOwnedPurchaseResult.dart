@@ -19,12 +19,12 @@ import 'ConsumePurchaseData.dart';
 import 'Status.dart';
 
 class ConsumeOwnedPurchaseResult {
-  ConsumePurchaseData consumePurchaseData;
-  String dataSignature;
-  String errMsg;
-  String returnCode;
-  Status status;
-  String rawValue;
+  ConsumePurchaseData? consumePurchaseData;
+  String? dataSignature;
+  String? errMsg;
+  String? returnCode;
+  Status? status;
+  String? rawValue;
 
   ConsumeOwnedPurchaseResult({
     this.consumePurchaseData,
@@ -46,12 +46,9 @@ class ConsumeOwnedPurchaseResult {
       consumePurchaseData: jsonMap["consumePurchaseData"] == null
           ? null
           : ConsumePurchaseData.fromJson(jsonMap["consumePurchaseData"]),
-      dataSignature:
-          jsonMap["dataSignature"] == null ? null : jsonMap["dataSignature"],
-      errMsg: jsonMap["errMsg"] == null ? null : jsonMap["errMsg"],
-      returnCode: jsonMap["returnCode"] == null
-          ? null
-          : jsonMap["returnCode"].toString(),
+      dataSignature: jsonMap["dataSignature"],
+      errMsg: jsonMap["errMsg"],
+      returnCode: jsonMap["returnCode"].toString(),
       status:
           jsonMap["status"] == null ? null : Status.fromMap(jsonMap["status"]),
       rawValue: source,
@@ -59,25 +56,23 @@ class ConsumeOwnedPurchaseResult {
   }
 
   Map<String, dynamic> toMap() => {
-        "consumePurchaseData":
-            consumePurchaseData == null ? null : consumePurchaseData.toJson(),
+        "consumePurchaseData": consumePurchaseData?.toJson(),
         "dataSignature": dataSignature,
         "errMsg": errMsg,
         "returnCode": returnCode,
-        "status": status == null ? null : status.toMap(),
+        "status": status?.toMap(),
       };
 
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final ConsumeOwnedPurchaseResult check = o;
     return o is ConsumeOwnedPurchaseResult &&
-        check.consumePurchaseData == consumePurchaseData &&
-        check.dataSignature == dataSignature &&
-        check.errMsg == errMsg &&
-        check.returnCode == returnCode &&
-        check.status == status;
+        o.consumePurchaseData == consumePurchaseData &&
+        o.dataSignature == dataSignature &&
+        o.errMsg == errMsg &&
+        o.returnCode == returnCode &&
+        o.status == status;
   }
 
   @override

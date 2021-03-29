@@ -20,10 +20,10 @@ import 'ProductInfo.dart';
 import 'Status.dart';
 
 class ProductInfoResult {
-  String errMsg;
-  List<ProductInfo> productInfoList;
-  String returnCode;
-  Status status;
+  String? errMsg;
+  List<ProductInfo>? productInfoList;
+  String? returnCode;
+  Status? status;
 
   ProductInfoResult({
     this.errMsg,
@@ -39,14 +39,13 @@ class ProductInfoResult {
 
   factory ProductInfoResult.fromMap(Map<dynamic, dynamic> json) =>
       ProductInfoResult(
-        errMsg: json["errMsg"] == null ? null : json["errMsg"],
+        errMsg: json["errMsg"],
         productInfoList: json["productInfoList"] == null
             ? null
             : List<ProductInfo>.from(
                     json["productInfoList"].map((x) => ProductInfo.fromMap(x)))
                 .toList(),
-        returnCode:
-            json["returnCode"] == null ? null : json["returnCode"].toString(),
+        returnCode: json["returnCode"]?.toString(),
         status: json["status"] == null ? null : Status.fromMap(json["status"]),
       );
 
@@ -55,9 +54,9 @@ class ProductInfoResult {
       "errMsg": errMsg,
       "productInfoList": productInfoList == null
           ? null
-          : List<dynamic>.from(productInfoList.map((x) => x.toMap())),
+          : List<dynamic>.from(productInfoList!.map((x) => x.toMap())),
       "returnCode": returnCode,
-      "status": status == null ? null : status.toMap(),
+      "status": status?.toMap(),
     };
   }
 
@@ -65,12 +64,11 @@ class ProductInfoResult {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final ProductInfoResult check = o;
     return o is ProductInfoResult &&
-        check.errMsg == errMsg &&
-        listEquals(check.productInfoList, productInfoList) &&
-        check.returnCode == returnCode &&
-        check.status == status;
+        o.errMsg == errMsg &&
+        listEquals(o.productInfoList, productInfoList) &&
+        o.returnCode == returnCode &&
+        o.status == status;
   }
 
   @override

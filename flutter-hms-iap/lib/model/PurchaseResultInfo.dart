@@ -17,10 +17,10 @@ import 'dart:convert' show json;
 import 'InAppPurchaseData.dart';
 
 class PurchaseResultInfo {
-  String returnCode;
-  InAppPurchaseData inAppPurchaseData;
-  String inAppDataSignature;
-  String errMsg;
+  String? returnCode;
+  InAppPurchaseData? inAppPurchaseData;
+  String? inAppDataSignature;
+  String? errMsg;
   String rawValue;
 
   PurchaseResultInfo({
@@ -28,7 +28,7 @@ class PurchaseResultInfo {
     this.inAppPurchaseData,
     this.returnCode,
     this.errMsg,
-    this.rawValue,
+    required this.rawValue,
   });
 
   factory PurchaseResultInfo.fromJson(String str) =>
@@ -39,16 +39,12 @@ class PurchaseResultInfo {
   factory PurchaseResultInfo.fromMap(String source) {
     Map<dynamic, dynamic> jsonMap = json.decode(source);
     return PurchaseResultInfo(
-      returnCode: jsonMap["returnCode"] == null
-          ? null
-          : jsonMap["returnCode"].toString(),
+      returnCode: jsonMap["returnCode"]?.toString(),
       inAppPurchaseData: jsonMap["inAppPurchaseData"] == null
           ? null
           : InAppPurchaseData.fromJson(jsonMap["inAppPurchaseData"]),
-      inAppDataSignature: jsonMap["inAppDataSignature"] == null
-          ? null
-          : jsonMap["inAppDataSignature"],
-      errMsg: jsonMap["errMsg"] == null ? null : jsonMap["errMsg"],
+      inAppDataSignature: jsonMap["inAppDataSignature"],
+      errMsg: jsonMap["errMsg"],
       rawValue: source,
     );
   }
@@ -56,8 +52,7 @@ class PurchaseResultInfo {
   Map<String, dynamic> toMap() {
     return {
       "returnCode": returnCode,
-      "inAppPurchaseData":
-          inAppPurchaseData == null ? null : inAppPurchaseData.toJson(),
+      "inAppPurchaseData": inAppPurchaseData?.toJson(),
       "inAppDataSignature": inAppDataSignature,
       "errMsg": errMsg,
     };
@@ -67,12 +62,11 @@ class PurchaseResultInfo {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final PurchaseResultInfo check = o;
     return o is PurchaseResultInfo &&
-        check.returnCode == returnCode &&
-        check.inAppPurchaseData == inAppPurchaseData &&
-        check.inAppDataSignature == inAppDataSignature &&
-        check.errMsg == errMsg;
+        o.returnCode == returnCode &&
+        o.inAppPurchaseData == inAppPurchaseData &&
+        o.inAppDataSignature == inAppDataSignature &&
+        o.errMsg == errMsg;
   }
 
   @override

@@ -17,13 +17,13 @@ import 'dart:convert' show json;
 import 'Status.dart';
 
 class IsSandboxActivatedResult {
-  String errMsg;
-  bool isSandboxApk;
-  bool isSandboxUser;
-  String returnCode;
-  String versionFrMarket;
-  String versionInApk;
-  Status status;
+  String? errMsg;
+  bool? isSandboxApk;
+  bool? isSandboxUser;
+  String? returnCode;
+  String? versionFrMarket;
+  String? versionInApk;
+  Status? status;
 
   IsSandboxActivatedResult({
     this.errMsg,
@@ -42,17 +42,12 @@ class IsSandboxActivatedResult {
 
   factory IsSandboxActivatedResult.fromMap(Map<dynamic, dynamic> json) =>
       IsSandboxActivatedResult(
-        errMsg: json["errMsg"] == null ? null : json["errMsg"],
-        isSandboxApk:
-            json["isSandboxApk"] == null ? null : json["isSandboxApk"],
-        isSandboxUser:
-            json["isSandboxUser"] == null ? null : json["isSandboxUser"],
-        returnCode:
-            json["returnCode"] == null ? null : json["returnCode"].toString(),
-        versionFrMarket:
-            json["versionFrMarket"] == null ? null : json["versionFrMarket"],
-        versionInApk:
-            json["versionInApk"] == null ? null : json["versionInApk"],
+        errMsg: json["errMsg"],
+        isSandboxApk: json["isSandboxApk"],
+        isSandboxUser: json["isSandboxUser"],
+        returnCode: json["returnCode"]?.toString(),
+        versionFrMarket: json["versionFrMarket"],
+        versionInApk: json["versionInApk"],
         status: json["status"] == null ? null : Status.fromMap(json["status"]),
       );
 
@@ -64,7 +59,7 @@ class IsSandboxActivatedResult {
       'returnCode': returnCode,
       'versionFrMarket': versionFrMarket,
       'versionInApk': versionInApk,
-      'status': status == null ? null : status.toMap(),
+      'status': status?.toMap(),
     };
   }
 
@@ -72,15 +67,14 @@ class IsSandboxActivatedResult {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final IsSandboxActivatedResult check = o;
     return o is IsSandboxActivatedResult &&
-        check.errMsg == errMsg &&
-        check.isSandboxApk == isSandboxApk &&
-        check.isSandboxUser == isSandboxUser &&
-        check.returnCode == returnCode &&
-        check.versionFrMarket == versionFrMarket &&
-        check.versionInApk == versionInApk &&
-        check.status == status;
+        o.errMsg == errMsg &&
+        o.isSandboxApk == isSandboxApk &&
+        o.isSandboxUser == isSandboxUser &&
+        o.returnCode == returnCode &&
+        o.versionFrMarket == versionFrMarket &&
+        o.versionInApk == versionInApk &&
+        o.status == status;
   }
 
   @override

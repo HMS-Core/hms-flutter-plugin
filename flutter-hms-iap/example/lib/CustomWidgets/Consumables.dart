@@ -45,13 +45,13 @@ class _ConsumablesState extends State<Consumables> {
           skuIds: ["xxx", "xxxxxx"]));
       setState(() {
         available = [];
-        for (int i = 0; i < result.productInfoList.length; i++) {
-          available.add(result.productInfoList[i]);
+        for (int i = 0; i < result.productInfoList!.length; i++) {
+          available.add(result.productInfoList![i]);
         }
       });
     } on PlatformException catch (e) {
       if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
-        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage!);
       } else {
         log(e.toString());
       }
@@ -67,11 +67,11 @@ class _ConsumablesState extends State<Consumables> {
         loadProducts();
         ownedPurchases();
       } else {
-        log(result.errMsg);
+        log(result.errMsg!);
       }
     } on PlatformException catch (e) {
       if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
-        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage!);
       } else {
         log(e.toString());
       }
@@ -84,13 +84,13 @@ class _ConsumablesState extends State<Consumables> {
           OwnedPurchasesReq(priceType: IapClient.IN_APP_CONSUMABLE));
       setState(() {
         purchased = [];
-        for (int i = 0; i < result.inAppPurchaseDataList.length; i++) {
-          purchased.add(result.inAppPurchaseDataList[i]);
+        for (int i = 0; i < result.inAppPurchaseDataList!.length; i++) {
+          purchased.add(result.inAppPurchaseDataList![i]);
         }
       });
     } on PlatformException catch (e) {
       if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
-        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage!);
       } else {
         log(e.toString());
       }
@@ -105,11 +105,11 @@ class _ConsumablesState extends State<Consumables> {
         ownedPurchases();
         purchaseHistory();
       } else {
-        log(result.errMsg);
+        log(result.errMsg!);
       }
     } on PlatformException catch (e) {
       if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
-        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage!);
       } else {
         log(e.toString());
       }
@@ -122,13 +122,13 @@ class _ConsumablesState extends State<Consumables> {
           OwnedPurchasesReq(priceType: IapClient.IN_APP_CONSUMABLE));
       setState(() {
         purchasedRecord = [];
-        for (int i = 0; i < result.inAppPurchaseDataList.length; i++) {
-          purchasedRecord.add(result.inAppPurchaseDataList[i]);
+        for (int i = 0; i < result.inAppPurchaseDataList!.length; i++) {
+          purchasedRecord.add(result.inAppPurchaseDataList![i]);
         }
       });
     } on PlatformException catch (e) {
       if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
-        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage!);
       } else {
         log(e.toString());
       }
@@ -171,7 +171,7 @@ class _ConsumablesState extends State<Consumables> {
               itemBuilder: (BuildContext ctxt, int i) {
                 return InkWell(
                   onTap: () {
-                    consumeItem(purchased[i].purchaseToken);
+                    consumeItem(purchased[i].purchaseToken!);
                   },
                   child: Card(
                     child: Column(
@@ -179,7 +179,7 @@ class _ConsumablesState extends State<Consumables> {
                         Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: Text(
-                            purchased[i].productName,
+                            purchased[i].productName!,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 decoration: TextDecoration.underline),
@@ -187,7 +187,7 @@ class _ConsumablesState extends State<Consumables> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(4.0),
-                          child: Text(purchased[i].productId),
+                          child: Text(purchased[i].productId!),
                         )
                       ],
                     ),
@@ -209,7 +209,7 @@ class _ConsumablesState extends State<Consumables> {
               itemBuilder: (BuildContext ctxt, int i) {
                 return InkWell(
                   onTap: () {
-                    buyProduct(available[i].productId);
+                    buyProduct(available[i].productId!);
                   },
                   child: Card(
                     child: Column(
@@ -217,7 +217,7 @@ class _ConsumablesState extends State<Consumables> {
                         Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: Text(
-                            available[i].productName,
+                            available[i].productName!,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 decoration: TextDecoration.underline),
@@ -225,11 +225,11 @@ class _ConsumablesState extends State<Consumables> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(4.0),
-                          child: Text(available[i].productDesc),
+                          child: Text(available[i].productDesc!),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(4.0),
-                          child: Text(available[i].price),
+                          child: Text(available[i].price!),
                         )
                       ],
                     ),
@@ -256,7 +256,7 @@ class _ConsumablesState extends State<Consumables> {
                       Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: Text(
-                          purchasedRecord[i].productName,
+                          purchasedRecord[i].productName!,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               decoration: TextDecoration.underline),
@@ -264,7 +264,7 @@ class _ConsumablesState extends State<Consumables> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(4.0),
-                        child: Text(purchasedRecord[i].productId),
+                        child: Text(purchasedRecord[i].productId!),
                       )
                     ],
                   ),

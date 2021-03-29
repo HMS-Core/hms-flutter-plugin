@@ -16,9 +16,9 @@
 
 class HmsIapResult {
   final String resultCode;
-  final String resultMessage;
+  final String? resultMessage;
 
-  const HmsIapResult({this.resultCode, this.resultMessage});
+  const HmsIapResult({required this.resultCode, this.resultMessage});
 }
 
 class HmsIapResults {
