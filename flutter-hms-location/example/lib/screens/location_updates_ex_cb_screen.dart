@@ -39,8 +39,8 @@ class _LocationUpdatesExCbScreenState extends State<LocationUpdatesExCbScreen> {
 
   String _topText = "";
   String _bottomText = "";
-  int _callbackId;
-  LocationCallback _locationCallback;
+  int? _callbackId;
+  late LocationCallback _locationCallback;
 
   @override
   void initState() {
@@ -76,7 +76,7 @@ class _LocationUpdatesExCbScreenState extends State<LocationUpdatesExCbScreen> {
     _setTopText();
     if (_callbackId != null) {
       try {
-        await _locationService.removeLocationUpdatesCb(_callbackId);
+        await _locationService.removeLocationUpdatesCb(_callbackId!);
         _callbackId = null;
         _setTopText("Location updates are removed successfully");
       } on PlatformException catch (e) {
@@ -90,7 +90,7 @@ class _LocationUpdatesExCbScreenState extends State<LocationUpdatesExCbScreen> {
   void _removeLocationUpdatesOnDispose() async {
     if (_callbackId != null) {
       try {
-        await _locationService.removeLocationUpdatesCb(_callbackId);
+        await _locationService.removeLocationUpdatesCb(_callbackId!);
         _callbackId = null;
       } on PlatformException catch (e) {
         log(e.toString());

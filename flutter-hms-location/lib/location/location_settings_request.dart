@@ -22,7 +22,7 @@ import 'package:flutter/foundation.dart';
 import 'location_request.dart';
 
 class LocationSettingsRequest {
-  List<LocationRequest> requests;
+  List<LocationRequest?>? requests;
   bool alwaysShow;
   bool needBle;
 
@@ -34,15 +34,13 @@ class LocationSettingsRequest {
 
   Map<String, dynamic> toMap() {
     return {
-      'requests': requests?.map((x) => x?.toMap())?.toList(),
+      'requests': requests?.map((x) => x?.toMap()).toList(),
       'alwaysShow': alwaysShow,
       'needBle': needBle,
     };
   }
 
   factory LocationSettingsRequest.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return LocationSettingsRequest(
       requests: List<LocationRequest>.from(
           map['requests']?.map((x) => LocationRequest.fromMap(x))),

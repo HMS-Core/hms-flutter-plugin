@@ -23,9 +23,9 @@ class CustomTextInput extends StatelessWidget {
 
   final String labelText;
   final String hintText;
-  final TextEditingController controller;
-  final TextInputType keyboardType;
-  final List<TextInputFormatter> inputFormatters;
+  final TextEditingController? controller;
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
   final EdgeInsets padding;
 
   CustomTextInput({

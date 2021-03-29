@@ -40,10 +40,10 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
   String _topText = "";
   String _bottomText = "";
 
-  int _fenceCount;
-  int _requestCode;
-  String _geofenceListText;
-  StreamSubscription<GeofenceData> _streamSubscription;
+  late int _fenceCount;
+  int? _requestCode;
+  late String _geofenceListText;
+  late StreamSubscription<GeofenceData> _streamSubscription;
 
   final List<Geofence> _geofenceList = <Geofence>[];
   final List<String> _geofenceIdList = <String>[];
@@ -106,7 +106,7 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
       _setTopText("Call createGeofenceList method first.");
     } else {
       try {
-        await _geofenceService.deleteGeofenceList(_requestCode);
+        await _geofenceService.deleteGeofenceList(_requestCode!);
         _requestCode = null;
         _setBottomText();
         _setTopText("");
@@ -134,7 +134,7 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
   void _deleteGeofenceListOnDispose() async {
     if (_requestCode != null) {
       try {
-        await _geofenceService.deleteGeofenceList(_requestCode);
+        await _geofenceService.deleteGeofenceList(_requestCode!);
         _requestCode = null;
       } on PlatformException catch (e) {
         log(e.toString());

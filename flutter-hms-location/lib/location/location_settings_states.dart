@@ -28,14 +28,14 @@ class LocationSettingsStates {
   bool networkLocationUsable;
 
   LocationSettingsStates({
-    this.blePresent,
-    this.bleUsable,
-    this.gpsPresent,
-    this.gpsUsable,
-    this.locationPresent,
-    this.locationUsable,
-    this.networkLocationPresent,
-    this.networkLocationUsable,
+    required this.blePresent,
+    required this.bleUsable,
+    required this.gpsPresent,
+    required this.gpsUsable,
+    required this.locationPresent,
+    required this.locationUsable,
+    required this.networkLocationPresent,
+    required this.networkLocationUsable,
   });
 
   Map<String, dynamic> toMap() {
@@ -52,8 +52,6 @@ class LocationSettingsStates {
   }
 
   factory LocationSettingsStates.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return LocationSettingsStates(
       blePresent: map['blePresent'],
       bleUsable: map['bleUsable'],

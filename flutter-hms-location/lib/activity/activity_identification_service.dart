@@ -21,14 +21,14 @@ import 'activity_conversion_response.dart';
 import 'activity_identification_response.dart';
 
 class ActivityIdentificationService {
-  static ActivityIdentificationService _instance;
+  static ActivityIdentificationService? _instance;
 
   final MethodChannel _methodChannel;
   final EventChannel _activityIdentificationEventChannel;
   final EventChannel _activityConversionEventChannel;
 
-  Stream<ActivityIdentificationResponse> _onActivityIdentification;
-  Stream<ActivityConversionResponse> _onActivityConversion;
+  Stream<ActivityIdentificationResponse>? _onActivityIdentification;
+  Stream<ActivityConversionResponse>? _onActivityConversion;
 
   ActivityIdentificationService._create(
     this._methodChannel,
@@ -53,19 +53,19 @@ class ActivityIdentificationService {
         activityConversionEventChannel,
       );
     }
-    return _instance;
+    return _instance!;
   }
 
   Future<int> createActivityIdentificationUpdates(
       int detectionIntervalMillis) async {
-    return _methodChannel.invokeMethod<int>(
-        'createActivityIdentificationUpdates', detectionIntervalMillis);
+    return (await _methodChannel.invokeMethod<int>(
+        'createActivityIdentificationUpdates', detectionIntervalMillis))!;
   }
 
   Future<int> createActivityConversionUpdates(
-      List<ActivityConversionInfo> activityConversions) async {
-    return _methodChannel.invokeMethod<int>('createActivityConversionUpdates',
-        activityConversions?.map((x) => x?.toMap())?.toList());
+      List<ActivityConversionInfo?>? activityConversions) async {
+    return (await _methodChannel.invokeMethod<int>('createActivityConversionUpdates',
+        activityConversions?.map((x) => x?.toMap()).toList()))!;
   }
 
   Future<void> deleteActivityIdentificationUpdates(int requestCode) async {
@@ -84,7 +84,7 @@ class ActivityIdentificationService {
           .receiveBroadcastStream()
           .map((event) => ActivityIdentificationResponse.fromMap(event));
     }
-    return _onActivityIdentification;
+    return _onActivityIdentification!;
   }
 
   Stream<ActivityConversionResponse> get onActivityConversion {
@@ -93,6 +93,6 @@ class ActivityIdentificationService {
           .receiveBroadcastStream()
           .map((event) => ActivityConversionResponse.fromMap(event));
     }
-    return _onActivityConversion;
+    return _onActivityConversion!;
   }
 }

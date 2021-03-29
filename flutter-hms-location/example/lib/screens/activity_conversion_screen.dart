@@ -66,8 +66,8 @@ class _ActivityConversionScreenState extends State<ActivityConversionScreen> {
 
   String _topText = "";
   String _bottomText = "";
-  int _requestCode;
-  StreamSubscription<ActivityConversionResponse> _streamSubscription;
+  int? _requestCode;
+  late StreamSubscription<ActivityConversionResponse> _streamSubscription;
 
   @override
   void initState() {
@@ -77,8 +77,8 @@ class _ActivityConversionScreenState extends State<ActivityConversionScreen> {
   }
 
   void _onConversionData(ActivityConversionResponse response) {
-    for (ActivityConversionData data in response.activityConversionDatas) {
-      _appendToBottomText(data.toString());
+    for (ActivityConversionData? data in response.activityConversionDatas!) {
+      _appendToBottomText(data!.toString());
     }
   }
 
@@ -116,7 +116,7 @@ class _ActivityConversionScreenState extends State<ActivityConversionScreen> {
   void _deleteActivityConversionUpdates() async {
     if (_requestCode != null) {
       try {
-        await _service.deleteActivityConversionUpdates(_requestCode);
+        await _service.deleteActivityConversionUpdates(_requestCode!);
         _requestCode = null;
         _setBottomText();
         _setTopText("Deleted Activity Conversion Updates successfully.");
@@ -131,7 +131,7 @@ class _ActivityConversionScreenState extends State<ActivityConversionScreen> {
   void _deleteUpdatesOnDispose() async {
     if (_requestCode != null) {
       try {
-        await _service.deleteActivityConversionUpdates(_requestCode);
+        await _service.deleteActivityConversionUpdates(_requestCode!);
         _requestCode = null;
       } on PlatformException catch (e) {
         log(e.toString());
@@ -200,8 +200,8 @@ class _ActivityConversionScreenState extends State<ActivityConversionScreen> {
                           width: _CONT_WIDTH2,
                           child: Checkbox(
                             value: _inStates[i],
-                            onChanged: (bool value) => setState(() {
-                              _inStates[i] = value;
+                            onChanged: (value) => setState(() {
+                              _inStates[i] = value!;
                             }),
                           ),
                         ),
@@ -209,8 +209,8 @@ class _ActivityConversionScreenState extends State<ActivityConversionScreen> {
                           width: _CONT_WIDTH3,
                           child: Checkbox(
                             value: _outStates[i],
-                            onChanged: (bool value) => setState(() {
-                              _outStates[i] = value;
+                            onChanged: (value) => setState(() {
+                              _outStates[i] = value!;
                             }),
                           ),
                         ),

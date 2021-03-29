@@ -21,8 +21,8 @@ class NavigationResult {
   int state;
 
   NavigationResult({
-    this.possibility,
-    this.state,
+    required this.possibility,
+    required this.state,
   });
 
   Map<String, dynamic> toMap() {
@@ -33,8 +33,6 @@ class NavigationResult {
   }
 
   factory NavigationResult.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return NavigationResult(
       state: map["state"] == null ? null : map["state"],
       possibility: map["possibility"] == null ? null : map["possibility"],

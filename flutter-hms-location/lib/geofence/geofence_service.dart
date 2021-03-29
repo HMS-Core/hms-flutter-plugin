@@ -20,12 +20,12 @@ import 'geofence_data.dart' show GeofenceData;
 import 'geofence_request.dart' show GeofenceRequest;
 
 class GeofenceService {
-  static GeofenceService _instance;
+  static GeofenceService? _instance;
 
   final MethodChannel _methodChannel;
   final EventChannel _eventChannel;
 
-  Stream<GeofenceData> _onGeofenceData;
+  Stream<GeofenceData>? _onGeofenceData;
 
   GeofenceService._create(
     this._methodChannel,
@@ -44,12 +44,12 @@ class GeofenceService {
         eventChannel,
       );
     }
-    return _instance;
+    return _instance!;
   }
 
   Future<int> createGeofenceList(GeofenceRequest geofenceRequest) async {
-    return _methodChannel.invokeMethod<int>(
-        'createGeofenceList', geofenceRequest.toMap());
+    return (await _methodChannel.invokeMethod<int>(
+        'createGeofenceList', geofenceRequest.toMap()))!;
   }
 
   Future<void> deleteGeofenceList(int requestCode) async {
@@ -67,6 +67,6 @@ class GeofenceService {
           .receiveBroadcastStream()
           .map((event) => GeofenceData.fromMap(event));
     }
-    return _onGeofenceData;
+    return _onGeofenceData!;
   }
 }

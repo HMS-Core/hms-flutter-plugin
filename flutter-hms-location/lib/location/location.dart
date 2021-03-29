@@ -18,18 +18,18 @@ import 'dart:convert';
 import 'dart:ui';
 
 class Location {
-  String provider;
-  double latitude;
-  double longitude;
-  double altitude;
-  double speed;
-  double bearing;
-  double horizontalAccuracyMeters;
-  double verticalAccuracyMeters;
-  double speedAccuracyMetersPerSecond;
-  double bearingAccuracyDegrees;
-  int time;
-  int elapsedRealtimeNanos;
+  String? provider;
+  double? latitude;
+  double? longitude;
+  double? altitude;
+  double? speed;
+  double? bearing;
+  double? horizontalAccuracyMeters;
+  double? verticalAccuracyMeters;
+  double? speedAccuracyMetersPerSecond;
+  double? bearingAccuracyDegrees;
+  int? time;
+  int? elapsedRealtimeNanos;
 
   Location({
     this.provider = 'HMS Mock Location',
@@ -64,31 +64,19 @@ class Location {
   }
 
   factory Location.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return Location(
-      provider: map["provider"] == null ? null : map["provider"],
-      latitude: map["latitude"] == null ? null : map["latitude"],
-      longitude: map["longitude"] == null ? null : map["longitude"],
-      altitude: map["altitude"] == null ? null : map["altitude"],
-      speed: map["speed"] == null ? null : map["speed"],
-      bearing: map["bearing"] == null ? null : map["bearing"],
-      horizontalAccuracyMeters: map["horizontalAccuracyMeters"] == null
-          ? null
-          : map["horizontalAccuracyMeters"],
-      verticalAccuracyMeters: map["verticalAccuracyMeters"] == null
-          ? null
-          : map["verticalAccuracyMeters"],
-      speedAccuracyMetersPerSecond: map["speedAccuracyMetersPerSecond"] == null
-          ? null
-          : map["speedAccuracyMetersPerSecond"],
-      bearingAccuracyDegrees: map["bearingAccuracyDegrees"] == null
-          ? null
-          : map["bearingAccuracyDegrees"],
-      time: map["time"] == null ? null : map["time"],
-      elapsedRealtimeNanos: map["elapsedRealtimeNanos"] == null
-          ? null
-          : map["elapsedRealtimeNanos"],
+      provider: map["provider"],
+      latitude: map["latitude"],
+      longitude: map["longitude"],
+      altitude: map["altitude"],
+      speed: map["speed"],
+      bearing: map["bearing"],
+      horizontalAccuracyMeters: map["horizontalAccuracyMeters"],
+      verticalAccuracyMeters: map["verticalAccuracyMeters"],
+      speedAccuracyMetersPerSecond: map["speedAccuracyMetersPerSecond"],
+      bearingAccuracyDegrees: map["bearingAccuracyDegrees"],
+      time: map["time"],
+      elapsedRealtimeNanos: map["elapsedRealtimeNanos"],
     );
   }
 

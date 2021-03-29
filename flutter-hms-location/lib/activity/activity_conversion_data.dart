@@ -23,9 +23,9 @@ class ActivityConversionData {
   int elapsedTimeFromReboot;
 
   ActivityConversionData({
-    this.activityType,
-    this.conversionType,
-    this.elapsedTimeFromReboot,
+    required this.activityType,
+    required this.conversionType,
+    required this.elapsedTimeFromReboot,
   });
 
   Map<String, dynamic> toMap() {
@@ -37,8 +37,7 @@ class ActivityConversionData {
   }
 
   factory ActivityConversionData.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
+    // if (map == null) return null;
     return ActivityConversionData(
       activityType: map['activityType'],
       conversionType: map['conversionType'],

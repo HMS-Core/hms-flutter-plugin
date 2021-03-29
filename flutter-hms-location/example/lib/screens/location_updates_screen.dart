@@ -39,8 +39,8 @@ class _LocationUpdatesScreenState extends State<LocationUpdatesScreen> {
 
   String _topText = "";
   String _bottomText = "";
-  int _requestCode;
-  StreamSubscription<Location> _streamSubscription;
+  int? _requestCode;
+  late StreamSubscription<Location> _streamSubscription;
 
   @override
   void initState() {
@@ -69,7 +69,7 @@ class _LocationUpdatesScreenState extends State<LocationUpdatesScreen> {
   void _removeLocationUpdates() async {
     if (_requestCode != null) {
       try {
-        await _locationService.removeLocationUpdates(_requestCode);
+        await _locationService.removeLocationUpdates(_requestCode!);
         _requestCode = null;
         _setTopText("Location updates are removed successfully");
         _setBottomText();
@@ -84,7 +84,7 @@ class _LocationUpdatesScreenState extends State<LocationUpdatesScreen> {
   void _removeLocationUpdatesOnDispose() async {
     if (_requestCode != null) {
       try {
-        await _locationService.removeLocationUpdates(_requestCode);
+        await _locationService.removeLocationUpdates(_requestCode!);
         _requestCode = null;
       } on PlatformException catch (e) {
         log(e.toString());

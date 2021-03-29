@@ -38,9 +38,9 @@ class _AddGeofenceScreenState extends State<AddGeofenceScreen> {
   String _topText = "";
   String _bottomText = "";
   int _fenceCount = 0;
-  int _requestCode;
-  List<Geofence> _geofenceList;
-  List<String> _geofenceIdList;
+  int? _requestCode;
+  late List<Geofence> _geofenceList;
+  late List<String> _geofenceIdList;
 
   final TextEditingController _lat = TextEditingController();
   final TextEditingController _lng = TextEditingController();
@@ -55,18 +55,18 @@ class _AddGeofenceScreenState extends State<AddGeofenceScreen> {
 
   final List<TextInputFormatter> _numWithDecimalFormatter =
       <TextInputFormatter>[
-    WhitelistingTextInputFormatter(
+        FilteringTextInputFormatter.allow(
       RegExp(r"[+-]?([0-9]+([.][0-9]*)?|[.][0-9]+)"),
     ),
   ];
 
   final List<TextInputFormatter> _digitsOnlyFormatter = <TextInputFormatter>[
-    WhitelistingTextInputFormatter.digitsOnly,
+    FilteringTextInputFormatter.digitsOnly,
   ];
 
   final FusedLocationProviderClient _locationService =
       FusedLocationProviderClient();
-  StreamSubscription<Location> _streamSubscription;
+  late StreamSubscription<Location> _streamSubscription;
 
   @override
   void initState() {
@@ -77,9 +77,9 @@ class _AddGeofenceScreenState extends State<AddGeofenceScreen> {
 
   void _getGeofenceListFromRoute() {
     Future.delayed(Duration.zero, () {
-      Map<String, Object> args = ModalRoute.of(context).settings.arguments;
-      _geofenceList = args['geofenceList'];
-      _geofenceIdList = args['geofenceIdList'];
+      final args = ModalRoute.of(context)!.settings.arguments as Map<String, Object>;
+      _geofenceList = args['geofenceList'] as List<Geofence>;
+      _geofenceIdList = args['geofenceIdList'] as List<String>;
       setState(() {
         _bottomText = _geofenceIdList.toString();
         _fenceCount = _geofenceIdList.length;
@@ -93,7 +93,7 @@ class _AddGeofenceScreenState extends State<AddGeofenceScreen> {
         _lat.text = location.latitude.toString();
         _lng.text = location.longitude.toString();
       });
-      _removeLocationUpdates(_requestCode);
+      _removeLocationUpdates(_requestCode!);
     });
   }
 
@@ -274,6 +274,6 @@ class _AddGeofenceScreenState extends State<AddGeofenceScreen> {
   void dispose() {
     super.dispose();
     _streamSubscription.cancel();
-    _removeLocationUpdates(_requestCode);
+    _removeLocationUpdates(_requestCode!);
   }
 }

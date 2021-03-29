@@ -24,10 +24,10 @@ class NavigationRequest {
   static const int IS_SUPPORT_EX = 2;
 
   int type;
-  Map<String, String> extras;
+  Map<String, String>? extras;
 
   NavigationRequest({
-    this.type,
+    required this.type,
     this.extras,
   });
 
@@ -35,7 +35,7 @@ class NavigationRequest {
     if (extras == null) {
       extras = Map<String, String>();
     }
-    extras.putIfAbsent(key, () => value);
+    extras!.putIfAbsent(key, () => value);
   }
 
   Map<String, dynamic> toMap() {
@@ -46,8 +46,6 @@ class NavigationRequest {
   }
 
   factory NavigationRequest.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return NavigationRequest(
       type: map['type'],
       extras: Map<String, String>.from(map['extras']),

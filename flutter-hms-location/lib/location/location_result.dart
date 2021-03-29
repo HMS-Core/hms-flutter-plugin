@@ -23,10 +23,10 @@ import 'hwlocation.dart' show HWLocation;
 import 'location.dart' show Location;
 
 class LocationResult {
-  List<Location> locations;
-  List<HWLocation> hwLocations;
-  Location lastLocation;
-  HWLocation lastHWLocation;
+  List<Location?>? locations;
+  List<HWLocation?>? hwLocations;
+  Location? lastLocation;
+  HWLocation? lastHWLocation;
 
   LocationResult({
     this.locations,
@@ -37,16 +37,14 @@ class LocationResult {
 
   Map<String, dynamic> toMap() {
     return {
-      'locations': locations?.map((x) => x?.toMap())?.toList(),
-      'hwLocations': hwLocations?.map((x) => x?.toMap())?.toList(),
+      'locations': locations?.map((x) => x?.toMap()).toList(),
+      'hwLocations': hwLocations?.map((x) => x?.toMap()).toList(),
       'lastLocation': lastLocation?.toMap(),
       'lastHWLocation': lastHWLocation?.toMap(),
     };
   }
 
   factory LocationResult.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return LocationResult(
       locations: map["locations"] == null
           ? null

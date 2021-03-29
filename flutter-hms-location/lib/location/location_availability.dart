@@ -24,10 +24,10 @@ class LocationAvailability {
   int locationStatus;
 
   LocationAvailability({
-    this.cellStatus,
-    this.wifiStatus,
-    this.elapsedRealtimeNs,
-    this.locationStatus,
+    required this.cellStatus,
+    required this.wifiStatus,
+    required this.elapsedRealtimeNs,
+    required this.locationStatus,
   });
 
   bool get isLocationAvailable => locationStatus < 1000;
@@ -42,8 +42,6 @@ class LocationAvailability {
   }
 
   factory LocationAvailability.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return LocationAvailability(
       cellStatus: map['cellStatus'],
       wifiStatus: map['wifiStatus'],

@@ -25,8 +25,8 @@ class ActivityConversionInfo {
   int conversionType;
 
   ActivityConversionInfo({
-    this.activityType,
-    this.conversionType,
+    required this.activityType,
+    required this.conversionType,
   });
 
   Map<String, dynamic> toMap() {
@@ -37,8 +37,6 @@ class ActivityConversionInfo {
   }
 
   factory ActivityConversionInfo.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return ActivityConversionInfo(
       activityType: map['activityType'],
       conversionType: map['conversionType'],

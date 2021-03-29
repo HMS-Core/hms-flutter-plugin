@@ -39,7 +39,7 @@ class _ActivityIdentificationScreenState
   final ActivityIdentificationService _service =
       ActivityIdentificationService();
 
-  int _requestCode;
+  int? _requestCode;
 
   String _topText = "";
   String _bottomText = "";
@@ -53,7 +53,7 @@ class _ActivityIdentificationScreenState
   int _progressWalking = 0;
   int _progressRunning = 0;
 
-  StreamSubscription<ActivityIdentificationResponse> _streamSubscription;
+  late StreamSubscription<ActivityIdentificationResponse> _streamSubscription;
 
   @override
   void initState() {
@@ -125,9 +125,9 @@ class _ActivityIdentificationScreenState
   void _onIdentificationResponse(ActivityIdentificationResponse response) {
     _resetProgressBars();
     _appendBottomText(response.toString());
-    for (ActivityIdentificationData data
-        in response.activityIdentificationDatas) {
-      _setProgress(data.identificationActivity, data.possibility);
+    for (ActivityIdentificationData? data
+        in response.activityIdentificationDatas!) {
+      _setProgress(data!.identificationActivity, data.possibility);
     }
   }
 
@@ -167,7 +167,7 @@ class _ActivityIdentificationScreenState
   void _deleteActivityIdentificationUpdates() async {
     if (_requestCode != null) {
       try {
-        await _service.deleteActivityIdentificationUpdates(_requestCode);
+        await _service.deleteActivityIdentificationUpdates(_requestCode!);
         _requestCode = null;
         _resetProgressBars();
         _setBottomText();
@@ -183,7 +183,7 @@ class _ActivityIdentificationScreenState
   void _deleteUpdatesOnDispose() async {
     if (_requestCode != null) {
       try {
-        await _service.deleteActivityIdentificationUpdates(_requestCode);
+        await _service.deleteActivityIdentificationUpdates(_requestCode!);
         _requestCode = null;
       } on PlatformException catch (e) {
         log(e.toString());

@@ -22,22 +22,20 @@ import 'package:flutter/foundation.dart';
 import 'activity_conversion_data.dart';
 
 class ActivityConversionResponse {
-  List<ActivityConversionData> activityConversionDatas;
+  List<ActivityConversionData?>? activityConversionDatas;
 
   ActivityConversionResponse({
-    this.activityConversionDatas,
+    required this.activityConversionDatas,
   });
 
   Map<String, dynamic> toMap() {
     return {
       'activityConversionDatas':
-          activityConversionDatas?.map((x) => x?.toMap())?.toList(),
+          activityConversionDatas?.map((x) => x?.toMap()).toList(),
     };
   }
 
   factory ActivityConversionResponse.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return ActivityConversionResponse(
       activityConversionDatas: List<ActivityConversionData>.from(
           map['activityConversionDatas']

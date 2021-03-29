@@ -25,12 +25,12 @@ class GeofenceData {
   int errorCode;
   int conversion;
   List<String> convertingGeofenceIdList;
-  Location convertingLocation;
+  Location? convertingLocation;
 
   GeofenceData({
-    this.errorCode,
-    this.conversion,
-    this.convertingGeofenceIdList,
+    required this.errorCode,
+    required this.conversion,
+    required this.convertingGeofenceIdList,
     this.convertingLocation,
   });
 
@@ -44,8 +44,6 @@ class GeofenceData {
   }
 
   factory GeofenceData.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return GeofenceData(
       errorCode: map['errorCode'],
       conversion: map['conversion'],

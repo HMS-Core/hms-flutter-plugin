@@ -24,25 +24,25 @@ import 'activity_identification_data.dart';
 class ActivityIdentificationResponse {
   int time;
   int elapsedTimeFromReboot;
-  List<ActivityIdentificationData> activityIdentificationDatas;
+  List<ActivityIdentificationData?>? activityIdentificationDatas;
 
   ActivityIdentificationResponse({
     this.activityIdentificationDatas,
-    this.time,
-    this.elapsedTimeFromReboot,
+    required this.time,
+    required this.elapsedTimeFromReboot,
   });
 
-  ActivityIdentificationData get mostActivityIdentification {
+  ActivityIdentificationData? get mostActivityIdentification {
     return activityIdentificationDatas != null &&
-            activityIdentificationDatas.length > 0
-        ? activityIdentificationDatas[0]
+            activityIdentificationDatas!.length > 0
+        ? activityIdentificationDatas![0]
         : null;
   }
 
   int getActivityPossibility(int activityType) {
     if (activityIdentificationDatas != null &&
-        activityIdentificationDatas.length > 0) {
-      Iterator iterator = activityIdentificationDatas.iterator;
+        activityIdentificationDatas!.length > 0) {
+      Iterator iterator = activityIdentificationDatas!.iterator;
 
       while (iterator.moveNext()) {
         ActivityIdentificationData currentData = iterator.current;
@@ -60,13 +60,11 @@ class ActivityIdentificationResponse {
       'time': time,
       'elapsedTimeFromReboot': elapsedTimeFromReboot,
       'activityIdentificationDatas':
-          activityIdentificationDatas?.map((x) => x?.toMap())?.toList(),
+          activityIdentificationDatas?.map((x) => x?.toMap()).toList(),
     };
   }
 
   factory ActivityIdentificationResponse.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return ActivityIdentificationResponse(
       time: map['time'],
       elapsedTimeFromReboot: map['elapsedTimeFromReboot'],

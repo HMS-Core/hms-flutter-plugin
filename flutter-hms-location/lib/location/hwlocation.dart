@@ -20,29 +20,29 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 
 class HWLocation {
-  String provider;
-  double latitude;
-  double longitude;
-  double altitude;
-  double speed;
-  double bearing;
-  double horizontalAccuracyMeters;
-  double verticalAccuracyMeters;
-  double speedAccuracyMetersPerSecond;
-  double bearingAccuracyDegrees;
-  int time;
-  int elapsedRealtimeNanos;
-  String countryCode;
-  String countryName;
-  String state;
-  String city;
-  String county;
-  String street;
-  String featureName;
-  String postalCode;
-  String phone;
-  String url;
-  Map<String, dynamic> extraInfo;
+  String? provider;
+  double? latitude;
+  double? longitude;
+  double? altitude;
+  double? speed;
+  double? bearing;
+  double? horizontalAccuracyMeters;
+  double? verticalAccuracyMeters;
+  double? speedAccuracyMetersPerSecond;
+  double? bearingAccuracyDegrees;
+  int? time;
+  int? elapsedRealtimeNanos;
+  String? countryCode;
+  String? countryName;
+  String? state;
+  String? city;
+  String? county;
+  String? street;
+  String? featureName;
+  String? postalCode;
+  String? phone;
+  String? url;
+  Map<String, dynamic>? extraInfo;
 
   HWLocation({
     this.provider,
@@ -99,42 +99,30 @@ class HWLocation {
   }
 
   factory HWLocation.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return HWLocation(
-        provider: map["provider"] == null ? null : map["provider"],
-        latitude: map["latitude"] == null ? null : map["latitude"],
-        longitude: map["longitude"] == null ? null : map["longitude"],
-        altitude: map["altitude"] == null ? null : map["altitude"],
-        speed: map["speed"] == null ? null : map["speed"],
-        bearing: map["bearing"] == null ? null : map["bearing"],
+        provider: map["provider"],
+        latitude: map["latitude"],
+        longitude: map["longitude"],
+        altitude: map["altitude"],
+        speed: map["speed"],
+        bearing: map["bearing"],
         horizontalAccuracyMeters: map["horizontalAccuracyMeters"],
-        verticalAccuracyMeters: map["verticalAccuracyMeters"] == null
-            ? null
-            : map["verticalAccuracyMeters"],
-        speedAccuracyMetersPerSecond:
-            map["speedAccuracyMetersPerSecond"] == null
-                ? null
-                : map["speedAccuracyMetersPerSecond"],
-        bearingAccuracyDegrees: map["bearingAccuracyDegrees"] == null
-            ? null
-            : map["bearingAccuracyDegrees"],
-        time: map["time"] == null ? null : map["time"],
-        elapsedRealtimeNanos: map["elapsedRealtimeNanos"] == null
-            ? null
-            : map["elapsedRealtimeNanos"],
-        countryCode: map["countryCode"] == null ? null : map["countryCode"],
-        countryName: map["countryName"] == null ? null : map["countryName"],
-        state: map["state"] == null ? null : map["state"],
-        city: map["city"] == null ? null : map["city"],
-        county: map["county"] == null ? null : map["county"],
-        street: map["street"] == null ? null : map["street"],
+        verticalAccuracyMeters: map["verticalAccuracyMeters"],
+        speedAccuracyMetersPerSecond: map["speedAccuracyMetersPerSecond"],
+        bearingAccuracyDegrees: map["bearingAccuracyDegrees"],
+        time: map["time"],
+        elapsedRealtimeNanos: map["elapsedRealtimeNanos"],
+        countryCode: map["countryCode"],
+        countryName: map["countryName"],
+        state: map["state"],
+        city: map["city"],
+        county: map["county"],
+        street: map["street"],
         featureName: map["featureName"] == null ? null : map["featureName"],
         postalCode: map["postalCode"] == null ? null : map["postalCode"],
         phone: map["phone"] == null ? null : map["phone"],
         url: map["url"] == null ? null : map["url"],
-        extraInfo:
-            map["extraInfo"] == null ? null : Map.from(map["extraInfo"]));
+        extraInfo: map["extraInfo"] == null ? null : Map.from(map["extraInfo"]));
   }
 
   String toJson() => json.encode(toMap());

@@ -34,12 +34,12 @@ class Geofence {
   int dwellDelayTime;
 
   Geofence({
-    this.uniqueId,
-    this.conversions,
-    this.validDuration,
-    this.latitude,
-    this.longitude,
-    this.radius,
+    required this.uniqueId,
+    required this.conversions,
+    required this.validDuration,
+    required this.latitude,
+    required this.longitude,
+    required this.radius,
     this.notificationInterval = 0,
     this.dwellDelayTime = 0,
   });
@@ -58,8 +58,6 @@ class Geofence {
   }
 
   factory Geofence.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return Geofence(
       uniqueId: map['uniqueId'],
       conversions: map['conversions'],

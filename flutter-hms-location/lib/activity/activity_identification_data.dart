@@ -42,8 +42,8 @@ class ActivityIdentificationData {
   int possibility;
 
   ActivityIdentificationData({
-    this.identificationActivity,
-    this.possibility,
+    required this.identificationActivity,
+    required this.possibility,
   });
 
   static bool isValidType(int type) {
@@ -58,8 +58,6 @@ class ActivityIdentificationData {
   }
 
   factory ActivityIdentificationData.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return ActivityIdentificationData(
       identificationActivity: map['identificationActivity'],
       possibility: map['possibility'],

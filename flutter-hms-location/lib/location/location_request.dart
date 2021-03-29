@@ -27,18 +27,18 @@ class LocationRequest {
   static const int PRIORITY_HD_ACCURACY = 200;
   static const double _FASTEST_INTERVAL_FACTOR = 6.0;
 
-  int _priority;
-  int _interval;
-  int _fastestInterval;
-  bool _isFastestIntervalExplicitlySet;
-  int _expirationTime;
-  int _numUpdates;
-  double _smallestDisplacement;
-  int _maxWaitTime;
-  bool needAddress;
-  String language;
-  String countryCode;
-  Map<String, String> extras;
+  late int _priority;
+  late int _interval;
+  late int _fastestInterval;
+  late bool _isFastestIntervalExplicitlySet;
+  late int _expirationTime;
+  late int _numUpdates;
+  late double _smallestDisplacement;
+  late int _maxWaitTime;
+  late bool needAddress;
+  late String language;
+  late String countryCode;
+  Map<String, String>? extras;
 
   LocationRequest._create(
     this._priority,
@@ -143,7 +143,7 @@ class LocationRequest {
     if (extras == null) {
       extras = Map<String, String>();
     }
-    extras.putIfAbsent(key, () => value);
+    extras!.putIfAbsent(key, () => value);
   }
 
   Map<String, dynamic> toMap() {
@@ -164,8 +164,6 @@ class LocationRequest {
   }
 
   factory LocationRequest.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return LocationRequest._create(
       map['priority'],
       map['interval'],

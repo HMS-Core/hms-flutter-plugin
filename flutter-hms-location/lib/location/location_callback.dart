@@ -25,7 +25,7 @@ class LocationCallback {
   OnLocationAvailability onLocationAvailability;
 
   LocationCallback({
-    this.onLocationResult,
-    this.onLocationAvailability,
+    required this.onLocationResult,
+    required this.onLocationAvailability,
   });
 }
