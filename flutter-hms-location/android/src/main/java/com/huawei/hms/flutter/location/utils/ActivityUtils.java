@@ -1,11 +1,11 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -31,6 +31,7 @@ import java.util.Map;
 public interface ActivityUtils {
     /**
      * Utility method
+     *
      * @param list List of the ActivityConversionInfo
      * @return ActivityConversionRequest object
      */
@@ -47,6 +48,7 @@ public interface ActivityUtils {
 
     /**
      * Utility method
+     *
      * @param map HashMap representation of the ActivityConversionInfo object
      * @return ActivityConversionInfo object
      */
@@ -57,6 +59,7 @@ public interface ActivityUtils {
 
     /**
      * Utility method
+     *
      * @param data ActivityIdentificationData object
      * @return HashMap representation of ActivityIdentificationData object
      */
@@ -75,6 +78,7 @@ public interface ActivityUtils {
 
     /**
      * Utility method
+     *
      * @param response ActivityIdentificationResponse object
      * @return HashMap representation of ActivityIdentificationResponse object
      */
@@ -99,6 +103,7 @@ public interface ActivityUtils {
 
     /**
      * Utility method
+     *
      * @param data ActivityConversionData object
      * @return HashMap representation of the ActivityConversionData object
      */
@@ -118,6 +123,7 @@ public interface ActivityUtils {
 
     /**
      * Utility method
+     *
      * @param response ActivityConversionResponse object
      * @return HashMap representation of the ActivityConversionResponse object
      */

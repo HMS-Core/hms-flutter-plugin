@@ -1,11 +1,11 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,6 +22,7 @@ import java.util.Objects;
 public interface ValueGetter {
     /**
      * Utility method
+     *
      * @param key Lookup key for the map
      * @param map Map that contains argument keys and values
      * @return The "int" value for the corresponding key.
@@ -37,6 +38,7 @@ public interface ValueGetter {
 
     /**
      * Utility method
+     *
      * @param key Lookup key for the map
      * @param map Map that contains argument keys and values
      * @return The "long" value for the corresponding key.
@@ -52,6 +54,7 @@ public interface ValueGetter {
 
     /**
      * Utility method
+     *
      * @param key Lookup key for the map
      * @param map Map that contains argument keys and values
      * @return The "float" value for the corresponding key.
@@ -67,6 +70,7 @@ public interface ValueGetter {
 
     /**
      * Utility method
+     *
      * @param key Lookup key for the map
      * @param map Map that contains argument keys and values
      * @return The "double" value for the corresponding key.
@@ -82,6 +86,7 @@ public interface ValueGetter {
 
     /**
      * Utility method
+     *
      * @param key Lookup key for the map
      * @param map Map that contains argument keys and values
      * @return The "boolean" value for the corresponding key.
@@ -97,6 +102,7 @@ public interface ValueGetter {
 
     /**
      * Utility method
+     *
      * @param key Lookup key for the map
      * @param map Map that contains argument keys and values
      * @return The "String" value for the corresponding key.

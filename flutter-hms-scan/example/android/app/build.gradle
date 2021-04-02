@@ -43,10 +43,10 @@ android {
 
     signingConfigs {
         config {
-            keyAlias '<keystore_file>.jks/.keystore'
-            keyPassword '<keystore_password>'
-            storeFile file('<key_alias>')
-            storePassword '<key_password>'
+            keyAlias '<key_alias>'
+            keyPassword '<key_password>'
+            storeFile file('<keystore_file>')
+            storePassword '<keystore_password>'
         }
     }
 

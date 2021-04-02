@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.huawei.hms.flutter.map.map;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 
@@ -25,35 +26,43 @@ import com.huawei.hms.flutter.map.constants.Param;
 import com.huawei.hms.flutter.map.utils.Convert;
 import com.huawei.hms.maps.model.CameraPosition;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.StandardMessageCodec;
 import io.flutter.plugin.platform.PlatformView;
 import io.flutter.plugin.platform.PlatformViewFactory;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class MapFactory extends PlatformViewFactory {
 
     private final AtomicInteger mActivityState;
+
     private final BinaryMessenger binaryMessenger;
+
     private final Application application;
+
+    private final Activity mActivity;
+
     private final int activityHashCode;
+
     private final Lifecycle lifecycle;
+
     private final PluginRegistry.Registrar registrar;
 
-    public MapFactory(final AtomicInteger state, final BinaryMessenger binaryMessenger, final Application application,
+    public MapFactory(final AtomicInteger state, final BinaryMessenger binaryMessenger, final Activity mActivity,
         final Lifecycle lifecycle, final PluginRegistry.Registrar registrar, final int activityHashCode) {
         super(StandardMessageCodec.INSTANCE);
         mActivityState = state;
         this.binaryMessenger = binaryMessenger;
-        this.application = application;
+        this.application = mActivity.getApplication();
         this.activityHashCode = activityHashCode;
         this.lifecycle = lifecycle;
         this.registrar = registrar;
+        this.mActivity = mActivity;
     }
 
     @Override
@@ -84,7 +93,7 @@ public class MapFactory extends PlatformViewFactory {
         if (params.containsKey(Param.TILE_OVERLAYS_TO_INSERT)) {
             builder.setTileOverlays((List<HashMap<String, Object>>) params.get(Param.TILE_OVERLAYS_TO_INSERT));
         }
-        return builder.build(id, context, mActivityState, binaryMessenger, application, lifecycle, registrar,
+        return builder.build(id, context, mActivity, mActivityState, binaryMessenger, application, lifecycle, registrar,
             activityHashCode);
     }
 }

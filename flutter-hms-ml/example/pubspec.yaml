@@ -1,6 +1,6 @@
 name: huawei_ml_example
 description: Demonstrates how to use the Huawei ML plugin.
-version: 2.0.5+300
+version: 2.0.5+301
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -11,10 +11,10 @@ dependencies:
 
   huawei_ml:
     path: ../
-  image_picker: 0.6.7+4
-  flutter_audio_recorder: 0.5.5
-  path_provider: 1.6.11
-  file_picker: 1.13.3
+  image_picker: ^0.6.7+4
+  flutter_audio_recorder: ^0.5.5
+  path_provider: ^1.6.11
+  file_picker: ^1.13.3
 
 dev_dependencies:
   flutter_test:

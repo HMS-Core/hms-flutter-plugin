@@ -1,18 +1,18 @@
 /*
- * Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+
+    Licensed under the Apache License, Version 2.0 (the "License")
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        https://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 
 package com.huawei.hms.flutter.scan.customizedview;
 
@@ -47,6 +47,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.HashMap;
 import java.util.Objects;
 
 import io.flutter.plugin.common.MethodChannel;
@@ -128,11 +130,16 @@ public class CustomizedViewActivity extends Activity {
         continuouslyScan = intent.getExtras().getBoolean("continuouslyScan");
 
         //Initialize the RemoteView instance, and set callback for the scanning result.
-        remoteView = new RemoteView.Builder().setContext(this)
-            .setBoundingBox(rect)
-            .setContinuouslyScan(continuouslyScan)
-            .setFormat(intent.getExtras().getInt("scanType"), intent.getExtras().getIntArray("additionalScanTypes"))
-            .build();
+        RemoteView.Builder builder = new RemoteView.Builder().setContext(this)
+                .setBoundingBox(rect)
+                .setContinuouslyScan(continuouslyScan)
+                .setFormat(intent.getExtras().getInt("scanType"), intent.getExtras().getIntArray("additionalScanTypes"));
+
+        if (intent.getExtras().getBoolean("enableReturnBitmap")) {
+            remoteView = builder.enableReturnBitmap().build();
+        } else {
+            remoteView = builder.build();
+        }
 
         //Set Method Call Handler for pause and resume actions of remote view.
         if (remoteViewChannel != null) {
@@ -146,23 +153,30 @@ public class CustomizedViewActivity extends Activity {
             @Override
             public void onResult(HmsScan[] result) {
                 //Check the result.
-                if (!continuouslyScan) {
-                    if (result != null && result.length > 0 && result[0] != null && !TextUtils.isEmpty(
-                        result[0].getOriginalValue())) {
-                        mHMSLogger.sendSingleEvent("CustomizedViewActivity.customizedView");
-                        Intent resultIntent = new Intent();
-                        resultIntent.putExtra(ScanUtil.RESULT, result[0]);
-                        setResult(RESULT_OK, resultIntent);
-                        CustomizedViewActivity.this.finish();
-                    }
+                if (result == null || result.length == 0 || result[0] == null || TextUtils.isEmpty(result[0].getOriginalValue())) {
+                    return;
+                }
+                HashMap<String, Object> resultMap = mGson.fromJson(mGson.toJson(result[0]), HashMap.class);
+                if (resultMap.containsKey("originalBitmap")) {
+                    resultMap.remove("originalBitmap");
+
+                    int bytes = result[0].getOriginalBitmap().getByteCount();
+                    ByteBuffer buffer = ByteBuffer.allocate(bytes);
+                    result[0].getOriginalBitmap().copyPixelsToBuffer(buffer);
+                    final byte[] array = buffer.array();
+
+                    resultMap.put("originalBitmap", array);
+                }
+
+                if (customizedViewChannel != null) {
+                    customizedViewChannel.invokeMethod("CustomizedViewResponse", resultMap);
+                }
+
+                if (continuouslyScan) {
+                    mHMSLogger.sendPeriodicEvent("CustomizedViewActivity.customizedView");
                 } else {
-                    if (result != null && result.length > 0 && result[0] != null && !TextUtils.isEmpty(
-                        result[0].getOriginalValue())) {
-                        if (customizedViewChannel != null) {
-                            customizedViewChannel.invokeMethod("CustomizedViewResponse", mGson.toJson(result[0]));
-                        }
-                        mHMSLogger.sendPeriodicEvent("CustomizedViewActivity.customizedView");
-                    }
+                    mHMSLogger.sendSingleEvent("CustomizedViewActivity.customizedView");
+                    CustomizedViewActivity.this.finish();
                 }
             }
         });

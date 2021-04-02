@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -20,12 +20,11 @@ import android.app.Activity;
 
 import androidx.annotation.NonNull;
 
-import com.huawei.hms.flutter.account.handlers.AuthManagerMethodHandler;
-import com.huawei.hms.flutter.account.handlers.AuthServiceMethodHandler;
-import com.huawei.hms.flutter.account.handlers.AuthToolMethodHandler;
-import com.huawei.hms.flutter.account.handlers.NetworkToolMethodHandler;
-import com.huawei.hms.flutter.account.handlers.SmsManagerMethodHandler;
-import com.huawei.hms.flutter.account.logger.LoggerMethodHandler;
+import com.huawei.hms.flutter.account.handlers.AccAuthManager;
+import com.huawei.hms.flutter.account.handlers.AccAuthService;
+import com.huawei.hms.flutter.account.handlers.HwAuthTool;
+import com.huawei.hms.flutter.account.handlers.HwNetworkTool;
+import com.huawei.hms.flutter.account.handlers.HwSmsManager;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -37,12 +36,13 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 public class HmsAccountPlugin implements FlutterPlugin, ActivityAware {
     private FlutterPluginBinding mFlutterPluginBinding;
     private ActivityPluginBinding mActivityPluginBinding;
-    private MethodChannel authServiceMethodChannel;
-    private MethodChannel authManagerMethodChannel;
-    private MethodChannel authToolMethodChannel;
-    private MethodChannel networkToolMethodChannel;
-    private MethodChannel smsManagerMethodChannel;
-    private MethodChannel loggerMethodChannel;
+    
+    private MethodChannel hwAuthTool;
+    private MethodChannel hwNetworkTool;
+    private MethodChannel hwSmsManager;
+
+    private MethodChannel accAuthService;
+    private MethodChannel accAuthManager;
 
     public static void registerWith(Registrar registrar) {
         HmsAccountPlugin hmsAccountPlugin = new HmsAccountPlugin();
@@ -56,34 +56,35 @@ public class HmsAccountPlugin implements FlutterPlugin, ActivityAware {
     }
 
     private void initializeChannels(final BinaryMessenger messenger) {
-        authServiceMethodChannel = new MethodChannel(messenger, "com.huawei.hms.flutter.account/auth/service");
-        authManagerMethodChannel = new MethodChannel(messenger, "com.huawei.hms.flutter.account/auth/manager");
-        authToolMethodChannel = new MethodChannel(messenger, "com.huawei.hms.flutter.account/auth/tool");
-        networkToolMethodChannel = new MethodChannel(messenger, "com.huawei.hms.flutter.account/network/tool");
-        smsManagerMethodChannel = new MethodChannel(messenger, "com.huawei.hms.flutter.account/sms/manager");
-        loggerMethodChannel = new MethodChannel(messenger, "com.huawei.hms.flutter.account/logger");
+        hwAuthTool = new MethodChannel(messenger, "com.huawei.hms.flutter.account/hwid/auth");
+        hwNetworkTool = new MethodChannel(messenger, "com.huawei.hms.flutter.account/hwid/network");
+        hwSmsManager = new MethodChannel(messenger, "com.huawei.hms.flutter.account/hwid/sms");
+
+        accAuthService = new MethodChannel(messenger, "com.huawei.hms.flutter.account/acc");
+        accAuthManager = new MethodChannel(messenger, "com.huawei.hms.flutter.account/acc/manager");
     }
 
     private void setHandlers(Activity activity) {
-        AuthServiceMethodHandler authServiceMethodHandler = new AuthServiceMethodHandler(activity);
+        AccAuthService accService = new AccAuthService(activity);
         if (mActivityPluginBinding != null) {
-            mActivityPluginBinding.addActivityResultListener(authServiceMethodHandler);
+            mActivityPluginBinding.addActivityResultListener(accService);
         }
-        authServiceMethodChannel.setMethodCallHandler(authServiceMethodHandler);
-        authManagerMethodChannel.setMethodCallHandler(new AuthManagerMethodHandler(activity));
-        authToolMethodChannel.setMethodCallHandler(new AuthToolMethodHandler(activity));
-        networkToolMethodChannel.setMethodCallHandler(new NetworkToolMethodHandler(activity));
-        smsManagerMethodChannel.setMethodCallHandler(new SmsManagerMethodHandler(activity, smsManagerMethodChannel));
-        loggerMethodChannel.setMethodCallHandler(new LoggerMethodHandler(activity));
+        accAuthService.setMethodCallHandler(accService);
+
+        accAuthManager.setMethodCallHandler(new AccAuthManager(activity));
+        
+        hwAuthTool.setMethodCallHandler(new HwAuthTool(activity));
+        hwNetworkTool.setMethodCallHandler(new HwNetworkTool(activity));
+        hwSmsManager.setMethodCallHandler(new HwSmsManager(activity, hwSmsManager));
     }
 
     private void removeChannels() {
-        authServiceMethodChannel = null;
-        authManagerMethodChannel = null;
-        authToolMethodChannel = null;
-        networkToolMethodChannel = null;
-        smsManagerMethodChannel = null;
-        loggerMethodChannel = null;
+        hwAuthTool = null;
+        hwNetworkTool = null;
+        hwSmsManager = null;
+
+        accAuthService = null;
+        accAuthManager = null;
     }
 
     @Override
@@ -120,12 +121,13 @@ public class HmsAccountPlugin implements FlutterPlugin, ActivityAware {
 
     @Override
     public void onDetachedFromActivity() {
-        authServiceMethodChannel.setMethodCallHandler(null);
-        authManagerMethodChannel.setMethodCallHandler(null);
-        authToolMethodChannel.setMethodCallHandler(null);
-        networkToolMethodChannel.setMethodCallHandler(null);
-        smsManagerMethodChannel.setMethodCallHandler(null);
-        loggerMethodChannel.setMethodCallHandler(null);
+        hwAuthTool.setMethodCallHandler(null);
+        hwNetworkTool.setMethodCallHandler(null);
+        hwSmsManager.setMethodCallHandler(null);
+
+        accAuthService.setMethodCallHandler(null);
+        accAuthManager.setMethodCallHandler(null);
+        
         mActivityPluginBinding = null;
     }
 }

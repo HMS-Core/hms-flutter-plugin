@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:huawei_map/map.dart';
-import 'package:huawei_map_example/customWidgets/customWidgets.dart';
+import '../customWidgets/customWidgets.dart';
 
 class PolylineDemo extends StatefulWidget {
   @override

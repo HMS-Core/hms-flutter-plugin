@@ -1,5 +1,6 @@
 name: huawei_location_example
 description: Demonstrates how to use the Huawei Location plugin.
+version: 5.1.0+301
 
 environment:
   sdk: ">=2.1.0 <3.0.0"

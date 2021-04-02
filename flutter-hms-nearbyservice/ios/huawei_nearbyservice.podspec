@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'huawei_nearbyservice'
-  s.version          = '5.0.4+302'
+  s.version          = '5.0.4+303'
   s.summary          = 'HUAWEI Nearby Service Kit Plugin for Flutter.'
   s.description      = <<-DESC
 Nearby Service Data Communication allows apps to easily discover nearby devices and set up communication with them using technologies such as Bluetooth and Wi-Fi.

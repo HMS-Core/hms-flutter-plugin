@@ -30,7 +30,7 @@ class QuerySuggestionRequest {
   List<LocationType> poiTypes;
   String countryCode;
   String language;
-  final String politicalView;
+  String politicalView;
   bool children;
   bool strictBounds;
 
@@ -46,11 +46,6 @@ class QuerySuggestionRequest {
     this.children,
     this.strictBounds,
   }) : politicalView = null;
-
-  @deprecated
-  set politicalView(String politicalView) {
-    this.politicalView = null;
-  }
 
   Map<String, dynamic> toMap() {
     return {

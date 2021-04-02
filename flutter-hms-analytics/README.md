@@ -52,6 +52,7 @@ Please see [pub.dev](https://pub.dev/packages/huawei_analytics/install) and [App
 - Debugging
   - [Using Debug Mode Android](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/android-setup-0000001058644236#EN-US_TOPIC_0000001058644236__section216115895319)
   - [Using Debug Mode iOS](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/ios-setup-0000001058804234#EN-US_TOPIC_0000001058804234__section166659381319)
+- [Accessing Analytics Kit](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/initializing-analytics-kit-0000001058525725)
 
 
 ## Questions or Issues

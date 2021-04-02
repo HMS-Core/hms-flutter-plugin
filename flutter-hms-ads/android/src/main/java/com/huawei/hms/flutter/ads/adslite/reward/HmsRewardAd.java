@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -78,16 +78,16 @@ public class HmsRewardAd {
         this.rewardAdListener = rewardAdListener;
     }
 
-    void setStatus(String status) {
-        this.status = status;
+    boolean isPreparing() {
+        return this.status.equals(AdStatus.PREPARING);
     }
 
     public boolean isCreated() {
         return this.status.equals(AdStatus.CREATED);
     }
 
-    boolean isPreparing() {
-        return this.status.equals(AdStatus.PREPARING);
+    void setStatus(String status) {
+        this.status = status;
     }
 
     private boolean isLoading() {

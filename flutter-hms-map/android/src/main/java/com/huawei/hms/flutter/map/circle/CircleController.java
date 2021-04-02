@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -21,8 +21,11 @@ import com.huawei.hms.maps.model.LatLng;
 
 class CircleController implements CircleMethods {
     private final Circle circle;
+
     private final String idOnMap;
+
     private final float compactness;
+
     private boolean isClickable;
 
     CircleController(final Circle circle, final boolean clickable, final float compactness) {

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.huawei.hms.flutter.map.map;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.graphics.Rect;
@@ -27,28 +28,38 @@ import com.huawei.hms.maps.HuaweiMapOptions;
 import com.huawei.hms.maps.model.CameraPosition;
 import com.huawei.hms.maps.model.LatLngBounds;
 
+import io.flutter.plugin.common.BinaryMessenger;
+import io.flutter.plugin.common.PluginRegistry;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import io.flutter.plugin.common.BinaryMessenger;
-import io.flutter.plugin.common.PluginRegistry;
 
 class MapBuilder implements MapMethods {
     private final HuaweiMapOptions options = new HuaweiMapOptions();
 
     private List<HashMap<String, Object>> markers;
+
     private List<HashMap<String, Object>> polygons;
+
     private List<HashMap<String, Object>> polylines;
+
     private List<HashMap<String, Object>> circles;
+
     private List<HashMap<String, Object>> groundOverlays;
+
     private List<HashMap<String, Object>> tileOverlays;
 
     private boolean trackCameraPosition = false;
+
     private boolean myLocationEnabled = false;
+
     private boolean myLocationButtonEnabled = false;
+
     private boolean trafficEnabled = false;
+
     private boolean buildingsEnabled = true;
+
     private boolean markersClustering = false;
 
     private Rect padding = new Rect(0, 0, 0, 0);
@@ -59,11 +70,11 @@ class MapBuilder implements MapMethods {
         logger = HMSLogger.getInstance(application);
     }
 
-    MapController build(final int id, final Context context, final AtomicInteger state,
+    MapController build(final int id, final Context context, final Activity mActivity, final AtomicInteger state,
         final BinaryMessenger binaryMessenger, final Application application, final Lifecycle lifecycle,
         final PluginRegistry.Registrar registrar, final int activityHashCode) {
-        final MapController controller = new MapController(id, context, state, binaryMessenger, application, lifecycle,
-            registrar, activityHashCode, options);
+        final MapController controller = new MapController(id, context, mActivity, state, binaryMessenger, application,
+            lifecycle, registrar, activityHashCode, options);
         controller.init();
         controller.setMyLocationEnabled(myLocationEnabled);
         controller.setMyLocationButtonEnabled(myLocationButtonEnabled);

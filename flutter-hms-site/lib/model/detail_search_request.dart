@@ -19,7 +19,7 @@ import 'dart:convert';
 class DetailSearchRequest {
   String siteId;
   String language;
-  final String politicalView;
+  String politicalView;
   bool children;
 
   DetailSearchRequest({
@@ -28,11 +28,6 @@ class DetailSearchRequest {
     @deprecated String politicalView,
     this.children,
   }) : politicalView = null;
-
-  @deprecated
-  set politicalView(String politicalView) {
-    this.politicalView = null;
-  }
 
   Map<String, dynamic> toMap() {
     return {

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@ class SafetyDetect {
   /// Initiates a URL check request.
   static Future<List<UrlCheckThreat>> urlCheck(
       String url, String appId, List<UrlThreatType> urlThreatTypes) async {
-    List<int> threatTypesValues = List();
+    List<int> threatTypesValues = <int>[];
     for (var urlThreatType in urlThreatTypes) {
       if (urlThreatType == UrlThreatType.malware) {
         threatTypesValues.add(1);

@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'huawei_dtm'
-  s.version          = '5.0.4+301'
+  s.version          = '5.0.4+302'
   s.summary          = 'Huawei DTM Kit Plugin for Flutter'
   s.description      = <<-DESC
 With Huawei DTM Kit, you can dynamically update tracking tags to track

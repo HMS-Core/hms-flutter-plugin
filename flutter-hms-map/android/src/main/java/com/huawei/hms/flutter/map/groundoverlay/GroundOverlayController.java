@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -24,7 +24,9 @@ import com.huawei.hms.maps.model.LatLngBounds;
 public class GroundOverlayController implements GroundOverlayMethods {
 
     private final GroundOverlay groundOverlay;
+
     private final String mapGroundOverlayId;
+
     private final boolean clickable;
 
     GroundOverlayController(final GroundOverlay groundOverlay, final boolean clickable) {

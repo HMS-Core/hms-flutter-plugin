@@ -1,3 +1,10 @@
+## 5.0.3+303
+
+* Updated HMSLogger.
+* Fixed the bug that causes the Huawei Map to crash when running on earlier HMS Core versions.
+* Fixed the bug that causes the app to crash when pressing the "Legal" button on the Huawei Map instances.
+* Added missing permission for the demo application that prevents the app from running. 
+
 ## 5.0.3+302
 
 * Added Tile Overlays and tile types.

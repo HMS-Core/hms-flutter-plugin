@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'huawei_analytics'
-  s.version          = '5.1.0+300'
+  s.version          = '5.1.0+301'
   s.summary          = 'HUAWEI Analytics Kit plugin for Flutter.'
   s.description      = <<-DESC
 HUAWEI Analytics Kit plugin for Flutter. Analytics Kit offers you a range of preset analytics models so you can gain a deeper insight into your users, products, and content.

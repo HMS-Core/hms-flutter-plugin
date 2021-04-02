@@ -24,7 +24,6 @@ This demo project is an example to demonstrate the features of the **Huawei Flut
 Before you get started, you must register as a HUAWEI developer and complete identity verification on the [HUAWEI Developer](https://developer.huawei.com/consumer/en/) website. For details, please refer to [Register a HUAWEI ID](https://developer.huawei.com/consumer/en/doc/10104).
 
 ### Creating a Project in AppGallery Connect
-
 Creating an app in AppGallery Connect is required in order to communicate with the Huawei services. To create an app, perform the following steps:
 
 **Step 1.** Set an unique **Application ID** on the app level build gradle file located on **example/android/app/build.gradle**. You should also change the **package names** for the manifest files in the **/example/android/app/src/** directory and on the **MainActivity.java** to match with the Application ID. 

@@ -64,16 +64,19 @@ class _MyAppState extends State<MyApp> {
 
   void _onMessageReceived(RemoteMessage remoteMessage) {
     String data = remoteMessage.data;
-
-    Push.localNotification({
-      HMSLocalNotificationAttr.TITLE: 'DataMessage Received',
-      HMSLocalNotificationAttr.MESSAGE: data
-    });
-    showResult("onRemoteMessageReceived", "Data: " + data);
+    if (data != null) {
+      Push.localNotification({
+        HMSLocalNotificationAttr.TITLE: 'DataMessage Received',
+        HMSLocalNotificationAttr.MESSAGE: data
+      });
+      showResult("onMessageReceived", "Data: " + data);
+    } else {
+      showResult("onMessageReceived", "No data is present.");
+    }
   }
 
   void _onMessageReceiveError(Object error) {
-    showResult("onRemoteMessageReceiveError", error.toString());
+    showResult("onMessageReceiveError", error.toString());
   }
 
   void _onRemoteMessageSendStatus(String event) {

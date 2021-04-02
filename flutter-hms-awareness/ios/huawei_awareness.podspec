@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'huawei_awareness'
-  s.version          = '1.0.7+303'
+  s.version          = '1.0.7+304'
   s.summary          = 'HUAWEI Awareness Kit Plugin for Flutter.'
   s.description      = <<-DESC
   HUAWEI Awareness Kit provides your app with the ability to obtain contextual information including users' time, location, behavior, ambient light, weather, and nearby beacons.

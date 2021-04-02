@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -93,15 +93,15 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
           "Basic Integrity: " + jsonMap['basicIntegrity'].toString();
       print("SysIntegrityCheck result is: $decodedText");
     } on PlatformException catch (e) {
-      currentMethodResult = "Error occured while getting result, Error is: $e";
-      print("Error occured while getting SysIntegrityResult. Error is : $e");
+      currentMethodResult = "Error occurred while getting result, Error is: $e";
+      print("Error occurred while getting SysIntegrityResult. Error is : $e");
     }
     animateResult();
   }
 
   void getMaliciousAppsList() async {
     selectedMethodName = "Malicious Apps List";
-    List<MaliciousAppData> maliciousApps = List();
+    List<MaliciousAppData> maliciousApps = [];
     maliciousApps = await SafetyDetect.getMaliciousAppsList();
     animateResult();
     setState(() {
@@ -139,7 +139,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     selectedMethodName = "User Detection";
     try {
       String token = await SafetyDetect.userDetection(appId);
-      currentMethodResult = "User verification succeded, user token: $token";
+      currentMethodResult = "User verification succeeded, user token: $token";
     } on PlatformException catch (e) {
       currentMethodResult =
           "Error occurred: " + e.code + ":" + SafetyDetectStatusCodes[e.code];

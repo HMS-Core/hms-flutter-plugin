@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 import 'package:http/http.dart' as http;
 
-/// If you want to do a verification, you can use the link below
+/// If you want to do a verification, you can use the link below.
 ///
 /// [idToken] the token received token from signed HUAWEI ID.
 Future<void> performServerVerification(String idToken) async {

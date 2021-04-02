@@ -1,18 +1,18 @@
 /*
- * Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+
+    Licensed under the Apache License, Version 2.0 (the "License")
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        https://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 
 import 'dart:convert' show json;
 
@@ -35,6 +35,7 @@ class CustomizedViewRequest {
   bool isFlashAvailable;
   bool isGalleryAvailable;
   bool continuouslyScan;
+  bool enableReturnBitmap;
 
   CustomizedCameraListener customizedCameraListener;
   CustomizedLifeCycleListener customizedLifeCycleListener;
@@ -48,6 +49,7 @@ class CustomizedViewRequest {
     this.isFlashAvailable = false,
     this.isGalleryAvailable = true,
     this.continuouslyScan = true,
+    this.enableReturnBitmap = false,
     this.customizedCameraListener,
     this.customizedLifeCycleListener,
   });
@@ -75,6 +77,7 @@ class CustomizedViewRequest {
             : json["isGalleryAvailable"],
         continuouslyScan:
             json["continuouslyScan"] == null ? null : json["continuouslyScan"],
+        enableReturnBitmap: json["enableReturnBitmap"],
       );
 
   Map<dynamic, dynamic> toMap() => {
@@ -86,6 +89,7 @@ class CustomizedViewRequest {
         "isFlashAvailable": isFlashAvailable,
         "isGalleryAvailable": isGalleryAvailable,
         "continuouslyScan": continuouslyScan,
+        "enableReturnBitmap": enableReturnBitmap,
       };
 
   @override
@@ -101,7 +105,8 @@ class CustomizedViewRequest {
         check.flashOnLightChange == flashOnLightChange &&
         check.isFlashAvailable == isFlashAvailable &&
         check.isGalleryAvailable == isGalleryAvailable &&
-        check.continuouslyScan == continuouslyScan;
+        check.continuouslyScan == continuouslyScan &&
+        check.enableReturnBitmap == enableReturnBitmap;
   }
 
   @override
@@ -114,6 +119,7 @@ class CustomizedViewRequest {
         isFlashAvailable,
         isGalleryAvailable,
         continuouslyScan,
+        enableReturnBitmap,
       );
 }
 

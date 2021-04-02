@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -30,27 +30,21 @@ class MLLangDetector {
 
   final MethodChannel _channel = Channels.langDetectionMethodChannel;
 
-  Future<String> firstBestDetect(
-      {@required MLLangDetectorSetting setting}) async {
+  Future<String> firstBestDetect({@required MLLangDetectorSetting setting}) async {
     return await _channel.invokeMethod("firstBestDetect", setting.toMap());
   }
 
-  Future<String> syncFirstBestDetect(
-      {@required MLLangDetectorSetting setting}) async {
+  Future<String> syncFirstBestDetect({@required MLLangDetectorSetting setting}) async {
     return await _channel.invokeMethod("syncFirstBestDetect", setting.toMap());
   }
 
-  Future<List<MLDetectedLang>> probabilityDetect(
-      {@required MLLangDetectorSetting setting}) async {
-    var res = json.decode(
-        await _channel.invokeMethod("probabilityDetect", setting.toMap()));
+  Future<List<MLDetectedLang>> probabilityDetect({@required MLLangDetectorSetting setting}) async {
+    var res = json.decode(await _channel.invokeMethod("probabilityDetect", setting.toMap()));
     return (res as List).map((e) => MLDetectedLang.fromJson(e)).toList();
   }
 
-  Future<List<MLDetectedLang>> syncProbabilityDetect(
-      {@required MLLangDetectorSetting setting}) async {
-    var res = json.decode(
-        await _channel.invokeMethod("syncProbabilityDetect", setting.toMap()));
+  Future<List<MLDetectedLang>> syncProbabilityDetect({@required MLLangDetectorSetting setting}) async {
+    var res = json.decode(await _channel.invokeMethod("syncProbabilityDetect", setting.toMap()));
     return (res as List).map((e) => MLDetectedLang.fromJson(e)).toList();
   }
 

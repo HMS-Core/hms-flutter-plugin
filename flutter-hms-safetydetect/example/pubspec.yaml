@@ -1,6 +1,6 @@
 name: huawei_safetydetect_example
 description: Demonstrates how to use the Huawei Safety Detect Plugin.
-version: 5.0.3+300
+version: 5.0.3+301
 
 environment:
   sdk: ">=2.1.0 <3.0.0"

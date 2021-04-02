@@ -1,6 +1,6 @@
 name: huawei_account_example
 description: Demonstrates how to use the Huawei Account plugin.
-version: 5.0.3+303
+version: 5.2.0+300
 
 environment:
   sdk: ">=2.1.0 <3.0.0"

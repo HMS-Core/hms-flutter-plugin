@@ -25,9 +25,11 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 29
+    buildToolsVersion "29.0.3"
 
     defaultConfig {
         minSdkVersion 19
+        targetSdkVersion 29
     }
     lintOptions {
         disable 'InvalidPackage'
@@ -37,7 +39,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
-
 
 dependencies {
     implementation 'com.huawei.hms:dtm-api:5.0.4.301'

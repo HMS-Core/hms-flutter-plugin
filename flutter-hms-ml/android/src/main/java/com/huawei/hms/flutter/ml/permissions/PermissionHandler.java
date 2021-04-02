@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -18,19 +18,22 @@ package com.huawei.hms.flutter.ml.permissions;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.pm.PackageManager;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
+import androidx.core.content.PermissionChecker;
 
-import com.huawei.hms.flutter.ml.logger.HMSLogger;
+import java.util.ArrayList;
+import java.util.List;
 
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.PluginRegistry;
 
 public class PermissionHandler implements MethodChannel.MethodCallHandler, PluginRegistry.RequestPermissionsResultListener {
+    private static final String TAG = PermissionHandler.class.getSimpleName();
+
     private Activity activity;
     private MethodChannel.Result mResult;
 
@@ -42,152 +45,94 @@ public class PermissionHandler implements MethodChannel.MethodCallHandler, Plugi
     public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         mResult = result;
         switch (call.method) {
-            case "checkCameraPermission":
-                HMSLogger.getInstance(activity.getApplicationContext()).startMethodExecutionTimer("checkCameraPermission");
-                result.success(checkCameraPermission());
+            case "requestPermission":
+                requestPermission(call);
                 break;
-            case "checkWriteExternalStoragePermission":
-                HMSLogger.getInstance(activity.getApplicationContext()).startMethodExecutionTimer("checkWriteExternalStoragePermission");
-                result.success(checkWriteExternalStoragePermission());
+            case "hasCameraPermission":
+                mResult.success(hasCameraPermission());
                 break;
-            case "checkReadExternalStoragePermission":
-                HMSLogger.getInstance(activity.getApplicationContext()).startMethodExecutionTimer("checkReadExternalStoragePermission");
-                result.success(checkReadExternalStoragePermission());
+            case "hasRecordAudioPermission":
+                mResult.success(hasRecordAudioPermission());
                 break;
-            case "checkAudioPermission":
-                HMSLogger.getInstance(activity.getApplicationContext()).startMethodExecutionTimer("checkAudioPermission");
-                result.success(checkAudioPermission());
-                break;
-            case "checkAccessNetworkStatePermission":
-                HMSLogger.getInstance(activity.getApplicationContext()).startMethodExecutionTimer("checkAccessNetworkStatePermission");
-                result.success(checkAccessNetworkStatePermission());
-                break;
-            case "checkAccessWifiStatePermission":
-                HMSLogger.getInstance(activity.getApplicationContext()).startMethodExecutionTimer("checkAccessWifiStatePermission");
-                result.success(checkAccessWifiStatePermission());
-                break;
-            case "requestCameraPermission":
-                HMSLogger.getInstance(activity.getApplicationContext()).startMethodExecutionTimer("requestCameraPermission");
-                requestCameraPermission();
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent("requestCameraPermission");
-                break;
-            case "requestStoragePermission":
-                HMSLogger.getInstance(activity.getApplicationContext()).startMethodExecutionTimer("requestStoragePermission");
-                requestStoragePermission();
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent("requestStoragePermission");
-                break;
-            case "requestAudioPermission":
-                HMSLogger.getInstance(activity.getApplicationContext()).startMethodExecutionTimer("requestAudioPermission");
-                requestAudioPermission();
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent("requestAudioPermission");
-                break;
-            case "requestConnectionStatePermission":
-                HMSLogger.getInstance(activity.getApplicationContext()).startMethodExecutionTimer("requestConnectionStatePermission");
-                requestConnectionStatePermission();
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent("requestConnectionStatePermission");
+            case "hasStoragePermission":
+                mResult.success(hasStoragePermission());
                 break;
             default:
+                mResult.notImplemented();
                 break;
         }
     }
 
-    // CHECKING PERMISSIONS
-
-    public boolean checkCameraPermission() {
-        final int cameraPer = ActivityCompat.checkSelfPermission(activity, Manifest.permission.CAMERA);
-        HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent("checkCameraPermission");
-        return cameraPer == PackageManager.PERMISSION_GRANTED;
+    private boolean hasCameraPermission() {
+        return hasPermission(Manifest.permission.CAMERA);
     }
 
-    private boolean checkWriteExternalStoragePermission() {
-        final int writeExPer = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent("checkWriteExternalStoragePermission");
-        return writeExPer == PackageManager.PERMISSION_GRANTED;
+    private boolean hasRecordAudioPermission() {
+        return hasPermission(Manifest.permission.RECORD_AUDIO);
     }
 
-    private boolean checkReadExternalStoragePermission() {
-        final int readExPer = ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE);
-        HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent("checkReadExternalStoragePermission");
-        return readExPer == PackageManager.PERMISSION_GRANTED;
+    private boolean hasStoragePermission() {
+        return hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) && hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
-    private boolean checkAudioPermission() {
-        final int audioPer = ActivityCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO);
-        HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent("checkAudioPermission");
-        return audioPer == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private boolean checkAccessNetworkStatePermission() {
-        final int networkPer = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_NETWORK_STATE);
-        HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent("checkAccessNetworkStatePermission");
-        return networkPer == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private boolean checkAccessWifiStatePermission() {
-        final int wifiPer = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_WIFI_STATE);
-        HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent("checkAccessWifiStatePermission");
-        return wifiPer == PackageManager.PERMISSION_GRANTED;
-    }
-
-    // REQUESTING PERMISSIONS
-
-    public void requestCameraPermission() {
-        final String[] permissions = {Manifest.permission.CAMERA};
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-            ActivityCompat.requestPermissions(activity, permissions, 1);
-        } else {
-            ActivityCompat.requestPermissions(activity, permissions, 2);
-        }
-    }
-
-    private void requestStoragePermission() {
-        final String[] permissions = {
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE};
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-            ActivityCompat.requestPermissions(activity, permissions, 5);
-        } else {
-            ActivityCompat.requestPermissions(activity, permissions, 6);
-        }
-    }
-
-    private void requestAudioPermission() {
-        final String[] permissions = {Manifest.permission.RECORD_AUDIO};
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-            ActivityCompat.requestPermissions(activity, permissions, 7);
-        } else {
-            ActivityCompat.requestPermissions(activity, permissions, 8);
-        }
-    }
-
-    private void requestConnectionStatePermission() {
-        final String[] permissions = {
-                Manifest.permission.ACCESS_WIFI_STATE,
-                Manifest.permission.ACCESS_NETWORK_STATE};
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-            ActivityCompat.requestPermissions(activity, permissions, 9);
-        } else {
-            ActivityCompat.requestPermissions(activity, permissions, 10);
-        }
-    }
-
-    private boolean checkGrantStatus(final int[] grantResults) {
-        for (final int i : grantResults) {
-            return !(i == -1);
+    private boolean hasPermission(String permission) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int granted = PermissionChecker.checkSelfPermission(activity, permission);
+            return granted == PermissionChecker.PERMISSION_GRANTED;
         }
         return true;
     }
 
+    private void requestPermission(MethodCall call) {
+        List<String> list = call.argument("list");
+        List<String> permissions = new ArrayList<>();
+
+        for (String p : list) {
+            switch (p) {
+                case "camera":
+                    permissions.add(Manifest.permission.CAMERA);
+                    break;
+                case "audio":
+                    permissions.add(Manifest.permission.RECORD_AUDIO);
+                    break;
+                case "storage":
+                    permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                    permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+                    break;
+                case "connectionState":
+                    permissions.add(Manifest.permission.ACCESS_NETWORK_STATE);
+                    permissions.add(Manifest.permission.ACCESS_WIFI_STATE);
+                    break;
+                default:
+                    Log.w(TAG, "Unsupported permission.");
+                    break;
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            activity.requestPermissions(permissions.toArray(new String[0]), 1);
+        }
+    }
+
+    private boolean checkGrantStatus(final int[] grantResults) {
+        boolean res = true;
+        for (int grantResult : grantResults) {
+            boolean granted = grantResult == 0;
+            if (!granted) {
+                res = false;
+                break;
+            }
+        }
+        return res;
+    }
+
     @Override
     public boolean onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        final MethodChannel.Result result = mResult;
+        final MethodChannel.Result incomingResult = mResult;
         mResult = null;
-        if (result != null) {
-            if (requestCode == 1 || requestCode == 5 || requestCode == 7) {
-                result.success(grantResults[0] == 0 && grantResults[1] == 0);
-            } else {
-                result.success(checkGrantStatus(grantResults));
-            }
+
+        if (incomingResult != null) {
+            incomingResult.success(checkGrantStatus(grantResults));
         }
         return true;
     }

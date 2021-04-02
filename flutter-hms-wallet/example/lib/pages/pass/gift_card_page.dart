@@ -35,16 +35,13 @@ class _GiftCardPageState extends State<GiftCardPage> {
   DateTime endDate = DateTime(2022, 1, 12);
 
   TextEditingController passTypeIdController = TextEditingController.fromValue(
-    // TODO: required param
     TextEditingValue(text: Constants.passTypeIdGift),
   );
   TextEditingController passStyleIdController = TextEditingController.fromValue(
-    // TODO: required param
     TextEditingValue(text: Constants.passStyleIdGift),
   );
   TextEditingController serialNumberController =
       TextEditingController.fromValue(
-    // TODO: required param
     TextEditingValue(text: Utils.getRandomNumber(12)),
   );
 
@@ -68,7 +65,6 @@ class _GiftCardPageState extends State<GiftCardPage> {
     TextEditingValue(text: 'carrefour'),
   );
   TextEditingController cardNumberController = TextEditingController.fromValue(
-    // TODO: required param
     TextEditingValue(text: Utils.getRandomNumber(6)),
   );
   TextEditingController pinController = TextEditingController.fromValue(
@@ -90,7 +86,6 @@ class _GiftCardPageState extends State<GiftCardPage> {
     TextEditingValue(text: '123456789123456'),
   );
   TextEditingController eventNumberController = TextEditingController.fromValue(
-    // TODO: required param
     TextEditingValue(text: '0'),
   );
   TextEditingController messageHeaderController =
@@ -341,7 +336,6 @@ class _GiftCardPageState extends State<GiftCardPage> {
   }
 
   PassObject getPassObject() {
-    // TODO: checks first
     return PassObject(
       serialNumber: serialNumberController.text,
       passStyleIdentifier: passStyleIdController.text,
@@ -350,7 +344,6 @@ class _GiftCardPageState extends State<GiftCardPage> {
       currencyCode: currencyCodeController.text,
       status: PassStatus(
         state: status.toLowerCase(),
-        // TODO: iso string with same format on demo
         effectTime: '${startDate?.toIso8601String()}Z',
         expireTime: '${endDate?.toIso8601String()}Z',
       ),

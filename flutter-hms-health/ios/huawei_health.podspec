@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'huawei_health'
-  s.version          = '5.0.5+300'
+  s.version          = '5.0.5+301'
   s.summary          = 'HUAWEI Health Kit Plugin for Flutter'
   s.description      = <<-DESC
  Health Kit provides a data platform with fitness and health open capabilities, so that developers can build related apps and services based on a multitude of data types.

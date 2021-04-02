@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,15 +14,18 @@
     limitations under the License.
 */
 
-export './constants/hms_account_error_codes.dart';
-export './helpers/hms_auth_param_helper.dart';
-export './helpers/hms_auth_params.dart';
-export './helpers/hms_scope.dart';
-export './hmsauthbutton/hms_auth_button.dart';
-export './hmsauthmanager/hms_auth_manager.dart';
-export './hmsauthservice/hms_auth_service.dart';
-export './hmsauthtool/hms_auth_tool.dart';
-export './hmsnetworktool/hms_network_tool.dart';
-export './hmssmsmanager/hms_sms_manager.dart';
-export './model/hms_account.dart';
-export './model/hms_auth_huawei_id.dart';
+library huawei_account;
+
+export './src/common/account.dart';
+export './src/common/scope.dart';
+export './src/request/account_auth_extended_params.dart';
+export './src/request/account_auth_params.dart';
+export './src/request/account_auth_params_helper.dart';
+export './src/results/account_icon.dart';
+export './src/results/auth_account.dart';
+export './src/services/account_auth_manager.dart';
+export './src/services/account_auth_service.dart';
+export './src/services/huawei_id_auth_tool.dart';
+export './src/services/network_tool.dart';
+export './src/services/read_sms_manager.dart';
+export './src/ui/huawei_id_auth_button.dart';

@@ -2728,7 +2728,7 @@ buildTypes {
 
 This plugin includes a demo project in the [example](example) folder, there you can find more usage examples.
 
-<img src="https://github.com/HMS-Core/hms-flutter-plugin/raw/master/flutter-hms-nearbyservice/example/.docs/screenshot1.jpg" width = 40% height = 40% style="margin:1.5em"><img src="https://github.com/HMS-Core/hms-flutter-plugin/raw/master/flutter-hms-nearbyservice/example/.docs/screenshot2.jpg" width = 40% height = 40% style="margin:1.5em">
+<img src="https://github.com/HMS-Core/hms-flutter-plugin/raw/master/flutter-hms-nearby/example/.docs/screenshot1.jpg" width = 40% height = 40% style="margin:1.5em"><img src="https://github.com/HMS-Core/hms-flutter-plugin/raw/master/flutter-hms-nearby/example/.docs/screenshot2.jpg" width = 40% height = 40% style="margin:1.5em">
 
 ## 6. Questions or Issues
 If you have questions about how to use HMS samples, try the following options:

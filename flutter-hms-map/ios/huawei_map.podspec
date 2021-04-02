@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'huawei_map'
-  s.version          = '5.0.3+302'
+  s.version          = '5.0.3+303'
   s.summary          = 'HUAWEI Map Kit plugin for Flutter.'
   s.description      = <<-DESC
   HUAWEI Map Kit plugin for Flutter. Huawei Map Kit, provides standard maps as well as UI elements for you to customize maps that better meet service scenarios.

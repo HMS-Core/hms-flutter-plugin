@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -33,9 +33,6 @@ import com.huawei.hms.flutter.map.utils.Convert;
 import com.huawei.hms.maps.common.util.DistanceCalculator;
 import com.huawei.hms.maps.model.LatLng;
 
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
@@ -47,19 +44,32 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry;
 
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class HmsMap
     implements Application.ActivityLifecycleCallbacks, FlutterPlugin, ActivityAware, DefaultLifecycleObserver,
     MethodCallHandler {
     public static final int CREATED = 1;
+
     public static final int STARTED = 2;
+
     public static final int RESUMED = 3;
+
     public static final int PAUSED = 4;
+
     public static final int STOPPED = 5;
+
     public static final int DESTROYED = 6;
+
     private final AtomicInteger state = new AtomicInteger(0);
+
     private int registrarActivityHashCode;
+
     private FlutterPluginBinding pluginBinding;
+
     private Lifecycle lifecycle;
+
     private MethodChannel mapUtils;
 
     private static final String VIEW_TYPE = Channel.CHANNEL;
@@ -81,7 +91,7 @@ public class HmsMap
         registrar.activity().getApplication().registerActivityLifecycleCallbacks(instance);
         registrar.platformViewRegistry()
             .registerViewFactory(VIEW_TYPE,
-                new MapFactory(instance.state, registrar.messenger(), null, null, registrar, -1));
+                new MapFactory(instance.state, registrar.messenger(), registrar.activity(), null, registrar, -1));
     }
 
     // FlutterPlugin
@@ -109,8 +119,8 @@ public class HmsMap
         lifecycle.addObserver(this);
         pluginBinding.getPlatformViewRegistry()
             .registerViewFactory(VIEW_TYPE,
-                new MapFactory(state, pluginBinding.getBinaryMessenger(), binding.getActivity().getApplication(),
-                    lifecycle, null, binding.getActivity().hashCode()));
+                new MapFactory(state, pluginBinding.getBinaryMessenger(), binding.getActivity(), lifecycle, null,
+                    binding.getActivity().hashCode()));
     }
 
     @Override

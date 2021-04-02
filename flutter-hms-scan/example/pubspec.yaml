@@ -1,5 +1,6 @@
 name: huawei_scan_example
 description: Demonstrates how to use the scan_flutter plugin.
+version: 1.3.0+300
 
 environment:
   sdk: ">=2.1.0 <3.0.0"

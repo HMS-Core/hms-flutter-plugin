@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -35,16 +35,12 @@ class MLImageSegmentationAnalyzer {
 
   final MethodChannel _channel = Channels.segmentationMethodChannel;
 
-  Future<MLImageSegmentation> asyncAnalyzeFrame(
-      MLImageSegmentationAnalyzerSetting setting) async {
-    return new MLImageSegmentation.fromJson(json.decode(
-        await _channel.invokeMethod("asyncAnalyzeFrame", setting.toMap())));
+  Future<MLImageSegmentation> asyncAnalyzeFrame(MLImageSegmentationAnalyzerSetting setting) async {
+    return new MLImageSegmentation.fromJson(json.decode(await _channel.invokeMethod("asyncAnalyzeFrame", setting.toMap())));
   }
 
-  Future<List<MLImageSegmentation>> analyzeFrame(
-      MLImageSegmentationAnalyzerSetting setting) async {
-    var res = json
-        .decode(await _channel.invokeMethod("analyzeFrame", setting.toMap()));
+  Future<List<MLImageSegmentation>> analyzeFrame(MLImageSegmentationAnalyzerSetting setting) async {
+    var res = json.decode(await _channel.invokeMethod("analyzeFrame", setting.toMap()));
     return (res as List).map((e) => MLImageSegmentation.fromJson(e)).toList();
   }
 

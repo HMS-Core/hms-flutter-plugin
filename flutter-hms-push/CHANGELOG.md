@@ -1,3 +1,7 @@
+## 5.0.2+304
+* Updated HMSLogger.
+* Changed lightSettings, vibrateConfig, titleLocalizationArgs and bodyLocalizationArgs fields of RemoteMessageNotification to type List\<dynamic> in order to support parsing for 3rd party integrations.
+
 ## 5.0.2+302/5.0.2+303
 * Updated documentation comments for push.dart.
 * Bug fixes and improvements.

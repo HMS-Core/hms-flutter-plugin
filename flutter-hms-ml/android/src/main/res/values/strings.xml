@@ -1,6 +1,4 @@
 <resources>
     <string name="grid_image">grid image</string>
-    <string name="products_list">Products List</string>
-    <string name="fragment_image">fragment image</string>
-    <string name="productid">productID</string>
+    <string name="product_id">product id</string>
 </resources>

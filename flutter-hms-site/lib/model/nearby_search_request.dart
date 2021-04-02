@@ -28,7 +28,7 @@ class NearbySearchRequest {
   int radius;
   LocationType poiType;
   String language;
-  final String politicalView;
+  String politicalView;
   HwLocationType hwPoiType;
   bool strictBounds;
 
@@ -44,11 +44,6 @@ class NearbySearchRequest {
     this.hwPoiType,
     this.strictBounds,
   }) : politicalView = null;
-
-  @deprecated
-  set politicalView(String politicalView) {
-    this.politicalView = null;
-  }
 
   Map<String, dynamic> toMap() {
     return {

@@ -23,7 +23,7 @@ class QueryAutocompleteRequest {
   Coordinate location;
   int radius;
   String language;
-  final String politicalView;
+  String politicalView;
   bool children;
 
   QueryAutocompleteRequest({
@@ -34,11 +34,6 @@ class QueryAutocompleteRequest {
     @deprecated String politicalView,
     bool children,
   }) : politicalView = null;
-
-  @deprecated
-  set politicalView(String politicalView) {
-    this.politicalView = null;
-  }
 
   Map<String, dynamic> toMap() {
     return {

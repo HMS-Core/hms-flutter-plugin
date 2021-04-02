@@ -28,7 +28,7 @@ class SearchFilter {
   String language;
   Coordinate location;
   List<LocationType> poiType;
-  final String politicalView;
+  String politicalView;
   String query;
   int radius;
   bool children;
@@ -46,11 +46,6 @@ class SearchFilter {
     this.children,
     this.strictBounds,
   }) : politicalView = null;
-
-  @deprecated
-  set politicalView(String politicalView) {
-    this.politicalView = null;
-  }
 
   Map<String, dynamic> toMap() {
     return {

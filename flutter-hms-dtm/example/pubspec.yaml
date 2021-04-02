@@ -1,6 +1,6 @@
 name: huawei_dtm_example
 description: Demonstrates how to use the Huawei DTM plugin.
-version: 5.0.4+301
+version: 5.0.4+302
 
 environment:
   sdk: ">=2.1.0 <3.0.0"

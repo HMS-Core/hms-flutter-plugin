@@ -1,3 +1,8 @@
+## 5.1.0+301
+
+* Updated HMSLogger.
+* Removed the deprecated **setPoliticalView** method.
+
 ## 5.1.0+300
 
 * The error which raised when deserializing NaN values is fixed.

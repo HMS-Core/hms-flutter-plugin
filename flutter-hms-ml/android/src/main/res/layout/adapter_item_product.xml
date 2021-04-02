@@ -17,6 +17,6 @@
         android:gravity="center"
         android:textColor="@android:color/black"
         android:textSize="14sp"
-        android:text="@string/productid"
+        android:text="@string/product_id"
         />
 </LinearLayout>

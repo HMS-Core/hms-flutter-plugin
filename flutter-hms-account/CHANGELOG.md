@@ -1,48 +1,23 @@
-## 5.0.3+303
+## 5.2.0+300
 
-* Remove unsupported classes.
+**Breaking Changes**
+
+* HmsAuthService is changed to **AccountAuthService**.
+* HmsAuthManager is changed to **AccountAuthManager**.
+* HmsSmsManager is changed to **ReadSmsManager**.
+* HmsNetworkTool is changed to **NetworkTool**.
+* HmsAuthTool is changed to **HuaweiIdAuthTool**.
+* HmsAuthHaweiId is changed to **AuthAccount**.
+
+
 ## 5.0.3+302
 
-**HmsAccount** and its API's are divided to 5 modules which are:
-* HmsAuthService
-    - signIn
-    - signOut
-    - silentSignIn
-    - revokeAuthorization
-    - enableLogger and disableLogger API's have been added under this module.
-
-* HmsAuthManager
-    - getAuthResult
-    - getAuthResultWithScopes
-    - addAuthScopes
-    - containScopes
-
-* HmsAuthTool
-    - deleteAuthInfo
-    - requestAccessToken
-    - requestUnionId
-
-* HmsNetworkTool
-    - buildNetworkUrl
-    - buildNetworkCookie
-
-* HmsSmsManager
-    - smsVerification
-    - obtainHashcode
-
-**AuthParamHelper** is changed to **HmsAuthParamHelper**
-
-**AuthParams** is changed to **HmsAuthParams**
-
-**Scope** is changed to **HmsScope**
-
-**Account** is changed to **HmsAccount**
-
-**AuthHuaweiId** is changed to **HmsAuthHuaweiId**
-
-**ErrorCodes** is changed to **HmsAccountErrorCodes**
-
-**HuaweiIdAuthButton** is changed to **HmsAuthButton**
+* Added HmsAuthService module.
+* Added HmsAuthManager module.
+* Added HmsAuthTool module.
+* Added HmsNetworkTool module.
+* Added HmsSmsManager module.
+* Added enableLogger and disableLogger methods to enable & disable the HMS Plugin Method Analytics.
 
 ## 5.0.0+300
 

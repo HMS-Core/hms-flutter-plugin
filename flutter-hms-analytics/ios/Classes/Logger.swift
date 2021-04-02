@@ -19,7 +19,7 @@ import SystemConfiguration
 import CoreTelephony
 import Foundation
 
-let Log = Logger(version: "5.1.0.300", service: "FlutterAnalytics")
+let Log = Logger(version: "5.1.0.301", service: "FlutterAnalytics")
 
 /// Custom Logger Class to listen api log events from RN Side.
 final class Logger {

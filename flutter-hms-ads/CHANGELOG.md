@@ -1,3 +1,7 @@
+## 13.4.35+301
+
+*  Updated HMSLogger.
+
 ## 13.4.35+300
 
 * Banner Ad - Platform View implementation

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -15,15 +15,15 @@
 */
 
 import 'package:flutter/material.dart';
-import 'package:huawei_map_example/components/circleDemo.dart';
-import 'package:huawei_map_example/components/groundOverlayDemo.dart';
-import 'package:huawei_map_example/components/markerDemo.dart';
-import 'package:huawei_map_example/components/polygonDemo.dart';
-import 'package:huawei_map_example/components/polylineDemo.dart';
-import 'package:huawei_map_example/components/tileOverlayDemo.dart';
-import 'package:huawei_map_example/huaweiMapDemo.dart';
+import 'components/circleDemo.dart';
+import 'components/groundOverlayDemo.dart';
+import 'components/markerDemo.dart';
+import 'components/polygonDemo.dart';
+import 'components/polylineDemo.dart';
+import 'components/tileOverlayDemo.dart';
+import 'huaweiMapDemo.dart';
 
-import 'package:huawei_map_example/customWidgets/customWidgets.dart';
+import 'customWidgets/customWidgets.dart';
 
 import 'package:huawei_map/components/components.dart';
 
@@ -50,7 +50,6 @@ class _HomePageState extends State<HomePage> {
           floating: false,
           expandedHeight: 220.0,
           backgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
           flexibleSpace: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(

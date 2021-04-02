@@ -45,16 +45,20 @@ public class FlutterHmsMessageService extends HmsMessageService {
     @Override
     public void onNewToken(String token) {
         super.onNewToken(token);
-        HMSLogger.getInstance(PushPlugin.getContext()).sendPeriodicEvent("onNewToken");
-        Log.d(TAG, "Token received");
-        Utils.sendIntent(PushIntent.TOKEN_INTENT_ACTION, PushIntent.TOKEN, token);
+        if (PushPlugin.getContext() != null) {
+            HMSLogger.getInstance(PushPlugin.getContext()).sendPeriodicEvent("onNewToken");
+            Log.d(TAG, "Token received");
+            Utils.sendIntent(PushIntent.TOKEN_INTENT_ACTION, PushIntent.TOKEN, token);
+        }
     }
 
     @Override
     public void onTokenError(Exception e) {
         super.onTokenError(e);
-        HMSLogger.getInstance(PushPlugin.getContext()).sendPeriodicEvent("onTokenError");
-        Utils.sendIntent(PushIntent.TOKEN_INTENT_ACTION, PushIntent.TOKEN_ERROR, "Token Error: " + e.getMessage());
+        if (PushPlugin.getContext() != null) {
+            HMSLogger.getInstance(PushPlugin.getContext()).sendPeriodicEvent("onTokenError");
+            Utils.sendIntent(PushIntent.TOKEN_INTENT_ACTION, PushIntent.TOKEN_ERROR, "Token Error: " + e.getMessage());
+        }
     }
 
     /**
@@ -92,7 +96,7 @@ public class FlutterHmsMessageService extends HmsMessageService {
         HMSLogger.getInstance(PushPlugin.getContext()).sendSingleEvent("onMessageSent");
         Log.d(TAG, "RemoteMessage sent successfully");
         Utils.sendIntent(PushIntent.REMOTE_MESSAGE_SENT_DELIVERED_ACTION, PushIntent.REMOTE_MESSAGE,
-                "Sent Remote message with id: " + msgID);
+            "Sent Remote message with id: " + msgID);
     }
 
     @Override
@@ -103,7 +107,7 @@ public class FlutterHmsMessageService extends HmsMessageService {
         String errInfo = e.getMessage();
         Log.d(TAG, "RemoteMessage sent error, msgid: " + msgId + ", exception: " + e.getMessage());
         Utils.sendIntent(PushIntent.REMOTE_MESSAGE_SENT_DELIVERED_ACTION, PushIntent.REMOTE_MESSAGE_ERROR,
-                "onSendError for msgId: " + msgId + ", Error Code: " + errCode + ", Error Info: " + errInfo);
+            "onSendError for msgId: " + msgId + ", Error Code: " + errCode + ", Error Info: " + errInfo);
     }
 
     @Override
@@ -113,20 +117,20 @@ public class FlutterHmsMessageService extends HmsMessageService {
         if (e == null) {
             Log.d(TAG, "RemoteMessage delivered successfully");
             Utils.sendIntent(PushIntent.REMOTE_MESSAGE_SENT_DELIVERED_ACTION, PushIntent.REMOTE_MESSAGE,
-                    "Delivered remote message with id: " + msgId);
+                "Delivered remote message with id: " + msgId);
         } else {
             int errCode = ((SendException) e).getErrorCode();
             if (errCode == 0) {
                 // 0 => RESULT_SUCCESS
                 Log.d(TAG, "RemoteMessage delivered successfully");
                 Utils.sendIntent(PushIntent.REMOTE_MESSAGE_SENT_DELIVERED_ACTION, PushIntent.REMOTE_MESSAGE,
-                        "Delivered remote message with id: " + msgId);
+                    "Delivered remote message with id: " + msgId);
             } else {
-                Log.d(TAG, "RemoteMessage deliver error, msgid " + msgId + ", exception "
-                        + e.getMessage() + ", code " + errCode);
+                Log.d(TAG, "RemoteMessage deliver error, msgid " + msgId + ", exception " + e.getMessage() + ", code "
+                    + errCode);
                 Utils.sendIntent(PushIntent.REMOTE_MESSAGE_SENT_DELIVERED_ACTION, PushIntent.REMOTE_MESSAGE,
-                        "RemoteMessage deliver error, msgid " + msgId + ", exception "
-                                + e.getMessage() + ", code " + errCode);
+                    "RemoteMessage deliver error, msgid " + msgId + ", exception " + e.getMessage() + ", code "
+                        + errCode);
             }
         }
     }

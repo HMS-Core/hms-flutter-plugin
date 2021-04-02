@@ -1,6 +1,6 @@
 name: huawei_contactshield
 description: To help confront the global pandemic of coronavirus disease 2019, Huawei provides Contact Shield for developers to develop epidemic prevention and control apps.
-version: 5.1.0+300
+version: 5.1.0+301
 homepage: https://www.huawei.com
 repository: https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-contact-shield
 

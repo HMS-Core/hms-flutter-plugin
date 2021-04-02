@@ -1,20 +1,21 @@
 /*
- * Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+
+    Licensed under the Apache License, Version 2.0 (the "License")
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        https://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 
 import 'dart:convert' show json;
+import 'dart:typed_data';
 import 'package:flutter/material.dart' show Color, Colors, required;
 import 'dart:ui' show hashValues;
 import 'package:huawei_scan/utils/HmsScanTypes.dart';
@@ -27,6 +28,7 @@ class BuildBitmapRequest {
   int margin;
   Color bitmapColor;
   Color backgroundColor;
+  Uint8List qrLogo;
 
   BuildBitmapRequest({
     @required this.content,
@@ -36,6 +38,7 @@ class BuildBitmapRequest {
     this.margin = 1,
     this.bitmapColor = Colors.black,
     this.backgroundColor = Colors.white,
+    this.qrLogo,
   });
 
   factory BuildBitmapRequest.fromJson(String str) =>
@@ -54,6 +57,7 @@ class BuildBitmapRequest {
             json["bitmapColor"] == null ? null : Color(json["bitmapColor"]),
         backgroundColor:
             json["backgroundColor"] == null ? null : Color(json["bitmapColor"]),
+        qrLogo: json["qrLogo"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -64,6 +68,7 @@ class BuildBitmapRequest {
         'bitmapColor': bitmapColor.value,
         'margin': margin,
         'backgroundColor': backgroundColor.value,
+        'qrLogo': qrLogo?.toString(),
       };
 
   @override
@@ -78,7 +83,8 @@ class BuildBitmapRequest {
         check.height == height &&
         check.bitmapColor == bitmapColor &&
         check.margin == margin &&
-        check.backgroundColor == backgroundColor;
+        check.backgroundColor == backgroundColor &&
+        check.qrLogo == qrLogo;
   }
 
   @override
@@ -90,5 +96,6 @@ class BuildBitmapRequest {
         bitmapColor,
         margin,
         backgroundColor,
+        qrLogo,
       );
 }

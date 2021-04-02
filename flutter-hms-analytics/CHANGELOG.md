@@ -1,3 +1,7 @@
+## 5.1.0+301
+
+* Updated HMSLogger.
+
 ## 5.1.0+300 
 
 * Added the setRestrictionEnabled, isRestrictionEnabled and deleteUserProfile methods.

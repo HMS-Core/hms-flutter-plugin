@@ -1,18 +1,18 @@
 /*
- * Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+
+    Licensed under the Apache License, Version 2.0 (the "License")
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        https://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 
 package com.huawei.hms.flutter.scan.scanutils;
 
@@ -130,9 +130,17 @@ public class ScanUtilsMethodCallHandler
         int bitmapColor = ValueGetter.getInt("bitmapColor", call);
         int backgroundColor = ValueGetter.getInt("backgroundColor", call);
 
+        Bitmap qrLogoBitmap = null;
+        if (call.argument("qrLogo") != null) {
+            qrLogoBitmap = ValueGetter.bitmapForDecoders(call, "qrLogo");
+        }
+
         try {
             //Barcode options
             HmsBuildBitmapOption.Creator creator = new HmsBuildBitmapOption.Creator();
+            if (qrLogoBitmap != null) {
+                creator.setQRLogoBitmap(qrLogoBitmap);
+            }
             creator.setBitmapBackgroundColor(backgroundColor);
             creator.setBitmapColor(bitmapColor);
             creator.setBitmapMargin(margin);
@@ -161,7 +169,7 @@ public class ScanUtilsMethodCallHandler
         //Arguments from call
         int scanType = ValueGetter.getInt("scanType", call);
         List<Integer> additionalScanTypes = call.argument("additionalScanTypes");
-        Bitmap bitmap = ValueGetter.bitmapForDecoders(call);
+        Bitmap bitmap = ValueGetter.bitmapForDecoders(call, "data");
 
         //List<Integer> to int[]
         int[] scanTypesIntArray = null;

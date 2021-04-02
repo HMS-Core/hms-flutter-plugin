@@ -35,16 +35,13 @@ class _CouponCardPageState extends State<CouponCardPage> {
   DateTime endDate = DateTime(2022, 1, 12);
 
   TextEditingController passTypeIdController = TextEditingController.fromValue(
-    // TODO: required param
     TextEditingValue(text: Constants.passTypeIdCoupon),
   );
   TextEditingController passStyleIdController = TextEditingController.fromValue(
-    // TODO: required param
     TextEditingValue(text: Constants.passStyleIdCoupon),
   );
   TextEditingController serialNumberController =
       TextEditingController.fromValue(
-    // TODO: required param
     TextEditingValue(text: Utils.getRandomNumber(12)),
   );
   TextEditingController cardLogoController = TextEditingController.fromValue(
@@ -61,7 +58,6 @@ class _CouponCardPageState extends State<CouponCardPage> {
     TextEditingValue(text: 'Coupon Name'),
   );
   TextEditingController cardNumberController = TextEditingController.fromValue(
-    // TODO: required param
     TextEditingValue(text: Utils.getRandomNumber(6)),
   );
   TextEditingController backgroundColorController =
@@ -75,7 +71,6 @@ class _CouponCardPageState extends State<CouponCardPage> {
     TextEditingValue(text: '123456789123456'),
   );
   TextEditingController eventNumberController = TextEditingController.fromValue(
-    // TODO: required param
     TextEditingValue(text: '0'),
   );
   TextEditingController messageHeaderController =
@@ -273,7 +268,6 @@ class _CouponCardPageState extends State<CouponCardPage> {
   }
 
   PassObject getPassObject() {
-    // TODO: checks first
     return PassObject(
       serialNumber: serialNumberController.text,
       passStyleIdentifier: passStyleIdController.text,
@@ -281,7 +275,6 @@ class _CouponCardPageState extends State<CouponCardPage> {
       organizationPassId: cardNumberController.text,
       status: PassStatus(
         state: status.toLowerCase(),
-        // TODO: iso string with same format on demo
         effectTime: '${startDate?.toIso8601String()}Z',
         expireTime: '${endDate?.toIso8601String()}Z',
       ),

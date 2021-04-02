@@ -1,4 +1,5 @@
 name: huawei_ar_example
+version: 2.13.0+5
 description: Demonstrates how to use the Huawei AR Engine Flutter Plugin.
 
 environment:

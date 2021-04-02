@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -27,8 +27,7 @@ class MLApplication {
   }
 
   Future<void> setAccessToken({@required String accessToken}) async {
-    await _channel.invokeMethod(
-        "setAccessToken", <String, dynamic>{'accessToken': accessToken});
+    await _channel.invokeMethod("setAccessToken", <String, dynamic>{'accessToken': accessToken});
   }
 
   Future<void> createSettings(MLApplicationSetting setting) async {

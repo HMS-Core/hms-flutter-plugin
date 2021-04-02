@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -46,11 +46,6 @@ import com.huawei.hms.maps.OnMapReadyCallback;
 import com.huawei.hms.maps.model.LatLng;
 import com.huawei.hms.maps.model.LatLngBounds;
 
-import java.io.ByteArrayOutputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
@@ -58,46 +53,79 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.platform.PlatformView;
 
+import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
 final class MapController
     implements MapMethods, MethodChannel.MethodCallHandler, OnMapReadyCallback, DefaultLifecycleObserver,
     Application.ActivityLifecycleCallbacks, PlatformView, ActivityPluginBinding.OnSaveInstanceStateListener {
 
     private final AtomicInteger activityState;
+
     private final MethodChannel methodChannel;
+
     private MethodChannel.Result mapReadyResult;
+
     private final int activityHashCode;
+
     private final Lifecycle lifecycle;
+
     private final Context context;
+
     private final Application mApplication;
+
     private final PluginRegistry.Registrar registrar;
+
     private final MapView mapView;
+
     private HuaweiMap huaweiMap;
+
     private boolean trackCameraPosition = false;
+
     private boolean myLocationEnabled = false;
+
     private boolean myLocationButtonEnabled = false;
+
     private boolean zoomControlsEnabled = true;
+
     private boolean trafficEnabled = false;
+
     private boolean buildingsEnabled = true;
+
     private boolean disposed = false;
+
     private final float compactness;
+
     private boolean markersClustering = false;
+
     private List<HashMap<String, Object>> initMarkers;
+
     private List<HashMap<String, Object>> initPolylines;
+
     private List<HashMap<String, Object>> initPolygons;
+
     private List<HashMap<String, Object>> initCircles;
+
     private List<HashMap<String, Object>> initGroundOverlays;
+
     private List<HashMap<String, Object>> initTileOverlays;
+
     private final MapUtils mapUtils;
+
     private final MapListenerHandler mapListenerHandler;
+
     private final BinaryMessenger messenger;
+
     private final HMSLogger logger;
 
-    MapController(final int id, final Context context, final AtomicInteger activityState,
+    MapController(final int id, final Context context, final Activity mActivity, final AtomicInteger activityState,
         final BinaryMessenger binaryMessenger, final Application application, final Lifecycle lifecycle,
         final PluginRegistry.Registrar registrar, final int registrarActivityHashCode, final HuaweiMapOptions options) {
         this.context = context;
         this.activityState = activityState;
-        mapView = new MapView(context, options);
+        mapView = new MapView(mActivity, options);
         compactness = context.getResources().getDisplayMetrics().density;
         messenger = binaryMessenger;
         methodChannel = new MethodChannel(binaryMessenger, Channel.CHANNEL + "_" + id);

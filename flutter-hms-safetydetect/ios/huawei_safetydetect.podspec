@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'huawei_safetydetect'
-  s.version          = '5.0.3+300'
+  s.version          = '5.0.3+301'
   s.summary          = 'Huawei Safety Detect Plugin for Flutter.'
   s.description      = <<-DESC
   Huawei Safety Detect Flutter Plugin exposes all the functionality of the Huawei Safety Detect SDK which builds robust security capabilities.

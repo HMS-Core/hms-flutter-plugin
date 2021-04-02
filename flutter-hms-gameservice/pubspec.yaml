@@ -1,6 +1,6 @@
 name: huawei_gameservice
 description: HUAWEI Game Service, provides a range of development capabilities to help you develop your games more efficiently.
-version: 5.0.4+302
+version: 5.0.4+303
 homepage: https://www.huawei.com
 repository: https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-gameservice
 

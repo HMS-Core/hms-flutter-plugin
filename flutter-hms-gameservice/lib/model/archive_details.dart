@@ -37,8 +37,8 @@ class ArchiveDetails {
     return ArchiveDetails(Uint8List.fromList(bytes));
   }
 
-  /// Modifies an archive file. 
-  /// 
+  /// Modifies an archive file.
+  ///
   /// The modified archive file is saved in the local cache and is not uploaded to Huawei game server
   /// until the archive is submitted.
   bool update(

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -69,6 +69,10 @@ import com.huawei.hms.maps.model.animation.RotateAnimation;
 import com.huawei.hms.maps.model.animation.ScaleAnimation;
 import com.huawei.hms.maps.model.animation.TranslateAnimation;
 
+import io.flutter.plugin.common.BinaryMessenger;
+import io.flutter.plugin.common.MethodChannel;
+import io.flutter.view.FlutterMain;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -80,10 +84,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import io.flutter.plugin.common.BinaryMessenger;
-import io.flutter.plugin.common.MethodChannel;
-import io.flutter.view.FlutterMain;
 
 public class Convert {
     private static List<?> toList(final Object o) {

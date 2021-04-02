@@ -56,7 +56,6 @@ class PassActionBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        // TODO: refer an url
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(

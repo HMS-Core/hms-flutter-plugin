@@ -1,11 +1,11 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,31 +17,17 @@
 import 'dart:convert';
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
-
 class NavigationRequest {
   static const int OVERPASS = 1;
   static const int IS_SUPPORT_EX = 2;
 
   int type;
-  Map<String, String> extras;
 
-  NavigationRequest({
-    this.type,
-    this.extras,
-  });
-
-  void putExtras(String key, String value) {
-    if (extras == null) {
-      extras = Map<String, String>();
-    }
-    extras.putIfAbsent(key, () => value);
-  }
+  NavigationRequest({this.type});
 
   Map<String, dynamic> toMap() {
     return {
       'type': type,
-      'extras': extras,
     };
   }
 
@@ -50,7 +36,6 @@ class NavigationRequest {
 
     return NavigationRequest(
       type: map['type'],
-      extras: Map<String, String>.from(map['extras']),
     );
   }
 
@@ -61,22 +46,19 @@ class NavigationRequest {
 
   @override
   String toString() {
-    return 'NavigationRequest(type: $type, extras: $extras)';
+    return 'NavigationRequest(type: $type)';
   }
 
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
-    return o is NavigationRequest &&
-        o.type == type &&
-        mapEquals(o.extras, extras);
+    return o is NavigationRequest && o.type == type;
   }
 
   @override
   int get hashCode {
     return hashList([
       type,
-      extras,
     ]);
   }
 }

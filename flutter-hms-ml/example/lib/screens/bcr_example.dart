@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -42,11 +42,12 @@ class _BcrExampleState extends State<BcrExample> {
   }
 
   _checkPermissions() async {
-    if (await MLPermissionClient().checkCameraPermission()) {
-      print("Permissions are granted");
-    } else {
-      await MLPermissionClient().requestCameraPermission();
-    }
+    List<MLPermission> list = [MLPermission.camera, MLPermission.storage];
+    await MLPermissionClient().requestPermission(list).then((v) {
+      if (!v) {
+        _checkPermissions();
+      }
+    });
   }
 
   @override

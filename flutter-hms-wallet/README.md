@@ -35,4 +35,4 @@ If you run into a bug in our samples, please submit an issue to the [GitHub repo
 
 ## License
 
-Huawei Wallet Flutter Plugin is licensed under [Apache 2.0 license](LICENSE)
+Huawei Wallet Flutter Plugin is licensed under [Apache 2.0 license](LICENCE)

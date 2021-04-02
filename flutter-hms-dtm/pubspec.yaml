@@ -1,7 +1,7 @@
 name: huawei_dtm
 description: Huawei DTM Kit plugin for Flutter. With Huawei DTM Kit, you can dynamically update tracking tags to track
   specific events and report data to third-party analytics platforms.
-version: 5.0.4+301
+version: 5.0.4+302
 homepage: https://www.huawei.com
 repository: https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-dtm
 

@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'huawei_fido'
-  s.version          = '5.0.5+304'
+  s.version          = '5.0.5+305'
   s.summary          = 'HUAWEI FIDO Kit plugin for Flutter.'
   s.author           = { 'Huawei Technologies' => 'huaweideveloper1@gmail.com' }
   s.description      = <<-DESC

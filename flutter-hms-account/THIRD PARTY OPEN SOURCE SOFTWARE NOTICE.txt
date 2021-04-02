@@ -11,7 +11,7 @@ APPLICABLE LICENSES FOR MORE DETAILS.
 
 Copyright Notice and License Texts 
 
-Software: http 0.12.2
+Software: http 0.12.1
 ----------------------------------------------------------------------
 Copyright notice:
 

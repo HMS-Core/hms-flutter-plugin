@@ -1,20 +1,21 @@
 /*
- * Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+
+    Licensed under the Apache License, Version 2.0 (the "License")
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        https://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 
 import 'dart:convert' show json;
+import 'dart:typed_data';
 import 'dart:ui' show hashValues;
 
 import 'BorderRect.dart';
@@ -39,6 +40,7 @@ class ScanResponse {
     this.scanTypeForm,
     this.showResult,
     this.zoomValue,
+    this.originalBitmap,
     this.smsContent,
     this.emailContent,
     this.telPhoneNumber,
@@ -58,6 +60,7 @@ class ScanResponse {
   int scanTypeForm;
   String showResult;
   double zoomValue;
+  Uint8List originalBitmap;
 
   SmsContent smsContent;
   EmailContent emailContent;
@@ -75,48 +78,58 @@ class ScanResponse {
 
   factory ScanResponse.fromMap(Map<String, dynamic> json) {
     ScanResponse response = ScanResponse(
-      hmsScanVersion:
-          json["HMS_SCAN_VERSION"] == null ? null : json["HMS_SCAN_VERSION"],
+      hmsScanVersion: json["HMS_SCAN_VERSION"] == null
+          ? null
+          : json["HMS_SCAN_VERSION"].round(),
       cornerPoints: json["cornerPoints"] == null
           ? null
-          : List<CornerPoint>.from(
-              json["cornerPoints"].map((x) => CornerPoint.fromMap(x))),
+          : List<CornerPoint>.from(json["cornerPoints"]
+              .map((x) => CornerPoint.fromMap(Map<String, dynamic>.from(x)))),
       originValueByte: json["originValueByte"] == null
           ? null
-          : List<int>.from(json["originValueByte"].map((x) => x)),
+          : List<int>.from(json["originValueByte"].map((x) => x.round())),
       originalValue:
           json["originalValue"] == null ? null : json["originalValue"],
-      scanType: json["scanType"] == null ? null : json["scanType"],
-      scanTypeForm: json["scanTypeForm"] == null ? null : json["scanTypeForm"],
+      scanType: json["scanType"] == null ? null : json["scanType"].round(),
+      scanTypeForm:
+          json["scanTypeForm"] == null ? null : json["scanTypeForm"].round(),
       showResult: json["showResult"] == null ? null : json["showResult"],
       zoomValue: json["zoomValue"] == null ? null : json["zoomValue"],
       //Form fields
       smsContent: json["smsContent"] == null
           ? null
-          : SmsContent.fromMap(json["smsContent"]),
+          : SmsContent.fromMap(Map<String, dynamic>.from(json["smsContent"])),
       emailContent: json["emailContent"] == null
           ? null
-          : EmailContent.fromMap(json["emailContent"]),
+          : EmailContent.fromMap(
+              Map<String, dynamic>.from(json["emailContent"])),
       telPhoneNumber: json["telPhoneNumber"] == null
           ? null
-          : TelPhoneNumber.fromMap(json["telPhoneNumber"]),
-      linkUrl:
-          json["linkUrl"] == null ? null : LinkUrl.fromMap(json["linkUrl"]),
+          : TelPhoneNumber.fromMap(
+              Map<String, dynamic>.from(json["telPhoneNumber"])),
+      linkUrl: json["linkUrl"] == null
+          ? null
+          : LinkUrl.fromMap(Map<String, dynamic>.from(json["linkUrl"])),
       wifiConnectionInfo: json["wifiConnectionInfo"] == null
           ? null
-          : WiFiConnectionInfo.fromMap(json["wifiConnectionInfo"]),
+          : WiFiConnectionInfo.fromMap(
+              Map<String, dynamic>.from(json["wifiConnectionInfo"])),
       locationCoordinate: json["locationCoordinate"] == null
           ? null
-          : LocationCoordinate.fromMap(json["locationCoordinate"]),
+          : LocationCoordinate.fromMap(
+              Map<String, dynamic>.from(json["locationCoordinate"])),
       driverInfo: json["driverInfo"] == null
           ? null
-          : DriverInfo.fromMap(json["driverInfo"]),
+          : DriverInfo.fromMap(Map<String, dynamic>.from(json["driverInfo"])),
       contactDetail: json["contactDetail"] == null
           ? null
-          : ContactDetail.fromMap(json["contactDetail"]),
+          : ContactDetail.fromMap(
+              Map<String, dynamic>.from(json["contactDetail"])),
       eventInfo: json["eventInfo"] == null
           ? null
-          : EventInfo.fromMap(json["eventInfo"]),
+          : EventInfo.fromMap(Map<String, dynamic>.from(json["eventInfo"])),
+      originalBitmap:
+          json["originalBitmap"] == null ? null : json["originalBitmap"],
     );
     response.borderRect = HmsBorderRect(response.cornerPoints);
     return response;
@@ -149,6 +162,7 @@ class ScanResponse {
         "driverInfo": driverInfo == null ? null : driverInfo.toMap(),
         "contactDetail": contactDetail == null ? null : contactDetail.toMap(),
         "eventInfo": eventInfo == null ? null : eventInfo.toMap(),
+        "originalBitmap": originalBitmap,
       };
 
   @override
@@ -174,7 +188,8 @@ class ScanResponse {
         check.driverInfo == driverInfo &&
         check.contactDetail == contactDetail &&
         check.eventInfo == eventInfo &&
-        check.borderRect == borderRect;
+        check.borderRect == borderRect &&
+        check.originalBitmap == originalBitmap;
   }
 
   @override
@@ -197,5 +212,6 @@ class ScanResponse {
         contactDetail,
         eventInfo,
         borderRect,
+        originalBitmap,
       );
 }

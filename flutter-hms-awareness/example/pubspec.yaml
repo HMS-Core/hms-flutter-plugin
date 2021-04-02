@@ -1,6 +1,6 @@
 name: huawei_awareness_example
 description: Demonstrates how to use the HUAWEI Awareness plugin.
-version: 1.0.7+303
+version: 1.0.7+304
 
 environment:
   sdk: ">=2.1.0 <3.0.0"

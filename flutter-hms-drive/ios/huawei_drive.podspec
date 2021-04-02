@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'huawei_drive'
-  s.version          = '5.0.0+302'
+  s.version          = '5.0.0+303'
   s.summary          = 'HUAWEI Drive Kit Plugin for Flutter.'
   s.description      = <<-DESC
 Huawei Drive Kit provides cloud storage for your apps, enabling users to store files that are created in Drive while using your apps, including photos, videos, and documents.

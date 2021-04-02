@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -24,10 +24,8 @@ import 'package:huawei_ml/utils/channels.dart';
 class MLLandmarkAnalyzer {
   final MethodChannel _channel = Channels.landmarkAnalyzerMethodChannel;
 
-  Future<List<MLLandmark>> asyncAnalyzeFrame(
-      MLLandmarkAnalyzerSetting setting) async {
-    var res = json.decode(
-        await _channel.invokeMethod("analyzeLandmark", setting.toMap()));
+  Future<List<MLLandmark>> asyncAnalyzeFrame(MLLandmarkAnalyzerSetting setting) async {
+    var res = json.decode(await _channel.invokeMethod("analyzeLandmark", setting.toMap()));
     return (res as List).map((e) => MLLandmark.fromJson(e)).toList();
   }
 

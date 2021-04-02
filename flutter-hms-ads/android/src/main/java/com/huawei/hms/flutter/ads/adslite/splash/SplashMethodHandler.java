@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -50,29 +50,29 @@ public class SplashMethodHandler implements MethodChannel.MethodCallHandler {
     @Override
     public void onMethodCall(@NonNull final MethodCall call, @NonNull final Result result) {
         switch (call.method) {
-            case "preloadSplashAd":
-                preloadSplashAd(activity, call, result);
-                break;
-            case "prepareSplashAd":
-                prepareSplashAd(activity, call, result);
-                break;
-            case "loadSplashAd":
-                loadSplashAd(call, result);
+            case "resumeAd":
+                resumeAd(call, result);
                 break;
             case "destroyAd":
                 destroyAd(call, result);
                 break;
+            case "preloadSplashAd":
+                preloadSplashAd(activity, call, result);
+                break;
             case "isAdLoaded":
                 isAdLoaded(call, result);
+                break;
+            case "prepareSplashAd":
+                prepareSplashAd(activity, call, result);
                 break;
             case "isAdLoading":
                 isAdLoading(call, result);
                 break;
+            case "loadSplashAd":
+                loadSplashAd(call, result);
+                break;
             case "pauseAd":
                 pauseAd(call, result);
-                break;
-            case "resumeAd":
-                resumeAd(call, result);
                 break;
             default:
                 result.notImplemented();

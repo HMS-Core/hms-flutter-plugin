@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -95,10 +95,10 @@ public interface MapMethods {
     /**
      * Sets padding.
      *
-     * @param top    the top
-     * @param left   the left
+     * @param top the top
+     * @param left the left
      * @param bottom the bottom
-     * @param right  the right
+     * @param right the right
      */
     void setPadding(float top, float left, float bottom, float right);
 

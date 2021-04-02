@@ -30,7 +30,7 @@ class TextSearchRequest {
   HwLocationType hwPoiType;
   int pageIndex;
   String countryCode;
-  final String politicalView;
+  String politicalView;
   bool children;
 
   TextSearchRequest({
@@ -46,11 +46,6 @@ class TextSearchRequest {
     @deprecated String politicalView,
     this.children,
   }) : politicalView = null;
-
-  @deprecated
-  set politicalView(String politicalView) {
-    this.politicalView = null;
-  }
 
   Map<String, dynamic> toMap() {
     return {

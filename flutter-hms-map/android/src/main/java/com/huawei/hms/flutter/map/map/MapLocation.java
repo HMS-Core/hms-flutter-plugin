@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package com.huawei.hms.flutter.map.map;
 
 import android.Manifest;
-
 import android.content.Context;
 import android.content.pm.PackageManager;
 

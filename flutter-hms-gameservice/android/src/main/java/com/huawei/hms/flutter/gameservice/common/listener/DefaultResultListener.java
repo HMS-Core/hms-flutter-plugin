@@ -65,6 +65,7 @@ public class DefaultResultListener<T> implements OnSuccessListener<T>, OnFailure
             mResult.success(o);
         } else if (o instanceof Intent) {
             activity.startActivityForResult((Intent) o, 13);
+            mResult.success(true);
         } else if (o instanceof Void || o == null) {
             mResult.success(true);
         } else if (o instanceof Boolean) {

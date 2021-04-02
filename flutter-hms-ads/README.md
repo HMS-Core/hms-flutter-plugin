@@ -3305,9 +3305,6 @@ buildTypes {
 
 This plugin includes a demo project in the [example](example) folder, there you can find more usage examples.
 
-<img src=".docs/demo-pages.png" width = 40% height = 40% style="margin:1.5em"><img src=".docs/demo-banner.png" width = 40% height = 40% style="margin:1.5em">
-
-
 # 7. Questions or Issues
 
 If you have questions about how to use HMS samples, try the following options:

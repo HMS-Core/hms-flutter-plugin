@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'huawei_gameservice'
-  s.version          = '5.0.4+302'
+  s.version          = '5.0.4+303'
   s.summary          = 'HUAWEI Game Service Plugin for Flutter.'
   s.description      = <<-DESC
   HUAWEI Game Service, provides a range of development capabilities to help you develop your games more efficiently.

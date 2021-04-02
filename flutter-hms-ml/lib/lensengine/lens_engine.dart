@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -45,8 +45,7 @@ class LensEngine {
 
   Future<void> initLens() async {
     _startTransactor();
-    _controller.setTextureId(
-        await _channel.invokeMethod("initializeLensView", _controller.toMap()));
+    _controller.setTextureId(await _channel.invokeMethod("initializeLensView", _controller.toMap()));
   }
 
   Future<void> run() async {
@@ -76,8 +75,7 @@ class LensEngine {
   }
 
   Future<Size> getDisplayDimension() async {
-    Map<dynamic, dynamic> map =
-        await _channel.invokeMethod("getDisplayDimensions");
+    Map<dynamic, dynamic> map = await _channel.invokeMethod("getDisplayDimensions");
     int width = map['width'];
     int height = map['height'];
     return new Size(width.toDouble(), height.toDouble());
@@ -144,9 +142,7 @@ class LensEngine {
         });
         break;
       case LensEngineAnalyzerOptions.CLASSIFICATION:
-        _subscription = Channels.classificationEventChannel
-            .receiveBroadcastStream()
-            .listen((event) {
+        _subscription = Channels.classificationEventChannel.receiveBroadcastStream().listen((event) {
           Map<String, dynamic> map = json.decode(event);
           MLImageClassification classification =
               new MLImageClassification.fromJson(map['result']);
@@ -166,9 +162,7 @@ class LensEngine {
         });
         break;
       case LensEngineAnalyzerOptions.OBJECT:
-        _subscription = Channels.objectAnalyzerEventChannel
-            .receiveBroadcastStream()
-            .listen((event) {
+        _subscription = Channels.objectAnalyzerEventChannel.receiveBroadcastStream().listen((event) {
           Map<String, dynamic> map = json.decode(event);
           MLObject object = new MLObject.fromJson(map['result']);
           bool isAvailable = map['isAnalyzerAvailable'];
@@ -176,15 +170,12 @@ class LensEngine {
         });
         break;
       case LensEngineAnalyzerOptions.SCENE:
-        _subscription = Channels.sceneDetectionEventChannel
-            .receiveBroadcastStream()
-            .listen((event) {
+        _subscription = Channels.sceneDetectionEventChannel.receiveBroadcastStream().listen((event) {
           Map<String, dynamic> map = json.decode(event);
           MLSceneDetection sceneDetection =
               new MLSceneDetection.fromJson(map['result']);
           bool isAvailable = map['isAnalyzerAvailable'];
-          _transactor?.call(
-              result: sceneDetection, isAnalyzerAvailable: isAvailable);
+          _transactor?.call(result: sceneDetection, isAnalyzerAvailable: isAvailable);
         });
         break;
       default:

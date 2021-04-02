@@ -345,10 +345,10 @@ class _RemoteMessageNotification {
 
   final double when;
 
-  final List<int> lightSettings;
-  final List<double> vibrateConfig;
-  final List<String> titleLocalizationArgs;
-  final List<String> bodyLocalizationArgs;
+  final List<dynamic> lightSettings;
+  final List<dynamic> vibrateConfig;
+  final List<dynamic> titleLocalizationArgs;
+  final List<dynamic> bodyLocalizationArgs;
 
   _RemoteMessageNotification(
       {this.title,
@@ -387,13 +387,13 @@ class _RemoteMessageNotification {
   String get getTitleLocalizationKey => titleLocalizationKey;
 
   /// Obtains variables of the displayed title of a message.
-  List<String> get getTitleLocalizationArgs => titleLocalizationArgs;
+  List<dynamic> get getTitleLocalizationArgs => titleLocalizationArgs;
 
   /// Obtains the key of the displayed content of a message.
   String get getBodyLocalizationKey => bodyLocalizationKey;
 
   /// Obtains variables of the displayed content of a message.
-  List<String> get getBodyLocalizationArgs => bodyLocalizationArgs;
+  List<dynamic> get getBodyLocalizationArgs => bodyLocalizationArgs;
 
   /// Obtains the displayed content of a message.
   String get getBody => body;
@@ -429,7 +429,7 @@ class _RemoteMessageNotification {
   double get getWhen => when;
 
   /// Obtains the blinking frequency and color of a breathing light.
-  List<int> get getLightSettings => lightSettings;
+  List<dynamic> get getLightSettings => lightSettings;
 
   /// Obtains a badge number.
   int get getBadgeNumber => badgeNumber;
@@ -441,7 +441,7 @@ class _RemoteMessageNotification {
   String get getTicker => ticker;
 
   /// Obtains an array of vibration patterns.
-  List<double> get getVibrateConfig => vibrateConfig;
+  List<dynamic> get getVibrateConfig => vibrateConfig;
 
   /// Obtains the visibility of a notification message.
   int get getVisibility => visibility;

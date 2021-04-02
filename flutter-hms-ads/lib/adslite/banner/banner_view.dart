@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -122,11 +122,8 @@ class BannerView extends StatelessWidget {
   }
 
   double adSizeDisplayHeight([double deviceHeight = 0]) {
-    double dynamicHeight() => deviceHeight > 720
-        ? 90
-        : deviceHeight > 400
-            ? 50
-            : 32;
+    double dynamicHeight() =>
+        deviceHeight > 720 ? 90 : deviceHeight > 400 ? 50 : 32;
     switch (size) {
       case BannerAdSize.sDynamic:
         return dynamicHeight();

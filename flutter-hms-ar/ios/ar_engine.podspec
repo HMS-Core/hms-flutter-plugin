@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'huawei_ar'
-  s.version          = '2.13.0+4'
+  s.version          = '2.13.0+5'
   s.summary          = 'Huawei AR Engine Plugin for Flutter.'
   s.description      = <<-DESC
 Huawei AR Engine Flutter Plugin is a platform for building augmented reality (AR) apps on Android

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -26,49 +26,59 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  List<String> logs = [];
+  List<String> _logs = [];
 
-  HmsAuthHuaweiId _id;
+  AuthAccount _account;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         key: _scaffoldKey,
+        backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text("HMS Account Example"),
-          backgroundColor: Colors.blueAccent,
+          title: Text("Huawei Account Demo",
+              style: TextStyle(color: Colors.black)),
+          backgroundColor: Colors.white,
+          elevation: 2,
         ),
         body: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              SizedBox(height: 20),
-              Column(
-                children: [
-                  HmsAuthButton(
-                      onPressed: _signIn,
-                      buttonColor: AuthButtonBackground.RED),
-                  authButton("SILENT SIGN IN", _silentSignIn),
-                  authButton("SIGN OUT", _signOut),
-                  authButton("REVOKE AUTHORIZATION", _revokeAuthorization),
-                  authButton("SMS VERIFICATION", _smsVerification)
-                ],
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0, bottom: 10),
+                child: Column(
+                  children: [
+                    HuaweiIdAuthButton(
+                        onPressed: _signIn,
+                        elevation: 0,
+                        borderRadius: AuthButtonRadius.SMALL,
+                        buttonColor: AuthButtonBackground.RED),
+                    authButton("SILENT SIGN IN", _silentSignIn),
+                    authButton("SIGN OUT", _signOut),
+                    authButton("REVOKE AUTHORIZATION", _revokeAuthorization),
+                  ],
+                ),
               ),
               Divider(indent: 15, endIndent: 15, color: Colors.blueGrey),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                child: Text("---- DOUBLE TAP TO CLEAR LOGS ----"),
+              ),
               Expanded(
                   child: GestureDetector(
                 onDoubleTap: () {
                   setState(() {
-                    logs.clear();
+                    _logs.clear();
                   });
                 },
                 child: Container(
                   child: ListView.builder(
-                    itemCount: logs.length,
+                    itemCount: _logs.length,
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.all(15),
-                        child: Text(logs[index],
+                        child: Text(_logs[index],
                             style: TextStyle(color: Colors.black54)),
                       );
                     },
@@ -81,65 +91,52 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   _signIn() async {
-    // This parameter is optional. You can run the method with default options.
-    final helper = new HmsAuthParamHelper();
+    final helper = AccountAuthParamsHelper();
     helper
-      ..setIdToken()
       ..setAccessToken()
-      ..setAuthorizationCode()
       ..setEmail()
+      ..setIdToken()
+      ..setAuthorizationCode()
       ..setProfile();
+
     try {
-      _id = await HmsAuthService.signIn(authParamHelper: helper);
-      _addToLogs("FROM SIGN IN: ${_id.displayName}");
+      _account = await AccountAuthService.signIn(helper);
+      _addToLogs("FROM SIGN IN: " + _account.displayName);
     } on Exception catch (e) {
-      print(e.toString());
+      _addToLogs(e.toString());
     }
   }
 
   _signOut() async {
     try {
-      final bool result = await HmsAuthService.signOut();
-      _addToLogs("FROM SIGN OUT: $result");
+      final bool res = await AccountAuthService.signOut();
+      _addToLogs("FROM SIGN OUT: $res");
     } on Exception catch (e) {
-      print(e.toString());
+      _addToLogs(e.toString());
     }
   }
 
   _silentSignIn() async {
     try {
-      final HmsAuthHuaweiId id = await HmsAuthService.silentSignIn();
-      _addToLogs("FROM SILENT SIGN IN: ${id.displayName}");
+      final AuthAccount account = await AccountAuthService.silentSignIn();
+      _addToLogs("FROM SILENT SIGN IN: " + account.displayName);
     } on Exception catch (e) {
-      print(e.toString());
+      _addToLogs(e.toString());
     }
   }
 
   _revokeAuthorization() async {
     try {
-      final bool result = await HmsAuthService.revokeAuthorization();
-      _addToLogs("FROM REVOKE AUTHORIZATION: $result");
+      final bool res = await AccountAuthService.cancelAuthorization();
+      _addToLogs("FROM CANCEL AUTHORIZATION: $res");
     } on Exception catch (e) {
-      print(e.toString());
+      _addToLogs(e.toString());
     }
-  }
-
-  _smsVerification() async {
-    HmsSmsManager.smsVerification(({errorCode, message}) {
-      if (message != null) {
-        setState(() {
-          _addToLogs(message);
-        });
-        print("Received message: $message");
-      } else {
-        print("Error: $errorCode");
-      }
-    });
   }
 
   _addToLogs(String s) {
     setState(() {
-      logs.add(s);
+      _logs.add(s);
     });
   }
 }

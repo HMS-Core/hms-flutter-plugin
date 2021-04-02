@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -27,17 +27,19 @@ import com.huawei.hms.maps.HuaweiMap;
 import com.huawei.hms.maps.model.GroundOverlay;
 import com.huawei.hms.maps.model.GroundOverlayOptions;
 
+import io.flutter.plugin.common.MethodChannel;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.flutter.plugin.common.MethodChannel;
-
 public class GroundOverlayUtils {
     private HuaweiMap huaweiMap;
+
     private final MethodChannel mChannel;
 
     private final Map<String, GroundOverlayController> idsOnMap;
+
     private final Map<String, String> ids;
 
     private final HMSLogger logger;

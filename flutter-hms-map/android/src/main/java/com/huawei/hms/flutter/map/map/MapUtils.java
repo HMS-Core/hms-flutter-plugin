@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -34,13 +34,13 @@ import com.huawei.hms.maps.model.CameraPosition;
 import com.huawei.hms.maps.model.LatLng;
 import com.huawei.hms.maps.model.MapStyleOptions;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 class MapUtils {
     private HuaweiMap huaweiMap;
@@ -48,12 +48,19 @@ class MapUtils {
     private final float compactness;
 
     private final MarkersUtils markersUtils;
+
     private final PolylineUtils polylineUtils;
+
     private final PolygonUtils polygonUtils;
+
     private final CircleUtils circleUtils;
+
     private final GroundOverlayUtils groundOverlayUtils;
+
     private final TileOverlayUtils tileOverlayUtils;
+
     private BinaryMessenger messenger;
+
     private final HMSLogger logger;
 
     MapUtils(final MethodChannel mChannel, final float compactness, final Application application) {

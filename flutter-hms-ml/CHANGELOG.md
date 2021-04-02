@@ -1,3 +1,10 @@
+## 2.0.5+301
+* Updated HMSLogger.
+* Fixed the bug that causes the app permissions to not being accepted.
+* Added multiple permission request support.
+* Added requestPermission method in MLPermissionClient.
+* Added MLPermission data type.
+
 ## 2.0.5+300
 
 ### New Features

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ import com.huawei.hms.mlsdk.common.MLException;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -68,7 +69,7 @@ public class HmsMlUtils {
         if (inImage != null) {
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-            return MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", "Desc");
+            return MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, Long.toString(Calendar.getInstance().getTimeInMillis()), null);
         }
         return "No path";
     }

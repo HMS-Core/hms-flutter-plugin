@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ public class TileOverlayUtils {
     private HuaweiMap huaweiMap;
 
     private final Map<String, TileOverlayController> idsOnMap;
+
     private final Map<String, String> ids;
 
     private final HMSLogger logger;

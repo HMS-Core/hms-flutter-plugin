@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -45,9 +45,9 @@ public class DefaultSettingController implements DefaultSettingControllerService
         settingController.disableHiHealth().addOnFailureListener(exception -> {
             Log.i("TAG", "Disable HiHealth failed");
             voidResultListener.onFail(exception);
-        }).addOnCompleteListener(task -> {
+        }).addOnSuccessListener(task -> {
             Log.i(TAG, "Disable HiHealth is successful");
-            voidResultListener.onSuccess(task.getResult());
+            voidResultListener.onSuccess(task);
         });
     }
 

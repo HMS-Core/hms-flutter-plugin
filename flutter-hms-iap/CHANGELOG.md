@@ -1,3 +1,6 @@
+## 5.0.2+301
+* Updated HMSLogger.
+
 ## 5.0.2+300
 
 * Upgrade Huawei IAP SDK to v5.0.2.300

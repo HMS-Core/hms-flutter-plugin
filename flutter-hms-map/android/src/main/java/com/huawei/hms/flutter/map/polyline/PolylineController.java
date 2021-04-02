@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -25,8 +25,11 @@ import java.util.List;
 
 class PolylineController implements PolylineMethods {
     private final Polyline polyline;
+
     private final String mapPolylineId;
+
     private boolean clickable;
+
     private final float compactness;
 
     PolylineController(final Polyline polyline, final boolean clickable, final float compactness) {

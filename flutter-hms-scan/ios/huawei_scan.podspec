@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'huawei_scan'
-  s.version          = '1.2.2'
+  s.version          = '1.3.0+300'
   s.summary          = 'HUAWEI Scan Kit plugin for Flutter.'
   s.description      = <<-DESC
   HUAWEI Scan Flutter Plugin scans all major 1D and 2D barcodes as well as generates barcodes to help you quickly build barcode scanning functions into your apps.

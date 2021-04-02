@@ -30,7 +30,8 @@ Future<HmsAuthHuaweiId> signIn() async {
       ..setAuthorizationCode()
       ..setEmail()
       ..setScopeList([
-        HmsScope.game,
+        GameScopes.GAME,
+        GameScopes.DRIVE_APP_DATA,
       ])
       ..setProfile();
 

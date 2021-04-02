@@ -1,18 +1,18 @@
 /*
- * Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+
+    Licensed under the Apache License, Version 2.0 (the "License")
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        https://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,10 +29,6 @@ class CustomizedViewScreen extends StatefulWidget {
 }
 
 class _CustomizedViewScreenState extends State<CustomizedViewScreen> {
-  String resultScan;
-  int codeFormatScan;
-  int resultTypeScan;
-
   List<ScanResponse> responseList = [];
 
   @override
@@ -85,12 +81,12 @@ class _CustomizedViewScreenState extends State<CustomizedViewScreen> {
 
   customizedView() async {
     responseList = [];
-    ScanResponse response =
-        await HmsCustomizedView.startCustomizedView(CustomizedViewRequest(
+    await HmsCustomizedView.startCustomizedView(CustomizedViewRequest(
       scanType: HmsScanTypes.AllScanType,
       continuouslyScan: false,
       isFlashAvailable: true,
       flashOnLightChange: false,
+      enableReturnBitmap: false,
       customizedCameraListener: (ScanResponse response) {
         pause();
         setState(() {
@@ -108,11 +104,6 @@ class _CustomizedViewScreenState extends State<CustomizedViewScreen> {
         }
       },
     ));
-    setState(() {
-      resultScan = response.originalValue;
-      codeFormatScan = response.scanType;
-      resultTypeScan = response.scanTypeForm;
-    });
   }
 
   @override
@@ -121,7 +112,7 @@ class _CustomizedViewScreenState extends State<CustomizedViewScreen> {
         appBar: AppBar(
           title: const Text('Customized View Screen'),
         ),
-        body: resultScan == null && responseList.isEmpty
+        body: responseList.isEmpty
             ? AlertDialog(
                 content: Text("Please scan a valid barcode."),
                 actions: [
@@ -132,38 +123,32 @@ class _CustomizedViewScreenState extends State<CustomizedViewScreen> {
                       })
                 ],
               )
-            : resultScan == null
-                ? SingleChildScrollView(
-                    child: Column(
-                    children: [
-                      CustomButton(
-                        text: "Show Unique Elements",
-                        onPressed: () {
-                          setState(() {
-                            responseList = getUniqueList(responseList);
-                          });
-                        },
-                      ),
-                      ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: responseList.length,
-                          itemBuilder: (BuildContext ctxt, int index) {
-                            return ResponseWidget(
-                              isMulti: true,
-                              codeFormat: responseList[index].scanType,
-                              result: responseList[index].originalValue,
-                              resultType: responseList[index].scanTypeForm,
-                            );
-                          })
-                    ],
-                  ))
-                : SingleChildScrollView(
-                    child: ResponseWidget(
-                    isMulti: false,
-                    codeFormat: codeFormatScan,
-                    result: resultScan,
-                    resultType: resultTypeScan,
-                  )));
+            : Column(
+                children: [
+                  (responseList.length > 1)
+                      ? CustomButton(
+                          text: "Show Unique Elements",
+                          onPressed: () {
+                            setState(() {
+                              responseList = getUniqueList(responseList);
+                            });
+                          },
+                        )
+                      : const SizedBox.shrink(),
+                  Expanded(
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: responseList.length,
+                        itemBuilder: (BuildContext ctxt, int index) {
+                          return ResponseWidget(
+                            isMulti: true,
+                            codeFormat: responseList[index].scanType,
+                            result: responseList[index].originalValue,
+                            resultType: responseList[index].scanTypeForm,
+                          );
+                        }),
+                  )
+                ],
+              ));
   }
 }

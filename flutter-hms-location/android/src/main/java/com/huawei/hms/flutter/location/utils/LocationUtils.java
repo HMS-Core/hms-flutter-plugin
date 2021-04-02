@@ -1,11 +1,11 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -39,6 +39,7 @@ import java.util.Set;
 public interface LocationUtils {
     /**
      * Utility method
+     *
      * @param location ActivityIdentificationData object
      * @return HashMap representation of Location object
      */
@@ -75,6 +76,7 @@ public interface LocationUtils {
 
     /**
      * Utility method
+     *
      * @param hwLocation HWLocation object
      * @return HashMap representation of HWLocation object
      */
@@ -114,6 +116,7 @@ public interface LocationUtils {
 
     /**
      * Utility method
+     *
      * @param locationAvailability LocationAvailability object
      * @return HashMap representation of LocationAvailability object
      */
@@ -134,6 +137,7 @@ public interface LocationUtils {
 
     /**
      * Utility method
+     *
      * @param locationResult LocationResult object
      * @return HashMap representation of LocationResult object
      */
@@ -164,6 +168,7 @@ public interface LocationUtils {
 
     /**
      * Utility method
+     *
      * @param states LocationSettingsStates object
      * @return HashMap representation of LocationSettingsStates object
      */
@@ -182,12 +187,17 @@ public interface LocationUtils {
         map.put("locationUsable", states.isLocationUsable());
         map.put("networkLocationPresent", states.isNetworkLocationPresent());
         map.put("networkLocationUsable", states.isNetworkLocationUsable());
+        map.put("hmsLocationPresent", states.isHMSLocationPresent());
+        map.put("hmsLocationUsable", states.isHMSLocationUsable());
+        map.put("gnssPresent", states.isGnssPresent());
+        map.put("gnssUsable", states.isGnssUsable());
 
         return map;
     }
 
     /**
      * Utility method
+     *
      * @param result NavigationResult object
      * @return HashMap representation of NavigationResult object
      */
@@ -206,6 +216,7 @@ public interface LocationUtils {
 
     /**
      * Utility method
+     *
      * @param map HashMap representation of the LocationRequest object
      * @return LocationRequest object
      */
@@ -245,21 +256,18 @@ public interface LocationUtils {
 
     /**
      * Utility method
+     *
      * @param map HashMap representation of the NavigationRequest object
      * @return NavigationRequest object
      */
     static NavigationRequest fromMapToNavigationRequest(final Map<String, Object> map) {
         final int type = ValueGetter.getInt("type", map);
-        final Map extras = ObjectUtils.cast(map.get("extras"), Map.class);
-
-        final NavigationRequest request = new NavigationRequest(type);
-        request.setExtras(extras);
-
-        return request;
+        return new NavigationRequest(type);
     }
 
     /**
      * Utility method
+     *
      * @param map HashMap representation of the Location object
      * @return Location object
      */
@@ -287,6 +295,7 @@ public interface LocationUtils {
 
     /**
      * Utility method
+     *
      * @param map HashMap representation of the LocationSettingsRequest object
      * @return LocationSettingsRequest object
      */

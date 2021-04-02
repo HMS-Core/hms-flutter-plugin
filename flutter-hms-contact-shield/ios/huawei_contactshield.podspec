@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'huawei_contactshield'
-  s.version          = '5.1.0+300'
+  s.version          = '5.1.0+301'
   s.summary          = 'HUAWEI Contact Shield plugin for Flutter.'
   s.description      = <<-DESC
   To help confront the global pandemic of coronavirus disease 2019 (COVID-19), Huawei provides HMS Core Contact Shield for developers to develop epidemic prevention and control apps.

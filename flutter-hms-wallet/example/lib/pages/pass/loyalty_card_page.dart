@@ -34,15 +34,12 @@ class _LoyaltyCardPageState extends State<LoyaltyCardPage> {
 
   TextEditingController serialNumberController =
       TextEditingController.fromValue(
-    // TODO: required param
     TextEditingValue(text: Utils.getRandomNumber(12)),
   );
   TextEditingController passStyleIdController = TextEditingController.fromValue(
-    // TODO: required param
     TextEditingValue(text: Constants.passStyleIdLoyalty),
   );
   TextEditingController passTypeIdController = TextEditingController.fromValue(
-    // TODO: required param
     TextEditingValue(text: Constants.passTypeIdLoyalty),
   );
   TextEditingController cardPictureController = TextEditingController.fromValue(
@@ -64,7 +61,6 @@ class _LoyaltyCardPageState extends State<LoyaltyCardPage> {
     TextEditingValue(text: 'carrefour'),
   );
   TextEditingController cardNumberController = TextEditingController.fromValue(
-    // TODO: required param
     TextEditingValue(text: '0'),
   );
   TextEditingController pointsController = TextEditingController();
@@ -87,7 +83,6 @@ class _LoyaltyCardPageState extends State<LoyaltyCardPage> {
     TextEditingValue(text: 'tester'),
   );
   TextEditingController tierLevelController = TextEditingController.fromValue(
-    // TODO: required param
     TextEditingValue(text: 'tier-level-0'),
   );
   TextEditingController messageHeaderController =
@@ -354,7 +349,6 @@ class _LoyaltyCardPageState extends State<LoyaltyCardPage> {
   }
 
   PassObject getPassObject() {
-    // TODO: checks first
     return PassObject(
       serialNumber: serialNumberController.text,
       passStyleIdentifier: passStyleIdController.text,
@@ -363,7 +357,6 @@ class _LoyaltyCardPageState extends State<LoyaltyCardPage> {
       currencyCode: currencyCodeController.text,
       status: PassStatus(
         state: status.toLowerCase(),
-        // TODO: iso string with same format on demo
         effectTime: '${startDate?.toIso8601String()}Z',
         expireTime: '${endDate?.toIso8601String()}Z',
       ),

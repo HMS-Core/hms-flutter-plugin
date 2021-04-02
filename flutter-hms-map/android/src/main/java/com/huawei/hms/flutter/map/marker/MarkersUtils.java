@@ -1,5 +1,5 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -28,19 +28,22 @@ import com.huawei.hms.maps.model.LatLng;
 import com.huawei.hms.maps.model.Marker;
 import com.huawei.hms.maps.model.MarkerOptions;
 
+import io.flutter.plugin.common.BinaryMessenger;
+import io.flutter.plugin.common.MethodChannel;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.flutter.plugin.common.BinaryMessenger;
-import io.flutter.plugin.common.MethodChannel;
-
 public class MarkersUtils {
     private HuaweiMap huaweiMap;
+
     private final MethodChannel mChannel;
+
     private BinaryMessenger messenger;
 
     private final Map<String, MarkerController> idsOnMap;
+
     private final Map<String, String> ids;
 
     private final HMSLogger logger;

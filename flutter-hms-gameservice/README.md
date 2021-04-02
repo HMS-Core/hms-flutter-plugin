@@ -34,7 +34,7 @@ Please see [pub.dev](https://pub.dev/packages/huawei_gameservice/install) and [A
 ## Documentation
 
 - [Quick Start](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/client-dev-overview-0000001080675722)
-- [Reference](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-References/overview-0000001080990190)
+- [Reference](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-References-V1/flutter-apis-overview-0000001080990190-V1)
 
 ### Additional Topics
 
@@ -70,4 +70,4 @@ If you run into a bug in our samples, please submit an issue to the [GitHub repo
 
 ## License
 
-Huawei Game Service Flutter Plugin is licensed under [Apache 2.0 license](LICENCE)
+Huawei Game Service Flutter Plugin is licensed under [Apache 2.0 license](LICENSE)

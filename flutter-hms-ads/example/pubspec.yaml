@@ -1,6 +1,6 @@
 name: huawei_ads_example
 description: Demonstrates how to use the HUAWEI Ads plugin.
-version: 13.4.35+300
+version: 13.4.35+301
 publish_to: 'none'
 
 environment:

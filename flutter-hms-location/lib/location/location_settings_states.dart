@@ -1,11 +1,11 @@
 /*
-    Copyright 2020. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        https://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,17 +26,24 @@ class LocationSettingsStates {
   bool locationUsable;
   bool networkLocationPresent;
   bool networkLocationUsable;
+  bool hmsLocationPresent;
+  bool hmsLocationUsable;
+  bool gnssPresent;
+  bool gnssUsable;
 
-  LocationSettingsStates({
-    this.blePresent,
-    this.bleUsable,
-    this.gpsPresent,
-    this.gpsUsable,
-    this.locationPresent,
-    this.locationUsable,
-    this.networkLocationPresent,
-    this.networkLocationUsable,
-  });
+  LocationSettingsStates(
+      {this.blePresent,
+      this.bleUsable,
+      this.gpsPresent,
+      this.gpsUsable,
+      this.locationPresent,
+      this.locationUsable,
+      this.networkLocationPresent,
+      this.networkLocationUsable,
+      this.hmsLocationPresent,
+      this.hmsLocationUsable,
+      this.gnssPresent,
+      this.gnssUsable});
 
   Map<String, dynamic> toMap() {
     return {
@@ -48,6 +55,10 @@ class LocationSettingsStates {
       'locationUsable': locationUsable,
       'networkLocationPresent': networkLocationPresent,
       'networkLocationUsable': networkLocationUsable,
+      'hmsLocationPresent': hmsLocationPresent,
+      'hmsLocationUsable': hmsLocationUsable,
+      'gnssPresent': gnssPresent,
+      'gnssUsable': gnssUsable,
     };
   }
 
@@ -63,6 +74,10 @@ class LocationSettingsStates {
       locationUsable: map['locationUsable'],
       networkLocationPresent: map['networkLocationPresent'],
       networkLocationUsable: map['networkLocationUsable'],
+      hmsLocationPresent: map['hmsLocationPresent'],
+      hmsLocationUsable: map['hmsLocationUsable'],
+      gnssPresent: map['gnssPresent'],
+      gnssUsable: map['gnssUsable'],
     );
   }
 
@@ -73,7 +88,13 @@ class LocationSettingsStates {
 
   @override
   String toString() {
-    return 'LocationSettingsStates(blePresent: $blePresent, bleUsable: $bleUsable, gpsPresent: $gpsPresent, gpsUsable: $gpsUsable, locationPresent: $locationPresent, locationUsable: $locationUsable, networkLocationPresent: $networkLocationPresent, networkLocationUsable: $networkLocationUsable)';
+    return 'LocationSettingsStates(blePresent: $blePresent, bleUsable: '
+        '$bleUsable, gpsPresent: $gpsPresent, gpsUsable: $gpsUsable, '
+        'locationPresent: $locationPresent, locationUsable: $locationUsable, '
+        'networkLocationPresent: $networkLocationPresent, '
+        'networkLocationUsable: $networkLocationUsable, hmsLocationPresent: '
+        '$hmsLocationPresent, hmsLocationUsable: $hmsLocationUsable, '
+        'gnssPresent: $gnssPresent, gnssUsable: $gnssUsable)';
   }
 
   @override
@@ -88,7 +109,11 @@ class LocationSettingsStates {
         o.locationPresent == locationPresent &&
         o.locationUsable == locationUsable &&
         o.networkLocationPresent == networkLocationPresent &&
-        o.networkLocationUsable == networkLocationUsable;
+        o.networkLocationUsable == networkLocationUsable &&
+        o.hmsLocationPresent == hmsLocationPresent &&
+        o.hmsLocationUsable == hmsLocationUsable &&
+        o.gnssPresent == gnssPresent &&
+        o.gnssUsable == gnssUsable;
   }
 
   @override
@@ -102,6 +127,10 @@ class LocationSettingsStates {
       locationUsable,
       networkLocationPresent,
       networkLocationUsable,
+      hmsLocationPresent,
+      hmsLocationUsable,
+      gnssPresent,
+      gnssUsable,
     ]);
   }
 }
