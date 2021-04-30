@@ -21,7 +21,8 @@ public enum Param {
     TOPIC("topic"),
     ENABLED("enabled"),
     SCOPE("scope"),
-    MESSAGE("msg");
+    MESSAGE("msg"),
+    SUBJECT_ID("subjectId");
 
     private String code;
 

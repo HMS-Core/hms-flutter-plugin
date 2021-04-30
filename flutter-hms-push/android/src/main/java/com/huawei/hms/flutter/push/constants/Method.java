@@ -25,11 +25,13 @@ public enum Method {
     getAAID,
     getAppId,
     getToken,
+    getMultiSenderToken,
     getCreationTime,
     getOdid,
 
     deleteAAID,
     deleteToken,
+    deleteMultiSenderToken,
 
     subscribe,
     unsubscribe,
@@ -56,6 +58,15 @@ public enum Method {
     cancelNotificationsWithTag,
     cancelNotificationsWithId,
     cancelNotificationsWithIdTag,
+
+    isSupportProfile,
+    addProfile,
+    addMultiSenderProfile,
+    deleteProfile,
+    deleteMultiSenderProfile,
+
+    setCountryCode,
+    initFcmPushProxy,
 
     enableLogger,
     disableLogger,

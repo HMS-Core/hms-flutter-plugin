@@ -14,25 +14,25 @@
     limitations under the License.
 */
 
-package com.huawei.hms.flutter.push.utils;
+package com.huawei.hms.flutter.push.hms;
 
-import android.os.Bundle;
+import android.content.Context;
 
-import com.huawei.hms.flutter.push.config.NotificationAttributes;
+import androidx.annotation.NonNull;
 
-import io.flutter.plugin.common.MethodCall;
+import java.lang.ref.WeakReference;
 
-public class LocalNotificationUtils {
+public class PluginContext {
+    private static WeakReference<Context> weakReference;
 
-    private LocalNotificationUtils() {
-        throw new IllegalStateException("Utility class");
+    private PluginContext() {
     }
 
-    public static Bundle callArgsToBundle(MethodCall call) {
-        try {
-            return new NotificationAttributes(call).toBundle();
-        } catch (Exception e) {
-            return null;
-        }
+    public static void initialize(@NonNull Context context) {
+        weakReference = new WeakReference<>(context);
+    }
+
+    public static Context getContext() {
+        return weakReference.get();
     }
 }

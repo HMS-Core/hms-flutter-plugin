@@ -14,25 +14,6 @@
     limitations under the License.
 */
 
-package com.huawei.hms.flutter.push.utils;
-
-import android.os.Bundle;
-
-import com.huawei.hms.flutter.push.config.NotificationAttributes;
-
-import io.flutter.plugin.common.MethodCall;
-
-public class LocalNotificationUtils {
-
-    private LocalNotificationUtils() {
-        throw new IllegalStateException("Utility class");
-    }
-
-    public static Bundle callArgsToBundle(MethodCall call) {
-        try {
-            return new NotificationAttributes(call).toBundle();
-        } catch (Exception e) {
-            return null;
-        }
-    }
-}
+export 'channel.dart';
+export 'method.dart';
+export 'result_codes.dart';

@@ -14,27 +14,23 @@
     limitations under the License.
 */
 
-package com.huawei.hms.flutter.push.receiver;
+package com.huawei.hms.flutter.push.event;
 
 import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-
-import com.huawei.hms.flutter.push.constants.PushIntent;
 
 import io.flutter.plugin.common.EventChannel;
 
-public class DataMessageReceiver extends BroadcastReceiver {
-    final EventChannel.EventSink events;
-
-    public DataMessageReceiver(EventChannel.EventSink events) {
-        this.events = events;
-    }
-
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        String status = intent.getStringExtra(PushIntent.DATA_MESSAGE.id());
-        this.events.success(status);
-    }
+/**
+ * Interface that is used as a callback for creating a {@link BroadcastReceiver}
+ *
+ * @since 5.1.1
+ */
+public interface CreateBroadcastReceiverCallback {
+    /**
+     * Creates a BroadcastReceiver.
+     *
+     * @param events Events from the assigned stream handler.
+     * @return A BroadcastReceiver Object
+     */
+    BroadcastReceiver createBroadcastReceiver(EventChannel.EventSink events);
 }
-

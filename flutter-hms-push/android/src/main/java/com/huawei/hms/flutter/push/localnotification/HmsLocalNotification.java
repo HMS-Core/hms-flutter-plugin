@@ -24,14 +24,13 @@ import com.huawei.hms.flutter.push.constants.Code;
 import com.huawei.hms.flutter.push.receiver.common.NotificationIntentListener;
 import com.huawei.hms.flutter.push.utils.LocalNotificationUtils;
 import com.huawei.hms.flutter.push.utils.NotificationConfigUtils;
-import com.huawei.hms.flutter.push.utils.RemoteMessageUtils;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import io.flutter.Log;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel.Result;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class HmsLocalNotification {
     private static String TAG = HmsLocalNotification.class.getSimpleName();
@@ -44,7 +43,7 @@ public class HmsLocalNotification {
     }
 
     public void localNotification(MethodCall call, final Result result) {
-        Bundle bundle = LocalNotificationUtils.callArgsToBundle(call, result);
+        Bundle bundle = LocalNotificationUtils.callArgsToBundle(call);
         if (bundle == null) {
             result.error(Code.NULL_BUNDLE.code(), "Arguments are wrong or empty", "");
             return;
@@ -54,13 +53,17 @@ public class HmsLocalNotification {
     }
 
     public void localNotificationSchedule(MethodCall call, final Result result) {
-        Bundle bundle = LocalNotificationUtils.callArgsToBundle(call, result);
+        Bundle bundle = LocalNotificationUtils.callArgsToBundle(call);
         if (bundle == null) {
             result.error(Code.NULL_BUNDLE.code(), "Arguments are wrong or empty", "");
             return;
         }
         NotificationConfigUtils.configId(bundle);
-        hmsLocalNotificationController.localNotificationSchedule(bundle, result);
+        String localNotif = hmsLocalNotificationController.localNotificationSchedule(bundle, result);
+        if (localNotif.isEmpty()) {
+            return;
+        }
+        result.success(localNotif);
     }
 
     public void getInitialNotification(final Result result) {

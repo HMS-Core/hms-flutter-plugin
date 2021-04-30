@@ -1,3 +1,13 @@
+## 5.1.1+301
+* Updated Push SDK to the latest version 5.1.1+301.
+* Added Multi-Sender API.
+* Bug fixes and improvements.
+* **[Breaking Changes]**
+  * Migrated the plugin to Null-Safety.
+  * Folder structure updated, all library can be imported with a single line.
+  * Code constant renamed as ResultCodes.
+  * Push.deleteToken method's result will not be returned to the stream anymore, it can be obtained directly from the method.
+
 ## 5.0.2+304
 * Updated HMSLogger.
 * Changed lightSettings, vibrateConfig, titleLocalizationArgs and bodyLocalizationArgs fields of RemoteMessageNotification to type List\<dynamic> in order to support parsing for 3rd party integrations.

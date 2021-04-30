@@ -16,22 +16,23 @@
 
 package com.huawei.hms.flutter.push.hms;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.huawei.agconnect.config.AGConnectServicesConfig;
+import com.huawei.hmf.tasks.Task;
+import com.huawei.hms.aaid.HmsInstanceId;
+import com.huawei.hms.aaid.entity.AAIDResult;
+import com.huawei.hms.common.ApiException;
 import com.huawei.hms.flutter.push.constants.Code;
 import com.huawei.hms.flutter.push.constants.Core;
 import com.huawei.hms.flutter.push.constants.PushIntent;
-import com.huawei.hmf.tasks.Task;
-import com.huawei.hms.aaid.entity.AAIDResult;
-import com.huawei.hms.aaid.HmsInstanceId;
+import com.huawei.hms.flutter.push.logger.HMSLogger;
+import com.huawei.hms.flutter.push.utils.Utils;
 
 import io.flutter.plugin.common.MethodChannel.Result;
 
-import com.huawei.hms.flutter.push.PushPlugin;
-import com.huawei.hms.flutter.push.logger.HMSLogger;
-import com.huawei.hms.flutter.push.utils.Utils;
-import com.huawei.hms.common.ApiException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,47 +43,58 @@ import java.util.Map;
  * @since 4.0.4
  */
 public class FlutterHmsInstanceId {
-    private static String TAG = FlutterHmsInstanceId.class.getSimpleName();
+    private static final String TAG = FlutterHmsInstanceId.class.getSimpleName();
 
-    private static HMSLogger hmsLogger = HMSLogger.getInstance(PushPlugin.getContext());
+    private HMSLogger hmsLogger;
 
-    public static void getId(final Result result) {
+    private Context context;
+
+    public FlutterHmsInstanceId(Context context) {
+        this.context = context;
+        hmsLogger = HMSLogger.getInstance(context);
+    }
+
+    public void getId(final Result result) {
         hmsLogger.startMethodExecutionTimer("getId");
-        String instanceId = HmsInstanceId.getInstance(PushPlugin.getContext()).getId();
+        String instanceId = HmsInstanceId.getInstance(context).getId();
         hmsLogger.sendSingleEvent("getId");
-        Log.d(TAG, "id");
         result.success(instanceId);
     }
 
-    public static void getAAID(final Result result) {
+    public void getAAID(final Result result) {
         hmsLogger.startMethodExecutionTimer("getAAID");
-        Task<AAIDResult> aaidResultTask = HmsInstanceId.getInstance(PushPlugin.getContext()).getAAID();
+        Task<AAIDResult> aaidResultTask = HmsInstanceId.getInstance(context).getAAID();
         aaidResultTask.addOnSuccessListener(aaidResult -> {
             String aaid = aaidResult.getId();
             hmsLogger.sendSingleEvent("getAAID");
-            Log.d(TAG, "aaid");
             result.success(aaid);
         }).addOnFailureListener(e -> {
             if (e instanceof ApiException) {
                 ApiException ex = ((ApiException) e);
+                result.error(String.valueOf(ex.getStatusCode()), ex.getMessage(), null);
                 hmsLogger.sendSingleEvent("getAAID", String.valueOf(ex.getStatusCode()));
             } else {
+                result.error("-1", e.getMessage(), null);
                 hmsLogger.sendSingleEvent("getAAID", Code.RESULT_UNKNOWN.code());
             }
             Log.d("FlutterHmsInstanceId", "getAAID failed");
         });
     }
 
-    public static void getAppId(final Result result) {
-        String appId = AGConnectServicesConfig.fromContext(PushPlugin.getContext()).getString(Core.CLIENT_APP_ID);
-        if (Utils.isEmpty(appId)) appId = "";
+    public void getAppId(final Result result) {
+        String appId = AGConnectServicesConfig.fromContext(context).getString(Core.CLIENT_APP_ID);
+        if (Utils.isEmpty(appId)) {
+            appId = "";
+        }
         result.success(appId);
     }
 
-    public static void getToken(final String scope) {
+    public void getToken(final String scope) {
         new Thread(() -> {
-            String appId = AGConnectServicesConfig.fromContext(PushPlugin.getContext()).getString(Core.CLIENT_APP_ID);
-            if (Utils.isEmpty(appId)) appId = "";
+            String appId = AGConnectServicesConfig.fromContext(context).getString(Core.CLIENT_APP_ID);
+            if (Utils.isEmpty(appId)) {
+                appId = "";
+            }
             String token = "";
             hmsLogger.startMethodExecutionTimer("getToken");
             try {
@@ -90,74 +102,113 @@ public class FlutterHmsInstanceId {
                 if (defaultScope.trim().isEmpty()) {
                     defaultScope = Core.DEFAULT_TOKEN_SCOPE;
                 }
-                token = HmsInstanceId.getInstance(PushPlugin.getContext()).getToken(appId, defaultScope);
+                token = HmsInstanceId.getInstance(context).getToken(appId, defaultScope);
                 hmsLogger.sendSingleEvent("getToken");
-                Utils.sendIntent(PushIntent.TOKEN_INTENT_ACTION, PushIntent.TOKEN, token);
+                Utils.sendIntent(context, PushIntent.TOKEN_INTENT_ACTION, PushIntent.TOKEN, token);
             } catch (ApiException e) {
                 hmsLogger.sendSingleEvent("getToken", String.valueOf(e.getStatusCode()));
-                Utils.sendIntent(PushIntent.TOKEN_INTENT_ACTION, PushIntent.TOKEN_ERROR, e.getLocalizedMessage());
+                Utils.sendIntent(context, PushIntent.TOKEN_INTENT_ACTION, PushIntent.TOKEN_ERROR,
+                    e.getLocalizedMessage());
             } catch (Exception e) {
                 hmsLogger.sendSingleEvent("getToken", Code.RESULT_UNKNOWN.code());
-                Utils.sendIntent(PushIntent.TOKEN_INTENT_ACTION, PushIntent.TOKEN_ERROR, e.getLocalizedMessage());
+                Utils.sendIntent(context, PushIntent.TOKEN_INTENT_ACTION, PushIntent.TOKEN_ERROR,
+                    e.getLocalizedMessage());
             }
         }).start();
     }
 
-    public static void getCreationTime(final Result result) {
+    public void getMultiSenderToken(final String subjectId) {
+        new Thread(() -> {
+            String token = "";
+            hmsLogger.startMethodExecutionTimer("getMultiSenderToken");
+            try {
+                token = HmsInstanceId.getInstance(context).getToken(subjectId);
+                hmsLogger.sendSingleEvent("getMultiSenderToken");
+                JSONObject result = new JSONObject();
+                result.putOpt("multiSenderToken", token);
+                Utils.sendIntent(context, PushIntent.MULTI_SENDER_TOKEN_INTENT_ACTION, PushIntent.MULTI_SENDER_TOKEN,
+                    result.toString());
+            } catch (ApiException e) {
+                hmsLogger.sendSingleEvent("getMultiSenderToken", String.valueOf(e.getStatusCode()));
+                Utils.sendIntent(context, PushIntent.MULTI_SENDER_TOKEN_INTENT_ACTION,
+                    PushIntent.MULTI_SENDER_TOKEN_ERROR, e.getLocalizedMessage());
+            } catch (Exception e) {
+                hmsLogger.sendSingleEvent("getMultiSenderToken", Code.RESULT_UNKNOWN.code());
+                Utils.sendIntent(context, PushIntent.MULTI_SENDER_TOKEN_INTENT_ACTION,
+                    PushIntent.MULTI_SENDER_TOKEN_ERROR, e.getLocalizedMessage());
+            }
+        }).start();
+    }
+
+    public void getCreationTime(final Result result) {
         hmsLogger.startMethodExecutionTimer("getCreationTime");
-        String createTime = String.valueOf(HmsInstanceId.getInstance(PushPlugin.getContext()).getCreationTime());
-        Log.d(TAG, "createTime");
+        String createTime = String.valueOf(HmsInstanceId.getInstance(context).getCreationTime());
         hmsLogger.sendSingleEvent("getCreationTime");
         result.success(createTime);
     }
 
-    public static void deleteAAID(final Result result) {
-        hmsLogger.startMethodExecutionTimer("deleteAAID");
-        try {
-            HmsInstanceId.getInstance(PushPlugin.getContext()).deleteAAID();
-            hmsLogger.sendSingleEvent("deleteAAID");
-        } catch (ApiException e) {
-            result.error(Code.RESULT_UNKNOWN.code(), e.getMessage(), e.getCause());
-            hmsLogger.sendSingleEvent("deleteAAID", String.valueOf(e.getStatusCode()));
-        }
-        result.success(Code.RESULT_SUCCESS.code());
+    public void deleteAAID(final Result result) {
+        new Thread(() -> {
+            hmsLogger.startMethodExecutionTimer("deleteAAID");
+            try {
+                HmsInstanceId.getInstance(context).deleteAAID();
+                Utils.handleSuccessOnUIThread(result);
+                hmsLogger.sendSingleEvent("deleteAAID");
+            } catch (ApiException e) {
+                Utils.handleErrorOnUIThread(result, String.valueOf(e.getStatusCode()), e.getMessage(), "");
+                hmsLogger.sendSingleEvent("deleteAAID", String.valueOf(e.getStatusCode()));
+            }
+        }).start();
+
     }
 
-    public static void deleteToken(final String scope) {
-        // Since operation on main thread is prohibited for this method, results will be returned on
-        // token event channel's onError callback
+    public void deleteToken(final String scope, final Result result) {
         new Thread(() -> {
-            String appId = AGConnectServicesConfig.fromContext(PushPlugin.getContext()).getString(Core.CLIENT_APP_ID);
-            if (Utils.isEmpty(appId)) appId = "";
+            String appId = AGConnectServicesConfig.fromContext(context).getString(Core.CLIENT_APP_ID);
+            if (Utils.isEmpty(appId)) {
+                appId = "";
+            }
             hmsLogger.startMethodExecutionTimer("deleteToken");
             try {
                 String defaultScope = scope == null ? Core.DEFAULT_TOKEN_SCOPE : scope;
                 if (defaultScope.trim().isEmpty()) {
                     defaultScope = Core.DEFAULT_TOKEN_SCOPE;
                 }
-                HmsInstanceId.getInstance(PushPlugin.getContext()).deleteToken(appId, defaultScope);
+                HmsInstanceId.getInstance(context).deleteToken(appId, defaultScope);
                 hmsLogger.sendSingleEvent("deleteToken");
-                Utils.sendIntent(PushIntent.TOKEN_INTENT_ACTION, PushIntent.TOKEN_ERROR, Code.RESULT_SUCCESS.code());
+                Utils.handleSuccessOnUIThread(result);
             } catch (ApiException e) {
                 hmsLogger.sendSingleEvent("deleteToken", String.valueOf(e.getStatusCode()));
-                Utils.sendIntent(PushIntent.TOKEN_INTENT_ACTION, PushIntent.TOKEN_ERROR, e.getLocalizedMessage());
-            } catch (Exception e) {
-                hmsLogger.sendSingleEvent("deleteToken", Code.RESULT_UNKNOWN.code());
-                Utils.sendIntent(PushIntent.TOKEN_INTENT_ACTION, PushIntent.TOKEN_ERROR, e.getLocalizedMessage());
+                Utils.handleErrorOnUIThread(result, String.valueOf(e.getStatusCode()), e.getMessage(), "");
             }
         }).start();
     }
 
-    public static void getAgConnectValues(final Result result) {
+    public void deleteMultiSenderToken(final String subjectId, final Result result) {
+        final String methodName = "deleteMultiSenderToken";
+        new Thread(() -> {
+            hmsLogger.startMethodExecutionTimer(methodName);
+            try {
+                HmsInstanceId.getInstance(context).deleteToken(subjectId);
+                hmsLogger.sendSingleEvent(methodName);
+                Utils.handleSuccessOnUIThread(result);
+            } catch (ApiException e) {
+                hmsLogger.sendSingleEvent(methodName, String.valueOf(e.getStatusCode()));
+                Utils.handleErrorOnUIThread(result, String.valueOf(e.getStatusCode()), e.getMessage(), "");
+            }
+        }).start();
+    }
+
+    public void getAgConnectValues(final Result result) {
         HashMap<String, String> agconnect = new HashMap<>();
-        agconnect.put("app_id", AGConnectServicesConfig.fromContext(PushPlugin.getContext()).getString("client/app_id"));
-        agconnect.put("cp_id", AGConnectServicesConfig.fromContext(PushPlugin.getContext()).getString("client/cp_id"));
-        agconnect.put("client_id", AGConnectServicesConfig.fromContext(PushPlugin.getContext()).getString("client/client_id"));
-        agconnect.put("product_id", AGConnectServicesConfig.fromContext(PushPlugin.getContext()).getString("client/product_id"));
-        agconnect.put("package_name", AGConnectServicesConfig.fromContext(PushPlugin.getContext()).getString("client/package_name"));
-        agconnect.put("api_key", AGConnectServicesConfig.fromContext(PushPlugin.getContext()).getString("client/api_key"));
-        agconnect.put("client_secret", AGConnectServicesConfig.fromContext(PushPlugin.getContext()).getString("client/client_secret"));
-        agconnect.put("agcw_url", AGConnectServicesConfig.fromContext(PushPlugin.getContext()).getString("agcgw/url"));
+        agconnect.put("app_id", AGConnectServicesConfig.fromContext(context).getString("client/app_id"));
+        agconnect.put("cp_id", AGConnectServicesConfig.fromContext(context).getString("client/cp_id"));
+        agconnect.put("client_id", AGConnectServicesConfig.fromContext(context).getString("client/client_id"));
+        agconnect.put("product_id", AGConnectServicesConfig.fromContext(context).getString("client/product_id"));
+        agconnect.put("package_name", AGConnectServicesConfig.fromContext(context).getString("client/package_name"));
+        agconnect.put("api_key", AGConnectServicesConfig.fromContext(context).getString("client/api_key"));
+        agconnect.put("client_secret", AGConnectServicesConfig.fromContext(context).getString("client/client_secret"));
+        agconnect.put("agcw_url", AGConnectServicesConfig.fromContext(context).getString("agcgw/url"));
 
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, String> entry : agconnect.entrySet()) {

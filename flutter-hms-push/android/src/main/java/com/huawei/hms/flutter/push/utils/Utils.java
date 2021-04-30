@@ -16,16 +16,21 @@
 
 package com.huawei.hms.flutter.push.utils;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
-import com.huawei.hms.flutter.push.PushPlugin;
+import com.huawei.hms.flutter.push.constants.Code;
+import com.huawei.hms.flutter.push.constants.NotificationConstants;
 import com.huawei.hms.flutter.push.constants.PushIntent;
+
+import io.flutter.plugin.common.MethodCall;
+import io.flutter.plugin.common.MethodChannel;
 
 import java.io.InvalidClassException;
 import java.util.Objects;
-
-import io.flutter.plugin.common.MethodCall;
 
 /**
  * class Utils
@@ -38,7 +43,7 @@ public class Utils {
         throw new IllegalStateException("Utility class");
     }
 
-    private static String TAG = "FlutterHmsUtils";
+    private static final String TAG = "FlutterHmsUtils";
 
     public static boolean isEmpty(Object str) {
         return str == null || str.toString().trim().length() == 0;
@@ -77,12 +82,40 @@ public class Utils {
         }
     }
 
-    public static void sendIntent(PushIntent action, PushIntent extraName, String result) {
+    public static void sendIntent(Context context, PushIntent action, PushIntent extraName, String result) {
         Intent intent = new Intent();
-        intent.setPackage(PushPlugin.getContext().getPackageName());
+        intent.setPackage(context.getPackageName());
         intent.setAction(action.id());
         intent.putExtra(extraName.id(), result);
-        PushPlugin.getContext().sendBroadcast(intent);
+        context.sendBroadcast(intent);
+    }
+
+    /**
+     * Checks if the intent is a tapped notification.
+     *
+     * @param intent The intent object to be checked.
+     * @return true if the intent is identified as a notification, false otherwise.
+     */
+    public static boolean checkNotificationFlags(Intent intent) {
+        int flagNumber = Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_RECEIVER_REPLACE_PENDING
+            | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT;
+        int flagNumberAndBroughtToFront = flagNumber | Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT;
+        return intent.getFlags() == flagNumber || intent.getFlags() == flagNumberAndBroughtToFront
+            || intent.getBundleExtra(NotificationConstants.NOTIFICATION) != null || intent.getDataString() != null;
+    }
+
+    public static void handleSuccessOnUIThread(final MethodChannel.Result result) {
+        new Handler(Looper.getMainLooper()).post(() -> result.success(Code.RESULT_SUCCESS.code()));
+    }
+
+    public static void handleErrorOnUIThread(final MethodChannel.Result result, final String errorMessage) {
+        new Handler(Looper.getMainLooper()).post(() -> result.error(Code.RESULT_ERROR.code(), errorMessage, ""));
+    }
+
+    public static void handleErrorOnUIThread(final MethodChannel.Result result, final String errorCode,
+        final String errorMessage, final String errorDetails) {
+        new Handler(Looper.getMainLooper()).post(
+            () -> result.error(errorCode, errorMessage, errorDetails != null ? errorDetails : ""));
     }
 
 }

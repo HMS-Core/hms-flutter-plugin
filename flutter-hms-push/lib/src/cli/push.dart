@@ -20,43 +20,29 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:huawei_push/model/remote_message.dart';
+import 'package:huawei_push/src/constants/constants_export.dart';
+import 'package:huawei_push/src/model/remote_message.dart';
 
-import './constants/Channel.dart' as Channel;
-import './constants/Method.dart' as Method;
-import 'constants/Code.dart';
+import 'package:huawei_push/src/constants/channel.dart';
+import 'package:huawei_push/src/constants/method.dart' as Method;
 
 class Push {
-  /// Constant Method and Event Channel definitions for communicating with native platform
-  static const MethodChannel methodChannel =
-      const MethodChannel(Channel.METHOD_CHANNEL);
-  static const EventChannel tokenEventChannel =
-      EventChannel(Channel.TOKEN_CHANNEL);
-  static const EventChannel remoteMessageReceiveEventChannel =
-      EventChannel(Channel.REMOTE_MESSAGE_RECEIVE_CHANNEL);
-  static const EventChannel remoteMessageSendStatusEventChannel =
-      EventChannel(Channel.REMOTE_MESSAGE_SEND_STATUS_CHANNEL);
-  static const EventChannel remoteMessageNotificationIntentEventChannel =
-      EventChannel(Channel.REMOTE_MESSAGE_NOTIFICATION_INTENT_CHANNEL);
-  static const EventChannel notificationOpenEventChannel =
-      EventChannel(Channel.NOTIFICATION_OPEN_CHANNEL);
-  static const EventChannel localNotificationClickEventChannel =
-      EventChannel(Channel.LOCAL_NOTIFICATION_CLICK_CHANNEL);
-
   /// Enables the function of receiving notification messages.
   ///
   /// Returns the corresponding Push SDK Result Code's Description
   static Future<String> turnOnPush() async {
-    final String result = await methodChannel.invokeMethod(Method.turnOnPush);
-    return Code[result];
+    final String result =
+        await methodChannel.invokeMethod(Method.turnOnPush) ?? '-1';
+    return ResultCodes[result];
   }
 
   /// Disables the function of receiving notification messages.
   ///
   /// Returns the corresponding Push SDK Result Code's Description
   static Future<String> turnOffPush() async {
-    final String result = await methodChannel.invokeMethod(Method.turnOffPush);
-    return Code[result];
+    final String result =
+        await methodChannel.invokeMethod(Method.turnOffPush) ?? '-1';
+    return ResultCodes[result];
   }
 
   /// Before applying for a token, an app calls this method to obtain its unique AAID.
@@ -65,14 +51,14 @@ class Push {
   /// If the AAID of the app changes, a new token will be generated next time when
   /// the app applies for a token. If an app needs to report statistics events,
   /// it must carry the AAID as its unique ID.
-  static Future<String> getId() async {
-    final String result = await methodChannel.invokeMethod(Method.getId);
+  static Future<String?> getId() async {
+    final String? result = await methodChannel.invokeMethod(Method.getId);
     return result;
   }
 
   /// Obtains an AAID of Push SDK
-  static Future<String> getAAID() async {
-    final String result = await methodChannel.invokeMethod(Method.getAAID);
+  static Future<String?> getAAID() async {
+    final String? result = await methodChannel.invokeMethod(Method.getAAID);
     return result;
   }
 
@@ -83,8 +69,8 @@ class Push {
   }
 
   /// Obtains an open device ID (ODID) in asynchronous mode.
-  static Future<String> getOdid() async {
-    final String result = await methodChannel.invokeMethod(Method.getOdid);
+  static Future<String?> getOdid() async {
+    final String? result = await methodChannel.invokeMethod(Method.getOdid);
     return result;
   }
 
@@ -113,18 +99,23 @@ class Push {
   /// Deletes a local AAID and its generation timestamp.
   static Future<String> deleteAAID() async {
     final String result = await methodChannel.invokeMethod(Method.deleteAAID);
-    return Code[result];
+    return ResultCodes[result];
   }
 
   /// Deletes the push token.
-  ///
-  /// Result of this method will be returned to the **onError** callback of the
-  /// Token Stream.
-  static Future<void> deleteToken(String scope) async {
+  static Future<String> deleteToken(String scope) async {
     Map<String, dynamic> args = <String, dynamic>{};
     args.putIfAbsent("scope", () => scope);
+    String result = await methodChannel.invokeMethod(Method.deleteToken, args);
+    return ResultCodes[result];
+  }
 
-    methodChannel.invokeMethod(Method.deleteToken, args);
+  /// Deletes a token that a target app developer applies for a sender to integrate
+  /// Push Kit in the multi-sender scenario.
+  static Future<String> deleteMultiSenderToken(String subjectId) async {
+    String result = await methodChannel
+        .invokeMethod(Method.deleteToken, {'subjectId': subjectId});
+    return ResultCodes[result];
   }
 
   /// Obtains the stream of [tokenEventChannel].
@@ -133,6 +124,15 @@ class Push {
   /// SDK [Code] values.
   static Stream<String> get getTokenStream =>
       tokenEventChannel.receiveBroadcastStream().cast<String>();
+
+  /// Obtains the stream of [multiSenderTokenEventChannel].
+  ///
+  /// The stream emits the requested push token and errors thrown with the Push
+  /// SDK [Code] values in the multi-sender scenario.
+  static Stream<Map<String, dynamic>> get getMultiSenderTokenStream =>
+      multiSenderTokenEventChannel
+          .receiveBroadcastStream()
+          .map((event) => jsonDecode(event));
 
   /// Obtains the stream of [remoteMessageReceiveEventChannel].
   ///
@@ -166,7 +166,7 @@ class Push {
       RemoteMessageBuilder remoteMsg) async {
     final String result =
         await methodChannel.invokeMethod(Method.send, remoteMsg.toMap());
-    return Code[result];
+    return ResultCodes[result];
   }
 
   /// Subscribes to topics.
@@ -185,7 +185,7 @@ class Push {
 
     final String result =
         await methodChannel.invokeMethod(Method.subscribe, args);
-    return Code[result];
+    return ResultCodes[result];
   }
 
   /// Unsubscribes from topics that are subscribed to.
@@ -198,7 +198,7 @@ class Push {
 
     final String result =
         await methodChannel.invokeMethod(Method.unsubscribe, args);
-    return Code[result];
+    return ResultCodes[result];
   }
 
   /// Determines whether to enable automatic initialization.
@@ -221,7 +221,7 @@ class Push {
 
     final String result =
         await methodChannel.invokeMethod(Method.setAutoInitEnabled, args);
-    return Code[result];
+    return ResultCodes[result];
   }
 
   /// Checks whether automatic initialization is enabled.
@@ -234,24 +234,23 @@ class Push {
   /// Obtains values from the **agconnect-services.json** file.
   static Future<String> getAgConnectValues() async {
     final String result =
-        await methodChannel.invokeMethod<String>(Method.getAgConnectValues);
+        await methodChannel.invokeMethod(Method.getAgConnectValues);
     return result;
   }
 
   /// Utility for showing an Android Toast Message
-  static Future<Null> showToast(String msg) async {
+  static Future<void> showToast(String msg) async {
     Map<String, dynamic> args = <String, dynamic>{};
     args.putIfAbsent("msg", () => msg);
     await methodChannel.invokeMethod(Method.showToast, args);
-    return null;
   }
 
   /// Obtains the custom intent URI of the notification message which launches the app.
   ///
   /// If another notification message with a custom intent is selected, the return
   /// value will be updated.
-  static Future<String> getInitialIntent() async {
-    final String result =
+  static Future<String?> getInitialIntent() async {
+    final String? result =
         await methodChannel.invokeMethod(Method.getInitialIntent);
     return result;
   }
@@ -317,10 +316,10 @@ class Push {
 
   /// Obtains the list of all active notification messages.
   static Future<List<Map<String, dynamic>>> getNotifications() async {
-    final List<dynamic> notifications =
+    final List<dynamic>? notifications =
         await methodChannel.invokeMethod(Method.getNotifications);
     List<Map<String, dynamic>> result = [];
-    notifications.forEach((element) {
+    notifications?.forEach((element) {
       result.add(json.decode(element));
     });
     return result;
@@ -328,10 +327,10 @@ class Push {
 
   /// Obtains the list of all pending scheduled notification messages.
   static Future<List<Map<String, dynamic>>> getScheduledNotifications() async {
-    final List<dynamic> scheduledNotifications =
+    final List<dynamic>? scheduledNotifications =
         await methodChannel.invokeMethod(Method.getScheduledNotifications);
     List<Map<String, dynamic>> result = [];
-    scheduledNotifications.forEach((element) {
+    scheduledNotifications?.forEach((element) {
       result.add(json.decode(element));
     });
     return result;
@@ -339,7 +338,8 @@ class Push {
 
   /// Obtains the list of all notification channels.
   static Future<List<String>> getChannels() async {
-    final List result = await methodChannel.invokeMethod(Method.getChannels);
+    final List result =
+        await methodChannel.invokeMethod(Method.getChannels) ?? [];
     List<String> strList = result.cast<String>();
     return strList;
   }
@@ -347,8 +347,9 @@ class Push {
   /// Deletes a notification channel with the given ID.
   static Future<String> deleteChannel(String channelId) async {
     final String result =
-        await methodChannel.invokeMethod(Method.deleteChannel, channelId);
-    return Code[result];
+        await methodChannel.invokeMethod(Method.deleteChannel, channelId) ??
+            '-1';
+    return ResultCodes[result];
   }
 
   /// Checks whether a notification channel with the given ID exists.
@@ -400,6 +401,16 @@ class Push {
     methodChannel.invokeMethod(Method.cancelNotificationsWithIdTag, idTags);
   }
 
+  /// Obtains a token that a target app developer applies for a sender to integrate
+  /// Push Kit in the multi-sender scenario.
+  ///
+  /// The requested token will be emitted to the multi sender token stream. Listen for the stream
+  /// from [getMultiSenderTokenStream] to obtain the token.
+  static Future<void> getMultiSenderToken(String subjectId) async {
+    methodChannel
+        .invokeMethod(Method.getMultiSenderToken, {"subjectId": subjectId});
+  }
+
   /// Enables HMS Plugin Method Analytics
   static Future<void> enableLogger() async {
     methodChannel.invokeMethod(Method.enableLogger);
@@ -414,9 +425,10 @@ class Push {
   static Future<bool> registerBackgroundMessageHandler(
       void Function(RemoteMessage remoteMessage) callback) {
     int rawHandle =
-        PluginUtilities.getCallbackHandle(callbackDispatcher).toRawHandle();
+        PluginUtilities.getCallbackHandle(callbackDispatcher)!.toRawHandle();
     print("rawHandle $rawHandle");
-    int rawCallback = PluginUtilities.getCallbackHandle(callback).toRawHandle();
+    int rawCallback =
+        PluginUtilities.getCallbackHandle(callback)!.toRawHandle();
     print("rawCallback $rawCallback");
     return methodChannel.invokeMethod('registerBackgroundMessageHandler', {
       "rawHandle": rawHandle,
@@ -434,8 +446,6 @@ class Push {
 
 /// Callback function for handling received [RemoteMessage] objects in the background.
 void callbackDispatcher() {
-  const MethodChannel backgroundMessageChannel =
-      MethodChannel(Channel.BACKGROUND_MESSAGE_CHANNEL);
   WidgetsFlutterBinding.ensureInitialized();
 
   backgroundMessageChannel.setMethodCallHandler((MethodCall call) async {
@@ -443,7 +453,7 @@ void callbackDispatcher() {
         Map<String, dynamic>.from(call.arguments[1]);
     RemoteMessage remoteMessage = RemoteMessage.fromMap(args);
     final Function rawHandler = PluginUtilities.getCallbackFromHandle(
-        CallbackHandle.fromRawHandle(call.arguments[0]));
+        CallbackHandle.fromRawHandle(call.arguments[0]))!;
 
     rawHandler(remoteMessage);
   });

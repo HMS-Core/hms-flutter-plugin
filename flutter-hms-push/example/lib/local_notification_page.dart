@@ -16,11 +16,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:huawei_push/local_notification/local_notification.dart';
-import 'package:huawei_push/push.dart';
+import 'package:huawei_push/huawei_push_library.dart';
 
 class LocalNotificationPage extends StatefulWidget {
-  LocalNotificationPage({Key key}) : super(key: key);
+  LocalNotificationPage({Key? key}) : super(key: key);
 
   @override
   _LocalNotificationPageState createState() => _LocalNotificationPageState();
@@ -41,7 +40,7 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
   TextEditingController tagTextController = TextEditingController();
   TextEditingController logTextController = TextEditingController();
 
-  Map<String, dynamic> receivedNotification;
+  late Map<String, dynamic> receivedNotification;
   Map<String, dynamic> defaultNotification = {
     HMSLocalNotificationAttr.TITLE: 'Notification Title',
     HMSLocalNotificationAttr.MESSAGE: 'Notification Message',
@@ -83,33 +82,39 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
         onError: _onLocalNotificationClickErr);
   }
 
-  _onLocalNotificationClickEvent(Map<String, dynamic> event) {
+  void _onLocalNotificationClickEvent(Map<String, dynamic> event) {
     receivedNotification = event;
     if (mounted) {
       // Check if widget is still mounted to call setState
       showResult(
           "onLocalNotificationClickEvent", receivedNotification.toString());
     }
-    Push.showToast("Clicked: " + receivedNotification['action'] ?? " ");
+    Push.showToast("Clicked: " + receivedNotification['action']);
     if (receivedNotification[HMSLocalNotificationAttr.ACTION] == "Yes") {
       int id = int.parse(receivedNotification[HMSLocalNotificationAttr.ID]);
-      String tag = receivedNotification[HMSLocalNotificationAttr.TAG];
-      Push.cancelNotificationsWithIdTag({id: tag}).then((_) => showResult(
-          "cancelNotificationsWithIdTag",
-          "Cancelled, Notification with id: $id, and tag: $tag"));
+      String? tag = receivedNotification[HMSLocalNotificationAttr.TAG];
+      if (tag != null) {
+        Push.cancelNotificationsWithIdTag({id: tag}).then((_) => showResult(
+            "cancelNotificationsWithIdTag",
+            "Cancelled, Notification with id: $id, and tag: $tag"));
+      } else {
+        Push.cancelNotificationsWithId([id]).then((_) => showResult(
+            "cancelNotificationsWithId",
+            "Cancelled, Notification with id: $id"));
+      }
     }
   }
 
-  _onLocalNotificationClickErr(dynamic err) =>
+  void _onLocalNotificationClickErr(dynamic err) =>
       showResult("onLocalNotificationClickError", err.toString());
 
-  _clearLog() {
+  void _clearLog() {
     setState(() {
       logTextController.text = "";
     });
   }
 
-  _localNotification() async {
+  void _localNotification() async {
     try {
       Map<String, dynamic> notification = _constructNotificationMap();
       Map<String, dynamic> response =
@@ -120,7 +125,7 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
     }
   }
 
-  _localNotificationOngoing() async {
+  void _localNotificationOngoing() async {
     try {
       Map<String, dynamic> ongoingNotification = _constructNotificationMap();
       ongoingNotification[HMSLocalNotificationAttr.ONGOING] = true;
@@ -132,7 +137,7 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
     }
   }
 
-  _localNotificationSound() async {
+  void _localNotificationSound() async {
     try {
       Map<String, dynamic> soundNotification = _constructNotificationMap();
       soundNotification[HMSLocalNotificationAttr.PLAY_SOUND] = true;
@@ -146,7 +151,7 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
     }
   }
 
-  _localNotificationVibrate() async {
+  void _localNotificationVibrate() async {
     try {
       Map<String, dynamic> vibrateNotification = _constructNotificationMap();
       vibrateNotification[HMSLocalNotificationAttr.VIBRATE] = true;
@@ -159,7 +164,7 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
     }
   }
 
-  _localNotificationBigImage() async {
+  void _localNotificationBigImage() async {
     try {
       Map<String, dynamic> bigImgNotification = _constructNotificationMap();
       bigImgNotification[HMSLocalNotificationAttr.BIG_PICTURE_URL] =
@@ -172,7 +177,7 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
     }
   }
 
-  _localNotificationRepeat() async {
+  void _localNotificationRepeat() async {
     try {
       Map<String, dynamic> repeatedNotification = _constructNotificationMap();
       repeatedNotification[HMSLocalNotificationAttr.REPEAT_TYPE] =
@@ -185,7 +190,7 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
     }
   }
 
-  _localNotificationScheduled() async {
+  void _localNotificationScheduled() async {
     try {
       Map<String, dynamic> scheduledNotification = _constructNotificationMap();
       scheduledNotification[HMSLocalNotificationAttr.FIRE_DATE] =
@@ -199,30 +204,30 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
     }
   }
 
-  _channelBlocked() async {
+  void _channelBlocked() async {
     bool blocked = await Push.channelBlocked(
         'huawei-hms-flutter-push-channel-id-4-default');
     showResult("channelBlocked", blocked.toString());
   }
 
-  _channelExists() async {
+  void _channelExists() async {
     bool exists = await Push.channelExists(
         'huawei-hms-flutter-push-channel-id-4-default');
     showResult("channelExists", exists.toString());
   }
 
-  _getChannels() async {
+  void _getChannels() async {
     List<String> channels = await Push.getChannels();
     showResult("getChannels", channels.toString());
   }
 
-  _deleteChannel() async {
+  void _deleteChannel() async {
     String result = await Push.deleteChannel(
         "huawei-hms-flutter-push-channel-id-4-default");
     showResult("deleteChannel", result);
   }
 
-  _getNotifications() async {
+  void _getNotifications() async {
     List notifications = await Push.getNotifications();
     showResult(
         "getNotifications",
@@ -232,7 +237,7 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
     print("getNotification result: " + notifications.toString());
   }
 
-  _getScheduledNotifications() async {
+  void _getScheduledNotifications() async {
     List scheduledNotifications = await Push.getScheduledNotifications();
     showResult("getScheduledNotifications",
         scheduledNotifications.length.toString() + " scheduled notifications");
@@ -240,12 +245,13 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
         scheduledNotifications.toString());
   }
 
-  showResult(String name, [String msg = "Button pressed."]) {
+  void showResult(String name, [String msg = "Button pressed."]) {
     appendLog("[" + name + "]" + ": " + msg);
+    print("[" + name + "]" + ": " + msg);
     if (msg.isNotEmpty) Push.showToast(msg);
   }
 
-  appendLog([String msg = "Button pressed."]) {
+  void appendLog([String msg = "Button pressed."]) {
     setState(() {
       logTextController.text = msg + "\n" + logTextController.text;
     });
@@ -258,7 +264,7 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
   }
 
   Widget customTextField(TextEditingController controller, String hintText,
-      {EdgeInsets customPadding}) {
+      {EdgeInsets? customPadding}) {
     return Padding(
       padding: customPadding ?? padding,
       child: Container(
@@ -295,18 +301,19 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
     );
   }
 
-  Widget customButton(String label, Function callback, {Color color}) {
+  Widget customButton(String label, Function() callback, {Color? color}) {
     return Expanded(
       flex: 5,
       child: Padding(
         padding: padding.copyWith(top: 0.0, bottom: 0.0),
-        child: RaisedButton(
-          padding: EdgeInsets.zero,
-          color: color,
+        child: ElevatedButton(
           onPressed: callback,
+          style: ElevatedButton.styleFrom(
+            primary: color ?? Colors.grey.shade300,
+          ),
           child: Text(
             label,
-            style: TextStyle(fontSize: 12),
+            style: TextStyle(fontSize: 12, color: Colors.black87),
           ),
         ),
       ),
@@ -401,8 +408,8 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
             children: [
               customButton(
                   'cancelAllNotifications',
-                  () => Push.cancelAllNotifications()
-                      .then((_) => showResult("cancelAllNotifications", ""))),
+                  () => Push.cancelAllNotifications().then(
+                      (_) => showResult("cancelAllNotifications", "Success"))),
               customButton('getNotifications', () => _getNotifications()),
             ],
           ),
@@ -410,8 +417,8 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
             children: [
               customButton(
                   'cancelScheduledNotifications',
-                  () => Push.cancelScheduledNotifications().then(
-                      (_) => showResult("cancelScheduledNotifications", ""))),
+                  () => Push.cancelScheduledNotifications().then((_) =>
+                      showResult("cancelScheduledNotifications", "Success"))),
               customButton('getScheduledNotifications',
                   () => _getScheduledNotifications()),
             ],
@@ -420,8 +427,8 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
             children: [
               customButton(
                   'cancelNotificationsWithTag',
-                  () => Push.cancelNotificationsWithTag('hms_tag').then(
-                      (_) => showResult("cancelNotificationsWithTag", ""))),
+                  () => Push.cancelNotificationsWithTag('hms_tag').then((_) =>
+                      showResult("cancelNotificationsWithTag", "Success"))),
               customButton('getChannels', () => _getChannels()),
             ],
           ),
@@ -429,8 +436,8 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
             children: [
               customButton(
                   'cancelNotifications',
-                  () => Push.cancelNotifications()
-                      .then((_) => showResult("cancelNotifications", ""))),
+                  () => Push.cancelNotifications().then(
+                      (_) => showResult("cancelNotifications", "Success"))),
               customButton('deleteChannel', () => _deleteChannel()),
             ],
           ),

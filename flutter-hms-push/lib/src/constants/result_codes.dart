@@ -15,7 +15,7 @@
 */
 
 /// Push SDK Result Codes ///
-const Map Code = {
+const Map ResultCodes = {
   /// Success
   '0': 'RESULT_SUCCESS',
 

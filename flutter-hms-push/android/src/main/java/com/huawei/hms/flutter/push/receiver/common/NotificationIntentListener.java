@@ -16,6 +16,7 @@
 
 package com.huawei.hms.flutter.push.receiver.common;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -26,14 +27,14 @@ import com.huawei.hms.flutter.push.utils.RemoteMessageUtils;
 import com.huawei.hms.flutter.push.utils.Utils;
 import com.huawei.hms.push.RemoteMessage;
 
+import io.flutter.Log;
+import io.flutter.plugin.common.MethodChannel;
+import io.flutter.plugin.common.PluginRegistry.NewIntentListener;
+
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import io.flutter.Log;
-import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugin.common.PluginRegistry.NewIntentListener;
 
 /**
  * class NotificationIntentListener
@@ -47,13 +48,21 @@ public class NotificationIntentListener implements NewIntentListener {
 
     private String initialIntent;
 
+    private Context context;
+
+    public NotificationIntentListener(Context context) {
+        this.context = context;
+    }
+
     @Override
     public boolean onNewIntent(Intent intent) {
-        handleIntent(intent);
+        if (Utils.checkNotificationFlags(intent)) {
+            handleIntent(intent);
+        }
         return false;
     }
 
-    public static Map<String, Object> getInitialNotification() {
+    public static synchronized Map<String, Object> getInitialNotification() {
         return NotificationIntentListener.initialNotification;
     }
 
@@ -75,16 +84,20 @@ public class NotificationIntentListener implements NewIntentListener {
         if (bundleExtras != null) {
             RemoteMessage remoteMessage = new RemoteMessage(bundleExtras);
             map.put("remoteMessage", RemoteMessageUtils.toMap(remoteMessage));
-            Map<String,Object> extras = MapUtils.toMap(BundleUtils.convertJSONObject(bundleExtras));
+            Map<String, Object> extras = MapUtils.toMap(BundleUtils.convertJSONObject(bundleExtras));
             map.put("extras", extras);
         }
         if (Intent.ACTION_VIEW.equals(action)) {
             initialIntent = dataString;
-            Utils.sendIntent(PushIntent.REMOTE_MESSAGE_NOTIFICATION_INTENT_ACTION, PushIntent.CUSTOM_INTENT,
-                    initialIntent);
-            if (bundleExtras != null) sendNotificationOpenedAppEvent(map);
+            Utils.sendIntent(context, PushIntent.REMOTE_MESSAGE_NOTIFICATION_INTENT_ACTION, PushIntent.CUSTOM_INTENT,
+                initialIntent);
+            if (bundleExtras != null) {
+                sendNotificationOpenedAppEvent(map);
+            }
         } else if (Intent.ACTION_MAIN.equals(action) || PushIntent.LOCAL_NOTIFICATION_ACTION.name().equals(action)) {
-            if (bundleExtras != null) sendNotificationOpenedAppEvent(map);
+            if (bundleExtras != null) {
+                sendNotificationOpenedAppEvent(map);
+            }
         } else {
             Log.i("NotificationIntentListener", "Unsupported action intent:" + action);
         }
@@ -93,7 +106,8 @@ public class NotificationIntentListener implements NewIntentListener {
     private void sendNotificationOpenedAppEvent(Map<String, Object> initialNotification) {
         setInitialNotification(initialNotification);
         JSONObject jsonObject = new JSONObject(initialNotification);
-        Utils.sendIntent(PushIntent.NOTIFICATION_OPEN_ACTION, PushIntent.NOTIFICATION_OPEN, jsonObject.toString());
+        Utils.sendIntent(context, PushIntent.NOTIFICATION_OPEN_ACTION, PushIntent.NOTIFICATION_OPEN,
+            jsonObject.toString());
     }
 
 }

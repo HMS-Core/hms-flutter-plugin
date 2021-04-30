@@ -37,6 +37,7 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
+import com.huawei.hms.flutter.push.HeadlessPushPlugin;
 import com.huawei.hms.flutter.push.config.NotificationAttributes;
 import com.huawei.hms.flutter.push.constants.Code;
 import com.huawei.hms.flutter.push.constants.Core;
@@ -48,6 +49,8 @@ import com.huawei.hms.flutter.push.utils.ApplicationUtils;
 import com.huawei.hms.flutter.push.utils.BundleUtils;
 import com.huawei.hms.flutter.push.utils.NotificationConfigUtils;
 
+import io.flutter.plugin.common.MethodChannel;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,12 +61,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.flutter.plugin.common.MethodChannel;
-
 public class HmsLocalNotificationController {
     private final String TAG = HmsLocalNotificationController.class.getSimpleName();
 
     private Context context;
+
     private final SharedPreferences sharedPreferences;
 
     public HmsLocalNotificationController(Context context) {
@@ -98,26 +100,32 @@ public class HmsLocalNotificationController {
         Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         String channelId = Core.NOTIFICATION_CHANNEL_ID + "-" + importance;
-        createChannel(notificationManager, channelId, Core.NOTIFICATION_CHANNEL_NAME,
-                Core.NOTIFICATION_CHANNEL_DESC, soundUri, importance, new long[]{0, Core.DEFAULT_VIBRATE_DURATION});
+        createChannel(notificationManager, channelId, Core.NOTIFICATION_CHANNEL_NAME, Core.NOTIFICATION_CHANNEL_DESC,
+            soundUri, importance, new long[] {0, Core.DEFAULT_VIBRATE_DURATION});
     }
 
-    private void createChannel(NotificationManager notificationManager, String channelId,
-            String channelName, String channelDescription, Uri soundUri, int importance, long[] vibratePattern) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
+    private void createChannel(NotificationManager notificationManager, String channelId, String channelName,
+        String channelDescription, Uri soundUri, int importance, long[] vibratePattern) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             return;
-        if (notificationManager == null)
+        }
+        if (notificationManager == null) {
             return;
+        }
 
         NotificationChannel notificationChannel = notificationManager.getNotificationChannel(channelId);
 
-        if (notificationChannel != null) return;
+        if (notificationChannel != null) {
+            return;
+        }
 
-        if (channelName == null)
+        if (channelName == null) {
             channelName = Core.NOTIFICATION_CHANNEL_NAME;
+        }
 
-        if (channelDescription == null)
+        if (channelDescription == null) {
             channelDescription = Core.NOTIFICATION_CHANNEL_DESC;
+        }
 
         notificationChannel = new NotificationChannel(channelId, channelName, importance);
 
@@ -127,10 +135,8 @@ public class HmsLocalNotificationController {
         notificationChannel.setVibrationPattern(vibratePattern);
 
         if (soundUri != null) {
-            AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
-                    .build();
+            AudioAttributes audioAttributes = new AudioAttributes.Builder().setContentType(
+                AudioAttributes.CONTENT_TYPE_SONIFICATION).setUsage(AudioAttributes.USAGE_NOTIFICATION).build();
 
             notificationChannel.setSound(soundUri, audioAttributes);
         } else {
@@ -140,21 +146,23 @@ public class HmsLocalNotificationController {
     }
 
     public void localNotificationNow(final Bundle bundle, final MethodChannel.Result result) {
-        HmsLocalNotificationPicturesLoader notificationPicturesLoader =
-                new HmsLocalNotificationPicturesLoader((largeIconImage, bigPictureImage, res) ->
-                        localNotificationNowPicture(bundle, largeIconImage, bigPictureImage, res));
+        HmsLocalNotificationPicturesLoader notificationPicturesLoader = new HmsLocalNotificationPicturesLoader(
+            (largeIconImage, bigPictureImage, res) -> localNotificationNowPicture(bundle, largeIconImage,
+                bigPictureImage, res));
 
         notificationPicturesLoader.setFlutterResult(result);
-        notificationPicturesLoader
-                .setLargeIconUrl(context, BundleUtils.get(bundle, NotificationConstants.LARGE_ICON_URL));
-        notificationPicturesLoader
-                .setBigPictureUrl(context, BundleUtils.get(bundle, NotificationConstants.BIG_PICTURE_URL));
+        notificationPicturesLoader.setLargeIconUrl(context,
+            BundleUtils.get(bundle, NotificationConstants.LARGE_ICON_URL));
+        notificationPicturesLoader.setBigPictureUrl(context,
+            BundleUtils.get(bundle, NotificationConstants.BIG_PICTURE_URL));
     }
 
     public void invokeApp(Bundle bundle) {
         String packageName = context.getPackageName();
         Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
-        if (launchIntent == null) return;
+        if (launchIntent == null) {
+            return;
+        }
 
         try {
             String className = launchIntent.getComponent().getClassName();
@@ -174,30 +182,34 @@ public class HmsLocalNotificationController {
         }
     }
 
-    public void checkRequiredParams(Bundle bundle, final MethodChannel.Result result, String type) {
-        if (getMainActivityClass() == null) {
-            if (result != null)
+    public boolean invalidRequiredParams(Bundle bundle, final MethodChannel.Result result, String type) {
+        if (result != null) {
+            if (getMainActivityClass() == null) {
                 result.error(Code.RESULT_ERROR.code(), "No activity class", "");
-        }
-        if (BundleUtils.get(bundle, NotificationConstants.MESSAGE) == null) {
-            if (result != null)
+                return true;
+            }
+            if (BundleUtils.get(bundle, NotificationConstants.MESSAGE) == null) {
                 result.error(Code.RESULT_ERROR.code(), "Notification Message is required", "");
-        }
-        if (BundleUtils.get(bundle, NotificationConstants.ID) == null) {
-            if (result != null)
+                return true;
+            }
+            if (BundleUtils.get(bundle, NotificationConstants.ID) == null) {
                 result.error(Code.RESULT_ERROR.code(), "Notification ID is null", "");
-        }
-        if (type.equals(Core.NotificationType.SCHEDULED)) {
-            if (BundleUtils.getD(bundle, NotificationConstants.FIRE_DATE) == 0) {
-                if (result != null)
-                    result.error(Code.RESULT_ERROR.code(), "FireDate is null", "");
+                return true;
+            }
+            if (type.equals(Core.NotificationType.SCHEDULED)
+                && BundleUtils.getD(bundle, NotificationConstants.FIRE_DATE) == 0) {
+                result.error(Code.RESULT_ERROR.code(), "FireDate is null", "");
+                return true;
             }
         }
+        return false;
     }
 
-    public void localNotificationNowPicture(Bundle bundle, Bitmap largeIconBitmap,
-                                            Bitmap bigPictureBitmap, MethodChannel.Result result) {
-        checkRequiredParams(bundle, result, Core.NotificationType.NOW);
+    public void localNotificationNowPicture(Bundle bundle, Bitmap largeIconBitmap, Bitmap bigPictureBitmap,
+        MethodChannel.Result result) {
+        if (invalidRequiredParams(bundle, result, Core.NotificationType.NOW)) {
+            return;
+        }
         try {
             String title = NotificationConfigUtils.configTitle(bundle, context);
             int priority = NotificationConfigUtils.configPriority(bundle);
@@ -206,14 +218,14 @@ public class HmsLocalNotificationController {
 
             String channelId = Core.NOTIFICATION_CHANNEL_ID + "-" + importance;
 
-            NotificationCompat.Builder notification = new NotificationCompat.Builder(context, "")
-                    .setChannelId(channelId)
-                    .setContentTitle(title)
-                    .setTicker(BundleUtils.get(bundle, NotificationConstants.TICKER))
-                    .setVisibility(visibility)
-                    .setPriority(priority)
-                    .setAutoCancel(BundleUtils.getB(bundle, NotificationConstants.AUTO_CANCEL, true))
-                    .setOnlyAlertOnce(BundleUtils.getB(bundle, NotificationConstants.ONLY_ALERT_ONCE, false));
+            NotificationCompat.Builder notification = new NotificationCompat.Builder(context, "").setChannelId(
+                channelId)
+                .setContentTitle(title)
+                .setTicker(BundleUtils.get(bundle, NotificationConstants.TICKER))
+                .setVisibility(visibility)
+                .setPriority(priority)
+                .setAutoCancel(BundleUtils.getB(bundle, NotificationConstants.AUTO_CANCEL, true))
+                .setOnlyAlertOnce(BundleUtils.getB(bundle, NotificationConstants.ONLY_ALERT_ONCE, false));
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 boolean showWhen = BundleUtils.getB(bundle, NotificationConstants.SHOW_WHEN, true);
@@ -231,8 +243,8 @@ public class HmsLocalNotificationController {
                     notification.setGroup(group);
                 }
 
-                if (BundleUtils.contains(bundle, NotificationConstants.GROUP_SUMMARY) ||
-                        BundleUtils.getB(bundle, NotificationConstants.GROUP_SUMMARY)) {
+                if (BundleUtils.contains(bundle, NotificationConstants.GROUP_SUMMARY) || BundleUtils.getB(bundle,
+                    NotificationConstants.GROUP_SUMMARY)) {
                     notification.setGroupSummary(BundleUtils.getB(bundle, NotificationConstants.GROUP_SUMMARY));
                 }
             }
@@ -242,8 +254,9 @@ public class HmsLocalNotificationController {
 
             String subText = BundleUtils.get(bundle, NotificationConstants.SUB_TEXT);
 
-            if (subText != null)
+            if (subText != null) {
                 notification.setSubText(subText);
+            }
 
             String bigText = BundleUtils.get(bundle, NotificationConstants.BIG_TEXT);
             bigText = bigText == null ? message : bigText;
@@ -264,10 +277,9 @@ public class HmsLocalNotificationController {
             NotificationCompat.Style style;
 
             if (bigPictureBitmap != null) {
-                style = new NotificationCompat.BigPictureStyle()
-                        .bigPicture(bigPictureBitmap)
-                        .setBigContentTitle(title)
-                        .setSummaryText(message);
+                style = new NotificationCompat.BigPictureStyle().bigPicture(bigPictureBitmap)
+                    .setBigContentTitle(title)
+                    .setSummaryText(message);
             } else {
                 style = new NotificationCompat.BigTextStyle().bigText(bigText);
             }
@@ -283,8 +295,8 @@ public class HmsLocalNotificationController {
 
             Uri soundUri = null;
 
-            if (!BundleUtils.contains(bundle, NotificationConstants.PLAY_SOUND) ||
-                    BundleUtils.getB(bundle, NotificationConstants.PLAY_SOUND)) {
+            if (!BundleUtils.contains(bundle, NotificationConstants.PLAY_SOUND) || BundleUtils.getB(bundle,
+                NotificationConstants.PLAY_SOUND)) {
                 soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
                 String soundName = BundleUtils.get(bundle, NotificationConstants.SOUND_NAME);
@@ -292,7 +304,8 @@ public class HmsLocalNotificationController {
                 if (soundName != null) {
                     if (!Core.Resource.DEFAULT.equalsIgnoreCase(soundName)) {
                         int resId;
-                        if (context.getResources().getIdentifier(soundName, Core.RAW, context.getPackageName()) == 0) {
+                        if (context.getResources().getIdentifier(soundName, Core.RAW, context.getPackageName()) == 0
+                            && soundName.contains(".")) {
                             soundName = soundName.substring(0, soundName.lastIndexOf('.'));
                         }
                         resId = context.getResources().getIdentifier(soundName, Core.RAW, context.getPackageName());
@@ -314,8 +327,8 @@ public class HmsLocalNotificationController {
                 notification.setSound(null);
             }
 
-            if (BundleUtils.contains(bundle, NotificationConstants.ONGOING) ||
-                    BundleUtils.getB(bundle, NotificationConstants.ONGOING)) {
+            if (BundleUtils.contains(bundle, NotificationConstants.ONGOING) || BundleUtils.getB(bundle,
+                NotificationConstants.ONGOING)) {
                 notification.setOngoing(BundleUtils.getB(bundle, NotificationConstants.ONGOING));
             }
 
@@ -331,22 +344,24 @@ public class HmsLocalNotificationController {
             int notificationID = Integer.parseInt(BundleUtils.get(bundle, NotificationConstants.ID));
 
             PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationID, intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
             NotificationManager notificationManager = notificationManager();
 
-            long[] vibratePattern = new long[]{0};
+            long[] vibratePattern = new long[] {0};
 
-            if (!BundleUtils.contains(bundle, NotificationConstants.VIBRATE) ||
-                    BundleUtils.getB(bundle, NotificationConstants.VIBRATE)) {
-                long vibrateDuration = BundleUtils.contains(bundle, NotificationConstants.VIBRATE_DURATION) ?
-                        BundleUtils.getL(bundle, NotificationConstants.VIBRATE_DURATION) : Core.DEFAULT_VIBRATE_DURATION;
-                if (vibrateDuration == 0)
+            if (!BundleUtils.contains(bundle, NotificationConstants.VIBRATE) || BundleUtils.getB(bundle,
+                NotificationConstants.VIBRATE)) {
+                long vibrateDuration = BundleUtils.contains(bundle, NotificationConstants.VIBRATE_DURATION)
+                    ? BundleUtils.getL(bundle, NotificationConstants.VIBRATE_DURATION)
+                    : Core.DEFAULT_VIBRATE_DURATION;
+                if (vibrateDuration == 0) {
                     vibrateDuration = Core.DEFAULT_VIBRATE_DURATION;
+                }
 
                 channelId = channelId + "-" + vibrateDuration;
 
-                vibratePattern = new long[]{0, vibrateDuration};
+                vibratePattern = new long[] {0, vibrateDuration};
 
                 notification.setVibrate(vibratePattern);
             }
@@ -367,19 +382,21 @@ public class HmsLocalNotificationController {
             String channelName = BundleUtils.get(bundle, NotificationConstants.CHANNEL_NAME);
             String channelDescription = BundleUtils.get(bundle, NotificationConstants.CHANNEL_DESCRIPTION);
 
-            createChannel(notificationManager, channelId, channelName, channelDescription,
-                    soundUri, importance, vibratePattern);
+            createChannel(notificationManager, channelId, channelName, channelDescription, soundUri, importance,
+                vibratePattern);
 
             notification.setChannelId(channelId);
             notification.setContentIntent(pendingIntent);
 
             JSONArray actionArr = null;
             try {
-                actionArr = BundleUtils.get(bundle, NotificationConstants.ACTIONS) != null ?
-                        new JSONArray(BundleUtils.get(bundle, NotificationConstants.ACTIONS)) : null;
+                actionArr = BundleUtils.get(bundle, NotificationConstants.ACTIONS) != null ? new JSONArray(
+                    BundleUtils.get(bundle, NotificationConstants.ACTIONS)) : null;
             } catch (Exception e) {
-                if (result != null)
+                if (result != null) {
                     result.error(Code.RESULT_ERROR.code(), e.getMessage(), e.getCause());
+                    return;
+                }
             }
 
             if (actionArr != null) {
@@ -402,11 +419,11 @@ public class HmsLocalNotificationController {
                     actionIntent.setPackage(context.getPackageName());
 
                     PendingIntent pendingActionIntent = PendingIntent.getBroadcast(context, notificationID,
-                            actionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        actionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        notification.addAction(new NotificationCompat.Action
-                                .Builder(icon, action, pendingActionIntent).build());
+                        notification.addAction(
+                            new NotificationCompat.Action.Builder(icon, action, pendingActionIntent).build());
                     } else {
                         notification.addAction(icon, action, pendingActionIntent);
                     }
@@ -420,8 +437,8 @@ public class HmsLocalNotificationController {
                 editor.apply();
             }
 
-            if (!(ApplicationUtils.isApplicationInForeground(context) &&
-                    BundleUtils.getB(bundle, NotificationConstants.DONT_NOTIFY_IN_FOREGROUND))) {
+            if (!(ApplicationUtils.isApplicationInForeground(context) && BundleUtils.getB(bundle,
+                NotificationConstants.DONT_NOTIFY_IN_FOREGROUND))) {
                 Notification builtNotification = notification.build();
                 builtNotification.defaults |= Notification.DEFAULT_LIGHTS;
 
@@ -441,22 +458,27 @@ public class HmsLocalNotificationController {
             }
             this.localNotificationRepeat(bundle);
         } catch (NullPointerException | IllegalArgumentException | IllegalStateException e) {
-            if (result != null)
+            if (result != null) {
                 result.error(Code.RESULT_ERROR.code(), e.getMessage(), e.getCause());
+            }
         }
     }
 
     private void localNotificationRepeat(Bundle bundle) {
         long newFireDate = NotificationConfigUtils.configNextFireDate(bundle);
 
-        if (newFireDate == 0) return;
+        if (newFireDate == 0) {
+            return;
+        }
 
         bundle.putDouble(NotificationConstants.FIRE_DATE, newFireDate);
         this.localNotificationSchedule(bundle, null);
     }
 
-    public void localNotificationSchedule(Bundle bundle, MethodChannel.Result result) {
-        checkRequiredParams(bundle, result, Core.NotificationType.SCHEDULED);
+    public String localNotificationSchedule(Bundle bundle, MethodChannel.Result result) {
+        if (invalidRequiredParams(bundle, result, Core.NotificationType.SCHEDULED)) {
+            return "";
+        }
 
         NotificationAttributes notificationAttributes = new NotificationAttributes(bundle);
         String id = notificationAttributes.getId();
@@ -467,8 +489,7 @@ public class HmsLocalNotificationController {
 
         localNotificationScheduleSetAlarm(bundle);
 
-        if (result != null)
-            result.success(new NotificationAttributes(bundle).toJson().toString());
+        return new NotificationAttributes(bundle).toJson().toString();
     }
 
     public void localNotificationScheduleSetAlarm(Bundle bundle) {
@@ -481,7 +502,9 @@ public class HmsLocalNotificationController {
 
         PendingIntent pendingIntent = buildScheduleNotificationIntent(bundle);
 
-        if (pendingIntent == null) return;
+        if (pendingIntent == null) {
+            return;
+        }
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             getAlarmManager().set(AlarmManager.RTC_WAKEUP, fireDate, pendingIntent);
@@ -515,13 +538,16 @@ public class HmsLocalNotificationController {
             return false;
         }
 
-        if (channelId == null) return false;
+        if (channelId == null) {
+            return false;
+        }
 
         try {
             NotificationChannel channel = notificationManager().getNotificationChannel(channelId);
 
-            if (channel == null)
+            if (channel == null) {
                 return false;
+            }
 
             return NotificationManager.IMPORTANCE_NONE == channel.getImportance();
         } catch (Exception e) {
@@ -554,8 +580,8 @@ public class HmsLocalNotificationController {
             result.success(Code.RESULT_SUCCESS.code());
         } catch (Exception e) {
             Log.e(TAG, Code.RESULT_ERROR.code(), e);
-            result.error(Code.RESULT_ERROR.code(),
-                    "Exception on deleting the channel, message: " + e.getMessage(), e.getStackTrace());
+            result.error(Code.RESULT_ERROR.code(), "Exception on deleting the channel, message: " + e.getMessage(),
+                e.getStackTrace());
         }
     }
 
@@ -608,6 +634,10 @@ public class HmsLocalNotificationController {
 
         for (Map.Entry<String, ?> entry : scheduledNotifications.entrySet()) {
             try {
+                if (entry.getKey().equals(HeadlessPushPlugin.KEY_CALLBACK) || entry.getKey()
+                    .equals(HeadlessPushPlugin.KEY_HANDLER)) {
+                    continue;
+                }
                 NotificationAttributes notification = NotificationAttributes.fromJson(entry.getValue().toString());
                 scheduledNotificationList.add(notification.toJson().toString());
             } catch (JSONException e) {
@@ -632,7 +662,9 @@ public class HmsLocalNotificationController {
     public void cancelNotificationsWithId(ArrayList<Integer> ids) {
         for (int idx = 0; idx < ids.size(); idx++) {
             Integer id = ids.get(idx);
-            if (id != null) cancelNotification(id);
+            if (id != null) {
+                cancelNotification(id);
+            }
         }
     }
 
@@ -640,7 +672,9 @@ public class HmsLocalNotificationController {
         for (Map.Entry<Integer, String> entry : idTags.entrySet()) {
             Integer id = entry.getKey();
             String tag = entry.getValue();
-            if (tag != null) cancelNotification(tag, id);
+            if (tag != null) {
+                cancelNotification(tag, id);
+            }
         }
     }
 
@@ -657,7 +691,9 @@ public class HmsLocalNotificationController {
 
     public void cancelScheduledNotifications() {
         for (String id : sharedPreferences.getAll().keySet()) {
-            cancelScheduledNotification(id);
+            if (!id.equals(HeadlessPushPlugin.KEY_CALLBACK) && !id.equals(HeadlessPushPlugin.KEY_HANDLER)) {
+                cancelScheduledNotification(id);
+            }
         }
     }
 

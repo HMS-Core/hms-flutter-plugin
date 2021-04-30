@@ -23,10 +23,12 @@ const String getAAID = "getAAID";
 const String getAppId = "getAppId";
 const String getOdid = "getOdid";
 const String getToken = "getToken";
+const String getMultiSenderToken = "getMultiSenderToken";
 const String getCreationTime = "getCreationTime";
 
 const String deleteAAID = "deleteAAID";
 const String deleteToken = "deleteToken";
+const String deleteMultiSenderToken = "deleteMultiSenderToken";
 
 const String subscribe = "subscribe";
 const String unsubscribe = "unsubscribe";

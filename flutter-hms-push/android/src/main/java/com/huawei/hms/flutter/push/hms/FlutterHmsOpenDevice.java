@@ -20,7 +20,6 @@ import android.util.Log;
 
 import com.huawei.hmf.tasks.Task;
 import com.huawei.hms.common.ApiException;
-import com.huawei.hms.flutter.push.PushPlugin;
 import com.huawei.hms.flutter.push.constants.Code;
 import com.huawei.hms.flutter.push.logger.HMSLogger;
 import com.huawei.hms.opendevice.OpenDevice;
@@ -29,22 +28,25 @@ import com.huawei.hms.support.api.opendevice.OdidResult;
 import io.flutter.plugin.common.MethodChannel;
 
 public class FlutterHmsOpenDevice {
+    private FlutterHmsOpenDevice() {
+    }
+
     public static void getOdid(final MethodChannel.Result result) {
-        HMSLogger.getInstance(PushPlugin.getContext()).startMethodExecutionTimer("getOdid");
-        Task<OdidResult> odidResultTask = OpenDevice.getOpenDeviceClient(PushPlugin.getContext()).getOdid();
+        HMSLogger.getInstance(PluginContext.getContext()).startMethodExecutionTimer("getOdid");
+        Task<OdidResult> odidResultTask = OpenDevice.getOpenDeviceClient(PluginContext.getContext()).getOdid();
         odidResultTask.addOnSuccessListener(ooidRes -> {
             String ooid = ooidRes.getId();
-            HMSLogger.getInstance(PushPlugin.getContext()).sendSingleEvent("getOdid");
+            HMSLogger.getInstance(PluginContext.getContext()).sendSingleEvent("getOdid");
             Log.d("FlutterHmsInstanceId", "Odid");
             result.success(ooid);
         }).addOnFailureListener(e -> {
             if (e instanceof ApiException) {
                 ApiException apiException = (ApiException) e;
-                HMSLogger.getInstance(PushPlugin.getContext())
-                        .sendSingleEvent("getOdid", String.valueOf(apiException.getStatusCode()));
+                HMSLogger.getInstance(PluginContext.getContext())
+                    .sendSingleEvent("getOdid", String.valueOf(apiException.getStatusCode()));
             } else {
-                HMSLogger.getInstance(PushPlugin.getContext())
-                        .sendSingleEvent("getOdid", Code.RESULT_UNKNOWN.code());
+                HMSLogger.getInstance(PluginContext.getContext())
+                    .sendSingleEvent("getOdid", Code.RESULT_UNKNOWN.code());
             }
             Log.e("FlutterHmsOpenDevice", "getOdid failed. Error message: " + e.getMessage());
         });

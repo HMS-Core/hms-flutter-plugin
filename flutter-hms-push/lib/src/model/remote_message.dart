@@ -40,23 +40,23 @@ class RemoteMessage {
   static const String SEND_MODE = 'sendMode';
   static const String RECEIPT_MODE = 'receiptMode';
 
-  final String messageId;
-  final String to;
-  final String from;
-  final String type;
-  final String token;
-  final int ttl;
-  final String collapseKey;
-  final int urgency;
-  final int originalUrgency;
-  final int sentTime;
-  final String data;
-  final Map<String, String> dataOfMap;
-  final _RemoteMessageNotification notification;
-  final int sendMode;
-  final int receiptMode;
+  final String? messageId;
+  final String? to;
+  final String? from;
+  final String? type;
+  final String? token;
+  final int? ttl;
+  final String? collapseKey;
+  final int? urgency;
+  final int? originalUrgency;
+  final int? sentTime;
+  final String? data;
+  final Map<String, String>? dataOfMap;
+  final _RemoteMessageNotification? notification;
+  final int? sendMode;
+  final int? receiptMode;
 
-  RemoteMessage._internal({
+  RemoteMessage._({
     this.collapseKey,
     this.data,
     this.dataOfMap,
@@ -75,47 +75,47 @@ class RemoteMessage {
   });
 
   /// Obtains the classification identifier (collapse key) of a message.
-  String get getCollapseKey => collapseKey;
+  String? get getCollapseKey => collapseKey;
 
   /// Obtains the payload of a message.
-  String get getData => data;
+  String? get getData => data;
 
   /// Obtains the payload of a Map message.
-  Map<String, String> get getDataOfMap => dataOfMap;
+  Map<String, String>? get getDataOfMap => dataOfMap;
 
   /// Obtains the ID of a message.
-  String get getMessageId => messageId;
+  String? get getMessageId => messageId;
 
   /// Obtains the type of a message.
-  String get getMessageType => type;
+  String? get getMessageType => type;
 
   /// Obtains the notification data instance from a message.
-  _RemoteMessageNotification get getNotification => notification;
+  _RemoteMessageNotification? get getNotification => notification;
 
   /// Obtains the message priority set by an app.
-  int get getOriginalUrgency => originalUrgency;
+  int? get getOriginalUrgency => originalUrgency;
 
   /// Obtains the message priority set on the HUAWEI Push Kit server.
-  int get getUrgency => urgency;
+  int? get getUrgency => urgency;
 
   /// Obtains the maximum cache duration of a message.
-  int get getTtl => ttl;
+  int? get getTtl => ttl;
 
   /// Obtains the time when a message is sent from the server.
-  int get getSentTime => sentTime;
+  int? get getSentTime => sentTime;
 
   /// Obtains the recipient of a message.
-  String get getTo => to;
+  String? get getTo => to;
 
   /// Obtains the source of a message.
-  String get getFrom => from;
+  String? get getFrom => from;
 
   /// Obtains the token in a message.
-  String get getToken => token;
+  String? get getToken => token;
 
-  factory RemoteMessage.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-    return RemoteMessage._internal(
+  factory RemoteMessage.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return RemoteMessage._();
+    return RemoteMessage._(
       to: map[RemoteMessage.TO] == null ? null : map[RemoteMessage.TO],
       from: map[RemoteMessage.FROM] == null ? null : map[RemoteMessage.FROM],
       messageId: map[RemoteMessage.MESSAGE_ID] == null
@@ -168,7 +168,7 @@ class RemoteMessage {
       COLLAPSE_KEY: this.collapseKey ?? '',
       DATA: this.data ?? '',
       DATA_OF_MAP: this.dataOfMap ?? {},
-      NOTIFICATION: this.notification != null ? this.notification.toMap() : '',
+      NOTIFICATION: this.notification != null ? this.notification!.toMap() : '',
       SEND_MODE: this.sendMode != null ? this.sendMode : '',
       RECEIPT_MODE: this.receiptMode != null ? this.receiptMode : '',
     };
@@ -176,14 +176,14 @@ class RemoteMessage {
 }
 
 class RemoteMessageBuilder {
-  String collapseKey;
-  Map<String, String> data;
-  String messageId;
-  String messageType;
-  int ttl;
-  String to;
-  int sendMode = 1;
-  int receiptMode = 1;
+  String? collapseKey;
+  Map<String, String>? data;
+  String? messageId;
+  String? messageType;
+  int? ttl;
+  String? to;
+  int sendMode;
+  int receiptMode;
 
   RemoteMessageBuilder(
       {this.to,
@@ -192,12 +192,12 @@ class RemoteMessageBuilder {
       this.messageId,
       this.messageType,
       this.ttl,
-      this.sendMode,
-      this.receiptMode});
+      this.sendMode = 1,
+      this.receiptMode = 1});
 
   /// Adds key-value pair data to a message.
   RemoteMessageBuilder addData(String key, String value) {
-    this.data[key] = value;
+    this.data![key] = value;
     return this;
   }
 
@@ -209,7 +209,7 @@ class RemoteMessageBuilder {
 
   /// Deletes message data.
   RemoteMessageBuilder clearData() {
-    this.data.clear();
+    this.data!.clear();
     return this;
   }
 
@@ -316,39 +316,39 @@ class _RemoteMessageNotification {
   static const IS_DEFAULT_SOUND = 'isDefaultSound';
   static const IS_DEFAULT_VIBRATE = 'isDefaultVibrate';
 
-  final String title;
-  final String titleLocalizationKey;
-  final String body;
-  final String bodyLocalizationKey;
-  final String icon;
-  final String sound;
-  final String tag;
-  final String color;
-  final String clickAction;
-  final String channelId;
-  final String ticker;
-  final String intentUri;
+  final String? title;
+  final String? titleLocalizationKey;
+  final String? body;
+  final String? bodyLocalizationKey;
+  final String? icon;
+  final String? sound;
+  final String? tag;
+  final String? color;
+  final String? clickAction;
+  final String? channelId;
+  final String? ticker;
+  final String? intentUri;
 
-  final bool isDefaultLight;
-  final bool isDefaultSound;
-  final bool isDefaultVibrate;
-  final bool isAutoCancel;
-  final bool isLocalOnly;
+  final bool? isDefaultLight;
+  final bool? isDefaultSound;
+  final bool? isDefaultVibrate;
+  final bool? isAutoCancel;
+  final bool? isLocalOnly;
 
-  final int notifyId;
-  final int badgeNumber;
-  final int importance;
-  final int visibility;
+  final int? notifyId;
+  final int? badgeNumber;
+  final int? importance;
+  final int? visibility;
 
-  final Uri imageUrl;
-  final Uri link;
+  final Uri? imageUrl;
+  final Uri? link;
 
-  final double when;
+  final double? when;
 
-  final List<dynamic> lightSettings;
-  final List<dynamic> vibrateConfig;
-  final List<dynamic> titleLocalizationArgs;
-  final List<dynamic> bodyLocalizationArgs;
+  final List<dynamic>? lightSettings;
+  final List<dynamic>? vibrateConfig;
+  final List<dynamic>? titleLocalizationArgs;
+  final List<dynamic>? bodyLocalizationArgs;
 
   _RemoteMessageNotification(
       {this.title,
@@ -381,76 +381,76 @@ class _RemoteMessageNotification {
       this.vibrateConfig});
 
   /// Obtains the title of a message.
-  String get getTitle => title;
+  String? get getTitle => title;
 
   /// Obtains the key of the displayed title of a message.
-  String get getTitleLocalizationKey => titleLocalizationKey;
+  String? get getTitleLocalizationKey => titleLocalizationKey;
 
   /// Obtains variables of the displayed title of a message.
-  List<dynamic> get getTitleLocalizationArgs => titleLocalizationArgs;
+  List<dynamic>? get getTitleLocalizationArgs => titleLocalizationArgs;
 
   /// Obtains the key of the displayed content of a message.
-  String get getBodyLocalizationKey => bodyLocalizationKey;
+  String? get getBodyLocalizationKey => bodyLocalizationKey;
 
   /// Obtains variables of the displayed content of a message.
-  List<dynamic> get getBodyLocalizationArgs => bodyLocalizationArgs;
+  List<dynamic>? get getBodyLocalizationArgs => bodyLocalizationArgs;
 
   /// Obtains the displayed content of a message.
-  String get getBody => body;
+  String? get getBody => body;
 
   /// Obtains the image resource name of the notification icon.
-  String get getIcon => icon;
+  String? get getIcon => icon;
 
   /// Obtains the name of an audio resource to be played when a notification message is displayed.
-  String get getSound => sound;
+  String? get getSound => sound;
 
   /// Obtains the tag from a message for message overwriting.
-  String get getTag => tag;
+  String? get getTag => tag;
 
   /// Obtains the colors of icons and buttons in a message.
-  String get getColor => color;
+  String? get getColor => color;
 
   /// Obtains actions triggered by message tapping.
-  String get getClickAction => clickAction;
+  String? get getClickAction => clickAction;
 
   /// Obtains IDs of channels that support the display of messages.
-  String get getChannelId => channelId;
+  String? get getChannelId => channelId;
 
   /// Obtains the image URL from a message.
-  Uri get getImageUrl => imageUrl;
+  Uri? get getImageUrl => imageUrl;
 
   /// Obtains the deep link from a message.
-  Uri get getLink => link;
+  Uri? get getLink => link;
 
   /// Obtains the unique ID of a message.
-  int get getNotifyId => notifyId;
+  int? get getNotifyId => notifyId;
 
   /// Obtains the display time of a notification message.
-  double get getWhen => when;
+  double? get getWhen => when;
 
   /// Obtains the blinking frequency and color of a breathing light.
-  List<dynamic> get getLightSettings => lightSettings;
+  List<dynamic>? get getLightSettings => lightSettings;
 
   /// Obtains a badge number.
-  int get getBadgeNumber => badgeNumber;
+  int? get getBadgeNumber => badgeNumber;
 
   /// Obtains the priority of a notification message.
-  int get getImportance => importance;
+  int? get getImportance => importance;
 
   /// Obtains the text to be displayed on the status bar for a notification message.
-  String get getTicker => ticker;
+  String? get getTicker => ticker;
 
   /// Obtains an array of vibration patterns.
-  List<dynamic> get getVibrateConfig => vibrateConfig;
+  List<dynamic>? get getVibrateConfig => vibrateConfig;
 
   /// Obtains the visibility of a notification message.
-  int get getVisibility => visibility;
+  int? get getVisibility => visibility;
 
   /// Obtains the intent in a notification message.
-  String get getIntentUri => intentUri;
+  String? get getIntentUri => intentUri;
 
-  factory _RemoteMessageNotification.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
+  factory _RemoteMessageNotification.fromMap(Map<dynamic, dynamic>? map) {
+    if (map == null) return _RemoteMessageNotification();
     return _RemoteMessageNotification(
       title: map[TITLE] == null ? null : map[TITLE],
       titleLocalizationKey: map[TITLE_LOCALIZATION_KEY] == null
@@ -493,9 +493,6 @@ class _RemoteMessageNotification {
       vibrateConfig: map[VIBRATE_CONFIG] == null ? null : map[VIBRATE_CONFIG],
     );
   }
-
-  factory _RemoteMessageNotification.fromJson(String source) =>
-      _RemoteMessageNotification.fromMap(json.decode(source));
 
   Map<String, dynamic> toMap() {
     return {

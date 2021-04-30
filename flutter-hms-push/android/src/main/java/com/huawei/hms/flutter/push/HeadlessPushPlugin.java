@@ -27,10 +27,6 @@ import com.huawei.hms.flutter.push.constants.Core;
 import com.huawei.hms.flutter.push.utils.RemoteMessageUtils;
 import com.huawei.hms.push.RemoteMessage;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.PluginRegistry;
@@ -39,25 +35,30 @@ import io.flutter.view.FlutterMain;
 import io.flutter.view.FlutterNativeView;
 import io.flutter.view.FlutterRunArguments;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class HeadlessPushPlugin implements MethodChannel.MethodCallHandler {
     private static final String TAG = HeadlessPushPlugin.class.getSimpleName();
 
-    public final static String KEY_HANDLER = "push_background_message_handler";
-    public final static String KEY_CALLBACK = "push_background_message_callback";
+    public static final String KEY_HANDLER = "push_background_message_handler";
 
-    private static MethodChannel methodBackgroundChannel;
+    public static final String KEY_CALLBACK = "push_background_message_callback";
+
     private static PluginRegistry.PluginRegistrantCallback pluginRegistrantCallback;
+
+    private MethodChannel methodBackgroundChannel;
 
     private Context context;
 
-    private static FlutterNativeView flutterNativeView;
+    private FlutterNativeView flutterNativeView;
 
     private static final AtomicBoolean SYNCHRONIZER = new AtomicBoolean(false);
 
     public HeadlessPushPlugin(Context context) {
         this.context = context;
-        if (flutterNativeView == null)
-            initFlutterNativeView();
+        initFlutterNativeView();
 
         // Queue events while background isolate is starting
         waitFlutterNativeView();
@@ -86,7 +87,6 @@ public class HeadlessPushPlugin implements MethodChannel.MethodCallHandler {
         pluginRegistrantCallback = callback;
     }
 
-
     public void handleBackgroundMessage(Context context, RemoteMessage remoteMessage) {
 
         SharedPreferences prefs = context.getSharedPreferences(Core.PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -106,15 +106,9 @@ public class HeadlessPushPlugin implements MethodChannel.MethodCallHandler {
         FlutterMain.ensureInitializationComplete(context, null);
 
         SharedPreferences prefs = context.getSharedPreferences(Core.PREFERENCE_NAME, Context.MODE_PRIVATE);
-        Long mCallbackHandle = prefs.getLong(KEY_HANDLER, -1);
+        long mCallbackHandle = prefs.getLong(KEY_HANDLER, -1);
 
-        FlutterCallbackInformation callbackInfo = FlutterCallbackInformation
-                .lookupCallbackInformation(mCallbackHandle);
-
-        if (callbackInfo == null) {
-            Log.e(TAG, "ERROR : failed to find callback");
-            return;
-        }
+        FlutterCallbackInformation callbackInfo = FlutterCallbackInformation.lookupCallbackInformation(mCallbackHandle);
 
         flutterNativeView = new FlutterNativeView(context.getApplicationContext(), true);
 
@@ -122,8 +116,9 @@ public class HeadlessPushPlugin implements MethodChannel.MethodCallHandler {
         methodBackgroundChannel = new MethodChannel(flutterNativeView, Channel.BACKGROUND_MESSAGE_CHANNEL.id());
         methodBackgroundChannel.setMethodCallHandler(this);
 
-        if (pluginRegistrantCallback == null)
+        if (pluginRegistrantCallback == null) {
             return;
+        }
 
         pluginRegistrantCallback.registerWith(flutterNativeView.getPluginRegistry());
 

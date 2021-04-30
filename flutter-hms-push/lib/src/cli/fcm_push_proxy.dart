@@ -14,25 +14,12 @@
     limitations under the License.
 */
 
-package com.huawei.hms.flutter.push.utils;
+import 'package:huawei_push/src/constants/channel.dart';
 
-import android.os.Bundle;
-
-import com.huawei.hms.flutter.push.config.NotificationAttributes;
-
-import io.flutter.plugin.common.MethodCall;
-
-public class LocalNotificationUtils {
-
-    private LocalNotificationUtils() {
-        throw new IllegalStateException("Utility class");
-    }
-
-    public static Bundle callArgsToBundle(MethodCall call) {
-        try {
-            return new NotificationAttributes(call).toBundle();
-        } catch (Exception e) {
-            return null;
-        }
-    }
+/// Provides the package for you to aggregate the push capability of FCM.
+class FcmPushProxy {
+  /// Initializes the push capability of FCM.
+  static Future<bool> init() async {
+    return await methodChannel.invokeMethod("initFcmPushProxy");
+  }
 }

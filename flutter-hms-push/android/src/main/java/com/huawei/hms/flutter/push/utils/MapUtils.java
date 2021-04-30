@@ -16,6 +16,8 @@
 
 package com.huawei.hms.flutter.push.utils;
 
+import android.os.Bundle;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,6 +25,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 public class MapUtils {
 
@@ -30,12 +33,13 @@ public class MapUtils {
         throw new IllegalStateException("Utility class");
     }
 
-
     public static Map<String, Object> toMap(JSONObject jsonObject) {
 
         Map<String, Object> map = new HashMap<>();
 
-        if (jsonObject == null) return map;
+        if (jsonObject == null) {
+            return map;
+        }
 
         Iterator<String> iterator = jsonObject.keys();
         try {
@@ -60,4 +64,19 @@ public class MapUtils {
 
     }
 
+    public static Map<String, Object> bundleToMap(Bundle bundle) {
+        Map<String, Object> map = new HashMap<>();
+        if (bundle != null) {
+            Set<String> keys = bundle.keySet();
+            for (String key : keys) {
+                Object value = bundle.get(key);
+                if (value instanceof Bundle) {
+                    map.put(key, bundleToMap((Bundle) value));
+                } else {
+                    map.put(key, value);
+                }
+            }
+        }
+        return map;
+    }
 }

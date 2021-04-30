@@ -16,7 +16,6 @@
 
 package com.huawei.hms.flutter.push.receiver.local;
 
-import android.app.Application;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -33,15 +32,20 @@ public class HmsLocalNotificationActionsReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, Intent intent) {
         String intentActionPrefix = context.getPackageName() + ".ACTION_";
-        if (intent.getAction() == null || !intent.getAction().startsWith(intentActionPrefix))
+        if (intent.getAction() == null || !intent.getAction().startsWith(intentActionPrefix)) {
             return;
+        }
 
         final Bundle bundle = intent.getBundleExtra(NotificationConstants.NOTIFICATION);
-        if (bundle == null) return;
+        if (bundle == null) {
+            return;
+        }
 
-        NotificationManager notificationManager =
-                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (notificationManager == null) return;
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(
+            Context.NOTIFICATION_SERVICE);
+        if (notificationManager == null) {
+            return;
+        }
 
         int id = Integer.parseInt(BundleUtils.get(bundle, NotificationConstants.ID));
 
@@ -55,12 +59,12 @@ public class HmsLocalNotificationActionsReceiver extends BroadcastReceiver {
         }
 
         if (BundleUtils.getB(bundle, NotificationConstants.INVOKE_APP, true)) {
-            HmsLocalNotificationController hmsLocalNotificationController =
-                    new HmsLocalNotificationController((Application) context.getApplicationContext());
+            HmsLocalNotificationController hmsLocalNotificationController = new HmsLocalNotificationController(
+                context.getApplicationContext());
             hmsLocalNotificationController.invokeApp(bundle);
         } else {
-            Utils.sendIntent(PushIntent.LOCAL_NOTIFICATION_CLICK_ACTION, PushIntent.LOCAL_NOTIFICATION_CLICK,
-                    BundleUtils.convertJSON(bundle));
+            Utils.sendIntent(context, PushIntent.LOCAL_NOTIFICATION_CLICK_ACTION, PushIntent.LOCAL_NOTIFICATION_CLICK,
+                BundleUtils.convertJSON(bundle));
         }
     }
 }

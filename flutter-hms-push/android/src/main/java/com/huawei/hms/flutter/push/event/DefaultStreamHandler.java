@@ -14,40 +14,40 @@
     limitations under the License.
 */
 
-package com.huawei.hms.flutter.push.event.remote;
+package com.huawei.hms.flutter.push.event;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
 
 import com.huawei.hms.flutter.push.constants.PushIntent;
-import com.huawei.hms.flutter.push.receiver.remote.RemoteMessageSentDeliveredReceiver;
 
 import io.flutter.plugin.common.EventChannel;
-import io.flutter.plugin.common.EventChannel.StreamHandler;
 
-public class RemoteMessageSentDeliveredStreamHandler implements StreamHandler {
+public class DefaultStreamHandler implements EventChannel.StreamHandler {
+
     private Context context;
-    private BroadcastReceiver remoteMsgSentDeliveredEventBroadcastListener;
 
-    public RemoteMessageSentDeliveredStreamHandler(Context ctx) {
-        this.context = ctx;
+    private BroadcastReceiver broadcastReceiver;
+
+    private CreateBroadcastReceiverCallback cb;
+
+    private PushIntent intentAction;
+
+    public DefaultStreamHandler(Context context, CreateBroadcastReceiverCallback cb, PushIntent intentAction) {
+        this.context = context;
+        this.cb = cb;
+        this.intentAction = intentAction;
     }
 
     @Override
     public void onListen(Object arguments, EventChannel.EventSink events) {
-        remoteMsgSentDeliveredEventBroadcastListener = createRemoteMessageEventBroadcastReceiver(events);
-        context.registerReceiver(remoteMsgSentDeliveredEventBroadcastListener,
-                new IntentFilter(PushIntent.REMOTE_MESSAGE_SENT_DELIVERED_ACTION.id()));
+        broadcastReceiver = cb.createBroadcastReceiver(events);
+        context.registerReceiver(broadcastReceiver, new IntentFilter(intentAction.id()));
     }
 
     @Override
     public void onCancel(Object arguments) {
-        context.unregisterReceiver(remoteMsgSentDeliveredEventBroadcastListener);
+        context.unregisterReceiver(broadcastReceiver);
     }
-
-    private BroadcastReceiver createRemoteMessageEventBroadcastReceiver(final EventChannel.EventSink events) {
-        return new RemoteMessageSentDeliveredReceiver(events);
-    }
-
 }

@@ -18,6 +18,7 @@ package com.huawei.hms.flutter.push;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
@@ -25,22 +26,30 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.huawei.hms.flutter.push.constants.Channel;
+import com.huawei.hms.flutter.push.constants.Code;
 import com.huawei.hms.flutter.push.constants.Core;
 import com.huawei.hms.flutter.push.constants.Method;
 import com.huawei.hms.flutter.push.constants.Param;
-import com.huawei.hms.flutter.push.event.DataMessageStreamHandler;
-import com.huawei.hms.flutter.push.event.TokenStreamHandler;
-import com.huawei.hms.flutter.push.event.local.LocalNotificationClickStreamHandler;
-import com.huawei.hms.flutter.push.event.local.LocalNotificationOpenStreamHandler;
-import com.huawei.hms.flutter.push.event.remote.RemoteMessageCustomIntentStreamHandler;
-import com.huawei.hms.flutter.push.event.remote.RemoteMessageSentDeliveredStreamHandler;
+import com.huawei.hms.flutter.push.constants.PushIntent;
+import com.huawei.hms.flutter.push.event.DefaultStreamHandler;
 import com.huawei.hms.flutter.push.hms.FlutterHmsInstanceId;
 import com.huawei.hms.flutter.push.hms.FlutterHmsMessaging;
 import com.huawei.hms.flutter.push.hms.FlutterHmsOpenDevice;
+import com.huawei.hms.flutter.push.hms.FlutterHmsProfile;
+import com.huawei.hms.flutter.push.hms.PluginContext;
 import com.huawei.hms.flutter.push.localnotification.HmsLocalNotification;
 import com.huawei.hms.flutter.push.logger.HMSLogger;
+import com.huawei.hms.flutter.push.receiver.MultiSenderTokenReceiver;
+import com.huawei.hms.flutter.push.receiver.RemoteDataMessageReceiver;
+import com.huawei.hms.flutter.push.receiver.TokenReceiver;
 import com.huawei.hms.flutter.push.receiver.common.NotificationIntentListener;
+import com.huawei.hms.flutter.push.receiver.common.NotificationOpenEventReceiver;
+import com.huawei.hms.flutter.push.receiver.local.LocalNotificationClickEventReceiver;
+import com.huawei.hms.flutter.push.receiver.remote.RemoteMessageNotificationIntentReceiver;
+import com.huawei.hms.flutter.push.receiver.remote.RemoteMessageSentDeliveredReceiver;
 import com.huawei.hms.flutter.push.utils.Utils;
+import com.huawei.hms.push.plugin.base.proxy.ProxySettings;
+import com.huawei.hms.push.plugin.fcm.FcmPushProxy;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -52,8 +61,12 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * class PushPlugin
@@ -61,56 +74,36 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
  * @since 4.0.4
  */
 public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAware {
-    private static String TAG = "HmsFlutterPush";
+    private static final String TAG = "HmsFlutterPush";
 
     private MethodChannel channel;
-    private static volatile Context context;
+
+    private Context context;
+
     private HmsLocalNotification hmsLocalNotification;
+
     private NotificationIntentListener notificationIntentListener;
+
+    private FlutterHmsInstanceId hmsInstanceId;
+
+    private FlutterHmsMessaging hmsMessaging;
+
+    private FlutterHmsProfile hmsProfile;
 
     private Activity activity;
 
-
-    public static Context getContext() {
-        return PushPlugin.context;
-    }
-
-    public static void setContext(Context context) {
-        PushPlugin.context = context;
-    }
-
-    private void setStreamHandlers(BinaryMessenger messenger) {
-        EventChannel tokenEventChannel = new EventChannel(messenger, Channel.TOKEN_CHANNEL.id());
-        tokenEventChannel.setStreamHandler(new TokenStreamHandler(context));
-
-        EventChannel remoteMsgReceiveEventChannel =
-                new EventChannel(messenger, Channel.REMOTE_MESSAGE_RECEIVE_CHANNEL.id());
-        remoteMsgReceiveEventChannel.setStreamHandler(new DataMessageStreamHandler(context));
-
-        EventChannel remoteMsgSentDeliveredEventChannel =
-                new EventChannel(messenger, Channel.REMOTE_MESSAGE_SEND_STATUS_CHANNEL.id());
-        remoteMsgSentDeliveredEventChannel.setStreamHandler(new RemoteMessageSentDeliveredStreamHandler(context));
-
-        // For sending remote message notification's custom intent Uri events
-        EventChannel remoteMsgCustomIntentEventChannel =
-                new EventChannel(messenger, Channel.REMOTE_MESSAGE_NOTIFICATION_INTENT_CHANNEL.id());
-        remoteMsgCustomIntentEventChannel.setStreamHandler(new RemoteMessageCustomIntentStreamHandler(context));
-
-        EventChannel notificationOpenEventChannel
-                = new EventChannel(messenger, Channel.NOTIFICATION_OPEN_CHANNEL.id());
-        notificationOpenEventChannel.setStreamHandler(new LocalNotificationOpenStreamHandler(context));
-
-        EventChannel localNotificationClickEventChannel
-                = new EventChannel(messenger, Channel.LOCAL_NOTIFICATION_CLICK_CHANNEL.id());
-        localNotificationClickEventChannel.setStreamHandler(new LocalNotificationClickStreamHandler(context));
-    }
+    private List<EventChannel> eventChannels = new ArrayList<>();
 
     public void onAttachedToEngine(BinaryMessenger messenger, Context context) {
         channel = new MethodChannel(messenger, Channel.METHOD_CHANNEL.id());
         channel.setMethodCallHandler(this);
-        PushPlugin.setContext(context);
-        notificationIntentListener = new NotificationIntentListener();
+        this.context = context;
+        hmsProfile = new FlutterHmsProfile(context);
+        hmsInstanceId = new FlutterHmsInstanceId(context);
+        notificationIntentListener = new NotificationIntentListener(context);
         hmsLocalNotification = new HmsLocalNotification(context);
+        hmsMessaging = new FlutterHmsMessaging(context);
+        PluginContext.initialize(context);
         setStreamHandlers(messenger);
     }
 
@@ -119,25 +112,38 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
         onAttachedToEngine(flutterPluginBinding.getBinaryMessenger(), flutterPluginBinding.getApplicationContext());
     }
 
-    public static void registerWith(Registrar registrar) {
+    public static void registerWith(PluginRegistry.Registrar registrar) {
         PushPlugin instance = new PushPlugin();
         instance.onAttachedToEngine(registrar.messenger(), registrar.context());
         if (registrar.activity() != null) {
             registrar.addNewIntentListener(instance.notificationIntentListener);
-            instance.notificationIntentListener.handleIntent(registrar.activity().getIntent());
+            Log.e(TAG, "registerWith: " + registrar.activity().getIntent(), null);
+            Intent launcherIntent = registrar.activity().getIntent();
+            if (Utils.checkNotificationFlags(launcherIntent)) {
+                instance.notificationIntentListener.handleIntent(launcherIntent);
+            }
         }
     }
 
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-        if (channel != null) channel.setMethodCallHandler(null);
+        if (channel != null) {
+            channel.setMethodCallHandler(null);
+            for (EventChannel e : eventChannels) {
+                e.setStreamHandler(null);
+            }
+            eventChannels.clear();
+        }
     }
 
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
         this.activity = binding.getActivity();
         binding.addOnNewIntentListener(this.notificationIntentListener);
-        this.notificationIntentListener.handleIntent(activity.getIntent());
+        Intent startupIntent = activity.getIntent();
+        if (Utils.checkNotificationFlags(startupIntent)) {
+            this.notificationIntentListener.handleIntent(startupIntent);
+        }
     }
 
     @Override
@@ -161,22 +167,23 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
         switch (Method.valueOf(call.method)) {
             case getId:
-                FlutterHmsInstanceId.getId(result);
+                hmsInstanceId.getId(result);
                 break;
             case getAAID:
-                FlutterHmsInstanceId.getAAID(result);
+                hmsInstanceId.getAAID(result);
                 break;
             case getAppId:
-                FlutterHmsInstanceId.getAppId(result);
+                hmsInstanceId.getAppId(result);
                 break;
             case getCreationTime:
-                FlutterHmsInstanceId.getCreationTime(result);
+                hmsInstanceId.getCreationTime(result);
                 break;
             case deleteAAID:
-                FlutterHmsInstanceId.deleteAAID(result);
+                hmsInstanceId.deleteAAID(result);
                 break;
             case registerBackgroundMessageHandler:
-                registerBackgroundMessageHandler((long) call.argument("rawHandle"), (long) call.argument("rawCallback"), result);
+                registerBackgroundMessageHandler(Objects.requireNonNull(call.argument("rawHandle")),
+                    Objects.requireNonNull(call.argument("rawCallback")), result);
                 break;
             case removeBackgroundMessageHandler:
                 removeBackgroundMessageHandler(result);
@@ -189,10 +196,10 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
     private void onMethodCallToken(@NonNull MethodCall call, @NonNull Result result) {
         switch (Method.valueOf(call.method)) {
             case getToken:
-                FlutterHmsInstanceId.getToken(Utils.getStringArgument(call, Param.SCOPE.code()));
+                hmsInstanceId.getToken(Utils.getStringArgument(call, Param.SCOPE.code()));
                 break;
             case deleteToken:
-                FlutterHmsInstanceId.deleteToken(Utils.getStringArgument(call, Param.SCOPE.code()));
+                hmsInstanceId.deleteToken(Utils.getStringArgument(call, Param.SCOPE.code()), result);
                 break;
             default:
                 onMethodCallOpenDevice(call, result);
@@ -254,6 +261,9 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
             case cancelNotificationsWithIdTag:
                 hmsLocalNotification.cancelNotificationsWithIdTag(call);
                 break;
+            case getInitialIntent:
+                notificationIntentListener.getInitialIntent(result);
+                break;
             default:
                 onMethodCallSubscribe(call, result);
         }
@@ -262,10 +272,10 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
     private void onMethodCallSubscribe(@NonNull MethodCall call, @NonNull Result result) {
         switch (Method.valueOf(call.method)) {
             case subscribe:
-                FlutterHmsMessaging.subscribe(Utils.getStringArgument(call, Param.TOPIC.code()), result);
+                hmsMessaging.subscribe(Utils.getStringArgument(call, Param.TOPIC.code()), result);
                 break;
             case unsubscribe:
-                FlutterHmsMessaging.unsubscribe(Utils.getStringArgument(call, Param.TOPIC.code()), result);
+                hmsMessaging.unsubscribe(Utils.getStringArgument(call, Param.TOPIC.code()), result);
                 break;
             default:
                 onMethodCallEnable(call, result);
@@ -275,22 +285,22 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
     private void onMethodCallEnable(@NonNull MethodCall call, @NonNull Result result) {
         switch (Method.valueOf(call.method)) {
             case send:
-                FlutterHmsMessaging.sendRemoteMessage(result, call);
+                hmsMessaging.sendRemoteMessage(result, call);
                 break;
             case turnOnPush:
-                FlutterHmsMessaging.turnOnPush(result);
+                hmsMessaging.turnOnPush(result);
                 break;
             case turnOffPush:
-                FlutterHmsMessaging.turnOffPush(result);
+                hmsMessaging.turnOffPush(result);
                 break;
             case setAutoInitEnabled:
-                FlutterHmsMessaging.setAutoInitEnabled(Utils.getBoolArgument(call, Param.ENABLED.code()), result);
+                hmsMessaging.setAutoInitEnabled(Utils.getBoolArgument(call, Param.ENABLED.code()), result);
                 break;
             case isAutoInitEnabled:
-                FlutterHmsMessaging.isAutoInitEnabled(result);
+                hmsMessaging.isAutoInitEnabled(result);
                 break;
             case getAgConnectValues:
-                FlutterHmsInstanceId.getAgConnectValues(result);
+                hmsInstanceId.getAgConnectValues(result);
                 break;
             case showToast:
                 Toast.makeText(context, Utils.getStringArgument(call, Param.MESSAGE.code()), Toast.LENGTH_LONG).show();
@@ -309,19 +319,59 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
                 HMSLogger.getInstance(context).disableLogger();
                 break;
             default:
-                onMethodCallOther(call, result);
+                onMethodCallHmsProfile(call, result);
         }
     }
 
-    private void onMethodCallOther(@NonNull MethodCall call, @NonNull Result result) {
-        if (Method.valueOf(call.method) == Method.getInitialIntent) {
-            notificationIntentListener.getInitialIntent(result);
-        } else result.notImplemented();
+    private void onMethodCallHmsProfile(@NonNull MethodCall call, @NonNull Result result) {
+        switch (Method.valueOf(call.method)) {
+            case isSupportProfile:
+                hmsProfile.isSupportProfile(result);
+                break;
+            case addProfile:
+                hmsProfile.addProfile(call, result);
+                break;
+            case addMultiSenderProfile:
+                hmsProfile.addMultiSenderProfile(call, result);
+                break;
+            case deleteProfile:
+                hmsProfile.deleteProfile(call, result);
+                break;
+            case deleteMultiSenderProfile:
+                hmsProfile.deleteMultiSenderProfile(call, result);
+                break;
+            case getMultiSenderToken:
+                hmsInstanceId.getMultiSenderToken(Utils.getStringArgument(call, Param.SUBJECT_ID.code()));
+                break;
+            case deleteMultiSenderToken:
+                hmsInstanceId.deleteMultiSenderToken(Utils.getStringArgument(call, Param.SUBJECT_ID.code()), result);
+                break;
+            default:
+                onMethodCallProxy(call, result);
+                break;
+        }
     }
 
+    private void onMethodCallProxy(final @NonNull MethodCall call, final @NonNull Result result) {
+        switch (Method.valueOf(call.method)) {
+            case setCountryCode:
+                HMSLogger.getInstance(context).startMethodExecutionTimer(Method.setCountryCode.name());
+                ProxySettings.setCountryCode(context, call.argument("countryCode"));
+                result.success(Code.RESULT_SUCCESS.code());
+                HMSLogger.getInstance(context).sendSingleEvent(Method.setCountryCode.name());
+                break;
+            case initFcmPushProxy:
+                HMSLogger.getInstance(context).startMethodExecutionTimer(Method.initFcmPushProxy.name());
+                result.success(FcmPushProxy.init(context));
+                HMSLogger.getInstance(context).sendSingleEvent(Method.initFcmPushProxy.name());
+                break;
+            default:
+                result.notImplemented();
+                break;
+        }
+    }
 
     private void registerBackgroundMessageHandler(long handlerRaw, long callbackRaw, Result result) {
-
         try {
             SharedPreferences prefs = context.getSharedPreferences(Core.PREFERENCE_NAME, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
@@ -337,12 +387,10 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
     }
 
     private void removeBackgroundMessageHandler(Result result) {
-
         SharedPreferences prefs = context.getSharedPreferences(Core.PREFERENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putLong(HeadlessPushPlugin.KEY_HANDLER, -1);
         editor.putLong(HeadlessPushPlugin.KEY_CALLBACK, -1);
-
         editor.apply();
 
         Log.i(TAG, "BackgroundMessageHandler removed ✔");
@@ -353,4 +401,39 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
         HeadlessPushPlugin.setPluginRegistrant(callback);
     }
 
+    private void setStreamHandlers(BinaryMessenger messenger) {
+        Map<String, EventChannel.StreamHandler> streams = new ConcurrentHashMap<>();
+        streams.put(Channel.TOKEN_CHANNEL.id(),
+            new DefaultStreamHandler(context, TokenReceiver::new, PushIntent.TOKEN_INTENT_ACTION));
+
+        streams.put(Channel.MULTI_SENDER_TOKEN_CHANNEL.id(),
+            new DefaultStreamHandler(context, MultiSenderTokenReceiver::new,
+                PushIntent.MULTI_SENDER_TOKEN_INTENT_ACTION));
+
+        streams.put(Channel.REMOTE_MESSAGE_RECEIVE_CHANNEL.id(),
+            new DefaultStreamHandler(context, RemoteDataMessageReceiver::new,
+                PushIntent.REMOTE_DATA_MESSAGE_INTENT_ACTION));
+
+        streams.put(Channel.REMOTE_MESSAGE_SEND_STATUS_CHANNEL.id(),
+            new DefaultStreamHandler(context, RemoteMessageSentDeliveredReceiver::new,
+                PushIntent.REMOTE_MESSAGE_SENT_DELIVERED_ACTION));
+
+        // For sending remote message notification's custom intent Uri events
+        streams.put(Channel.REMOTE_MESSAGE_NOTIFICATION_INTENT_CHANNEL.id(),
+            new DefaultStreamHandler(context, RemoteMessageNotificationIntentReceiver::new,
+                PushIntent.REMOTE_MESSAGE_NOTIFICATION_INTENT_ACTION));
+
+        streams.put(Channel.NOTIFICATION_OPEN_CHANNEL.id(),
+            new DefaultStreamHandler(context, NotificationOpenEventReceiver::new, PushIntent.NOTIFICATION_OPEN_ACTION));
+
+        streams.put(Channel.LOCAL_NOTIFICATION_CLICK_CHANNEL.id(),
+            new DefaultStreamHandler(context, LocalNotificationClickEventReceiver::new,
+                PushIntent.LOCAL_NOTIFICATION_CLICK_ACTION));
+
+        for (Map.Entry<String, EventChannel.StreamHandler> entry : streams.entrySet()) {
+            EventChannel eventChannel = new EventChannel(messenger, entry.getKey());
+            eventChannel.setStreamHandler(entry.getValue());
+            eventChannels.add(eventChannel);
+        }
+    }
 }

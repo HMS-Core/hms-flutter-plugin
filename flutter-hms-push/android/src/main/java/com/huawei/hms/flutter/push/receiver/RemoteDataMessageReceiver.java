@@ -14,25 +14,27 @@
     limitations under the License.
 */
 
-package com.huawei.hms.flutter.push.utils;
+package com.huawei.hms.flutter.push.receiver;
 
-import android.os.Bundle;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 
-import com.huawei.hms.flutter.push.config.NotificationAttributes;
+import com.huawei.hms.flutter.push.constants.PushIntent;
 
-import io.flutter.plugin.common.MethodCall;
+import io.flutter.plugin.common.EventChannel;
 
-public class LocalNotificationUtils {
+public class RemoteDataMessageReceiver extends BroadcastReceiver {
+    final EventChannel.EventSink events;
 
-    private LocalNotificationUtils() {
-        throw new IllegalStateException("Utility class");
+    public RemoteDataMessageReceiver(EventChannel.EventSink events) {
+        this.events = events;
     }
 
-    public static Bundle callArgsToBundle(MethodCall call) {
-        try {
-            return new NotificationAttributes(call).toBundle();
-        } catch (Exception e) {
-            return null;
-        }
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        String status = intent.getStringExtra(PushIntent.DATA_MESSAGE.id());
+        this.events.success(status);
     }
 }
+

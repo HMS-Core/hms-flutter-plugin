@@ -14,25 +14,10 @@
     limitations under the License.
 */
 
-package com.huawei.hms.flutter.push.utils;
-
-import android.os.Bundle;
-
-import com.huawei.hms.flutter.push.config.NotificationAttributes;
-
-import io.flutter.plugin.common.MethodCall;
-
-public class LocalNotificationUtils {
-
-    private LocalNotificationUtils() {
-        throw new IllegalStateException("Utility class");
-    }
-
-    public static Bundle callArgsToBundle(MethodCall call) {
-        try {
-            return new NotificationAttributes(call).toBundle();
-        } catch (Exception e) {
-            return null;
-        }
-    }
+abstract class RepeatType {
+  static const String HOUR = "hour";
+  static const String MINUTE = "minute";
+  static const String DAY = "day";
+  static const String WEEK = "week";
+  static const String CUSTOM_TIME = "custom_time";
 }

@@ -31,13 +31,16 @@ import com.huawei.hms.flutter.push.localnotification.HmsLocalNotificationControl
 import java.util.Set;
 
 public class HmsLocalNotificationBootEventReceiver extends BroadcastReceiver {
-    private final String TAG = HmsLocalNotificationBootEventReceiver.class.getSimpleName();
+    private static final String TAG = HmsLocalNotificationBootEventReceiver.class.getSimpleName();
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent.getAction() == null) return;
-        if (!intent.getAction().equals(Core.ScheduledPublisher.BOOT_EVENT))
+        if (intent.getAction() == null) {
             return;
+        }
+        if (!intent.getAction().equals(Core.ScheduledPublisher.BOOT_EVENT)) {
+            return;
+        }
 
         Log.i(TAG, "Loading scheduled notifications....");
 
@@ -45,22 +48,21 @@ public class HmsLocalNotificationBootEventReceiver extends BroadcastReceiver {
         Set<String> ids = sharedPreferences.getAll().keySet();
 
         Application applicationContext = (Application) context.getApplicationContext();
-        HmsLocalNotificationController hmsLocalNotificationController =
-                new HmsLocalNotificationController(applicationContext);
+        HmsLocalNotificationController hmsLocalNotificationController = new HmsLocalNotificationController(
+            applicationContext);
 
         for (String id : ids) {
             try {
                 String notificationAttributesJson = sharedPreferences.getString(id, null);
                 if (notificationAttributesJson != null) {
-                    NotificationAttributes notificationAttributes =
-                            NotificationAttributes.fromJson(notificationAttributesJson);
+                    NotificationAttributes notificationAttributes = NotificationAttributes.fromJson(
+                        notificationAttributesJson);
 
                     if (notificationAttributes.getFireDate() < System.currentTimeMillis()) {
-                        hmsLocalNotificationController
-                                .localNotificationNow(notificationAttributes.toBundle(), null);
+                        hmsLocalNotificationController.localNotificationNow(notificationAttributes.toBundle(), null);
                     } else {
-                        hmsLocalNotificationController
-                                .localNotificationScheduleSetAlarm(notificationAttributes.toBundle());
+                        hmsLocalNotificationController.localNotificationScheduleSetAlarm(
+                            notificationAttributes.toBundle());
                     }
                 }
             } catch (Exception e) {

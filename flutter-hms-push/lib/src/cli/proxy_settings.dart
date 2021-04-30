@@ -14,25 +14,12 @@
     limitations under the License.
 */
 
-package com.huawei.hms.flutter.push.utils;
+import 'package:huawei_push/src/constants/channel.dart';
 
-import android.os.Bundle;
-
-import com.huawei.hms.flutter.push.config.NotificationAttributes;
-
-import io.flutter.plugin.common.MethodCall;
-
-public class LocalNotificationUtils {
-
-    private LocalNotificationUtils() {
-        throw new IllegalStateException("Utility class");
-    }
-
-    public static Bundle callArgsToBundle(MethodCall call) {
-        try {
-            return new NotificationAttributes(call).toBundle();
-        } catch (Exception e) {
-            return null;
-        }
-    }
+/// A class provided by the aggregation capability package for setting basic attributes.
+class ProxySettings {
+  /// Sets a country/region code. This method is available only for Huawei-developed apps.
+  static Future<void> setCountryCode(String countryCode) async {
+    methodChannel.invokeMethod("setCountryCode", {"countryCode": countryCode});
+  }
 }

@@ -19,6 +19,7 @@ package com.huawei.hms.flutter.push.constants;
 public enum Channel {
 
     TOKEN_CHANNEL("com.huawei.flutter.push/token"),
+    MULTI_SENDER_TOKEN_CHANNEL("com.huawei.flutter.push/multi_sender_token"),
     REMOTE_MESSAGE_RECEIVE_CHANNEL("com.huawei.flutter.push/remote_message_receive"),
     REMOTE_MESSAGE_SEND_STATUS_CHANNEL("com.huawei.flutter.push/remote_message_send_status"),
     REMOTE_MESSAGE_NOTIFICATION_INTENT_CHANNEL("com.huawei.flutter.push/remote_message_notification_intent"),
