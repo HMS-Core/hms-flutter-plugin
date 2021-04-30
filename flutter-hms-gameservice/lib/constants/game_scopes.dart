@@ -17,7 +17,10 @@
 class GameScopes {
   GameScopes._();
 
+  /// Drive App Data scope.
   static const String DRIVE_APP_DATA =
       "https://www.huawei.com/auth/drive.appdata";
+
+  /// Game scope.
   static const String GAME = "https://www.huawei.com/auth/games";
 }

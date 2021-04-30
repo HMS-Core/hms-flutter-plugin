@@ -30,6 +30,8 @@ public class Constants {
         }
 
         public static final String GAME_SERVICE_METHOD_CHANNEL = "com.huawei.hms.flutter.gameservice/method";
+
+        public static final String JOS_APPS_METHOD_CHANNEL = "com.huawei.hms.flutter.josappsclient/method";
     }
 
     public enum ClientNames implements MethodEnum {
@@ -42,7 +44,8 @@ public class Constants {
         GAME_SUMMARY("GameSummaryClient"),
         PLAYERS("PlayersClient"),
         RANKINGS("RankingsClient"),
-        HMS_LOGGER("HMSLogger");
+        HMS_LOGGER("HMSLogger"),
+        JOS_APPS("JosAppsClient");
 
         private final String value;
 
@@ -314,6 +317,32 @@ public class Constants {
         }
 
         public static HMSLoggerMethods getEnum(final String value) {
+            return enumGetter.getEnum(value);
+        }
+    }
+
+    public enum JosAppsClientMethods implements MethodEnum {
+        INIT("init"),
+        GET_APP_ID("getAppId"),
+        CHECK_APP_UPDATE("checkAppUpdate"),
+        SHOW_UPDATE_DIALOG("showUpdateDialog"),
+        RELEASE_CALLBACK("releaseCallback"),
+        GET_MISS_PRODUCT_ORDER("getMissProductOrder");
+
+        private String value;
+
+        private static EnumGetter<JosAppsClientMethods> enumGetter = new EnumGetter<>(JosAppsClientMethods.values());
+
+        JosAppsClientMethods(final String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String getValue() {
+            return value;
+        }
+
+        public static JosAppsClientMethods getEnum(final String value) {
             return enumGetter.getEnum(value);
         }
     }

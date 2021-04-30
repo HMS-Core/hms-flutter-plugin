@@ -18,5 +18,10 @@ library contants;
 
 import 'package:flutter/services.dart';
 
+/// Method channel for Game Service APIs.
 const MethodChannel channel =
     const MethodChannel('com.huawei.hms.flutter.gameservice/method');
+
+/// Method channel for JOS APIs.
+const MethodChannel josAppChannel =
+    const MethodChannel('com.huawei.hms.flutter.josappsclient/method');

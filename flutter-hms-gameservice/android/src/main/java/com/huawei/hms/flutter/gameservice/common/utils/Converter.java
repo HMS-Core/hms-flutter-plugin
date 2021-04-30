@@ -16,6 +16,7 @@
 
 package com.huawei.hms.flutter.gameservice.common.utils;
 
+import android.content.Intent;
 import android.util.Log;
 
 import com.huawei.hms.jos.games.RankingsClient;
@@ -32,8 +33,12 @@ import com.huawei.hms.jos.games.ranking.Ranking;
 import com.huawei.hms.jos.games.ranking.RankingScore;
 import com.huawei.hms.jos.games.ranking.RankingVariant;
 import com.huawei.hms.jos.games.ranking.ScoreSubmissionInfo;
+import com.huawei.hms.jos.product.ProductOrderInfo;
+import com.huawei.updatesdk.service.appmgr.bean.ApkUpgradeInfo;
+import com.huawei.updatesdk.service.otaupdate.UpdateKey;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +63,8 @@ public class Converter {
                     list.add(eventToMap((Event) object.get(i)));
                 } else if (innerObj instanceof ArchiveSummary) {
                     list.add(archiveSummaryToMap((ArchiveSummary) innerObj));
+                } else if (innerObj instanceof ProductOrderInfo) {
+                    list.add(productOrderInfoToMap((ProductOrderInfo) innerObj));
                 }
             }
         }
@@ -354,5 +361,93 @@ public class Converter {
         map.put("totalPurchasesAmountRange", gamePlayerStatistics.getTotalPurchasesAmountRange());
         return map;
     }
+
+    public static Map<String, Object> productOrderInfoToMap(ProductOrderInfo productOrderInfo) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("tradeId", productOrderInfo.getTradeId());
+        map.put("productNo", productOrderInfo.getProductNo());
+        map.put("orderId", productOrderInfo.getOrderId());
+        map.put("sign", productOrderInfo.getSign());
+        return map;
+    }
+
+    public static ApkUpgradeInfo apkUpgradeInfoFromMap(Map<String, Object> args) {
+        ApkUpgradeInfo apkUpgradeInfo = new ApkUpgradeInfo();
+
+        apkUpgradeInfo.setName_((String) args.get("name"));
+        apkUpgradeInfo.setId_((String) args.get("id"));
+        apkUpgradeInfo.setReleaseDate_((String) args.get("releaseDate"));
+        if (args.get("versionCode") != null) {
+            apkUpgradeInfo.setVersionCode_((int) args.get("versionCode"));
+        }
+        apkUpgradeInfo.setPackage_((String) args.get("package"));
+        apkUpgradeInfo.setIcon_((String) args.get("icon"));
+        apkUpgradeInfo.setDownurl_((String) args.get("downUrl"));
+        if (args.get("size") != null) {
+            apkUpgradeInfo.setSize_(((Number) args.get("size")).longValue());
+        }
+        if (args.get("diffSize") != null) {
+            apkUpgradeInfo.setDiffSize_((int) args.get("diffSize"));
+        }
+        apkUpgradeInfo.setVersion_((String) args.get("version"));
+        if (args.get("isSignatureDifferent") != null) {
+            apkUpgradeInfo.setSameS_((int) args.get("isSignatureDifferent"));
+        }
+        apkUpgradeInfo.setNewFeatures_((String) args.get("newFeatures"));
+        apkUpgradeInfo.setReleaseDateDesc_((String) args.get("releaseDateDesc"));
+        apkUpgradeInfo.setDetailId_((String) args.get("detailId"));
+        if (args.get("isCompulsoryUpdate") != null) {
+            apkUpgradeInfo.setIsCompulsoryUpdate_((int) args.get("isCompulsoryUpdate"));
+        }
+        if (args.get("devType") != null) {
+            apkUpgradeInfo.setDevType_((int) args.get("devType"));
+        }
+        apkUpgradeInfo.setOldVersionName_((String) args.get("oldVersionName"));
+        if (args.get("oldVersionCode") != null) {
+            apkUpgradeInfo.setOldVersionCode_((int) args.get("oldVersionCode"));
+        }
+        apkUpgradeInfo.setNotRcmReason_((String) args.get("notRcmReason"));
+        apkUpgradeInfo.setSha256_((String) args.get("sha256"));
+        return apkUpgradeInfo;
+
+    }
+
+    public static Map<String, Object> apkUpgradeInfoToMap(Serializable apkUpgradeInfo) {
+        ApkUpgradeInfo info = (ApkUpgradeInfo) apkUpgradeInfo;
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", info.getName_());
+        map.put("id", info.getId_());
+        map.put("releaseDate", info.getReleaseDate_());
+        map.put("versionCode", info.getVersionCode_());
+        map.put("package", info.getPackage_());
+        map.put("icon", info.getIcon_());
+        map.put("downUrl", info.getDownurl_());
+        map.put("diffSize", info.getDiffSize_());
+        map.put("version", info.getVersion_());
+        map.put("isSignatureDifferent", info.getSameS_());
+        map.put("newFeatures", info.getNewFeatures_());
+        map.put("releaseDateDesc", info.getReleaseDateDesc_());
+        map.put("detailId", info.getDetailId_());
+        map.put("isCompulsoryUpdate", info.getIsCompulsoryUpdate_());
+        map.put("devType", info.getDevType_());
+        map.put("oldVersionName", info.getOldVersionName_());
+        map.put("oldVersionCode", info.getOldVersionCode_());
+        map.put("notRcmReason", info.getNotRcmReason_());
+        map.put("sha256", info.getSha256_());
+        return map;
+    }
+
+    public static Map<String, Object> updateInfoToMap(Intent intent) {
+        Map<String, Object> map = new HashMap<>();
+        Serializable info = intent.getSerializableExtra(UpdateKey.INFO);
+        map.put(UpdateKey.STATUS, intent.getIntExtra(UpdateKey.STATUS, -1));
+        map.put(UpdateKey.FAIL_CODE, intent.getIntExtra(UpdateKey.FAIL_CODE, -1));
+        map.put(UpdateKey.FAIL_REASON, intent.getStringExtra(UpdateKey.FAIL_REASON));
+        map.put(UpdateKey.MUST_UPDATE, intent.getBooleanExtra(UpdateKey.MUST_UPDATE, false));
+        map.put(UpdateKey.BUTTON_STATUS, intent.getIntExtra(UpdateKey.BUTTON_STATUS, -1));
+        map.put(UpdateKey.INFO, info instanceof ApkUpgradeInfo ? apkUpgradeInfoToMap(info) : null);
+        return map;
+    }
+
 }
 

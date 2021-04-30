@@ -30,6 +30,7 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 apply plugin: 'com.huawei.agconnect'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"

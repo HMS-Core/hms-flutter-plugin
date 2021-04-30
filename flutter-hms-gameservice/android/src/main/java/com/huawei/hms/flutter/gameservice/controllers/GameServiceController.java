@@ -89,6 +89,9 @@ public class GameServiceController implements MethodChannel.MethodCallHandler {
                 break;
             case HMS_LOGGER:
                 onMethodCallHmsLogger(methodNamePair.second, result);
+                break;
+            default:
+                result.notImplemented();
         }
     }
 

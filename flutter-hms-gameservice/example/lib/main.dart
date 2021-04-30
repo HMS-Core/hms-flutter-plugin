@@ -15,9 +15,9 @@
 */
 
 import 'package:flutter/material.dart';
-import 'package:huawei_gameservice_example/custom_widgets/custom_appbar.dart';
-import 'package:huawei_gameservice_example/custom_widgets/custom_body_layout.dart';
-import 'package:huawei_gameservice_example/custom_widgets/match_game/hms_card_info.dart';
+import 'custom_widgets/custom_appbar.dart';
+import 'custom_widgets/custom_body_layout.dart';
+import 'custom_widgets/match_game/hms_card_info.dart';
 
 void main() {
   runApp(MaterialApp(home: MyApp(HMSCardInfo.getShuffledCards)));

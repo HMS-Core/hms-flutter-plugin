@@ -18,11 +18,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:huawei_gameservice/huawei_gameservice.dart';
-import 'package:huawei_gameservice_example/custom_widgets/intent_container.dart';
-import 'package:huawei_gameservice_example/custom_widgets/match_game/hms_card_info.dart';
-import 'package:huawei_gameservice_example/custom_widgets/match_game/hms_cards.dart';
-import 'package:huawei_gameservice_example/custom_widgets/match_game/match_game.dart';
-import 'package:huawei_gameservice_example/custom_widgets/utils.dart';
+import 'intent_container.dart';
+import 'match_game/hms_card_info.dart';
+import 'match_game/hms_cards.dart';
+import 'match_game/match_game.dart';
+import 'utils.dart';
 
 class CustomBodyLayout extends StatefulWidget {
   final List<HMSCardInfo> hmsCards;
@@ -35,34 +35,43 @@ class CustomBodyLayout extends StatefulWidget {
 
 class _CustomBodyLayoutState extends State<CustomBodyLayout> {
   List<HMSCardInfo> hmsCards;
+
   @override
   void initState() {
     super.initState();
+    initJosClient();
     hmsCards = widget.hmsCards;
     showWarning();
+  }
+
+  /// Initializes the Game Service.
+  ///
+  /// This method should be called before calling any other API.
+  void initJosClient() async {
+    await JosAppsClient.init();
   }
 
   void showWarning() async {
     WidgetsBinding.instance.addPostFrameCallback((_) => showDialog(
         context: context,
-        child: AlertDialog(
-          title: Text(
-            "Note",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          content: Text(
-            "To try Game Service methods, Please Add Your Huawei ID to the test accounts for your account on AppGallery Connect.",
-            textAlign: TextAlign.center,
-          ),
-          actions: <Widget>[
-            MaterialButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text("OK"),
-              color: Colors.blue,
-            )
-          ],
-        )));
+        builder: (BuildContext context) => AlertDialog(
+              title: Text(
+                "Note",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              content: Text(
+                "To try Game Service methods, Please Add Your Huawei ID to the test accounts for your account on AppGallery Connect.",
+                textAlign: TextAlign.center,
+              ),
+              actions: <Widget>[
+                MaterialButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text("OK"),
+                  color: Colors.blue,
+                )
+              ],
+            )));
   }
 
   /// Showcase of ranking methods.

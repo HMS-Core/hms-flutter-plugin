@@ -25,16 +25,16 @@ HUAWEI Game Service provides the following basic functions for your game apps:
 
 The HUAWEI Game Service Flutter Plugin enables communication between HUAWEI Game Service SDK and the Flutter Platform and it exposes all capabilities provided by the HUAWEI Game Service.
 
-[Learn More](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/introduction-0000001080980430)
+[Learn More](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/introduction-0000001080980430?ha_source=hms1)
 
 ## Installation
 
-Please see [pub.dev](https://pub.dev/packages/huawei_gameservice/install) and [AppGallery Connect Configuration](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/config-agc-0000001080660860).
+Please see [pub.dev](https://pub.dev/packages/huawei_gameservice/install) and [AppGallery Connect Configuration](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/config-agc-0000001080660860?ha_source=hms1).
 
 ## Documentation
 
-- [Quick Start](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/client-dev-overview-0000001080675722)
-- [Reference](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-References-V1/flutter-apis-overview-0000001080990190-V1)
+- [Quick Start](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/client-dev-overview-0000001080675722?ha_source=hms1)
+- [Reference](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-References-V1/flutter-apis-overview-0000001080990190-V1?ha_source=hms1)
 
 ### Additional Topics
 
@@ -44,7 +44,7 @@ Please see [pub.dev](https://pub.dev/packages/huawei_gameservice/install) and [A
 
 #### Testing Game Features
 
-You need to have a tester account to perform the testing of some Game Features. For details about how to create a tester account, please refer to [Managing Tester Accounts](https://developer.huawei.com/consumer/en/doc/distribution/app/agc-tester_account_mgt).
+You need to have a tester account to perform the testing of some Game Features. For details about how to create a tester account, please refer to [Managing Tester Accounts](https://developer.huawei.com/consumer/en/doc/distribution/app/agc-tester_account_mgt?ha_source=hms1).
 
 Before a game is released, you can use a tester account to sign in to the game and test the game achievements, leaderboards, and saved games. Avoid releasing achievements or leaderboards when the corresponding game is still undergoing tests. This is because achievement or leaderboard data changes along with game operations performed by the tester account, and it cannot be reset once they have been released.
 
@@ -63,8 +63,8 @@ If you have questions about how to use HMS samples, try the following options:
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/huawei-mobile-services) is the best place for any programming questions. Be sure to tag your question with 
   **huawei-mobile-services**.
 - [Github](https://github.com/HMS-Core/hms-flutter-plugin) is the official repository for these plugins, You can open an issue or submit your ideas.
-- [Huawei Developer Forum](https://forums.developer.huawei.com/forumPortal/en/home?fid=0101187876626530001) HMS Core Module is great for general questions, or seeking recommendations and opinions.
-- [Huawei Developer Docs](https://developer.huawei.com/consumer/en/doc/overview/HMS-Core-Plugin) is place to official documentation for all HMS Core Kits, you can find detailed documentations in there.
+- [Huawei Developer Forum](https://forums.developer.huawei.com/forumPortal/en/home?fid=0101187876626530001?ha_source=hms1) HMS Core Module is great for general questions, or seeking recommendations and opinions.
+- [Huawei Developer Docs](https://developer.huawei.com/consumer/en/doc/overview/HMS-Core-Plugin?ha_source=hms1) is place to official documentation for all HMS Core Kits, you can find detailed documentations in there.
 
 If you run into a bug in our samples, please submit an issue to the [GitHub repository](https://github.com/HMS-Core/hms-flutter-plugin).
 

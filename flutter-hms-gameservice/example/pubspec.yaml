@@ -1,6 +1,6 @@
 name: huawei_gameservice_example
 description: Demonstrates how to use the Flutter HUAWEI Game Service plugin.
-version: 5.0.4+303
+version: 5.0.4+304
 
 environment:
   sdk: ">=2.1.0 <3.0.0"

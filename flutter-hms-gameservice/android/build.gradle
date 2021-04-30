@@ -41,5 +41,5 @@ android {
 }
 
 dependencies {
-    implementation 'com.huawei.hms:game:5.0.4.302'
+    implementation 'com.huawei.hms:game:5.0.4.303'
 }

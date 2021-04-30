@@ -22,6 +22,7 @@ export 'game_player_statistics_client.dart';
 export 'game_summary_client.dart';
 export 'games_client.dart';
 export 'hms_gameservice_logger.dart';
+export 'jos_apps_client.dart';
 export 'players_client.dart';
 export 'ranking_client.dart';
 export 'utils.dart';

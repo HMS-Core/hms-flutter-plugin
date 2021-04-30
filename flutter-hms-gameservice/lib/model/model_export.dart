@@ -15,22 +15,26 @@
 */
 
 export 'achievement.dart';
+export 'apk_upgrade_info.dart';
 export 'app_player_info.dart';
+export 'archive.dart';
+export 'archive_details.dart';
+export 'archive_summary.dart';
+export 'archive_summary_update.dart';
+export 'check_update_callback.dart';
+export 'difference.dart';
+export 'game_event.dart';
+export 'game_player_statistics.dart';
 export 'game_summary.dart';
+export 'game_trial_process.dart';
+export 'operation_result.dart';
 export 'player.dart';
+export 'player_extra_info.dart';
+export 'product_order_info.dart';
+export 'ranking.dart';
 export 'ranking_score.dart';
 export 'ranking_scores.dart';
 export 'ranking_variant.dart';
-export 'ranking.dart';
 export 'score_submission_Info.dart';
 export 'submission_score_result.dart';
-export 'game_event.dart';
-export 'game_player_statistics.dart';
-export 'player_extra_info.dart';
-export 'archive_details.dart';
-export 'archive_summary_update.dart';
-export 'archive_summary.dart';
-export 'archive.dart';
-export 'difference.dart';
-export 'operation_result.dart';
-export 'game_trial_process.dart';
+export 'update_info.dart';

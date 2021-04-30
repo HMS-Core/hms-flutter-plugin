@@ -16,5 +16,5 @@
 
 export 'archive_constants.dart';
 export 'constants.dart';
-export 'game_service_result_codes.dart';
 export 'game_scopes.dart';
+export 'game_service_result_codes.dart';
