@@ -32,8 +32,10 @@ class MyBtn extends StatelessWidget {
     return Container(
         padding: EdgeInsets.fromLTRB(0, 3, 3, 3),
         color: Colors.white,
-        child: RaisedButton(
-            color: Colors.grey,
+        child: ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.grey),
+            ),
             child: Text(title,
                 style: TextStyle(
                     fontWeight: FontWeight.bold, color: Colors.white)),
@@ -56,7 +58,7 @@ class MyHomePage extends StatelessWidget {
             title: Text("Result"),
             content: Text(content, key: Key(Keys.DIALOG_CONTENT)),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 child: new Text("Close", key: Key(Keys.DIALOG_CLOSE)),
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -130,8 +132,8 @@ class MyHomePage extends StatelessWidget {
   }
 
   Future<void> _getAAID(BuildContext context) async {
-    String aaid = await hmsAnalytics.getAAID();
-    _showDialog(context, "AAID : " + aaid);
+    String? aaid = await hmsAnalytics.getAAID();
+    _showDialog(context, "AAID : " + (aaid ?? ''));
   }
 
   Future<void> _getUserProfiles(BuildContext context) async {
@@ -155,13 +157,13 @@ class MyHomePage extends StatelessWidget {
   }
 
   Future<void> _getReportPolicyThreshold(BuildContext context) async {
-    int type = await hmsAnalytics
+    int? type = await hmsAnalytics
         .getReportPolicyThreshold(ReportPolicyType.ON_SCHEDULED_TIME_POLICY);
     _showDialog(context, "getReportPolicyThreshold $type");
   }
 
   Future<void> _isRestrictionEnabled(BuildContext context) async {
-    bool enabled = await hmsAnalytics.isRestrictionEnabled();
+    bool? enabled = await hmsAnalytics.isRestrictionEnabled();
     _showDialog(context, "isRestrictionEnabled $enabled");
   }
 
@@ -209,8 +211,7 @@ class MyHomePage extends StatelessWidget {
                 Key(Keys.CLEAR_CACHED_DATA)),
             MyBtn("Delete User Profile", _deleteUserProfile,
                 Key(Keys.DELETE_USER_PROFILE)),
-            MyBtn("Delete UserId", _deleteUserId,
-                Key(Keys.DELETE_USER_ID)),
+            MyBtn("Delete UserId", _deleteUserId, Key(Keys.DELETE_USER_ID)),
             MyBtn("SetAnalyticsEnabled", _setAnalyticsEnabled,
                 Key(Keys.SET_ANALYTICS_ENABLED)),
             MyBtn("Get AAID", _getAAID, Key(Keys.GET_AAID)),
