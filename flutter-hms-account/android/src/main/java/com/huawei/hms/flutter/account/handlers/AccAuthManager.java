@@ -32,6 +32,7 @@ import com.huawei.hms.support.account.request.AccountAuthExtendedParams;
 import com.huawei.hms.support.account.result.AuthAccount;
 import com.huawei.hms.support.api.entity.auth.Scope;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -97,7 +98,8 @@ public class AccAuthManager implements MethodChannel.MethodCallHandler {
     private void getAuthRes(MethodCall call, MethodChannel.Result result) {
         AuthAccount authAccount = AccountAuthManager.getAuthResult();
 
-        if (authAccount.equals(AuthAccount.createDefault())) {
+        if (authAccount == null) {
+            HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, "-1");
             result.error(TAG, "You have to be signed in first!", null);
             return;
         }
@@ -118,7 +120,8 @@ public class AccAuthManager implements MethodChannel.MethodCallHandler {
         try {
             AuthAccount authAccount = AccountAuthManager.getAuthResultWithScopes(scopes);
 
-            if (authAccount.equals(AuthAccount.createDefault())) {
+            if (authAccount == null) {
+                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, "-1");
                 result.error(TAG, "You have to be signed in first!", null);
                 return;
             }
@@ -134,7 +137,7 @@ public class AccAuthManager implements MethodChannel.MethodCallHandler {
         Integer paramType = FromMap.toInteger("extendedParamType", call.argument("extendedParamType"));
         List<String> extScopes = FromMap.toStringArrayList("extendedScopes", call.argument("extendedScopes"));
 
-        if (extScopes.isEmpty() || paramType == null) {
+        if (extScopes.isEmpty()) {
             ResultSender.illegal(activity, TAG, call.method, result);
             return;
         }
@@ -144,7 +147,8 @@ public class AccAuthManager implements MethodChannel.MethodCallHandler {
 
         AuthAccount account = AccountAuthManager.getExtendedAuthResult(extended);
 
-        if (account.equals(AuthAccount.createDefault())) {
+        if (account == null) {
+            HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, "-1");
             result.error(TAG, "You have to be signed in first!", null);
             return;
         }
@@ -156,40 +160,44 @@ public class AccAuthManager implements MethodChannel.MethodCallHandler {
         Map<String, Object> accountMap = call.argument("account");
         List<String> scopeList = FromMap.toStringArrayList("scopes", call.argument("scopes"));
 
-        if (accountMap == null || accountMap.isEmpty() || scopeList.isEmpty()) {
-            ResultSender.illegal(activity, TAG, call.method, result);
-            return;
+        AuthAccount acc;
+        if (accountMap == null || accountMap.isEmpty()) {
+            acc = null;
+        } else {
+            acc = AccountBuilder.buildAuthAccount(accountMap);
         }
 
         List<Scope> scopes = Commons.getScopeList(scopeList);
-        AuthAccount account = AccountBuilder.buildAuthAccount(accountMap);
 
-        Boolean res = AccountAuthManager.containScopes(account, scopes);
+        Boolean res = AccountAuthManager.containScopes(acc, scopes);
         ResultSender.success(activity, call.method, result, res);
     }
 
     private void containScpExt(@NonNull MethodCall call, MethodChannel.Result result) {
+        AuthAccount acc1;
+        Integer paramType0;
+        List<String> extScopes0;
         Map<String, Object> accountMp = call.argument("account");
         Map<String, Object> extensionMp = call.argument("ext");
-        
-        if (accountMp == null || accountMp.isEmpty() || extensionMp == null || extensionMp.isEmpty()) {
-            ResultSender.illegal(activity, TAG, call.method, result);
-            return;
+
+        if (accountMp == null || accountMp.isEmpty()) {
+            acc1 = null;
+        } else {
+            acc1 = AccountBuilder.buildAuthAccount(accountMp);
         }
 
-        Integer paramType0 = FromMap.toInteger("extendedParamType", extensionMp.get("extendedParamType"));
-        List<String> extScopes0 = FromMap.toStringArrayList("extendedScopes", extensionMp.get("extendedScopes"));
-
-        if (extScopes0.isEmpty() || paramType0 == null) {
-            ResultSender.illegal(activity, TAG, call.method, result);
-            return;
+        if (extensionMp == null || extensionMp.isEmpty()) {
+            paramType0 = null;
+            extScopes0 = Collections.emptyList();
+        } else {
+            paramType0 = FromMap.toInteger("extendedParamType", extensionMp.get("extendedParamType"));
+            extScopes0 = FromMap.toStringArrayList("extendedScopes", extensionMp.get("extendedScopes"));
         }
 
         List<Scope> scopes = Commons.getScopeList(extScopes0);
         ExtendedImpl extended = new ExtendedImpl(paramType0, scopes);
-        AuthAccount authAccount = AccountBuilder.buildAuthAccount(accountMp);
 
-        Boolean res = AccountAuthManager.containScopes(authAccount, extended);
+        Boolean res = AccountAuthManager.containScopes(acc1, extended);
         ResultSender.success(activity, call.method, result, res);
     }
 

@@ -20,7 +20,7 @@ import '../common/scope.dart';
 /// Creates a list of [Scope] from [list].
 List<String> getScopeList(List<Scope> list) {
   List<String> res = [];
-  if (list != null && list.isNotEmpty) {
+  if (list.isNotEmpty) {
     list.forEach((scope) {
       res.add(scope.getScopeUri());
     });
@@ -30,20 +30,8 @@ List<String> getScopeList(List<Scope> list) {
 
 /// Creates a map object from [params].
 Map<String, dynamic> getExtendedParamsMap(AccountAuthExtendedParams params) {
-  Map<String, dynamic> map;
-
-  if (params != null) {
-    map = {};
-    map['extendedParamType'] = params.getExtendedParamType() ?? null;
-    map['extendedScopes'] = getScopeList(params.getExtendedScopes());
-  }
-
-  return map;
-}
-
-/// Checks whether [values] has a null value.
-void checkParams(List<dynamic> values) {
-  if (values.contains(null)) {
-    throw new Exception("Required parameters must not be null!");
-  }
+  return {
+    "extendedParamType": params.getExtendedParamType(),
+    "extendedScopes": getScopeList(params.getExtendedScopes())
+  };
 }

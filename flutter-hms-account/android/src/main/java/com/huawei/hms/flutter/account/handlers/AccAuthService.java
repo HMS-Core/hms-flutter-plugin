@@ -132,12 +132,10 @@ public class AccAuthService implements MethodChannel.MethodCallHandler, PluginRe
     }
 
     private void getChannel(@NonNull MethodCall call, MethodChannel.Result result) {
-        if (service == null) {
-            ResultSender.noService(activity, TAG, call.method, result);
-            return;
-        }
+        AccountAuthParams authParams = new AccountAuthParamsHelper(AccountAuthParams.DEFAULT_AUTH_REQUEST_PARAM).createParams();
+        AccountAuthService service1 = AccountAuthManager.getService(activity, authParams);
 
-        service.getChannel()
+        service1.getChannel()
                 .addOnSuccessListener(accountIcon -> ResultSender.success(activity, call.method, result, AccountBuilder.accountIconToMap(accountIcon)))
                 .addOnFailureListener(e -> ResultSender.exception(activity, TAG, e, call.method, result));
     }

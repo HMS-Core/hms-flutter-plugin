@@ -16,20 +16,23 @@
 
 import 'package:flutter/material.dart';
 
-Widget authButton(String text, Function function) {
+Widget authButton(String text, VoidCallback callback) {
   return Container(
     width: double.infinity,
     padding: EdgeInsets.zero,
     margin: EdgeInsets.fromLTRB(15, 15, 15, 0),
-    decoration: BoxDecoration(border: Border.all(width: 1, color: Colors.black), borderRadius: BorderRadius.circular(8)),
-    child: RaisedButton(
-      color: Colors.white,
-      textColor: Colors.black,
-      elevation: 0,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
-      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 25),
-      child: Text(text.toUpperCase()),
-      onPressed: function,
-    ),
+    decoration: BoxDecoration(
+        border: Border.all(width: 1, color: Colors.black),
+        borderRadius: BorderRadius.circular(8)),
+    child: ElevatedButton(
+        onPressed: callback,
+        child: Text(text.toUpperCase()),
+        style: ElevatedButton.styleFrom(
+          primary: Colors.white,
+          onPrimary: Colors.black,
+          elevation: 0,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(2)),
+          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 25),
+        )),
   );
 }

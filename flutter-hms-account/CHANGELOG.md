@@ -1,3 +1,7 @@
+## 5.2.0+301
+
+Migrated to **null safety**.
+
 ## 5.2.0+300
 
 **Breaking Changes**

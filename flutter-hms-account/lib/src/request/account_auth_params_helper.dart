@@ -18,16 +18,16 @@ import 'account_auth_params.dart';
 import '../common/scope.dart';
 
 class AccountAuthParamsHelper {
-  AccountAuthParams _params;
-  bool _needUid;
-  bool _needAuthorizationCode;
-  bool _needAccessToken;
-  bool _needEmail;
-  bool _needId;
-  bool _needIdToken;
-  bool _needProfile;
-  bool _needAuthDialog;
-  List<String> _scopeList;
+  AccountAuthParams? _params;
+  bool? _needUid;
+  bool? _needAuthorizationCode;
+  bool? _needAccessToken;
+  bool? _needEmail;
+  bool? _needId;
+  bool? _needIdToken;
+  bool? _needProfile;
+  bool? _needAuthDialog;
+  late List<String> _scopeList;
 
   AccountAuthParamsHelper() {
     _needUid = false;
@@ -54,15 +54,13 @@ class AccountAuthParamsHelper {
       "setProfile": _needProfile,
       "setAuthDialog": _needAuthDialog,
       "scopeList": _scopeList,
-      "defaultParam": _params.getId
+      "defaultParam": _params?.getId
     }..removeWhere((k, v) => v == null);
   }
 
   /// Sets the default auth parameter for signing in.
   void setDefaultParam(AccountAuthParams p) {
-    if (p != null) {
-      _params = p;
-    }
+    _params = p;
   }
 
   /// Requests an ID user to authorize an app to obtain the user ID.
@@ -106,14 +104,19 @@ class AccountAuthParamsHelper {
     _needAuthDialog = true;
   }
 
-  /// Adds a specified scope to authorization configurations to request an ID user to
-  /// authorize an app to obtain the permission specified by the scope.
-  void setScopeList(List<Scope> scopes) {
+  /// Adds specified scopes to authorization configurations to request an ID user to
+  /// authorize an app to obtain the permissions specified by the scopes.
+  void setScopeList(List<Scope> scopes, {List<String>? extraScopeURIs}) {
     _scopeList.clear();
-    if (scopes != null && scopes.isNotEmpty) {
+    if (scopes.isNotEmpty) {
       scopes.forEach((scope) {
         _scopeList.add(scope.getScopeUri());
       });
+      if (extraScopeURIs != null) {
+        extraScopeURIs.forEach((elem) {
+          _scopeList.add(elem);
+        });
+      }
     }
   }
 }

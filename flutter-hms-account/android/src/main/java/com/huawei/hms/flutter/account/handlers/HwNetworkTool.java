@@ -29,8 +29,6 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
 public class HwNetworkTool implements MethodChannel.MethodCallHandler {
-    private static final String TAG = "HwNetworkTool";
-
     private final Activity activity;
 
     public HwNetworkTool(Activity activity) {
@@ -55,15 +53,15 @@ public class HwNetworkTool implements MethodChannel.MethodCallHandler {
     
     private void buildNetworkCookie(@NonNull MethodCall call, MethodChannel.Result result) {
         String cookieName = FromMap.toString("cookieName", call.argument("cookieName"), false);
-        String cookieValue = FromMap.toString("cookieValue", call.argument("cookieValue"), false);
-        String domain = FromMap.toString("domain", call.argument("domain"), false);
-        String path = FromMap.toString("path", call.argument("path"), false);
+        String cookieValue = FromMap.toString("cookieValue", call.argument("cookieValue"), true);
+        String domain = FromMap.toString("domain", call.argument("domain"), true);
+        String path = FromMap.toString("path", call.argument("path"), true);
         Boolean isHttpOnly = FromMap.toBoolean("isHttpOnly", call.argument("isHttpOnly"));
         Boolean isSecure = FromMap.toBoolean("isSecure", call.argument("isSecure"));
         Long maxAge = FromMap.toLong("maxAge", call.argument("maxAge"));
-
-        if (cookieName == null || cookieName.isEmpty()) {
-            ResultSender.illegal(activity, TAG, call.method, result);
+        
+        if (cookieName == null) {
+            ResultSender.illegal(activity, "HwNetworkTool", call.method, result);
             return;
         }
 
@@ -74,11 +72,6 @@ public class HwNetworkTool implements MethodChannel.MethodCallHandler {
     private void buildNetworkUrl(@NonNull MethodCall call, MethodChannel.Result result) {
         String domainName = FromMap.toString("domainName", call.argument("domainName"), false);
         Boolean isHttps = FromMap.toBoolean("isHttps", call.argument("isHttps"));
-
-        if (domainName == null || domainName.isEmpty()) {
-            ResultSender.illegal(activity, TAG, call.method, result);
-            return;
-        }
 
         String res = NetworkTool.buildNetworkUrl(domainName, isHttps);
         ResultSender.success(activity, call.method, result, res);

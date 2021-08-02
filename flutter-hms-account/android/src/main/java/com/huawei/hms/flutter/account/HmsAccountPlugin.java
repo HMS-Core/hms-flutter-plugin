@@ -31,7 +31,6 @@ import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 public class HmsAccountPlugin implements FlutterPlugin, ActivityAware {
     private FlutterPluginBinding mFlutterPluginBinding;
@@ -43,12 +42,6 @@ public class HmsAccountPlugin implements FlutterPlugin, ActivityAware {
 
     private MethodChannel accAuthService;
     private MethodChannel accAuthManager;
-
-    public static void registerWith(Registrar registrar) {
-        HmsAccountPlugin hmsAccountPlugin = new HmsAccountPlugin();
-        registrar.publish(hmsAccountPlugin);
-        hmsAccountPlugin.onAttachedToEngine(registrar.messenger(), registrar.activity());
-    }
 
     private void onAttachedToEngine(final BinaryMessenger messenger, final Activity activity) {
         initializeChannels(messenger);

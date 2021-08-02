@@ -15,23 +15,22 @@
 */
 
 import 'package:flutter/services.dart';
-import '../utils/account_utils.dart';
 import '../utils/constants.dart';
 
 /// Constructs a cookie based on specified parameters.
 class NetworkTool {
-  static const MethodChannel c = const MethodChannel(NETWORK_TOOL);
+  static const MethodChannel _c = const MethodChannel(NETWORK_TOOL);
 
   /// Constructs a cookie by combining entered values.
   static Future<String> buildNetworkCookie(
       String cookieName,
-      String cookieValue,
-      String domain,
-      String path,
-      bool isHttpOnly,
-      bool isSecure,
-      double maxAge) {
-    return c.invokeMethod("buildNetworkCookie", {
+      String? cookieValue,
+      String? domain,
+      String? path,
+      bool? isHttpOnly,
+      bool? isSecure,
+      double? maxAge) async {
+    return await _c.invokeMethod("buildNetworkCookie", {
       'cookieName': cookieName,
       'cookieValue': cookieValue,
       'domain': domain,
@@ -43,10 +42,8 @@ class NetworkTool {
   }
 
   /// Obtains a cookie URL based on the domain name and [isUseHttps].
-  static Future<String> buildNetworkUrl(String domain, [bool isUseHttps]) {
-    checkParams([domain]);
-
-    return c.invokeMethod(
+  static Future<String> buildNetworkUrl(String domain, bool? isUseHttps) async {
+    return await _c.invokeMethod(
         "buildNetworkUrl", {'domainName': domain, 'isHttps': isUseHttps});
   }
 }

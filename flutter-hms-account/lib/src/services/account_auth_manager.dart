@@ -25,10 +25,14 @@ import '../request/account_auth_extended_params.dart';
 class AccountAuthManager {
   static final MethodChannel _c = const MethodChannel(AUTH_MANAGER);
 
+  /// Enables HMS Plugin Method Analytics which is used for sending usage
+  /// analytics of Account Kit SDK's methods to improve the service quality.
   static void enableLogger() {
     _c.invokeMethod("enableLogger");
   }
 
+  /// Disables HMS Plugin Method Analytics which is used for sending usage
+  /// analytics of Account Kit SDK's methods to improve the service quality.
   static void disableLogger() {
     _c.invokeMethod("disableLogger");
   }
@@ -41,7 +45,6 @@ class AccountAuthManager {
   /// Obtains the [AuthAccount] instance with all permissions specified in scopeList.
   static Future<AuthAccount> getAuthResultWithScopes(
       List<Scope> scopeList) async {
-    checkParams([scopeList]);
     List<String> scopes = getScopeList(scopeList);
 
     return AuthAccount.fromMap(
@@ -51,8 +54,7 @@ class AccountAuthManager {
   /// Obtains the [AuthAccount] instance with all permissions specified in [extendedParams].
   static Future<AuthAccount> getExtendedAuthResult(
       AccountAuthExtendedParams extendedParams) async {
-    checkParams([extendedParams]);
-    Map<String, dynamic> extMap = getExtendedParamsMap(extendedParams);
+    final Map<String, dynamic> extMap = getExtendedParamsMap(extendedParams);
 
     return AuthAccount.fromMap(
         await _c.invokeMethod("getExtendedAuthResult", extMap));
@@ -60,27 +62,24 @@ class AccountAuthManager {
 
   /// Checks whether an ID has been assigned all permissions specified by [scopeList].
   static Future<bool> containScopes(
-      AuthAccount account, List<Scope> scopeList) {
-    checkParams([account, scopeList]);
+      AuthAccount? account, List<Scope> scopeList) async {
     final List<String> scopes = getScopeList(scopeList);
 
-    return _c.invokeMethod(
-        "containScopes", {'account': account.toMap(), 'scopes': scopes});
+    return await _c.invokeMethod(
+        "containScopes", {'account': account?.toMap(), 'scopes': scopes});
   }
 
   /// Checks whether an ID has been assigned all permissions specified by [extendedParams].
   static Future<bool> containScopesWithExtendedParams(
-      AuthAccount account, AccountAuthExtendedParams extendedParams) {
-    checkParams([account, extendedParams]);
-    Map<String, dynamic> extMap = getExtendedParamsMap(extendedParams);
+      AuthAccount? account, AccountAuthExtendedParams extendedParams) async {
+    final Map<String, dynamic> extMap = getExtendedParamsMap(extendedParams);
 
-    return _c.invokeMethod(
-        "containScopesExt", {'account': account.toMap(), 'ext': extMap});
+    return await _c.invokeMethod(
+        "containScopesExt", {'account': account?.toMap(), 'ext': extMap});
   }
 
   /// Requests permissions specified by [scopeList] from an ID.
   static void addAuthScopes(int requestCode, List<Scope> scopeList) {
-    checkParams([requestCode, scopeList]);
     final List<String> scopes = getScopeList(scopeList);
 
     _c.invokeMethod(
@@ -90,7 +89,6 @@ class AccountAuthManager {
   /// Requests permissions specified by [extendedParams] from an ID.
   static void addAuthScopesWithExtendedParams(
       int requestCode, AccountAuthExtendedParams extendedParams) {
-    checkParams([requestCode, extendedParams]);
     Map<String, dynamic> extMap = getExtendedParamsMap(extendedParams);
 
     _c.invokeMethod(

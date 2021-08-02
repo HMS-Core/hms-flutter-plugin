@@ -18,13 +18,12 @@ import 'package:flutter/material.dart';
 
 /// Account object obtained from android.accounts.Account
 class Account {
-  String type;
-  String name;
+  String? type;
+  String? name;
 
   Account({this.name, this.type});
 
   factory Account.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
     return Account(type: map['type'] ?? null, name: map['name'] ?? null);
   }
 

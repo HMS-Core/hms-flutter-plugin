@@ -25,26 +25,30 @@ class HuaweiIdAuthTool {
   static const MethodChannel _c = const MethodChannel(AUTH_TOOL);
 
   /// Deletes authentication information cached locally.
-  static Future<bool> deleteAuthInfo(String accessToken) {
-    checkParams([accessToken]);
-
-    return _c.invokeMethod("deleteAuthInfo", {'accessToken': accessToken});
+  static Future<bool> deleteAuthInfo(String accessToken) async {
+    return await _c
+        .invokeMethod("deleteAuthInfo", {'accessToken': accessToken});
   }
 
   /// Obtains a UnionID.
-  static Future<String> requestUnionId(Account account) {
-    checkParams([account]);
-
-    return _c.invokeMethod("requestUnionId", {'accountName': account.name});
+  static Future<String> requestUnionId(Account account) async {
+    if (account.name == null) {
+      throw Exception("Account name must not be null!");
+    }
+    return await _c
+        .invokeMethod("requestUnionId", {'accountName': account.name});
   }
 
   /// Obtains a token.
   static Future<String> requestAccessToken(
-      Account account, List<Scope> scopeList) {
-    checkParams([account, account.name, account.type]);
+      Account account, List<Scope> scopeList) async {
+    if (account.name == null || account.type == null) {
+      throw Exception("Account name and type must not be null!");
+    }
+
     final List<String> scopes = getScopeList(scopeList);
 
-    return _c.invokeMethod("requestAccessToken",
+    return await _c.invokeMethod("requestAccessToken",
         {'type': account.type, 'name': account.name, 'scopeList': scopes});
   }
 }

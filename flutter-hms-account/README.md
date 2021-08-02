@@ -15,7 +15,7 @@ Flutter Account Kit Plugin enables communication between Huawei Account SDK and 
 
 ## Installation
 
-Please see [pub.dev](https://pub.dev/packages/huawei_account/install).
+Please see [pub.dev](https://pub.dev/packages/huawei_account/install) and [AppGallery Connect Configuration](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/config-agc-0000001050767061).
 
 ## Documentation
 

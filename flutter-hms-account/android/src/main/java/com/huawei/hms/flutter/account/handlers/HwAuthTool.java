@@ -67,11 +67,6 @@ public class HwAuthTool implements MethodChannel.MethodCallHandler {
     private void requestUnionId(MethodCall call, MethodChannel.Result result) {
         String name = FromMap.toString("accountName", call.argument("accountName"), false);
 
-        if (name == null) {
-            ResultSender.illegal(activity, TAG, call.method, result);
-            return;
-        }
-
         Tasks.callInBackground(() -> HuaweiIdAuthTool.requestUnionId(activity, name))
                 .addOnSuccessListener(s -> ResultSender.success(activity, call.method, result, s))
                 .addOnFailureListener(e -> ResultSender.exception(activity, TAG, e, call.method, result));
@@ -79,13 +74,8 @@ public class HwAuthTool implements MethodChannel.MethodCallHandler {
 
     private void requestAccessToken(@NonNull MethodCall call, MethodChannel.Result result) {
         List<String> scopeList = FromMap.toStringArrayList("scopeList", call.argument("scopeList"));
-        String name = FromMap.toString("name", call.argument("name"), true);
-        String type = FromMap.toString("type", call.argument("type"), true);
-
-        if (name == null || name.isEmpty() || type == null || type.isEmpty()) {
-            ResultSender.illegal(activity, TAG, call.method, result);
-            return;
-        }
+        String name = FromMap.toString("name", call.argument("name"), false);
+        String type = FromMap.toString("type", call.argument("type"), false);
 
         Account account = new Account(name, type);
         List<Scope> scopes = Commons.getScopeList(scopeList);
@@ -97,11 +87,6 @@ public class HwAuthTool implements MethodChannel.MethodCallHandler {
 
     private void deleteAuthInfo(@NonNull MethodCall call, MethodChannel.Result result) {
         String accessToken = FromMap.toString("accessToken", call.argument("accessToken"), false);
-
-        if (accessToken == null || accessToken.isEmpty()) {
-            ResultSender.illegal(activity, TAG, call.method, result);
-            return;
-        }
 
         Tasks.callInBackground((Callable<Void>) () -> {
             HuaweiIdAuthTool.deleteAuthInfo(activity, accessToken);

@@ -32,7 +32,7 @@ import java.util.Map;
 import io.flutter.plugin.common.MethodChannel;
 
 public class ReadSmsListener extends BroadcastReceiver {
-    private static final String TAG = CommonSmsListener.class.getSimpleName();
+    private static final String TAG = ReadSmsListener.class.getSimpleName();
 
     private final MethodChannel mChannel;
 

@@ -25,7 +25,7 @@ class AccountAuthService {
   static final MethodChannel _c = const MethodChannel(AUTH_SERVICE);
 
   /// Obtains the Intent object of the ID authorization screen.
-  static Future<AuthAccount> signIn([AccountAuthParamsHelper h]) async {
+  static Future<AuthAccount> signIn([AccountAuthParamsHelper? h]) async {
     return AuthAccount.fromMap(await _c.invokeMethod("signIn",
         h != null ? h.toMap() : new AccountAuthParamsHelper().toMap()));
   }
@@ -37,13 +37,13 @@ class AccountAuthService {
   }
 
   /// Signs out of the current ID. The account SDK deletes the cached ID information.
-  static Future<bool> signOut() {
-    return _c.invokeMethod("signOut");
+  static Future<bool> signOut() async {
+    return await _c.invokeMethod("signOut");
   }
 
   /// Cancels the authorization from an ID user.
-  static Future<bool> cancelAuthorization() {
-    return _c.invokeMethod("cancelAuthorization");
+  static Future<bool> cancelAuthorization() async {
+    return await _c.invokeMethod("cancelAuthorization");
   }
 
   /// Obtains icon information.

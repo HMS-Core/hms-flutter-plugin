@@ -19,21 +19,21 @@ import '../common/account.dart';
 /// Signed-in ID information, including the ID, nickname, profile picture URI,
 /// permission, and access token.
 class AuthAccount {
-  String accessToken;
-  Account account;
-  String serviceCountryCode;
-  String displayName;
-  String email;
-  String familyName;
-  String givenName;
-  int gender;
-  List<dynamic> authorizedScopes;
-  String idToken;
-  String avatarUri;
-  String authorizationCode;
-  String unionId;
-  String openId;
-  int accountFlag;
+  String? accessToken;
+  Account? account;
+  String? serviceCountryCode;
+  String? displayName;
+  String? email;
+  String? familyName;
+  String? givenName;
+  int? gender;
+  List<dynamic>? authorizedScopes;
+  String? idToken;
+  String? avatarUri;
+  String? authorizationCode;
+  String? unionId;
+  String? openId;
+  int? accountFlag;
 
   AuthAccount(
       {this.accessToken,
@@ -53,8 +53,6 @@ class AuthAccount {
       this.unionId});
 
   factory AuthAccount.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return AuthAccount(
         accessToken: map['accessToken'] ?? null,
         account:
@@ -78,7 +76,7 @@ class AuthAccount {
   Map<String, dynamic> toMap() {
     return {
       "accessToken": accessToken,
-      "account": account != null ? account.toMap() : null,
+      "account": account?.toMap() ?? null,
       "accountFlag": accountFlag,
       "authorizationCode": authorizationCode,
       "authorizedScopes": authorizedScopes,

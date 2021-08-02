@@ -92,7 +92,7 @@ public class AccountBuilder {
         acc.put("idToken", authAccount.getIdToken());
         acc.put("avatarUri", authAccount.getAvatarUriString());
         acc.put("authorizationCode", authAccount.getAuthorizationCode());
-        acc.put("uninonId", authAccount.getUnionId());
+        acc.put("unionId", authAccount.getUnionId());
         acc.put("openId", authAccount.getOpenId());
         acc.put("accountFlag", authAccount.getAccountFlag());
         if (authAccount.getAccount() != null) {

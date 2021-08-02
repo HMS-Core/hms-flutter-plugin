@@ -28,7 +28,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
   List<String> _logs = [];
 
-  AuthAccount _account;
+  late AuthAccount _account;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         buttonColor: AuthButtonBackground.RED),
                     authButton("SILENT SIGN IN", _silentSignIn),
                     authButton("SIGN OUT", _signOut),
-                    authButton("REVOKE AUTHORIZATION", _revokeAuthorization),
+                    authButton("CANCEL AUTHORIZATION", _revokeAuthorization)
                   ],
                 ),
               ),
@@ -101,7 +101,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
     try {
       _account = await AccountAuthService.signIn(helper);
-      _addToLogs("FROM SIGN IN: " + _account.displayName);
+      _addToLogs("FROM SIGN IN: " + _account.displayName!);
     } on Exception catch (e) {
       _addToLogs(e.toString());
     }
@@ -119,7 +119,7 @@ class _AuthScreenState extends State<AuthScreen> {
   _silentSignIn() async {
     try {
       final AuthAccount account = await AccountAuthService.silentSignIn();
-      _addToLogs("FROM SILENT SIGN IN: " + account.displayName);
+      _addToLogs("FROM SILENT SIGN IN: " + account.displayName!);
     } on Exception catch (e) {
       _addToLogs(e.toString());
     }

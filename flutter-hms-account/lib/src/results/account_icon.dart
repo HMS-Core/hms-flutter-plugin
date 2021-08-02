@@ -18,15 +18,13 @@ import 'dart:typed_data';
 
 /// Icon resource information.
 class AccountIcon {
-  Uint8List bytes;
-  String description;
-  int describeContents;
+  Uint8List? bytes;
+  String? description;
+  int? describeContents;
 
   AccountIcon({this.description, this.bytes, this.describeContents});
 
   factory AccountIcon.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return AccountIcon(
         bytes: map['bytes'] ?? null,
         description: map['description'] ?? null,
