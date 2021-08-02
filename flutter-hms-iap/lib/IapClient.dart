@@ -36,8 +36,9 @@ class IapClient {
   static const int IN_APP_NONCONSUMABLE = 1;
   static const int IN_APP_SUBSCRIPTION = 2;
 
-  static Future<IsEnvReadyResult> isEnvReady() async {
-    return IsEnvReadyResult.fromJson(await _channel.invokeMethod('isEnvReady'));
+  static Future<IsEnvReadyResult> isEnvReady({bool? isSupportAppTouch}) async {
+    return IsEnvReadyResult.fromJson(await _channel
+        .invokeMethod('isEnvReady', {"isSupportAppTouch": isSupportAppTouch}));
   }
 
   static Future<IsSandboxActivatedResult> isSandboxActivated() async {

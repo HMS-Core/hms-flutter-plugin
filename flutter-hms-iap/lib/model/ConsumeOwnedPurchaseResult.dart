@@ -19,11 +19,12 @@ import 'ConsumePurchaseData.dart';
 import 'Status.dart';
 
 class ConsumeOwnedPurchaseResult {
-  ConsumePurchaseData consumePurchaseData;
-  String dataSignature;
-  String errMsg;
-  String returnCode;
-  Status status;
+  ConsumePurchaseData? consumePurchaseData;
+  String? dataSignature;
+  String? errMsg;
+  String? returnCode;
+  Status? status;
+  String? signatureAlgorithm;
   String rawValue;
 
   ConsumeOwnedPurchaseResult({
@@ -32,7 +33,8 @@ class ConsumeOwnedPurchaseResult {
     this.errMsg,
     this.returnCode,
     this.status,
-    this.rawValue,
+    this.signatureAlgorithm,
+    required this.rawValue,
   });
 
   factory ConsumeOwnedPurchaseResult.fromJson(String source) =>
@@ -54,30 +56,35 @@ class ConsumeOwnedPurchaseResult {
           : jsonMap["returnCode"].toString(),
       status:
           jsonMap["status"] == null ? null : Status.fromMap(jsonMap["status"]),
+      signatureAlgorithm: jsonMap["signatureAlgorithm"] == null
+          ? null
+          : jsonMap["signatureAlgorithm"],
       rawValue: source,
     );
   }
 
   Map<String, dynamic> toMap() => {
         "consumePurchaseData":
-            consumePurchaseData == null ? null : consumePurchaseData.toJson(),
+            consumePurchaseData == null ? null : consumePurchaseData!.toJson(),
         "dataSignature": dataSignature,
         "errMsg": errMsg,
         "returnCode": returnCode,
-        "status": status == null ? null : status.toMap(),
+        "status": status == null ? null : status!.toMap(),
+        "signatureAlgorithm": signatureAlgorithm,
       };
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-    if (runtimeType != o.runtimeType) return false;
-    final ConsumeOwnedPurchaseResult check = o;
-    return o is ConsumeOwnedPurchaseResult &&
-        check.consumePurchaseData == consumePurchaseData &&
-        check.dataSignature == dataSignature &&
-        check.errMsg == errMsg &&
-        check.returnCode == returnCode &&
-        check.status == status;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (this.runtimeType != other.runtimeType) return false;
+
+    return other is ConsumeOwnedPurchaseResult &&
+        this.consumePurchaseData == other.consumePurchaseData &&
+        this.dataSignature == other.dataSignature &&
+        this.errMsg == other.errMsg &&
+        this.returnCode == other.returnCode &&
+        this.status == other.status &&
+        this.signatureAlgorithm == other.signatureAlgorithm;
   }
 
   @override
@@ -86,5 +93,6 @@ class ConsumeOwnedPurchaseResult {
       dataSignature.hashCode ^
       errMsg.hashCode ^
       returnCode.hashCode ^
-      status.hashCode;
+      status.hashCode ^
+      signatureAlgorithm.hashCode;
 }

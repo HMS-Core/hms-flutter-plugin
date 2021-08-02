@@ -16,30 +16,30 @@
 import 'dart:convert' show json;
 
 class ConsumePurchaseData {
-  int applicationId;
-  bool autoRenewing;
-  String orderId;
-  String packageName;
-  String productId;
-  int purchaseTime;
-  int purchaseState;
-  String developerPayload;
-  String purchaseToken;
-  String developerChallenge;
-  int consumptionState;
-  int acknowledged;
-  String currency;
-  int price;
-  String country;
-  String responseCode;
-  String responseMessage;
-  int kind;
-  String productName;
-  int purchaseTimeMillis;
-  int confirmed;
-  int purchaseType;
-  String payOrderId;
-  String payType;
+  int? applicationId;
+  bool? autoRenewing;
+  String? orderId;
+  String? packageName;
+  String? productId;
+  int? purchaseTime;
+  int? purchaseState;
+  String? developerPayload;
+  String? purchaseToken;
+  String? developerChallenge;
+  int? consumptionState;
+  int? acknowledged;
+  String? currency;
+  int? price;
+  String? country;
+  String? responseCode;
+  String? responseMessage;
+  int? kind;
+  String? productName;
+  int? purchaseTimeMillis;
+  int? confirmed;
+  int? purchaseType;
+  String? payOrderId;
+  String? payType;
 
   ConsumePurchaseData(
       {this.autoRenewing,
@@ -145,35 +145,35 @@ class ConsumePurchaseData {
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-    if (runtimeType != o.runtimeType) return false;
-    final ConsumePurchaseData check = o;
-    return o is ConsumePurchaseData &&
-        check.autoRenewing == autoRenewing &&
-        check.orderId == orderId &&
-        check.packageName == packageName &&
-        check.applicationId == applicationId &&
-        check.productId == productId &&
-        check.purchaseTime == purchaseTime &&
-        check.purchaseState == purchaseState &&
-        check.developerPayload == developerPayload &&
-        check.purchaseToken == purchaseToken &&
-        check.consumptionState == consumptionState &&
-        check.currency == currency &&
-        check.price == price &&
-        check.country == country &&
-        check.developerChallenge == developerChallenge &&
-        check.acknowledged == acknowledged &&
-        check.responseCode == responseCode &&
-        check.responseMessage == responseMessage &&
-        check.kind == kind &&
-        check.productName == productName &&
-        check.purchaseTimeMillis == purchaseTimeMillis &&
-        check.confirmed == confirmed &&
-        check.purchaseType == purchaseType &&
-        check.payOrderId == payOrderId &&
-        check.payType == payType;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (this.runtimeType != other.runtimeType) return false;
+
+    return other is ConsumePurchaseData &&
+        this.autoRenewing == other.autoRenewing &&
+        this.orderId == other.orderId &&
+        this.packageName == other.packageName &&
+        this.applicationId == other.applicationId &&
+        this.productId == other.productId &&
+        this.purchaseTime == other.purchaseTime &&
+        this.purchaseState == other.purchaseState &&
+        this.developerPayload == other.developerPayload &&
+        this.purchaseToken == other.purchaseToken &&
+        this.consumptionState == other.consumptionState &&
+        this.currency == other.currency &&
+        this.price == other.price &&
+        this.country == other.country &&
+        this.developerChallenge == other.developerChallenge &&
+        this.acknowledged == other.acknowledged &&
+        this.responseCode == other.responseCode &&
+        this.responseMessage == other.responseMessage &&
+        this.kind == other.kind &&
+        this.productName == other.productName &&
+        this.purchaseTimeMillis == other.purchaseTimeMillis &&
+        this.confirmed == other.confirmed &&
+        this.purchaseType == other.purchaseType &&
+        this.payOrderId == other.payOrderId &&
+        this.payType == other.payType;
   }
 
   @override

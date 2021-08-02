@@ -14,16 +14,16 @@
     limitations under the License.
 */
 import 'dart:convert' show json;
-import 'package:flutter/foundation.dart' show required;
 
 class ConsumeOwnedPurchaseReq {
   String purchaseToken;
-  String developerChallenge;
+  String? developerChallenge;
+  String? signatureAlgorithm;
 
-  ConsumeOwnedPurchaseReq({
-    @required this.purchaseToken,
-    this.developerChallenge,
-  });
+  ConsumeOwnedPurchaseReq(
+      {required this.purchaseToken,
+      this.developerChallenge,
+      this.signatureAlgorithm});
 
   factory ConsumeOwnedPurchaseReq.fromJson(String str) =>
       ConsumeOwnedPurchaseReq.fromMap(json.decode(str));
@@ -32,30 +32,37 @@ class ConsumeOwnedPurchaseReq {
 
   factory ConsumeOwnedPurchaseReq.fromMap(Map<String, dynamic> json) =>
       ConsumeOwnedPurchaseReq(
-        purchaseToken:
-            json['purchaseToken'] == null ? null : json['purchaseToken'],
+        purchaseToken: json['purchaseToken'],
         developerChallenge: json['developerChallange'] == null
             ? null
             : json['developerChallange'],
+        signatureAlgorithm: json['signatureAlgorithm'] == null
+            ? null
+            : json['signatureAlgorithm'],
       );
 
   Map<String, dynamic> toMap() {
     return {
       'purchaseToken': purchaseToken,
-      'developerChallenge': developerChallenge
+      'developerChallenge': developerChallenge,
+      'signatureAlgorithm': signatureAlgorithm,
     };
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-    if (runtimeType != o.runtimeType) return false;
-    final ConsumeOwnedPurchaseReq check = o;
-    return o is ConsumeOwnedPurchaseReq &&
-        check.purchaseToken == purchaseToken &&
-        check.developerChallenge == developerChallenge;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (this.runtimeType != other.runtimeType) return false;
+
+    return other is ConsumeOwnedPurchaseReq &&
+        this.purchaseToken == other.purchaseToken &&
+        this.developerChallenge == other.developerChallenge &&
+        this.signatureAlgorithm == other.signatureAlgorithm;
   }
 
   @override
-  int get hashCode => purchaseToken.hashCode ^ developerChallenge.hashCode;
+  int get hashCode =>
+      purchaseToken.hashCode ^
+      developerChallenge.hashCode ^
+      signatureAlgorithm.hashCode;
 }

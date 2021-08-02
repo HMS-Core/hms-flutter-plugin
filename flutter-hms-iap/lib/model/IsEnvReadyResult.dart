@@ -18,12 +18,16 @@ import 'dart:convert' show json;
 import 'Status.dart';
 
 class IsEnvReadyResult {
-  String returnCode;
-  Status status;
+  String? returnCode;
+  Status? status;
+  String? carrierId;
+  String? country;
 
   IsEnvReadyResult({
     this.returnCode,
     this.status,
+    this.carrierId,
+    this.country,
   });
 
   factory IsEnvReadyResult.fromJson(String str) =>
@@ -36,25 +40,35 @@ class IsEnvReadyResult {
         returnCode:
             json["returnCode"] == null ? null : json["returnCode"].toString(),
         status: json["status"] == null ? null : Status.fromMap(json["status"]),
+        carrierId: json["carrierId"] == null ? null : json["carrierId"],
+        country: json["country"] == null ? null : json["country"],
       );
 
   Map<String, dynamic> toMap() {
     return {
       "returnCode": returnCode,
-      "status": status == null ? null : status.toMap(),
+      "status": status == null ? null : status!.toMap(),
+      "carrierId": carrierId,
+      "country": country,
     };
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-    if (runtimeType != o.runtimeType) return false;
-    final IsEnvReadyResult check = o;
-    return o is IsEnvReadyResult &&
-        check.returnCode == returnCode &&
-        check.status == status;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (this.runtimeType != other.runtimeType) return false;
+
+    return other is IsEnvReadyResult &&
+        this.returnCode == other.returnCode &&
+        this.status == other.status &&
+        this.carrierId == other.carrierId &&
+        this.country == other.country;
   }
 
   @override
-  int get hashCode => returnCode.hashCode ^ status.hashCode;
+  int get hashCode =>
+      returnCode.hashCode ^
+      status.hashCode ^
+      carrierId.hashCode ^
+      country.hashCode;
 }

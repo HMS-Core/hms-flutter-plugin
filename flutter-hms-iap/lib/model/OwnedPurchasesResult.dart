@@ -20,15 +20,16 @@ import 'InAppPurchaseData.dart';
 import 'Status.dart';
 
 class OwnedPurchasesResult {
-  String continuationToken;
-  String errMsg;
-  List<InAppPurchaseData> inAppPurchaseDataList;
-  List<String> inAppSignature;
-  List<String> itemList;
-  String returnCode;
-  Status status;
-  List<String> placedInappPurchaseDataList;
-  List<String> placedInappSignatureList;
+  String? continuationToken;
+  String? errMsg;
+  List<InAppPurchaseData>? inAppPurchaseDataList;
+  List<String>? inAppSignature;
+  List<String>? itemList;
+  String? returnCode;
+  Status? status;
+  List<String>? placedInappPurchaseDataList;
+  List<String>? placedInappSignatureList;
+  String? signatureAlgorithm;
   String rawValue;
 
   OwnedPurchasesResult({
@@ -41,7 +42,8 @@ class OwnedPurchasesResult {
     this.status,
     this.placedInappPurchaseDataList,
     this.placedInappSignatureList,
-    this.rawValue,
+    this.signatureAlgorithm,
+    required this.rawValue,
   });
 
   factory OwnedPurchasesResult.fromJson(String str) =>
@@ -78,6 +80,9 @@ class OwnedPurchasesResult {
       placedInappSignatureList: jsonMap["placedInappSignatureList"] == null
           ? null
           : List<String>.from(jsonMap["placedInappSignatureList"]),
+      signatureAlgorithm: jsonMap["signatureAlgorithm"] == null
+          ? null
+          : jsonMap["signatureAlgorithm"],
       rawValue: source,
     );
   }
@@ -88,39 +93,43 @@ class OwnedPurchasesResult {
       "errMsg": errMsg == null ? null : errMsg,
       "inAppPurchaseDataList": inAppPurchaseDataList == null
           ? null
-          : List<dynamic>.from(inAppPurchaseDataList.map((x) => x)),
+          : List<dynamic>.from(inAppPurchaseDataList!.map((x) => x)),
       "inAppSignature": inAppSignature == null
           ? null
-          : List<dynamic>.from(inAppSignature.map((x) => x)),
+          : List<dynamic>.from(inAppSignature!.map((x) => x)),
       "itemList":
-          itemList == null ? null : List<dynamic>.from(itemList.map((x) => x)),
+          itemList == null ? null : List<dynamic>.from(itemList!.map((x) => x)),
       "returnCode": returnCode == null ? null : returnCode,
-      "status": status == null ? null : status.toMap(),
+      "status": status == null ? null : status!.toMap(),
       "placedInappPurchaseDataList": placedInappPurchaseDataList == null
           ? null
-          : List<String>.from(placedInappPurchaseDataList.map((x) => x)),
+          : List<String>.from(placedInappPurchaseDataList!.map((x) => x)),
       "placedInappSignatureList": placedInappSignatureList == null
           ? null
-          : List<String>.from(placedInappSignatureList.map((x) => x)),
+          : List<String>.from(placedInappSignatureList!.map((x) => x)),
+      "signatureAlgorithm":
+          signatureAlgorithm == null ? null : signatureAlgorithm,
     };
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-    if (runtimeType != o.runtimeType) return false;
-    final OwnedPurchasesResult check = o;
-    return o is OwnedPurchasesResult &&
-        check.continuationToken == continuationToken &&
-        check.errMsg == errMsg &&
-        listEquals(check.inAppPurchaseDataList, inAppPurchaseDataList) &&
-        listEquals(check.inAppSignature, inAppSignature) &&
-        listEquals(check.itemList, itemList) &&
-        check.returnCode == returnCode &&
-        check.status == status &&
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (this.runtimeType != other.runtimeType) return false;
+
+    return other is OwnedPurchasesResult &&
+        this.continuationToken == other.continuationToken &&
+        this.errMsg == other.errMsg &&
+        listEquals(this.inAppPurchaseDataList, other.inAppPurchaseDataList) &&
+        listEquals(this.inAppSignature, other.inAppSignature) &&
+        listEquals(this.itemList, other.itemList) &&
+        this.returnCode == other.returnCode &&
+        this.status == other.status &&
+        listEquals(this.placedInappPurchaseDataList,
+            other.placedInappPurchaseDataList) &&
         listEquals(
-            check.placedInappPurchaseDataList, placedInappPurchaseDataList) &&
-        listEquals(check.placedInappSignatureList, placedInappSignatureList);
+            this.placedInappSignatureList, other.placedInappSignatureList) &&
+        this.signatureAlgorithm == other.signatureAlgorithm;
   }
 
   @override
@@ -133,5 +142,6 @@ class OwnedPurchasesResult {
       returnCode.hashCode ^
       status.hashCode ^
       hashList(placedInappPurchaseDataList) ^
-      hashList(placedInappSignatureList);
+      hashList(placedInappSignatureList) ^
+      signatureAlgorithm.hashCode;
 }

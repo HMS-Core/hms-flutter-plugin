@@ -17,10 +17,11 @@ import 'dart:convert' show json;
 import 'InAppPurchaseData.dart';
 
 class PurchaseResultInfo {
-  String returnCode;
-  InAppPurchaseData inAppPurchaseData;
-  String inAppDataSignature;
-  String errMsg;
+  String? returnCode;
+  InAppPurchaseData? inAppPurchaseData;
+  String? inAppDataSignature;
+  String? errMsg;
+  String? signatureAlgorithm;
   String rawValue;
 
   PurchaseResultInfo({
@@ -28,7 +29,8 @@ class PurchaseResultInfo {
     this.inAppPurchaseData,
     this.returnCode,
     this.errMsg,
-    this.rawValue,
+    this.signatureAlgorithm,
+    required this.rawValue,
   });
 
   factory PurchaseResultInfo.fromJson(String str) =>
@@ -49,6 +51,9 @@ class PurchaseResultInfo {
           ? null
           : jsonMap["inAppDataSignature"],
       errMsg: jsonMap["errMsg"] == null ? null : jsonMap["errMsg"],
+      signatureAlgorithm: jsonMap["signatureAlgorithm"] == null
+          ? null
+          : jsonMap["signatureAlgorithm"],
       rawValue: source,
     );
   }
@@ -57,22 +62,24 @@ class PurchaseResultInfo {
     return {
       "returnCode": returnCode,
       "inAppPurchaseData":
-          inAppPurchaseData == null ? null : inAppPurchaseData.toJson(),
+          inAppPurchaseData == null ? null : inAppPurchaseData!.toJson(),
       "inAppDataSignature": inAppDataSignature,
       "errMsg": errMsg,
+      "signatureAlgorithm": signatureAlgorithm,
     };
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-    if (runtimeType != o.runtimeType) return false;
-    final PurchaseResultInfo check = o;
-    return o is PurchaseResultInfo &&
-        check.returnCode == returnCode &&
-        check.inAppPurchaseData == inAppPurchaseData &&
-        check.inAppDataSignature == inAppDataSignature &&
-        check.errMsg == errMsg;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (this.runtimeType != other.runtimeType) return false;
+
+    return other is PurchaseResultInfo &&
+        this.returnCode == other.returnCode &&
+        this.inAppPurchaseData == other.inAppPurchaseData &&
+        this.inAppDataSignature == other.inAppDataSignature &&
+        this.errMsg == other.errMsg &&
+        this.signatureAlgorithm == other.signatureAlgorithm;
   }
 
   @override
@@ -80,5 +87,6 @@ class PurchaseResultInfo {
       returnCode.hashCode ^
       inAppPurchaseData.hashCode ^
       inAppDataSignature.hashCode ^
-      errMsg.hashCode;
+      errMsg.hashCode ^
+      signatureAlgorithm.hashCode;
 }

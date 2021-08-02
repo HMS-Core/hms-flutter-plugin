@@ -14,19 +14,20 @@
     limitations under the License.
 */
 import 'dart:convert' show json;
-import 'package:flutter/foundation.dart' show required;
 
 class PurchaseIntentReq {
   int priceType;
   String productId;
-  String developerPayload;
-  String reservedInfor;
+  String? developerPayload;
+  String? reservedInfor;
+  String? signatureAlgorithm;
 
   PurchaseIntentReq({
-    @required this.priceType,
-    @required this.productId,
+    required this.priceType,
+    required this.productId,
     this.developerPayload,
     this.reservedInfor,
+    this.signatureAlgorithm,
   });
 
   factory PurchaseIntentReq.fromJson(String str) =>
@@ -36,12 +37,13 @@ class PurchaseIntentReq {
 
   factory PurchaseIntentReq.fromMap(Map<String, dynamic> json) =>
       PurchaseIntentReq(
-        priceType: json['priceType'] == null ? null : json['priceType'],
-        productId: json['productId'] == null ? null : json['productId'],
+        priceType: json['priceType'],
+        productId: json['productId'],
         developerPayload:
             json['developerPayload'] == null ? null : json['developerPayload'],
         reservedInfor:
             json['reservedInfor'] == null ? null : json['reservedInfor'],
+        signatureAlgorithm: json['signatureAlgorithm'],
       );
 
   Map<String, dynamic> toMap() {
@@ -50,19 +52,21 @@ class PurchaseIntentReq {
       "productId": productId,
       "developerPayload": developerPayload,
       "reservedInfor": reservedInfor,
+      "signatureAlgorithm": signatureAlgorithm,
     };
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-    if (runtimeType != o.runtimeType) return false;
-    final PurchaseIntentReq check = o;
-    return o is PurchaseIntentReq &&
-        check.priceType == priceType &&
-        check.productId == productId &&
-        check.developerPayload == developerPayload &&
-        check.reservedInfor == reservedInfor;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (this.runtimeType != other.runtimeType) return false;
+
+    return other is PurchaseIntentReq &&
+        this.priceType == other.priceType &&
+        this.productId == other.productId &&
+        this.developerPayload == other.developerPayload &&
+        this.reservedInfor == other.reservedInfor &&
+        this.signatureAlgorithm == other.signatureAlgorithm;
   }
 
   @override
@@ -70,5 +74,6 @@ class PurchaseIntentReq {
       priceType.hashCode ^
       productId.hashCode ^
       developerPayload.hashCode ^
-      reservedInfor.hashCode;
+      reservedInfor.hashCode ^
+      signatureAlgorithm.hashCode;
 }

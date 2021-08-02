@@ -14,15 +14,16 @@
     limitations under the License.
 */
 import 'dart:convert' show json;
-import 'package:flutter/foundation.dart' show required;
 
 class OwnedPurchasesReq {
-  String continuationToken;
+  String? continuationToken;
   int priceType;
+  String? signatureAlgorithm;
 
   OwnedPurchasesReq({
-    @required this.priceType,
+    required this.priceType,
     this.continuationToken,
+    this.signatureAlgorithm,
   });
 
   factory OwnedPurchasesReq.fromJson(String str) =>
@@ -35,26 +36,32 @@ class OwnedPurchasesReq {
         continuationToken: json['continuationToken'] == null
             ? null
             : json['continuationToken'],
-        priceType: json['priceType'] == null ? null : json['priceType'],
+        priceType: json['priceType'],
+        signatureAlgorithm: json['signatureAlgorithm'],
       );
 
   Map<String, dynamic> toMap() {
     return {
       "continuationToken": continuationToken,
       "priceType": priceType,
+      "signatureAlgorithm": signatureAlgorithm,
     };
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-    if (runtimeType != o.runtimeType) return false;
-    final OwnedPurchasesReq check = o;
-    return o is OwnedPurchasesReq &&
-        check.continuationToken == continuationToken &&
-        check.priceType == priceType;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (this.runtimeType != other.runtimeType) return false;
+
+    return other is OwnedPurchasesReq &&
+        this.continuationToken == other.continuationToken &&
+        this.priceType == other.priceType &&
+        this.signatureAlgorithm == other.signatureAlgorithm;
   }
 
   @override
-  int get hashCode => continuationToken.hashCode ^ priceType.hashCode;
+  int get hashCode =>
+      continuationToken.hashCode ^
+      priceType.hashCode ^
+      signatureAlgorithm.hashCode;
 }

@@ -16,25 +16,25 @@
 import 'dart:convert' show json;
 
 class ProductInfo {
-  String productId;
-  int priceType;
-  String price;
-  int microsPrice;
-  String originalLocalPrice;
-  int originalMicroPrice;
-  String currency;
-  String productName;
-  String productDesc;
-  int subSpecialPriceMicros;
-  int subSpecialPeriodCycles;
-  int subProductLevel;
-  int status;
-  String subFreeTrialPeriod;
-  String subGroupId;
-  String subGroupTitle;
-  String subSpecialPeriod;
-  String subPeriod;
-  String subSpecialPrice;
+  String? productId;
+  int? priceType;
+  String? price;
+  int? microsPrice;
+  String? originalLocalPrice;
+  int? originalMicroPrice;
+  String? currency;
+  String? productName;
+  String? productDesc;
+  int? subSpecialPriceMicros;
+  int? subSpecialPeriodCycles;
+  int? subProductLevel;
+  int? status;
+  String? subFreeTrialPeriod;
+  String? subGroupId;
+  String? subGroupTitle;
+  String? subSpecialPeriod;
+  String? subPeriod;
+  String? subSpecialPrice;
 
   ProductInfo({
     this.productId,
@@ -124,30 +124,30 @@ class ProductInfo {
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-    if (runtimeType != o.runtimeType) return false;
-    final ProductInfo check = o;
-    return o is ProductInfo &&
-        check.productId == productId &&
-        check.priceType == priceType &&
-        check.price == price &&
-        check.microsPrice == microsPrice &&
-        check.originalLocalPrice == originalLocalPrice &&
-        check.originalMicroPrice == originalMicroPrice &&
-        check.currency == currency &&
-        check.productName == productName &&
-        check.productDesc == productDesc &&
-        check.subSpecialPriceMicros == subSpecialPriceMicros &&
-        check.subSpecialPeriodCycles == subSpecialPeriodCycles &&
-        check.subProductLevel == subProductLevel &&
-        check.status == status &&
-        check.subFreeTrialPeriod == subFreeTrialPeriod &&
-        check.subGroupId == subGroupId &&
-        check.subGroupTitle == subGroupTitle &&
-        check.subSpecialPeriod == subSpecialPeriod &&
-        check.subPeriod == subPeriod &&
-        check.subSpecialPrice == subSpecialPrice;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (this.runtimeType != other.runtimeType) return false;
+
+    return other is ProductInfo &&
+        this.productId == other.productId &&
+        this.priceType == other.priceType &&
+        this.price == other.price &&
+        this.microsPrice == other.microsPrice &&
+        this.originalLocalPrice == other.originalLocalPrice &&
+        this.originalMicroPrice == other.originalMicroPrice &&
+        this.currency == other.currency &&
+        this.productName == other.productName &&
+        this.productDesc == other.productDesc &&
+        this.subSpecialPriceMicros == other.subSpecialPriceMicros &&
+        this.subSpecialPeriodCycles == other.subSpecialPeriodCycles &&
+        this.subProductLevel == other.subProductLevel &&
+        this.status == other.status &&
+        this.subFreeTrialPeriod == other.subFreeTrialPeriod &&
+        this.subGroupId == other.subGroupId &&
+        this.subGroupTitle == other.subGroupTitle &&
+        this.subSpecialPeriod == other.subSpecialPeriod &&
+        this.subPeriod == other.subPeriod &&
+        this.subSpecialPrice == other.subSpecialPrice;
   }
 
   @override

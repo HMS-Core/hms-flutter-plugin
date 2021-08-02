@@ -21,20 +21,21 @@ class CustomButton extends StatelessWidget {
   final VoidCallback onPressed;
 
   const CustomButton({
-    @required this.text,
-    @required this.onPressed,
+    required this.text,
+    required this.onPressed,
   });
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(30.0))),
+    return ElevatedButton(
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30.0)))),
+        backgroundColor: MaterialStateProperty.all(Colors.red),
+        textStyle: MaterialStateProperty.all(TextStyle(color: Colors.white)),
+        padding: MaterialStateProperty.all(EdgeInsets.all(12.0)),
+      ),
       onPressed: onPressed,
-      color: Colors.red,
-      textColor: Colors.white,
-      splashColor: Colors.redAccent,
-      padding: EdgeInsets.all(12.0),
       child: Text(
         text,
       ),

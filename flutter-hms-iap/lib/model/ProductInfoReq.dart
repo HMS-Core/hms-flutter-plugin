@@ -14,15 +14,16 @@
     limitations under the License.
 */
 import 'dart:convert' show json;
-import 'package:flutter/foundation.dart' show listEquals, required;
+import 'dart:ui' show hashList;
+import 'package:flutter/foundation.dart' show listEquals;
 
 class ProductInfoReq {
   int priceType;
   List<String> skuIds;
 
   ProductInfoReq({
-    @required this.priceType,
-    @required this.skuIds,
+    required this.priceType,
+    required this.skuIds,
   });
 
   factory ProductInfoReq.fromJson(String str) =>
@@ -31,8 +32,8 @@ class ProductInfoReq {
   String toJson() => json.encode(toMap());
 
   factory ProductInfoReq.fromMap(Map<String, dynamic> json) => ProductInfoReq(
-        priceType: json['priceType'] == null ? null : json['priceType'],
-        skuIds: json['skuIds'] == null ? null : json['skuIds'].cast<String>(),
+        priceType: json['priceType'],
+        skuIds: json['skuIds'].cast<String>(),
       );
 
   Map<String, dynamic> toMap() {
@@ -40,15 +41,15 @@ class ProductInfoReq {
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-    if (runtimeType != o.runtimeType) return false;
-    final ProductInfoReq check = o;
-    return o is ProductInfoReq &&
-        check.priceType == priceType &&
-        listEquals(check.skuIds, skuIds);
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (this.runtimeType != other.runtimeType) return false;
+
+    return other is ProductInfoReq &&
+        this.priceType == other.priceType &&
+        listEquals(this.skuIds, other.skuIds);
   }
 
   @override
-  int get hashCode => priceType.hashCode ^ skuIds.hashCode;
+  int get hashCode => priceType.hashCode ^ hashList(skuIds);
 }

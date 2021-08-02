@@ -20,10 +20,10 @@ import 'ProductInfo.dart';
 import 'Status.dart';
 
 class ProductInfoResult {
-  String errMsg;
-  List<ProductInfo> productInfoList;
-  String returnCode;
-  Status status;
+  String? errMsg;
+  List<ProductInfo>? productInfoList;
+  String? returnCode;
+  Status? status;
 
   ProductInfoResult({
     this.errMsg,
@@ -55,22 +55,22 @@ class ProductInfoResult {
       "errMsg": errMsg,
       "productInfoList": productInfoList == null
           ? null
-          : List<dynamic>.from(productInfoList.map((x) => x.toMap())),
+          : List<dynamic>.from(productInfoList!.map((x) => x.toMap())),
       "returnCode": returnCode,
-      "status": status == null ? null : status.toMap(),
+      "status": status == null ? null : status!.toMap(),
     };
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-    if (runtimeType != o.runtimeType) return false;
-    final ProductInfoResult check = o;
-    return o is ProductInfoResult &&
-        check.errMsg == errMsg &&
-        listEquals(check.productInfoList, productInfoList) &&
-        check.returnCode == returnCode &&
-        check.status == status;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (this.runtimeType != other.runtimeType) return false;
+
+    return other is ProductInfoResult &&
+        this.errMsg == other.errMsg &&
+        listEquals(this.productInfoList, other.productInfoList) &&
+        this.returnCode == other.returnCode &&
+        this.status == other.status;
   }
 
   @override

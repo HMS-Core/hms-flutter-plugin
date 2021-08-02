@@ -24,56 +24,56 @@ class InAppPurchaseData {
   static const int CANCELED = 1;
   static const int REFUNDED = 2;
 
-  int applicationId;
-  bool autoRenewing;
-  String orderId;
-  String packageName;
-  String productId;
-  String productName;
-  int purchaseTime;
-  int purchaseState;
-  String developerPayload;
-  String purchaseToken;
-  int purchaseType;
-  String currency;
-  int price;
-  String country;
-  String lastOrderId;
-  String productGroup;
-  int oriPurchaseTime;
-  String subscriptionId;
-  int quantity;
-  int daysLasted;
-  int numOfPeriods;
-  int numOfDiscounts;
-  int expirationDate;
-  int expirationIntent;
-  int retryFlag;
-  int introductoryFlag;
-  int trialFlag;
-  int cancelTime;
-  int cancelReason;
-  String appInfo;
-  int notifyClosed;
-  int renewStatus;
-  int priceConsentStatus;
-  int renewPrice;
-  bool subIsvalid;
-  int cancelledSubKeepDays;
-  int kind;
-  String developerChallenge;
-  int consumptionState;
-  String payOrderId;
-  String payType;
-  int deferFlag;
-  String oriSubscriptionId;
-  int cancelWay;
-  int cancellationTime;
-  int resumeTime;
-  int accountFlag;
-  int purchaseTimeMillis;
-  int confirmed;
-  int graceExpirationTime;
+  int? applicationId;
+  bool? autoRenewing;
+  String? orderId;
+  String? packageName;
+  String? productId;
+  String? productName;
+  int? purchaseTime;
+  int? purchaseState;
+  String? developerPayload;
+  String? purchaseToken;
+  int? purchaseType;
+  String? currency;
+  int? price;
+  String? country;
+  String? lastOrderId;
+  String? productGroup;
+  int? oriPurchaseTime;
+  String? subscriptionId;
+  int? quantity;
+  int? daysLasted;
+  int? numOfPeriods;
+  int? numOfDiscounts;
+  int? expirationDate;
+  int? expirationIntent;
+  int? retryFlag;
+  int? introductoryFlag;
+  int? trialFlag;
+  int? cancelTime;
+  int? cancelReason;
+  String? appInfo;
+  int? notifyClosed;
+  int? renewStatus;
+  int? priceConsentStatus;
+  int? renewPrice;
+  bool? subIsvalid;
+  int? cancelledSubKeepDays;
+  int? kind;
+  String? developerChallenge;
+  int? consumptionState;
+  String? payOrderId;
+  String? payType;
+  int? deferFlag;
+  String? oriSubscriptionId;
+  int? cancelWay;
+  int? cancellationTime;
+  int? resumeTime;
+  int? accountFlag;
+  int? purchaseTimeMillis;
+  int? confirmed;
+  int? graceExpirationTime;
 
   InAppPurchaseData({
     this.autoRenewing,
@@ -274,61 +274,61 @@ class InAppPurchaseData {
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-    if (runtimeType != o.runtimeType) return false;
-    final InAppPurchaseData check = o;
-    return o is InAppPurchaseData &&
-        check.autoRenewing == autoRenewing &&
-        check.orderId == orderId &&
-        check.packageName == packageName &&
-        check.applicationId == applicationId &&
-        check.kind == kind &&
-        check.productId == productId &&
-        check.productName == productName &&
-        check.purchaseTime == purchaseTime &&
-        check.purchaseTimeMillis == purchaseTimeMillis &&
-        check.purchaseState == purchaseState &&
-        check.developerPayload == developerPayload &&
-        check.purchaseToken == purchaseToken &&
-        check.consumptionState == consumptionState &&
-        check.confirmed == confirmed &&
-        check.currency == currency &&
-        check.price == price &&
-        check.country == country &&
-        check.payOrderId == payOrderId &&
-        check.payType == payType &&
-        check.purchaseType == purchaseType &&
-        check.lastOrderId == lastOrderId &&
-        check.productGroup == productGroup &&
-        check.oriPurchaseTime == oriPurchaseTime &&
-        check.subscriptionId == subscriptionId &&
-        check.quantity == quantity &&
-        check.daysLasted == daysLasted &&
-        check.numOfPeriods == numOfPeriods &&
-        check.numOfDiscounts == numOfDiscounts &&
-        check.expirationDate == expirationDate &&
-        check.expirationIntent == expirationIntent &&
-        check.retryFlag == retryFlag &&
-        check.introductoryFlag == introductoryFlag &&
-        check.trialFlag == trialFlag &&
-        check.cancelTime == cancelTime &&
-        check.cancelReason == cancelReason &&
-        check.appInfo == appInfo &&
-        check.notifyClosed == notifyClosed &&
-        check.renewStatus == renewStatus &&
-        check.subIsvalid == subIsvalid &&
-        check.cancelledSubKeepDays == cancelledSubKeepDays &&
-        check.developerChallenge == developerChallenge &&
-        check.deferFlag == deferFlag &&
-        check.oriSubscriptionId == oriSubscriptionId &&
-        check.cancelWay == cancelWay &&
-        check.cancellationTime == cancellationTime &&
-        check.resumeTime == resumeTime &&
-        check.accountFlag == accountFlag &&
-        check.renewPrice == renewPrice &&
-        check.priceConsentStatus == priceConsentStatus &&
-        check.graceExpirationTime == graceExpirationTime;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (this.runtimeType != other.runtimeType) return false;
+
+    return other is InAppPurchaseData &&
+        this.autoRenewing == other.autoRenewing &&
+        this.orderId == other.orderId &&
+        this.packageName == other.packageName &&
+        this.applicationId == other.applicationId &&
+        this.kind == other.kind &&
+        this.productId == other.productId &&
+        this.productName == other.productName &&
+        this.purchaseTime == other.purchaseTime &&
+        this.purchaseTimeMillis == other.purchaseTimeMillis &&
+        this.purchaseState == other.purchaseState &&
+        this.developerPayload == other.developerPayload &&
+        this.purchaseToken == other.purchaseToken &&
+        this.consumptionState == other.consumptionState &&
+        this.confirmed == other.confirmed &&
+        this.currency == other.currency &&
+        this.price == other.price &&
+        this.country == other.country &&
+        this.payOrderId == other.payOrderId &&
+        this.payType == other.payType &&
+        this.purchaseType == other.purchaseType &&
+        this.lastOrderId == other.lastOrderId &&
+        this.productGroup == other.productGroup &&
+        this.oriPurchaseTime == other.oriPurchaseTime &&
+        this.subscriptionId == other.subscriptionId &&
+        this.quantity == other.quantity &&
+        this.daysLasted == other.daysLasted &&
+        this.numOfPeriods == other.numOfPeriods &&
+        this.numOfDiscounts == other.numOfDiscounts &&
+        this.expirationDate == other.expirationDate &&
+        this.expirationIntent == other.expirationIntent &&
+        this.retryFlag == other.retryFlag &&
+        this.introductoryFlag == other.introductoryFlag &&
+        this.trialFlag == other.trialFlag &&
+        this.cancelTime == other.cancelTime &&
+        this.cancelReason == other.cancelReason &&
+        this.appInfo == other.appInfo &&
+        this.notifyClosed == other.notifyClosed &&
+        this.renewStatus == other.renewStatus &&
+        this.subIsvalid == other.subIsvalid &&
+        this.cancelledSubKeepDays == other.cancelledSubKeepDays &&
+        this.developerChallenge == other.developerChallenge &&
+        this.deferFlag == other.deferFlag &&
+        this.oriSubscriptionId == other.oriSubscriptionId &&
+        this.cancelWay == other.cancelWay &&
+        this.cancellationTime == other.cancellationTime &&
+        this.resumeTime == other.resumeTime &&
+        this.accountFlag == other.accountFlag &&
+        this.renewPrice == other.renewPrice &&
+        this.priceConsentStatus == other.priceConsentStatus &&
+        this.graceExpirationTime == other.graceExpirationTime;
   }
 
   @override

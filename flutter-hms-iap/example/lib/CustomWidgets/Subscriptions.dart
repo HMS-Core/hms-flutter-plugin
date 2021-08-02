@@ -44,16 +44,17 @@ class _SubscriptionsState extends State<Subscriptions> {
       ProductInfoResult result = await IapClient.obtainProductInfo(ProductInfoReq(
           priceType: 2,
           //Make sure that the product IDs are the same as those defined in AppGallery Connect.
-          skuIds: ["xxx", "xxxxxx"]));
+          skuIds: ["subscription_1", "subscription_2"]));
       setState(() {
-        available = [];
-        for (int i = 0; i < result.productInfoList.length; i++) {
-          available.add(result.productInfoList[i]);
-        }
+        available.clear();
+        if (result.productInfoList != null)
+          for (int i = 0; i < result.productInfoList!.length; i++) {
+            available.add(result.productInfoList![i]);
+          }
       });
     } on PlatformException catch (e) {
       if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
-        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage!);
       } else {
         log(e.toString());
       }
@@ -70,11 +71,14 @@ class _SubscriptionsState extends State<Subscriptions> {
         ownedPurchases();
         purchaseHistory();
       } else {
-        log(result.errMsg);
+        if (result.errMsg != null)
+          log(result.errMsg!);
+        else
+          log(result.rawValue);
       }
     } on PlatformException catch (e) {
       if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
-        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage!);
       } else {
         log(e.toString());
       }
@@ -86,14 +90,15 @@ class _SubscriptionsState extends State<Subscriptions> {
       OwnedPurchasesResult result =
           await IapClient.obtainOwnedPurchases(OwnedPurchasesReq(priceType: 2));
       setState(() {
-        purchased = [];
-        for (int i = 0; i < result.inAppPurchaseDataList.length; i++) {
-          purchased.add(result.inAppPurchaseDataList[i]);
-        }
+        purchased.clear();
+        if (result.inAppPurchaseDataList != null)
+          for (int i = 0; i < result.inAppPurchaseDataList!.length; i++) {
+            purchased.add(result.inAppPurchaseDataList![i]);
+          }
       });
     } on PlatformException catch (e) {
       if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
-        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage!);
       } else {
         log(e.toString());
       }
@@ -105,14 +110,15 @@ class _SubscriptionsState extends State<Subscriptions> {
       OwnedPurchasesResult result = await IapClient.obtainOwnedPurchaseRecord(
           OwnedPurchasesReq(priceType: 2));
       setState(() {
-        purchasedRecord = [];
-        for (int i = 0; i < result.inAppPurchaseDataList.length; i++) {
-          purchasedRecord.add(result.inAppPurchaseDataList[i]);
-        }
+        purchasedRecord.clear();
+        if (result.inAppPurchaseDataList != null)
+          for (int i = 0; i < result.inAppPurchaseDataList!.length; i++) {
+            purchasedRecord.add(result.inAppPurchaseDataList![i]);
+          }
       });
     } on PlatformException catch (e) {
       if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
-        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage!);
       } else {
         log(e.toString());
       }
@@ -125,7 +131,7 @@ class _SubscriptionsState extends State<Subscriptions> {
           type: StartIapActivityReq.TYPE_SUBSCRIBE_MANAGER_ACTIVITY));
     } on PlatformException catch (e) {
       if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
-        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage);
+        log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage!);
       } else {
         log(e.toString());
       }
@@ -172,7 +178,7 @@ class _SubscriptionsState extends State<Subscriptions> {
                       Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: Text(
-                          purchased[i].productName,
+                          purchased[i].productName ?? "",
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               decoration: TextDecoration.underline),
@@ -180,7 +186,7 @@ class _SubscriptionsState extends State<Subscriptions> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(4.0),
-                        child: Text(purchased[i].productId),
+                        child: Text(purchased[i].productId ?? ""),
                       )
                     ],
                   ),
@@ -201,7 +207,10 @@ class _SubscriptionsState extends State<Subscriptions> {
               itemBuilder: (BuildContext ctxt, int i) {
                 return InkWell(
                   onTap: () {
-                    buyProduct(available[i].productId);
+                    if (available[i].productId != null)
+                      buyProduct(available[i].productId!);
+                    else
+                      log("Please provide valid product id.");
                   },
                   child: Card(
                     child: Column(
@@ -209,7 +218,7 @@ class _SubscriptionsState extends State<Subscriptions> {
                         Padding(
                           padding: const EdgeInsets.all(4.0),
                           child: Text(
-                            available[i].productName,
+                            available[i].productName ?? "",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 decoration: TextDecoration.underline),
@@ -217,11 +226,11 @@ class _SubscriptionsState extends State<Subscriptions> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(4.0),
-                          child: Text(available[i].productDesc),
+                          child: Text(available[i].productDesc ?? ""),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(4.0),
-                          child: Text(available[i].price),
+                          child: Text(available[i].price ?? ""),
                         )
                       ],
                     ),
@@ -248,7 +257,7 @@ class _SubscriptionsState extends State<Subscriptions> {
                       Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: Text(
-                          purchasedRecord[i].productName,
+                          purchasedRecord[i].productName ?? "",
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               decoration: TextDecoration.underline),
@@ -256,7 +265,7 @@ class _SubscriptionsState extends State<Subscriptions> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(4.0),
-                        child: Text(purchasedRecord[i].productId),
+                        child: Text(purchasedRecord[i].productId ?? ""),
                       )
                     ],
                   ),

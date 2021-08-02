@@ -21,6 +21,7 @@ export 'IapClient.dart';
 
 //Utils
 export 'HmsIapResult.dart';
+export 'model/SignAlgorithmConstants.dart';
 
 //Requests
 export 'model/ConsumeOwnedPurchaseReq.dart';

@@ -72,12 +72,21 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
         hmsLogger = HMSLogger.getInstance(mActivity.getApplicationContext());
     }
 
-    private void isEnvReady(@NonNull final Result result) {
+    private void isEnvReady(@NonNull final MethodCall call, @NonNull final Result result) {
         final String isEnvReadyMethodName = "isEnvReady";
+        final Boolean isSupportAppTouch = call.argument("isSupportAppTouch") == null
+            ? null
+            : ValueGetter.getBoolean("isSupportAppTouch", call);
         hmsLogger.startMethodExecutionTimer(isEnvReadyMethodName);
-        mIapClient.isEnvReady()
-            .addOnSuccessListener(new DefaultSuccessListener<>(result, mGson, hmsLogger, isEnvReadyMethodName))
-            .addOnFailureListener(new IsEnvReadyFailureListener(this, result, REQUEST_IS_ENVIRONMENT_READY, hmsLogger));
+        if(isSupportAppTouch == null) {
+            mIapClient.isEnvReady()
+                .addOnSuccessListener(new DefaultSuccessListener<>(result, mGson, hmsLogger, isEnvReadyMethodName))
+                .addOnFailureListener(new IsEnvReadyFailureListener(this, result, REQUEST_IS_ENVIRONMENT_READY, hmsLogger));
+        } else{
+            mIapClient.isEnvReady(isSupportAppTouch)
+                .addOnSuccessListener(new DefaultSuccessListener<>(result, mGson, hmsLogger, isEnvReadyMethodName))
+                .addOnFailureListener(new IsEnvReadyFailureListener(this, result, REQUEST_IS_ENVIRONMENT_READY, hmsLogger));
+        }
     }
 
     private void isSandboxActivated(@NonNull final Result result) {
@@ -119,6 +128,9 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
         final String reservedInfor = call.argument("reservedInfor") == null
             ? null
             : ValueGetter.getString("reservedInfor", call);
+        final String signatureAlgorithm = call.argument("signatureAlgorithm") == null
+            ? null
+            : ValueGetter.getString("signatureAlgorithm", call);
 
         //Constructing request
         final PurchaseIntentReq request = new PurchaseIntentReq();
@@ -126,6 +138,7 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
         request.setPriceType(priceType);
         request.setDeveloperPayload(developerPayload);
         request.setReservedInfor(reservedInfor);
+        request.setSignatureAlgorithm(signatureAlgorithm);
 
         //Create purchase intent from IAP service
         final String createPurchaseIntentMethodName = "createPurchaseIntent";
@@ -144,11 +157,15 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
         final String developerChallenge = call.argument("developerChallenge") == null
             ? null
             : ValueGetter.getString("developerChallenge", call);
+        final String signatureAlgorithm = call.argument("signatureAlgorithm") == null
+            ? null
+            : ValueGetter.getString("signatureAlgorithm", call);
 
         //Constructing request
         final ConsumeOwnedPurchaseReq request = new ConsumeOwnedPurchaseReq();
         request.setDeveloperChallenge(developerChallenge);
         request.setPurchaseToken(purchaseToken);
+        request.setSignatureAlgorithm(signatureAlgorithm);
 
         // Call service from IAP service
         final String consumeOwnedPurchaseMethodName = "consumeOwnedPurchase";
@@ -164,6 +181,9 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
     private void obtainOwnedPurchaseRecord(@NonNull final MethodCall call, @NonNull final Result result) {
         //Arguments
         final int priceType = ValueGetter.getInt("priceType", call);
+        final String signatureAlgorithm = call.argument("signatureAlgorithm") == null
+            ? null
+            : ValueGetter.getString("signatureAlgorithm", call);
         final String continuationToken = call.argument("continuationToken") == null
             ? null
             : ValueGetter.getString("continuationToken", call);
@@ -172,6 +192,7 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
         final OwnedPurchasesReq request = new OwnedPurchasesReq();
         request.setContinuationToken(continuationToken);
         request.setPriceType(priceType);
+        request.setSignatureAlgorithm(signatureAlgorithm);
 
         //Obtain record from IAP service
         final String obtainOwnedPurchaseRecordMethodName = "obtainOwnedPurchaseRecord";
@@ -190,11 +211,15 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
         final String continuationToken = call.argument("continuationToken") == null
             ? null
             : ValueGetter.getString("continuationToken", call);
+        final String signatureAlgorithm = call.argument("signatureAlgorithm") == null
+            ? null
+            : ValueGetter.getString("signatureAlgorithm", call);
 
         //Constructing request
         final OwnedPurchasesReq request = new OwnedPurchasesReq();
         request.setContinuationToken(continuationToken);
         request.setPriceType(priceType);
+        request.setSignatureAlgorithm(signatureAlgorithm);
 
         //Obtain owned purchase from IAP service
         final String obtainOwnedPurchasesMethodName = "obtainOwnedPurchases";
@@ -231,7 +256,7 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
     public void onMethodCall(@NonNull final MethodCall call, @NonNull final Result result) {
         switch (call.method) {
             case "isEnvReady":
-                isEnvReady(result);
+                isEnvReady(call, result);
                 break;
             case "isSandboxActivated":
                 isSandboxActivated(result);

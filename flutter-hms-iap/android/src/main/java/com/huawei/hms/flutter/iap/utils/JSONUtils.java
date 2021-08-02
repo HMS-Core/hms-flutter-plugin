@@ -50,6 +50,7 @@ public final class JSONUtils {
             jsonObject.put("errMsg", obj.getErrMsg());
             jsonObject.put("inAppPurchaseData", obj.getInAppPurchaseData());
             jsonObject.put("inAppDataSignature", obj.getInAppDataSignature());
+            jsonObject.put("signatureAlgorithm", obj.getSignatureAlgorithm());
         } catch (final JSONException e) {
             Log.e(TAG, e.toString());
         }

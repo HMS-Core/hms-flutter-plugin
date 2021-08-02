@@ -14,17 +14,16 @@
     limitations under the License.
 */
 import 'dart:convert' show json;
-import 'package:flutter/foundation.dart' show required;
 
 class StartIapActivityReq {
   static const int TYPE_SUBSCRIBE_MANAGER_ACTIVITY = 2;
   static const int TYPE_SUBSCRIBE_EDIT_ACTIVITY = 3;
 
   int type;
-  String productId;
+  String? productId;
 
   StartIapActivityReq({
-    @required this.type,
+    required this.type,
     this.productId,
   });
 
@@ -35,7 +34,7 @@ class StartIapActivityReq {
 
   factory StartIapActivityReq.fromMap(Map<String, dynamic> json) =>
       StartIapActivityReq(
-        type: json['type'] == null ? null : json['type'],
+        type: json['type'],
         productId: json['productId'] == null ? null : json['productId'],
       );
 
@@ -47,13 +46,13 @@ class StartIapActivityReq {
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-    if (runtimeType != o.runtimeType) return false;
-    final StartIapActivityReq check = o;
-    return o is StartIapActivityReq &&
-        check.type == type &&
-        check.productId == productId;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (this.runtimeType != other.runtimeType) return false;
+
+    return other is StartIapActivityReq &&
+        this.type == other.type &&
+        this.productId == other.productId;
   }
 
   @override

@@ -17,13 +17,13 @@ import 'dart:convert' show json;
 import 'Status.dart';
 
 class IsSandboxActivatedResult {
-  String errMsg;
-  bool isSandboxApk;
-  bool isSandboxUser;
-  String returnCode;
-  String versionFrMarket;
-  String versionInApk;
-  Status status;
+  String? errMsg;
+  bool? isSandboxApk;
+  bool? isSandboxUser;
+  String? returnCode;
+  String? versionFrMarket;
+  String? versionInApk;
+  Status? status;
 
   IsSandboxActivatedResult({
     this.errMsg,
@@ -64,23 +64,23 @@ class IsSandboxActivatedResult {
       'returnCode': returnCode,
       'versionFrMarket': versionFrMarket,
       'versionInApk': versionInApk,
-      'status': status == null ? null : status.toMap(),
+      'status': status == null ? null : status!.toMap(),
     };
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-    if (runtimeType != o.runtimeType) return false;
-    final IsSandboxActivatedResult check = o;
-    return o is IsSandboxActivatedResult &&
-        check.errMsg == errMsg &&
-        check.isSandboxApk == isSandboxApk &&
-        check.isSandboxUser == isSandboxUser &&
-        check.returnCode == returnCode &&
-        check.versionFrMarket == versionFrMarket &&
-        check.versionInApk == versionInApk &&
-        check.status == status;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (this.runtimeType != other.runtimeType) return false;
+
+    return other is IsSandboxActivatedResult &&
+        this.errMsg == other.errMsg &&
+        this.isSandboxApk == other.isSandboxApk &&
+        this.isSandboxUser == other.isSandboxUser &&
+        this.returnCode == other.returnCode &&
+        this.versionFrMarket == other.versionFrMarket &&
+        this.versionInApk == other.versionInApk &&
+        this.status == other.status;
   }
 
   @override
