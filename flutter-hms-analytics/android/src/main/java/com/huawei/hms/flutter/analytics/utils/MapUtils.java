@@ -19,17 +19,25 @@ package com.huawei.hms.flutter.analytics.utils;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class MapUtils {
+public final class MapUtils {
+
+    private MapUtils() {
+    }
+
     private static final String TAG = "MapUtils";
 
     /**
-     * Converts a Object into a String.
+     * Converts an Object into a String.
      *
-     * @param key:   String key.
+     * @param key: String key.
      * @param value: Object value.
      * @return value
      */
@@ -44,7 +52,7 @@ public class MapUtils {
     /**
      * Converts a Object into a Boolean.
      *
-     * @param key:   String key.
+     * @param key: String key.
      * @param value: Object value.
      * @return value
      */
@@ -59,7 +67,7 @@ public class MapUtils {
     /**
      * Converts a Object into a Long.
      *
-     * @param key:   String key.
+     * @param key: String key.
      * @param value: Object value.
      * @return value
      */
@@ -74,16 +82,16 @@ public class MapUtils {
     public static Map<String, Object> objectToMap(Object args) {
         Map<String, Object> resMap = new HashMap<>();
         if (args instanceof Map) {
-            for (Object entry : ((Map) args).entrySet()) {
-                if (entry instanceof Map.Entry) {
-                    resMap.put(((Map.Entry) entry).getKey().toString(), ((Map.Entry) entry).getValue());
+            for (Map.Entry<?, ?> entry : ((Map<?, ?>) args).entrySet()) {
+                if (entry != null) {
+                    resMap.put(entry.getKey().toString(), entry.getValue());
                 }
             }
         }
         return resMap;
     }
 
-    public static Bundle mapToBundle(Map<String, Object> map) {
+    public static Bundle mapToBundle(@Nullable Map<String, Object> map, boolean isNested) {
         Bundle bundle = new Bundle();
 
         if (map == null) {
@@ -97,19 +105,88 @@ public class MapUtils {
 
             if (val instanceof String) {
                 bundle.putString(key, (String) val);
-            } else if (val instanceof Boolean) {
-                bundle.putBoolean(key, (Boolean) val);
             } else if (val instanceof Integer) {
                 bundle.putInt(key, (Integer) val);
             } else if (val instanceof Long) {
                 bundle.putLong(key, (Long) val);
             } else if (val instanceof Double) {
                 bundle.putDouble(key, (Double) val);
+            } else if (val instanceof Boolean) {
+                bundle.putBoolean(key, (Boolean) val);
+            } else if (val instanceof Map) {
+                if (!isNested) {
+                    bundle.putBundle(key, mapToBundle(MapUtils.objectToMap(val), true));
+                } else {
+                    Log.e(TAG, "Illegal value type. Key :" + key + ", only one nested bundle structure is allowed.");
+                }
+            } else if (val instanceof List) {
+                handleList(bundle, key, (List<?>) val);
             } else {
                 throw new IllegalArgumentException(
                     "Illegal value type. Key :" + key + ", valueType : " + val.getClass().getSimpleName());
             }
         }
         return bundle;
+    }
+
+    private static <T> ArrayList<T> toArrayList(List<T> list) {
+        return new ArrayList<>(list);
+    }
+
+    public static List<Integer> toIntegerList(Object value) {
+        ArrayList<Integer> arrList = new ArrayList<>();
+        if (value instanceof ArrayList) {
+            Object[] objArr = ((ArrayList<?>) value).toArray();
+            for (Object o : objArr) {
+                if (o instanceof Integer) {
+                    arrList.add((Integer) o);
+                } else {
+                    Log.w(TAG, "toIntegerList | Unexpected type in list");
+                }
+            }
+
+        } else {
+            Log.w(TAG, "toIntegerList | A list was expected");
+        }
+        return arrList;
+    }
+
+    public static List<String> toStringList(Object value) {
+        ArrayList<String> arrList = new ArrayList<>();
+        if (value instanceof ArrayList) {
+            Object[] objArr = ((ArrayList<?>) value).toArray();
+            for (Object o : objArr) {
+                if (o instanceof String) {
+                    arrList.add(o.toString());
+                } else {
+                    Log.w(TAG, "toStringList |  Unexpected type in list");
+                }
+            }
+
+        } else {
+            Log.w(TAG, "toStringList | A list was expected");
+        }
+        return arrList;
+    }
+
+    private static void handleList(Bundle bundle, String key, List<?> val) {
+        switch (val.get(0).getClass().getSimpleName()) {
+            case "String":
+                bundle.putStringArrayList(key, toArrayList(toStringList(val)));
+                break;
+            case "Integer":
+                bundle.putIntegerArrayList(key, toArrayList(toIntegerList(val)));
+                break;
+            case "HashMap":
+                ArrayList<Bundle> bundles = new ArrayList<>();
+                for (int i = 0; i < val.size(); i++) {
+                    bundles.add(mapToBundle(objectToMap(val.get(i)), true));
+                }
+                bundle.putParcelableArrayList(key, bundles);
+                break;
+            default:
+                throw new IllegalArgumentException(
+                    "inner Illegal value type. Key :" + key + ", valueType : " + val.getClass().getSimpleName());
+        }
     }
 }

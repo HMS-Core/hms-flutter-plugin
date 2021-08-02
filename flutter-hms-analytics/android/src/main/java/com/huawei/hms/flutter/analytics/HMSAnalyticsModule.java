@@ -110,9 +110,9 @@ public class HMSAnalyticsModule {
     }
 
     public void onEvent(MethodCall methodCall, Result result) {
-        String key = MapUtils.getString("key", methodCall.argument("key"));
-        Map<String, Object> val = MapUtils.objectToMap(methodCall.argument("value"));
-        Bundle bundle = MapUtils.mapToBundle(val);
+        String key = MapUtils.getString("eventId", methodCall.argument("eventId"));
+        Map<String, Object> val = MapUtils.objectToMap(methodCall.argument("params"));
+        Bundle bundle = MapUtils.mapToBundle(val, false);
         viewModel.onEvent(key, bundle);
         result.success(null);
     }

@@ -131,7 +131,6 @@ class HAParamType {
   static const String SOURCE = "\$Source";
   static const String ACOUNTTYPE = "\$AcountType";
   static const String REGISTMETHOD = "\$RegistMeth";
-  static const String OCCURREDTIME = "\$OccurredTime";
   static const String EVTRESULT = "\$EvtResult";
   static const String PREVLEVEL = "\$PrevLevel";
   static const String CURRVLEVEL = "\$CurrvLevel";

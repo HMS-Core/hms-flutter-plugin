@@ -58,8 +58,8 @@ public class HMSAnalyticsMethodCallHandler: NSObject, FlutterPlugin {
             guard let value = args["value"] as? String else { return }
             analytics.setUserProfile(name, value: value, resolve: result)
         case method.ON_EVENT:
-            guard let name = args["key"] as? String else { return }
-            guard let value = args["value"] as? NSDictionary else { return }
+            guard let name = args["eventId"] as? String else { return }
+            guard let value = args["params"] as? NSDictionary else { return }
             analytics.onEvent(name, params: value, resolve: result)
         case method.SET_USER_ID:
             guard let userId = args["userId"] as? String else { return }

@@ -13,13 +13,13 @@
 
 ## 1. Introduction
 
-This demo project is an example to demonstrate the features of the **Huawei Flutter Analytics ** Plugin.
+This demo project is an example to demonstrate the features of the **Huawei Flutter Analytics** Plugin.
 
 ---
 
 ## 2. Installation
 
-Before you get started, you must register as a HUAWEI developer and complete identity verification on the [HUAWEI Developer](https://developer.huawei.com/consumer/en/) website. For details, please refer to [Register a HUAWEI ID](https://developer.huawei.com/consumer/en/doc/10104).
+Before you get started, you must register as a HUAWEI developer and complete identity verification on the [HUAWEI Developer](https://developer.huawei.com/consumer/en/?ha_source=hms1) website. For details, please refer to [Register a HUAWEI ID](https://developer.huawei.com/consumer/en/doc/10104?ha_source=hms1).
 
 ### Creating a Project in AppGallery Connect
 
@@ -39,7 +39,7 @@ Set an unique **Application ID** on the app level build gradle file located on *
       <!-- Other configurations ... -->
   }
   ```
-**Step 2.** Sign in to [AppGallery Connect](https://developer.huawei.com/consumer/en/service/josp/agc/index.html)  and select **My projects**.
+**Step 2.** Sign in to [AppGallery Connect](https://developer.huawei.com/consumer/en/service/josp/agc/index.html?ha_source=hms1)  and select **My projects**.
 
 **Step 3.** Select your project from the project list or create a new one by clicking the **Add Project** button.
 
@@ -52,7 +52,7 @@ If an app exists in the project and you need to add a new one, expand the app se
 
 A signing certificate fingerprint is used to verify the authenticity of an app when it attempts to access an HMS Core (APK) through the HMS SDK. Before using the HMS Core (APK), you must locally generate a signing certificate fingerprint and configure it in the **AppGallery Connect**. You can refer to 3rd and 4th steps of [Generating a Signing Certificate](https://developer.huawei.com/consumer/en/codelab/HMSPreparation/index.html#2) codelab tutorial for the certificate generation. Perform the following steps after you have generated the certificate.
 
-**Step 1:** Sign in to [AppGallery Connect](https://developer.huawei.com/consumer/en/service/josp/agc/index.html) and select your project from **My Projects**. Then go to **Project Setting** > **General information**. In the **App information** field, click the  icon next to SHA-256 certificate fingerprint, and enter the obtained **SHA-256 certificate fingerprint**.
+**Step 1:** Sign in to [AppGallery Connect](https://developer.huawei.com/consumer/en/service/josp/agc/index.html?ha_source=hms1) and select your project from **My Projects**. Then go to **Project Setting** > **General information**. In the **App information** field, click the  icon next to SHA-256 certificate fingerprint, and enter the obtained **SHA-256 certificate fingerprint**.
 
 **Step 2:**  After completing the configuration, click **OK** to save the changes. (Check mark icon)
 
@@ -81,7 +81,7 @@ buildTypes {
 
 **Step 1:**
 
-- Sign in to [AppGallery Connect](https://developer.huawei.com/consumer/en/service/josp/agc/index.html) and
+- Sign in to [AppGallery Connect](https://developer.huawei.com/consumer/en/service/josp/agc/index.html?ha_source=hms1) and
    select your project from **My Projects**. Find your project, and click the app for which you want to view analytics
     data. 
 - Select any menu under **HUAWEI Analytics** and click **Enable Analytics service**. (Only users with the management permission can perform this operation.) 
@@ -89,7 +89,7 @@ buildTypes {
 
 **NOTE**
 
-To check whether HUAWEI Analytics has been enabled, sign in to [AppGallery Connect](https://developer.huawei.com/consumer/en/service/josp/agc/index.html), and go to **My projects** > **Project Setting** > **Manage APIs**.
+To check whether HUAWEI Analytics has been enabled, sign in to [AppGallery Connect](https://developer.huawei.com/consumer/en/service/josp/agc/index.html?ha_source=hms1), and go to **My projects** > **Project Setting** > **Manage APIs**.
 
 **Step 2:** Go to **Project Setting > General information** page, under the **App information** field, click **agconnect-services.json**  or **agconnect-services.plist** to download the configuration file.
 

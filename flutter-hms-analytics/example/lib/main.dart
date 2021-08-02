@@ -30,10 +30,12 @@ class MyBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.fromLTRB(0, 3, 3, 3),
+        padding: EdgeInsets.fromLTRB(3, 3, 3, 3),
         color: Colors.white,
-        child: RaisedButton(
-            color: Colors.grey,
+        child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Colors.grey,
+            ),
             child: Text(title,
                 style: TextStyle(
                     fontWeight: FontWeight.bold, color: Colors.white)),
@@ -56,7 +58,7 @@ class MyHomePage extends StatelessWidget {
             title: Text("Result"),
             content: Text(content, key: Key(Keys.DIALOG_CONTENT)),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 child: new Text("Close", key: Key(Keys.DIALOG_CLOSE)),
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -104,10 +106,23 @@ class MyHomePage extends StatelessWidget {
   }
 
   Future<void> _onCustomEvent(BuildContext context) async {
-    String name = "event_name";
-    dynamic value = {'my_event_key': 'my_event_value'};
+    String name = "my_custom_event";
 
-    await hmsAnalytics.onEvent(name, value);
+    Map<String, dynamic> customEvent = {
+      "string_value": "analytics",
+      "integer_value": 42,
+      "long_value": 4294967298,
+      "double_value": 4.2,
+      "boolean_value": true,
+      // "list_of_integers": <int>[1, 2, 3, 4, 5, 6, 10], // You can only send one list at a time.
+      "list_of_strings": <String>["HUAWEI", "Analytics"],
+      "inner_bundle_example": {
+        "string_val": "hms",
+        "int_val": 23,
+      },
+    };
+
+    await hmsAnalytics.onEvent(name, customEvent);
     _showDialog(context, "onEvent success");
   }
 
@@ -130,8 +145,8 @@ class MyHomePage extends StatelessWidget {
   }
 
   Future<void> _getAAID(BuildContext context) async {
-    String aaid = await hmsAnalytics.getAAID();
-    _showDialog(context, "AAID : " + aaid);
+    String? aaid = await hmsAnalytics.getAAID();
+    _showDialog(context, "AAID : $aaid");
   }
 
   Future<void> _getUserProfiles(BuildContext context) async {
@@ -155,7 +170,7 @@ class MyHomePage extends StatelessWidget {
   }
 
   Future<void> _getReportPolicyThreshold(BuildContext context) async {
-    int type = await hmsAnalytics
+    int? type = await hmsAnalytics
         .getReportPolicyThreshold(ReportPolicyType.ON_SCHEDULED_TIME_POLICY);
     _showDialog(context, "getReportPolicyThreshold $type");
   }
@@ -209,8 +224,7 @@ class MyHomePage extends StatelessWidget {
                 Key(Keys.CLEAR_CACHED_DATA)),
             MyBtn("Delete User Profile", _deleteUserProfile,
                 Key(Keys.DELETE_USER_PROFILE)),
-            MyBtn("Delete UserId", _deleteUserId,
-                Key(Keys.DELETE_USER_ID)),
+            MyBtn("Delete UserId", _deleteUserId, Key(Keys.DELETE_USER_ID)),
             MyBtn("SetAnalyticsEnabled", _setAnalyticsEnabled,
                 Key(Keys.SET_ANALYTICS_ENABLED)),
             MyBtn("Get AAID", _getAAID, Key(Keys.GET_AAID)),
