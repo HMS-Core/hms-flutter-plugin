@@ -14,7 +14,6 @@
     limitations under the License.
 */
 import 'package:flutter/material.dart';
-import 'dart:async';
 import 'package:huawei_ads/hms_ads_lib.dart';
 import 'package:huawei_ads_example/pages/publisher/banner_ad_platform_view_page.dart';
 
@@ -31,22 +30,20 @@ import 'pages/identifier/oaid_page.dart';
 import 'pages/installreferrer/install_referrer_page.dart';
 import 'utils/constants.dart';
 
-void main() => runApp(HmsAdsDemo());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await HwAds.init();
+  } catch (e) {
+    print('EXCEPTION | $e');
+  }
+  runApp(HmsAdsDemo());
+}
 
 class HmsAdsDemo extends StatelessWidget {
-  Future<void> initHwAds() async {
-    try {
-      await HwAds.init();
-    } catch (e) {
-      print('EXCEPTION | $e');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    initHwAds();
     return MaterialApp(
-      initialRoute: Routes.splashAd,
       routes: {
         '/': (context) => AdsMenuPage(),
         // publisher

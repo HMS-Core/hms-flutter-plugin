@@ -377,6 +377,7 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
         Integer nonPersonalizedAd = FromMap.toInteger("nonPersonalizedAd", call.argument("nonPersonalizedAd"));
         String appCountry = FromMap.toString("appCountry", call.argument("appCountry"));
         String appLang = FromMap.toString("appLang", call.argument("appLang"));
+        boolean requestLocation = FromMap.toBoolean("requestLocation", call.argument("requestLocation"));
 
         RequestOptions options = new RequestOptions().toBuilder()
             .setAdContentClassification(adContentClassification)
@@ -385,6 +386,7 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
             .setNonPersonalizedAd(nonPersonalizedAd)
             .setAppCountry(appCountry)
             .setAppLang(appLang)
+            .setRequestLocation(requestLocation)
             .build();
 
         HwAds.setRequestOptions(options);
@@ -413,6 +415,7 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
             arguments.put("nonPersonalizedAd", options.getNonPersonalizedAd());
             arguments.put("appCountry", options.getAppCountry());
             arguments.put("appLang", options.getAppLang());
+            arguments.put("requestLocation", options.isRequestLocation());
             result.success(arguments);
         } else {
             Log.w(TAG, "Request Options null");
@@ -489,14 +492,7 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
 
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
-        if (flutterPluginBinding != null) {
-            onAttachedToEngine(
-                flutterPluginBinding.getPlatformViewRegistry(),
-                new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), Channels.LIBRARY_METHOD_CHANNEL),
-                flutterPluginBinding.getApplicationContext(),
-                flutterPluginBinding.getBinaryMessenger(),
-                binding.getActivity());
-        }
+        attachedToActivity(binding);
     }
 
     @Override
@@ -515,13 +511,17 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
 
     @Override
     public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
+        attachedToActivity(binding);
+    }
+
+    private void attachedToActivity(@NonNull ActivityPluginBinding binding) {
         if (flutterPluginBinding != null) {
             onAttachedToEngine(
-                flutterPluginBinding.getPlatformViewRegistry(),
-                new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), Channels.LIBRARY_METHOD_CHANNEL),
-                flutterPluginBinding.getApplicationContext(),
-                flutterPluginBinding.getBinaryMessenger(),
-                binding.getActivity());
+                    flutterPluginBinding.getPlatformViewRegistry(),
+                    new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), Channels.LIBRARY_METHOD_CHANNEL),
+                    flutterPluginBinding.getApplicationContext(),
+                    flutterPluginBinding.getBinaryMessenger(),
+                    binding.getActivity());
         }
     }
 

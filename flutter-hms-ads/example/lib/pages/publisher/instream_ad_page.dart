@@ -41,23 +41,23 @@ class InstreamAdPageBody extends StatefulWidget {
 
 class _InstreamAdPageBodyState extends State<InstreamAdPageBody>
     with WidgetsBindingObserver {
-  BuildContext context;
-  InstreamAdView adView;
-  InstreamAdViewController adViewController;
-  InstreamAdLoader adLoader;
+  late BuildContext context;
+  InstreamAdView? adView;
+  InstreamAdViewController? adViewController;
+  late InstreamAdLoader adLoader;
   List<InstreamAd> instreamAds = [];
   bool paused = false;
   bool muted = false;
   bool loaded = false;
   int countdownInSeconds = 0;
-  int currentTotalTime = 0;
-  String callToActionText;
-  InstreamAd currentAd;
+  int? currentTotalTime = 0;
+  String? callToActionText;
+  InstreamAd? currentAd;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
     adLoader = InstreamAdLoader(
       adId: 'testy3cglm3pj0',
       totalDuration: Duration(minutes: 1),
@@ -68,11 +68,14 @@ class _InstreamAdPageBodyState extends State<InstreamAdPageBody>
         setState(() {});
         showSnackbar('onAdLoaded: length: ${ads.length}');
       },
-      onAdFailed: (int errorCode) {
+      onAdFailed: (int? errorCode) {
         showSnackbar('onAdFailed: errorCode:$errorCode');
       },
     );
     adViewController = InstreamAdViewController(
+      onInstreamAdViewCreated: (int adId) {
+        resume();
+      },
       onClick: () {
         showSnackbar('onClick');
       },
@@ -83,7 +86,7 @@ class _InstreamAdPageBodyState extends State<InstreamAdPageBody>
         restartCountdown(instreamAd);
       },
       onMediaProgress: (per, playTime) {
-        updateCountdown(playTime, per: per);
+        updateCountdown(playTime!, per: per);
       },
       onMediaStart: (playTime) {
         showSnackbar('onMediaStart: $playTime');
@@ -116,7 +119,7 @@ class _InstreamAdPageBodyState extends State<InstreamAdPageBody>
   @override
   void dispose() {
     super.dispose();
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
   }
 
   @override
@@ -142,19 +145,19 @@ class _InstreamAdPageBodyState extends State<InstreamAdPageBody>
     setState(() {});
   }
 
-  void restartCountdown(InstreamAd ad) async {
+  void restartCountdown(InstreamAd? ad) async {
     currentTotalTime = await ad?.getDuration();
     updateCountdown(0);
   }
 
-  void updateCallToAction(InstreamAd ad) async {
+  void updateCallToAction(InstreamAd? ad) async {
     callToActionText = await ad?.getCallToAction();
     setState(() {});
   }
 
-  void updateCountdown(int playTime, {int per}) {
+  void updateCountdown(int playTime, {int? per}) {
     int oldCountdownInSeconds = countdownInSeconds;
-    this.countdownInSeconds = (currentTotalTime - playTime) ~/ 1000;
+    this.countdownInSeconds = (currentTotalTime! - playTime) ~/ 1000;
     if (oldCountdownInSeconds != countdownInSeconds) {
       print('onMediaProgress: per: $per playTime $playTime');
       setState(() {});
@@ -188,9 +191,9 @@ class _InstreamAdPageBodyState extends State<InstreamAdPageBody>
                   )
                 : Stack(
                     children: [
-                      adView,
+                      adView!,
                       InstreamAdViewElements(
-                        countdown: '${countdownInSeconds ?? ''}s',
+                        countdown: '${countdownInSeconds}s',
                         callToActionText: '${callToActionText ?? ''}',
                         onSkip: () async {
                           await adViewController?.stop();
@@ -215,7 +218,7 @@ class _InstreamAdPageBodyState extends State<InstreamAdPageBody>
                 RaisedButton(
                   child: Text(loaded ? 'LOADED' : 'LOAD AD'),
                   onPressed: () async {
-                    bool loadAd = await adLoader.loadAd();
+                    bool? loadAd = await adLoader.loadAd();
                     print('loadAd: $loadAd');
                   },
                 ),

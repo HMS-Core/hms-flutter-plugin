@@ -27,11 +27,11 @@ class _InterstitialAdPageState extends State<InterstitialAdPage> {
   static final String _imageTestAdSlotId = "teste9ih9j0rc3"; // Image ad
   static final String _videoTestAdSlotId = "testb4znbuh3n2"; // Video ad
   final AdParam _adParam = AdParam();
-  String adSlotId = _imageTestAdSlotId;
-  InterstitialAd _interstitialAd;
+  String? adSlotId = _imageTestAdSlotId;
+  InterstitialAd? _interstitialAd;
   String logs = "Double tap to clear the logs.\n\n";
 
-  void changeSlotId(String slotId) {
+  void changeSlotId(String? slotId) {
     setState(() {
       _interstitialAd = null;
       adSlotId = slotId;
@@ -40,9 +40,9 @@ class _InterstitialAdPageState extends State<InterstitialAdPage> {
 
   InterstitialAd createAd() {
     return InterstitialAd(
-      adSlotId: adSlotId,
+      adSlotId: adSlotId!,
       adParam: _adParam,
-      listener: (AdEvent event, {int errorCode}) {
+      listener: (AdEvent event, {int? errorCode}) {
         print("Interstitial Ad event : $event");
         setState(() {
           logs = logs + "Interstitial Ad event : ${describeEnum(event)}\n";

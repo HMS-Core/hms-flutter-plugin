@@ -26,25 +26,25 @@ class BannerAdPlatformViewPage extends StatefulWidget {
 class _BannerAdPlatformViewPageState extends State<BannerAdPlatformViewPage> {
   static final String _testAdSlotId = "testw6vs28auh3";
   final AdParam _adParam = AdParam();
-  BannerViewController _bannerViewController;
-  BannerAdSize bannerAdSize = BannerAdSize.s320x50;
+  BannerViewController? _bannerViewController;
+  BannerAdSize? bannerAdSize = BannerAdSize.s320x50;
   String logs = "\nDouble tap to clear the logs.\n\n";
 
-  void changeSize(BannerAdSize size) {
+  void changeSize(BannerAdSize? size) {
     setState(() {
       bannerAdSize = size;
     });
   }
 
   void testBannerAdSizeMethods() async {
-    print('isFullWidthSize : ${bannerAdSize.isFullWidthSize}');
-    print('isDynamicSize : ${bannerAdSize.isDynamicSize}');
-    print('isAutoHeightSize : ${bannerAdSize.isAutoHeightSize}');
+    print('isFullWidthSize : ${bannerAdSize!.isFullWidthSize}');
+    print('isDynamicSize : ${bannerAdSize!.isDynamicSize}');
+    print('isAutoHeightSize : ${bannerAdSize!.isAutoHeightSize}');
 
-    int widthPx = await bannerAdSize.getWidthPx;
+    int? widthPx = await bannerAdSize!.getWidthPx;
     print('widthPx : $widthPx');
 
-    int heightPx = await bannerAdSize.getHeightPx;
+    int? heightPx = await bannerAdSize!.getHeightPx;
     print('heightPx : $heightPx');
 
     BannerAdSize currentDir =
@@ -66,7 +66,7 @@ class _BannerAdPlatformViewPageState extends State<BannerAdPlatformViewPage> {
     super.initState();
     testBannerAdSizeMethods();
     _bannerViewController = BannerViewController(
-      listener: (AdEvent event, {int errorCode}) {
+      listener: (AdEvent event, {int? errorCode}) {
         print("Banner Ad event : $event");
         setState(() {
           logs = logs + "Banner Ad event : ${describeEnum(event)}\n";
@@ -164,7 +164,7 @@ class _BannerAdPlatformViewPageState extends State<BannerAdPlatformViewPage> {
               ),
               BannerView(
                 adSlotId: _testAdSlotId,
-                size: bannerAdSize,
+                size: bannerAdSize!,
                 adParam: _adParam,
                 backgroundColor: Colors.blueGrey,
                 refreshDuration: Duration(seconds: 30),

@@ -18,13 +18,12 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:huawei_ads/adslite/ad_param.dart';
 import 'package:huawei_ads/adslite/reward/reward_verify_config.dart';
-import 'package:flutter/foundation.dart';
 import 'package:huawei_ads/hms_ads.dart';
 import 'package:huawei_ads/utils/channels.dart';
 
 class Reward {
-  final String name;
-  final int amount;
+  final String? name;
+  final int? amount;
 
   Reward({this.name, this.amount});
 
@@ -37,7 +36,7 @@ class Reward {
   }
 
   static Reward fromJson(Map<dynamic, dynamic> args) {
-    String name = args['name'] ?? null;
+    String? name = args['name'] ?? null;
     int amount = args['amount'] ?? 0;
 
     return new Reward(name: name, amount: amount);
@@ -49,29 +48,29 @@ class RewardAd {
   int get id => hashCode;
 
   static final String _adType = 'Reward';
-  String userId;
-  String data;
-  bool openInHmsCore;
-  RewardVerifyConfig rewardVerifyConfig;
-  RewardAdListener _listener;
-  EventChannel _streamReward;
-  StreamSubscription _listenerSub;
+  String? userId;
+  String? data;
+  bool? openInHmsCore;
+  RewardVerifyConfig? rewardVerifyConfig;
+  RewardAdListener? _listener;
+  late EventChannel _streamReward;
+  StreamSubscription? _listenerSub;
 
   RewardAd({
     this.userId,
     this.data,
-    this.openInHmsCore,
-    RewardAdListener listener,
+    @deprecated this.openInHmsCore,
+    RewardAdListener? listener,
   }) {
     rewardAds[id] = this;
     _streamReward = EventChannel('$REWARD_EVENT_CHANNEL/$id');
     _listener = listener;
   }
 
-  RewardAdListener get getRewardAdListener => _listener;
+  RewardAdListener? get getRewardAdListener => _listener;
   Future<Reward> getReward() async {
     Map<dynamic, dynamic> args =
-        await Ads.instance.channelReward.invokeMethod("getRewardAdReward");
+        await (Ads.instance.channelReward.invokeMethod("getRewardAdReward"));
     return Reward.fromJson(args);
   }
 
@@ -79,7 +78,7 @@ class RewardAd {
     _listener = listener;
   }
 
-  Future<bool> _initAd() async {
+  Future<bool?> _initAd() async {
     return Ads.instance.channelReward
         .invokeMethod("initRewardAd", <String, dynamic>{
       'id': id,
@@ -87,41 +86,41 @@ class RewardAd {
     });
   }
 
-  Future<bool> loadAd({@required String adSlotId, @required AdParam adParam}) {
+  Future<bool?> loadAd({required String adSlotId, required AdParam adParam}) {
     _initAd();
     _startListening();
     return Ads.instance.channelReward
         .invokeMethod("loadRewardAd", <String, dynamic>{
       'id': id,
       'adSlotId': adSlotId,
-      'adParam': adParam?.toJson(),
+      'adParam': adParam.toJson(),
       'userId': userId,
       'data': data,
       'rewardVerifyConfig': rewardVerifyConfig?.toJson(),
     });
   }
 
-  Future<bool> isLoaded() {
+  Future<bool?> isLoaded() {
     return Ads.instance.channelReward.invokeMethod(
         "isAdLoaded", <String, dynamic>{'id': id, "adType": _adType});
   }
 
-  Future<bool> show() {
+  Future<bool?> show() {
     return Ads.instance.channelReward
         .invokeMethod("showRewardAd", <String, dynamic>{'id': id});
   }
 
-  Future<bool> pause() {
+  Future<bool?> pause() {
     return Ads.instance.channelReward.invokeMethod(
         "pauseAd", <String, dynamic>{'id': id, "adType": _adType});
   }
 
-  Future<bool> resume() {
+  Future<bool?> resume() {
     return Ads.instance.channelReward.invokeMethod(
         "resumeAd", <String, dynamic>{'id': id, "adType": _adType});
   }
 
-  Future<bool> destroy() {
+  Future<bool?> destroy() {
     return Ads.instance.channelReward.invokeMethod(
         "destroyAd", <String, dynamic>{'id': id, "adType": _adType});
   }
@@ -131,7 +130,7 @@ class RewardAd {
     _listenerSub =
         _streamReward.receiveBroadcastStream(id).listen((channelEvent) {
       final Map<dynamic, dynamic> argumentsMap = channelEvent;
-      final RewardAdEvent rewardAdEvent =
+      final RewardAdEvent? rewardAdEvent =
           toRewardAdEvent(argumentsMap['event']);
       if (rewardAdEvent == RewardAdEvent.failedToLoad) {
         _listener?.call(rewardAdEvent, errorCode: argumentsMap["errorCode"]);
@@ -143,8 +142,8 @@ class RewardAd {
     });
   }
 
-  static RewardAdEvent toRewardAdEvent(String event) =>
-      _rewardAdEventMap[event];
+  static RewardAdEvent? toRewardAdEvent(String? event) =>
+      _rewardAdEventMap[event!];
 
   static const Map<String, RewardAdEvent> _rewardAdEventMap =
       <String, RewardAdEvent>{
@@ -159,8 +158,8 @@ class RewardAd {
   };
 }
 
-typedef void RewardAdListener(RewardAdEvent event,
-    {Reward reward, int errorCode});
+typedef void RewardAdListener(RewardAdEvent? event,
+    {Reward? reward, int? errorCode});
 
 enum RewardAdEvent {
   loaded,

@@ -18,52 +18,52 @@ import 'package:huawei_ads/utils/channels.dart';
 
 class InstreamAd {
   final int id;
-  MethodChannel _channel;
-  InstreamAd({this.id}) {
+  late MethodChannel _channel;
+  InstreamAd({required this.id}) {
     _channel = MethodChannel("$INSTREAM_METHOD_CHANNEL/AD/$id");
   }
 
-  Future<String> getAdSource() async {
+  Future<String?> getAdSource() async {
     return await _channel.invokeMethod('getAdSource');
   }
 
-  Future<String> getCallToAction() async {
+  Future<String?> getCallToAction() async {
     return await _channel.invokeMethod('getCallToAction');
   }
 
-  Future<int> getDuration() async {
+  Future<int?> getDuration() async {
     return await _channel.invokeMethod('getDuration');
   }
 
-  Future<String> getWhyThisAd() async {
+  Future<String?> getWhyThisAd() async {
     return await _channel.invokeMethod('getWhyThisAd');
   }
 
-  Future<String> getAdSign() async {
+  Future<String?> getAdSign() async {
     return await _channel.invokeMethod('getAdSign');
   }
 
-  Future<bool> isClicked() async {
+  Future<bool?> isClicked() async {
     return await _channel.invokeMethod('isClicked');
   }
 
-  Future<bool> isExpired() async {
+  Future<bool?> isExpired() async {
     return await _channel.invokeMethod('isExpired');
   }
 
-  Future<bool> isImageAd() async {
+  Future<bool?> isImageAd() async {
     return await _channel.invokeMethod('isImageAd');
   }
 
-  Future<bool> isShown() async {
+  Future<bool?> isShown() async {
     return await _channel.invokeMethod('isShown');
   }
 
-  Future<bool> isVideoAd() async {
+  Future<bool?> isVideoAd() async {
     return await _channel.invokeMethod('isVideoAd');
   }
 
-  Future<bool> gotoWhyThisAdPage() async {
+  Future<bool?> gotoWhyThisAdPage() async {
     return await _channel.invokeMethod('gotoWhyThisAdPage');
   }
 }

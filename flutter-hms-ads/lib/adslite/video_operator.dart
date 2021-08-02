@@ -17,89 +17,89 @@ import 'package:flutter/services.dart';
 
 class VideoOperator {
   // This has to be a method channel of a native ad controller.
-  final MethodChannel _nativeChannel;
-  VideoLifecycleListener _listener;
+  final MethodChannel? _nativeChannel;
+  VideoLifecycleListener? _listener;
 
   VideoOperator(this._nativeChannel);
 
-  VideoLifecycleListener get getVideoLifecycleListener => _listener;
+  VideoLifecycleListener? get getVideoLifecycleListener => _listener;
   set setVideoLifecycleListener(VideoLifecycleListener listener) =>
       _listener = listener;
 
-  Future<double> getAspectRatio() async {
+  Future<double?> getAspectRatio() async {
     if (_nativeChannel == null) {
       print('ERROR: MethodChannel is null');
       return -1;
     }
-    double aspectRatio = await _nativeChannel.invokeMethod("getAspectRatio");
+    double? aspectRatio = await _nativeChannel!.invokeMethod("getAspectRatio");
     return aspectRatio;
   }
 
-  Future<bool> hasVideo() async {
+  Future<bool?> hasVideo() async {
     if (_nativeChannel == null) {
       print('ERROR: MethodChannel is null');
       return false;
     }
-    bool hasVideo = await _nativeChannel.invokeMethod("hasVideo");
+    bool? hasVideo = await _nativeChannel!.invokeMethod("hasVideo");
     return hasVideo;
   }
 
-  Future<bool> isCustomizeOperateEnabled() async {
+  Future<bool?> isCustomizeOperateEnabled() async {
     if (_nativeChannel == null) {
       print('ERROR: MethodChannel is null');
       return false;
     }
-    bool customEnabled =
-        await _nativeChannel.invokeMethod("isCustomOperateEnabled");
+    bool? customEnabled =
+        await _nativeChannel!.invokeMethod("isCustomOperateEnabled");
     return customEnabled;
   }
 
-  Future<bool> isMuted() async {
+  Future<bool?> isMuted() async {
     if (_nativeChannel == null) {
       print('ERROR: MethodChannel is null');
       return false;
     }
-    bool isMuted = await _nativeChannel.invokeMethod("isMuted");
+    bool? isMuted = await _nativeChannel!.invokeMethod("isMuted");
     return isMuted;
   }
 
-  Future<bool> mute(bool mute) async {
+  Future<bool?> mute(bool mute) async {
     if (_nativeChannel == null) {
       print('ERROR: MethodChannel is null');
       return false;
     }
-    bool muted = await _nativeChannel.invokeMethod("mute", {"mute": mute});
+    bool? muted = await _nativeChannel!.invokeMethod("mute", {"mute": mute});
     return muted;
   }
 
-  Future<bool> pause() async {
+  Future<bool?> pause() async {
     if (_nativeChannel == null) {
       print('ERROR: MethodChannel is null');
       return false;
     }
-    bool paused = await _nativeChannel.invokeMethod("pause");
+    bool? paused = await _nativeChannel!.invokeMethod("pause");
     return paused;
   }
 
-  Future<bool> play() async {
+  Future<bool?> play() async {
     if (_nativeChannel == null) {
       print('ERROR: MethodChannel is null');
       return false;
     }
-    bool played = await _nativeChannel.invokeMethod("play");
+    bool? played = await _nativeChannel!.invokeMethod("play");
     return played;
   }
 
-  Future<bool> stop() async {
+  Future<bool?> stop() async {
     if (_nativeChannel == null) {
       print('ERROR: MethodChannel is null');
       return false;
     }
-    bool stopped = await _nativeChannel.invokeMethod("stop");
+    bool? stopped = await _nativeChannel!.invokeMethod("stop");
     return stopped;
   }
 
-  static VideoLifecycleEvent toVideoLifeCycleEvent(String event) =>
+  static VideoLifecycleEvent? toVideoLifeCycleEvent(String event) =>
       _videoLifecycleEventMap[event];
 
   static const Map<String, VideoLifecycleEvent> _videoLifecycleEventMap =
@@ -112,7 +112,7 @@ class VideoOperator {
   };
 }
 
-typedef void VideoLifecycleListener(VideoLifecycleEvent event, {bool isMuted});
+typedef void VideoLifecycleListener(VideoLifecycleEvent event, {bool? isMuted});
 
 enum VideoLifecycleEvent {
   start,

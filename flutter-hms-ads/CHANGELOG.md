@@ -1,3 +1,8 @@
+## 13.4.40+302
+
+* Nullsafety migration.
+* Ads Kit sdk updated to 13.4.40.302.
+
 ## 13.4.35+301
 
 *  Updated HMSLogger.

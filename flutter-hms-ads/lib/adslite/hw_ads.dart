@@ -25,36 +25,36 @@ class HwAds {
     Ads.instance.channel.invokeMethod('HwAds-initWithAppCode');
   }
 
-  static Future<String> get getSdkVersion async {
-    String sdkVersion =
+  static Future<String?> get getSdkVersion async {
+    String? sdkVersion =
         await Ads.instance.channel.invokeMethod('HwAds-getSdkVersion');
     return sdkVersion;
   }
 
-  static Future<RequestOptions> get getRequestOptions async {
+  static Future<RequestOptions?> get getRequestOptions async {
     dynamic args =
         await Ads.instance.channel.invokeMethod('HwAds-getRequestOptions');
     return args != null ? RequestOptions.fromJson(args) : null;
   }
 
-  static Future<bool> setRequestOptions(RequestOptions options) async {
-    bool result = await Ads.instance.channel
+  static Future<bool?> setRequestOptions(RequestOptions options) async {
+    bool? result = await Ads.instance.channel
         .invokeMethod('HwAds-setRequestOptions', options.toJson());
     return result;
   }
 
-  static Future<bool> setConsent(String consent) async {
-    bool result = await Ads.instance.channel.invokeMethod('HwAds-setConsent', {
+  static Future<bool?> setConsent(String consent) async {
+    bool? result = await Ads.instance.channel.invokeMethod('HwAds-setConsent', {
       'consent': consent,
     });
     return result;
   }
 
-  static Future<bool> enableLogger() async {
+  static Future<bool?> enableLogger() async {
     return await Ads.instance.channel.invokeMethod('enableLogger');
   }
 
-  static Future<bool> disableLogger() async {
+  static Future<bool?> disableLogger() async {
     return await Ads.instance.channel.invokeMethod('disableLogger');
   }
 }

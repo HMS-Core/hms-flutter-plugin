@@ -14,7 +14,7 @@
     limitations under the License.
 */
 class Bundle {
-  Map<String, Map<String, dynamic>> _bundle;
+  late Map<String, Map<String, dynamic>> _bundle;
   static const String _int = "int";
   static const String _intList = "intList";
   static const String _string = "String";
@@ -28,10 +28,10 @@ class Bundle {
 
   get bundle => _bundle;
 
-  void putInt(String key, int i) => _bundle[key] = {"type": _int, "val": i};
+  void putInt(String key, int? i) => _bundle[key] = {"type": _int, "val": i};
   void putIntegerArrayList(String key, List<int> arr) =>
       _bundle[key] = {"type": _intList, "val": arr};
-  void putString(String key, String s) =>
+  void putString(String key, String? s) =>
       _bundle[key] = {"type": _string, "val": s};
   void putStringArrayList(String key, List<String> arr) =>
       _bundle[key] = {"type": _stringList, "val": arr};
@@ -40,39 +40,39 @@ class Bundle {
   void putBooleanArrayList(String key, List<bool> arr) =>
       _bundle[key] = {"type": _boolList, "val": arr};
 
-  int getInt(String key) {
-    if (_bundle[key] != null && _bundle[key]["type"] == _int)
-      return _bundle[key]["val"];
+  int? getInt(String key) {
+    if (_bundle[key] != null && _bundle[key]!["type"] == _int)
+      return _bundle[key]!["val"];
     return null;
   }
 
-  List<int> getIntegerArrayList(String key) {
-    if (_bundle[key] != null && _bundle[key]["type"] == _intList)
-      return _bundle[key]["val"];
+  List<int>? getIntegerArrayList(String key) {
+    if (_bundle[key] != null && _bundle[key]!["type"] == _intList)
+      return _bundle[key]!["val"];
     return null;
   }
 
-  String getString(String key) {
-    if (_bundle[key] != null && _bundle[key]["type"] == _string)
-      return _bundle[key]["val"];
+  String? getString(String key) {
+    if (_bundle[key] != null && _bundle[key]!["type"] == _string)
+      return _bundle[key]!["val"];
     return null;
   }
 
-  List<String> getArrayString(String key) {
-    if (_bundle[key] != null && _bundle[key]["type"] == _stringList)
-      return _bundle[key]["val"];
+  List<String>? getArrayString(String key) {
+    if (_bundle[key] != null && _bundle[key]!["type"] == _stringList)
+      return _bundle[key]!["val"];
     return null;
   }
 
-  bool getBoolean(String key) {
-    if (_bundle[key] != null && _bundle[key]["type"] == _bool)
-      return _bundle[key]["val"];
+  bool? getBoolean(String key) {
+    if (_bundle[key] != null && _bundle[key]!["type"] == _bool)
+      return _bundle[key]!["val"];
     return null;
   }
 
-  List<bool> getBooleanArrayList(String key) {
-    if (_bundle[key] != null && _bundle[key]["type"] == _boolList)
-      return _bundle[key]["val"];
+  List<bool>? getBooleanArrayList(String key) {
+    if (_bundle[key] != null && _bundle[key]!["type"] == _boolList)
+      return _bundle[key]!["val"];
     return null;
   }
 }

@@ -55,55 +55,55 @@ class NativeStyles {
   NativeStyles();
 
   void setFlag(
-          {bool isVisible,
-          double fontSize,
-          NativeFontWeight fontWeight,
-          Color color,
-          Color bgColor}) =>
+          {bool? isVisible,
+          double? fontSize,
+          NativeFontWeight? fontWeight,
+          Color? color,
+          Color? bgColor}) =>
       _flag = _buildNativeStyle(
           _flag, isVisible, fontSize, fontWeight, color, bgColor);
 
   void setTitle(
-          {bool isVisible,
-          double fontSize,
-          NativeFontWeight fontWeight,
-          Color color,
-          Color bgColor}) =>
+          {bool? isVisible,
+          double? fontSize,
+          NativeFontWeight? fontWeight,
+          Color? color,
+          Color? bgColor}) =>
       _buildNativeStyle(
           _title, isVisible, fontSize, fontWeight, color, bgColor);
 
   void setSource(
-          {bool isVisible,
-          double fontSize,
-          NativeFontWeight fontWeight,
-          Color color,
-          Color bgColor}) =>
+          {bool? isVisible,
+          double? fontSize,
+          NativeFontWeight? fontWeight,
+          Color? color,
+          Color? bgColor}) =>
       _buildNativeStyle(
           _source, isVisible, fontSize, fontWeight, color, bgColor);
 
   void setDescription(
-          {bool isVisible,
-          double fontSize,
-          NativeFontWeight fontWeight,
-          Color color,
-          Color bgColor}) =>
+          {bool? isVisible,
+          double? fontSize,
+          NativeFontWeight? fontWeight,
+          Color? color,
+          Color? bgColor}) =>
       _buildNativeStyle(
           _description, isVisible, fontSize, fontWeight, color, bgColor);
 
   void setCallToAction(
-          {bool isVisible,
-          double fontSize,
-          NativeFontWeight fontWeight,
-          Color color,
-          Color bgColor}) =>
+          {bool? isVisible,
+          double? fontSize,
+          NativeFontWeight? fontWeight,
+          Color? color,
+          Color? bgColor}) =>
       _buildNativeStyle(
           _callToAction, isVisible, fontSize, fontWeight, color, bgColor);
 
   static Map<String, dynamic> _createNativeStyle(
-      {double fontSize,
-      NativeFontWeight fontWeight,
-      Color color,
-      Color bgColor}) {
+      {double? fontSize,
+      NativeFontWeight? fontWeight,
+      required Color color,
+      Color? bgColor}) {
     Map<String, dynamic> style = Map<String, dynamic>();
     style[_Key.visibility] = true;
     style[_Key.fontSize] = fontSize;
@@ -116,11 +116,11 @@ class NativeStyles {
 
   static Map<String, dynamic> _buildNativeStyle(
       Map<String, dynamic> style,
-      bool isVisible,
-      double fontSize,
-      NativeFontWeight fontWeight,
-      Color color,
-      Color bgColor) {
+      bool? isVisible,
+      double? fontSize,
+      NativeFontWeight? fontWeight,
+      Color? color,
+      Color? bgColor) {
     if (isVisible != null) style[_Key.visibility] = isVisible;
     if (fontSize != null) style[_Key.fontSize] = fontSize;
     if (fontWeight != null) style[_Key.fontWeight] = fontWeight.index;

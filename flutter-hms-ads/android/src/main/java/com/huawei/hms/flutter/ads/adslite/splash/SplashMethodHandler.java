@@ -21,6 +21,8 @@ import android.content.pm.ActivityInfo;
 
 import androidx.annotation.NonNull;
 
+import java.util.Map;
+
 import com.huawei.hms.ads.splash.SplashView;
 import com.huawei.hms.flutter.ads.factory.EventChannelFactory;
 import com.huawei.hms.flutter.ads.logger.HMSLogger;
@@ -28,8 +30,6 @@ import com.huawei.hms.flutter.ads.utils.FromMap;
 import com.huawei.hms.flutter.ads.utils.ToMap;
 import com.huawei.hms.flutter.ads.utils.constants.Channels;
 import com.huawei.hms.flutter.ads.utils.constants.ErrorCodes;
-
-import java.util.Map;
 
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;

@@ -18,7 +18,7 @@ import 'package:huawei_ads/hms_ads_lib.dart';
 import 'package:huawei_ads_example/utils/constants.dart';
 
 class SplashAdPage extends StatefulWidget {
-  final bool fromIndexPage;
+  final bool? fromIndexPage;
 
   SplashAdPage({this.fromIndexPage});
 
@@ -29,8 +29,8 @@ class SplashAdPage extends StatefulWidget {
 class _SplashAdPageState extends State<SplashAdPage> {
   final String _testAdSlotId = "testq6zq98hecj";
   final AdParam _adParam = AdParam();
-  bool _fromIndexPage;
-  static SplashAd _splashAd;
+  late bool _fromIndexPage;
+  static SplashAd? _splashAd;
 
   SplashAd createAd() => SplashAd(
       adType: SplashAdType.above,
@@ -38,7 +38,7 @@ class _SplashAdPageState extends State<SplashAdPage> {
       footerText: 'CUSTOM FOOTER',
       logoBgResId: 'ic_background_launcher',
       logoResId: 'ic_launcher',
-      loadListener: (SplashAdLoadEvent event, {int errorCode}) {
+      loadListener: (SplashAdLoadEvent event, {int? errorCode}) {
         print("Splash Ad Load event : $event");
         if (event == SplashAdLoadEvent.dismissed) {
           if (_fromIndexPage)

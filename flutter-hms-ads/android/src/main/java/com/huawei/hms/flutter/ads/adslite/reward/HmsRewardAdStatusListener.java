@@ -52,7 +52,7 @@ class HmsRewardAdStatusListener extends RewardAdStatusListener {
     @Override
     public void onRewarded(Reward reward) {
         HMSLogger.getInstance(context).startMethodExecutionTimer("onRewarded");
-        event.success(ToMap.fromArgs("event", "onRewarded"));
+        event.success(ToMap.fromArgs("event", "onRewarded", "name", reward.getName(), "amount", reward.getAmount()));
         HMSLogger.getInstance(context).sendSingleEvent("onRewarded");
     }
 

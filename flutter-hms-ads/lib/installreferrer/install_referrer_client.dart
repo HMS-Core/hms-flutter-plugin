@@ -25,17 +25,17 @@ class InstallReferrerClient {
   int get id => hashCode;
 
   final ReferrerCallMode _callMode = ReferrerCallMode.sdk;
-  bool _test = false;
-  InstallReferrerStateListener stateListener;
-  ReferrerDetails _referrerDetails;
+  bool? _test = false;
+  InstallReferrerStateListener? stateListener;
+  ReferrerDetails? _referrerDetails;
 
-  InstallReferrerClient({this.stateListener, bool test}) {
+  InstallReferrerClient({this.stateListener, bool? test}) {
     this._test = test;
     allReferrers[id] = this;
   }
   set setTest(bool test) => _test = test;
 
-  void startConnection([bool isTest]) {
+  void startConnection([bool? isTest]) {
     Ads.instance.channelReferrer.invokeMethod('referrerStartConnection', {
       'id': id,
       'callMode': describeEnum(_callMode),
@@ -50,14 +50,14 @@ class InstallReferrerClient {
     });
   }
 
-  Future<bool> isReady() {
+  Future<bool?> isReady() {
     return Ads.instance.channelReferrer.invokeMethod('referrerIsReady', {
       'id': id,
       "callMode": describeEnum(_callMode),
     });
   }
 
-  Future<ReferrerDetails> get getInstallReferrer async {
+  Future<ReferrerDetails?> get getInstallReferrer async {
     dynamic referrer =
         await Ads.instance.channelReferrer.invokeMethod('getInstallReferrer', {
       'id': id,
@@ -78,32 +78,32 @@ class InstallReferrerClient {
 
   static Future<dynamic> onMethodCall(MethodCall call) {
     final Map<dynamic, dynamic> argumentsMap = call.arguments;
-    final InstallReferrerStateEvent referrerEvent =
+    final InstallReferrerStateEvent? referrerEvent =
         _toReferrerStateEvent(call.method);
 
-    final int id = argumentsMap['id'];
+    final int? id = argumentsMap['id'];
     if (id != null && InstallReferrerClient.allReferrers[id] != null) {
       final InstallReferrerClient client =
-          InstallReferrerClient.allReferrers[id];
+          InstallReferrerClient.allReferrers[id]!;
       if (client.stateListener != null) {
         if (referrerEvent == InstallReferrerStateEvent.setupFinished &&
             argumentsMap['responseCode'] != null) {
-          ReferrerResponse response =
+          ReferrerResponse? response =
               _toReferrerResponse(argumentsMap['responseCode']);
-          client.stateListener(referrerEvent, responseCode: response);
+          client.stateListener!(referrerEvent, responseCode: response);
         } else
-          client.stateListener(referrerEvent);
+          client.stateListener!(referrerEvent);
       }
     }
 
     return Future<dynamic>.value(null);
   }
 
-  static InstallReferrerStateEvent _toReferrerStateEvent(String event) =>
+  static InstallReferrerStateEvent? _toReferrerStateEvent(String event) =>
       _referrerStateEventMap[event];
 
-  static ReferrerResponse _toReferrerResponse(int code) =>
-      _referrerResponseCodeMap[code];
+  static ReferrerResponse? _toReferrerResponse(int? code) =>
+      _referrerResponseCodeMap[code!];
 
   static const Map<String, InstallReferrerStateEvent> _referrerStateEventMap =
       <String, InstallReferrerStateEvent>{
@@ -124,8 +124,8 @@ class InstallReferrerClient {
   };
 }
 
-typedef void InstallReferrerStateListener(InstallReferrerStateEvent event,
-    {ReferrerResponse responseCode});
+typedef void InstallReferrerStateListener(InstallReferrerStateEvent? event,
+    {ReferrerResponse? responseCode});
 
 enum InstallReferrerStateEvent { setupFinished, connectionClosed, disconnected }
 

@@ -13,12 +13,13 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import 'dart:async';
+
 import 'package:huawei_ads/adslite/ad_size.dart';
 import 'package:huawei_ads/hms_ads.dart';
-import 'package:flutter/foundation.dart';
 
 class BannerAdSize extends AdSize {
-  const BannerAdSize({@required int width, @required int height})
+  const BannerAdSize({required int width, required int height})
       : super(width: width, height: height);
 
   static const BannerAdSize s360x57 = BannerAdSize(width: 360, height: 57);
@@ -33,12 +34,12 @@ class BannerAdSize extends AdSize {
   static const BannerAdSize sDynamic = BannerAdSize(width: -3, height: -4);
   static const BannerAdSize sSmart = BannerAdSize(width: -1, height: -2);
 
-  Future<int> get getWidthPx async {
+  Future<int?> get getWidthPx async {
     return Ads.instance.channel
         .invokeMethod("bannerSize-getWidthPx", super.toJson());
   }
 
-  Future<int> get getHeightPx async {
+  Future<int?> get getHeightPx async {
     return Ads.instance.channel
         .invokeMethod("bannerSize-getHeightPx", super.toJson());
   }
@@ -49,7 +50,7 @@ class BannerAdSize extends AdSize {
 
   static Future<BannerAdSize> getCurrentDirectionBannerSize(int width) async {
     final Map<String, dynamic> json = <String, dynamic>{};
-    if (width != null) json['width'] = width;
+    json['width'] = width;
     Map<dynamic, dynamic> bannerJson = await Ads.instance.channel
         .invokeMethod("getCurrentDirectionBannerSize", json);
     return fromJson(bannerJson);
@@ -57,7 +58,7 @@ class BannerAdSize extends AdSize {
 
   static Future<BannerAdSize> getLandscapeBannerSize(int width) async {
     final Map<String, dynamic> json = <String, dynamic>{};
-    if (width != null) json['width'] = width;
+    json['width'] = width;
     Map<dynamic, dynamic> bannerJson =
         await Ads.instance.channel.invokeMethod("getLandscapeBannerSize", json);
     return fromJson(bannerJson);
@@ -65,7 +66,7 @@ class BannerAdSize extends AdSize {
 
   static Future<BannerAdSize> getPortraitBannerSize(int width) async {
     final Map<String, dynamic> json = <String, dynamic>{};
-    if (width != null) json['width'] = width;
+    json['width'] = width;
     Map<dynamic, dynamic> bannerJson =
         await Ads.instance.channel.invokeMethod("getPortraitBannerSize", json);
     return fromJson(bannerJson);

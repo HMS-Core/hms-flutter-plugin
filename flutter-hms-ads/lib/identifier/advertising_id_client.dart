@@ -13,31 +13,34 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import 'dart:async';
+
 import 'package:huawei_ads/hms_ads.dart';
 
 class AdvertisingIdClient {
   static Future<AdvertisingIdClientInfo> getAdvertisingIdInfo() async {
-    Map<dynamic, dynamic> args =
-        await Ads.instance.channel.invokeMethod("getAdvertisingIdInfo");
-    String adId = args["advertisingId"];
-    bool trackingEnabled = args["limitAdTrackingEnabled"];
+    Map<dynamic, dynamic> args = await (Ads.instance.channel.invokeMethod(
+      "getAdvertisingIdInfo",
+    ));
+    String? adId = args["advertisingId"];
+    bool? trackingEnabled = args["limitAdTrackingEnabled"];
     return new AdvertisingIdClientInfo(adId, trackingEnabled);
   }
 
-  static Future<bool> verifyAdId(String adId, bool limitTracking) {
+  static Future<bool?> verifyAdId(String adId, bool limitTracking) {
     final Map<String, dynamic> json = <String, dynamic>{};
-    if (adId != null) json['adId'] = adId;
-    if (limitTracking != null) json['limitTracking'] = limitTracking;
+    json['adId'] = adId;
+    json['limitTracking'] = limitTracking;
     return Ads.instance.channel.invokeMethod("verifyAdId", json);
   }
 }
 
 class AdvertisingIdClientInfo {
-  String _advertisingId;
-  bool _limitAdTrackingEnabled;
+  String? _advertisingId;
+  bool? _limitAdTrackingEnabled;
 
   AdvertisingIdClientInfo(this._advertisingId, this._limitAdTrackingEnabled);
 
-  String get getId => _advertisingId;
-  bool get isLimitAdTrackingEnabled => _limitAdTrackingEnabled;
+  String? get getId => _advertisingId;
+  bool? get isLimitAdTrackingEnabled => _limitAdTrackingEnabled;
 }

@@ -25,16 +25,16 @@ import 'banner_ad_size.dart';
 class BannerView extends StatelessWidget {
   final String adSlotId;
   final BannerAdSize size;
-  final Color backgroundColor;
-  final Duration refreshDuration;
+  final Color? backgroundColor;
+  final Duration? refreshDuration;
   final bool loadOnStart;
-  final AdParam adParam;
+  final AdParam? adParam;
 
-  final BannerViewController controller;
+  final BannerViewController? controller;
 
   const BannerView({
-    Key key,
-    @required this.adSlotId,
+    Key? key,
+    required this.adSlotId,
     this.size = BannerAdSize.s320x50,
     this.backgroundColor,
     this.loadOnStart = true,
@@ -59,7 +59,7 @@ class BannerView extends StatelessWidget {
           "adSlotId": adSlotId,
           "bannerSize": adSizeValue,
           "backgroundColor":
-              backgroundColor != null ? colorHex(backgroundColor) : null,
+              backgroundColor != null ? colorHex(backgroundColor!) : null,
           "refreshTime": refreshDuration?.inSeconds,
           "loadOnStart": controller != null ? loadOnStart : true,
           'adParam': adParam?.toJson() ?? {},
@@ -93,47 +93,41 @@ class BannerView extends StatelessWidget {
     switch (size) {
       case BannerAdSize.sDynamic:
         return "size_dynamic";
-        break;
       case BannerAdSize.sInvalid:
         return "size_invalid";
-        break;
       case BannerAdSize.sSmart:
         return "size_smart";
-        break;
       default:
         return "size_${size.width}_${size.height}";
     }
   }
 
-  double get adSizeDisplayWidth {
+  double? get adSizeDisplayWidth {
     switch (size) {
       case BannerAdSize.sDynamic:
         return null;
-        break;
       case BannerAdSize.sInvalid:
         return 0;
-        break;
       case BannerAdSize.sSmart:
         return null;
-        break;
       default:
         return size.width.toDouble();
     }
   }
 
   double adSizeDisplayHeight([double deviceHeight = 0]) {
-    double dynamicHeight() =>
-        deviceHeight > 720 ? 90 : deviceHeight > 400 ? 50 : 32;
+    double dynamicHeight() => deviceHeight > 720
+        ? 90
+        : deviceHeight > 400
+            ? 50
+            : 32;
     switch (size) {
       case BannerAdSize.sDynamic:
         return dynamicHeight();
-        break;
       case BannerAdSize.sInvalid:
         return 0;
-        break;
       case BannerAdSize.sSmart:
         return dynamicHeight();
-        break;
       default:
         return size.height.toDouble();
     }
@@ -141,10 +135,10 @@ class BannerView extends StatelessWidget {
 }
 
 class BannerViewController {
-  MethodChannel _channel;
-  final AdListener listener;
+  late MethodChannel _channel;
+  final AdListener? listener;
 
-  final Function onBannerViewCreated;
+  final Function? onBannerViewCreated;
 
   BannerViewController({
     this.listener,
@@ -156,7 +150,7 @@ class BannerViewController {
     _channel = MethodChannel(
       "${BANNER_VIEW}_$id",
     );
-    _channel.setMethodCallHandler((call) {
+    _channel.setMethodCallHandler((call) async {
       switch (call.method) {
         case "onAdLoaded":
           listener?.call(AdEvent.loaded);
@@ -186,19 +180,19 @@ class BannerViewController {
     });
   }
 
-  Future<bool> pause() async {
+  Future<bool?> pause() async {
     return await _channel.invokeMethod('pause');
   }
 
-  Future<bool> resume() async {
+  Future<bool?> resume() async {
     return await _channel.invokeMethod('resume');
   }
 
-  Future<bool> loadAd() async {
+  Future<bool?> loadAd() async {
     return await _channel.invokeMethod('loadAd');
   }
 
-  Future<bool> isLoading() async {
+  Future<bool?> isLoading() async {
     return await _channel.invokeMethod('isLoading');
   }
 }

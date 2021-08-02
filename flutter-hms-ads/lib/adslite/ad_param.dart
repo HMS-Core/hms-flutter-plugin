@@ -16,11 +16,17 @@
 import 'package:huawei_ads/adslite/request_options.dart';
 
 class AdParam {
-  int gender;
-  String countryCode;
-  RequestOptions requestOptions;
+  int? gender;
+  String? countryCode;
+  List<int>? detailedCreativeTypeList;
+  late RequestOptions requestOptions;
 
-  AdParam({this.gender, this.countryCode, RequestOptions options}) {
+  AdParam({
+    this.gender,
+    this.countryCode,
+    this.detailedCreativeTypeList,
+    RequestOptions? options,
+  }) {
     requestOptions = options ?? RequestOptions();
   }
 
@@ -28,6 +34,8 @@ class AdParam {
     final Map<String, dynamic> json = requestOptions.toJson();
     if (gender != null) json['gender'] = gender;
     if (countryCode != null) json['countryCode'] = countryCode;
+    if (detailedCreativeTypeList != null)
+      json['detailedCreativeTypeList'] = detailedCreativeTypeList;
 
     return json;
   }

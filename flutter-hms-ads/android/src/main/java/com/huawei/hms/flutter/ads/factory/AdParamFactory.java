@@ -19,8 +19,10 @@ package com.huawei.hms.flutter.ads.factory;
 import android.util.Log;
 
 import com.huawei.hms.ads.AdParam;
+import com.huawei.hms.ads.nativead.DetailedCreativeType;
 import com.huawei.hms.flutter.ads.utils.FromMap;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class AdParamFactory {
@@ -50,6 +52,8 @@ public class AdParamFactory {
         String appLang = FromMap.toString("appLang", adParamMap.get("appLang"));
         String countryCode = FromMap.toString("countryCode", adParamMap.get("countryCode"));
         String consent = FromMap.toString("consent", adParamMap.get("consent"));
+        ArrayList<Integer> detailedCreativeTypeList = FromMap.toIntegerArrayList("detailedCreativeTypeList", adParamMap.get("detailedCreativeTypeList"));
+        boolean requestLocation = FromMap.toBoolean("requestLocation", adParamMap.get("requestLocation"));
 
         if (gender != null && (gender >= 0 && gender < 3)) {
             Log.i(TAG, "set gender");
@@ -90,6 +94,12 @@ public class AdParamFactory {
             Log.i(TAG, "set consent");
             builder.setConsent(consent);
         }
+        if (!detailedCreativeTypeList.isEmpty()) {
+            Log.i(TAG, "set detailedCreativeTypeList");
+            builder.setDetailedCreativeTypeList(detailedCreativeTypeList);
+        }
+        Log.i(TAG, "set requestLocation");
+        builder.setRequestLocation(requestLocation);
         return builder.build();
     }
 }

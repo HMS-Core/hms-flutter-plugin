@@ -17,7 +17,6 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:huawei_ads/hms_ads.dart';
 import 'package:huawei_ads/adslite/reward/reward_ad.dart';
@@ -25,29 +24,29 @@ import 'package:huawei_ads/adslite/ad_param.dart';
 import 'package:huawei_ads/utils/channels.dart';
 
 class InterstitialAd {
-  static final Map<int, InterstitialAd> interstitialAds =
-      <int, InterstitialAd>{};
+  static final Map<int, InterstitialAd?> interstitialAds =
+      <int, InterstitialAd?>{};
   static final _rId = UniqueKey();
-  bool openInHmsCore;
+  bool? openInHmsCore;
   int get id => hashCode;
   int get rId => _rId.hashCode;
 
   static final String _adType = 'Interstitial';
   String adSlotId;
   AdParam adParam;
-  AdListener _listener;
-  RewardAdListener _rewardAdListener;
-  EventChannel _streamInterstitial;
-  EventChannel _streamReward;
-  StreamSubscription _listenerSub;
-  StreamSubscription _rewardAdListenerSub;
+  AdListener? _listener;
+  RewardAdListener? _rewardAdListener;
+  late EventChannel _streamInterstitial;
+  late EventChannel _streamReward;
+  StreamSubscription? _listenerSub;
+  StreamSubscription? _rewardAdListenerSub;
 
   InterstitialAd({
-    @required this.adSlotId,
-    this.openInHmsCore,
-    AdParam adParam,
-    AdListener listener,
-    RewardAdListener rewardAdListener,
+    required this.adSlotId,
+    @deprecated this.openInHmsCore,
+    AdParam? adParam,
+    AdListener? listener,
+    RewardAdListener? rewardAdListener,
   }) : this.adParam = adParam ?? AdParam() {
     interstitialAds[id] = this;
     _streamInterstitial = EventChannel('$INTERSTITIAL_EVENT_CHANNEL/$id');
@@ -56,7 +55,7 @@ class InterstitialAd {
     _rewardAdListener = rewardAdListener;
   }
 
-  Future<bool> _initAd() async {
+  Future<bool?> _initAd() async {
     return Ads.instance.channelInterstitial
         .invokeMethod("initInterstitialAd", <String, dynamic>{
       'id': id,
@@ -65,7 +64,7 @@ class InterstitialAd {
     });
   }
 
-  Future<bool> loadAd() {
+  Future<bool?> loadAd() {
     _initAd();
     _startListening();
     _startListeningReward();
@@ -73,7 +72,7 @@ class InterstitialAd {
         .invokeMethod("loadInterstitialAd", <String, dynamic>{
       'id': id,
       'adSlotId': adSlotId,
-      'adParam': adParam?.toJson(),
+      'adParam': adParam.toJson(),
     });
   }
 
@@ -81,33 +80,33 @@ class InterstitialAd {
     _listener = listener;
   }
 
-  AdListener get getAdListener => this._listener;
+  AdListener? get getAdListener => this._listener;
 
   set setRewardAdListener(RewardAdListener rewardAdListener) {
     _rewardAdListener = rewardAdListener;
   }
 
-  RewardAdListener get getRewardAdListener => this._rewardAdListener;
+  RewardAdListener? get getRewardAdListener => this._rewardAdListener;
 
-  Future<bool> isLoading() {
+  Future<bool?> isLoading() {
     return Ads.instance.channelInterstitial.invokeMethod("isAdLoading",
         <String, dynamic>{'id': id, 'adSlotId': adSlotId, "adType": _adType});
   }
 
-  Future<bool> isLoaded() {
+  Future<bool?> isLoaded() {
     return Ads.instance.channelInterstitial.invokeMethod(
         "isAdLoaded", <String, dynamic>{'id': id, "adType": _adType});
   }
 
-  Future<bool> show() async {
-    bool result = await Ads.instance.channelInterstitial.invokeMethod(
+  Future<bool?> show() async {
+    bool? result = await Ads.instance.channelInterstitial.invokeMethod(
         "showInterstitialAd", <String, dynamic>{'id': id, "adType": _adType});
     return result;
   }
 
-  Future<bool> destroy() async {
+  Future<bool?> destroy() async {
     interstitialAds[id] = null;
-    bool result = await Ads.instance.channelInterstitial.invokeMethod(
+    bool? result = await Ads.instance.channelInterstitial.invokeMethod(
         "destroyAd",
         <String, dynamic>{'id': id, 'rId': rId, "adType": _adType});
     return result;
@@ -118,7 +117,7 @@ class InterstitialAd {
     _listenerSub =
         _streamInterstitial.receiveBroadcastStream(id).listen((channelEvent) {
       final Map<dynamic, dynamic> argumentsMap = channelEvent;
-      final AdEvent event = Ads.toAdEvent(argumentsMap['event']);
+      final AdEvent? event = Ads.toAdEvent(argumentsMap['event']);
       if (event != null) {
         event == AdEvent.failed
             ? _listener?.call(event, errorCode: argumentsMap['errorCode'])
@@ -132,7 +131,7 @@ class InterstitialAd {
     _rewardAdListenerSub =
         _streamReward.receiveBroadcastStream(rId).listen((channelEvent) {
       final Map<dynamic, dynamic> argumentsMap = channelEvent;
-      final RewardAdEvent rewardAdEvent =
+      final RewardAdEvent? rewardAdEvent =
           RewardAd.toRewardAdEvent(argumentsMap['event']);
       if (rewardAdEvent == RewardAdEvent.failedToLoad) {
         _rewardAdListener?.call(

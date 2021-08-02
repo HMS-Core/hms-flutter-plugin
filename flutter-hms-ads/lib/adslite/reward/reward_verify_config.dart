@@ -14,8 +14,8 @@
     limitations under the License.
 */
 class RewardVerifyConfig {
-  String userId;
-  String data;
+  String? userId;
+  String? data;
 
   RewardVerifyConfig({this.userId, this.data});
 

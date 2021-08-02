@@ -13,18 +13,17 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import 'package:flutter/foundation.dart';
 
 class AdSize {
   final int width;
   final int height;
 
-  const AdSize({@required this.width, @required this.height});
+  const AdSize({required this.width, required this.height});
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> json = <String, dynamic>{};
-    if (width != null) json['width'] = width;
-    if (height != null) json['height'] = height;
+    json['width'] = width;
+    json['height'] = height;
 
     return json;
   }

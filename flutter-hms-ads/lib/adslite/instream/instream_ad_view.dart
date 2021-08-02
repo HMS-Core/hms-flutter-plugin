@@ -22,45 +22,41 @@ import 'instream_ad.dart';
 
 class InstreamAdView extends StatelessWidget {
   final List<InstreamAd> instreamAds;
-  final InstreamAdViewController controller;
+  final InstreamAdViewController? controller;
 
   const InstreamAdView({
-    Key key,
-    @required this.instreamAds,
+    Key? key,
+    required this.instreamAds,
     this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    List<int> instreamAdIds = [];
-    for (InstreamAd ad in instreamAds ?? []) {
-      instreamAdIds.add(ad.id);
-    }
     return AndroidView(
       viewType: INSTREAM_VIEW,
       onPlatformViewCreated: controller?._init,
       creationParamsCodec: StandardMessageCodec(),
       creationParams: {
-        "instreamAdIds": instreamAdIds,
+        "instreamAdIds": instreamAds.map((ad) => ad.id).toList(),
       },
     );
   }
 }
 
 class InstreamAdViewController {
-  MethodChannel _channel;
-  final Function onClick;
-  final Function(InstreamAd) onSegmentMediaChange;
-  final Function(int per, int playTime) onMediaProgress;
-  final Function(int playTime) onMediaStart;
-  final Function(int playTime) onMediaPause;
-  final Function(int playTime) onMediaStop;
-  final Function(int playTime) onMediaCompletion;
-  final Function(int playTime, int errorCode, int extra) onMediaError;
-  final Function onMute;
-  final Function onUnMute;
+  late MethodChannel _channel;
+  final Function? onClick;
+  final Function(InstreamAd?)? onSegmentMediaChange;
+  final Function(int? per, int? playTime)? onMediaProgress;
+  final Function(int? playTime)? onMediaStart;
+  final Function(int? playTime)? onMediaPause;
+  final Function(int? playTime)? onMediaStop;
+  final Function(int? playTime)? onMediaCompletion;
+  final Function(int? playTime, int? errorCode, int? extra)? onMediaError;
+  final Function? onMute;
+  final Function? onUnMute;
 
-  final Function onInstreamAdViewCreated;
+  final Function(int adId)? onInstreamAdViewCreated;
 
   InstreamAdViewController({
     this.onClick,
@@ -77,11 +73,10 @@ class InstreamAdViewController {
   });
 
   void _init(int id) {
-    onInstreamAdViewCreated?.call(id);
     _channel = MethodChannel(
       "$INSTREAM_VIEW/$id",
     );
-    _channel.setMethodCallHandler((call) {
+    _channel.setMethodCallHandler((call) async {
       switch (call.method) {
         case "onClick":
           onClick?.call();
@@ -89,7 +84,7 @@ class InstreamAdViewController {
         case "onSegmentMediaChange":
           Map<String, dynamic> args = Map<String, dynamic>.from(call.arguments);
           onSegmentMediaChange?.call(
-            args.containsKey("adId") ? InstreamAd(id: args["adId"]) : null,
+            args["adId"] != null ? InstreamAd(id: args["adId"]) : null,
           );
           break;
         case "onMediaProgress":
@@ -136,49 +131,50 @@ class InstreamAdViewController {
       }
       return;
     });
+    onInstreamAdViewCreated?.call(id);
   }
 
-  Future<bool> destroy() async {
+  Future<bool?> destroy() async {
     return await _channel.invokeMethod('destroy');
   }
 
-  Future<bool> isPlaying() async {
+  Future<bool?> isPlaying() async {
     return await _channel.invokeMethod('isPlaying');
   }
 
-  Future<bool> mute() async {
+  Future<bool?> mute() async {
     return await _channel.invokeMethod('mute');
   }
 
-  Future<bool> onClose() async {
+  Future<bool?> onClose() async {
     return await _channel.invokeMethod('onClose');
   }
 
-  Future<bool> pause() async {
+  Future<bool?> pause() async {
     return await _channel.invokeMethod('pause');
   }
 
-  Future<bool> play() async {
+  Future<bool?> play() async {
     return await _channel.invokeMethod('play');
   }
 
-  Future<bool> removeInstreamMediaChangeListener() async {
+  Future<bool?> removeInstreamMediaChangeListener() async {
     return await _channel.invokeMethod('removeInstreamMediaChangeListener');
   }
 
-  Future<bool> removeInstreamMediaStateListener() async {
+  Future<bool?> removeInstreamMediaStateListener() async {
     return await _channel.invokeMethod('removeInstreamMediaStateListener');
   }
 
-  Future<bool> removeMediaMuteListener() async {
+  Future<bool?> removeMediaMuteListener() async {
     return await _channel.invokeMethod('removeMediaMuteListener');
   }
 
-  Future<bool> stop() async {
+  Future<bool?> stop() async {
     return await _channel.invokeMethod('stop');
   }
 
-  Future<bool> unmute() async {
+  Future<bool?> unmute() async {
     return await _channel.invokeMethod('unmute');
   }
 }

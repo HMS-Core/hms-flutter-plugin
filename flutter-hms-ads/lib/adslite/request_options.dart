@@ -14,13 +14,14 @@
     limitations under the License.
 */
 class RequestOptions {
-  String adContentClassification;
-  int tagForUnderAgeOfPromise;
-  int tagForChildProtection;
-  int nonPersonalizedAd;
-  String appCountry;
-  String appLang;
-  String consent;
+  String? adContentClassification;
+  int? tagForUnderAgeOfPromise;
+  int? tagForChildProtection;
+  int? nonPersonalizedAd;
+  String? appCountry;
+  String? appLang;
+  String? consent;
+  bool? requestLocation;
 
   RequestOptions({
     this.adContentClassification,
@@ -30,6 +31,7 @@ class RequestOptions {
     this.appCountry,
     this.appLang,
     this.consent,
+    this.requestLocation = true,
   });
 
   Map<String, dynamic> toJson() {
@@ -45,6 +47,7 @@ class RequestOptions {
     if (appCountry != null) json['appCountry'] = appCountry;
     if (appLang != null) json['appLang'] = appLang;
     if (consent != null) json['consent'] = consent;
+    if (requestLocation != null) json['requestLocation'] = requestLocation;
 
     return json;
   }
@@ -58,6 +61,7 @@ class RequestOptions {
     options.appCountry = args['appCountry'] ?? null;
     options.appLang = args['appLang'] ?? null;
     options.consent = args['consent'] ?? null;
+    options.requestLocation = args['requestLocation'] ?? null;
 
     return options;
   }

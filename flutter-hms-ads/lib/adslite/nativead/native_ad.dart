@@ -24,11 +24,11 @@ import 'package:huawei_ads/utils/view_types.dart';
 class NativeAd extends StatefulWidget {
   final String adSlotId;
   final NativeAdType type;
-  final NativeStyles styles;
-  final NativeAdController controller;
+  final NativeStyles? styles;
+  final NativeAdController? controller;
 
   NativeAd({
-    @required this.adSlotId,
+    required this.adSlotId,
     this.type = NativeAdType.banner,
     this.styles,
     this.controller,
@@ -39,8 +39,8 @@ class NativeAd extends StatefulWidget {
 }
 
 class _NativeAdState extends State<NativeAd> {
-  NativeAdController _nativeAdController;
-  NativeStyles get _nativeStyles => widget.styles;
+  late NativeAdController _nativeAdController;
+  NativeStyles? get _nativeStyles => widget.styles;
   NativeAdType get _type => widget.type;
   NativeAdLoadState _state = NativeAdLoadState.loading;
 
@@ -86,7 +86,7 @@ class _NativeAdState extends State<NativeAd> {
   @override
   void dispose() {
     super.dispose();
-    _nativeAdController?.destroy();
+    _nativeAdController.destroy();
   }
 }
 

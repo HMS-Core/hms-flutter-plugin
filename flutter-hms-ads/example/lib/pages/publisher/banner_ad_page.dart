@@ -26,14 +26,14 @@ class BannerAdPage extends StatefulWidget {
 class _BannerAdPageState extends State<BannerAdPage> {
   static final String _testAdSlotId = "testw6vs28auh3";
   final AdParam _adParam = AdParam();
-  BannerAdSize bannerAdSize = BannerAdSize.s320x50;
-  BannerAd _bannerAd;
+  BannerAdSize? bannerAdSize = BannerAdSize.s320x50;
+  BannerAd? _bannerAd;
   String logs = "Double tap to clear the logs.\n\n";
 
-  void changeSize(BannerAdSize size) {
+  void changeSize(BannerAdSize? size) {
     if (_bannerAd != null)
       print(
-          'Previous Banner size - width ${_bannerAd.size.width} : height ${_bannerAd.size.height}');
+          'Previous Banner size - width ${_bannerAd!.size.width} : height ${_bannerAd!.size.height}');
 
     setState(() {
       bannerAdSize = size;
@@ -43,10 +43,10 @@ class _BannerAdPageState extends State<BannerAdPage> {
   BannerAd createAd() {
     return BannerAd(
       adSlotId: _testAdSlotId,
-      size: bannerAdSize,
+      size: bannerAdSize!,
       adParam: _adParam,
       bannerRefreshTime: 5000,
-      listener: (AdEvent event, {int errorCode}) {
+      listener: (AdEvent event, {int? errorCode}) {
         print("Banner Ad event : $event");
         setState(() {
           logs = logs + "Banner Ad event : ${describeEnum(event)}\n";
@@ -56,14 +56,14 @@ class _BannerAdPageState extends State<BannerAdPage> {
   }
 
   void testBannerAdSizeMethods() async {
-    print('isFullWidthSize : ${bannerAdSize.isFullWidthSize}');
-    print('isDynamicSize : ${bannerAdSize.isDynamicSize}');
-    print('isAutoHeightSize : ${bannerAdSize.isAutoHeightSize}');
+    print('isFullWidthSize : ${bannerAdSize!.isFullWidthSize}');
+    print('isDynamicSize : ${bannerAdSize!.isDynamicSize}');
+    print('isAutoHeightSize : ${bannerAdSize!.isAutoHeightSize}');
 
-    int widthPx = await bannerAdSize.getWidthPx;
+    int? widthPx = await bannerAdSize!.getWidthPx;
     print('widthPx : $widthPx');
 
-    int heightPx = await bannerAdSize.getHeightPx;
+    int? heightPx = await bannerAdSize!.getHeightPx;
     print('heightPx : $heightPx');
 
     BannerAdSize currentDir =

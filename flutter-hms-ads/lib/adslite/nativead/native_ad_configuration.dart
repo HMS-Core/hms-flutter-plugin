@@ -17,14 +17,14 @@ import 'package:huawei_ads/adslite/ad_size.dart';
 import 'package:huawei_ads/adslite/video_configuration.dart';
 
 class NativeAdConfiguration {
-  AdSize adSize;
-  int choicesPosition;
-  int mediaDirection;
-  int mediaAspect;
-  bool requestCustomDislikeAd;
-  bool requestMultiImages;
-  bool returnUrlsForImages;
-  VideoConfiguration videoConfiguration;
+  AdSize? adSize;
+  int? choicesPosition;
+  int? mediaDirection;
+  int? mediaAspect;
+  bool? requestCustomDislikeAd;
+  bool? requestMultiImages;
+  bool? returnUrlsForImages;
+  VideoConfiguration? videoConfiguration;
 
   NativeAdConfiguration(
       {this.adSize,
@@ -34,13 +34,13 @@ class NativeAdConfiguration {
       this.requestCustomDislikeAd,
       this.requestMultiImages,
       this.returnUrlsForImages,
-      VideoConfiguration configuration}) {
+      VideoConfiguration? configuration}) {
     videoConfiguration = configuration ?? VideoConfiguration();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> json = <String, dynamic>{};
-    if (adSize != null) json['adSize'] = adSize.toJson();
+    if (adSize != null) json['adSize'] = adSize!.toJson();
     if (choicesPosition != null) json['choicesPosition'] = choicesPosition;
     if (mediaDirection != null) json['direction'] = mediaDirection;
     if (mediaAspect != null) json['aspect'] = mediaAspect;
@@ -51,7 +51,7 @@ class NativeAdConfiguration {
     if (returnUrlsForImages != null)
       json['returnUrlsForImages'] = returnUrlsForImages;
     if (videoConfiguration != null)
-      json['videoConfiguration'] = videoConfiguration.toJson();
+      json['videoConfiguration'] = videoConfiguration!.toJson();
 
     return json;
   }

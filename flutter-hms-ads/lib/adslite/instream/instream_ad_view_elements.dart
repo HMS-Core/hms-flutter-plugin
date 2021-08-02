@@ -16,16 +16,16 @@
 import 'package:flutter/material.dart';
 
 class InstreamAdViewElements extends StatelessWidget {
-  final Function onSkip;
-  final Function onInfo;
-  final String callToActionText;
-  final String countdown;
+  final Function? onSkip;
+  final Function? onInfo;
+  final String? callToActionText;
+  final String? countdown;
 
-  final String skipText;
-  final String adFlagText;
+  final String? skipText;
+  final String? adFlagText;
 
   const InstreamAdViewElements({
-    Key key,
+    Key? key,
     this.onSkip,
     this.onInfo,
     this.callToActionText,
@@ -49,7 +49,7 @@ class InstreamAdViewElements extends StatelessWidget {
                   style: const TextStyle(color: Colors.white),
                 ),
                 shape: Border.all(color: Colors.white30),
-                onPressed: onSkip,
+                onPressed: onSkip as void Function()?,
               ),
               Text(
                 countdown ?? "",
@@ -72,7 +72,7 @@ class InstreamAdViewElements extends StatelessWidget {
                       Icons.info_outline,
                       color: Colors.white,
                     ),
-                    onPressed: onInfo,
+                    onPressed: onInfo as void Function()?,
                   )
                 ],
               ),

@@ -25,9 +25,9 @@ class PrivacySettingsPage extends StatefulWidget {
 class _PrivacySettingsPage extends State<PrivacySettingsPage> {
   void setConsent(int privacyValue) async {
     print('User agreed');
-    bool isUpdated = await Consent.updateSharedPreferences(
-        ConsentConstant.spConsentKey, privacyValue);
-    if (isUpdated)
+    bool? isUpdated = await (Consent.updateSharedPreferences(
+        ConsentConstant.spConsentKey, privacyValue));
+    if (isUpdated ?? false)
       print('SharedPreferences updated');
     else
       print('ERROR: Update shared preferences failed.');

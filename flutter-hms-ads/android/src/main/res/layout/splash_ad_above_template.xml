@@ -29,8 +29,7 @@
                 <ImageView
                     android:id="@+id/splash_logo"
                     android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:background="@drawable/ic_launcher_background" />
+                    android:layout_height="28dp" />
 
                 <View
                     android:layout_width="0.5dp"

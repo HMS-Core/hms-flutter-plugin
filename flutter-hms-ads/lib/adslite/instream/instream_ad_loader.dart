@@ -13,7 +13,6 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:huawei_ads/adslite/ad_param.dart';
 import 'package:huawei_ads/adslite/instream/instream_ad.dart';
@@ -21,15 +20,15 @@ import 'package:huawei_ads/hms_ads.dart';
 import 'package:huawei_ads/utils/channels.dart';
 
 class InstreamAdLoader {
-  MethodChannel _channel;
+  late MethodChannel _channel;
   String adId;
   final Duration totalDuration;
-  final int maxCount;
-  final Function(List<InstreamAd>) onAdLoaded;
-  final Function(int errorCode) onAdFailed;
+  final int? maxCount;
+  final Function(List<InstreamAd>)? onAdLoaded;
+  final Function(int? errorCode)? onAdFailed;
   InstreamAdLoader({
-    @required this.adId,
-    @required this.totalDuration,
+    required this.adId,
+    required this.totalDuration,
     this.maxCount,
     this.onAdLoaded,
     this.onAdFailed,
@@ -39,12 +38,12 @@ class InstreamAdLoader {
       {
         "id": hashCode,
         "adId": adId,
-        "totalDuration": totalDuration?.inSeconds,
+        "totalDuration": totalDuration.inSeconds,
         "maxCount": maxCount,
       },
     );
     _channel = MethodChannel("$INSTREAM_METHOD_CHANNEL/LOADER/$hashCode");
-    _channel.setMethodCallHandler((call) {
+    _channel.setMethodCallHandler((call) async {
       switch (call.method) {
         case "onAdLoaded":
           List<int> ads = List<int>.from(call.arguments["ads"]);
@@ -64,13 +63,13 @@ class InstreamAdLoader {
     });
   }
 
-  Future<bool> loadAd({AdParam adParam}) async {
+  Future<bool?> loadAd({AdParam? adParam}) async {
     return await _channel.invokeMethod('loadAd', {
       "adParam": adParam?.toJson(),
     });
   }
 
-  Future<bool> isLoading() async {
+  Future<bool?> isLoading() async {
     return await _channel.invokeMethod('isLoading');
   }
 }

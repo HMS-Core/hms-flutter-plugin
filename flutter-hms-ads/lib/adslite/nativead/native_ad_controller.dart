@@ -26,21 +26,21 @@ import 'package:huawei_ads/utils/channels.dart';
 class NativeAdController {
   int get id => hashCode;
 
-  MethodChannel _channel;
-  EventChannel _streamNative;
-  NativeAdStateListener loadListener;
-  NativeAdConfiguration _adConfiguration;
-  AdParam _adParam;
-  AdListener listener;
-  DislikeAdListener dislikeListener;
-  VideoOperator _videoOperator;
-  StreamSubscription _listenerSub;
+  late MethodChannel _channel;
+  late EventChannel _streamNative;
+  late NativeAdStateListener loadListener;
+  NativeAdConfiguration? _adConfiguration;
+  AdParam? _adParam;
+  AdListener? listener;
+  DislikeAdListener? dislikeListener;
+  VideoOperator? _videoOperator;
+  StreamSubscription? _listenerSub;
 
   NativeAdController(
       {this.listener,
       this.dislikeListener,
-      NativeAdConfiguration adConfiguration,
-      AdParam adParam}) {
+      NativeAdConfiguration? adConfiguration,
+      AdParam? adParam}) {
     _streamNative = EventChannel('$NATIVE_EVENT_CHANNEL/$id');
     _channel = MethodChannel('$NATIVE_METHOD_CHANNEL/$id');
     _channel.setMethodCallHandler(_onMethodCall);
@@ -72,8 +72,8 @@ class NativeAdController {
     });
   }
 
-  Future<VideoOperator> getVideoOperator() async {
-    bool hasOperator = await _channel.invokeMethod("getVideoOperator");
+  Future<VideoOperator?> getVideoOperator() async {
+    bool hasOperator = await (_channel.invokeMethod("getVideoOperator"));
     if (hasOperator) _videoOperator = VideoOperator(_channel);
     return _videoOperator ?? null;
   }
@@ -82,8 +82,8 @@ class NativeAdController {
     _channel.invokeMethod("gotoWhyThisAdPage");
   }
 
-  Future<bool> isLoading() async {
-    bool isLoading = await _channel.invokeMethod("isLoading");
+  Future<bool?> isLoading() async {
+    bool? isLoading = await _channel.invokeMethod("isLoading");
     return isLoading;
   }
 
@@ -91,72 +91,73 @@ class NativeAdController {
     _channel.invokeMethod("setAllowCustomClick");
   }
 
-  Future<bool> isCustomClickAllowed() async {
-    bool isAllowed = await _channel.invokeMethod("isCustomClickAllowed");
+  Future<bool?> isCustomClickAllowed() async {
+    bool? isAllowed = await _channel.invokeMethod("isCustomClickAllowed");
     return isAllowed;
   }
 
-  Future<String> getAdSource() async {
-    String source = await _channel.invokeMethod("getAdSource");
+  Future<String?> getAdSource() async {
+    String? source = await _channel.invokeMethod("getAdSource");
     return source;
   }
 
-  Future<String> getDescription() async {
-    String description = await _channel.invokeMethod("getDescription");
+  Future<String?> getDescription() async {
+    String? description = await _channel.invokeMethod("getDescription");
     return description;
   }
 
-  Future<String> getCallToAction() async {
-    String callToAction = await _channel.invokeMethod("getCallToAction");
+  Future<String?> getCallToAction() async {
+    String? callToAction = await _channel.invokeMethod("getCallToAction");
     return callToAction;
   }
 
-  Future<String> getTitle() async {
-    String title = await _channel.invokeMethod("getTitle");
+  Future<String?> getTitle() async {
+    String? title = await _channel.invokeMethod("getTitle");
     return title;
   }
 
-  Future<String> getAdSign() async {
-    String adSign = await _channel.invokeMethod("getAdSign");
+  Future<String?> getAdSign() async {
+    String? adSign = await _channel.invokeMethod("getAdSign");
     return adSign;
   }
 
-  Future<String> getWhyThisAd() async {
-    String whyThisAd = await _channel.invokeMethod("getWhyThisAd");
+  Future<String?> getWhyThisAd() async {
+    String? whyThisAd = await _channel.invokeMethod("getWhyThisAd");
     return whyThisAd;
   }
 
-  Future<String> getUniqueId() async {
-    String uniqueId = await _channel.invokeMethod("getUniqueId");
+  Future<String?> getUniqueId() async {
+    String? uniqueId = await _channel.invokeMethod("getUniqueId");
     return uniqueId;
   }
 
-  Future<bool> dislikeAd(DislikeAdReason reason) {
+  Future<bool?> dislikeAd(DislikeAdReason reason) {
     return _channel
         .invokeMethod("dislikeAd", {"reason": reason.getDescription});
   }
 
-  Future<bool> isCustomDislikeThisAdEnabled() async {
-    bool isEnabled =
+  Future<bool?> isCustomDislikeThisAdEnabled() async {
+    bool? isEnabled =
         await _channel.invokeMethod("isCustomDislikeThisAdEnabled");
     return isEnabled;
   }
 
-  Future<bool> triggerClick(Bundle bundle) {
+  Future<bool?> triggerClick(Bundle bundle) {
     return _channel.invokeMethod("triggerClick", bundle.bundle);
   }
 
-  Future<bool> recordClickEvent() {
+  Future<bool?> recordClickEvent() {
     return _channel.invokeMethod("recordClickEvent");
   }
 
-  Future<bool> recordImpressionEvent(Bundle bundle) {
+  Future<bool?> recordImpressionEvent(Bundle bundle) {
     return _channel.invokeMethod("recordImpressionEvent", bundle.bundle);
   }
 
   Future<List<DislikeAdReason>> getDislikeAdReasons() async {
-    List<String> reasonsList = await _channel.invokeMethod("getDislikeReasons");
-    List<DislikeAdReason> responseList = new List<DislikeAdReason>();
+    List<String>? reasonsList =
+        await _channel.invokeMethod("getDislikeReasons");
+    List<DislikeAdReason> responseList = <DislikeAdReason>[];
     if (reasonsList != null) {
       reasonsList.forEach((String reason) {
         responseList.add(new DislikeAdReason(reason));
@@ -165,7 +166,7 @@ class NativeAdController {
     return responseList;
   }
 
-  Future<bool> destroy() {
+  Future<bool?> destroy() {
     _listenerSub?.cancel();
     return Ads.instance.channel.invokeMethod("destroyNativeAdController", {
       "id": id,
@@ -176,24 +177,24 @@ class NativeAdController {
     _listenerSub =
         _streamNative.receiveBroadcastStream(id).listen((channelEvent) {
       final Map<dynamic, dynamic> argumentsMap = channelEvent;
-      final AdEvent event = Ads.toAdEvent(argumentsMap['event']);
-      final VideoLifecycleEvent videoEvent =
+      final AdEvent? event = Ads.toAdEvent(argumentsMap['event']);
+      final VideoLifecycleEvent? videoEvent =
           VideoOperator.toVideoLifeCycleEvent(argumentsMap['event']);
 
       if (event != null && listener != null)
         event == AdEvent.failed
-            ? listener(event, errorCode: argumentsMap['errorCode'])
-            : listener(event);
+            ? listener!(event, errorCode: argumentsMap['errorCode'])
+            : listener!(event);
 
       if (event == AdEvent.disliked && dislikeListener != null)
-        dislikeListener(event);
+        dislikeListener!(event);
 
       if (videoEvent != null &&
-          _videoOperator.getVideoLifecycleListener != null)
+          _videoOperator!.getVideoLifecycleListener != null)
         videoEvent == VideoLifecycleEvent.mute
-            ? _videoOperator.getVideoLifecycleListener(videoEvent,
+            ? _videoOperator!.getVideoLifecycleListener!(videoEvent,
                 isMuted: argumentsMap['isMuted'])
-            : _videoOperator.getVideoLifecycleListener(videoEvent);
+            : _videoOperator!.getVideoLifecycleListener!(videoEvent);
 
       switch (event) {
         case AdEvent.failed:
@@ -213,4 +214,4 @@ enum NativeAdLoadState { loading, loaded, failed }
 
 typedef void NativeAdStateListener(NativeAdLoadState state);
 
-typedef void DislikeAdListener(AdEvent event);
+typedef void DislikeAdListener(AdEvent? event);

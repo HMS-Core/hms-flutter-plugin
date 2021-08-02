@@ -23,10 +23,10 @@ class OaidPage extends StatefulWidget {
 }
 
 class _OaidPageState extends State<OaidPage> {
-  AdvertisingIdClientInfo _client;
-  String _oaid = '';
-  bool _limitAdTracking;
-  bool _verified;
+  AdvertisingIdClientInfo? _client;
+  String? _oaid = '';
+  bool? _limitAdTracking;
+  bool? _verified;
 
   void getAdvertisingIdInfo() async {
     AdvertisingIdClientInfo client =
@@ -40,8 +40,8 @@ class _OaidPageState extends State<OaidPage> {
   }
 
   void testVerifyAdId() async {
-    bool isVerified = await AdvertisingIdClient.verifyAdId(
-        _oaid, _client.isLimitAdTrackingEnabled);
+    bool? isVerified = await AdvertisingIdClient.verifyAdId(
+        _oaid!, _client!.isLimitAdTrackingEnabled!);
     setState(() {
       _verified = isVerified;
     });

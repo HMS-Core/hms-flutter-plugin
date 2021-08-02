@@ -16,22 +16,22 @@
 import 'dart:collection';
 
 class AdProvider {
-  String id;
-  String name;
-  String serviceArea;
-  String privacyPolicyUrl;
+  String? id;
+  String? name;
+  String? serviceArea;
+  String? privacyPolicyUrl;
 
   AdProvider({this.id, this.name, this.serviceArea, this.privacyPolicyUrl});
 
   bool isValid() {
-    return (id != null && id.isNotEmpty) &&
-        (name != null && name.isNotEmpty) &&
-        (serviceArea != null && serviceArea.isNotEmpty) &&
-        (privacyPolicyUrl != null && privacyPolicyUrl.isNotEmpty);
+    return (id != null && id!.isNotEmpty) &&
+        (name != null && name!.isNotEmpty) &&
+        (serviceArea != null && serviceArea!.isNotEmpty) &&
+        (privacyPolicyUrl != null && privacyPolicyUrl!.isNotEmpty);
   }
 
-  static List<AdProvider> buildList(List<dynamic> args) {
-    List<AdProvider> adProviders = new List<AdProvider>();
+  static List<AdProvider> buildList(List<dynamic>? args) {
+    List<AdProvider> adProviders = <AdProvider>[];
     if (args != null)
       args.forEach((dynamic providerMap) {
         adProviders.add(build(providerMap));

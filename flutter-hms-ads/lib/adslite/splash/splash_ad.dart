@@ -22,26 +22,26 @@ import 'package:huawei_ads/hms_ads.dart';
 import 'package:huawei_ads/utils/channels.dart';
 
 class SplashAd {
-  static final Map<int, SplashAd> splashAds = <int, SplashAd>{};
+  static final Map<int, SplashAd?> splashAds = <int, SplashAd?>{};
   int get id => hashCode;
 
   static final String _adType = 'Splash';
   SplashAdType adType;
-  String ownerText;
-  String footerText;
-  String logoResId;
-  String logoBgResId;
-  String mediaNameResId;
-  String sloganResId;
-  String wideSloganResId;
-  int audioFocusType;
-  SplashAdDisplayListener displayListener;
-  SplashAdLoadListener loadListener;
-  EventChannel _streamSplash;
-  StreamSubscription _listenerSub;
+  String? ownerText;
+  String? footerText;
+  String? logoResId;
+  String? logoBgResId;
+  String? mediaNameResId;
+  String? sloganResId;
+  String? wideSloganResId;
+  int? audioFocusType;
+  SplashAdDisplayListener? displayListener;
+  SplashAdLoadListener? loadListener;
+  EventChannel? _streamSplash;
+  StreamSubscription? _listenerSub;
 
   SplashAd({
-    @required this.adType,
+    required this.adType,
     this.displayListener,
     this.loadListener,
     this.ownerText,
@@ -57,8 +57,8 @@ class SplashAd {
     _streamSplash = EventChannel('$SPLASH_EVENT_CHANNEL/$id');
   }
 
-  static Future<bool> preloadAd(
-      {@required String adSlotId, int orientation, AdParam adParam}) {
+  static Future<bool?> preloadAd(
+      {required String adSlotId, int? orientation, AdParam? adParam}) {
     return Ads.instance.channelSplash
         .invokeMethod("preloadSplashAd", <String, dynamic>{
       'adSlotId': adSlotId,
@@ -67,9 +67,9 @@ class SplashAd {
   }
 
   Future<bool> loadAd(
-      {@required String adSlotId,
-      @required int orientation,
-      @required AdParam adParam,
+      {required String adSlotId,
+      required int orientation,
+      required AdParam adParam,
       double topMargin = 0.0}) async {
     await Ads.instance.channelSplash
         .invokeMethod("prepareSplashAd", <String, dynamic>{
@@ -77,7 +77,7 @@ class SplashAd {
       'adSlotId': adSlotId,
       'adType': describeEnum(adType),
       'orientation': orientation,
-      'adParam': adParam?.toJson(),
+      'adParam': adParam.toJson(),
       "resources": _resourcesToJson(),
       "audioFocusType": audioFocusType,
       "topMargin": topMargin,
@@ -92,27 +92,27 @@ class SplashAd {
     return true;
   }
 
-  Future<bool> isLoading() {
+  Future<bool?> isLoading() {
     return Ads.instance.channelSplash.invokeMethod(
         "isAdLoading", <String, dynamic>{'id': id, "adType": _adType});
   }
 
-  Future<bool> isLoaded() {
+  Future<bool?> isLoaded() {
     return Ads.instance.channelSplash.invokeMethod(
         "isAdLoaded", <String, dynamic>{'id': id, "adType": _adType});
   }
 
-  Future<bool> pause() {
+  Future<bool?> pause() {
     return Ads.instance.channel.invokeMethod(
         "pauseAd", <String, dynamic>{'id': id, "adType": _adType});
   }
 
-  Future<bool> resume() {
+  Future<bool?> resume() {
     return Ads.instance.channelSplash.invokeMethod(
         "resumeAd", <String, dynamic>{'id': id, "adType": _adType});
   }
 
-  Future<bool> destroy() {
+  Future<bool?> destroy() {
     splashAds[id] = null;
     _streamSplash = null;
     _listenerSub?.cancel();
@@ -135,10 +135,10 @@ class SplashAd {
   void _startListening() {
     _listenerSub?.cancel();
     _listenerSub =
-        _streamSplash.receiveBroadcastStream(id).listen((channelEvent) {
+        _streamSplash!.receiveBroadcastStream(id).listen((channelEvent) {
       final Map<dynamic, dynamic> argumentsMap = channelEvent;
-      final SplashAdLoadEvent loadEvent = _toLoadEvent(argumentsMap['event']);
-      final SplashAdDisplayEvent displayEvent =
+      final SplashAdLoadEvent? loadEvent = _toLoadEvent(argumentsMap['event']);
+      final SplashAdDisplayEvent? displayEvent =
           _toDisplayEvent(argumentsMap['event']);
       if (displayEvent != null) {
         displayListener?.call(displayEvent);
@@ -151,9 +151,10 @@ class SplashAd {
     });
   }
 
-  SplashAdLoadEvent _toLoadEvent(String event) => _loadEventMap[event];
+  SplashAdLoadEvent? _toLoadEvent(String? event) => _loadEventMap[event!];
 
-  SplashAdDisplayEvent _toDisplayEvent(String event) => _displayEventMap[event];
+  SplashAdDisplayEvent? _toDisplayEvent(String? event) =>
+      _displayEventMap[event!];
 
   static const Map<String, SplashAdLoadEvent> _loadEventMap =
       <String, SplashAdLoadEvent>{
@@ -169,7 +170,7 @@ class SplashAd {
   };
 }
 
-typedef void SplashAdLoadListener(SplashAdLoadEvent event, {int errorCode});
+typedef void SplashAdLoadListener(SplashAdLoadEvent event, {int? errorCode});
 
 typedef void SplashAdDisplayListener(SplashAdDisplayEvent event);
 

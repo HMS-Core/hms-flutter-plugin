@@ -13,21 +13,12 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-class VideoConfiguration {
-  int? audioFocusType;
-  bool? customizeOperationRequested;
-  bool? startMuted;
-
-  VideoConfiguration(
-      {this.audioFocusType, this.customizeOperationRequested, this.startMuted});
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> json = <String, dynamic>{};
-    if (audioFocusType != null) json['audioFocusType'] = audioFocusType;
-    if (customizeOperationRequested != null)
-      json['customizeOperationRequested'] = customizeOperationRequested;
-    if (startMuted != null) json['startMuted'] = startMuted;
-
-    return json;
-  }
+class DetailedCreativeType {
+  static int bigImg = 901;
+  static int video = 903;
+  static int threeImg = 904;
+  static int smallImg = 905;
+  static int singleImg = 909;
+  static int shortText = 913;
+  static int longText = 914;
 }

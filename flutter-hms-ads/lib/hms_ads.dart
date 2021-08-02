@@ -29,15 +29,15 @@ class Ads {
   final EventChannel streamConsent;
 
   Ads._({
-    this.channel,
-    this.channelSplash,
-    this.channelBanner,
-    this.channelReward,
-    this.channelInterstitial,
-    this.channelInstream,
-    this.streamConsent,
-    this.channelConsent,
-    this.channelReferrer,
+    required this.channel,
+    required this.channelSplash,
+    required this.channelBanner,
+    required this.channelReward,
+    required this.channelInterstitial,
+    required this.channelInstream,
+    required this.streamConsent,
+    required this.channelConsent,
+    required this.channelReferrer,
   }) {
     channelReferrer.setMethodCallHandler(InstallReferrerClient.onMethodCall);
   }
@@ -56,7 +56,7 @@ class Ads {
 
   static Ads get instance => _instance;
 
-  static AdEvent toAdEvent(String event) => _adEventMap[event];
+  static AdEvent? toAdEvent(String event) => _adEventMap[event];
   static const Map<String, AdEvent> _adEventMap = <String, AdEvent>{
     'onAdLoaded': AdEvent.loaded,
     'onAdFailed': AdEvent.failed,
@@ -69,7 +69,7 @@ class Ads {
   };
 }
 
-typedef void AdListener(AdEvent event, {int errorCode});
+typedef void AdListener(AdEvent event, {int? errorCode});
 
 enum AdEvent {
   clicked,

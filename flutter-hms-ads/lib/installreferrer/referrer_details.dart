@@ -21,15 +21,15 @@ class ReferrerDetails {
       "referrer_click_timestamp_seconds";
   static const String keyInstallBeginTimeStamp =
       "install_begin_timestamp_seconds";
-  Bundle _bundle;
+  late Bundle _bundle;
 
   ReferrerDetails(Bundle referrerBundle) {
     this._bundle = referrerBundle;
   }
 
-  String get getInstallReferrer => _bundle.getString(keyInstallReferrer);
-  int get getReferrerClickTimestampMillisecond =>
+  String? get getInstallReferrer => _bundle.getString(keyInstallReferrer);
+  int? get getReferrerClickTimestampMillisecond =>
       _bundle.getInt(keyReferrerClickTimeStamp);
-  int get getReferrerBeginTimeStampMillisecond =>
+  int? get getReferrerBeginTimeStampMillisecond =>
       _bundle.getInt(keyInstallBeginTimeStamp);
 }

@@ -44,14 +44,14 @@ class InstallReferrerPageContent extends StatefulWidget {
 
 class _InstallReferrerPageContentState
     extends State<InstallReferrerPageContent> {
-  InstallReferrerClient sdkReferrer = new InstallReferrerClient();
+  InstallReferrerClient? sdkReferrer = new InstallReferrerClient();
   bool _referrerConnected = false;
 
-  ReferrerDetails _referrerDetails;
+  ReferrerDetails? _referrerDetails;
 
   void getReferrerDetails() async {
-    ReferrerDetails referrerDetails;
-    referrerDetails = await sdkReferrer.getInstallReferrer;
+    ReferrerDetails? referrerDetails;
+    referrerDetails = await sdkReferrer!.getInstallReferrer;
 
     setState(() {
       _referrerDetails = referrerDetails;
@@ -80,15 +80,15 @@ class _InstallReferrerPageContentState
 
   @override
   Widget build(BuildContext context) {
-    if (sdkReferrer.stateListener == null) {
-      sdkReferrer.stateListener =
-          (InstallReferrerStateEvent event, {ReferrerResponse responseCode}) {
+    if (sdkReferrer!.stateListener == null) {
+      sdkReferrer!.stateListener =
+          (InstallReferrerStateEvent? event, {ReferrerResponse? responseCode}) {
         print("Referrer State event : $event | Code : $responseCode");
         SnackBar snackBar;
         if (event == InstallReferrerStateEvent.setupFinished) {
           _referrerConnected = true;
           snackBar = createSnack(
-              'Connection setup finished. \n Referrer Response : ${describeEnum(responseCode)}');
+              'Connection setup finished. \n Referrer Response : ${describeEnum(responseCode!)}');
         } else if (event == InstallReferrerStateEvent.connectionClosed) {
           _referrerConnected = false;
           snackBar = createSnack('Connection closed successfully.');
@@ -129,7 +129,7 @@ class _InstallReferrerPageContentState
                               createSnack('Referrer already connected.');
                           Scaffold.of(context).showSnackBar(snackBar);
                         } else {
-                          sdkReferrer.startConnection(true); // Test mode
+                          sdkReferrer!.startConnection(true); // Test mode
                         }
                       },
                     ),
@@ -150,7 +150,7 @@ class _InstallReferrerPageContentState
                               createSnack('Referrer already disconnected.');
                           Scaffold.of(context).showSnackBar(snackBar);
                         } else {
-                          sdkReferrer.endConnection();
+                          sdkReferrer!.endConnection();
                         }
                       },
                     ),

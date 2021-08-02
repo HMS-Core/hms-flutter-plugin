@@ -30,7 +30,7 @@ class _NativeAdPageState extends State<NativeAdPage> {
 
   NativeAdController createVideoAdController() {
     NativeAdController controller = NativeAdController();
-    controller.listener = (AdEvent event, {int errorCode}) {
+    controller.listener = (AdEvent event, {int? errorCode}) {
       if (event == AdEvent.loaded) {
         testNative(controller);
       }
@@ -39,33 +39,33 @@ class _NativeAdPageState extends State<NativeAdPage> {
   }
 
   void testNative(NativeAdController controller) async {
-    VideoOperator operator = await controller.getVideoOperator();
-    operator.setVideoLifecycleListener =
-        (VideoLifecycleEvent event, {bool isMuted}) {
+    VideoOperator? operator = await (controller.getVideoOperator());
+    operator?.setVideoLifecycleListener =
+        (VideoLifecycleEvent event, {bool? isMuted}) {
       print("VideoLifeCycle event : $event");
       setState(() {
         logs = logs + "VideoLifeCycle event : ${describeEnum(event)}\n";
       });
     };
-    bool hasVideo = await operator.hasVideo();
+    bool? hasVideo = await operator?.hasVideo();
     print('Operator has video : $hasVideo');
 
-    String title = await controller.getTitle();
+    String? title = await controller.getTitle();
     print('Ad Title : $title');
 
-    String callToAction = await controller.getCallToAction();
+    String? callToAction = await controller.getCallToAction();
     print('Ad action : $callToAction');
 
-    String source = await controller.getAdSource();
+    String? source = await controller.getAdSource();
     print('Ad source : $source');
 
-    String getAdSign = await controller.getAdSign();
+    String? getAdSign = await controller.getAdSign();
     print('Ad sign : $getAdSign');
 
-    String whyThisAd = await controller.getWhyThisAd();
+    String? whyThisAd = await controller.getWhyThisAd();
     print('Why this ad : $whyThisAd');
 
-    String uniqueId = await controller.getUniqueId();
+    String? uniqueId = await controller.getUniqueId();
     print('uniqueId : $uniqueId');
   }
 
@@ -125,7 +125,7 @@ class _NativeAdPageState extends State<NativeAdPage> {
                           adSlotId: _imageTestAdSlotId,
                           controller: NativeAdController(
                               adConfiguration: configuration,
-                              listener: (AdEvent event, {int errorCode}) {
+                              listener: (AdEvent event, {int? errorCode}) {
                                 print("Native Ad event : $event");
                                 setState(() {
                                   logs = logs +

@@ -13,6 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -28,40 +29,39 @@ class _ConsentSettingsPageState extends State<ConsentSettingsPage> {
   static final String _testAdSlotId = "testw6vs28auh3";
   final Consent consentInfo = Consent.instance;
   ConsentStatus _consentStatus = ConsentStatus.UNKNOWN;
-  bool _needConsent = false;
+  bool? _needConsent = false;
   bool _buttonEnabled = false;
-  BannerAd _bannerAd;
+  BannerAd? _bannerAd;
 
   Future<void> initPlatformState() async {
     try {
       await consentInfo.setConsentStatus(ConsentStatus.UNKNOWN);
-      String testDeviceId = await consentInfo.getTestDeviceId();
-      await consentInfo.addTestDeviceId(testDeviceId);
+      String? testDeviceId = await (consentInfo.getTestDeviceId());
+      if (testDeviceId != null) await consentInfo.addTestDeviceId(testDeviceId);
       await consentInfo
           .setDebugNeedConsent(DebugNeedConsent.DEBUG_NEED_CONSENT);
       consentInfo.requestConsentUpdate((
-        ConsentUpdateEvent event, {
-        ConsentStatus consentStatus,
-        bool isNeedConsent,
-        List<AdProvider> adProviders,
-        String description,
+        ConsentUpdateEvent? event, {
+        ConsentStatus? consentStatus,
+        bool? isNeedConsent,
+        List<AdProvider>? adProviders,
+        String? description,
       }) {
         if (event == ConsentUpdateEvent.success) {
           _needConsent = isNeedConsent;
           bool isUnknown = consentStatus == ConsentStatus.UNKNOWN;
-          if (isNeedConsent) {
+          if (isNeedConsent!) {
             if (isUnknown) {
-              List<Map<String, dynamic>> adMapList =
-                  List<Map<String, dynamic>>();
-              adProviders.forEach((AdProvider provider) {
+              List<Map<String, dynamic>> adMapList = <Map<String, dynamic>>[];
+              adProviders!.forEach((AdProvider provider) {
                 adMapList.add(provider.toJson());
               });
               print('AdProviders : ' + jsonEncode(adMapList));
               setState(() {
-                _buttonEnabled = _needConsent && isUnknown;
+                _buttonEnabled = _needConsent! && isUnknown;
               });
             } else {
-              loadBannerAd(consentStatus);
+              loadBannerAd(consentStatus!);
             }
           } else {
             print('User consent is not neeeded');
@@ -69,7 +69,7 @@ class _ConsentSettingsPageState extends State<ConsentSettingsPage> {
           }
           // Consent update failed
         } else {
-          print('Consent status failed to update: ' + description);
+          print('Consent status failed to update: ' + description!);
           loadBannerAd(ConsentStatus.NON_PERSONALIZED);
         }
       });
@@ -81,7 +81,7 @@ class _ConsentSettingsPageState extends State<ConsentSettingsPage> {
 
   void loadBannerAd(ConsentStatus status) async {
     print('Consent Status: $status');
-    RequestOptions options = await HwAds.getRequestOptions;
+    RequestOptions? options = await HwAds.getRequestOptions;
     if (options == null) options = RequestOptions();
 
     options.tagForUnderAgeOfPromise = UnderAge.promiseTrue;
@@ -103,9 +103,9 @@ class _ConsentSettingsPageState extends State<ConsentSettingsPage> {
   }
 
   void setConsent(ConsentStatus status) async {
-    bool isUpdated = await Consent.updateSharedPreferences(
-        ConsentConstant.spConsentKey, status.index);
-    if (isUpdated) {
+    bool? isUpdated = await (Consent.updateSharedPreferences(
+        ConsentConstant.spConsentKey, status.index));
+    if (isUpdated ?? false) {
       print('SharedPreferences updated');
       loadBannerAd(status);
       setState(() {
@@ -145,9 +145,9 @@ class _ConsentSettingsPageState extends State<ConsentSettingsPage> {
                   Center(
                     child: Container(
                       child: Text(
-                        _needConsent && _consentStatus == ConsentStatus.UNKNOWN
+                        _needConsent! && _consentStatus == ConsentStatus.UNKNOWN
                             ? consentExample
-                            : !_needConsent
+                            : !_needConsent!
                                 ? 'User consent is not needed.'
                                 : _consentStatus == ConsentStatus.PERSONALIZED
                                     ? 'User has agreed.'

@@ -28,7 +28,7 @@ class RewardAdPage extends StatefulWidget {
 class _RewardAdPageState extends State<RewardAdPage> {
   final String _testAdSlotId = "testx9dtjwj8hp";
   final AdParam _adParam = AdParam();
-  RewardAd _rewardAd;
+  RewardAd? _rewardAd;
   int _score = 0;
   String logs = "Double tap to clear the logs.\n\n";
 
@@ -38,17 +38,17 @@ class _RewardAdPageState extends State<RewardAdPage> {
   * *
   * NOTE: A reward is not issued every time
   * */
-  RewardAd createAd() =>
-      RewardAd(listener: (RewardAdEvent event, {Reward reward, int errorCode}) {
+  RewardAd createAd() => RewardAd(
+          listener: (RewardAdEvent? event, {Reward? reward, int? errorCode}) {
         print("RewardAd event : $event");
         setState(() {
-          logs = logs + "Reward Ad event : ${describeEnum(event)}\n";
+          logs = logs + "Reward Ad event : ${describeEnum(event!)}\n";
         });
         if (event == RewardAdEvent.rewarded) {
-          print('Received reward : ${jsonEncode(reward.toJson())}');
+          print('Received reward : ${jsonEncode(reward!.toJson())}');
           setState(() {
             logs = logs + 'Received reward amount : ${reward.amount}\n';
-            _score += reward.amount != 0 ? reward.amount : 10;
+            _score += reward.amount != 0 ? reward.amount! : 10;
           });
         }
       });
@@ -92,7 +92,7 @@ class _RewardAdPageState extends State<RewardAdPage> {
                     onPressed: () {
                       _rewardAd?.destroy();
                       _rewardAd = createAd();
-                      _rewardAd
+                      _rewardAd!
                         ..loadAd(adSlotId: _testAdSlotId, adParam: _adParam)
                         ..show();
                     },

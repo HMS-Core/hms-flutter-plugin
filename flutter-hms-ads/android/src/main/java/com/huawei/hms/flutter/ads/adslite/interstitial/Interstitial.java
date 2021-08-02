@@ -22,7 +22,6 @@ import android.util.SparseArray;
 
 import com.huawei.hms.ads.AdListener;
 import com.huawei.hms.ads.InterstitialAd;
-import com.huawei.hms.flutter.ads.HmsAdsPlugin;
 import com.huawei.hms.flutter.ads.factory.AdParamFactory;
 import com.huawei.hms.flutter.ads.utils.constants.AdStatus;
 
