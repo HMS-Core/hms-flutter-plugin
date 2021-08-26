@@ -44,7 +44,7 @@ class MLAsrRecognizer {
 
   Future<String> startRecognizingWithUi(MLAsrSetting setting) async {
     _listenEvents();
-    return await _channel.invokeMethod("recognizeWithUi");
+    return await _channel.invokeMethod("recognizeWithUi", setting.toMap());//导致设置不生效
   }
 
   Future<bool> stopRecognition() async {
