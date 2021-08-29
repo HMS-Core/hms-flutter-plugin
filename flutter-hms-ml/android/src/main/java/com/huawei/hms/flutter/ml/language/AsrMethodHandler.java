@@ -182,7 +182,10 @@ public class AsrMethodHandler implements MethodChannel.MethodCallHandler, Stream
     }
 
     private void sendAsrEvents(final HashMap<String, Object> event) {
-        EventHandler.getInstance().getUiHandler().post(() -> EventHandler.getInstance().getEventSink().success(event));
+        //onCancel调用会导致EventSink变空，此时这里不判断会导致app崩溃
+        if(EventHandler.getInstance().getEventSink()!=null){
+            EventHandler.getInstance().getUiHandler().post(() -> EventHandler.getInstance().getEventSink().success(event));
+        }
     }
 
     @Override
