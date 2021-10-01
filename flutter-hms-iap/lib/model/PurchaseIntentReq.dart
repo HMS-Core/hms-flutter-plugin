@@ -15,6 +15,7 @@
 */
 import 'dart:convert' show json;
 
+/// Request information of the createPurchaseIntent API.
 class PurchaseIntentReq {
   int priceType;
   String productId;

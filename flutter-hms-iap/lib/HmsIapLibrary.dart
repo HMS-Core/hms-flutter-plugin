@@ -16,30 +16,30 @@
 
 library hms_iap_library;
 
-//Iap Client
+/// Utils
+export 'HmsIapResult.dart';
+
+/// Iap Client
 export 'IapClient.dart';
 
-//Utils
-export 'HmsIapResult.dart';
-export 'model/SignAlgorithmConstants.dart';
-
-//Requests
+/// Requests
 export 'model/ConsumeOwnedPurchaseReq.dart';
-export 'model/OwnedPurchasesReq.dart';
-export 'model/ProductInfoReq.dart';
-export 'model/PurchaseIntentReq.dart';
-export 'model/StartIapActivityReq.dart';
 
-//Responses
+/// Responses
 export 'model/ConsumeOwnedPurchaseResult.dart';
-export 'model/IsEnvReadyResult.dart';
-export 'model/IsSandboxActivatedResult.dart';
-export 'model/OwnedPurchasesResult.dart';
-export 'model/ProductInfoResult.dart';
-export 'model/PurchaseResultInfo.dart';
 
-//Util Class
+/// Util Class
 export 'model/ConsumePurchaseData.dart';
 export 'model/InAppPurchaseData.dart';
+export 'model/IsEnvReadyResult.dart';
+export 'model/IsSandboxActivatedResult.dart';
+export 'model/OwnedPurchasesReq.dart';
+export 'model/OwnedPurchasesResult.dart';
 export 'model/ProductInfo.dart';
+export 'model/ProductInfoReq.dart';
+export 'model/ProductInfoResult.dart';
+export 'model/PurchaseIntentReq.dart';
+export 'model/PurchaseResultInfo.dart';
+export 'model/SignAlgorithmConstants.dart';
+export 'model/StartIapActivityReq.dart';
 export 'model/Status.dart';

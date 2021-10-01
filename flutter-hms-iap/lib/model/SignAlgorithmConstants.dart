@@ -14,6 +14,7 @@
     limitations under the License.
 */
 
+/// Algorithm that you can pass to an IapClient API.
 class SignAlgorithmConstants {
   static const String SIGNATURE_ALGORITHM_SHA256WITHRSA_PSS =
       "SHA256WithRSA/PSS";

@@ -15,6 +15,7 @@
 */
 import 'dart:convert' show json;
 
+/// Store user's purchase information about consumables, non-consumables, and subscriptions.
 class ConsumePurchaseData {
   int? applicationId;
   bool? autoRenewing;

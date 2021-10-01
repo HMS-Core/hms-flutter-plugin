@@ -17,6 +17,7 @@ import 'dart:convert' show json;
 
 import 'Status.dart';
 
+/// Information returned when isEnvReady is successfully called.
 class IsEnvReadyResult {
   String? returnCode;
   Status? status;

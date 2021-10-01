@@ -15,6 +15,7 @@
 */
 import 'dart:convert' show json;
 
+/// Request information of the consumeOwnedPurchase API.
 class ConsumeOwnedPurchaseReq {
   String purchaseToken;
   String? developerChallenge;

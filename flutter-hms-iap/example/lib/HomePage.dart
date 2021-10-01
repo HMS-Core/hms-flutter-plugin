@@ -14,9 +14,10 @@
     limitations under the License.
 */
 import 'package:flutter/material.dart';
-import 'package:huawei_iap_example/CustomWidgets/Consumables.dart';
-import 'package:huawei_iap_example/CustomWidgets/NonConsumables.dart';
-import 'package:huawei_iap_example/CustomWidgets/Subscriptions.dart';
+
+import './CustomWidgets/Consumables.dart';
+import './CustomWidgets/NonConsumables.dart';
+import './CustomWidgets/Subscriptions.dart';
 
 class HomePage extends StatefulWidget {
   @override

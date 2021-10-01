@@ -14,12 +14,12 @@
     limitations under the License.
 */
 import 'dart:developer' show log;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show PlatformException;
-
 import 'package:huawei_iap/HmsIapLibrary.dart';
-import 'package:huawei_iap_example/utils/CustomButton.dart';
 
+import './utils/CustomButton.dart';
 import 'HomePage.dart';
 
 void main() => runApp(MaterialApp(home: MyApp()));

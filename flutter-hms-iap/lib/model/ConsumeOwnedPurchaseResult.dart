@@ -18,6 +18,7 @@ import 'dart:convert' show json;
 import 'ConsumePurchaseData.dart';
 import 'Status.dart';
 
+/// Information returned when the consumeOwnedPurchase API is successfully called.
 class ConsumeOwnedPurchaseResult {
   ConsumePurchaseData? consumePurchaseData;
   String? dataSignature;

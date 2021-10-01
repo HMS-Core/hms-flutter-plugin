@@ -15,6 +15,7 @@
 */
 import 'dart:convert' show json;
 
+/// Request information of the obtainOwnedPurchases or obtainOwnedPurchaseRecord API.
 class OwnedPurchasesReq {
   String? continuationToken;
   int priceType;

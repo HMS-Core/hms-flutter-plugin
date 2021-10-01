@@ -15,6 +15,7 @@
 */
 import 'dart:convert' show json;
 
+/// Details of a product.
 class ProductInfo {
   String? productId;
   int? priceType;

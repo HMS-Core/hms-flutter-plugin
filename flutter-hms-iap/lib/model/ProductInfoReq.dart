@@ -15,8 +15,10 @@
 */
 import 'dart:convert' show json;
 import 'dart:ui' show hashList;
+
 import 'package:flutter/foundation.dart' show listEquals;
 
+/// Request information of the obtainProductInfo API.
 class ProductInfoReq {
   int priceType;
   List<String> skuIds;

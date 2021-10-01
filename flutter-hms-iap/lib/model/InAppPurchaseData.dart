@@ -15,10 +15,12 @@
 */
 import 'dart:convert' show json;
 
+/// Provides a tool that parses the InAppPurchaseData string.
 class InAppPurchaseData {
+  /// Indicates that the field does not exist in the source JSON string.
   static const int NOT_PRESENT = -2147483648;
 
-  //Purchase State
+  /// Purchase State
   static const int INITIALIZED = -2147483648;
   static const int PURCHASED = 0;
   static const int CANCELED = 1;

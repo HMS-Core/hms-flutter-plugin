@@ -15,10 +15,13 @@
 */
 import 'dart:convert' show json;
 import 'dart:ui' show hashList;
+
 import 'package:flutter/foundation.dart' show listEquals;
+
 import 'ProductInfo.dart';
 import 'Status.dart';
 
+/// Information returned when the obtainProductInfo API is successfully called.
 class ProductInfoResult {
   String? errMsg;
   List<ProductInfo>? productInfoList;

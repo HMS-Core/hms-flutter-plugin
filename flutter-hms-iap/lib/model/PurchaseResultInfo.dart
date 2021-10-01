@@ -14,8 +14,10 @@
     limitations under the License.
 */
 import 'dart:convert' show json;
+
 import 'InAppPurchaseData.dart';
 
+/// Payment result information.
 class PurchaseResultInfo {
   String? returnCode;
   InAppPurchaseData? inAppPurchaseData;

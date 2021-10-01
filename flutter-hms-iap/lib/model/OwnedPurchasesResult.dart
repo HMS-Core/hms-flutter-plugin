@@ -15,10 +15,14 @@
 */
 import 'dart:convert' show json;
 import 'dart:ui' show hashList;
+
 import 'package:flutter/foundation.dart';
+
 import 'InAppPurchaseData.dart';
 import 'Status.dart';
 
+/// Information returned when the obtainOwnedPurchases or obtainOwnedPurchaseRecord API
+/// is successfully called.
 class OwnedPurchasesResult {
   String? continuationToken;
   String? errMsg;

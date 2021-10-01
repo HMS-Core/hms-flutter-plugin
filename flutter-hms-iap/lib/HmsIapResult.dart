@@ -22,7 +22,7 @@ class HmsIapResult {
 }
 
 class HmsIapResults {
-  //Results from Plugin
+  /// Results from Plugin
   static const HmsIapResult LOG_IN_ERROR = const HmsIapResult(
       resultCode: "ERR_CAN_NOT_LOG_IN", resultMessage: "Can not log in.");
   static const HmsIapResult UNKNOWN_REQUEST_CODE = HmsIapResult(
@@ -49,7 +49,7 @@ class HmsIapResults {
       resultCode: "NO_RESOLUTION",
       resultMessage: "There is no resolution for error.");
 
-  //OrderStatusCodes from Huawei IAP
+  /// OrderStatusCodes from Huawei IAP
   static const HmsIapResult ORDER_STATE_SUCCESS =
       const HmsIapResult(resultCode: "0", resultMessage: "Success");
   static const HmsIapResult ORDER_STATE_FAILED = const HmsIapResult(

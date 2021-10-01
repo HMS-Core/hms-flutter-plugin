@@ -14,8 +14,10 @@
     limitations under the License.
 */
 import 'dart:convert' show json;
+
 import 'Status.dart';
 
+/// Information returned when the isSandboxActivated API is successfully called.
 class IsSandboxActivatedResult {
   String? errMsg;
   bool? isSandboxApk;

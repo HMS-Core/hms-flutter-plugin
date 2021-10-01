@@ -25,20 +25,10 @@ import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 public class IapPlugin implements FlutterPlugin, ActivityAware {
     private MethodChannel mMethodChannel;
     private MethodCallHandlerImpl mMethodCallHandler;
-
-    public static void registerWith(final Registrar registrar) {
-        final IapPlugin instance = new IapPlugin();
-        final Activity activity = registrar.activity();
-        final BinaryMessenger messenger = registrar.messenger();
-        instance.onAttachedToEngine(messenger);
-        instance.mMethodCallHandler = new MethodCallHandlerImpl(activity);
-        instance.mMethodChannel.setMethodCallHandler(instance.mMethodCallHandler);
-    }
 
     private void onAttachedToEngine(@NonNull BinaryMessenger messenger) {
         mMethodChannel = new MethodChannel(messenger, "IapClient");

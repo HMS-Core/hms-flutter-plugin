@@ -1,3 +1,7 @@
+## 6.0.0+300
+
+* Updated to support Huawei In-App Purchases SDK version 6.0.0.300.
+
 ## 5.3.0+300
 
 * [Breaking Change] Added null-safety support.

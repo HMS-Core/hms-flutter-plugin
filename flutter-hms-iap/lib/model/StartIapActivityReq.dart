@@ -15,8 +15,12 @@
 */
 import 'dart:convert' show json;
 
+/// Request information of the startIapActivity API.
 class StartIapActivityReq {
+  /// Redirects your app to the subscription management screen of HUAWEI IAP.
   static const int TYPE_SUBSCRIBE_MANAGER_ACTIVITY = 2;
+
+  ///Redirects your app to the subscription editing screen of HUAWEI IAP.
   static const int TYPE_SUBSCRIBE_EDIT_ACTIVITY = 3;
 
   int type;
