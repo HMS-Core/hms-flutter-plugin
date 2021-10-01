@@ -21,8 +21,8 @@ import 'package:flutter/foundation.dart';
 import 'site.dart';
 
 class TextSearchResponse {
-  int totalCount;
-  List<Site> sites;
+  int? totalCount;
+  List<Site?>? sites;
 
   TextSearchResponse({
     this.totalCount,
@@ -32,13 +32,11 @@ class TextSearchResponse {
   Map<String, dynamic> toMap() {
     return {
       'totalCount': totalCount,
-      'sites': sites?.map((x) => x?.toMap())?.toList(),
+      'sites': sites?.map((x) => x?.toMap()).toList(),
     };
   }
 
   factory TextSearchResponse.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return TextSearchResponse(
       totalCount: map["totalCount"] == null ? null : map["totalCount"],
       sites: map["sites"] == null

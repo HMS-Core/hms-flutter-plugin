@@ -41,7 +41,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.huawei.hms:site:5.1.0.300'
+    implementation 'com.huawei.hms:site:6.0.1.303'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation "androidx.recyclerview:recyclerview-selection:1.0.0"

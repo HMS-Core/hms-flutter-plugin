@@ -4,10 +4,10 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'huawei_site'
-  s.version          = '5.1.0+301'
+  s.version          = '6.0.1+303'
   s.summary          = 'HUAWEI Site Kit plugin for Flutter.'
   s.description      = <<-DESC
-With Huawei Site Kit plugin for Flutter, your app can provide users with convenient and secure access to diverse, place-related services.
+HUAWEI Site Kit plugin for Flutter. With Huawei Site Kit, your app can provide users with convenient and secure access to diverse, place-related services.
                        DESC
   s.homepage         = 'https://www.huawei.com'
   s.license          = { :type => 'Apache 2.0', :file => '../LICENSE' }

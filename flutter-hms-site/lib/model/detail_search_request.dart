@@ -18,33 +18,30 @@ import 'dart:convert';
 
 class DetailSearchRequest {
   String siteId;
-  String language;
-  String politicalView;
-  bool children;
+  String? language;
+  bool? children;
 
   DetailSearchRequest({
-    this.siteId,
+    required this.siteId,
     this.language,
-    @deprecated String politicalView,
     this.children,
-  }) : politicalView = null;
+  });
 
   Map<String, dynamic> toMap() {
     return {
       'siteId': siteId,
       'language': language,
-      'politicalView': null,
       'children': children,
     };
   }
 
   factory DetailSearchRequest.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return DetailSearchRequest(
-      siteId: map['siteId'],
-      language: map['language'],
-      children: map['children'],
+      siteId: map['siteId'] == null
+          ? throw ("A siteId must be provided.")
+          : map['siteId'],
+      language: map['language'] == null ? null : map['language'],
+      children: map['children'] == null ? null : map['children'],
     );
   }
 
@@ -55,7 +52,7 @@ class DetailSearchRequest {
 
   @override
   String toString() =>
-      'DetailSearchRequest(siteId: $siteId, language: $language, politicalView: $politicalView, children: $children)';
+      'DetailSearchRequest(siteId: $siteId, language: $language, children: $children)';
 
   @override
   bool operator ==(Object o) {

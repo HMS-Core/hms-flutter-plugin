@@ -21,13 +21,13 @@ import 'package:flutter/foundation.dart';
 import 'coordinate.dart';
 
 class ChildrenNode {
-  String siteId;
-  String name;
-  String formatAddress;
-  Coordinate location;
-  List<String> hwPoiTypes;
-  String domeAndInt;
-  String depAndArr;
+  String? siteId;
+  String? name;
+  String? formatAddress;
+  Coordinate? location;
+  List<String>? hwPoiTypes;
+  String? domeAndInt;
+  String? depAndArr;
 
   ChildrenNode({
     this.siteId,
@@ -54,15 +54,13 @@ class ChildrenNode {
       'name': name,
       'formatAddress': formatAddress,
       'location': location?.toMap(),
-      'hwPoiTypes': hwPoiTypes?.map((t) => t?.toString())?.toList(),
+      'hwPoiTypes': hwPoiTypes?.map((t) => t.toString()).toList(),
       'domeAndInt': domeAndInt,
       'depAndArr': depAndArr,
     };
   }
 
   factory ChildrenNode.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return ChildrenNode(
       siteId: map["siteId"] == null ? null : map["siteId"],
       name: map["name"] == null ? null : map["name"],

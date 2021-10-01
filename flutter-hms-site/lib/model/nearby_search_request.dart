@@ -21,58 +21,59 @@ import 'hwlocation_type.dart';
 import 'location_type.dart';
 
 class NearbySearchRequest {
-  int pageSize;
-  int pageIndex;
-  String query;
+  int? pageSize;
+  int? pageIndex;
+  String? query;
   Coordinate location;
-  int radius;
-  LocationType poiType;
-  String language;
-  String politicalView;
-  HwLocationType hwPoiType;
-  bool strictBounds;
+  int? radius;
+  LocationType? poiType;
+  String? language;
+  HwLocationType? hwPoiType;
+  bool? strictBounds;
 
   NearbySearchRequest({
     this.pageSize,
     this.pageIndex,
     this.query,
-    this.location,
+    required this.location,
     this.radius,
     this.poiType,
     this.language,
-    @deprecated String politicalView,
     this.hwPoiType,
     this.strictBounds,
-  }) : politicalView = null;
+  });
 
   Map<String, dynamic> toMap() {
     return {
       'pageSize': pageSize,
       'pageIndex': pageIndex,
       'query': query,
-      'location': location?.toMap(),
+      'location': location.toMap(),
       'radius': radius,
       'poiType': poiType?.toString(),
       'language': language,
-      'politicalView': null,
       'hwPoiType': hwPoiType?.toString(),
       'strictBounds': strictBounds,
     };
   }
 
   factory NearbySearchRequest.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return NearbySearchRequest(
-      pageSize: map['pageSize'],
-      pageIndex: map['pageIndex'],
-      query: map['query'],
-      location: Coordinate.fromMap(map['location']),
-      radius: map['radius'],
-      poiType: LocationType.fromString(map['poiType']),
-      language: map['language'],
-      hwPoiType: HwLocationType.fromString(map['hwPoiType']),
-      strictBounds: map['strictBounds'],
+      pageSize: map['pageSize'] == null ? null : map['pageSize'],
+      pageIndex: map['pageIndex'] == null ? null : map['pageIndex'],
+      query: map['query'] == null ? null : map['query'],
+      location: map['location'] == null
+          ? throw ("A location object must be provided.")
+          : Coordinate.fromMap(map['location']),
+      radius: map['radius'] == null ? null : map['radius'],
+      poiType: map['poiType'] == null
+          ? null
+          : LocationType.fromString(map['poiType']),
+      language: map['language'] == null ? null : map['language'],
+      hwPoiType: map['hwPoiType'] == null
+          ? null
+          : HwLocationType.fromString(map['hwPoiType']),
+      strictBounds: map['strictBounds'] == null ? null : map['strictBounds'],
     );
   }
 
@@ -83,7 +84,7 @@ class NearbySearchRequest {
 
   @override
   String toString() {
-    return 'NearbySearchRequest(pageSize: $pageSize, pageIndex: $pageIndex, query: $query, location: $location, radius: $radius, poiType: $poiType, language: $language, politicalView: $politicalView, hwPoiType: $hwPoiType, strictBounds: $strictBounds)';
+    return 'NearbySearchRequest(pageSize: $pageSize, pageIndex: $pageIndex, query: $query, location: $location, radius: $radius, poiType: $poiType, language: $language, hwPoiType: $hwPoiType, strictBounds: $strictBounds)';
   }
 
   @override

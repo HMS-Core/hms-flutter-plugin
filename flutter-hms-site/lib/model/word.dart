@@ -21,8 +21,8 @@ class Word {
   String value;
 
   Word({
-    int offset,
-    String value,
+    int? offset,
+    String? value,
   })  : offset = offset ?? 0,
         value = value ?? '';
 
@@ -34,8 +34,6 @@ class Word {
   }
 
   factory Word.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return Word(
       offset: map['offset'] == null ? 0 : map['offset'],
       value: map['value'] == null ? '' : map['value'],

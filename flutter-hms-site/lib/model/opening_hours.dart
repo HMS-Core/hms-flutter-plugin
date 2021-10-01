@@ -21,8 +21,8 @@ import 'package:flutter/foundation.dart';
 import 'period.dart';
 
 class OpeningHours {
-  List<String> texts;
-  List<Period> periods;
+  List<String>? texts;
+  List<Period>? periods;
 
   OpeningHours({
     this.texts,
@@ -32,13 +32,11 @@ class OpeningHours {
   Map<String, dynamic> toMap() {
     return {
       'texts': texts,
-      'periods': periods?.map((x) => x?.toMap())?.toList(),
+      'periods': periods?.map((x) => x.toMap()).toList(),
     };
   }
 
   factory OpeningHours.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return OpeningHours(
       periods: map["periods"] == null
           ? null

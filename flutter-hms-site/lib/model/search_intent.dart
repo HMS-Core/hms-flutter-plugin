@@ -19,8 +19,8 @@ import 'dart:convert';
 import 'search_filter.dart';
 
 class SearchIntent {
-  String hint;
-  SearchFilter searchFilter;
+  String? hint;
+  SearchFilter? searchFilter;
   String apiKey;
 
   SearchIntent(
@@ -38,8 +38,6 @@ class SearchIntent {
   }
 
   factory SearchIntent.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return SearchIntent(
       map['apiKey'] == null ? null : map['apiKey'],
       hint: map['hint'] == null ? null : map['hint'],

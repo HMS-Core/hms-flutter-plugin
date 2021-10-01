@@ -41,8 +41,7 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.PluginRegistry;
 
-public final class SiteService
-        implements PluginRegistry.ActivityResultListener {
+public final class SiteService implements PluginRegistry.ActivityResultListener {
     private final Activity activity;
 
     private SearchService searchService;
@@ -65,39 +64,34 @@ public final class SiteService
 
     public void textSearch(@NonNull final MethodCall call, @NonNull final MethodChannel.Result result) {
         final TextSearchRequest request = ArgumentParser.getTextSearchRequest(call);
-        searchService.textSearch(request,
-                new SearchResultListenerImpl<>(activity, result, call.method));
+        searchService.textSearch(request, new SearchResultListenerImpl<>(activity, result, call.method));
     }
 
     public void nearbySearch(@NonNull final MethodCall call, @NonNull final MethodChannel.Result result) {
         final NearbySearchRequest request = ArgumentParser.getNearbySearchRequest(call);
-        searchService.nearbySearch(request,
-                new SearchResultListenerImpl<>(activity, result, call.method));
+        searchService.nearbySearch(request, new SearchResultListenerImpl<>(activity, result, call.method));
     }
 
     public void detailSearch(@NonNull final MethodCall call, @NonNull final MethodChannel.Result result) {
         final DetailSearchRequest request = ArgumentParser.getDetailSearchRequest(call);
-        searchService.detailSearch(request,
-                new SearchResultListenerImpl<>(activity, result, call.method));
+        searchService.detailSearch(request, new SearchResultListenerImpl<>(activity, result, call.method));
     }
 
     public void querySuggestion(@NonNull final MethodCall call, @NonNull final MethodChannel.Result result) {
         final QuerySuggestionRequest request = ArgumentParser.getQuerySuggestionRequest(call);
-        searchService.querySuggestion(request,
-                new SearchResultListenerImpl<>(activity, result, call.method));
+        searchService.querySuggestion(request, new SearchResultListenerImpl<>(activity, result, call.method));
     }
 
     public void queryAutocomplete(@NonNull final MethodCall call, @NonNull final MethodChannel.Result result) {
         final QueryAutocompleteRequest request = ArgumentParser.getQueryAutocompleteRequest(call);
-        searchService.queryAutocomplete(request,
-                new SearchResultListenerImpl<>(activity, result, call.method));
+        searchService.queryAutocomplete(request, new SearchResultListenerImpl<>(activity, result, call.method));
     }
 
     public void startSiteSearchActivity(@NonNull final MethodCall call, @NonNull final MethodChannel.Result result) {
         this.result = result;
         searchIntent = ArgumentParser.getSearchIntent(call);
         final Intent intent = searchIntent.getIntent(activity)
-                .setPackage(activity.getApplicationContext().getPackageName());
+            .setPackage(activity.getApplicationContext().getPackageName());
         activity.startActivityForResult(intent, SearchIntent.SEARCH_REQUEST_CODE);
     }
 
@@ -108,20 +102,19 @@ public final class SiteService
 
         if (incomingResult != null) {
             if (SearchIntent.SEARCH_REQUEST_CODE == requestCode && SearchIntent.isSuccess(resultCode)
-                    && searchIntent != null && data != null) {
+                && searchIntent != null && data != null) {
                 final Site site = searchIntent.getSiteFromIntent(data);
                 incomingResult.success(ObjectSerializer.INSTANCE.toJson(site));
                 HMSLogger.getInstance(activity).sendSingleEvent("siteSearch");
             } else if (searchIntent != null && data != null) {
                 final SearchStatus searchStatus = searchIntent.getStatusFromIntent(data);
-                incomingResult.error(searchStatus.errorCode, searchStatus.errorMessage, null);
+                incomingResult.error(searchStatus.getErrorCode(), searchStatus.getErrorMessage(), null);
                 HMSLogger.getInstance(activity).sendSingleEvent("siteSearch", "-1");
             } else {
                 incomingResult.error("-1", "Unknown error. Site search task is failed.", null);
                 HMSLogger.getInstance(activity).sendSingleEvent("siteSearch", "-1");
             }
         }
-
         return true;
     }
 }

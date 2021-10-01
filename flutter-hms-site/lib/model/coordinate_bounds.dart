@@ -16,29 +16,25 @@
 
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
-
 import 'coordinate.dart';
 
 class CoordinateBounds {
-  Coordinate northeast;
-  Coordinate southwest;
+  Coordinate? northeast;
+  Coordinate? southwest;
 
   CoordinateBounds({
-    @required this.northeast,
-    @required this.southwest,
+    this.northeast,
+    this.southwest,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'northeast': northeast?.toMap(),
-      'southwest': southwest?.toMap(),
+      'northeast': northeast!.toMap(),
+      'southwest': southwest!.toMap(),
     };
   }
 
   factory CoordinateBounds.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return CoordinateBounds(
       northeast: map["northeast"] == null
           ? null

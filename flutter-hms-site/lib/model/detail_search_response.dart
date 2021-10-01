@@ -19,7 +19,7 @@ import 'dart:convert';
 import 'site.dart';
 
 class DetailSearchResponse {
-  Site site;
+  Site? site;
 
   DetailSearchResponse({
     this.site,
@@ -32,8 +32,6 @@ class DetailSearchResponse {
   }
 
   factory DetailSearchResponse.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return DetailSearchResponse(
       site: map["site"] == null ? null : Site.fromMap(map["site"]),
     );

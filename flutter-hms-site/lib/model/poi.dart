@@ -22,31 +22,33 @@ import 'children_node.dart';
 import 'opening_hours.dart';
 
 class Poi {
-  String internationalPhone;
-  OpeningHours openingHours;
-  String phone;
-  List<String> photoUrls;
-  List<String> poiTypes;
-  List<String> hwPoiTypes;
+  String? internationalPhone;
+  OpeningHours? openingHours;
+  String? phone;
+  List<String>? photoUrls;
+  List<String>? poiTypes;
+  List<String>? hwPoiTypes;
   double rating;
-  String websiteUrl;
+  String? websiteUrl;
   int priceLevel;
-  String businessStatus;
-  List<ChildrenNode> childrenNodes;
+  String? businessStatus;
+  List<ChildrenNode>? childrenNodes;
+  String? icon;
 
-  Poi({
-    this.internationalPhone,
-    this.openingHours,
-    this.phone,
-    this.photoUrls,
-    this.poiTypes,
-    this.hwPoiTypes,
-    double rating,
-    this.websiteUrl,
-    int priceLevel,
-    this.businessStatus,
-    this.childrenNodes,
-  })  : rating = rating ?? 0,
+  Poi(
+      {this.internationalPhone,
+      this.openingHours,
+      this.phone,
+      this.photoUrls,
+      this.poiTypes,
+      this.hwPoiTypes,
+      double? rating,
+      this.websiteUrl,
+      int? priceLevel,
+      this.businessStatus,
+      this.childrenNodes,
+      this.icon})
+      : rating = rating ?? 0,
         priceLevel = priceLevel ?? -1;
 
   Map<String, dynamic> toMap() {
@@ -62,12 +64,11 @@ class Poi {
       'priceLevel': priceLevel,
       'businessStatus': businessStatus,
       'childrenNodes': childrenNodes,
+      'icon': icon,
     };
   }
 
   factory Poi.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return Poi(
       internationalPhone:
           map["internationalPhone"] == null ? null : map["internationalPhone"],
@@ -93,6 +94,7 @@ class Poi {
           ? null
           : List<ChildrenNode>.from(
               map["childrenNodes"].map((x) => ChildrenNode.fromMap(x))),
+      icon: map["icon"] == null ? null : map["icon"],
     );
   }
 
@@ -104,7 +106,7 @@ class Poi {
   String toString() {
     return 'Poi(internationalPhone: $internationalPhone, openingHours: '
         '$openingHours, phone: $phone, photoUrls: $photoUrls, poiTypes: '
-        '$poiTypes, hwPoiTypes: $hwPoiTypes, rating: $rating, websiteUrl: $websiteUrl, priceLevel: $priceLevel, businessStatus: $businessStatus, childrenNodes: $childrenNodes)';
+        '$poiTypes, hwPoiTypes: $hwPoiTypes, rating: $rating, websiteUrl: $websiteUrl, priceLevel: $priceLevel, businessStatus: $businessStatus, childrenNodes: $childrenNodes, icon: $icon)';
   }
 
   @override
@@ -122,7 +124,8 @@ class Poi {
         o.websiteUrl == websiteUrl &&
         o.priceLevel == priceLevel &&
         o.businessStatus == businessStatus &&
-        listEquals(o.childrenNodes, childrenNodes);
+        listEquals(o.childrenNodes, childrenNodes) &&
+        o.icon == icon;
   }
 
   @override
@@ -137,6 +140,7 @@ class Poi {
         websiteUrl.hashCode ^
         priceLevel.hashCode ^
         businessStatus.hashCode ^
-        childrenNodes.hashCode;
+        childrenNodes.hashCode ^
+        icon.hashCode;
   }
 }

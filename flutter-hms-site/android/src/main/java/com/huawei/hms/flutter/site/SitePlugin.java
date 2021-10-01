@@ -30,19 +30,12 @@ import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 public class SitePlugin implements FlutterPlugin, ActivityAware {
     private MethodChannel methodChannel;
     private MethodChannel.MethodCallHandler methodCallHandler;
     private HMSLogger hmsLogger;
     private SiteService service;
-
-    public static void registerWith(final Registrar registrar) {
-        final SitePlugin instance = new SitePlugin();
-        instance.onAttachedToEngine(registrar.messenger(), registrar.activeContext());
-        instance.onAttachedToActivity(registrar.activity());
-    }
 
     private void onAttachedToEngine(@NonNull final BinaryMessenger messenger, @NonNull final Context context) {
         methodChannel = new MethodChannel(messenger, "com.huawei.hms.flutter.site/MethodChannel");

@@ -39,10 +39,11 @@ class _DetailSearchScreenState extends State<DetailSearchScreen> {
   final TextEditingController _languageTextController =
       TextEditingController(text: "en");
 
-  final DetailSearchRequest _request = DetailSearchRequest();
+  late DetailSearchRequest _request;
+  late String _results;
+  late SearchService _searchService;
 
-  String _results;
-  SearchService _searchService;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -56,9 +57,8 @@ class _DetailSearchScreenState extends State<DetailSearchScreen> {
   }
 
   void runSearch() async {
-    _request.siteId = _siteIdTextController.text;
+    _request = DetailSearchRequest(siteId: _siteIdTextController.text);
     _request.language = _languageTextController.text;
-
     try {
       DetailSearchResponse response =
           await _searchService.detailSearch(_request);
@@ -85,25 +85,30 @@ class _DetailSearchScreenState extends State<DetailSearchScreen> {
             Container(
               child: Padding(
                 padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    CustomTextFormField(
-                      labelText: "Site ID",
-                      controller: _siteIdTextController,
-                    ),
-                    CustomTextFormField(
-                      labelText: "Language",
-                      controller: _languageTextController,
-                    ),
-                    CustomButton(
-                      key: Key(Keys.SEARCH_DETAIL),
-                      text: "Search",
-                      onPressed: () {
-                        runSearch();
-                      },
-                    ),
-                  ],
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      CustomTextFormField(
+                        labelText: "Site ID",
+                        controller: _siteIdTextController,
+                      ),
+                      CustomTextFormField(
+                        labelText: "Language",
+                        controller: _languageTextController,
+                      ),
+                      CustomButton(
+                        key: Key(Keys.SEARCH_DETAIL),
+                        text: "Search",
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            runSearch();
+                          }
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

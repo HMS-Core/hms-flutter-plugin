@@ -21,8 +21,8 @@ import 'package:flutter/foundation.dart';
 import 'site.dart';
 
 class NearbySearchResponse {
-  int totalCount;
-  List<Site> sites;
+  int? totalCount;
+  List<Site?>? sites;
 
   NearbySearchResponse({
     this.totalCount,
@@ -32,13 +32,11 @@ class NearbySearchResponse {
   Map<String, dynamic> toMap() {
     return {
       'totalCount': totalCount,
-      'sites': sites?.map((x) => x?.toMap())?.toList(),
+      'sites': sites?.map((x) => x?.toMap()).toList(),
     };
   }
 
   factory NearbySearchResponse.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return NearbySearchResponse(
       totalCount: map["totalCount"] == null ? null : map["totalCount"],
       sites: map["sites"] == null

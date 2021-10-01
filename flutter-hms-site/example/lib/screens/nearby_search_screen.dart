@@ -50,10 +50,11 @@ class _NearbySearchScreenState extends State<NearbySearchScreen> {
   final TextEditingController _pageSizeTextController =
       TextEditingController(text: "20");
 
-  final NearbySearchRequest _request = NearbySearchRequest();
+  late NearbySearchRequest _request;
+  late String _results;
+  late SearchService _searchService;
 
-  String _results;
-  SearchService _searchService;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -67,16 +68,16 @@ class _NearbySearchScreenState extends State<NearbySearchScreen> {
   }
 
   void runSearch() async {
-    _request.query = _queryTextController.text;
-    _request.location = Coordinate(
+    _request = NearbySearchRequest(
+        location: Coordinate(
       lat: double.parse(_latTextController.text),
       lng: double.parse(_lngTextController.text),
-    );
+    ));
+    _request.query = _queryTextController.text;
     _request.language = _languageTextController.text;
     _request.pageIndex = int.parse(_pageIndexTextController.text);
     _request.pageSize = int.parse(_pageSizeTextController.text);
     _request.radius = int.parse(_radiusTextController.text);
-
     try {
       NearbySearchResponse response =
           await _searchService.nearbySearch(_request);
@@ -103,45 +104,50 @@ class _NearbySearchScreenState extends State<NearbySearchScreen> {
             Container(
               child: Padding(
                 padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    CustomTextFormField(
-                      labelText: "Query Text",
-                      controller: _queryTextController,
-                    ),
-                    CustomTextFormField(
-                      labelText: "Language",
-                      controller: _languageTextController,
-                    ),
-                    CustomTextFormField(
-                      labelText: "Latitude",
-                      controller: _latTextController,
-                    ),
-                    CustomTextFormField(
-                      labelText: "Longitude",
-                      controller: _lngTextController,
-                    ),
-                    CustomTextFormField(
-                      labelText: "Radius",
-                      controller: _radiusTextController,
-                    ),
-                    CustomTextFormField(
-                      labelText: "PageIndex",
-                      controller: _pageIndexTextController,
-                    ),
-                    CustomTextFormField(
-                      labelText: "PageSize",
-                      controller: _pageSizeTextController,
-                    ),
-                    CustomButton(
-                      key: Key(Keys.SEARCH_NEARBY),
-                      text: "Search",
-                      onPressed: () {
-                        runSearch();
-                      },
-                    ),
-                  ],
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      CustomTextFormField(
+                        labelText: "Query Text",
+                        controller: _queryTextController,
+                      ),
+                      CustomTextFormField(
+                        labelText: "Language",
+                        controller: _languageTextController,
+                      ),
+                      CustomTextFormField(
+                        labelText: "Latitude",
+                        controller: _latTextController,
+                      ),
+                      CustomTextFormField(
+                        labelText: "Longitude",
+                        controller: _lngTextController,
+                      ),
+                      CustomTextFormField(
+                        labelText: "Radius",
+                        controller: _radiusTextController,
+                      ),
+                      CustomTextFormField(
+                        labelText: "PageIndex",
+                        controller: _pageIndexTextController,
+                      ),
+                      CustomTextFormField(
+                        labelText: "PageSize",
+                        controller: _pageSizeTextController,
+                      ),
+                      CustomButton(
+                        key: Key(Keys.SEARCH_NEARBY),
+                        text: "Search",
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            runSearch();
+                          }
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

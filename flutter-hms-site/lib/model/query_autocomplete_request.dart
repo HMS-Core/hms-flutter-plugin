@@ -20,20 +20,18 @@ import 'coordinate.dart';
 
 class QueryAutocompleteRequest {
   String query;
-  Coordinate location;
-  int radius;
-  String language;
-  String politicalView;
+  Coordinate? location;
+  int? radius;
+  String? language;
   bool children;
 
   QueryAutocompleteRequest({
-    this.query,
+    required this.query,
     this.location,
     this.radius,
     this.language,
-    @deprecated String politicalView,
-    bool children,
-  }) : politicalView = null;
+    bool? children,
+  }) : children = children ?? false;
 
   Map<String, dynamic> toMap() {
     return {
@@ -41,20 +39,20 @@ class QueryAutocompleteRequest {
       'location': location?.toMap(),
       'radius': radius,
       'language': language,
-      'politicalView': null,
       'children': children,
     };
   }
 
   factory QueryAutocompleteRequest.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return QueryAutocompleteRequest(
-      query: map['query'],
-      location: Coordinate.fromMap(map['location']),
-      radius: map['radius'],
-      language: map['language'],
-      children: map['children'],
+      query: map['query'] == null
+          ? throw ("A query must be provided.")
+          : map['query'],
+      location:
+          map['location'] == null ? null : Coordinate.fromMap(map['location']),
+      radius: map['radius'] == null ? null : map['radius'],
+      language: map['language'] == null ? null : map['language'],
+      children: map['children'] == null ? null : map['children'],
     );
   }
 
@@ -65,7 +63,7 @@ class QueryAutocompleteRequest {
 
   @override
   String toString() {
-    return 'QueryAutocompleteRequest(query: $query, location: $location, radius: $radius, language: $language, politicalView: $politicalView, children: $children)';
+    return 'QueryAutocompleteRequest(query: $query, location: $location, radius: $radius, language: $language, children: $children)';
   }
 
   @override

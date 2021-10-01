@@ -16,27 +16,43 @@
 
 import 'package:flutter/material.dart';
 
-class CustomTextFormField extends StatelessWidget {
+class CustomTextFormField extends StatefulWidget {
   final String labelText;
   final TextEditingController controller;
 
   CustomTextFormField({
-    @required this.labelText,
-    @required this.controller,
+    required this.labelText,
+    required this.controller,
   });
+
+  @override
+  _CustomTextFormFieldState createState() => _CustomTextFormFieldState();
+}
+
+class _CustomTextFormFieldState extends State<CustomTextFormField> {
+  String? errorText;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(bottom: 5),
       child: TextFormField(
-        controller: controller,
-        decoration: new InputDecoration(
-          labelText: labelText,
-          border: new OutlineInputBorder(
-            borderSide: new BorderSide(),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            setState(() {
+              errorText = 'A value must be provided.';
+            });
+            return errorText;
+          }
+          return null;
+        },
+        controller: widget.controller,
+        decoration: InputDecoration(
+          labelText: widget.labelText,
+          errorText: errorText ?? null,
+          border: OutlineInputBorder(
+            borderSide: BorderSide(),
           ),
-          //fillColor: Colors.green
         ),
       ),
     );

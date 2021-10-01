@@ -21,7 +21,7 @@ import 'package:flutter/foundation.dart';
 import 'site.dart';
 
 class QuerySuggestionResponse {
-  List<Site> sites;
+  List<Site?>? sites;
 
   QuerySuggestionResponse({
     this.sites,
@@ -29,13 +29,11 @@ class QuerySuggestionResponse {
 
   Map<String, dynamic> toMap() {
     return {
-      'sites': sites?.map((x) => x?.toMap())?.toList(),
+      'sites': sites?.map((x) => x?.toMap()).toList(),
     };
   }
 
   factory QuerySuggestionResponse.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return QuerySuggestionResponse(
       sites: map['sites'] == null
           ? null

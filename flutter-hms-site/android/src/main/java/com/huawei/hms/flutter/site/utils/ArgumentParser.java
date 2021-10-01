@@ -70,7 +70,6 @@ public final class ArgumentParser {
         } else {
             searchIntent.setSearchFilter(new SearchFilter());
         }
-
         return searchIntent;
     }
 }

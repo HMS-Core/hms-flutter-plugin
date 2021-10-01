@@ -17,8 +17,8 @@
 import 'dart:convert';
 
 class SearchStatus {
-  String errorCode;
-  String errorMessage;
+  String? errorCode;
+  String? errorMessage;
 
   SearchStatus({
     this.errorCode,
@@ -33,8 +33,6 @@ class SearchStatus {
   }
 
   factory SearchStatus.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return SearchStatus(
       errorCode: map['errorCode'] == null ? null : map['errorCode'],
       errorMessage: map['errorMessage'] == null ? null : map['errorMessage'],

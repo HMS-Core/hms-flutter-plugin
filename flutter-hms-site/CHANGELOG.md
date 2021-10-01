@@ -1,3 +1,11 @@
+## 6.0.1+303
+
+* Added the icon attribute to the **Poi** object.
+* Added the countries attribute to **TextSearchRequest** and **QuerySuggestionRequest**, which is used to pass multiple **country** or **region codes**.
+## 5.2.0+300
+
+* [Breaking Change] Migrated library to null safety.
+
 ## 5.1.0+301
 
 * Updated HMSLogger.

@@ -23,16 +23,15 @@ import 'coordinate_bounds.dart';
 import 'location_type.dart';
 
 class SearchFilter {
-  CoordinateBounds bounds;
-  String countryCode;
-  String language;
-  Coordinate location;
-  List<LocationType> poiType;
-  String politicalView;
-  String query;
-  int radius;
-  bool children;
-  bool strictBounds;
+  CoordinateBounds? bounds;
+  String? countryCode;
+  String? language;
+  Coordinate? location;
+  List<LocationType>? poiType;
+  String? query;
+  int? radius;
+  bool? children;
+  bool? strictBounds;
 
   SearchFilter({
     this.bounds,
@@ -40,12 +39,11 @@ class SearchFilter {
     this.language,
     this.location,
     this.poiType,
-    @deprecated String politicalView,
     this.query,
     this.radius,
     this.children,
     this.strictBounds,
-  }) : politicalView = null;
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -53,8 +51,7 @@ class SearchFilter {
       'countryCode': countryCode,
       'language': language,
       'location': location?.toMap(),
-      'poiType': poiType?.map((t) => t?.toString())?.toList(),
-      'politicalView': null,
+      'poiType': poiType?.map((t) => t.toString()).toList(),
       'query': query,
       'radius': radius,
       'children': children,
@@ -63,8 +60,6 @@ class SearchFilter {
   }
 
   factory SearchFilter.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return SearchFilter(
       bounds: map["bounds"] == null
           ? null
@@ -91,7 +86,7 @@ class SearchFilter {
 
   @override
   String toString() {
-    return 'SearchFilter(bounds: $bounds, countryCode: $countryCode, language: $language, location: $location, poiType: $poiType, politicalView: $politicalView, query: $query, radius: $radius, children: $children, strictBounds: $strictBounds) ';
+    return 'SearchFilter(bounds: $bounds, countryCode: $countryCode, language: $language, location: $location, poiType: $poiType, query: $query, radius: $radius, children: $children, strictBounds: $strictBounds) ';
   }
 
   @override

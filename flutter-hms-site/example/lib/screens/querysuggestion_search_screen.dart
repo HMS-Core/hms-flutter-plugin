@@ -25,6 +25,7 @@ import 'package:huawei_site_example/screens/home_screen.dart';
 
 import '../keys.dart';
 import '../widgets/custom_button.dart';
+import '../widgets/custom_checkbox.dart';
 import '../widgets/custom_text_form_field.dart';
 
 class QuerySuggestionSearchScreen extends StatefulWidget {
@@ -50,10 +51,11 @@ class _QuerySuggestionSearchScreenState
   final TextEditingController _radiusTextController =
       TextEditingController(text: "5000");
 
-  final QuerySuggestionRequest _request = QuerySuggestionRequest();
-
-  String _results;
-  SearchService _searchService;
+  late List<String> _selectedCheckbox =
+      List.from(['en', 'fr', 'cn', 'de', 'ko'], growable: false);
+  late QuerySuggestionRequest _request;
+  late String _results;
+  late SearchService _searchService;
 
   @override
   void initState() {
@@ -67,14 +69,13 @@ class _QuerySuggestionSearchScreenState
   }
 
   void runSearch() async {
-    _request.query = _queryTextController.text;
     _request.location = Coordinate(
       lat: double.parse(_latTextController.text),
       lng: double.parse(_lngTextController.text),
     );
-    _request.language = _languageTextController.text;
-    _request.countryCode = _countryTextController.text;
     _request.radius = int.parse(_radiusTextController.text);
+    _request.countryCode = _countryTextController.text;
+    _request.language = _languageTextController.text;
     _request.children = true;
 
     try {
@@ -93,6 +94,7 @@ class _QuerySuggestionSearchScreenState
 
   @override
   Widget build(BuildContext context) {
+    _request = QuerySuggestionRequest(query: _queryTextController.text);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Query Suggestion Search'),
@@ -130,13 +132,23 @@ class _QuerySuggestionSearchScreenState
                       labelText: "Radius",
                       controller: _radiusTextController,
                     ),
-                    CustomButton(
-                      key: Key(Keys.SEARCH_QUERY),
-                      text: "Search",
-                      onPressed: () {
-                        runSearch();
+                    CustomCheckboxWithFormField(
+                      context: context,
+                      buttonText: 'Countries',
+                      onSaved: (countries) {
+                        setState(() {
+                          _selectedCheckbox = countries!;
+                          _request.countries = _selectedCheckbox;
+                        });
                       },
+                      dialogItemList: _selectedCheckbox,
+                      dialogTitleText: 'Select/Add Country Codes',
+                      initialValue: _selectedCheckbox,
                     ),
+                    CustomButton(
+                        key: Key(Keys.SEARCH_QUERY),
+                        text: "Search",
+                        onPressed: runSearch),
                   ],
                 ),
               ),

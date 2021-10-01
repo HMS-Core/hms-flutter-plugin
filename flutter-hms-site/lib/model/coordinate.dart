@@ -16,15 +16,13 @@
 
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
-
 class Coordinate {
-  double lat;
-  double lng;
+  double? lat;
+  double? lng;
 
   Coordinate({
-    @required this.lat,
-    @required this.lng,
+    this.lat,
+    this.lng,
   });
 
   Map<String, dynamic> toMap() {
@@ -35,8 +33,6 @@ class Coordinate {
   }
 
   factory Coordinate.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return Coordinate(
       lat: map["lat"] == null ? null : map["lat"].toDouble(),
       lng: map["lng"] == null ? null : map["lng"].toDouble(),

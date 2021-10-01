@@ -16,26 +16,28 @@
 
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
 import 'coordinate.dart';
 import 'hwlocation_type.dart';
 import 'location_type.dart';
 
 class TextSearchRequest {
-  String language;
+  String? language;
   String query;
-  Coordinate location;
-  int radius;
-  int pageSize;
-  LocationType poiType;
-  HwLocationType hwPoiType;
-  int pageIndex;
-  String countryCode;
-  String politicalView;
-  bool children;
+  Coordinate? location;
+  int? radius;
+  int? pageSize;
+  LocationType? poiType;
+  HwLocationType? hwPoiType;
+  int? pageIndex;
+  String? countryCode;
+  bool? children;
+  List<String>? countries;
 
   TextSearchRequest({
     this.language,
-    this.query,
+    required this.query,
     this.location,
     this.radius,
     this.pageSize,
@@ -43,9 +45,9 @@ class TextSearchRequest {
     this.hwPoiType,
     this.pageIndex,
     this.countryCode,
-    @deprecated String politicalView,
     this.children,
-  }) : politicalView = null;
+    this.countries,
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -58,25 +60,33 @@ class TextSearchRequest {
       'hwPoiType': hwPoiType?.toString(),
       'pageIndex': pageIndex,
       'countryCode': countryCode,
-      'politicalView': null,
       'children': children,
+      'countries': countries?.map((t) => t.toString()).toList(),
     };
   }
 
   factory TextSearchRequest.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return TextSearchRequest(
-      language: map['language'],
-      query: map['query'],
-      location: Coordinate.fromMap(map['location']),
-      radius: map['radius'],
-      pageSize: map['pageSize'],
-      poiType: LocationType.fromString(map['poiType']),
-      hwPoiType: HwLocationType.fromString(map['hwPoiType']),
-      pageIndex: map['pageIndex'],
-      countryCode: map['countryCode'],
-      children: map['children'],
+      language: map['language'] == null ? null : map['language'],
+      query: map['query'] == null
+          ? throw ("A query must be provided.")
+          : map['query'],
+      location:
+          map['location'] == null ? null : Coordinate.fromMap(map['location']),
+      radius: map['radius'] == null ? null : map['radius'],
+      pageSize: map['pageSize'] == null ? null : map['pageSize'],
+      poiType: map['poiType'] == null
+          ? null
+          : LocationType.fromString(map['poiType']),
+      hwPoiType: map['hwPoiType'] == null
+          ? null
+          : HwLocationType.fromString(map['hwPoiType']),
+      pageIndex: map['pageIndex'] == null ? null : map['pageIndex'],
+      countryCode: map['countryCode'] == null ? null : map['countryCode'],
+      children: map['children'] == null ? null : map['children'],
+      countries: map['countries'] == null
+          ? null
+          : List<String>.from(map['countries']?.map((x) => x?.toString)),
     );
   }
 
@@ -89,7 +99,7 @@ class TextSearchRequest {
   String toString() {
     return 'TextSearchRequest(language: $language, query: $query, location: '
         '$location, radius: $radius, pageSize: $pageSize, poiType: $poiType, '
-        'hwPoiType: $hwPoiType, pageIndex: $pageIndex, countryCode: $countryCode, politicalView: $politicalView)';
+        'hwPoiType: $hwPoiType, pageIndex: $pageIndex, countryCode: $countryCode, countries: $countries)';
   }
 
   @override
@@ -106,7 +116,8 @@ class TextSearchRequest {
         o.hwPoiType == hwPoiType &&
         o.pageIndex == pageIndex &&
         o.countryCode == countryCode &&
-        o.children == children;
+        o.children == children &&
+        listEquals(o.countries, countries);
   }
 
   @override
@@ -120,6 +131,7 @@ class TextSearchRequest {
         hwPoiType.hashCode ^
         pageIndex.hashCode ^
         countryCode.hashCode ^
-        children.hashCode;
+        children.hashCode ^
+        countries.hashCode;
   }
 }

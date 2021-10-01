@@ -19,8 +19,8 @@ import 'dart:convert';
 import 'time_of_week.dart';
 
 class Period {
-  TimeOfWeek open;
-  TimeOfWeek close;
+  TimeOfWeek? open;
+  TimeOfWeek? close;
 
   Period({
     this.open,
@@ -35,8 +35,6 @@ class Period {
   }
 
   factory Period.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return Period(
       open: map["open"] == null ? null : TimeOfWeek.fromMap(map["open"]),
       close: map["close"] == null ? null : TimeOfWeek.fromMap(map["close"]),

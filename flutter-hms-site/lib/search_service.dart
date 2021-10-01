@@ -44,35 +44,35 @@ class SearchService {
   }
 
   Future<TextSearchResponse> textSearch(TextSearchRequest request) async {
-    return TextSearchResponse.fromJson(await _methodChannel
-        .invokeMethod<String>('textSearch', request.toJson()));
+    return TextSearchResponse.fromJson((await (_methodChannel
+        .invokeMethod<String>('textSearch', request.toJson())))!);
   }
 
   Future<NearbySearchResponse> nearbySearch(NearbySearchRequest request) async {
-    return NearbySearchResponse.fromJson(await _methodChannel
-        .invokeMethod<String>('nearbySearch', request.toJson()));
+    return NearbySearchResponse.fromJson((await (_methodChannel
+        .invokeMethod<String>('nearbySearch', request.toJson())))!);
   }
 
   Future<DetailSearchResponse> detailSearch(DetailSearchRequest request) async {
-    return DetailSearchResponse.fromJson(await _methodChannel
-        .invokeMethod<String>('detailSearch', request.toJson()));
+    return DetailSearchResponse.fromJson((await (_methodChannel
+        .invokeMethod<String>('detailSearch', request.toJson())))!);
   }
 
   Future<QuerySuggestionResponse> querySuggestion(
       QuerySuggestionRequest request) async {
-    return QuerySuggestionResponse.fromJson(await _methodChannel
-        .invokeMethod<String>('querySuggestion', request.toJson()));
+    return QuerySuggestionResponse.fromJson((await (_methodChannel
+        .invokeMethod<String>('querySuggestion', request.toJson())))!);
   }
 
   Future<QueryAutocompleteResponse> queryAutocomplete(
       QueryAutocompleteRequest request) async {
-    return QueryAutocompleteResponse.fromJson(await _methodChannel
-        .invokeMethod<String>('queryAutocomplete', request.toJson()));
+    return QueryAutocompleteResponse.fromJson((await (_methodChannel
+        .invokeMethod<String>('queryAutocomplete', request.toJson())))!);
   }
 
   Future<Site> startSiteSearchActivity(SearchIntent searchIntent) async {
-    return Site.fromJson(await _methodChannel.invokeMethod<String>(
-        'startSiteSearchActivity', searchIntent.toMap()));
+    return Site.fromJson((await (_methodChannel.invokeMethod<String>(
+        'startSiteSearchActivity', searchIntent.toMap())))!);
   }
 
   Future<void> enableLogger() async {

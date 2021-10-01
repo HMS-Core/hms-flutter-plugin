@@ -23,15 +23,15 @@ import 'coordinate_bounds.dart';
 import 'poi.dart';
 
 class Site {
-  String siteId;
-  String name;
-  String formatAddress;
-  AddressDetail address;
-  Coordinate location;
-  CoordinateBounds viewport;
-  double distance;
-  Poi poi;
-  AutoCompletePrediction prediction;
+  String? siteId;
+  String? name;
+  String? formatAddress;
+  AddressDetail? address;
+  Coordinate? location;
+  CoordinateBounds? viewport;
+  double? distance;
+  Poi? poi;
+  AutoCompletePrediction? prediction;
   int utcOffset;
 
   Site({
@@ -44,7 +44,7 @@ class Site {
     this.distance,
     this.poi,
     this.prediction,
-    int utcOffset,
+    int? utcOffset,
   }) : utcOffset = utcOffset ?? 0;
 
   Map<String, dynamic> toMap() {
@@ -63,8 +63,6 @@ class Site {
   }
 
   factory Site.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return Site(
       address:
           map["address"] == null ? null : AddressDetail.fromMap(map["address"]),

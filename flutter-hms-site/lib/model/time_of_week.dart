@@ -22,16 +22,16 @@ class TimeOfWeek {
   static const int _TIME_MIN = 0;
   static const int _TIME_MAX = 2359;
 
-  int _day;
-  String _time;
+  int? _day;
+  String? _time;
 
   TimeOfWeek({
-    int day,
-    String time,
+    int? day,
+    String? time,
   })  : _day = day,
         _time = time;
 
-  int get day => _day;
+  int get day => _day!;
 
   set day(int day) {
     if (day < _DAY_MIN || day > _DAY_MAX) {
@@ -40,7 +40,7 @@ class TimeOfWeek {
     _day = day;
   }
 
-  String get time => _time;
+  String get time => _time!;
 
   set time(String time) {
     final int intValue = int.parse(time);
@@ -60,8 +60,6 @@ class TimeOfWeek {
   }
 
   factory TimeOfWeek.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return TimeOfWeek(
       day: map["day"] == null ? null : map["day"],
       time: map["time"] == null ? null : map["time"],

@@ -24,28 +24,28 @@ import 'location_type.dart';
 
 class QuerySuggestionRequest {
   String query;
-  Coordinate location;
-  int radius;
-  CoordinateBounds bounds;
-  List<LocationType> poiTypes;
-  String countryCode;
-  String language;
-  String politicalView;
-  bool children;
-  bool strictBounds;
+  Coordinate? location;
+  int? radius;
+  CoordinateBounds? bounds;
+  List<LocationType>? poiTypes;
+  String? countryCode;
+  String? language;
+  bool? children;
+  bool? strictBounds;
+  List<String>? countries;
 
   QuerySuggestionRequest({
-    this.query,
+    required this.query,
     this.location,
     this.radius,
     this.bounds,
     this.poiTypes,
     this.countryCode,
     this.language,
-    @deprecated String politicalView,
     this.children,
     this.strictBounds,
-  }) : politicalView = null;
+    this.countries,
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -53,29 +53,37 @@ class QuerySuggestionRequest {
       'location': location?.toMap(),
       'radius': radius,
       'bounds': bounds?.toMap(),
-      'poiTypes': poiTypes?.map((t) => t?.toString())?.toList(),
+      'poiTypes': poiTypes?.map((t) => t.toString()).toList(),
       'countryCode': countryCode,
       'language': language,
-      'politicalView': null,
       'children': children,
       'strictBounds': strictBounds,
+      'countries': countries?.map((t) => t.toString()).toList(),
     };
   }
 
   factory QuerySuggestionRequest.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return QuerySuggestionRequest(
-      query: map['query'],
-      location: Coordinate.fromMap(map['location']),
-      radius: map['radius'],
-      bounds: CoordinateBounds.fromMap(map['bounds']),
-      poiTypes: List<LocationType>.from(
-          map['poiTypes']?.map((x) => LocationType.fromString(x))),
-      countryCode: map['countryCode'],
-      language: map['language'],
-      children: map['children'],
-      strictBounds: map['strictBounds'],
+      query: map['query'] == null
+          ? throw ("A query must be provided.")
+          : map['query'],
+      location:
+          map['location'] == null ? null : Coordinate.fromMap(map['location']),
+      radius: map['radius'] == null ? null : map['radius'],
+      bounds: map['bounds'] == null
+          ? null
+          : CoordinateBounds.fromMap(map['bounds']),
+      poiTypes: map['poiTypes'] == null
+          ? null
+          : List<LocationType>.from(
+              map['poiTypes']?.map((x) => LocationType.fromString(x))),
+      countryCode: map['countryCode'] == null ? null : map['countryCode'],
+      language: map['language'] == null ? null : map['language'],
+      children: map['children'] == null ? null : map['children'],
+      strictBounds: map['strictBounds'] == null ? null : map['strictBounds'],
+      countries: map['countries'] == null
+          ? null
+          : List<String>.from(map['countries']?.map((x) => x?.toString)),
     );
   }
 
@@ -86,7 +94,7 @@ class QuerySuggestionRequest {
 
   @override
   String toString() {
-    return 'QuerySuggestionRequest(query: $query, location: $location, radius: $radius, bounds: $bounds, poiTypes: $poiTypes, countryCode: $countryCode, language: $language, politicalView: $politicalView, children: $children, strictBounds: $strictBounds)';
+    return 'QuerySuggestionRequest(query: $query, location: $location, radius: $radius, bounds: $bounds, poiTypes: $poiTypes, countryCode: $countryCode, language: $language, children: $children, strictBounds: $strictBounds, countries: $countries)';
   }
 
   @override
@@ -102,7 +110,8 @@ class QuerySuggestionRequest {
         o.countryCode == countryCode &&
         o.language == language &&
         o.children == children &&
-        o.strictBounds == strictBounds;
+        o.strictBounds == strictBounds &&
+        listEquals(o.countries, countries);
   }
 
   @override
@@ -115,6 +124,7 @@ class QuerySuggestionRequest {
         countryCode.hashCode ^
         language.hashCode ^
         children.hashCode ^
-        strictBounds.hashCode;
+        strictBounds.hashCode ^
+        countries.hashCode;
   }
 }

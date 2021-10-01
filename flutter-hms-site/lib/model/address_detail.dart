@@ -17,16 +17,16 @@
 import 'dart:convert';
 
 class AddressDetail {
-  String countryCode;
-  String country;
-  String adminArea;
-  String subAdminArea;
-  String locality;
-  String subLocality;
-  String thoroughfare;
-  String postalCode;
-  String streetNumber;
-  String tertiaryAdminArea;
+  String? countryCode;
+  String? country;
+  String? adminArea;
+  String? subAdminArea;
+  String? locality;
+  String? subLocality;
+  String? thoroughfare;
+  String? postalCode;
+  String? streetNumber;
+  String? tertiaryAdminArea;
 
   AddressDetail({
     this.countryCode,
@@ -57,8 +57,6 @@ class AddressDetail {
   }
 
   factory AddressDetail.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return AddressDetail(
       adminArea: map["adminArea"] == null ? null : map["adminArea"],
       country: map["country"] == null ? null : map["country"],

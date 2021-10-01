@@ -45,15 +45,15 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
-  void _showAlertDialog({String title, String message}) {
+  void _showAlertDialog({String? title, String? message}) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(title),
-          content: Text(message),
+          title: Text(title!),
+          content: Text(message!),
           actions: [
-            FlatButton(
+            TextButton(
               child: Text("Close"),
               onPressed: () {
                 Navigator.pop(context);
@@ -85,8 +85,10 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     } on PlatformException catch (e) {
       _showAlertDialog(
-        title: "Error",
-        message: e.toString(),
+        title: "ERROR",
+        message: e.message! +
+            ", result code returned to SearchStatus object. " +
+            e.toString(),
       );
     }
   }
@@ -120,60 +122,62 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text('HMS Site Kit Flutter Demo'),
       ),
       body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            CustomButton(
-              key: Key(Keys.SCREEN_TEXT),
-              text: "Text Search",
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  TextSearchScreen.id,
-                );
-              },
-            ),
-            CustomButton(
-              key: Key(Keys.SCREEN_NEARBY),
-              text: "Nearby Search",
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  NearbySearchScreen.id,
-                );
-              },
-            ),
-            CustomButton(
-              key: Key(Keys.SCREEN_DETAIL),
-              text: "Place Detail Search",
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  DetailSearchScreen.id,
-                );
-              },
-            ),
-            CustomButton(
-              key: Key(Keys.SCREEN_QUERY),
-              text: "Query Suggestion Search",
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  QuerySuggestionSearchScreen.id,
-                );
-              },
-            ),
-            CustomButton(
-              key: Key(Keys.QUERY_COMPLETE),
-              text: "Query Autocomplete",
-              onPressed: _queryAutocomplete,
-            ),
-            CustomButton(
-              key: Key(Keys.SITE_SEARCH),
-              text: "Site Search",
-              onPressed: _siteSearch,
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              CustomButton(
+                key: Key(Keys.SCREEN_TEXT),
+                text: "Text Search",
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    TextSearchScreen.id,
+                  );
+                },
+              ),
+              CustomButton(
+                key: Key(Keys.SCREEN_NEARBY),
+                text: "Nearby Search",
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    NearbySearchScreen.id,
+                  );
+                },
+              ),
+              CustomButton(
+                key: Key(Keys.SCREEN_DETAIL),
+                text: "Place Detail Search",
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    DetailSearchScreen.id,
+                  );
+                },
+              ),
+              CustomButton(
+                key: Key(Keys.SCREEN_QUERY),
+                text: "Query Suggestion Search",
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    QuerySuggestionSearchScreen.id,
+                  );
+                },
+              ),
+              CustomButton(
+                key: Key(Keys.QUERY_COMPLETE),
+                text: "Query Autocomplete",
+                onPressed: _queryAutocomplete,
+              ),
+              CustomButton(
+                key: Key(Keys.SITE_SEARCH),
+                text: "Site Search",
+                onPressed: _siteSearch,
+              ),
+            ],
+          ),
         ),
       ),
     );

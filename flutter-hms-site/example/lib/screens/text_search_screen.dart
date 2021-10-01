@@ -24,6 +24,7 @@ import 'package:huawei_site/model/text_search_request.dart';
 import 'package:huawei_site/model/text_search_response.dart';
 import 'package:huawei_site/search_service.dart';
 import 'package:huawei_site_example/screens/home_screen.dart';
+import 'package:huawei_site_example/widgets/custom_checkbox.dart';
 
 import '../keys.dart';
 import '../widgets/custom_button.dart';
@@ -48,16 +49,17 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
   final TextEditingController _lngTextController =
       TextEditingController(text: "2.334595");
   final TextEditingController _radiusTextController =
-      TextEditingController(text: "5000");
+      TextEditingController(text: "1000");
   final TextEditingController _pageIndexTextController =
       TextEditingController(text: "1");
   final TextEditingController _pageSizeTextController =
       TextEditingController(text: "20");
 
-  final TextSearchRequest _request = TextSearchRequest();
-
-  String _results;
-  SearchService _searchService;
+  late List<String> _selectedCheckbox =
+      List.from(['en', 'fr', 'cn', 'de', 'ko'], growable: false);
+  late TextSearchRequest _request;
+  late String _results;
+  late SearchService _searchService;
 
   @override
   void initState() {
@@ -71,7 +73,6 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
   }
 
   void runSearch() async {
-    _request.query = _queryTextController.text;
     _request.location = Coordinate(
       lat: double.parse(_latTextController.text),
       lng: double.parse(_lngTextController.text),
@@ -82,8 +83,6 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
     _request.pageSize = int.parse(_pageSizeTextController.text);
     _request.radius = int.parse(_radiusTextController.text);
     _request.hwPoiType = HwLocationType.TOWER;
-    _request.location =
-        Coordinate(lat: 48.85757246679441, lng: 2.2924174770714916);
     _request.poiType = LocationType.TOURIST_ATTRACTION;
 
     try {
@@ -101,6 +100,7 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _request = TextSearchRequest(query: _queryTextController.text);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Text Search'),
@@ -146,13 +146,23 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
                       labelText: "PageSize",
                       controller: _pageSizeTextController,
                     ),
-                    CustomButton(
-                      key: Key(Keys.SEARCH_TEXT),
-                      text: "Search",
-                      onPressed: () {
-                        runSearch();
+                    CustomCheckboxWithFormField(
+                      context: context,
+                      buttonText: 'Countries',
+                      onSaved: (countries) {
+                        setState(() {
+                          _selectedCheckbox = countries!;
+                          _request.countries = _selectedCheckbox;
+                        });
                       },
+                      dialogItemList: _selectedCheckbox,
+                      dialogTitleText: 'Select/Add Country Codes',
+                      initialValue: _selectedCheckbox,
                     ),
+                    CustomButton(
+                        key: Key(Keys.SEARCH_TEXT),
+                        text: "Search",
+                        onPressed: runSearch),
                   ],
                 ),
               ),

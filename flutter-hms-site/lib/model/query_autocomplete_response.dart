@@ -22,8 +22,8 @@ import 'auto_complete_prediction.dart';
 import 'site.dart';
 
 class QueryAutocompleteResponse {
-  List<Site> sites;
-  List<AutoCompletePrediction> predictions;
+  List<Site?>? sites;
+  List<AutoCompletePrediction?>? predictions;
 
   QueryAutocompleteResponse({
     this.sites,
@@ -32,14 +32,12 @@ class QueryAutocompleteResponse {
 
   Map<String, dynamic> toMap() {
     return {
-      'sites': sites?.map((x) => x?.toMap())?.toList(),
-      'predictions': predictions?.map((x) => x?.toMap())?.toList(),
+      'sites': sites?.map((x) => x?.toMap()).toList(),
+      'predictions': predictions?.map((x) => x?.toMap()).toList(),
     };
   }
 
   factory QueryAutocompleteResponse.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return QueryAutocompleteResponse(
       sites: map['sites'] == null
           ? null
