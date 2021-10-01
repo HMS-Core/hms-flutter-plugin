@@ -37,7 +37,7 @@ import java.util.Set;
  */
 public class HMSAnalyticsViewModel implements HMSAnalyticsContract.Presenter {
 
-    //HiAnalytics instance
+    // HiAnalytics instance
     private final HiAnalyticsInstance analyticsInstance;
 
     public HMSAnalyticsViewModel(Context context) {

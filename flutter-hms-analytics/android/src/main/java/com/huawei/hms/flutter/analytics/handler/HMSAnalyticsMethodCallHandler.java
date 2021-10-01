@@ -33,7 +33,8 @@ import io.flutter.plugin.common.MethodChannel.Result;
 public class HMSAnalyticsMethodCallHandler implements MethodCallHandler {
     private static final String TAG = HMSAnalyticsMethodCallHandler.class.getSimpleName();
     private final HMSAnalyticsModule analyticsModule;
-    //Weak Context Instance
+    
+    // Weak Context Instance
     private final WeakReference<Context> weakContext;
 
     public HMSAnalyticsMethodCallHandler(HMSAnalyticsModule module, WeakReference<Context> weakContext) {
@@ -117,6 +118,12 @@ public class HMSAnalyticsMethodCallHandler implements MethodCallHandler {
             case isRestrictionEnabled:
                 analyticsModule.isRestrictionEnabled(result);
                 break;
+            case setCollectAdsIdEnabled:
+                analyticsModule.setCollectAdsIdEnabled(methodCall, result);
+                break;
+            case addDefaultEventParams:
+                analyticsModule.addDefaultEventParams(methodCall, result);
+                break;
             case deleteUserProfile:
                 analyticsModule.deleteUserProfile(methodCall, result);
                 break;
@@ -149,6 +156,8 @@ public class HMSAnalyticsMethodCallHandler implements MethodCallHandler {
         setReportPolicies,
         setRestrictionEnabled,
         isRestrictionEnabled,
+        setCollectAdsIdEnabled,
+        addDefaultEventParams,
         deleteUserProfile,
         deleteUserId
     }

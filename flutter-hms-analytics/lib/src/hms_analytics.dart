@@ -47,6 +47,7 @@ class HMSAnalytics {
   /// empty and is different from the new userId, a new session is generated.
   /// If you do not want to use setUserId to identify a user
   /// (for example, when a user signs out), set userId to **null**.
+  /// The SDK does not save the user ID. You are advised to set a user ID each time after the app is launched.
   Future<void> setUserId(String? userId) async {
     await _channel.invokeMethod('setUserId', {'userId': userId});
   }
@@ -59,8 +60,11 @@ class HMSAnalytics {
     await _channel.invokeMethod('setUserProfile', params);
   }
 
-  /// Sets the push token, which is obtained using the Push Kit.
+  /// Sets the push token. After obtaining a push token through Push Kit,
+  /// call this method to save the push token so that you can use the audience
+  /// defined by Analytics Kit to create HCM notification tasks.
   /// [note] This function is specifically used by Android Platforms.
+  @deprecated
   Future<void> setPushToken(String token) async {
     await _channel.invokeMethod('setPushToken', {'': token});
   }
@@ -86,6 +90,8 @@ class HMSAnalytics {
   }
 
   /// Delete all collected data in the local cache, including the cached data that fails to be sent.
+  /// [note] Calling this method will reset the AAID. In Analytics Kit 6.0.0 and
+  /// later versions, alling this method will also reset the user ID.
   Future<void> clearCachedData() async {
     await _channel.invokeMethod('clearCachedData', {});
   }
@@ -95,7 +101,7 @@ class HMSAnalytics {
     await _channel.invokeMethod('setAnalyticsEnabled', {'enabled': enabled});
   }
 
-  /// Obtains the app instance ID from AppGallery Connect.
+  /// Obtains the Anonymous Application ID (AAID).
   Future<String?> getAAID() async {
     return await _channel.invokeMethod('getAAID', {});
   }
@@ -173,6 +179,21 @@ class HMSAnalytics {
   /// Obtains the restriction status of HUAWEI Analytics.
   Future<bool> isRestrictionEnabled() async {
     return await _channel.invokeMethod('isRestrictionEnabled', {});
+  }
+
+  /// Sets whether to collect advertising identifiers.
+  Future<void> setCollectAdsIdEnabled(bool enabled) async {
+    await _channel.invokeMethod('setCollectAdsIdEnabled', {'enabled': enabled});
+  }
+
+  /// Adds default event parameters.
+  /// These parameters will be added to all events except the automatically collected events.
+  /// If the name of a default event parameter is the same as that of an event parameter, the event parameter will be used.
+  Future<void> addDefaultEventParams(Map<String, Object>? params) async {
+    await _channel.invokeMethod(
+      'addDefaultEventParams',
+      {'params': params},
+    );
   }
 
   /// Enables the HMSLogger capability.

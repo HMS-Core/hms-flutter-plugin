@@ -19,6 +19,10 @@ package com.huawei.hms.flutter.analytics;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.huawei.hms.analytics.HiAnalytics;
+import com.huawei.hms.analytics.HiAnalyticsInstance;
+import com.huawei.hms.analytics.type.HAEventType;
+import com.huawei.hms.analytics.type.HAParamType;
 import com.huawei.hms.analytics.type.ReportPolicy;
 import com.huawei.hms.flutter.analytics.logger.HMSLogger;
 import com.huawei.hms.flutter.analytics.presenter.HMSAnalyticsContract;
@@ -35,14 +39,19 @@ import io.flutter.plugin.common.MethodChannel.Result;
 
 public class HMSAnalyticsModule {
 
-    //Weak Context Instance
+    // Weak Context Instance
     private final WeakReference<Context> weakContext;
-    //ViewModel instance
+
+    // ViewModel instance
     private final HMSAnalyticsContract.Presenter viewModel;
+    
+    // HiAnalytics instance
+    private final HiAnalyticsInstance analyticsInstance;
 
     public HMSAnalyticsModule(WeakReference<Context> context) {
         this.weakContext = context;
         this.viewModel = new HMSAnalyticsViewModel(getContext());
+        this.analyticsInstance = HiAnalytics.getInstance((getContext()));
     }
 
     private Context getContext() {
@@ -166,6 +175,22 @@ public class HMSAnalyticsModule {
     public void isRestrictionEnabled(Result result) {
         viewModel.isRestrictionEnabled(
             new HMSAnalyticsModule.HMSAnalyticsResultHandler<>(result, "isRestrictionEnabled", weakContext));
+    }
+
+    public void setCollectAdsIdEnabled(MethodCall methodCall, Result result) {
+        boolean value = MapUtils.toBoolean("enabled", methodCall.argument("enabled"));
+        analyticsInstance.setCollectAdsIdEnabled(value);
+        result.success(null);
+    }
+
+    public void addDefaultEventParams(MethodCall methodCall, Result result) {
+        Map<String, Object> val = MapUtils.objectToMap(methodCall.argument("params"));
+        Bundle params = MapUtils.mapToBundle(val, false);
+        if(params.isEmpty()){
+            params = null;
+        }
+        analyticsInstance.addDefaultEventParams(params);
+        result.success(null);
     }
 
     public void enableLog(Result result) {

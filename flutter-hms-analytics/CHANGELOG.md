@@ -1,8 +1,11 @@
+## 6.2.0+301
+* Added the setCollectAdsIdEnabled and addDefaultEventParams methods.
+* Changed the value of minSdkVersion from 18 to 19
+
 ## 5.2.0+301
 * Changed the value of minSdkVersion from 19 to 18 to support more mobile phones.
 * Added custom data support to onEvent API.
 * **[Breaking Changes]**
-  * Migrated to **null-safety**.
   * Deleted the **OccurredTime** and **InstallTime** parameters from the automatically collected events and predefined events.
 
 ## 5.1.0+301

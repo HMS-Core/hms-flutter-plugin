@@ -39,4 +39,6 @@ class Keys {
   static const String IS_RESTRICTION_ENABLED = "isRestrictionEnabled";
   static const String DELETE_USER_PROFILE = "deleteUserProfile";
   static const String DELETE_USER_ID = "deleteUserId";
+  static const String SET_COLLECT_ADS_ID_ENABLED = "setCollectAdsIdEnabled";
+  static const String ADD_DEFAULT_EVENT_PARAMS = "addDefaultEventParams";
 }

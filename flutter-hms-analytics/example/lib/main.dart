@@ -195,6 +195,18 @@ class MyHomePage extends StatelessWidget {
     _showDialog(context, "deleteUserId success");
   }
 
+  Future<void> setCollectAdsIdEnabled(BuildContext context) async {
+    await hmsAnalytics.setCollectAdsIdEnabled(true);
+    _showDialog(context, "setCollectAdsIdEnabled success");
+  }
+
+  Future<void> addDefaultEventParams(BuildContext context) async {
+    await hmsAnalytics.addDefaultEventParams({
+      "param": "value",
+    });
+    _showDialog(context, "addDefaultEventParams success");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -240,6 +252,10 @@ class MyHomePage extends StatelessWidget {
                 Key(Keys.SET_RESTRICTION_ENABLED)),
             MyBtn("isRestrictionEnabled", _isRestrictionEnabled,
                 Key(Keys.IS_RESTRICTION_ENABLED)),
+            MyBtn("setCollectAdsIdEnabled", setCollectAdsIdEnabled,
+                Key(Keys.SET_COLLECT_ADS_ID_ENABLED)),
+            MyBtn("addDefaultEventParams", addDefaultEventParams,
+                Key(Keys.ADD_DEFAULT_EVENT_PARAMS)),
           ],
         ),
       ),
