@@ -15,10 +15,11 @@
 */
 
 import 'dart:convert' show json;
+import 'package:flutter/foundation.dart';
 import 'package:huawei_scan/model/ScanResponse.dart';
 
 class ScanResponseList {
-  final List<ScanResponse> scanResponseList;
+  final List<ScanResponse?>? scanResponseList;
 
   ScanResponseList({
     this.scanResponseList,
@@ -30,9 +31,10 @@ class ScanResponseList {
   String toJson() => json.encode(toMap());
 
   factory ScanResponseList.fromMap(List<dynamic> parsedJson) {
-    List<ScanResponse> scanResponseInnerList = new List<ScanResponse>();
-    scanResponseInnerList =
-        parsedJson.map((i) => ScanResponse.fromMap(i)).toList();
+    List<ScanResponse?> scanResponseInnerList = <ScanResponse>[];
+    scanResponseInnerList = parsedJson
+        .map((i) => i == null ? null : ScanResponse.fromMap(i))
+        .toList();
 
     return new ScanResponseList(scanResponseList: scanResponseInnerList);
   }
@@ -40,15 +42,15 @@ class ScanResponseList {
   Map<String, dynamic> toMap() => {
         "scanResponseList": scanResponseList == null
             ? null
-            : List<dynamic>.from(scanResponseList.map((x) => x.toMap())),
+            : List<dynamic>.from(scanResponseList!.map((x) => x?.toMap())),
       };
 
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final ScanResponseList check = o;
-    return o is ScanResponseList && check.scanResponseList == scanResponseList;
+    return o is ScanResponseList &&
+        listEquals(o.scanResponseList, scanResponseList);
   }
 
   @override

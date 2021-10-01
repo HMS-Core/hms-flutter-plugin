@@ -20,31 +20,31 @@ import com.huawei.hms.hmsscankit.ScanUtil;
 
 public enum Errors {
 
-    //Scan Utils Errors
+    // Scan Utils Errors
     scanUtilNoCameraPermission(String.valueOf(ScanUtil.ERROR_NO_CAMERA_PERMISSION), "NO CAMERA PERMISSION"),
     scanUtilNoReadPermission(String.valueOf(ScanUtil.ERROR_NO_READ_PERMISSION), "NO READ PERMISSION"),
 
-    //Decode Multi Errors
+    // Decode Multi Errors
     decodeMultiAsyncCouldntFind("13", "Multi Async - Couldn't find anything."),
     decodeMultiAsyncOnFailure("14", "Multi Async - On Failure"),
     decodeMultiSyncCouldntFind("15", "Multi Sync - Couldn't find anything."),
 
-    //Multi Processor Camera
+    // Multi Processor Camera
     mpCameraScanModeError("16", "Please check your scan mode."),
 
-    //Decode With Bitmap
+    // Decode With Bitmap
     decodeWithBitmapError("17", "Please check your barcode and scan type."),
 
-    //Build Bitmap
+    // Build Bitmap
     buildBitmap("18", "Barcode generation failed."),
 
-    //HmsScanAnalyzer
+    // HmsScanAnalyzer
     hmsScanAnalyzerError("19", "Analyzer is not available."),
 
-    //Remote View Error
+    // Remote View Error
     remoteViewError("20", "Remote View is not initialized."),
 
-    //Multi Processor channel initialization
+    // Multi Processor channel initialization
     mpChannelError("21", "Multi Processor Channel cannot be initialized.");
 
     private final String errorCode;

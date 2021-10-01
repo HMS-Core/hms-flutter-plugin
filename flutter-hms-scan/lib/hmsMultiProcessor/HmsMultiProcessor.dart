@@ -26,12 +26,12 @@ class HmsMultiProcessor {
   static const int MPSyncMode = 444;
   static const int MPAsyncMode = 555;
 
-  static MultiCameraRequest multiCameraRequest;
+  static MultiCameraRequest? multiCameraRequest;
 
   static Future<dynamic> multiMethodCallHandler(MethodCall call) async {
     if (call.method == "MultiProcessorResponse") {
       ScanResponse response = ScanResponse.fromJson(call.arguments);
-      HmsMultiProcessor.multiCameraRequest.multiCameraListener(response);
+      HmsMultiProcessor.multiCameraRequest?.multiCameraListener?.call(response);
     }
   }
 

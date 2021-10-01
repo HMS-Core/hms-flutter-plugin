@@ -34,23 +34,23 @@ class MultiProcessorCameraScreen extends StatefulWidget {
 
 class _MultiProcessorCameraScreenState
     extends State<MultiProcessorCameraScreen> {
-  ScanResponseList scanList;
+  ScanResponseList? scanList;
   List<ScanResponse> responseListWidget = [];
 
   //Dropdown Values
-  String scanTypeValue = 'All Scan Types';
+  String? scanTypeValue = 'All Scan Types';
   int scanTypeValueFromDrowpDown = HmsScanTypes.AllScanType;
-  String color1 = 'Yellow';
+  String? color1 = 'Yellow';
   Color color1Value = Colors.yellow;
-  String color2 = 'Blue';
+  String? color2 = 'Blue';
   Color color2Value = Colors.blue;
-  String color3 = 'Red';
+  String? color3 = 'Red';
   Color color3Value = Colors.red;
-  String color4 = 'Green';
+  String? color4 = 'Green';
   Color color4Value = Colors.green;
-  String textColor = 'White';
+  String? textColor = 'White';
   Color textColorValue = Colors.white;
-  String textBackgroundColor = "Black";
+  String? textBackgroundColor = "Black";
   Color textBackgroundColorValue = Colors.black;
 
   //Switch Button Values
@@ -129,21 +129,21 @@ class _MultiProcessorCameraScreenState
               CustomDropdown(
                 label: "Scan Type: ",
                 list: scanTypeStringList,
-                onChanged: (String newValue) {
+                onChanged: (String? newValue) {
                   setState(() {
                     scanTypeValue = newValue;
                     scanTypeValueFromDrowpDown =
-                        dropdownController(scanTypeValue);
+                        dropdownController(scanTypeValue ?? '');
                   });
                 },
                 value: scanTypeValue,
               ),
               CustomDropdown(
                 label: "Color1: ",
-                onChanged: (String newValue) {
+                onChanged: (String? newValue) {
                   setState(() {
                     color1 = newValue;
-                    color1Value = dropdownColorController(color1);
+                    color1Value = dropdownColorController(color1 ?? '');
                   });
                 },
                 list: colorStringList,
@@ -151,10 +151,10 @@ class _MultiProcessorCameraScreenState
               ),
               CustomDropdown(
                 label: "Color2: ",
-                onChanged: (String newValue) {
+                onChanged: (String? newValue) {
                   setState(() {
                     color2 = newValue;
-                    color2Value = dropdownColorController(color2);
+                    color2Value = dropdownColorController(color2 ?? '');
                   });
                 },
                 list: colorStringList,
@@ -162,10 +162,10 @@ class _MultiProcessorCameraScreenState
               ),
               CustomDropdown(
                 label: "Color3: ",
-                onChanged: (String newValue) {
+                onChanged: (String? newValue) {
                   setState(() {
                     color3 = newValue;
-                    color3Value = dropdownColorController(color3);
+                    color3Value = dropdownColorController(color3 ?? '');
                   });
                 },
                 list: colorStringList,
@@ -173,10 +173,10 @@ class _MultiProcessorCameraScreenState
               ),
               CustomDropdown(
                 label: "Color4: ",
-                onChanged: (String newValue) {
+                onChanged: (String? newValue) {
                   setState(() {
                     color4 = newValue;
-                    color4Value = dropdownColorController(color4);
+                    color4Value = dropdownColorController(color4 ?? '');
                   });
                 },
                 list: colorStringList,
@@ -184,10 +184,10 @@ class _MultiProcessorCameraScreenState
               ),
               CustomDropdown(
                 label: "Text Color: ",
-                onChanged: (String newValue) {
+                onChanged: (String? newValue) {
                   setState(() {
                     textColor = newValue;
-                    textColorValue = dropdownColorController(textColor);
+                    textColorValue = dropdownColorController(textColor ?? '');
                   });
                 },
                 list: colorStringList,
@@ -195,11 +195,11 @@ class _MultiProcessorCameraScreenState
               ),
               CustomDropdown(
                 label: "Text Background Color: ",
-                onChanged: (String newValue) {
+                onChanged: (String? newValue) {
                   setState(() {
                     textBackgroundColor = newValue;
                     textBackgroundColorValue =
-                        dropdownColorController(textBackgroundColor);
+                        dropdownColorController(textBackgroundColor ?? '');
                   });
                 },
                 list: colorStringList,
@@ -319,19 +319,20 @@ class _MultiProcessorCameraScreenState
                   });
                 },
               ),
-              scanList != null
+              scanList != null && scanList!.scanResponseList != null
                   ? ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: scanList.scanResponseList.length,
+                      itemCount: scanList!.scanResponseList!.length,
                       itemBuilder: (BuildContext ctxt, int index) {
                         return ResponseWidget(
                           isMulti: true,
-                          codeFormat: scanList.scanResponseList[index].scanType,
+                          codeFormat:
+                              scanList?.scanResponseList![index]?.scanType,
                           result:
-                              scanList.scanResponseList[index].originalValue,
+                              scanList?.scanResponseList![index]?.originalValue,
                           resultType:
-                              scanList.scanResponseList[index].scanTypeForm,
+                              scanList?.scanResponseList![index]?.scanTypeForm,
                         );
                       })
                   : SizedBox.shrink(),

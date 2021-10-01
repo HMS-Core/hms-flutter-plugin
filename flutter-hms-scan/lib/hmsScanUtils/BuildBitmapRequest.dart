@@ -16,22 +16,22 @@
 
 import 'dart:convert' show json;
 import 'dart:typed_data';
-import 'package:flutter/material.dart' show Color, Colors, required;
+import 'package:flutter/material.dart' show Color, Colors;
 import 'dart:ui' show hashValues;
 import 'package:huawei_scan/utils/HmsScanTypes.dart';
 
 class BuildBitmapRequest {
-  String content;
-  int type;
-  int width;
-  int height;
-  int margin;
-  Color bitmapColor;
-  Color backgroundColor;
-  Uint8List qrLogo;
+  String? content;
+  int? type;
+  int? width;
+  int? height;
+  int? margin;
+  Color? bitmapColor;
+  Color? backgroundColor;
+  Uint8List? qrLogo;
 
   BuildBitmapRequest({
-    @required this.content,
+    this.content,
     this.type = HmsScanTypes.QRCode,
     this.width = 700,
     this.height = 700,
@@ -65,9 +65,9 @@ class BuildBitmapRequest {
         'type': type,
         'width': width,
         'height': height,
-        'bitmapColor': bitmapColor.value,
+        'bitmapColor': bitmapColor?.value,
         'margin': margin,
-        'backgroundColor': backgroundColor.value,
+        'backgroundColor': backgroundColor?.value,
         'qrLogo': qrLogo?.toString(),
       };
 
@@ -75,16 +75,15 @@ class BuildBitmapRequest {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final BuildBitmapRequest check = o;
     return o is BuildBitmapRequest &&
-        check.content == content &&
-        check.type == type &&
-        check.width == width &&
-        check.height == height &&
-        check.bitmapColor == bitmapColor &&
-        check.margin == margin &&
-        check.backgroundColor == backgroundColor &&
-        check.qrLogo == qrLogo;
+        o.content == content &&
+        o.type == type &&
+        o.width == width &&
+        o.height == height &&
+        o.bitmapColor == bitmapColor &&
+        o.margin == margin &&
+        o.backgroundColor == backgroundColor &&
+        o.qrLogo == qrLogo;
   }
 
   @override

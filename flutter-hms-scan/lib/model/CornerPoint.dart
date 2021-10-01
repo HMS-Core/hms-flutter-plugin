@@ -23,8 +23,8 @@ class CornerPoint {
     this.y,
   });
 
-  int x;
-  int y;
+  int? x;
+  int? y;
 
   factory CornerPoint.fromJson(String str) =>
       CornerPoint.fromMap(json.decode(str));
@@ -45,8 +45,7 @@ class CornerPoint {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final CornerPoint check = o;
-    return o is CornerPoint && check.x == x && check.y == y;
+    return o is CornerPoint && o.x == x && o.y == y;
   }
 
   @override

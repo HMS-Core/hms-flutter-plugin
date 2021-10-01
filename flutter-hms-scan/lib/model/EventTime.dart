@@ -29,14 +29,14 @@ class EventTime {
     this.year,
   });
 
-  int day;
-  int hours;
-  bool isUTCTime;
-  int minutes;
-  int month;
-  String originalValue;
-  int seconds;
-  int year;
+  int? day;
+  int? hours;
+  bool? isUTCTime;
+  int? minutes;
+  int? month;
+  String? originalValue;
+  int? seconds;
+  int? year;
 
   factory EventTime.fromJson(String str) => EventTime.fromMap(json.decode(str));
 
@@ -69,16 +69,15 @@ class EventTime {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final EventTime check = o;
     return o is EventTime &&
-        check.day == day &&
-        check.hours == hours &&
-        check.isUTCTime == isUTCTime &&
-        check.minutes == minutes &&
-        check.month == month &&
-        check.originalValue == originalValue &&
-        check.seconds == seconds &&
-        check.year == year;
+        o.day == day &&
+        o.hours == hours &&
+        o.isUTCTime == isUTCTime &&
+        o.minutes == minutes &&
+        o.month == month &&
+        o.originalValue == originalValue &&
+        o.seconds == seconds &&
+        o.year == year;
   }
 
   @override

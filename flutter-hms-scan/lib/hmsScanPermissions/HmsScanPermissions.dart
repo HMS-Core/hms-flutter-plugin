@@ -18,12 +18,12 @@ import 'package:huawei_scan/HmsScan.dart';
 
 class HmsScanPermissions {
   //Permissions
-  static Future<bool> hasCameraAndStoragePermission() async {
+  static Future<bool?> hasCameraAndStoragePermission() async {
     return await HmsScan.instance.permissionChannel
         .invokeMethod("hasCameraAndStoragePermission");
   }
 
-  static Future<bool> requestCameraAndStoragePermissions() async {
+  static Future<bool?> requestCameraAndStoragePermissions() async {
     return await HmsScan.instance.permissionChannel
         .invokeMethod("requestCameraAndStoragePermissions");
   }

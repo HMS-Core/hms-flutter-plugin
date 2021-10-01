@@ -39,7 +39,7 @@ public class PermissionMethodCallHandler implements MethodCallHandler, RequestPe
 
     private Result mResult;
 
-    //Camera Permission
+    // Camera Permission
     private boolean isGrantedCameraPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int result = PermissionChecker.checkSelfPermission(mActivity, Manifest.permission.CAMERA);
@@ -55,7 +55,7 @@ public class PermissionMethodCallHandler implements MethodCallHandler, RequestPe
         }
     }
 
-    //Read Permission
+    // Read Permission
     private boolean isGrantedReadStoragePermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int result = PermissionChecker.checkSelfPermission(mActivity, Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -71,22 +71,14 @@ public class PermissionMethodCallHandler implements MethodCallHandler, RequestPe
         }
     }
 
-    //Check Permissions
-    private boolean checkGrantStatus(final int[] grantResults) {
-        for (final int i : grantResults) {
-            return !(i == -1);
-        }
-        return true;
-    }
-
-    //Permission Control
+    // Permission Control
     private boolean hasCameraAndStoragePermission() {
         return isGrantedCameraPermission() && isGrantedReadStoragePermission();
     }
 
-    private int requestCodeAll = 1;
+    private int requestCodeAll = 11;
 
-    //Request Permissions
+    // Request Permissions
     private void requestCameraAndStoragePermissions() {
         String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -117,12 +109,8 @@ public class PermissionMethodCallHandler implements MethodCallHandler, RequestPe
     public boolean onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         final Result result = mResult;
         mResult = null;
-        if (result != null) {
-            if (requestCode == requestCodeAll) {
+        if (result != null && requestCode == requestCodeAll) {
                 result.success(grantResults[0] == 0 && grantResults[1] == 0);
-            } else {
-                result.success(checkGrantStatus(grantResults));
-            }
         }
         return true;
     }

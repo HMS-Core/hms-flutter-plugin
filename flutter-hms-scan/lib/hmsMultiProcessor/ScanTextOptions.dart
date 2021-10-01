@@ -20,24 +20,24 @@ import 'package:flutter/material.dart';
 
 class ScanTextOptions {
   //Text options
-  Color textColor;
-  double textSize;
+  Color? textColor;
+  double? textSize;
 
   //if true originalValue of the scan will be displayed on rectangle.
-  bool showText;
+  bool? showText;
 
   //if false text will remain in rectangle bounds.
-  bool showTextOutBounds;
+  bool? showTextOutBounds;
 
   //For text background
-  Color textBackgroundColor;
+  Color? textBackgroundColor;
 
   //if true text will auto size itself
-  bool autoSizeText;
+  bool? autoSizeText;
 
   //Auto size text options
-  int minTextSize;
-  int granularity;
+  int? minTextSize;
+  int? granularity;
 
   ScanTextOptions({
     this.textColor = Colors.black,
@@ -72,11 +72,11 @@ class ScanTextOptions {
       );
 
   Map<dynamic, dynamic> toMap() => {
-        "textColor": textColor.value,
+        "textColor": textColor?.value,
         "textSize": textSize,
         "showText": showText,
         "showTextOutBounds": showTextOutBounds,
-        "textBackgroundColor": textBackgroundColor.value,
+        "textBackgroundColor": textBackgroundColor?.value,
         "autoSizeText": autoSizeText,
         "minTextSize": minTextSize,
         "granularity": granularity,
@@ -86,16 +86,15 @@ class ScanTextOptions {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final ScanTextOptions check = o;
     return o is ScanTextOptions &&
-        check.textColor == textColor &&
-        check.textSize == textSize &&
-        check.showText == showText &&
-        check.showTextOutBounds == showTextOutBounds &&
-        check.textBackgroundColor == textBackgroundColor &&
-        check.autoSizeText == autoSizeText &&
-        check.minTextSize == minTextSize &&
-        check.granularity == granularity;
+        o.textColor == textColor &&
+        o.textSize == textSize &&
+        o.showText == showText &&
+        o.showTextOutBounds == showTextOutBounds &&
+        o.textBackgroundColor == textBackgroundColor &&
+        o.autoSizeText == autoSizeText &&
+        o.minTextSize == minTextSize &&
+        o.granularity == granularity;
   }
 
   @override

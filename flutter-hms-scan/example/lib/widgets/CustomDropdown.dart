@@ -17,12 +17,12 @@
 import 'package:flutter/material.dart';
 
 class CustomDropdown extends StatelessWidget {
-  final String value;
-  final void Function(String) onChanged;
-  final List<String> list;
-  final String label;
+  final String? value;
+  final void Function(String?)? onChanged;
+  final List<String>? list;
+  final String? label;
 
-  CustomDropdown({Key key, this.label, this.value, this.onChanged, this.list});
+  CustomDropdown({Key? key, this.label, this.value, this.onChanged, this.list});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class CustomDropdown extends StatelessWidget {
       children: [
         Expanded(
           child: Text(
-            label,
+            label ?? '',
             style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.bold),
           ),
         ),
@@ -53,7 +53,7 @@ class CustomDropdown extends StatelessWidget {
               color: Colors.black38,
             ),
             onChanged: onChanged,
-            items: list.map<DropdownMenuItem<String>>((String value) {
+            items: list?.map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(value),

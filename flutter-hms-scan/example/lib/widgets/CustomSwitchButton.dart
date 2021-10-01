@@ -17,14 +17,14 @@
 import 'package:flutter/material.dart';
 
 class CustomSwitchButton extends StatelessWidget {
-  final bool value;
-  final Function onChanged;
-  final String label;
-  final String rightLabel;
-  final String leftLabel;
+  final bool? value;
+  final Function? onChanged;
+  final String? label;
+  final String? rightLabel;
+  final String? leftLabel;
 
   CustomSwitchButton(
-      {Key key,
+      {Key? key,
       this.value,
       this.onChanged,
       this.label,
@@ -36,20 +36,20 @@ class CustomSwitchButton extends StatelessWidget {
     return Column(
       children: <Widget>[
         Text(
-          label,
+          label ?? '',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(leftLabel),
+            Text(leftLabel ?? ''),
             Switch(
-              value: value,
-              onChanged: onChanged,
+              value: value ?? false,
+              onChanged: onChanged as void Function(bool)?,
               activeTrackColor: Colors.lightGreenAccent,
               activeColor: Colors.green,
             ),
-            Text(rightLabel),
+            Text(rightLabel ?? ''),
           ],
         )
       ],

@@ -26,8 +26,8 @@ class TelPhoneNumber {
 
   TelPhoneNumber({this.telPhoneNumber, this.useType});
 
-  String telPhoneNumber;
-  int useType;
+  String? telPhoneNumber;
+  int? useType;
 
   factory TelPhoneNumber.fromJson(String str) =>
       TelPhoneNumber.fromMap(json.decode(str));
@@ -49,10 +49,9 @@ class TelPhoneNumber {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final TelPhoneNumber check = o;
     return o is TelPhoneNumber &&
-        check.telPhoneNumber == telPhoneNumber &&
-        check.useType == useType;
+        o.telPhoneNumber == telPhoneNumber &&
+        o.useType == useType;
   }
 
   @override

@@ -29,7 +29,7 @@ class MultiProcessorScreen extends StatefulWidget {
 }
 
 class _MultiProcessorScreenState extends State<MultiProcessorScreen> {
-  ScanResponseList scanList;
+  ScanResponseList? scanList;
 
   decodeMultiSync() async {
     Uint8List data = (await rootBundle.load('assets/multipleBarcode2.png'))
@@ -101,18 +101,20 @@ class _MultiProcessorScreenState extends State<MultiProcessorScreen> {
                 decodeMultiAsync();
               },
             ),
-            scanList != null
+            scanList != null && scanList!.scanResponseList != null
                 ? ListView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    itemCount: scanList.scanResponseList.length,
+                    itemCount: scanList!.scanResponseList!.length,
                     itemBuilder: (BuildContext ctxt, int index) {
                       return ResponseWidget(
                         isMulti: true,
-                        codeFormat: scanList.scanResponseList[index].scanType,
-                        result: scanList.scanResponseList[index].originalValue,
+                        codeFormat:
+                            scanList?.scanResponseList?[index]?.scanType,
+                        result:
+                            scanList?.scanResponseList?[index]?.originalValue,
                         resultType:
-                            scanList.scanResponseList[index].scanTypeForm,
+                            scanList?.scanResponseList?[index]?.scanTypeForm,
                       );
                     })
                 : SizedBox.shrink(),

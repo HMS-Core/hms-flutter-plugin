@@ -25,10 +25,10 @@ class EmailContent {
   EmailContent(
       {this.addressInfo, this.addressType, this.bodyInfo, this.subjectInfo});
 
-  int addressType;
-  String addressInfo;
-  String bodyInfo;
-  String subjectInfo;
+  int? addressType;
+  String? addressInfo;
+  String? bodyInfo;
+  String? subjectInfo;
 
   factory EmailContent.fromJson(String str) =>
       EmailContent.fromMap(json.decode(str));
@@ -54,12 +54,11 @@ class EmailContent {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final EmailContent check = o;
     return o is EmailContent &&
-        check.addressInfo == addressInfo &&
-        check.addressType == addressType &&
-        check.bodyInfo == bodyInfo &&
-        check.subjectInfo == subjectInfo;
+        o.addressInfo == addressInfo &&
+        o.addressType == addressType &&
+        o.bodyInfo == bodyInfo &&
+        o.subjectInfo == subjectInfo;
   }
 
   @override

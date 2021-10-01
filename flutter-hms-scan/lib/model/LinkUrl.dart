@@ -20,8 +20,8 @@ import 'dart:ui' show hashValues;
 class LinkUrl {
   LinkUrl({this.linkvalue, this.theme});
 
-  String linkvalue;
-  String theme;
+  String? linkvalue;
+  String? theme;
 
   factory LinkUrl.fromJson(String str) => LinkUrl.fromMap(json.decode(str));
 
@@ -41,8 +41,7 @@ class LinkUrl {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final LinkUrl check = o;
-    return o is LinkUrl && check.linkvalue == linkvalue && check.theme == theme;
+    return o is LinkUrl && o.linkvalue == linkvalue && o.theme == theme;
   }
 
   @override

@@ -20,8 +20,8 @@ import 'dart:ui' show hashValues;
 class LocationCoordinate {
   LocationCoordinate({this.latitude, this.longitude});
 
-  double latitude;
-  double longitude;
+  double? latitude;
+  double? longitude;
 
   factory LocationCoordinate.fromJson(String str) =>
       LocationCoordinate.fromMap(json.decode(str));
@@ -43,10 +43,9 @@ class LocationCoordinate {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final LocationCoordinate check = o;
     return o is LocationCoordinate &&
-        check.latitude == latitude &&
-        check.longitude == longitude;
+        o.latitude == latitude &&
+        o.longitude == longitude;
   }
 
   @override

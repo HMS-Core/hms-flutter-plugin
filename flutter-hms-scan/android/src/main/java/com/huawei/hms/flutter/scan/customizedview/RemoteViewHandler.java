@@ -44,7 +44,7 @@ public class RemoteViewHandler implements MethodChannel.MethodCallHandler {
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         switch (call.method) {
-            //remote view pause
+            // remote view pause
             case "pause":
                 mHMSLogger.startMethodExecutionTimer("remoteView.pauseContinuouslyScan");
                 if (remoteView != null) {
@@ -56,7 +56,7 @@ public class RemoteViewHandler implements MethodChannel.MethodCallHandler {
                         Errors.remoteViewError.getErrorCode());
                 }
                 break;
-            //remote view resume
+            // remote view resume
             case "resume":
                 mHMSLogger.startMethodExecutionTimer("remoteView.resumeContinuouslyScan");
                 if (remoteView != null) {
@@ -68,7 +68,7 @@ public class RemoteViewHandler implements MethodChannel.MethodCallHandler {
                         Errors.remoteViewError.getErrorCode());
                 }
                 break;
-            //Switch light
+            // Switch light
             case "switchLight":
                 mHMSLogger.startMethodExecutionTimer("remoteView.switchLight");
                 if (remoteView != null) {
@@ -87,7 +87,7 @@ public class RemoteViewHandler implements MethodChannel.MethodCallHandler {
                     mHMSLogger.sendSingleEvent("remoteView.switchLight", Errors.remoteViewError.getErrorCode());
                 }
                 break;
-            //get light status
+            // get light status
             case "getLightStatus":
                 mHMSLogger.startMethodExecutionTimer("remoteView.getLightStatus");
                 if (remoteView != null) {

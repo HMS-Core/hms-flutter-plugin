@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.huawei.hms.flutter.scan_example">
+    package="com.huawei.hms.flutter.scanexample">
 
 
     <uses-permission android:name="android.permission.CAMERA" />
@@ -13,7 +13,7 @@
         android:label="scan_example"
         >
         <activity
-            android:name="com.huawei.hms.flutter.scan_example.MainActivity"
+            android:name="com.huawei.hms.flutter.scanexample.MainActivity"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

@@ -92,7 +92,7 @@ public final class MultiProcessorHandler extends Handler {
 
         this.mChannel = channel;
 
-        //Options from Flutter side.
+        // Options from Flutter side.
         this.mMultiProcessorCamera = multiProcessorCamera;
         this.activity = activity;
         this.mode = mode;
@@ -113,10 +113,10 @@ public final class MultiProcessorHandler extends Handler {
 
         this.analyzer = mAnalyzer;
 
-        //HMS Logger
+        // HMS Logger
         mHMSLogger = HMSLogger.getInstance(activity.getApplicationContext());
 
-        //Threads for continuously scanning barcode.
+        // Threads for continuously scanning barcode.
         decodeThread = new HandlerThread("DecodeThread");
         decodeThread.start();
         decodeHandle = new Handler(decodeThread.getLooper()) {
@@ -136,7 +136,7 @@ public final class MultiProcessorHandler extends Handler {
                         message.what = msg.what;
                         message.obj = result;
                         MultiProcessorHandler.this.sendMessage(message);
-                        //change back to default zoom.
+                        // change back to default zoom.
                         restart(DEFAULT_ZOOM);
                     } else {
                         restart(DEFAULT_ZOOM);
@@ -153,18 +153,22 @@ public final class MultiProcessorHandler extends Handler {
 
     /**
      * Call the MultiProcessor API in synchronous mode.
+     * @param width width
+     * @param height height
+     * @param data data
+     * @return HmsScan[]
      */
     private HmsScan[] decodeSync(int width, int height, byte[] data) {
         HmsScan[] info = new HmsScan[0];
-        //Bitmap from camera
+        // Bitmap from camera
         Bitmap bitmap = convertToBitmap(width, height, data);
         MLFrame image = MLFrame.fromBitmap(bitmap);
         if (analyzerIsAvailableWithLogger(activity.getApplicationContext(), analyzer, "MultiProcessorHandler")) {
-            //Analyze
+            // Analyze
             mHMSLogger.startMethodExecutionTimer("MultiProcessorHandler.decodeMultiSync");
             SparseArray<HmsScan> result = analyzer.analyseFrame(image);
             mHMSLogger.sendSingleEvent("MultiProcessorHandler.decodeMultiSync");
-            //Results
+            // Results
             if (result != null && result.size() > 0 && result.valueAt(0) != null && !TextUtils.isEmpty(
                 result.valueAt(0).getOriginalValue())) {
                 info = new HmsScan[result.size()];
@@ -181,15 +185,18 @@ public final class MultiProcessorHandler extends Handler {
 
     /**
      * Call the MultiProcessor API in asynchronous mode.
+     * @param width width
+     * @param height height
+     * @param data data
      */
     private void decodeAsync(int width, int height, byte[] data) {
 
-        //Bitmap from camera
+        // Bitmap from camera
         final Bitmap bitmap = convertToBitmap(width, height, data);
         MLFrame image = MLFrame.fromBitmap(bitmap);
 
         if (analyzerIsAvailableWithLogger(activity.getApplicationContext(), analyzer, "MultiProcessorHandler")) {
-            //Analyze
+            // Analyze
             mHMSLogger.startMethodExecutionTimer("MultiProcessorHandler.decodeMultiAsync");
             analyzer.analyzInAsyn(image).addOnSuccessListener(new OnSuccessListener<List<HmsScan>>() {
                 @Override
@@ -219,6 +226,10 @@ public final class MultiProcessorHandler extends Handler {
 
     /**
      * Convert camera data into bitmap data.
+     * @param width width
+     * @param height height
+     * @param data data
+     * @return Bitmap
      */
     private Bitmap convertToBitmap(int width, int height, byte[] data) {
         YuvImage yuv = new YuvImage(data, ImageFormat.NV21, width, height, null);
@@ -227,7 +238,7 @@ public final class MultiProcessorHandler extends Handler {
         return BitmapFactory.decodeByteArray(stream.toByteArray(), 0, stream.toByteArray().length);
     }
 
-    //Drawing rectangles for multi processor camera UI.
+    // Drawing rectangles for multi processor camera UI.
     @Override
     public void handleMessage(Message message) {
         removeMessages(1);
@@ -237,7 +248,7 @@ public final class MultiProcessorHandler extends Handler {
             Intent intent = new Intent();
             intent.putExtra(ScanUtil.RESULT, (HmsScan[]) message.obj);
             activity.setResult(RESULT_OK, intent);
-            //Show the scanning result on the screen.
+            // Show the scanning result on the screen.
             if (mode == MultiProcessorMethodCallHandler.MULTIPROCESSOR_ASYNC_CODE
                 || mode == MultiProcessorMethodCallHandler.MULTIPROCESSOR_SYNC_CODE) {
                 MultiProcessorActivity multiProcessorActivity = (MultiProcessorActivity) activity;

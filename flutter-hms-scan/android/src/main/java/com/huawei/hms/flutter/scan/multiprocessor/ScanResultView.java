@@ -77,6 +77,7 @@ public class ScanResultView extends View {
 
     /**
      * Draw MultiCodes on screen.
+     * @param canvas canvas
      */
     @Override
     protected void onDraw(Canvas canvas) {
@@ -101,7 +102,7 @@ public class ScanResultView extends View {
         private final HmsScan hmsScan;
         private ScanResultView scanResultView;
 
-        //Options from Flutter.
+        // Options from Flutter.
         private final int TEXT_COLOR;
         private final float TEXT_SIZE;
         private final int textBackgroundColor;
@@ -140,8 +141,8 @@ public class ScanResultView extends View {
                 return;
             }
 
-            //rect - for hms results
-            //other - for colorful rectangle on canvas
+            // rect - for hms results
+            // other - for colorful rectangle on canvas
             RectF rect = new RectF(hmsScan.getBorderRect());
             RectF other = new RectF();
             other.left = canvas.getWidth() - scaleX(rect.top);
@@ -152,6 +153,9 @@ public class ScanResultView extends View {
         }
 
         /**
+         * getTextHeight
+         * @param text text
+         * @param paint paint
          * @return text height
          */
         private float getTextHeight(String text, Paint paint) {
@@ -161,6 +165,10 @@ public class ScanResultView extends View {
         }
 
         /**
+         * getTextHeightInRect
+         * @param text text
+         * @param width width
+         * @param fontSize fontSize
          * @return text height in static layout a.k.a rectangle
          * it is used to get height of the text in borders.
          */
@@ -175,6 +183,10 @@ public class ScanResultView extends View {
         }
 
         /**
+         * getOptimalTextSize
+         * @param text text
+         * @param width width
+         * @param height height
          * @return optimal text size a.k.a Auto Size Text
          */
         private int getOptimalTextSize(String text, int width, int height) {
@@ -185,10 +197,10 @@ public class ScanResultView extends View {
             return targetTextSize;
         }
 
-        //Draw text on rectangle
+        // Draw text on rectangle
         void drawText(Canvas canvas) {
-            //rect for hms scan object.
-            //other for rectangle drawing.
+            // rect for hms scan object.
+            // other for rectangle drawing.
             RectF rect = new RectF(hmsScan.getBorderRect());
             RectF other = new RectF();
             other.left = canvas.getWidth() - scaleX(rect.top);
@@ -199,7 +211,7 @@ public class ScanResultView extends View {
             int width = (int) other.width() * -1;
             int height = (int) other.height();
 
-            //bitmap for text background.
+            // bitmap for text background.
             Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
             Canvas canvas2 = new Canvas(bitmap);
             Paint p2 = new Paint();
@@ -209,10 +221,10 @@ public class ScanResultView extends View {
 
             canvas.drawBitmap(bitmap, other.right, other.top, null);
 
-            //hms scan text value.
+            // hms scan text value.
             String text = hmsScan.getOriginalValue();
 
-            //Text options from Flutter.
+            // Text options from Flutter.
             TextPaint tp = new TextPaint();
             tp.setColor(TEXT_COLOR);
             tp.setTextSize(autoSizeText && !showTextOutBounds ? getOptimalTextSize(text, width, height) : TEXT_SIZE);
@@ -220,7 +232,7 @@ public class ScanResultView extends View {
 
             float textHeight = getTextHeight(text, tp);
 
-            //static layout for drawing text.
+            // static layout for drawing text.
             StaticLayout staticLayout = new StaticLayout(text, tp, width, Layout.Alignment.ALIGN_CENTER, 1, 0, false);
             canvas2.save();
             canvas.save();
@@ -232,11 +244,11 @@ public class ScanResultView extends View {
 
             float textXCoordinate = other.right;
 
-            //For positioning text according to rectangles.
+            // For positioning text according to rectangles.
             canvas.translate(textXCoordinate, textYCoordinate);
             canvas2.translate(0, (numberOfTextLines * textHeight) >= bitmap.getHeight() ? 0 : textYCoordinate);
 
-            //drawing text.
+            // drawing text.
             staticLayout.draw(showTextOutBounds ? canvas : canvas2);
             canvas.restore();
             canvas2.restore();

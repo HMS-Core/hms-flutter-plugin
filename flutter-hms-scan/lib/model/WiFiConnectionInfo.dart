@@ -24,9 +24,9 @@ class WiFiConnectionInfo {
 
   WiFiConnectionInfo({this.password, this.ssidNumber, this.cipherMode});
 
-  String password;
-  String ssidNumber;
-  int cipherMode;
+  String? password;
+  String? ssidNumber;
+  int? cipherMode;
 
   factory WiFiConnectionInfo.fromJson(String str) =>
       WiFiConnectionInfo.fromMap(json.decode(str));
@@ -50,11 +50,10 @@ class WiFiConnectionInfo {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final WiFiConnectionInfo check = o;
     return o is WiFiConnectionInfo &&
-        check.password == password &&
-        check.ssidNumber == ssidNumber &&
-        check.cipherMode == check.cipherMode;
+        o.password == password &&
+        o.ssidNumber == ssidNumber &&
+        o.cipherMode == o.cipherMode;
   }
 
   @override

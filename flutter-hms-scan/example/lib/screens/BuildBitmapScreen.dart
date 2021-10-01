@@ -32,10 +32,10 @@ class BuildBitmapScreen extends StatefulWidget {
 }
 
 class _BuildBitmapScreenState extends State<BuildBitmapScreen> {
-  Image _qrImg;
-  String scanTypeValue = 'QRCode';
-  String bitmapColor = 'Black';
-  String backgroundColor = 'White';
+  Image? _qrImg;
+  String? scanTypeValue = 'QRCode';
+  String? bitmapColor = 'Black';
+  String? backgroundColor = 'White';
   int scanTypeValueFromDrowpDown = HmsScanTypes.QRCode;
   Color bitmapColorValue = Colors.black;
   Color backgroundColorValue = Colors.white;
@@ -65,7 +65,7 @@ class _BuildBitmapScreenState extends State<BuildBitmapScreen> {
     request.bitmapColor = bitmapColorValue;
     request.backgroundColor = backgroundColorValue;
 
-    Image image;
+    Image? image;
 
     try {
       image = await HmsScanUtils.buildBitmap(request);
@@ -117,11 +117,11 @@ class _BuildBitmapScreenState extends State<BuildBitmapScreen> {
                       ),
                       CustomDropdown(
                         label: "Scan Type: ",
-                        onChanged: (String newValue) {
+                        onChanged: (String? newValue) {
                           setState(() {
                             scanTypeValue = newValue;
                             scanTypeValueFromDrowpDown =
-                                dropdownControllerBitmap(scanTypeValue);
+                                dropdownControllerBitmap(scanTypeValue ?? '');
                           });
                         },
                         list: scanTypeStringListBitmap,
@@ -129,11 +129,11 @@ class _BuildBitmapScreenState extends State<BuildBitmapScreen> {
                       ),
                       CustomDropdown(
                         label: "Bitmap Color: ",
-                        onChanged: (String newValue) {
+                        onChanged: (String? newValue) {
                           setState(() {
                             bitmapColor = newValue;
                             bitmapColorValue =
-                                dropdownColorController(bitmapColor);
+                                dropdownColorController(bitmapColor ?? '');
                           });
                         },
                         list: colorStringList,
@@ -141,11 +141,11 @@ class _BuildBitmapScreenState extends State<BuildBitmapScreen> {
                       ),
                       CustomDropdown(
                         label: "Background Color: ",
-                        onChanged: (String newValue) {
+                        onChanged: (String? newValue) {
                           setState(() {
                             backgroundColor = newValue;
                             backgroundColorValue =
-                                dropdownColorController(backgroundColor);
+                                dropdownColorController(backgroundColor ?? '');
                           });
                         },
                         list: colorStringList,
@@ -159,7 +159,7 @@ class _BuildBitmapScreenState extends State<BuildBitmapScreen> {
                 text: "Build Bitmap",
                 onPressed: buildBitmap,
               ),
-              _qrImg != null ? _qrImg : SizedBox(height: 20),
+              _qrImg ?? SizedBox(height: 20),
             ],
           ),
         ),

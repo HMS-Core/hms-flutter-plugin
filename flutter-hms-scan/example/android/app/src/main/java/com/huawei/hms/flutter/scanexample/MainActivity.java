@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-package com.huawei.hms.flutter.scan_example;
+package com.huawei.hms.flutter.scanexample;
 
 import io.flutter.embedding.android.FlutterActivity;
 

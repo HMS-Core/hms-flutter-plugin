@@ -1,3 +1,7 @@
+## 2.1.0.300
+* Nullsafety migration.
+* Scan Kit SDK is updated to the newest version.
+
 ## 1.3.0.300
 * Scan Kit SDK is updated to the newest version.
 * [**Breaking Change**] HmsCustomizedView.startCustomizedView doesn't return ScanResponse anymore. All ScanResponse objects can be listenable from customizedCameraListener callback on CustomizedViewRequest.

@@ -17,6 +17,8 @@
 import 'dart:convert' show json;
 import 'dart:ui' show hashValues;
 
+import 'package:flutter/foundation.dart';
+
 import 'TelPhoneNumber.dart';
 import 'AddressInfo.dart';
 import 'PeopleName.dart';
@@ -34,14 +36,14 @@ class ContactDetail {
     this.title,
   });
 
-  List<AddressInfo> addressesInfos;
-  String company;
-  List<String> contactLinks;
-  List<EmailContent> eMailContents;
-  String note;
-  PeopleName peopleName;
-  List<TelPhoneNumber> telPhoneNumbers;
-  String title;
+  List<AddressInfo?>? addressesInfos;
+  String? company;
+  List<String?>? contactLinks;
+  List<EmailContent?>? eMailContents;
+  String? note;
+  PeopleName? peopleName;
+  List<TelPhoneNumber?>? telPhoneNumbers;
+  String? title;
 
   factory ContactDetail.fromJson(String str) =>
       ContactDetail.fromMap(json.decode(str));
@@ -51,43 +53,43 @@ class ContactDetail {
   factory ContactDetail.fromMap(Map<String, dynamic> json) => ContactDetail(
         addressesInfos: json["addressesInfos"] == null
             ? null
-            : List<AddressInfo>.from(
-                json["addressesInfos"].map((x) => AddressInfo.fromMap(x))),
+            : List<AddressInfo?>.from(json["addressesInfos"]
+                .map((x) => x == null ? null : AddressInfo.fromMap(x))),
         company: json["company"] == null ? null : json["company"],
         contactLinks: json["contactLinks"] == null
             ? null
-            : List<String>.from(json["contactLinks"].map((x) => x)),
+            : List<String?>.from(json["contactLinks"].map((x) => x)),
         eMailContents: json["eMailContents"] == null
             ? null
-            : List<EmailContent>.from(
-                json["eMailContents"].map((x) => EmailContent.fromMap(x))),
+            : List<EmailContent?>.from(json["eMailContents"]
+                .map((x) => x == null ? null : EmailContent.fromMap(x))),
         note: json["note"] == null ? null : json["note"],
         peopleName: json["peopleName"] == null
             ? null
             : PeopleName.fromMap(json["peopleName"]),
         telPhoneNumbers: json["telPhoneNumbers"] == null
             ? null
-            : List<TelPhoneNumber>.from(
-                json["telPhoneNumbers"].map((x) => TelPhoneNumber.fromMap(x))),
+            : List<TelPhoneNumber?>.from(json["telPhoneNumbers"]
+                .map((x) => x == null ? null : TelPhoneNumber.fromMap(x))),
         title: json["title"] == null ? null : json["title"],
       );
 
   Map<String, dynamic> toMap() => {
         "addressesInfos": addressesInfos == null
             ? null
-            : List<dynamic>.from(addressesInfos.map((x) => x.toMap())),
+            : List<dynamic>.from(addressesInfos!.map((x) => x?.toMap())),
         "company": company == null ? null : company,
         "contactLinks": contactLinks == null
             ? null
-            : List<dynamic>.from(contactLinks.map((x) => x)),
+            : List<dynamic>.from(contactLinks!.map((x) => x)),
         "eMailContents": eMailContents == null
             ? null
-            : List<dynamic>.from(eMailContents.map((x) => x.toMap())),
+            : List<dynamic>.from(eMailContents!.map((x) => x?.toMap())),
         "note": note == null ? null : note,
-        "peopleName": peopleName == null ? null : peopleName.toMap(),
+        "peopleName": peopleName == null ? null : peopleName!.toMap(),
         "telPhoneNumbers": telPhoneNumbers == null
             ? null
-            : List<dynamic>.from(telPhoneNumbers.map((x) => x.toMap())),
+            : List<dynamic>.from(telPhoneNumbers!.map((x) => x?.toMap())),
         "title": title == null ? null : title,
       };
 
@@ -95,16 +97,15 @@ class ContactDetail {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final ContactDetail check = o;
     return o is ContactDetail &&
-        check.addressesInfos == addressesInfos &&
-        check.company == company &&
-        check.contactLinks == contactLinks &&
-        check.eMailContents == eMailContents &&
-        check.note == note &&
-        check.peopleName == peopleName &&
-        check.telPhoneNumbers == telPhoneNumbers &&
-        check.title == title;
+        listEquals(o.addressesInfos, addressesInfos) &&
+        o.company == company &&
+        listEquals(o.contactLinks, contactLinks) &&
+        listEquals(o.eMailContents, eMailContents) &&
+        o.note == note &&
+        o.peopleName == peopleName &&
+        listEquals(o.telPhoneNumbers, telPhoneNumbers) &&
+        o.title == title;
   }
 
   @override

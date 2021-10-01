@@ -79,15 +79,15 @@ public class MultiProcessorActivity extends Activity {
         super.onCreate(savedInstanceState);
         Window window = getWindow();
 
-        //HMS Logger
+        // HMS Logger
         mHMSLogger = HMSLogger.getInstance(this.getApplicationContext());
 
-        //Window options
+        // Window options
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_multiprocessor);
 
-        //MultiProcessor mode
+        // MultiProcessor mode
         mode = Objects.requireNonNull(getIntent().getExtras()).getInt("scanMode");
 
         mMultiProcessorCamera = new MultiProcessorCamera();
@@ -110,7 +110,7 @@ public class MultiProcessorActivity extends Activity {
             multiProcessorChannel = ScanPlugin.SCAN_CHANNELS.get(channelId);
         }
 
-        //Gallery option from Flutter.
+        // Gallery option from Flutter.
         if (multiIntent.getExtras().getBoolean("gallery")) {
             galleryButton.setVisibility(View.VISIBLE);
             setPictureScanOperation();
@@ -124,7 +124,7 @@ public class MultiProcessorActivity extends Activity {
 
     }
 
-    //Adjust camera and surface.
+    // Adjust camera and surface.
     private void adjustSurface(SurfaceView cameraPreview) {
         FrameLayout.LayoutParams paramSurface = (FrameLayout.LayoutParams) cameraPreview.getLayoutParams();
         if (getSystemService(Context.WINDOW_SERVICE) != null) {
@@ -157,7 +157,7 @@ public class MultiProcessorActivity extends Activity {
         }
     }
 
-    //Back button
+    // Back button
     private void setBackOperation() {
         ImageView backButton = findViewById(R.id.back_img);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -177,7 +177,7 @@ public class MultiProcessorActivity extends Activity {
         MultiProcessorActivity.this.finish();
     }
 
-    //Gallery button
+    // Gallery button
     private void setPictureScanOperation() {
         galleryButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -189,7 +189,7 @@ public class MultiProcessorActivity extends Activity {
         });
     }
 
-    //Camera Lifecycle
+    // Camera Lifecycle
     @Override
     protected void onResume() {
         super.onResume();
@@ -218,13 +218,13 @@ public class MultiProcessorActivity extends Activity {
         super.onDestroy();
     }
 
-    //Camera start method.
+    // Camera start method.
     private void initCamera() {
         try {
             mMultiProcessorCamera.open(surfaceHolder);
             if (handler == null) {
                 Intent intent = getIntent();
-                //Options from Flutter.
+                // Options from Flutter.
                 long[] colorList = Objects.requireNonNull(intent.getExtras()).getLongArray("colorList");
 
                 int textColor = intent.getExtras().getInt("textColor");
@@ -238,7 +238,7 @@ public class MultiProcessorActivity extends Activity {
                 int minTextSize = intent.getExtras().getInt("minTextSize");
                 int granularity = intent.getExtras().getInt("granularity");
 
-                //Handler for multi processor camera -- this is where camera continuously scan barcode.
+                // Handler for multi processor camera -- this is where camera continuously scan barcode.
                 if (mAnalyzer != null && multiProcessorChannel != null) {
                     handler = new MultiProcessorHandler(MultiProcessorActivity.this, multiProcessorChannel,
                         mMultiProcessorCamera, mode, colorList, textColor, textSize, strokeWidth, textBackgroundColor,
@@ -270,7 +270,7 @@ public class MultiProcessorActivity extends Activity {
         }
     }
 
-    //Multi Async mode for image based scanning mode.
+    // Multi Async mode for image based scanning mode.
     private void decodeMultiAsync(Bitmap bitmap) {
         MLFrame image = MLFrame.fromBitmap(bitmap);
         if (analyzerIsAvailableWithLogger(this.getApplicationContext(), mAnalyzer, "MultiProcessorActivity")) {
@@ -301,7 +301,7 @@ public class MultiProcessorActivity extends Activity {
         }
     }
 
-    //Multi Sync mode for image based scanning mode.
+    // Multi Sync mode for image based scanning mode.
     private void decodeMultiSync(Bitmap bitmap) {
         MLFrame image = MLFrame.fromBitmap(bitmap);
         if (analyzerIsAvailableWithLogger(this.getApplicationContext(), mAnalyzer, "MultiProcessorActivity")) {

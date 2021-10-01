@@ -19,7 +19,7 @@ import 'package:huawei_scan/HmsScanLibrary.dart';
 
 //Get Unique List
 getUniqueList(List<ScanResponse> list) {
-  Map<String, ScanResponse> mp = {};
+  Map<String?, ScanResponse> mp = {};
   for (var item in list) {
     mp[item.originalValue] = item;
   }
@@ -133,88 +133,63 @@ List<String> scanTypeStringListBitmap = [
 ];
 
 //Scan Type Converter
-formatConverter(int format) {
+formatConverter(int? format) {
   switch (format) {
     case HmsScanTypes.Code128:
       return "Code128 Code";
-      break;
     case HmsScanTypes.Code39:
       return "Code39 Code";
-      break;
     case HmsScanTypes.Code93:
       return "Code93 Code";
-      break;
     case HmsScanTypes.Codabar:
       return "Codabar Code";
-      break;
     case HmsScanTypes.DataMatrix:
       return "Data Matrix Code";
-      break;
     case HmsScanTypes.EAN13:
       return "EAN13 Code";
-      break;
     case HmsScanTypes.EAN8:
       return "EAN8 Code";
-      break;
     case HmsScanTypes.ITF14:
       return "ITF14 Code";
-      break;
     case HmsScanTypes.QRCode:
       return "QR Code";
-      break;
     case HmsScanTypes.UPCCodeA:
       return "UPC Code - A";
-      break;
     case HmsScanTypes.UPCCodeE:
       return "UPC Code - E";
-      break;
     case HmsScanTypes.Pdf417:
       return "Pdf417 Code";
-      break;
     case HmsScanTypes.Aztec:
       return "Aztec Code";
-      break;
   }
 }
 
 //Result Type Converter
-resultTypeConverter(int type) {
+resultTypeConverter(int? type) {
   switch (type) {
     case HmsScanForm.ContactDetailForm:
       return "Contact";
-      break;
     case HmsScanForm.EmailContentForm:
       return "Email";
-      break;
     case HmsScanForm.ISBNNumberForm:
       return "ISBN";
-      break;
     case HmsScanForm.TelPhoneNumberForm:
       return "Tel";
-      break;
     case HmsScanForm.ArticleNumberForm:
       return "Product";
-      break;
     case HmsScanForm.SMSForm:
       return "SMS";
-      break;
     case HmsScanForm.PureTextForm:
       return "Text";
-      break;
     case HmsScanForm.UrlForm:
       return "Website";
-      break;
     case HmsScanForm.WIFIConnectInfoForm:
       return "WIFI";
-      break;
     case HmsScanForm.LocationCoordinateForm:
       return "Location";
-      break;
     case HmsScanForm.EventInfoForm:
       return "Event";
-      break;
     case HmsScanForm.DriverInfoForm:
       return "License";
-      break;
   }
 }

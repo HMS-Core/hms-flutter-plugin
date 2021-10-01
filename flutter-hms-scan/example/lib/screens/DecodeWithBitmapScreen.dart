@@ -29,9 +29,9 @@ class DecodeWithBitmapScreen extends StatefulWidget {
 }
 
 class _DecodeWithBitmapScreenState extends State<DecodeWithBitmapScreen> {
-  String resultScan;
-  int codeFormatScan;
-  int resultTypeScan;
+  String? resultScan;
+  int? codeFormatScan;
+  int? resultTypeScan;
 
   decodeWithBitmap() async {
     Uint8List data =

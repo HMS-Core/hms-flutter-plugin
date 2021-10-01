@@ -27,9 +27,9 @@ class DefaultViewScreen extends StatefulWidget {
 }
 
 class _DefaultViewScreenState extends State<DefaultViewScreen> {
-  String resultScan;
-  int codeFormatScan;
-  int resultTypeScan;
+  String? resultScan;
+  int? codeFormatScan;
+  int? resultTypeScan;
 
   @override
   void initState() {

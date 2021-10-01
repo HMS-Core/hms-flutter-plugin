@@ -16,32 +16,32 @@
 
 import 'dart:convert' show json;
 
-import 'package:flutter/foundation.dart' show required;
 import 'dart:ui' show hashValues;
 
+import 'package:flutter/foundation.dart';
 import 'package:huawei_scan/model/ScanResponse.dart';
 
 typedef CustomizedCameraListener(ScanResponse response);
 typedef CustomizedLifeCycleListener(CustomizedViewEvent lifecycleStatus);
 
 class CustomizedViewRequest {
-  int scanType;
-  List<int> additionalScanTypes;
+  int? scanType;
+  List<int>? additionalScanTypes;
 
-  int rectHeight;
-  int rectWidth;
+  int? rectHeight;
+  int? rectWidth;
 
-  bool flashOnLightChange;
-  bool isFlashAvailable;
-  bool isGalleryAvailable;
-  bool continuouslyScan;
-  bool enableReturnBitmap;
+  bool? flashOnLightChange;
+  bool? isFlashAvailable;
+  bool? isGalleryAvailable;
+  bool? continuouslyScan;
+  bool? enableReturnBitmap;
 
-  CustomizedCameraListener customizedCameraListener;
-  CustomizedLifeCycleListener customizedLifeCycleListener;
+  CustomizedCameraListener? customizedCameraListener;
+  CustomizedLifeCycleListener? customizedLifeCycleListener;
 
   CustomizedViewRequest({
-    @required this.scanType,
+    this.scanType,
     this.additionalScanTypes,
     this.rectHeight = 240,
     this.rectWidth = 240,
@@ -96,17 +96,16 @@ class CustomizedViewRequest {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final CustomizedViewRequest check = o;
     return o is CustomizedViewRequest &&
-        check.scanType == scanType &&
-        check.additionalScanTypes == additionalScanTypes &&
-        check.rectHeight == rectHeight &&
-        check.rectWidth == rectWidth &&
-        check.flashOnLightChange == flashOnLightChange &&
-        check.isFlashAvailable == isFlashAvailable &&
-        check.isGalleryAvailable == isGalleryAvailable &&
-        check.continuouslyScan == continuouslyScan &&
-        check.enableReturnBitmap == enableReturnBitmap;
+        o.scanType == scanType &&
+        listEquals(o.additionalScanTypes, additionalScanTypes) &&
+        o.rectHeight == rectHeight &&
+        o.rectWidth == rectWidth &&
+        o.flashOnLightChange == flashOnLightChange &&
+        o.isFlashAvailable == isFlashAvailable &&
+        o.isGalleryAvailable == isGalleryAvailable &&
+        o.continuouslyScan == continuouslyScan &&
+        o.enableReturnBitmap == enableReturnBitmap;
   }
 
   @override

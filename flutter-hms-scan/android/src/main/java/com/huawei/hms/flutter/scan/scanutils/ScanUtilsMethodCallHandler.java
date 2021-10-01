@@ -86,12 +86,12 @@ public class ScanUtilsMethodCallHandler
     }
 
     private void defaultView(MethodCall call, MethodChannel.Result result) {
-        //Arguments from call
+        // Arguments from call
         int scanType = ValueGetter.getInt("scanType", call);
         List<Integer> additionalScanTypes = call.argument("additionalScanTypes");
         int[] scanTypesIntArray = null;
 
-        //List<Integer> to int[]
+        // List<Integer> to int[]
         if (additionalScanTypes != null) {
             scanTypesIntArray = new int[additionalScanTypes.size()];
             for (int i = 0; i < additionalScanTypes.size(); i++) {
@@ -99,12 +99,12 @@ public class ScanUtilsMethodCallHandler
             }
         }
 
-        //Default view options
+        // Default view options
         HmsScanAnalyzerOptions.Creator creator = new HmsScanAnalyzerOptions.Creator();
         creator.setHmsScanTypes(scanType, scanTypesIntArray);
         HmsScanAnalyzerOptions options = creator.create();
 
-        //Start scan with options
+        // Start scan with options
         mHMSLogger.startMethodExecutionTimer("ScanUtilsMethodCallHandler.defaultView");
 
         if (ScanUtil.startScan(mActivity, REQUEST_CODE_SCAN_DEFAULT, options) == ScanUtil.SUCCESS) {
@@ -120,7 +120,7 @@ public class ScanUtilsMethodCallHandler
 
     private void buildBitmap(MethodCall call, MethodChannel.Result result) {
 
-        //Arguments from call
+        // Arguments from call
         String content = ValueGetter.getString("content", call);
         int type = ValueGetter.getInt("type", call);
         int margin = ValueGetter.getInt("margin", call);
@@ -136,7 +136,7 @@ public class ScanUtilsMethodCallHandler
         }
 
         try {
-            //Barcode options
+            // Barcode options
             HmsBuildBitmapOption.Creator creator = new HmsBuildBitmapOption.Creator();
             if (qrLogoBitmap != null) {
                 creator.setQRLogoBitmap(qrLogoBitmap);
@@ -146,16 +146,16 @@ public class ScanUtilsMethodCallHandler
             creator.setBitmapMargin(margin);
             HmsBuildBitmapOption options = creator.create();
 
-            //Generate Barcode
+            // Generate Barcode
             mHMSLogger.startMethodExecutionTimer("ScanUtilsMethodCallHandler.buildBitmap");
             final Bitmap qrBmp = ScanUtil.buildBitmap(content, type, width, height, options);
 
-            //Casting into byte[]
+            // Casting into byte[]
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             qrBmp.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
             final byte[] byteArray = byteArrayOutputStream.toByteArray();
 
-            //Sending result
+            // Sending result
             result.success(byteArray);
             mHMSLogger.sendSingleEvent("ScanUtilsMethodCallHandler.buildBitmap");
 
@@ -166,29 +166,29 @@ public class ScanUtilsMethodCallHandler
     }
 
     private void decodeWithBitmap(MethodCall call, MethodChannel.Result result) {
-        //Arguments from call
+        // Arguments from call
         int scanType = ValueGetter.getInt("scanType", call);
         List<Integer> additionalScanTypes = call.argument("additionalScanTypes");
         Bitmap bitmap = ValueGetter.bitmapForDecoders(call, "data");
 
-        //List<Integer> to int[]
+        // List<Integer> to int[]
         int[] scanTypesIntArray = null;
         if (additionalScanTypes != null) {
             scanTypesIntArray = ValueGetter.scanTypesListToArray(additionalScanTypes);
         }
 
-        //Default view options
+        // Default view options
         HmsScanAnalyzerOptions.Creator creator = new HmsScanAnalyzerOptions.Creator();
         creator.setHmsScanTypes(scanType, scanTypesIntArray);
         creator.setPhotoMode(true);
         HmsScanAnalyzerOptions options = creator.create();
 
-        //Decode with bitmap
+        // Decode with bitmap
         mHMSLogger.startMethodExecutionTimer("ScanUtilsMethodCallHandler.decodeWithBitmap");
         HmsScan[] hmsScans = ScanUtil.decodeWithBitmap(mActivity, bitmap, options);
         mHMSLogger.sendSingleEvent("ScanUtilsMethodCallHandler.decodeWithBitmap");
 
-        //Send result to flutter
+        // Send result to flutter
         if (hmsScans != null && hmsScans.length > 0 && hmsScans[0] != null && !TextUtils.isEmpty(
             hmsScans[0].getOriginalValue())) {
             result.success(gson.toJson(hmsScans[0]));
@@ -201,19 +201,19 @@ public class ScanUtilsMethodCallHandler
 
     @Override
     public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-        //onActivityResult control
+        // onActivityResult control
         if (resultCode != RESULT_OK || data == null) {
             return false;
         }
-        //Default View
+        // Default View
         if (requestCode == REQUEST_CODE_SCAN_DEFAULT) {
             if (pendingResult != null) {
                 HmsScan obj = data.getParcelableExtra(ScanUtil.RESULT);
-                //Sending Result
+                // Sending Result
                 pendingResult.success(gson.toJson(obj));
                 HMSLogger.getInstance(mActivity.getApplicationContext())
                     .sendSingleEvent("ScanUtilsMethodCallHandler.defaultView");
-                pendingResult = null; //reset
+                pendingResult = null; // reset
             }
         } else {
             pendingResult = null;

@@ -30,13 +30,13 @@ class EventInfo {
     this.theme,
   });
 
-  String abstractInfo;
-  EventTime beginTime;
-  EventTime closeTime;
-  String condition;
-  String placeInfo;
-  String sponsor;
-  String theme;
+  String? abstractInfo;
+  EventTime? beginTime;
+  EventTime? closeTime;
+  String? condition;
+  String? placeInfo;
+  String? sponsor;
+  String? theme;
 
   factory EventInfo.fromJson(String str) => EventInfo.fromMap(json.decode(str));
 
@@ -59,8 +59,8 @@ class EventInfo {
 
   Map<String, dynamic> toMap() => {
         "abstractInfo": abstractInfo == null ? null : abstractInfo,
-        "beginTime": beginTime == null ? null : beginTime.toMap(),
-        "closeTime": closeTime == null ? null : closeTime.toMap(),
+        "beginTime": beginTime == null ? null : beginTime!.toMap(),
+        "closeTime": closeTime == null ? null : closeTime!.toMap(),
         "condition": condition == null ? null : condition,
         "placeInfo": placeInfo == null ? null : placeInfo,
         "sponsor": sponsor == null ? null : sponsor,
@@ -71,15 +71,14 @@ class EventInfo {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final EventInfo check = o;
     return o is EventInfo &&
-        check.abstractInfo == abstractInfo &&
-        check.beginTime == beginTime &&
-        check.closeTime == closeTime &&
-        check.condition == condition &&
-        check.placeInfo == placeInfo &&
-        check.sponsor == sponsor &&
-        check.theme == theme;
+        o.abstractInfo == abstractInfo &&
+        o.beginTime == beginTime &&
+        o.closeTime == closeTime &&
+        o.condition == condition &&
+        o.placeInfo == placeInfo &&
+        o.sponsor == sponsor &&
+        o.theme == theme;
   }
 
   @override

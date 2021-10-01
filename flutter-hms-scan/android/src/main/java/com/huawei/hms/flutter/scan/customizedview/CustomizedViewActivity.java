@@ -69,19 +69,19 @@ public class CustomizedViewActivity extends Activity {
     boolean continuouslyScan;
     Intent intent;
 
-    //Flash button image
+    // Flash button image
     private int[] img = {R.drawable.flashlight_on, R.drawable.flashlight_off};
 
-    //Declare the key. It is used to obtain the value returned from Scan Kit.
+    // Declare the key. It is used to obtain the value returned from Scan Kit.
     public static final int REQUEST_CODE_PHOTO = 0X1113;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //HMS Logger
+        // HMS Logger
         mHMSLogger = HMSLogger.getInstance(this.getApplicationContext());
         intent = getIntent();
-        //Window options.
+        // Window options.
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_defined);
 
@@ -102,10 +102,10 @@ public class CustomizedViewActivity extends Activity {
         ImageView scanFrame = findViewById(R.id.scan_area);
         flashButton = findViewById(R.id.flush_btn);
 
-        //1. Obtain the screen density to calculate the viewfinder's rectangle.
+        // 1. Obtain the screen density to calculate the viewfinder's rectangle.
         DisplayMetrics dm = getResources().getDisplayMetrics();
         float density = dm.density;
-        //2. Obtain the screen size.
+        // 2. Obtain the screen size.
         mScreenWidth = dm.widthPixels;
         mScreenHeight = dm.heightPixels;
 
@@ -115,8 +115,8 @@ public class CustomizedViewActivity extends Activity {
         int scanFrameSizeHeight = (int) (SCAN_FRAME_SIZE_HEIGHT * density);
         int scanFrameSizeWidth = (int) (SCAN_FRAME_SIZE_WIDTH * density);
 
-        //3. Calculate the viewfinder's rectangle, which in the middle of the layout.
-        //Set the scanning area. (Optional. Rect can be null. If no settings are specified, it will be located in the middle of the layout.)
+        // 3. Calculate the viewfinder's rectangle, which in the middle of the layout.
+        // Set the scanning area. (Optional. Rect can be null. If no settings are specified, it will be located in the middle of the layout.)
         Rect rect = new Rect();
         rect.left = mScreenWidth / 2 - scanFrameSizeWidth / 2;
         rect.right = mScreenWidth / 2 + scanFrameSizeWidth / 2;
@@ -126,10 +126,10 @@ public class CustomizedViewActivity extends Activity {
         scanFrame.getLayoutParams().height = rect.height();
         scanFrame.getLayoutParams().width = rect.width();
 
-        //Continuously Scan option from Flutter.
+        // Continuously Scan option from Flutter.
         continuouslyScan = intent.getExtras().getBoolean("continuouslyScan");
 
-        //Initialize the RemoteView instance, and set callback for the scanning result.
+        // Initialize the RemoteView instance, and set callback for the scanning result.
         RemoteView.Builder builder = new RemoteView.Builder().setContext(this)
                 .setBoundingBox(rect)
                 .setContinuouslyScan(continuouslyScan)
@@ -141,7 +141,7 @@ public class CustomizedViewActivity extends Activity {
             remoteView = builder.build();
         }
 
-        //Set Method Call Handler for pause and resume actions of remote view.
+        // Set Method Call Handler for pause and resume actions of remote view.
         if (remoteViewChannel != null) {
             RemoteViewHandler remoteViewHandler = new RemoteViewHandler(remoteView, flashButton, mHMSLogger);
             remoteViewChannel.setMethodCallHandler(remoteViewHandler);
@@ -152,7 +152,7 @@ public class CustomizedViewActivity extends Activity {
         remoteView.setOnResultCallback(new OnResultCallback() {
             @Override
             public void onResult(HmsScan[] result) {
-                //Check the result.
+                // Check the result.
                 if (result == null || result.length == 0 || result[0] == null || TextUtils.isEmpty(result[0].getOriginalValue())) {
                     return;
                 }
@@ -193,7 +193,7 @@ public class CustomizedViewActivity extends Activity {
         // Set the back, photo scanning, and flashlight operations.
         setBackOperation();
 
-        //Flash button visibility
+        // Flash button visibility
         flashButton.setVisibility(View.INVISIBLE);
 
         // When the light is dim, this API is called back to display the flashlight switch.
@@ -213,20 +213,20 @@ public class CustomizedViewActivity extends Activity {
             mHMSLogger.sendSingleEvent("remoteView.setOnLightVisibleCallback");
         }
 
-        //Flash Button option from Flutter.
+        // Flash Button option from Flutter.
         if (intent.getExtras().getBoolean("isFlashAvailable")) {
             flashButton.setVisibility(View.VISIBLE);
             setFlashOperation();
         }
 
-        //Gallery Button option from Flutter
+        // Gallery Button option from Flutter
         if (intent.getExtras().getBoolean("gallery")) {
             galleryButton.setVisibility(View.VISIBLE);
             setPictureScanOperation();
         }
     }
 
-    //Gallery button
+    // Gallery button
     private void setPictureScanOperation() {
         ImageView galleryButton = findViewById(R.id.img_btn);
         galleryButton.setOnClickListener(new View.OnClickListener() {
@@ -240,7 +240,7 @@ public class CustomizedViewActivity extends Activity {
         });
     }
 
-    //Normal flash button
+    // Normal flash button
     private void setFlashOperation() {
         flashButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -260,7 +260,7 @@ public class CustomizedViewActivity extends Activity {
         });
     }
 
-    //Back button
+    // Back button
     private void setBackOperation() {
         ImageView backButton = findViewById(R.id.back_img);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -332,6 +332,9 @@ public class CustomizedViewActivity extends Activity {
 
     /**
      * Handle the return results from the gallery.
+     * @param requestCode requestCode
+     * @param resultCode resultCode
+     * @param data Intent
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

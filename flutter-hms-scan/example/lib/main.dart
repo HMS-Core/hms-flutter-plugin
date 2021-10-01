@@ -60,9 +60,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   permissionRequest() async {
-    bool permissionResult =
+    bool? permissionResult =
         await HmsScanPermissions.hasCameraAndStoragePermission();
-    if (permissionResult == false) {
+    if (permissionResult != true) {
       await HmsScanPermissions.requestCameraAndStoragePermissions();
     } else {
       setState(() {

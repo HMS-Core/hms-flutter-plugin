@@ -54,7 +54,7 @@ public class ScanPlugin implements FlutterPlugin, ActivityAware {
     private MethodChannel remoteViewChannel;
 
     private void initChannels(final BinaryMessenger messenger) {
-        //init channels
+        // init channels
         permissionChannel = new MethodChannel(messenger, "permissionChannel");
         scanUtilsChannel = new MethodChannel(messenger, "scanUtilsChannel");
         multiProcessorChannel = new MethodChannel(messenger, "multiProcessorChannel");
@@ -103,7 +103,7 @@ public class ScanPlugin implements FlutterPlugin, ActivityAware {
     }
 
     private void removeChannels() {
-        //remove channels
+        // remove channels
         permissionChannel = null;
         scanUtilsChannel = null;
         multiProcessorChannel = null;

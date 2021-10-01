@@ -35,6 +35,8 @@ class MultiProcessorCamera {
 
     /**
      * Open up the camera.
+     * @param holder SurfaceHolder
+     * @throws IOException
      */
     synchronized void open(SurfaceHolder holder) throws IOException {
         camera = Camera.open();
@@ -73,7 +75,7 @@ class MultiProcessorCamera {
             frameCallback.setProperties(handler);
             double defaultZoom = 1.0;
             if (camera.getParameters().isZoomSupported() && zoomValue != defaultZoom) {
-                //Auto zoom.
+                // Auto zoom.
                 parameters.setZoom(convertZoomInt(zoomValue));
                 camera.setParameters(parameters);
             }

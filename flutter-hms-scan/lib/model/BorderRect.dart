@@ -16,6 +16,8 @@
 
 import 'dart:math' show min, max;
 import 'dart:ui' show hashValues;
+import 'package:flutter/foundation.dart';
+
 import 'CornerPoint.dart';
 
 class HmsBorderRect {
@@ -24,20 +26,20 @@ class HmsBorderRect {
   int right = -2147483648;
   int bottom = -2147483648;
 
-  double exactCenterX;
-  double exactCenterY;
-  int centerX;
-  int centerY;
-  List<CornerPoint> cornerPointsList;
+  double? exactCenterX;
+  double? exactCenterY;
+  int? centerX;
+  int? centerY;
+  List<CornerPoint?>? cornerPointsList;
 
-  HmsBorderRect(List<CornerPoint> cornerPoints) {
+  HmsBorderRect(List<CornerPoint?>? cornerPoints) {
     cornerPointsList = cornerPoints;
-    for (int i = 0; i < cornerPointsList.length; ++i) {
-      CornerPoint point = cornerPointsList[i];
-      left = min(left, point.x);
-      top = min(top, point.y);
-      right = max(right, point.x);
-      bottom = max(bottom, point.y);
+    for (int i = 0; i < (cornerPointsList?.length ?? 0); ++i) {
+      CornerPoint? point = cornerPointsList![i];
+      left = min(left, point?.x ?? left);
+      top = min(top, point?.y ?? top);
+      right = max(right, point?.x ?? right);
+      bottom = max(bottom, point?.y ?? bottom);
     }
     exactCenterX = (left + right) * 0.5;
     exactCenterY = (top + bottom) * 0.5;
@@ -49,17 +51,16 @@ class HmsBorderRect {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final HmsBorderRect check = o;
     return o is HmsBorderRect &&
-        check.left == left &&
-        check.top == top &&
-        check.right == right &&
-        check.bottom == bottom &&
-        check.exactCenterX == exactCenterX &&
-        check.exactCenterY == exactCenterY &&
-        check.centerX == centerX &&
-        check.centerY == centerY &&
-        check.cornerPointsList == cornerPointsList;
+        o.left == left &&
+        o.top == top &&
+        o.right == right &&
+        o.bottom == bottom &&
+        o.exactCenterX == exactCenterX &&
+        o.exactCenterY == exactCenterY &&
+        o.centerX == centerX &&
+        o.centerY == centerY &&
+        listEquals(o.cornerPointsList, cornerPointsList);
   }
 
   @override

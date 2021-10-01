@@ -15,14 +15,14 @@
 */
 
 import 'dart:convert' show json;
-import 'package:flutter/foundation.dart' show required;
+import 'package:flutter/foundation.dart' show listEquals;
 import 'dart:ui' show hashValues;
 
 class DefaultViewRequest {
-  int scanType;
-  List<int> additionalScanTypes;
+  int? scanType;
+  List<int>? additionalScanTypes;
 
-  DefaultViewRequest({@required this.scanType, this.additionalScanTypes});
+  DefaultViewRequest({this.scanType, this.additionalScanTypes});
 
   factory DefaultViewRequest.fromJson(String str) =>
       DefaultViewRequest.fromMap(json.decode(str));
@@ -43,10 +43,9 @@ class DefaultViewRequest {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final DefaultViewRequest check = o;
     return o is DefaultViewRequest &&
-        check.scanType == scanType &&
-        check.additionalScanTypes == additionalScanTypes;
+        o.scanType == scanType &&
+        listEquals(o.additionalScanTypes, additionalScanTypes);
   }
 
   @override

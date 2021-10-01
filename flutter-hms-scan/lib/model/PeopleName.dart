@@ -28,13 +28,13 @@ class PeopleName {
     this.spelling,
   });
 
-  String familyName;
-  String fullName;
-  String givenName;
-  String middleName;
-  String namePrefix;
-  String nameSuffix;
-  String spelling;
+  String? familyName;
+  String? fullName;
+  String? givenName;
+  String? middleName;
+  String? namePrefix;
+  String? nameSuffix;
+  String? spelling;
 
   factory PeopleName.fromJson(String str) =>
       PeopleName.fromMap(json.decode(str));
@@ -65,15 +65,14 @@ class PeopleName {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final PeopleName check = o;
     return o is PeopleName &&
-        check.familyName == familyName &&
-        check.fullName == fullName &&
-        check.givenName == givenName &&
-        check.middleName == middleName &&
-        check.namePrefix == namePrefix &&
-        check.nameSuffix == nameSuffix &&
-        check.spelling == spelling;
+        o.familyName == familyName &&
+        o.fullName == fullName &&
+        o.givenName == givenName &&
+        o.middleName == middleName &&
+        o.namePrefix == namePrefix &&
+        o.nameSuffix == nameSuffix &&
+        o.spelling == spelling;
   }
 
   @override

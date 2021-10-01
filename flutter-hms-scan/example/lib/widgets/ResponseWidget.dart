@@ -18,10 +18,10 @@ import 'package:flutter/material.dart';
 import 'package:huawei_scan_example/Utils.dart';
 
 class ResponseWidget extends StatelessWidget {
-  final int codeFormat;
-  final int resultType;
-  final String result;
-  final bool isMulti;
+  final int? codeFormat;
+  final int? resultType;
+  final String? result;
+  final bool? isMulti;
 
   ResponseWidget({this.codeFormat, this.result, this.resultType, this.isMulti});
 
@@ -75,7 +75,7 @@ class ResponseWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              Text(result),
+              Text(result ?? ''),
               isMulti != false
                   ? SizedBox(
                       height: 16.0,

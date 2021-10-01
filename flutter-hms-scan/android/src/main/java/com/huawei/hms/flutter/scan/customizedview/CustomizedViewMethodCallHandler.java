@@ -56,7 +56,7 @@ public class CustomizedViewMethodCallHandler implements MethodChannel.MethodCall
     }
 
     private void customizedView(MethodCall call, MethodChannel.Result result) {
-        //Arguments from call
+        // Arguments from call
         int scanType = ValueGetter.getInt("scanType", call);
         List<Integer> additionalScanTypes = call.argument("additionalScanTypes");
         int[] scanTypesIntArray = null;
@@ -71,18 +71,18 @@ public class CustomizedViewMethodCallHandler implements MethodChannel.MethodCall
         boolean continuouslyScan = ValueGetter.getBoolean("continuouslyScan", call);
         boolean enableReturnBitmap = ValueGetter.getBoolean("enableReturnBitmap", call);
 
-        //List<Integer> to int[]
+        // List<Integer> to int[]
         if (additionalScanTypes != null) {
             scanTypesIntArray = ValueGetter.scanTypesListToArray(additionalScanTypes);
         }
 
-        //Intent
+        // Intent
         Intent intent = new Intent(mActivity, CustomizedViewActivity.class);
 
         intent.putExtra(Constants.CHANNEL_ID_KEY, customizedChannelId);
         intent.putExtra(Constants.CHANNEL_REMOTE_KEY, remoteChannelId);
 
-        //Intent extras
+        // Intent extras
         intent.putExtra("scanType", scanType);
         if (additionalScanTypes != null) {
             intent.putExtra("additionalScanTypes", scanTypesIntArray);
@@ -96,7 +96,7 @@ public class CustomizedViewMethodCallHandler implements MethodChannel.MethodCall
         intent.putExtra("continuouslyScan", continuouslyScan);
         intent.putExtra("enableReturnBitmap", enableReturnBitmap);
 
-        //Start intent for customized view
+        // Start intent for customized view
         mActivity.startActivity(intent);
         result.success(true);
     }

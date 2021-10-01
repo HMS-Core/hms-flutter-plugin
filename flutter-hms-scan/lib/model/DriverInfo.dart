@@ -34,20 +34,20 @@ class DriverInfo {
       this.sex,
       this.zipCode});
 
-  String avenue;
-  String certificateNumber;
-  String certificateType;
-  String city;
-  String countryOfIssue;
-  String dateOfBirth;
-  String dateOfExpire;
-  String dateOfIssue;
-  String familyName;
-  String givenName;
-  String middleName;
-  String province;
-  String sex;
-  String zipCode;
+  String? avenue;
+  String? certificateNumber;
+  String? certificateType;
+  String? city;
+  String? countryOfIssue;
+  String? dateOfBirth;
+  String? dateOfExpire;
+  String? dateOfIssue;
+  String? familyName;
+  String? givenName;
+  String? middleName;
+  String? province;
+  String? sex;
+  String? zipCode;
 
   factory DriverInfo.fromJson(String str) =>
       DriverInfo.fromMap(json.decode(str));
@@ -98,22 +98,21 @@ class DriverInfo {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final DriverInfo check = o;
     return o is DriverInfo &&
-        check.avenue == avenue &&
-        check.certificateNumber == certificateNumber &&
-        check.certificateType == certificateType &&
-        check.city == city &&
-        check.countryOfIssue == countryOfIssue &&
-        check.dateOfBirth == dateOfBirth &&
-        check.dateOfExpire == dateOfExpire &&
-        check.dateOfIssue == dateOfIssue &&
-        check.familyName == familyName &&
-        check.givenName == givenName &&
-        check.middleName == middleName &&
-        check.province == province &&
-        check.sex == sex &&
-        check.zipCode == zipCode;
+        o.avenue == avenue &&
+        o.certificateNumber == certificateNumber &&
+        o.certificateType == certificateType &&
+        o.city == city &&
+        o.countryOfIssue == countryOfIssue &&
+        o.dateOfBirth == dateOfBirth &&
+        o.dateOfExpire == dateOfExpire &&
+        o.dateOfIssue == dateOfIssue &&
+        o.familyName == familyName &&
+        o.givenName == givenName &&
+        o.middleName == middleName &&
+        o.province == province &&
+        o.sex == sex &&
+        o.zipCode == zipCode;
   }
 
   @override

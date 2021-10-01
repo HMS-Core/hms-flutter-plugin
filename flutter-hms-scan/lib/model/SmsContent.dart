@@ -23,8 +23,8 @@ class SmsContent {
     this.destPhoneNumber,
   });
 
-  String msgContent;
-  String destPhoneNumber;
+  String? msgContent;
+  String? destPhoneNumber;
 
   factory SmsContent.fromJson(String str) =>
       SmsContent.fromMap(json.decode(str));
@@ -46,10 +46,9 @@ class SmsContent {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final SmsContent check = o;
     return o is SmsContent &&
-        check.msgContent == msgContent &&
-        check.destPhoneNumber == destPhoneNumber;
+        o.msgContent == msgContent &&
+        o.destPhoneNumber == destPhoneNumber;
   }
 
   @override

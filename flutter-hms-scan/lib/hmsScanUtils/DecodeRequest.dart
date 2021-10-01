@@ -15,17 +15,16 @@
 */
 
 import 'dart:typed_data' show Uint8List;
-import 'package:flutter/foundation.dart' show required;
+import 'package:flutter/foundation.dart' show listEquals;
 import 'dart:ui' show hashValues;
 
 class DecodeRequest {
-  Uint8List data;
-  String dataString;
-  int scanType;
-  List<int> additionalScanTypes;
+  Uint8List? data;
+  String? dataString;
+  int? scanType;
+  List<int>? additionalScanTypes;
 
-  DecodeRequest(
-      {@required this.data, @required this.scanType, this.additionalScanTypes});
+  DecodeRequest({this.data, this.scanType, this.additionalScanTypes});
 
   DecodeRequest.fromJson(Map<dynamic, dynamic> json) {
     data = json["data"];
@@ -54,12 +53,11 @@ class DecodeRequest {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final DecodeRequest check = o;
     return o is DecodeRequest &&
-        check.data == data &&
-        check.dataString == dataString &&
-        check.scanType == scanType &&
-        check.additionalScanTypes == additionalScanTypes;
+        o.data == data &&
+        o.dataString == dataString &&
+        o.scanType == scanType &&
+        listEquals(o.additionalScanTypes, additionalScanTypes);
   }
 
   @override

@@ -19,11 +19,11 @@ import 'hmsCustomizedView/HmsCustomizedView.dart';
 import 'hmsMultiProcessor/HmsMultiProcessor.dart';
 
 class HmsScan {
-  MethodChannel _permissionChannel;
-  MethodChannel _scanUtilsChannel;
-  MethodChannel _multiProcessorChannel;
-  MethodChannel _customizedViewChannel;
-  MethodChannel _remoteViewChannel;
+  late MethodChannel _permissionChannel;
+  late MethodChannel _scanUtilsChannel;
+  late MethodChannel _multiProcessorChannel;
+  late MethodChannel _customizedViewChannel;
+  late MethodChannel _remoteViewChannel;
 
   HmsScan.private(
     MethodChannel permissionChannel,

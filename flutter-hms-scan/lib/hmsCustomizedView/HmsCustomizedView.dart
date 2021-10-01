@@ -20,47 +20,48 @@ import 'package:huawei_scan/HmsScan.dart';
 import 'package:huawei_scan/model/ScanResponse.dart';
 
 class HmsCustomizedView {
-  static CustomizedViewRequest customizedViewRequest;
+  static CustomizedViewRequest? customizedViewRequest;
 
   static Future<dynamic> customizedMethodCallHandler(MethodCall call) async {
     if (call.method == "CustomizedViewResponse") {
       ScanResponse response = ScanResponse.fromMap(Map<String, dynamic>.from(
         call.arguments,
       ));
-      HmsCustomizedView.customizedViewRequest
-          .customizedCameraListener(response);
+      HmsCustomizedView.customizedViewRequest?.customizedCameraListener
+          ?.call(response);
     }
   }
 
   static Future<dynamic> listenCustomizedLifecycle(MethodCall call) async {
     switch (call.method) {
       case "onStart":
-        customizedViewRequest
-            .customizedLifeCycleListener(CustomizedViewEvent.onStart);
+        customizedViewRequest?.customizedLifeCycleListener
+            ?.call(CustomizedViewEvent.onStart);
         break;
       case "onResume":
-        customizedViewRequest
-            .customizedLifeCycleListener(CustomizedViewEvent.onResume);
+        customizedViewRequest?.customizedLifeCycleListener
+            ?.call(CustomizedViewEvent.onResume);
         break;
       case "onPause":
-        customizedViewRequest
-            .customizedLifeCycleListener(CustomizedViewEvent.onPause);
+        customizedViewRequest?.customizedLifeCycleListener
+            ?.call(CustomizedViewEvent.onPause);
         break;
       case "onDestroy":
-        customizedViewRequest
-            .customizedLifeCycleListener(CustomizedViewEvent.onDestroy);
+        customizedViewRequest?.customizedLifeCycleListener
+            ?.call(CustomizedViewEvent.onDestroy);
         customizedViewRequest = null;
         break;
       case "onStop":
-        customizedViewRequest
-            .customizedLifeCycleListener(CustomizedViewEvent.onStop);
+        customizedViewRequest?.customizedLifeCycleListener
+            ?.call(CustomizedViewEvent.onStop);
         break;
     }
   }
 
-  static Future<bool> startCustomizedView(CustomizedViewRequest request) async {
+  static Future<bool?> startCustomizedView(
+      CustomizedViewRequest request) async {
     customizedViewRequest = request;
-    bool result = await HmsScan.instance.customizedViewChannel.invokeMethod(
+    bool? result = await HmsScan.instance.customizedViewChannel.invokeMethod(
       "customizedView",
       request.toMap(),
     );
@@ -79,7 +80,7 @@ class HmsCustomizedView {
     await HmsScan.instance.remoteViewChannel.invokeMethod("switchLight");
   }
 
-  static Future<bool> getLightStatus() async {
+  static Future<bool?> getLightStatus() async {
     return await HmsScan.instance.remoteViewChannel
         .invokeMethod("getLightStatus");
   }

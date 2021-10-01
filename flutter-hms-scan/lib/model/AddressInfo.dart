@@ -17,6 +17,8 @@
 import 'dart:convert' show json;
 import 'dart:ui' show hashValues;
 
+import 'package:flutter/foundation.dart';
+
 class AddressInfo {
   static const int ResidentialUseType = 0;
   static const int OtherUseType = -1;
@@ -27,8 +29,8 @@ class AddressInfo {
     this.addressType,
   });
 
-  List<String> addressDetails;
-  int addressType;
+  List<String?>? addressDetails;
+  int? addressType;
 
   factory AddressInfo.fromJson(String str) =>
       AddressInfo.fromMap(json.decode(str));
@@ -38,7 +40,7 @@ class AddressInfo {
   factory AddressInfo.fromMap(Map<String, dynamic> json) => AddressInfo(
         addressDetails: json["addressDetails"] == null
             ? null
-            : List<String>.from(json["addressDetails"].map((x) => x)),
+            : List<String?>.from(json["addressDetails"].map((x) => x)),
         addressType:
             json["addressType"] == null ? null : json["addressType"].round(),
       );
@@ -46,7 +48,7 @@ class AddressInfo {
   Map<String, dynamic> toMap() => {
         "addressDetails": addressDetails == null
             ? null
-            : List<dynamic>.from(addressDetails.map((x) => x)),
+            : List<dynamic>.from(addressDetails!.map((x) => x)),
         "addressType": addressType == null ? null : addressType,
       };
 
@@ -54,10 +56,9 @@ class AddressInfo {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final AddressInfo check = o;
     return o is AddressInfo &&
-        check.addressDetails == addressDetails &&
-        check.addressType == addressType;
+        listEquals(o.addressDetails, addressDetails) &&
+        o.addressType == addressType;
   }
 
   @override

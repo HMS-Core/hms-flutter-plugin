@@ -15,8 +15,8 @@
 */
 
 class HmsScanError {
-  final String errorCode;
-  final String errorMessage;
+  final String? errorCode;
+  final String? errorMessage;
 
   const HmsScanError({this.errorCode, this.errorMessage});
 }

@@ -77,17 +77,17 @@ public class ValueGetter {
     }
 
     public static HmsScanAnalyzer analyzerForMultiDecoders(MethodCall call, Activity mActivity) {
-        //Arguments from call
+        // Arguments from call
         int scanType = ValueGetter.getInt("scanType", call);
         List<Integer> additionalScanTypes = call.argument("additionalScanTypes");
         int[] scanTypesIntArray = null;
 
-        //List<Integer> to int[]
+        // List<Integer> to int[]
         if (additionalScanTypes != null) {
             scanTypesIntArray = ValueGetter.scanTypesListToArray(additionalScanTypes);
         }
 
-        //Analyzer options
+        // Analyzer options
         return new HmsScanAnalyzer.Creator(mActivity).setHmsScanTypes(scanType, scanTypesIntArray).create();
     }
 
@@ -95,7 +95,7 @@ public class ValueGetter {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String data = ValueGetter.getString(key, call);
 
-        //Build bitmap from data
+        // Build bitmap from data
         byte[] parsed = gson.fromJson(data, byte[].class);
         return BitmapFactory.decodeByteArray(parsed, 0, parsed.length);
     }

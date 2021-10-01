@@ -15,8 +15,9 @@
 */
 
 import 'dart:convert' show json;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' show Color, Colors;
-import 'package:flutter/foundation.dart' show required;
+
 import 'package:huawei_scan/hmsMultiProcessor/ScanTextOptions.dart';
 import 'dart:ui' show hashValues;
 import 'package:huawei_scan/model/ScanResponse.dart';
@@ -24,25 +25,24 @@ import 'package:huawei_scan/model/ScanResponse.dart';
 typedef MultiCameraListener(ScanResponse response);
 
 class MultiCameraRequest {
-  int scanMode;
-  int scanType;
-  List<int> additionalScanTypes;
+  int? scanMode;
+  int? scanType;
+  List<int>? additionalScanTypes;
 
-  List<Color> colorList;
-  List<String> colorListIntValues = [];
+  List<Color>? colorList;
   static const List<Color> defaultColorList = [Colors.yellow];
 
-  double strokeWidth;
+  double? strokeWidth;
 
-  bool isGalleryAvailable;
+  bool? isGalleryAvailable;
 
-  ScanTextOptions scanTextOptions;
+  ScanTextOptions? scanTextOptions;
 
-  MultiCameraListener multiCameraListener;
+  MultiCameraListener? multiCameraListener;
 
   MultiCameraRequest({
-    @required this.scanType,
-    @required this.scanMode,
+    this.scanType,
+    this.scanMode,
     this.multiCameraListener,
     this.additionalScanTypes,
     this.colorList = defaultColorList,
@@ -76,9 +76,9 @@ class MultiCameraRequest {
       );
 
   Map<dynamic, dynamic> toMap() {
-    colorListIntValues = [];
-    for (int i = 0; i < colorList.length; i++) {
-      colorListIntValues.add(colorList[i].value.toString());
+    List<String> colorListIntValues = [];
+    for (int i = 0; i < (colorList?.length ?? 0); i++) {
+      colorListIntValues.add(colorList![i].value.toString());
     }
     return {
       "scanType": scanType,
@@ -88,7 +88,7 @@ class MultiCameraRequest {
       "strokeWidth": strokeWidth,
       "isGalleryAvailable": isGalleryAvailable,
       "scanTextOptions":
-          scanTextOptions == null ? null : scanTextOptions.toJson()
+          scanTextOptions == null ? null : scanTextOptions!.toJson()
     };
   }
 
@@ -96,16 +96,15 @@ class MultiCameraRequest {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final MultiCameraRequest check = o;
     return o is MultiCameraRequest &&
-        check.scanType == scanType &&
-        check.scanMode == scanMode &&
-        check.multiCameraListener == multiCameraListener &&
-        check.additionalScanTypes == additionalScanTypes &&
-        check.colorList == colorList &&
-        check.scanTextOptions == scanTextOptions &&
-        check.strokeWidth == strokeWidth &&
-        check.isGalleryAvailable == isGalleryAvailable;
+        o.scanType == scanType &&
+        o.scanMode == scanMode &&
+        o.multiCameraListener == multiCameraListener &&
+        listEquals(o.additionalScanTypes, additionalScanTypes) &&
+        listEquals(o.colorList, colorList) &&
+        o.scanTextOptions == scanTextOptions &&
+        o.strokeWidth == strokeWidth &&
+        o.isGalleryAvailable == isGalleryAvailable;
   }
 
   @override

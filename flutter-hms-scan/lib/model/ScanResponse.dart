@@ -18,6 +18,8 @@ import 'dart:convert' show json;
 import 'dart:typed_data';
 import 'dart:ui' show hashValues;
 
+import 'package:flutter/foundation.dart';
+
 import 'BorderRect.dart';
 import 'CornerPoint.dart';
 import 'SmsContent.dart';
@@ -52,26 +54,26 @@ class ScanResponse {
     this.eventInfo,
   });
 
-  int hmsScanVersion;
-  List<CornerPoint> cornerPoints;
-  List<int> originValueByte;
-  String originalValue;
-  int scanType;
-  int scanTypeForm;
-  String showResult;
-  double zoomValue;
-  Uint8List originalBitmap;
+  int? hmsScanVersion;
+  List<CornerPoint?>? cornerPoints;
+  List<int?>? originValueByte;
+  String? originalValue;
+  int? scanType;
+  int? scanTypeForm;
+  String? showResult;
+  double? zoomValue;
+  Uint8List? originalBitmap;
 
-  SmsContent smsContent;
-  EmailContent emailContent;
-  TelPhoneNumber telPhoneNumber;
-  LinkUrl linkUrl;
-  WiFiConnectionInfo wifiConnectionInfo;
-  LocationCoordinate locationCoordinate;
-  DriverInfo driverInfo;
-  ContactDetail contactDetail;
-  EventInfo eventInfo;
-  HmsBorderRect borderRect;
+  SmsContent? smsContent;
+  EmailContent? emailContent;
+  TelPhoneNumber? telPhoneNumber;
+  LinkUrl? linkUrl;
+  WiFiConnectionInfo? wifiConnectionInfo;
+  LocationCoordinate? locationCoordinate;
+  DriverInfo? driverInfo;
+  ContactDetail? contactDetail;
+  EventInfo? eventInfo;
+  HmsBorderRect? borderRect;
 
   factory ScanResponse.fromJson(String str) =>
       ScanResponse.fromMap(json.decode(str));
@@ -83,11 +85,13 @@ class ScanResponse {
           : json["HMS_SCAN_VERSION"].round(),
       cornerPoints: json["cornerPoints"] == null
           ? null
-          : List<CornerPoint>.from(json["cornerPoints"]
-              .map((x) => CornerPoint.fromMap(Map<String, dynamic>.from(x)))),
+          : List<CornerPoint?>.from(json["cornerPoints"].map((x) => x == null
+              ? null
+              : CornerPoint.fromMap(Map<String, dynamic>.from(x)))),
       originValueByte: json["originValueByte"] == null
           ? null
-          : List<int>.from(json["originValueByte"].map((x) => x.round())),
+          : List<int?>.from(
+              json["originValueByte"].map((x) => x == null ? null : x.round())),
       originalValue:
           json["originalValue"] == null ? null : json["originalValue"],
       scanType: json["scanType"] == null ? null : json["scanType"].round(),
@@ -141,27 +145,27 @@ class ScanResponse {
         "HMS_SCAN_VERSION": hmsScanVersion == null ? null : hmsScanVersion,
         "cornerPoints": cornerPoints == null
             ? null
-            : List<dynamic>.from(cornerPoints.map((x) => x.toMap())),
+            : List<dynamic>.from(cornerPoints!.map((x) => x?.toMap())),
         "originValueByte": originValueByte == null
             ? null
-            : List<dynamic>.from(originValueByte.map((x) => x)),
+            : List<dynamic>.from(originValueByte!.map((x) => x)),
         "originalValue": originalValue == null ? null : originalValue,
         "scanType": scanType == null ? null : scanType,
         "scanTypeForm": scanTypeForm == null ? null : scanTypeForm,
         "showResult": showResult == null ? null : showResult,
         "zoomValue": zoomValue == null ? null : zoomValue,
-        "smsContent": smsContent == null ? null : smsContent.toMap(),
-        "emailContent": emailContent == null ? null : emailContent.toMap(),
+        "smsContent": smsContent == null ? null : smsContent!.toMap(),
+        "emailContent": emailContent == null ? null : emailContent!.toMap(),
         "telPhoneNumber":
-            telPhoneNumber == null ? null : telPhoneNumber.toMap(),
-        "linkUrl": linkUrl == null ? null : linkUrl.toMap(),
+            telPhoneNumber == null ? null : telPhoneNumber!.toMap(),
+        "linkUrl": linkUrl == null ? null : linkUrl!.toMap(),
         "wifiConnectionInfo":
-            wifiConnectionInfo == null ? null : wifiConnectionInfo.toMap(),
+            wifiConnectionInfo == null ? null : wifiConnectionInfo!.toMap(),
         "locationCoordinate":
-            locationCoordinate == null ? null : locationCoordinate.toMap(),
-        "driverInfo": driverInfo == null ? null : driverInfo.toMap(),
-        "contactDetail": contactDetail == null ? null : contactDetail.toMap(),
-        "eventInfo": eventInfo == null ? null : eventInfo.toMap(),
+            locationCoordinate == null ? null : locationCoordinate!.toMap(),
+        "driverInfo": driverInfo == null ? null : driverInfo!.toMap(),
+        "contactDetail": contactDetail == null ? null : contactDetail!.toMap(),
+        "eventInfo": eventInfo == null ? null : eventInfo!.toMap(),
         "originalBitmap": originalBitmap,
       };
 
@@ -169,27 +173,26 @@ class ScanResponse {
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
     if (runtimeType != o.runtimeType) return false;
-    final ScanResponse check = o;
     return o is ScanResponse &&
-        check.hmsScanVersion == hmsScanVersion &&
-        check.cornerPoints == cornerPoints &&
-        check.originValueByte == originValueByte &&
-        check.originalValue == originalValue &&
-        check.scanType == scanType &&
-        check.scanTypeForm == scanTypeForm &&
-        check.showResult == showResult &&
-        check.zoomValue == zoomValue &&
-        check.smsContent == smsContent &&
-        check.emailContent == emailContent &&
-        check.telPhoneNumber == telPhoneNumber &&
-        check.linkUrl == linkUrl &&
-        check.wifiConnectionInfo == wifiConnectionInfo &&
-        check.locationCoordinate == locationCoordinate &&
-        check.driverInfo == driverInfo &&
-        check.contactDetail == contactDetail &&
-        check.eventInfo == eventInfo &&
-        check.borderRect == borderRect &&
-        check.originalBitmap == originalBitmap;
+        o.hmsScanVersion == hmsScanVersion &&
+        listEquals(o.cornerPoints, cornerPoints) &&
+        listEquals(o.originValueByte, originValueByte) &&
+        o.originalValue == originalValue &&
+        o.scanType == scanType &&
+        o.scanTypeForm == scanTypeForm &&
+        o.showResult == showResult &&
+        o.zoomValue == zoomValue &&
+        o.smsContent == smsContent &&
+        o.emailContent == emailContent &&
+        o.telPhoneNumber == telPhoneNumber &&
+        o.linkUrl == linkUrl &&
+        o.wifiConnectionInfo == wifiConnectionInfo &&
+        o.locationCoordinate == locationCoordinate &&
+        o.driverInfo == driverInfo &&
+        o.contactDetail == contactDetail &&
+        o.eventInfo == eventInfo &&
+        o.borderRect == borderRect &&
+        o.originalBitmap == originalBitmap;
   }
 
   @override

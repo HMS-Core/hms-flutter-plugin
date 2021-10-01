@@ -92,13 +92,13 @@ public class MultiProcessorMethodCallHandler
     }
 
     private void multiProcessorCamera(MethodCall call, MethodChannel.Result result) {
-        //Arguments from call
+        // Arguments from call
         int scanMode = ValueGetter.getInt("scanMode", call);
         int scanType = ValueGetter.getInt("scanType", call);
         List<Integer> additionalScanTypes = call.argument("additionalScanTypes");
         int[] scanTypesIntArray = null;
 
-        //List<Integer> to int[]
+        // List<Integer> to int[]
         if (additionalScanTypes != null) {
             scanTypesIntArray = new int[additionalScanTypes.size()];
             for (int i = 0; i < additionalScanTypes.size(); i++) {
@@ -106,7 +106,7 @@ public class MultiProcessorMethodCallHandler
             }
         }
 
-        //Camera color options
+        // Camera color options
         List<String> colorList = call.argument("colorList");
         long[] colorListAsLongArray = null;
         if (colorList != null) {
@@ -116,7 +116,7 @@ public class MultiProcessorMethodCallHandler
             }
         }
 
-        //Camera Frame options
+        // Camera Frame options
         float strokeWidth = ValueGetter.getFloat("strokeWidth", call);
 
         ScanTextOptions scanTextOptions;
@@ -127,15 +127,15 @@ public class MultiProcessorMethodCallHandler
             scanTextOptions = gson.fromJson((String) call.argument("scanTextOptions"), ScanTextOptions.class);
         }
 
-        //Gallery Button
+        // Gallery Button
         boolean isGalleryAvailable = ValueGetter.getBoolean("isGalleryAvailable", call);
 
-        //Intent
+        // Intent
         Intent intent = new Intent(mActivity, MultiProcessorActivity.class);
 
         intent.putExtra(Constants.CHANNEL_ID_KEY, channelId);
 
-        //Intent extras
+        // Intent extras
         intent.putExtra("scanType", scanType);
         if (additionalScanTypes != null) {
             intent.putExtra("additionalScanTypes", scanTypesIntArray);
@@ -154,10 +154,10 @@ public class MultiProcessorMethodCallHandler
         intent.putExtra("minTextSize", scanTextOptions.getMinTextSize());
         intent.putExtra("granularity", scanTextOptions.getGranularity());
 
-        //Multiprocessor Camera Mode
+        // Multiprocessor Camera Mode
         intent.putExtra("scanMode", scanMode);
 
-        //Start intent for multi processor camera
+        // Start intent for multi processor camera
         if (scanMode == MULTIPROCESSOR_ASYNC_CODE || scanMode == MULTIPROCESSOR_SYNC_CODE) {
             mActivity.startActivityForResult(intent, REQUEST_CODE_SCAN_MULTI);
         } else {
@@ -168,20 +168,20 @@ public class MultiProcessorMethodCallHandler
     }
 
     private void decodeMultiSync(MethodCall call, MethodChannel.Result result) {
-        //Analyzer options
+        // Analyzer options
         HmsScanAnalyzer analyzer = ValueGetter.analyzerForMultiDecoders(call, mActivity);
 
-        //ML Frame from Bitmap
+        // ML Frame from Bitmap
         MLFrame image = MLFrame.fromBitmap(ValueGetter.bitmapForDecoders(call, "data"));
 
         if (analyzerIsAvailableWithLogger(mActivity.getApplicationContext(), analyzer,
             "MultiProcessorMethodCallHandler")) {
-            //Scan Results
+            // Scan Results
             mHMSLogger.startMethodExecutionTimer("MultiProcessorMethodCallHandler.decodeMultiSync");
             SparseArray<HmsScan> scanResult = analyzer.analyseFrame(image);
             mHMSLogger.sendSingleEvent("MultiProcessorMethodCallHandler.decodeMultiSync");
 
-            //Response to Flutter Side
+            // Response to Flutter Side
             if (scanResult != null && scanResult.size() > 0 && scanResult.valueAt(0) != null && !TextUtils.isEmpty(
                 scanResult.valueAt(0).getOriginalValue())) {
                 HmsScan[] info = new HmsScan[scanResult.size()];
@@ -201,13 +201,13 @@ public class MultiProcessorMethodCallHandler
     }
 
     private void decodeMultiAsync(MethodCall call, final MethodChannel.Result result) {
-        //Analyzer options
+        // Analyzer options
         HmsScanAnalyzer analyzer = ValueGetter.analyzerForMultiDecoders(call, mActivity);
 
-        //ML Frame from Bitmap
+        // ML Frame from Bitmap
         MLFrame image = MLFrame.fromBitmap(ValueGetter.bitmapForDecoders(call, "data"));
 
-        //onSuccess and onFailure of analyzeInAsync
+        // onSuccess and onFailure of analyzeInAsync
         if (analyzerIsAvailableWithLogger(mActivity.getApplicationContext(), analyzer,
             "MultiProcessorMethodCallHandler")) {
             mHMSLogger.startMethodExecutionTimer("MultiProcessorMethodCallHandler.decodeMultiAsync");
@@ -249,18 +249,18 @@ public class MultiProcessorMethodCallHandler
 
     @Override
     public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-        //onActivityResult control
+        // onActivityResult control
         if (resultCode != RESULT_OK || data == null) {
             return false;
         }
-        //Request Code control
-        //Multiprocessor Camera
+        // Request Code control
+        // Multiprocessor Camera
         if (requestCode == REQUEST_CODE_SCAN_MULTI) {
             Parcelable[] obj = data.getParcelableArrayExtra(ScanUtil.RESULT);
             if (obj != null && obj.length > 0) {
-                //Sending Result
+                // Sending Result
                 pendingResult.success(gson.toJson(obj));
-                pendingResult = null; //reset
+                pendingResult = null; // reset
             }
         } else {
             pendingResult = null;
