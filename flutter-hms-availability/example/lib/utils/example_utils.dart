@@ -19,11 +19,12 @@ import 'package:flutter/material.dart';
 Widget customButton(String title, VoidCallback callback) => Container(
       width: double.infinity,
       margin: EdgeInsets.fromLTRB(10, 10, 10, 5),
-      child: RaisedButton(
+      child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.symmetric(vertical: 15),
+              primary: Colors.blueAccent,
+              onPrimary: Colors.white,
+              elevation: 0),
           child: Text(title.toUpperCase()),
-          elevation: 0,
-          padding: EdgeInsets.symmetric(vertical: 15),
-          color: Colors.blueAccent,
-          textColor: Colors.white,
           onPressed: callback),
     );

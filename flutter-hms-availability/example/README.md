@@ -1,6 +1,6 @@
 # huawei_availability_example
 
-Demonstrates how to use the huawei_availability plugin.
+Demonstrates how to use the huawei_hmsavailability plugin.
 
 ## Getting Started
 

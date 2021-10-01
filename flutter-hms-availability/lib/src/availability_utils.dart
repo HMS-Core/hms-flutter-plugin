@@ -14,16 +14,12 @@
     limitations under the License.
 */
 
-void checkArguments(List<dynamic> args) {
-  if (args.contains(null))
-    throw new ArgumentError("Required parameters must not be null!");
-}
-
-typedef void AvailabilityResultListener(AvailabilityEvent event);
+typedef void AvailabilityResultListener(AvailabilityEvent? event);
 
 enum AvailabilityEvent { onDialogCanceled, resultOk, resultCanceled }
 
-AvailabilityEvent toAvailabilityEvent(String event) => availabilityMap[event];
+AvailabilityEvent? toAvailabilityEvent(String? event) =>
+    availabilityMap[event!];
 
 const Map<String, AvailabilityEvent> availabilityMap = {
   '-1': AvailabilityEvent.resultOk,

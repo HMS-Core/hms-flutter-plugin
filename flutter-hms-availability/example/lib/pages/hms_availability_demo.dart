@@ -24,7 +24,7 @@ class HmsAvailabilityDemo extends StatefulWidget {
 }
 
 class _HmsAvailabilityDemoState extends State<HmsAvailabilityDemo> {
-  HmsApiAvailability hmsApiAvailability;
+  late HmsApiAvailability hmsApiAvailability;
 
   String _result = "HMS availability result code: unknown";
   List<String> _eventList = ["Availability result events will be listed"];
@@ -45,22 +45,20 @@ class _HmsAvailabilityDemoState extends State<HmsAvailabilityDemo> {
       }
     } on Exception catch (e) {
       _updateList(e.toString());
-    } on Error catch (e) {
-      _updateList(e.toString());
     }
   }
 
   _getErrorDialog(int code) {
     // Set a listener to track events for activity results and dialog cancellations
-    hmsApiAvailability.setResultListener = ((AvailabilityEvent event) {
-      _updateList("Availability event: " + describeEnum(event));
+    hmsApiAvailability.setResultListener = ((AvailabilityEvent? event) {
+      if (event != null) {
+        _updateList("Availability event: " + describeEnum(event));
+      }
     });
 
     try {
       hmsApiAvailability.getErrorDialog(code, 1000, true);
     } on Exception catch (e) {
-      _updateList(e.toString());
-    } on Error catch (e) {
       _updateList(e.toString());
     }
   }
@@ -81,9 +79,9 @@ class _HmsAvailabilityDemoState extends State<HmsAvailabilityDemo> {
             Text(_result),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
-              child: RaisedButton(
-                  color: Color(0xff394867),
-                  textColor: Colors.white,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: Color(0xff394867), onPrimary: Colors.white),
                   child: Text("Check Hms Core Availability"),
                   onPressed: _getAvailability),
             ),

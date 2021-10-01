@@ -22,6 +22,7 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: HmsAvailabilityDemo(), debugShowCheckedModeBanner: false);
+    return MaterialApp(
+        home: HmsAvailabilityDemo(), debugShowCheckedModeBanner: false);
   }
 }

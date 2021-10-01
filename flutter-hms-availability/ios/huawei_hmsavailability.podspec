@@ -1,10 +1,10 @@
 #
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
-# Run `pod lib lint huawei_availability.podspec' to validate before publishing.
+# Run `pod lib lint huawei_hmsavailability.podspec' to validate before publishing.
 #
 Pod::Spec.new do |s|
   s.name             = 'huawei_hmsavailability'
-  s.version          = '5.2.0+300'
+  s.version          = '5.2.0+301'
   s.summary          = 'HUAWEI Availability Plugin for Flutter.'
   s.description      = <<-DESC
 HUAWEI Availability Plugin for Flutter. It allows you to detect whether HMS Core apk is installed on a device.

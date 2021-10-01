@@ -28,18 +28,12 @@ import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 public class HuaweiAvailabilityPlugin implements FlutterPlugin, ActivityAware {
     private FlutterPluginBinding mFlutterPluginBinding;
     private ActivityPluginBinding mActivityPluginBinding;
 
     private MethodChannel hmsAvailabilityChannel;
-
-    public static void registerWith(Registrar registrar) {
-        HuaweiAvailabilityPlugin plugin = new HuaweiAvailabilityPlugin();
-        plugin.onAttachedToEngine(registrar.messenger(), registrar.activity());
-    }
 
     private void onAttachedToEngine(final BinaryMessenger messenger, final Activity activity) {
         initChannels(messenger);

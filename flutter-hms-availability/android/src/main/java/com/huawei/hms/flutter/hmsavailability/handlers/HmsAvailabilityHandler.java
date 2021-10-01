@@ -119,10 +119,10 @@ public class HmsAvailabilityHandler implements MethodChannel.MethodCallHandler, 
         Integer minApkVersion = FromMap.toInteger("minApkVersion", call.argument("minApkVersion"));
 
         if (minApkVersion == null) {
-            Log.e(TAG, "Minimum apk version is null");
-            result.error(TAG, "Minimum apk version must not be null", Constants.NULL_PARAMETER);
+            result.error(TAG, "Apk version must not be null!", Constants.NULL_PARAMETER);
             return;
         }
+
         result.success(HuaweiApiAvailability.getInstance().isHuaweiMobileServicesAvailable(activity.getApplicationContext(), minApkVersion));
     }
 
@@ -135,8 +135,7 @@ public class HmsAvailabilityHandler implements MethodChannel.MethodCallHandler, 
         Boolean usePendingIntent = call.argument("usePendingIntent");
 
         if (errorCode == null) {
-            Log.e(TAG, "Error code is null");
-            result.error(TAG, "Error code must not be null", Constants.NULL_PARAMETER);
+            result.error(TAG, "Error code must not be null!", Constants.NULL_PARAMETER);
             return;
         }
 
@@ -148,14 +147,13 @@ public class HmsAvailabilityHandler implements MethodChannel.MethodCallHandler, 
         result.success(HuaweiApiAvailability.getInstance().isUserResolvableError(errorCode, !usePendingIntent ? null : pendingIntent));
     }
 
-    private void resolve(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+    private void resolve(@NonNull MethodCall call, MethodChannel.Result result) {
         Integer errCode = FromMap.toInteger("errCode", call.argument("errCode"));
         Integer reqCode = FromMap.toInteger("reqCode", call.argument("reqCode"));
         Boolean usePendingIntent = call.argument("usePendingIntent");
 
         if (errCode == null || reqCode == null) {
-            Log.e(TAG, "Error code or request code is null");
-            result.error(TAG, "Error code or request code must not be null", Constants.NULL_PARAMETER);
+            result.error(TAG, "Error and request codes must not be null!", Constants.NULL_PARAMETER);
             return;
         }
 
@@ -164,18 +162,16 @@ public class HmsAvailabilityHandler implements MethodChannel.MethodCallHandler, 
         }
 
         PendingIntent pendingIntent = HuaweiApiAvailability.getInstance().getResolveErrorPendingIntent(activity, errCode);
-
         HuaweiApiAvailability.getInstance().resolveError(activity, errCode, reqCode, !usePendingIntent ? null : pendingIntent);
     }
 
-    private void getErrorDialog(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+    private void getErrorDialog(@NonNull MethodCall call, MethodChannel.Result res) {
         Integer errC = FromMap.toInteger("errCode", call.argument("errCode"));
         Integer reqC = FromMap.toInteger("reqCode", call.argument("reqCode"));
         Boolean useCancelLis = call.argument("useCancelListener");
 
         if (errC == null || reqC == null) {
-            Log.e(TAG, "Error code or request code is null");
-            result.error(TAG, "Error code or request code must not be null", Constants.NULL_PARAMETER);
+            res.error(TAG, "Error and request codes must not be null!", Constants.NULL_PARAMETER);
             return;
         }
 
@@ -187,41 +183,42 @@ public class HmsAvailabilityHandler implements MethodChannel.MethodCallHandler, 
     }
 
     private void getErrorString(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-        Integer errCode = FromMap.toInteger("errCode", call.argument("errCode"));
+        Integer errCode1 = FromMap.toInteger("errCode", call.argument("errCode"));
 
-        if (errCode == null) {
-            Log.e(TAG, "Error code is null");
-            result.error(TAG, "Error code must not be null!", Constants.NULL_PARAMETER);
+        if (errCode1 == null) {
+            result.error(TAG, "Error code is null!", Constants.NULL_PARAMETER);
             return;
         }
-        result.success(HuaweiApiAvailability.getInstance().getErrorString(errCode));
+
+        result.success(HuaweiApiAvailability.getInstance().getErrorString(errCode1));
     }
 
     private void showErrorDialogFragment(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-        Integer errCode = FromMap.toInteger("errCode", call.argument("errCode"));
-        Integer reqCode = FromMap.toInteger("reqCode", call.argument("reqCode"));
+        Integer errCode2 = FromMap.toInteger("errCode", call.argument("errCode"));
+        Integer reqCode2 = FromMap.toInteger("reqCode", call.argument("reqCode"));
         Boolean useCancelListener = call.argument("useCancelListener");
 
-        if (errCode == null || reqCode == null) {
-            Log.e(TAG, "Error code or request code is null");
-            result.error(TAG, "Error code or request code must not be null", Constants.NULL_PARAMETER);
+        if (errCode2 == null || reqCode2 == null) {
+            result.error(TAG, "Error and request codes must not be null!!", Constants.NULL_PARAMETER);
             return;
         }
 
         if (useCancelListener == null) {
             useCancelListener = false;
         }
-        result.success(HuaweiApiAvailability.getInstance().showErrorDialogFragment(activity, errCode, reqCode, !useCancelListener ? null : this));
+
+        result.success(HuaweiApiAvailability.getInstance().showErrorDialogFragment(activity, errCode2, reqCode2, !useCancelListener ? null : this));
     }
 
-    private void showErrorNotification(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-        Integer errCode = FromMap.toInteger("errCode", call.argument("errCode"));
+    private void showErrorNotification(@NonNull MethodCall call, MethodChannel.Result result) {
+        Integer errCode3 = FromMap.toInteger("errCode", call.argument("errCode"));
 
-        if (errCode == null) {
-            result.error(TAG, "Error code must not be null!", Constants.NULL_PARAMETER);
+        if (errCode3 == null) {
+            result.error(TAG, "Error and request codes must not be null.", Constants.NULL_PARAMETER);
             return;
         }
-        HuaweiApiAvailability.getInstance().showErrorNotification(activity, errCode);
+
+        HuaweiApiAvailability.getInstance().showErrorNotification(activity, errCode3);
     }
 
     private void dispose(MethodChannel.Result result) {

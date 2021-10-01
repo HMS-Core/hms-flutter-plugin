@@ -100,10 +100,10 @@ class HmsApiAvailability {
   static const int HMS_VERSION_CODE_PPS = 20700300;
 
   /// Version number of the HMS Core SDK.
-  static const int HMS_SDK_VERSION_CODE = 50100300;
+  static const int HMS_SDK_VERSION_CODE = 50200300;
 
   /// Version name of the HMS Core SDK.
-  static const String HMS_SDK_VERSION_NAME = "5.1.0.300";
+  static const String HMS_SDK_VERSION_NAME = "5.2.0.300";
 
   /// Specified parameter is null.
   static const String NULL_PARAMETER = "0011";
@@ -111,9 +111,9 @@ class HmsApiAvailability {
   /// Attempted to use [destroyStreams] method without initializing the streams
   static const String OBJECT_NOT_INITIALIZED = "0012";
 
-  EventChannel _eventChannel;
-  AvailabilityResultListener _listener;
-  StreamSubscription _subscription;
+  late EventChannel _eventChannel;
+  AvailabilityResultListener? _listener;
+  StreamSubscription? _subscription;
 
   HmsApiAvailability() {
     _eventChannel = EventChannel(HMS_EVENT);
@@ -131,56 +131,45 @@ class HmsApiAvailability {
   }
 
   /// Obtains the API version number of each service.
-  Future<Map<dynamic, dynamic>> getApiMap() {
-    return _channel.invokeMethod("getApiMap");
+  Future<Map<dynamic, dynamic>> getApiMap() async {
+    return await _channel.invokeMethod("getApiMap");
   }
 
   /// Obtains the minimum version number of HMS Core that is supported currently.
-  Future<int> getServicesVersionCode() {
+  Future<int?> getServicesVersionCode() {
     return _channel.invokeMethod("getServicesVersionCode");
   }
 
   /// Checks whether HMS Core (APK) is successfully installed and integrated on a device,
   /// and whether the version of the installed APK is that required by the
   /// client or is later than the required version.
-  Future<int> isHMSAvailable() {
-    return _channel.invokeMethod("isHmsAvailable");
+  Future<int> isHMSAvailable() async {
+    return await _channel.invokeMethod("isHmsAvailable");
   }
 
   /// Checks whether HMS Core (APK) is successfully installed and integrated on a device,
   /// and whether the version of the installed APK is that required by the
   /// client or is later than the required version.
-  ///
-  /// Throws an [ArgumentError] if the [minApkVersion] is null.
-  Future<int> isHMSAvailableWithApkVersion(int minApkVersion) {
-    checkArguments([minApkVersion]);
-
-    return _channel
+  Future<int> isHMSAvailableWithApkVersion(int minApkVersion) async {
+    return await _channel
         .invokeMethod("isHmsAvailableMinApk", {'minApkVersion': minApkVersion});
   }
 
   /// Checks whether the HMS Core (APK) version supports notice obtaining.
-  Future<int> isHuaweiMobileNoticeAvailable() {
-    return _channel.invokeMethod("isHuaweiMobileNoticeAvailable");
+  Future<int> isHuaweiMobileNoticeAvailable() async {
+    return await _channel.invokeMethod("isHuaweiMobileNoticeAvailable");
   }
 
   /// Checks whether an exception is rectified through user operations.
-  ///
-  /// Throws an [ArgumentError] if the [errorCode] is null.
-  Future<bool> isUserResolvableError(int errorCode, [bool usePendingIntent]) {
-    checkArguments([errorCode]);
-
-    return _channel.invokeMethod("isUserResolvableError",
+  Future<bool> isUserResolvableError(int errorCode,
+      [bool? usePendingIntent]) async {
+    return await _channel.invokeMethod("isUserResolvableError",
         {'errorCode': errorCode, 'usePendingIntent': usePendingIntent ?? null});
   }
 
   /// Displays a notification or dialog box is displayed for the
   /// returned result code if an exception can be rectified through user operations.
-  ///
-  /// Throws an [ArgumentError] if [errorCode] and [requestCode] are null.
-  void resolveError(int errorCode, int requestCode, [bool usePendingIntent]) {
-    checkArguments([errorCode, requestCode]);
-
+  void resolveError(int errorCode, int requestCode, [bool? usePendingIntent]) {
     _getEvents();
 
     _channel.invokeMethod("resolveError", {
@@ -192,12 +181,8 @@ class HmsApiAvailability {
 
   /// Displays a notification or dialog box for the result code returned
   /// by the [isHMSAvailableWithApkVersion] method.
-  ///
-  /// Throws an [ArgumentError] if [errorCode] and [requestCode] are null.
   void getErrorDialog(int errorCode, int requestCode,
-      [bool useCancelListener]) {
-    checkArguments([errorCode, requestCode]);
-
+      [bool? useCancelListener]) {
     _getEvents();
 
     _channel.invokeMethod("getErrorDialog", {
@@ -209,24 +194,17 @@ class HmsApiAvailability {
 
   /// Displays a readable text result code returned
   /// by the [isHMSAvailableWithApkVersion] method.
-  ///
-  /// Throws an [ArgumentError] if [errorCode] is null.
-  Future<String> getErrorString(int errorCode) {
-    checkArguments([errorCode]);
-
-    return _channel.invokeMethod("getErrorString", {'errCode': errorCode});
+  Future<String> getErrorString(int errorCode) async {
+    return await _channel
+        .invokeMethod("getErrorString", {'errCode': errorCode});
   }
 
   /// Creates and displays a dialog box for a result code.
-  ///
-  /// Throws an [ArgumentError] if [errorCode] and [requestCode] are null.
   Future<bool> showErrorDialogFragment(int errorCode, int requestCode,
-      [bool useCancelListener]) {
-    checkArguments([errorCode, requestCode]);
-
+      [bool? useCancelListener]) async {
     _getEvents();
 
-    return _channel.invokeMethod("showErrorDialogFragment", {
+    return await _channel.invokeMethod("showErrorDialogFragment", {
       'errCode': errorCode,
       'reqCode': requestCode,
       'useCancelListener': useCancelListener ?? null
@@ -234,11 +212,7 @@ class HmsApiAvailability {
   }
 
   /// Creates and displays a dialog box for a result code.
-  ///
-  /// Throws an [ArgumentError] if the [errorCode] is null.
   void showErrorNotification(int errorCode) {
-    checkArguments([errorCode]);
-
     _channel.invokeMethod("showErrorNotification", {'errCode': errorCode});
   }
 
@@ -251,7 +225,7 @@ class HmsApiAvailability {
   void _getEvents() {
     _subscription?.cancel();
     _subscription = _eventChannel.receiveBroadcastStream().listen((msg) {
-      AvailabilityEvent availabilityEvent = toAvailabilityEvent(msg);
+      AvailabilityEvent? availabilityEvent = toAvailabilityEvent(msg);
       _listener?.call(availabilityEvent);
     });
   }
