@@ -25,6 +25,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.huawei.hms.flutter.push.backgroundmessaging.BackgroundMessagingService;
+import com.huawei.hms.flutter.push.backgroundmessaging.FlutterBackgroundRunner;
 import com.huawei.hms.flutter.push.constants.Channel;
 import com.huawei.hms.flutter.push.constants.Code;
 import com.huawei.hms.flutter.push.constants.Core;
@@ -182,8 +184,7 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
                 hmsInstanceId.deleteAAID(result);
                 break;
             case registerBackgroundMessageHandler:
-                registerBackgroundMessageHandler(Objects.requireNonNull(call.argument("rawHandle")),
-                    Objects.requireNonNull(call.argument("rawCallback")), result);
+                registerBackgroundMessageHandler(call, result);
                 break;
             case removeBackgroundMessageHandler:
                 removeBackgroundMessageHandler(result);
@@ -371,34 +372,42 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
         }
     }
 
-    private void registerBackgroundMessageHandler(long handlerRaw, long callbackRaw, Result result) {
+    private void registerBackgroundMessageHandler(final MethodCall call, final Result result) {
         try {
+            long pluginCallbackHandle = Objects.requireNonNull(call.argument("rawHandle"));
+            long userCallbackHandle = Objects.requireNonNull(call.argument("rawCallback"));
+
             SharedPreferences prefs = context.getSharedPreferences(Core.PREFERENCE_NAME, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
-            editor.putLong(HeadlessPushPlugin.KEY_HANDLER, handlerRaw);
-            editor.putLong(HeadlessPushPlugin.KEY_CALLBACK, callbackRaw);
+            editor.putLong(FlutterBackgroundRunner.CALLBACK_DISPATCHER_KEY, pluginCallbackHandle);
+            editor.putLong(FlutterBackgroundRunner.USER_CALLBACK_KEY, userCallbackHandle);
             editor.apply();
 
+            BackgroundMessagingService.setCallbackDispatcher(context, pluginCallbackHandle);
+            BackgroundMessagingService.setUserCallback(context, userCallbackHandle);
+            BackgroundMessagingService.startBgIsolate(context, pluginCallbackHandle);
+
+            result.success(true);
             Log.i(TAG, "BackgroundMessageHandler registered ✔");
-            result.success(1);
         } catch (SecurityException e) {
-            result.success(0);
+            Log.i(TAG, "BackgroundMessageHandler could not be registered.");
+            result.success(false);
         }
     }
 
     private void removeBackgroundMessageHandler(Result result) {
         SharedPreferences prefs = context.getSharedPreferences(Core.PREFERENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putLong(HeadlessPushPlugin.KEY_HANDLER, -1);
-        editor.putLong(HeadlessPushPlugin.KEY_CALLBACK, -1);
+        editor.putLong(FlutterBackgroundRunner.CALLBACK_DISPATCHER_KEY, -1);
+        editor.putLong(FlutterBackgroundRunner.USER_CALLBACK_KEY, -1);
         editor.apply();
 
         Log.i(TAG, "BackgroundMessageHandler removed ✔");
-        result.success(1);
+        result.success(true);
     }
 
     public static void setPluginRegistrant(PluginRegistry.PluginRegistrantCallback callback) {
-        HeadlessPushPlugin.setPluginRegistrant(callback);
+        BackgroundMessagingService.setPluginRegistrantCallback(callback);
     }
 
     private void setStreamHandlers(BinaryMessenger messenger) {

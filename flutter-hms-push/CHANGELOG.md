@@ -1,3 +1,12 @@
+## 5.3.0+304
+* Upgraded Push SDK and added the **getAnalyticInfo** and **getAnalyticInfoMap** methods to obtain **bi_tag** (indicates the tag of a message in a batch delivery task).
+* Resolved the issue about the call of Implicit PendingIntent.
+* Updated Background Messaging and added V2 plugin embedding support.
+* Added custom data payload to local notifications.
+* Bug fixes and improvements.
+* **[Breaking Change]**
+  * Library file name "huawei_push_library" has changed to "huawei_push" due to a pub requirement.
+
 ## 5.1.1+301
 * Updated Push SDK to the latest version 5.1.1+301.
 * Added Multi-Sender API.

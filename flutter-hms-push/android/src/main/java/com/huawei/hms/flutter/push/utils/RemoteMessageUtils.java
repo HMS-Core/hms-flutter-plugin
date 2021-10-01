@@ -53,6 +53,8 @@ public class RemoteMessageUtils {
         content.put(RemoteMessageAttributes.RECEIPT_MODE, message.getReceiptMode());
         content.put(RemoteMessageAttributes.SEND_MODE, message.getSendMode());
         content.put(RemoteMessageAttributes.CONTENTS, message.describeContents());
+        content.put(RemoteMessageAttributes.ANALYTIC_INFO, message.getAnalyticInfo());
+        content.put(RemoteMessageAttributes.ANALYTIC_INFO_MAP, message.getAnalyticInfoMap());
 
         if (message.getNotification() != null) {
             RemoteMessage.Notification notification = message.getNotification();

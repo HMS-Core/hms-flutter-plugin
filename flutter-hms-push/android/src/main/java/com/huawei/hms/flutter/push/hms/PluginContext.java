@@ -19,6 +19,7 @@ package com.huawei.hms.flutter.push.hms;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.lang.ref.WeakReference;
 
@@ -32,7 +33,8 @@ public class PluginContext {
         weakReference = new WeakReference<>(context);
     }
 
+    @Nullable
     public static Context getContext() {
-        return weakReference.get();
+        return weakReference != null ? weakReference.get() : null;
     }
 }

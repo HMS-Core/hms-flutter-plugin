@@ -2,20 +2,13 @@
   <h1 align="center">Huawei Push Kit Flutter Plugin</h1>
 </p>
 
-
-
-<p align="center">
-  <a href="https://pub.dev/packages/huawei_gameservice"><img src="https://img.shields.io/pub/v/huawei_push?style=for-the-badge" alt="pub.dev version"></a>
-</p>
-
-
 ----
 
 HUAWEI Push Kit is a messaging service provided by Huawei. It establishes a messaging channel from the cloud to devices. By integrating Push Kit, you can send messages to your apps on users' devices in real time. This helps you maintain closer ties with users and increases user awareness and engagement with your apps. 
 
 This plugin enables communication between HUAWEI Push Kit SDK and Flutter platform. It exposes all functionality provided by HUAWEI Push Kit SDK.
 
-[Learn More](https://developer.huawei.com/consumer/en/doc/development/HMSCore-Guides-V5/service-introduction-0000001050040060-V5?ha_source=hms1)
+[> Learn More](https://developer.huawei.com/consumer/en/doc/development/HMSCore-Guides-V5/service-introduction-0000001050040060-V5?ha_source=hms1)
 
 ## Installation
 

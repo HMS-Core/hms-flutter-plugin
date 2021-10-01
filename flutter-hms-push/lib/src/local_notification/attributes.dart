@@ -54,4 +54,5 @@ abstract class HMSLocalNotificationAttr {
   static const String PRIORITY = "priority";
   static const String IMPORTANCE = "importance";
   static const String VISIBILITY = "visibility";
+  static const String DATA = "data";
 }

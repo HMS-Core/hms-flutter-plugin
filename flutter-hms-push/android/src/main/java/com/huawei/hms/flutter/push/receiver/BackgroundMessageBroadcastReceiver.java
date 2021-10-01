@@ -22,11 +22,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.huawei.hms.flutter.push.HeadlessPushPlugin;
-import com.huawei.hms.flutter.push.constants.Param;
-import com.huawei.hms.push.RemoteMessage;
-
-import io.flutter.view.FlutterMain;
+import com.huawei.hms.flutter.push.backgroundmessaging.BackgroundMessagingService;
 
 public class BackgroundMessageBroadcastReceiver extends BroadcastReceiver {
     private static final String TAG = BackgroundMessageBroadcastReceiver.class.getSimpleName();
@@ -35,17 +31,13 @@ public class BackgroundMessageBroadcastReceiver extends BroadcastReceiver {
         = "com.huawei.hms.flutter.push.receiver.BACKGROUND_REMOTE_MESSAGE";
 
     @Override
-    public void onReceive(Context context, Intent intent) {
-        FlutterMain.ensureInitializationComplete(context, null);
+    public void onReceive(Context context, final Intent intent) {
         if (intent != null) {
             final String action = intent.getAction();
             if (BACKGROUND_REMOTE_MESSAGE.equals(action)) {
                 Bundle result = intent.getExtras();
-                Log.d(TAG, result != null ? result.toString() : "");
                 if (result != null) {
-                    HeadlessPushPlugin headLess = new HeadlessPushPlugin(context);
-                    headLess.handleBackgroundMessage(context, (RemoteMessage) result.get(Param.MESSAGE.code()));
-                    Log.i("Receiver-java", result.toString());
+                    BackgroundMessagingService.enqueueWork(context, intent);
                 }
             }
         }

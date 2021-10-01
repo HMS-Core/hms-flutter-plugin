@@ -20,7 +20,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:huawei_push/huawei_push_library.dart';
+import 'package:huawei_push/huawei_push.dart';
 import 'package:huawei_push_example/multi_sender_page.dart';
 
 import 'custom_intent_page.dart';
@@ -28,6 +28,19 @@ import 'local_notification_page.dart';
 
 void main() {
   runApp(MaterialApp(home: MyApp()));
+}
+
+void backgroundMessageCallback(RemoteMessage remoteMessage) async {
+  String? data = remoteMessage.data;
+  if (data != null) {
+    print("Background message is received, sending local notification.");
+    Push.localNotification({
+      HMSLocalNotificationAttr.TITLE: '[Headless] DataMessage Received',
+      HMSLocalNotificationAttr.MESSAGE: data
+    });
+  } else {
+    print("Background message is received. There is no data in the message.");
+  }
 }
 
 class MyApp extends StatefulWidget {
@@ -51,19 +64,6 @@ class _MyAppState extends State<MyApp> {
   void _onTokenError(Object error) {
     PlatformException e = error as PlatformException;
     showResult("TokenErrorEvent", e.message!);
-  }
-
-  static void backgroundMessageCallback(RemoteMessage remoteMessage) async {
-    String? data = remoteMessage.data;
-    if (data != null) {
-      print("Background message is received, sending local notification.");
-      Push.localNotification({
-        HMSLocalNotificationAttr.TITLE: '[Headless] DataMessage Received',
-        HMSLocalNotificationAttr.MESSAGE: data
-      });
-    } else {
-      print("Background message is received. There is no data in the message.");
-    }
   }
 
   void _onMessageReceived(RemoteMessage remoteMessage) {
@@ -117,7 +117,6 @@ class _MyAppState extends State<MyApp> {
   void _onNotificationOpenedApp(dynamic initialNotification) {
     if (initialNotification != null) {
       showResult("onNotificationOpenedApp", initialNotification.toString());
-      print("[onNotificationOpenedApp]" + initialNotification.toString());
     }
   }
 

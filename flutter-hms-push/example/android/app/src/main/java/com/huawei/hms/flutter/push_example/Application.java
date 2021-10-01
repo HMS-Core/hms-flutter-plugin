@@ -22,7 +22,11 @@ import io.flutter.app.FlutterApplication;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugins.GeneratedPluginRegistrant;
 
-
+/**
+ * This configuration is required for flutter projects that use the Plugin Embedding V1.
+ * For projects that use the Plugin Embedding V2 the registration process will be handled automatically and
+ * this configuration is not needed.
+ */
 public class Application extends FlutterApplication implements PluginRegistry.PluginRegistrantCallback {
     @Override
     public void onCreate() {

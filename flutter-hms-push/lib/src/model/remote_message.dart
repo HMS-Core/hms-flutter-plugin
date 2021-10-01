@@ -39,6 +39,8 @@ class RemoteMessage {
   static const String NOTIFICATION = 'notification';
   static const String SEND_MODE = 'sendMode';
   static const String RECEIPT_MODE = 'receiptMode';
+  static const String ANALYTICS_INFO = 'analyticInfo';
+  static const String ANALYTIC_INFO_MAP = 'analyticInfoMap';
 
   final String? messageId;
   final String? to;
@@ -55,6 +57,8 @@ class RemoteMessage {
   final _RemoteMessageNotification? notification;
   final int? sendMode;
   final int? receiptMode;
+  final String? analyticInfo;
+  final Map<String, String>? analyticInfoMap;
 
   RemoteMessage._({
     this.collapseKey,
@@ -72,6 +76,8 @@ class RemoteMessage {
     this.token,
     this.sendMode,
     this.receiptMode,
+    this.analyticInfo,
+    this.analyticInfoMap,
   });
 
   /// Obtains the classification identifier (collapse key) of a message.
@@ -113,6 +119,14 @@ class RemoteMessage {
   /// Obtains the token in a message.
   String? get getToken => token;
 
+  /// Obtains the tag of a message in a batch delivery task (bi_tag).
+  String? get getAnalyticInfo => analyticInfo;
+
+  /// Obtains the analysis data of the Map type.
+  ///
+  /// Different from the [getAnalyticInfo] method, this method directly returns the instance of the Map type.
+  Map<String, String>? get getAnalyticInfoMap => analyticInfoMap;
+
   factory RemoteMessage.fromMap(Map<String, dynamic>? map) {
     if (map == null) return RemoteMessage._();
     return RemoteMessage._(
@@ -151,6 +165,12 @@ class RemoteMessage {
       receiptMode: map[RemoteMessage.RECEIPT_MODE] == null
           ? null
           : map[RemoteMessage.RECEIPT_MODE],
+      analyticInfo: map[RemoteMessage.ANALYTICS_INFO] == null
+          ? null
+          : map[RemoteMessage.ANALYTICS_INFO],
+      analyticInfoMap: map[RemoteMessage.ANALYTIC_INFO_MAP] == null
+          ? null
+          : Map<String, String>.from(map[RemoteMessage.ANALYTIC_INFO_MAP]),
     );
   }
 
@@ -169,8 +189,10 @@ class RemoteMessage {
       DATA: this.data ?? '',
       DATA_OF_MAP: this.dataOfMap ?? {},
       NOTIFICATION: this.notification != null ? this.notification!.toMap() : '',
-      SEND_MODE: this.sendMode != null ? this.sendMode : '',
-      RECEIPT_MODE: this.receiptMode != null ? this.receiptMode : '',
+      SEND_MODE: this.sendMode ?? '',
+      RECEIPT_MODE: this.receiptMode ?? '',
+      ANALYTICS_INFO: this.analyticInfo ?? '',
+      ANALYTIC_INFO_MAP: this.analyticInfoMap ?? {}
     };
   }
 }

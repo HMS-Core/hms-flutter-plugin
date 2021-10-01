@@ -423,38 +423,33 @@ class Push {
 
   /// Defines a function to handle background messages.
   static Future<bool> registerBackgroundMessageHandler(
-      void Function(RemoteMessage remoteMessage) callback) {
+      void Function(RemoteMessage remoteMessage) callback) async {
     int rawHandle =
         PluginUtilities.getCallbackHandle(callbackDispatcher)!.toRawHandle();
     print("rawHandle $rawHandle");
     int rawCallback =
         PluginUtilities.getCallbackHandle(callback)!.toRawHandle();
     print("rawCallback $rawCallback");
-    return methodChannel.invokeMethod('registerBackgroundMessageHandler', {
-      "rawHandle": rawHandle,
-      "rawCallback": rawCallback
-    }).then((result) => result == 1);
+    return await methodChannel.invokeMethod('registerBackgroundMessageHandler',
+        {"rawHandle": rawHandle, "rawCallback": rawCallback});
   }
 
   /// Revokes the background message handler.
-  static Future<bool> removeBackgroundMessageHandler() {
-    return methodChannel
-        .invokeMethod('removeBackgroundMessageHandler')
-        .then((result) => result == 1);
+  static Future<bool> removeBackgroundMessageHandler() async {
+    return await methodChannel.invokeMethod('removeBackgroundMessageHandler');
   }
 }
 
 /// Callback function for handling received [RemoteMessage] objects in the background.
 void callbackDispatcher() {
   WidgetsFlutterBinding.ensureInitialized();
-
   backgroundMessageChannel.setMethodCallHandler((MethodCall call) async {
     final Map<String, dynamic> args =
         Map<String, dynamic>.from(call.arguments[1]);
     RemoteMessage remoteMessage = RemoteMessage.fromMap(args);
     final Function rawHandler = PluginUtilities.getCallbackFromHandle(
         CallbackHandle.fromRawHandle(call.arguments[0]))!;
-
     rawHandler(remoteMessage);
   });
+  backgroundMessageChannel.invokeMethod<void>("BackgroundRunner.initialize");
 }

@@ -37,7 +37,7 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
-import com.huawei.hms.flutter.push.HeadlessPushPlugin;
+import com.huawei.hms.flutter.push.backgroundmessaging.FlutterBackgroundRunner;
 import com.huawei.hms.flutter.push.config.NotificationAttributes;
 import com.huawei.hms.flutter.push.constants.Code;
 import com.huawei.hms.flutter.push.constants.Core;
@@ -91,17 +91,6 @@ public class HmsLocalNotificationController {
             Log.e(TAG, "Class not found", e);
             return null;
         }
-    }
-
-    public void createDefaultChannel() {
-        NotificationManager notificationManager = notificationManager();
-
-        int importance = 4; // HIGH
-        Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
-        String channelId = Core.NOTIFICATION_CHANNEL_ID + "-" + importance;
-        createChannel(notificationManager, channelId, Core.NOTIFICATION_CHANNEL_NAME, Core.NOTIFICATION_CHANNEL_DESC,
-            soundUri, importance, new long[] {0, Core.DEFAULT_VIBRATE_DURATION});
     }
 
     private void createChannel(NotificationManager notificationManager, String channelId, String channelName,
@@ -343,8 +332,14 @@ public class HmsLocalNotificationController {
 
             int notificationID = Integer.parseInt(BundleUtils.get(bundle, NotificationConstants.ID));
 
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationID, intent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent;
+            if (android.os.Build.VERSION.SDK_INT >= 23) {
+                pendingIntent = PendingIntent.getActivity(context, notificationID, intent,
+                    PendingIntent.FLAG_IMMUTABLE);
+            } else {
+                pendingIntent = PendingIntent.getActivity(context, notificationID, intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+            }
 
             NotificationManager notificationManager = notificationManager();
 
@@ -418,8 +413,15 @@ public class HmsLocalNotificationController {
                     actionIntent.putExtra(NotificationConstants.NOTIFICATION, bundle);
                     actionIntent.setPackage(context.getPackageName());
 
-                    PendingIntent pendingActionIntent = PendingIntent.getBroadcast(context, notificationID,
-                        actionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    PendingIntent pendingActionIntent;
+
+                    if (android.os.Build.VERSION.SDK_INT >= 23) {
+                        pendingActionIntent = PendingIntent.getBroadcast(context, notificationID, actionIntent,
+                            PendingIntent.FLAG_IMMUTABLE);
+                    } else {
+                        pendingActionIntent = PendingIntent.getBroadcast(context, notificationID, actionIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT);
+                    }
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         notification.addAction(
@@ -525,6 +527,9 @@ public class HmsLocalNotificationController {
             intent.setAction(PushIntent.LOCAL_NOTIFICATION_ACTION.name());
             intent.putExtra(Core.ScheduledPublisher.NOTIFICATION_ID, id);
             intent.putExtras(bundle);
+            if (android.os.Build.VERSION.SDK_INT >= 23) {
+                return PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_IMMUTABLE);
+            }
             return PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         } catch (Exception e) {
             Log.e(TAG, Code.RESULT_ERROR.code(), e);
@@ -634,8 +639,8 @@ public class HmsLocalNotificationController {
 
         for (Map.Entry<String, ?> entry : scheduledNotifications.entrySet()) {
             try {
-                if (entry.getKey().equals(HeadlessPushPlugin.KEY_CALLBACK) || entry.getKey()
-                    .equals(HeadlessPushPlugin.KEY_HANDLER)) {
+                if (entry.getKey().equals(FlutterBackgroundRunner.CALLBACK_DISPATCHER_KEY) || entry.getKey()
+                    .equals(FlutterBackgroundRunner.USER_CALLBACK_KEY)) {
                     continue;
                 }
                 NotificationAttributes notification = NotificationAttributes.fromJson(entry.getValue().toString());
@@ -691,7 +696,8 @@ public class HmsLocalNotificationController {
 
     public void cancelScheduledNotifications() {
         for (String id : sharedPreferences.getAll().keySet()) {
-            if (!id.equals(HeadlessPushPlugin.KEY_CALLBACK) && !id.equals(HeadlessPushPlugin.KEY_HANDLER)) {
+            if (!id.equals(FlutterBackgroundRunner.USER_CALLBACK_KEY) && !id.equals(
+                FlutterBackgroundRunner.CALLBACK_DISPATCHER_KEY)) {
                 cancelScheduledNotification(id);
             }
         }

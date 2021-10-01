@@ -109,6 +109,8 @@ public class NotificationAttributes {
 
     private final boolean dontNotifyInForeground;
 
+    private final String data;
+
     public NotificationAttributes(Bundle bundle) {
         id = BundleUtils.get(bundle, NotificationConstants.ID);
         message = BundleUtils.get(bundle, NotificationConstants.MESSAGE);
@@ -146,6 +148,7 @@ public class NotificationAttributes {
         ongoing = BundleUtils.getB(bundle, NotificationConstants.ONGOING);
         allowWhileIdle = BundleUtils.getB(bundle, NotificationConstants.ALLOW_WHILE_IDLE);
         dontNotifyInForeground = BundleUtils.getB(bundle, NotificationConstants.DONT_NOTIFY_IN_FOREGROUND);
+        data = BundleUtils.get(bundle, NotificationConstants.DATA);
     }
 
     private NotificationAttributes(JSONObject json) {
@@ -218,6 +221,9 @@ public class NotificationAttributes {
                 NotificationConstants.ALLOW_WHILE_IDLE);
             dontNotifyInForeground = json.has(NotificationConstants.DONT_NOTIFY_IN_FOREGROUND) && json.getBoolean(
                 NotificationConstants.DONT_NOTIFY_IN_FOREGROUND);
+            data = json.has(NotificationConstants.DATA)
+                ? json.getJSONObject(NotificationConstants.DATA).toString()
+                : null;
         } catch (IllegalStateException | JSONException | NumberFormatException | NullPointerException e) {
             throw new IllegalStateException(Code.RESULT_ERROR.code(), e);
         }
@@ -306,6 +312,8 @@ public class NotificationAttributes {
             NotificationConstants.ALLOW_WHILE_IDLE);
         dontNotifyInForeground = call.hasArgument(NotificationConstants.DONT_NOTIFY_IN_FOREGROUND)
             && Utils.getBoolArgument(call, NotificationConstants.DONT_NOTIFY_IN_FOREGROUND);
+        data = call.hasArgument(NotificationConstants.DATA) ? BundleUtils.convertJSON(
+            Utils.getMapArgument(call, NotificationConstants.DATA)) : null;
     }
 
     public Bundle toBundle() {
@@ -346,6 +354,7 @@ public class NotificationAttributes {
         BundleUtils.setB(bundle, NotificationConstants.ONGOING, ongoing);
         BundleUtils.setB(bundle, NotificationConstants.ALLOW_WHILE_IDLE, allowWhileIdle);
         BundleUtils.setB(bundle, NotificationConstants.DONT_NOTIFY_IN_FOREGROUND, dontNotifyInForeground);
+        BundleUtils.set(bundle, NotificationConstants.DATA, data);
         return bundle;
     }
 
@@ -388,6 +397,7 @@ public class NotificationAttributes {
             json.put(NotificationConstants.ONGOING, ongoing);
             json.put(NotificationConstants.ALLOW_WHILE_IDLE, allowWhileIdle);
             json.put(NotificationConstants.DONT_NOTIFY_IN_FOREGROUND, dontNotifyInForeground);
+            json.put(NotificationConstants.DATA, data);
         } catch (JSONException e) {
             Log.e("NotificationAttributes", Code.RESULT_ERROR.code(), e);
             return new JSONObject();

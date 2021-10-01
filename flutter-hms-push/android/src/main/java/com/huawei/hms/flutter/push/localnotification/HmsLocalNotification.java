@@ -39,7 +39,6 @@ public class HmsLocalNotification {
 
     public HmsLocalNotification(Context context) {
         this.hmsLocalNotificationController = new HmsLocalNotificationController(context);
-        this.hmsLocalNotificationController.createDefaultChannel();
     }
 
     public void localNotification(MethodCall call, final Result result) {

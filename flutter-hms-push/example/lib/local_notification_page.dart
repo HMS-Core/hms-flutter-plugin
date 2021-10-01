@@ -16,7 +16,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:huawei_push/huawei_push_library.dart';
+import 'package:huawei_push/huawei_push.dart';
 
 class LocalNotificationPage extends StatefulWidget {
   LocalNotificationPage({Key? key}) : super(key: key);
@@ -48,6 +48,7 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
     HMSLocalNotificationAttr.SHOW_WHEN: true,
     // HMSLocalNotificationAttr.LARGE_ICON_URL: 'https://developer.huawei.com/Enexport/sites/default/images/en/Develop/hms/push/push2-tuidedao.png',
     HMSLocalNotificationAttr.LARGE_ICON: 'ic_launcher',
+    // The notification small icon should be put under `android/app/res/mipmap` directory.
     HMSLocalNotificationAttr.SMALL_ICON: 'ic_notification',
     HMSLocalNotificationAttr.BIG_TEXT: 'This is a bigText',
     HMSLocalNotificationAttr.SUB_TEXT: 'This is a subText',
@@ -62,6 +63,8 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
     HMSLocalNotificationAttr.AUTO_CANCEL: false,
     HMSLocalNotificationAttr.ACTIONS: ["Yes", "No"],
     HMSLocalNotificationAttr.INVOKE_APP: false,
+    HMSLocalNotificationAttr.DATA:
+        Map<String, dynamic>.from({"string_val": "pushkit", "int_val": 15}),
     // HMSLocalNotificationAttr.CHANNEL_ID: 'huawei-hms-flutter-push-channel-id', // Please read the Android Documentation before using this param
   };
 

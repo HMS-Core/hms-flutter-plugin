@@ -48,7 +48,7 @@ public class NotificationIntentListener implements NewIntentListener {
 
     private String initialIntent;
 
-    private Context context;
+    private final Context context;
 
     public NotificationIntentListener(Context context) {
         this.context = context;

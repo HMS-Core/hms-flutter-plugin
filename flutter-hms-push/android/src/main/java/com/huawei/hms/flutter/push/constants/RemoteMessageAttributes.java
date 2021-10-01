@@ -61,5 +61,6 @@ public interface RemoteMessageAttributes {
     String IS_DEFAULT_SOUND = "isDefaultSound";
     String IS_DEFAULT_VIBRATE = "isDefaultVibrate";
     String NOTIFICATION = "notification";
-
+    String ANALYTIC_INFO = "analyticInfo";
+    String ANALYTIC_INFO_MAP = "analyticInfoMap";
 }

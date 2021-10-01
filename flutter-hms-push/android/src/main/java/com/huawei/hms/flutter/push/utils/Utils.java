@@ -22,6 +22,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
 import com.huawei.hms.flutter.push.constants.Code;
 import com.huawei.hms.flutter.push.constants.NotificationConstants;
 import com.huawei.hms.flutter.push.constants.PushIntent;
@@ -30,6 +32,8 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
 import java.io.InvalidClassException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -82,12 +86,29 @@ public class Utils {
         }
     }
 
-    public static void sendIntent(Context context, PushIntent action, PushIntent extraName, String result) {
-        Intent intent = new Intent();
-        intent.setPackage(context.getPackageName());
-        intent.setAction(action.id());
-        intent.putExtra(extraName.id(), result);
-        context.sendBroadcast(intent);
+    public static Map<String, Object> getMapArgument(MethodCall call, String argument) {
+        if (!call.hasArgument(argument)) {
+            return new HashMap<>();
+        }
+        Map<String, Object> resMap = new HashMap<>();
+        if (call.argument(argument) instanceof Map) {
+            for (Object entry : ((Map<?, ?>) Objects.requireNonNull(call.argument(argument))).entrySet()) {
+                if (entry instanceof Map.Entry) {
+                    resMap.put(((Map.Entry<?, ?>) entry).getKey().toString(), ((Map.Entry<?, ?>) entry).getValue());
+                }
+            }
+        }
+        return resMap;
+    }
+
+    public static void sendIntent(@Nullable Context context, PushIntent action, PushIntent extraName, String result) {
+        if (context != null) {
+            Intent intent = new Intent();
+            intent.setPackage(context.getPackageName());
+            intent.setAction(action.id());
+            intent.putExtra(extraName.id(), result);
+            context.sendBroadcast(intent);
+        }
     }
 
     /**
@@ -106,10 +127,6 @@ public class Utils {
 
     public static void handleSuccessOnUIThread(final MethodChannel.Result result) {
         new Handler(Looper.getMainLooper()).post(() -> result.success(Code.RESULT_SUCCESS.code()));
-    }
-
-    public static void handleErrorOnUIThread(final MethodChannel.Result result, final String errorMessage) {
-        new Handler(Looper.getMainLooper()).post(() -> result.error(Code.RESULT_ERROR.code(), errorMessage, ""));
     }
 
     public static void handleErrorOnUIThread(final MethodChannel.Result result, final String errorCode,

@@ -4,7 +4,7 @@ version '1.0'
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven { url 'https://developer.huawei.com/repo/' }
     }
 
@@ -16,7 +16,7 @@ buildscript {
 rootProject.allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven { url 'https://developer.huawei.com/repo/' }
     }
 }
@@ -40,7 +40,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.huawei.hms:push:5.1.1.301'
-    implementation 'com.huawei.hms:push-fcm:5.1.1.301'
-    implementation 'com.facebook.fresco:fresco:2.2.0'
+    implementation 'com.huawei.hms:push-fcm:5.3.0.304'
+    implementation 'com.huawei.hms:push:5.3.0.304'
+    implementation 'com.facebook.fresco:fresco:2.5.0'
 }

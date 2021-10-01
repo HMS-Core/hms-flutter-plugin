@@ -23,6 +23,7 @@ public interface NotificationConstants {
     String MESSAGE = "message";
     String FIRE_DATE = "fireDate";
     String DATE = "date";
+    String DATA = "data";
     String TITLE = "title";
     String TICKER = "ticker";
     String SHOW_WHEN = "showWhen";

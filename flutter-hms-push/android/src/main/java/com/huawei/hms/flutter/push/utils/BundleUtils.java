@@ -23,6 +23,7 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Map;
 import java.util.Set;
 
 public class BundleUtils {
@@ -38,8 +39,9 @@ public class BundleUtils {
 
     public static void set(Bundle bundle, String key, String value) {
 
-        if (bundle != null)
+        if (bundle != null) {
             bundle.putString(key, value);
+        }
     }
 
     public static String get(Bundle bundle, String key, String defaultValue) {
@@ -59,8 +61,9 @@ public class BundleUtils {
 
     public static void setB(Bundle bundle, String key, boolean value) {
 
-        if (bundle != null)
+        if (bundle != null) {
             bundle.putBoolean(key, value);
+        }
     }
 
     public static double getD(Bundle bundle, String key) {
@@ -75,8 +78,9 @@ public class BundleUtils {
 
     public static void setD(Bundle bundle, String key, double value) {
 
-        if (bundle != null)
+        if (bundle != null) {
             bundle.putDouble(key, value);
+        }
     }
 
     public static long getL(Bundle bundle, String key) {
@@ -95,13 +99,28 @@ public class BundleUtils {
     }
 
     public static String convertJSON(Bundle bundle) {
-
         JSONObject json = convertJSONObject(bundle);
-        return json.toString();
-
+        return json != null ? json.toString() : null;
     }
 
-    static public JSONObject convertJSONObject(Bundle bundle) {
+    public static String convertJSON(Map<String, Object> map) {
+        JSONObject json = new JSONObject();
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
+            Object v = entry.getValue();
+            if (v instanceof Map<?, ?>) {
+                v = convertJSON((Map<String, Object>) v);
+            }
+            try {
+                json.put(entry.getKey(), v);
+            } catch (JSONException e) {
+                Log.i("BundleUtils", "Error while converting bundle data to json: ");
+                return "";
+            }
+        }
+        return json.toString();
+    }
+
+    public static JSONObject convertJSONObject(Bundle bundle) {
         try {
             JSONObject json = new JSONObject();
             if (bundle != null) {

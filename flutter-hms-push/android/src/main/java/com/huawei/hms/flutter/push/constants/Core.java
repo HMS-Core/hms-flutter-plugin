@@ -41,8 +41,6 @@ public interface Core {
     interface NotificationType {
         String NOW = "NOW";
         String SCHEDULED = "SCHEDULED";
-        String REMOTE = "REMOTE";
-        String DATA = "DATA";
     }
 
     interface ScheduledPublisher {

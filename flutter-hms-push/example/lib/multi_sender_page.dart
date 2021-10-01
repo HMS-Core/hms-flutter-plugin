@@ -15,7 +15,7 @@
 */
 
 import 'package:flutter/material.dart';
-import 'package:huawei_push/huawei_push_library.dart';
+import 'package:huawei_push/huawei_push.dart';
 
 class MultiSenderPage extends StatefulWidget {
   MultiSenderPage({Key? key}) : super(key: key);
@@ -33,11 +33,12 @@ class _MultiSenderPageState extends State<MultiSenderPage> {
   }
 
   void _onMultiSenderTokenReceived(Map<String, dynamic> multiSenderTokenEvent) {
-    showResult('onMultiSenderTokenReceived', multiSenderTokenEvent.toString());
+    showResult(
+        '[onMultiSenderTokenReceived]' + multiSenderTokenEvent.toString());
   }
 
   void _onMultiSenderTokenError(dynamic error) {
-    showResult('onMultiSenderTokenError', error.toString());
+    showResult('[onMultiSenderTokenError]' + error.toString());
   }
 
   TextEditingController logTextController = TextEditingController();
@@ -124,6 +125,21 @@ class _MultiSenderPageState extends State<MultiSenderPage> {
   void isSupportProfile() async {
     showResult(
         'isSupportProfile', (await HmsProfile.isSupportProfile()).toString());
+  }
+
+  void getMultiSenderTOken() {
+    Push.getMultiSenderToken("<subjectId>").then(
+      (_) => print("[getMultiSenderToken] Success"),
+      onError: (e) => print("[getMultiSenderToken] Error: " + e.toString()),
+    );
+  }
+
+  void addProfile() async {
+    HmsProfile.addProfile(HmsProfile.HUAWEI_PROFILE, "<profileId>").then(
+      (_) => print("[addProfile] + Success"),
+      onError: (e) => print("[addProfile] Error:" + e.toString()),
+    );
+    ProxySettings.setCountryCode('<countryCode>');
   }
 
   @override
