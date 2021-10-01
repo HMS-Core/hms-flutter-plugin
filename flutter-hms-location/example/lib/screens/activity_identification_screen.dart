@@ -39,7 +39,7 @@ class _ActivityIdentificationScreenState
   final ActivityIdentificationService _service =
       ActivityIdentificationService();
 
-  int _requestCode;
+  int? _requestCode;
 
   String _topText = "";
   String _bottomText = "";
@@ -53,7 +53,7 @@ class _ActivityIdentificationScreenState
   int _progressWalking = 0;
   int _progressRunning = 0;
 
-  StreamSubscription<ActivityIdentificationResponse> _streamSubscription;
+  late StreamSubscription<ActivityIdentificationResponse> _streamSubscription;
 
   @override
   void initState() {
@@ -75,46 +75,46 @@ class _ActivityIdentificationScreenState
     });
   }
 
-  void _setProgress(int activity, int possibility) {
+  void _setProgress(int? activity, int? possibility) {
     switch (activity) {
       case ActivityIdentificationData.VEHICLE:
         setState(() {
-          _progressVehicle = possibility;
+          _progressVehicle = possibility!;
         });
         break;
       case ActivityIdentificationData.BIKE:
         setState(() {
-          _progressBike = possibility;
+          _progressBike = possibility!;
         });
         break;
       case ActivityIdentificationData.FOOT:
         setState(() {
-          _progressFoot = possibility;
+          _progressFoot = possibility!;
         });
         break;
       case ActivityIdentificationData.STILL:
         setState(() {
-          _progressStill = possibility;
+          _progressStill = possibility!;
         });
         break;
       case ActivityIdentificationData.OTHERS:
         setState(() {
-          _progressOthers = possibility;
+          _progressOthers = possibility!;
         });
         break;
       case ActivityIdentificationData.TILTING:
         setState(() {
-          _progressTilting = possibility;
+          _progressTilting = possibility!;
         });
         break;
       case ActivityIdentificationData.WALKING:
         setState(() {
-          _progressWalking = possibility;
+          _progressWalking = possibility!;
         });
         break;
       case ActivityIdentificationData.RUNNING:
         setState(() {
-          _progressRunning = possibility;
+          _progressRunning = possibility!;
         });
         break;
       default:
@@ -126,7 +126,7 @@ class _ActivityIdentificationScreenState
     _resetProgressBars();
     _appendBottomText(response.toString());
     for (ActivityIdentificationData data
-        in response.activityIdentificationDatas) {
+        in response.activityIdentificationDatas!) {
       _setProgress(data.identificationActivity, data.possibility);
     }
   }
@@ -167,7 +167,7 @@ class _ActivityIdentificationScreenState
   void _deleteActivityIdentificationUpdates() async {
     if (_requestCode != null) {
       try {
-        await _service.deleteActivityIdentificationUpdates(_requestCode);
+        await _service.deleteActivityIdentificationUpdates(_requestCode!);
         _requestCode = null;
         _resetProgressBars();
         _setBottomText();
@@ -183,7 +183,7 @@ class _ActivityIdentificationScreenState
   void _deleteUpdatesOnDispose() async {
     if (_requestCode != null) {
       try {
-        await _service.deleteActivityIdentificationUpdates(_requestCode);
+        await _service.deleteActivityIdentificationUpdates(_requestCode!);
         _requestCode = null;
       } on PlatformException catch (e) {
         log(e.toString());

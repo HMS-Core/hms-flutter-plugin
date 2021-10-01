@@ -18,15 +18,24 @@ import 'dart:convert';
 import 'dart:ui';
 
 class ActivityConversionInfo {
+  /// Specified activity that the user enters.
   static const int ENTER_ACTIVITY_CONVERSION = 0;
+
+  /// Specified activity that the user exits.
   static const int EXIT_ACTIVITY_CONVERSION = 1;
 
+  /// Activity type of the conversion.
+  ///
+  /// The value is one of the activity types defined in
+  /// [ActivityIdentificationData].
   int activityType;
+
+  /// Activity conversion information.
   int conversionType;
 
   ActivityConversionInfo({
-    this.activityType,
-    this.conversionType,
+    required this.activityType,
+    required this.conversionType,
   });
 
   Map<String, dynamic> toMap() {
@@ -37,8 +46,6 @@ class ActivityConversionInfo {
   }
 
   factory ActivityConversionInfo.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return ActivityConversionInfo(
       activityType: map['activityType'],
       conversionType: map['conversionType'],

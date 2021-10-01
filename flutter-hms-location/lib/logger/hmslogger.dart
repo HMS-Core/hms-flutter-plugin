@@ -20,10 +20,12 @@ class HMSLogger {
   static const MethodChannel _methodChannel =
       MethodChannel("com.huawei.flutter.location/hmslogger_methodchannel");
 
+  /// Enables the HMSLogger capability.
   static Future<void> enableLogger() async {
     return _methodChannel.invokeMethod<void>('enableLogger');
   }
 
+  /// Disables the HMSLogger capability.
   static Future<void> disableLogger() async {
     return _methodChannel.invokeMethod<void>('disableLogger');
   }

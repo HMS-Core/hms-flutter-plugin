@@ -18,18 +18,28 @@ import 'dart:convert';
 import 'dart:ui';
 
 class LocationAvailability {
+  /// Availability status code for cell-based location.
   int cellStatus;
+
+  /// Availability status code for Wi-Fi-based location.
   int wifiStatus;
+
+  /// Time elapsed since system boot, in nanoseconds.
   int elapsedRealtimeNs;
+
+  /// Location status code.
+  ///
+  /// If the value is smaller than 1000, the device location is available.
   int locationStatus;
 
   LocationAvailability({
-    this.cellStatus,
-    this.wifiStatus,
-    this.elapsedRealtimeNs,
-    this.locationStatus,
+    required this.cellStatus,
+    required this.wifiStatus,
+    required this.elapsedRealtimeNs,
+    required this.locationStatus,
   });
 
+  /// Indicates if the location is available or not.
   bool get isLocationAvailable => locationStatus < 1000;
 
   Map<String, dynamic> toMap() {
@@ -42,8 +52,6 @@ class LocationAvailability {
   }
 
   factory LocationAvailability.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return LocationAvailability(
       cellStatus: map['cellStatus'],
       wifiStatus: map['wifiStatus'],

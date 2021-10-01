@@ -17,12 +17,23 @@
 import 'dart:convert';
 
 class NavigationResult {
+  ///  Obtains the confidence of the status information.
+  ///
+  ///  The value ranges from 0 to 100. A larger value indicates more reliable
+  ///  result authenticity.
   int possibility;
+
+  /// Status information.
+  ///
+  /// If the navigation type is [IS_SUPPORT_EX], the return values are
+  /// described as follows:
+  /// * 11: The user device supports high-precision location.
+  /// * 12: The user device does not support high-precision location.
   int state;
 
   NavigationResult({
-    this.possibility,
-    this.state,
+    required this.possibility,
+    required this.state,
   });
 
   Map<String, dynamic> toMap() {
@@ -33,8 +44,6 @@ class NavigationResult {
   }
 
   factory NavigationResult.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return NavigationResult(
       state: map["state"] == null ? null : map["state"],
       possibility: map["possibility"] == null ? null : map["possibility"],

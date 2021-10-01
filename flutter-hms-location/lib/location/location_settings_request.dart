@@ -22,8 +22,17 @@ import 'package:flutter/foundation.dart';
 import 'location_request.dart';
 
 class LocationSettingsRequest {
-  List<LocationRequest> requests;
+  /// Collection of [LocationRequest] objects.
+  List<LocationRequest?>? requests;
+
+  /// Indicates whether BLE scanning needs to be enabled.
+  ///
+  /// The options are `true` (yes) and `false` (no).
   bool alwaysShow;
+
+  /// Indicates whether a location is required for the app to continue.
+  ///
+  /// The options are `true` (yes) and `false` (no).
   bool needBle;
 
   LocationSettingsRequest({
@@ -34,15 +43,13 @@ class LocationSettingsRequest {
 
   Map<String, dynamic> toMap() {
     return {
-      'requests': requests?.map((x) => x?.toMap())?.toList(),
+      'requests': requests?.map((x) => x?.toMap()).toList(),
       'alwaysShow': alwaysShow,
       'needBle': needBle,
     };
   }
 
   factory LocationSettingsRequest.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return LocationSettingsRequest(
       requests: List<LocationRequest>.from(
           map['requests']?.map((x) => LocationRequest.fromMap(x))),

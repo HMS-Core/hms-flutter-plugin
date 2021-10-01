@@ -15,6 +15,7 @@
 */
 
 import 'package:flutter/material.dart';
+import 'package:huawei_location_example/screens/high_precision_location_screen.dart';
 
 import '../widgets/custom_button.dart';
 import 'activity_screen.dart';
@@ -50,6 +51,12 @@ class HomeScreen extends StatelessWidget {
               Navigator.pushNamed(
                 context,
                 GeofenceScreen.ROUTE_NAME,
+              );
+            }),
+            Btn("High Precision Location Service", () {
+              Navigator.pushNamed(
+                context,
+                HighPrecisionLocationScreen.ROUTE_NAME,
               );
             }),
           ],

@@ -15,6 +15,7 @@
 */
 
 import 'package:flutter/material.dart';
+import 'package:huawei_location_example/screens/high_precision_location_screen.dart';
 
 import 'screens/activity_conversion_screen.dart';
 import 'screens/activity_identification_screen.dart';
@@ -51,6 +52,8 @@ class LocationKitDemoApp extends StatelessWidget {
         LocationUpdatesExCbScreen.ROUTE_NAME: (context) =>
             LocationUpdatesExCbScreen(),
         LocationEnhanceScreen.ROUTE_NAME: (context) => LocationEnhanceScreen(),
+        HighPrecisionLocationScreen.ROUTE_NAME: (context) =>
+            HighPrecisionLocationScreen(),
       },
     );
   }

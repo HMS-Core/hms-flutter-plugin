@@ -21,7 +21,7 @@ class ProgressBar extends StatelessWidget {
   final int value;
   final Color color;
 
-  ProgressBar({this.label, this.value, this.color});
+  ProgressBar({required this.label, required this.value, required this.color});
 
   @override
   Widget build(BuildContext context) {

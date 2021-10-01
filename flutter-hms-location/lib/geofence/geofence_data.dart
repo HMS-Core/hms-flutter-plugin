@@ -22,10 +22,17 @@ import 'package:flutter/foundation.dart';
 import '../location/location.dart';
 
 class GeofenceData {
-  int errorCode;
-  int conversion;
-  List<String> convertingGeofenceIdList;
-  Location convertingLocation;
+  /// Error code.
+  int? errorCode;
+
+  /// Geofence conversion type.
+  int? conversion;
+
+  /// List of unique IDs of converted geofences.
+  List<String>? convertingGeofenceIdList;
+
+  /// Location when a geofence is converted.
+  Location? convertingLocation;
 
   GeofenceData({
     this.errorCode,
@@ -44,13 +51,12 @@ class GeofenceData {
   }
 
   factory GeofenceData.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return GeofenceData(
       errorCode: map['errorCode'],
       conversion: map['conversion'],
-      convertingGeofenceIdList:
-          List<String>.from(map['convertingGeofenceIdList']),
+      convertingGeofenceIdList: map['convertingGeofenceIdList'] == null
+          ? null
+          : List<String>.from(map['convertingGeofenceIdList']),
       convertingLocation: Location.fromMap(map['convertingLocation']),
     );
   }

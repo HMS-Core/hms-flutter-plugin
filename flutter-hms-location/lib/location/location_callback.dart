@@ -21,11 +21,14 @@ typedef void OnLocationResult(LocationResult locationResult);
 typedef void OnLocationAvailability(LocationAvailability locationAvailability);
 
 class LocationCallback {
+  /// Called when the device location is available.
   OnLocationResult onLocationResult;
+
+  /// Called when the device location availability changes.
   OnLocationAvailability onLocationAvailability;
 
   LocationCallback({
-    this.onLocationResult,
-    this.onLocationAvailability,
+    required this.onLocationResult,
+    required this.onLocationAvailability,
   });
 }

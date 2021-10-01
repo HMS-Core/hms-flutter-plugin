@@ -23,9 +23,10 @@ class CustomTextInput extends StatelessWidget {
 
   final String labelText;
   final String hintText;
-  final TextEditingController controller;
-  final TextInputType keyboardType;
-  final List<TextInputFormatter> inputFormatters;
+  final TextEditingController? controller;
+  final TextInputType? keyboardType;
+  final List<FilteringTextInputFormatter>? inputFormatters;
+  final int? maxLength;
   final EdgeInsets padding;
 
   CustomTextInput({
@@ -34,6 +35,7 @@ class CustomTextInput extends StatelessWidget {
     this.controller,
     this.keyboardType,
     this.inputFormatters,
+    this.maxLength,
     this.padding = const EdgeInsets.only(top: 10),
   });
 
@@ -44,6 +46,7 @@ class CustomTextInput extends StatelessWidget {
       child: TextField(
         keyboardType: keyboardType,
         inputFormatters: inputFormatters,
+        maxLength: maxLength,
         controller: controller,
         decoration: InputDecoration(
             isDense: _IS_DENSE,

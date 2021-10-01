@@ -36,23 +36,20 @@ class _LocationEnhanceScreenState extends State<LocationEnhanceScreen> {
   final FusedLocationProviderClient _locationService =
       FusedLocationProviderClient();
   final TextEditingController _typeTextController = TextEditingController();
-  final List<TextInputFormatter> _numWithDecimalFormatter =
-      <TextInputFormatter>[
-    LengthLimitingTextInputFormatter(1),
-    WhitelistingTextInputFormatter(
+  final List<FilteringTextInputFormatter> _numWithDecimalFormatter =
+      <FilteringTextInputFormatter>[
+    FilteringTextInputFormatter.allow(
       RegExp(r"[12]+"),
     ),
   ];
 
   void _getNavigationContextState(int type) async {
-    if (type != null) {
-      try {
-        final NavigationResult result = await _locationService
-            .getNavigationContextState(NavigationRequest(type: type));
-        _setTopText(result.toString());
-      } on PlatformException catch (e) {
-        _setTopText(e.toString());
-      }
+    try {
+      final NavigationResult result = await _locationService
+          .getNavigationContextState(NavigationRequest(type: type));
+      _setTopText(result.toString());
+    } on PlatformException catch (e) {
+      _setTopText(e.toString());
     }
   }
 
@@ -85,6 +82,7 @@ class _LocationEnhanceScreenState extends State<LocationEnhanceScreen> {
               labelText: "Type",
               hintText: "Enter 1 or 2",
               inputFormatters: _numWithDecimalFormatter,
+              maxLength: 1,
               keyboardType:
                   TextInputType.numberWithOptions(signed: true, decimal: true),
             ),

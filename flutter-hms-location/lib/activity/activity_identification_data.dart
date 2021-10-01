@@ -18,13 +18,28 @@ import 'dart:convert';
 import 'dart:ui';
 
 class ActivityIdentificationData {
+  /// The device is in a vehicle, such as a car.
   static const int VEHICLE = 100;
+
+  /// The device is on a bicycle.
   static const int BIKE = 101;
+
+  /// The device user is walking or running.
   static const int FOOT = 102;
+
+  /// The device is still.
   static const int STILL = 103;
+
+  /// The current activity cannot be identified.
   static const int OTHERS = 104;
+
+  /// The device has an obvious tilt change.
   static const int TILTING = 105;
+
+  /// The device user is walking. This is a sub activity of the [FOOT] activity.
   static const int WALKING = 107;
+
+  /// The device user is running. This is a sub activity of the [FOOT] activity.
   static const int RUNNING = 108;
 
   static const List<int> _validTypes = <int>[
@@ -38,8 +53,13 @@ class ActivityIdentificationData {
     RUNNING
   ];
 
-  int identificationActivity;
-  int possibility;
+  /// Type of the detected activity.
+  int? identificationActivity;
+
+  /// Confidence for the user to execute the activity.
+  ///
+  /// The confidence ranges from `0` to `100`. A larger value indicates more reliable activity authenticity.
+  int? possibility;
 
   ActivityIdentificationData({
     this.identificationActivity,
@@ -58,8 +78,6 @@ class ActivityIdentificationData {
   }
 
   factory ActivityIdentificationData.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return ActivityIdentificationData(
       identificationActivity: map['identificationActivity'],
       possibility: map['possibility'],

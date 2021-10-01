@@ -183,7 +183,7 @@ public class PermissionHandler implements MethodCallHandler, RequestPermissionsR
                 incomingResult.success(grantResults[0] == 0 || grantResults[1] == 0);
             } else if (requestCode == 3) {
                 incomingResult.success((grantResults[0] == 0 || grantResults[1] == 0) && grantResults[2] == 0);
-            } else {
+            } else if (requestCode == 2 || requestCode == 4 || requestCode == 5 || requestCode == 6) {
                 incomingResult.success(checkGrantStatus(grantResults));
             }
         }

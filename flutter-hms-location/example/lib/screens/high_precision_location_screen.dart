@@ -14,28 +14,31 @@
     limitations under the License.
 */
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:huawei_location/location/fused_location_provider_client.dart';
 import 'package:huawei_location/location/location_callback.dart';
 import 'package:huawei_location/location/location_request.dart';
+import 'package:huawei_location/permission/permission_handler.dart';
+import 'package:huawei_location_example/widgets/custom_button.dart';
+import 'package:huawei_location_example/widgets/custom_row.dart';
 
-import '../widgets/custom_button.dart' show Btn;
-
-class LocationUpdatesExCbScreen extends StatefulWidget {
-  static const String ROUTE_NAME = "LocationUpdatesExCbScreen";
+class HighPrecisionLocationScreen extends StatefulWidget {
+  static const String ROUTE_NAME = "HighPrecisionLocationScreen";
 
   @override
-  _LocationUpdatesExCbScreenState createState() =>
-      _LocationUpdatesExCbScreenState();
+  _HighPrecisionLocationScreenState createState() =>
+      _HighPrecisionLocationScreenState();
 }
 
-class _LocationUpdatesExCbScreenState extends State<LocationUpdatesExCbScreen> {
+class _HighPrecisionLocationScreenState
+    extends State<HighPrecisionLocationScreen> {
+  final PermissionHandler _permissionHandler = PermissionHandler();
   final FusedLocationProviderClient _locationService =
       FusedLocationProviderClient();
-  final LocationRequest _locationRequest = LocationRequest()..interval = 500;
+  LocationRequest _locationRequest = LocationRequest()
+    ..interval = 10000
+    ..priority = LocationRequest.PRIORITY_HD_ACCURACY;
 
   String _topText = "";
   String _bottomText = "";
@@ -56,7 +59,25 @@ class _LocationUpdatesExCbScreenState extends State<LocationUpdatesExCbScreen> {
     _appendToBottomText(result.toString());
   }
 
-  void _requestLocationUpdatesExCb() async {
+  void _hasPermission() async {
+    try {
+      final bool status = await _permissionHandler.hasLocationPermission();
+      _setTopText("Has permission: $status");
+    } on PlatformException catch (e) {
+      _setTopText(e.toString());
+    }
+  }
+
+  void _requestPermission() async {
+    try {
+      final bool status = await _permissionHandler.requestLocationPermission();
+      _setTopText("Is permission granted $status");
+    } on PlatformException catch (e) {
+      _setTopText(e.toString());
+    }
+  }
+
+  void _reqHighPrecisionLoc() async {
     if (_callbackId == null) {
       try {
         final int callbackId = await _locationService
@@ -72,7 +93,7 @@ class _LocationUpdatesExCbScreenState extends State<LocationUpdatesExCbScreen> {
     }
   }
 
-  void _removeLocationUpdatesExCb() async {
+  void _removeHighPrecisionLoc() async {
     _setTopText();
     if (_callbackId != null) {
       try {
@@ -84,17 +105,6 @@ class _LocationUpdatesExCbScreenState extends State<LocationUpdatesExCbScreen> {
       }
     } else {
       _setTopText("callbackId does not exist. Request location updates first");
-    }
-  }
-
-  void _removeLocationUpdatesOnDispose() async {
-    if (_callbackId != null) {
-      try {
-        await _locationService.removeLocationUpdatesCb(_callbackId!);
-        _callbackId = null;
-      } on PlatformException catch (e) {
-        log(e.toString());
-      }
     }
   }
 
@@ -114,13 +124,13 @@ class _LocationUpdatesExCbScreenState extends State<LocationUpdatesExCbScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Location Updates Ex with CB'),
+        title: const Text('High Precision Location Service'),
       ),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
+          children: [
             Container(
               padding: EdgeInsets.only(
                 top: 10,
@@ -132,9 +142,14 @@ class _LocationUpdatesExCbScreenState extends State<LocationUpdatesExCbScreen> {
               thickness: 0.1,
               color: Colors.black,
             ),
-            Btn("Request Location Updates Ex with Callback",
-                _requestLocationUpdatesExCb),
-            Btn("Remove Location Updates", _removeLocationUpdatesExCb),
+            CRow(
+              children: <Widget>[
+                Btn("hasPermission", _hasPermission),
+                Btn("requestPermission", this._requestPermission),
+              ],
+            ),
+            Btn("Request High Precision Location", _reqHighPrecisionLoc),
+            Btn("Remove High Precision Location", _removeHighPrecisionLoc),
             Expanded(
               child: new SingleChildScrollView(
                 child: Text(
@@ -149,11 +164,5 @@ class _LocationUpdatesExCbScreenState extends State<LocationUpdatesExCbScreen> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _removeLocationUpdatesOnDispose();
   }
 }

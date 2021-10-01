@@ -19,27 +19,63 @@ import 'dart:core';
 import 'dart:ui';
 
 class Geofence {
+  /// A user enters the geofence.
   static const int ENTER_GEOFENCE_CONVERSION = 1;
+
+  /// A user exits the geofence.
   static const int EXIT_GEOFENCE_CONVERSION = 2;
+
+  /// A user stays in the geofence.
   static const int DWELL_GEOFENCE_CONVERSION = 4;
+
+  /// No timeout interval is configured for the geofence.
   static const int GEOFENCE_NEVER_EXPIRE = -1;
 
+  /// Unique ID of a geofence.
+  ///
+  /// If the unique ID exists, the new geofence will overwrite the old one.
   String uniqueId;
-  int conversions;
-  int validDuration;
+
+  /// Geofence conversions.
+  ///
+  /// The **bitwise-OR** operation is supported.
+  int? conversions;
+
+  /// Geofence timeout interval, in milliseconds.
+  ///
+  /// The geofence will be automatically deleted after this amount of time.
+  int? validDuration;
+
+  /// Latitude.
+  ///
+  /// The value range is between `-90` and `90`.
   double latitude;
+
+  /// Longitude.
+  ///
+  /// The value range is between `-180` and `180`.
   double longitude;
+
+  /// Geofence radius, in meters.
   double radius;
-  int notificationInterval;
-  int dwellDelayTime;
+
+  /// Interval for sending geofence notifications.
+  ///
+  /// The default value is `0`. Setting it to a larger value can reduce power consumption accordingly. However, reporting of geofence events may be delayed.
+  int? notificationInterval;
+
+  /// Stay duration for reporting a geofence event, in milliseconds.
+  ///
+  /// A geofence event will be reported when a user stays in a geofence for this amount of time.
+  int? dwellDelayTime;
 
   Geofence({
-    this.uniqueId,
+    required this.uniqueId,
     this.conversions,
     this.validDuration,
-    this.latitude,
-    this.longitude,
-    this.radius,
+    required this.latitude,
+    required this.longitude,
+    required this.radius,
     this.notificationInterval = 0,
     this.dwellDelayTime = 0,
   });
@@ -58,8 +94,6 @@ class Geofence {
   }
 
   factory Geofence.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return Geofence(
       uniqueId: map['uniqueId'],
       conversions: map['conversions'],

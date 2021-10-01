@@ -21,14 +21,14 @@ import 'activity_conversion_response.dart';
 import 'activity_identification_response.dart';
 
 class ActivityIdentificationService {
-  static ActivityIdentificationService _instance;
+  static ActivityIdentificationService? _instance;
 
   final MethodChannel _methodChannel;
   final EventChannel _activityIdentificationEventChannel;
   final EventChannel _activityConversionEventChannel;
 
-  Stream<ActivityIdentificationResponse> _onActivityIdentification;
-  Stream<ActivityConversionResponse> _onActivityConversion;
+  Stream<ActivityIdentificationResponse>? _onActivityIdentification;
+  Stream<ActivityConversionResponse>? _onActivityConversion;
 
   ActivityIdentificationService._create(
     this._methodChannel,
@@ -53,46 +53,56 @@ class ActivityIdentificationService {
         activityConversionEventChannel,
       );
     }
-    return _instance;
+    return _instance!;
   }
 
+  /// Registers for activity identification updates.
   Future<int> createActivityIdentificationUpdates(
       int detectionIntervalMillis) async {
-    return _methodChannel.invokeMethod<int>(
-        'createActivityIdentificationUpdates', detectionIntervalMillis);
+    return (await _methodChannel.invokeMethod<int>(
+        'createActivityIdentificationUpdates', detectionIntervalMillis))!;
   }
 
+  /// Registers for activity conversion updates (entering and exit), for
+  /// example, detecting user status change from walking to bicycling.
   Future<int> createActivityConversionUpdates(
       List<ActivityConversionInfo> activityConversions) async {
-    return _methodChannel.invokeMethod<int>('createActivityConversionUpdates',
-        activityConversions?.map((x) => x?.toMap())?.toList());
+    return (await _methodChannel.invokeMethod<int>(
+        'createActivityConversionUpdates',
+        activityConversions.map((x) => x.toMap()).toList()))!;
   }
 
+  /// Removes activity identification updates based on the specified request code.
   Future<void> deleteActivityIdentificationUpdates(int requestCode) async {
     return _methodChannel.invokeMethod<void>(
         'deleteActivityIdentificationUpdates', requestCode);
   }
 
+  /// Removes activity conversion updates based on the specified request code.
   Future<void> deleteActivityConversionUpdates(int requestCode) async {
     return _methodChannel.invokeMethod<void>(
         'deleteActivityConversionUpdates', requestCode);
   }
 
+  /// Listens for activity identification updates that come from the
+  /// [createActivityIdentificationUpdates] method.
   Stream<ActivityIdentificationResponse> get onActivityIdentification {
     if (_onActivityIdentification == null) {
       _onActivityIdentification = _activityIdentificationEventChannel
           .receiveBroadcastStream()
           .map((event) => ActivityIdentificationResponse.fromMap(event));
     }
-    return _onActivityIdentification;
+    return _onActivityIdentification!;
   }
 
+  /// Listens for activity conversion updates that come from the
+  /// [createActivityConversionUpdates] method.
   Stream<ActivityConversionResponse> get onActivityConversion {
     if (_onActivityConversion == null) {
       _onActivityConversion = _activityConversionEventChannel
           .receiveBroadcastStream()
           .map((event) => ActivityConversionResponse.fromMap(event));
     }
-    return _onActivityConversion;
+    return _onActivityConversion!;
   }
 }

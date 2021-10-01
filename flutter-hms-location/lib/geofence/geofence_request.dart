@@ -22,15 +22,35 @@ import 'package:flutter/foundation.dart';
 import 'geofence.dart';
 
 class GeofenceRequest {
+  /// Triggered immediately when a request is initiated to add the geofence
+  /// where a user device has already entered.
   static const int ENTER_INIT_CONVERSION = 1;
+
+  /// Triggered immediately when a request is initiated to add the geofence
+  /// where a user device has already exited.
   static const int EXIT_INIT_CONVERSION = 2;
+
+  /// Triggered immediately when a request is initiated to add the geofence
+  /// where a user device has already entered and stayed for the specified duration.
   static const int DWELL_INIT_CONVERSION = 4;
+
+  /// WGS_84 coordinate system.
   static const int COORDINATE_TYPE_WGS_84 = 1;
+
+  /// GCJ-02 coordinate system.
   static const int COORDINATE_TYPE_GCJ_02 = 0;
 
-  List<Geofence> geofenceList;
-  int initConversions;
-  int coordinateType;
+  /// List of geofences to be monitored.
+  List<Geofence?>? geofenceList;
+
+  /// Initial conversion type.
+  ///
+  /// The **bitwise-OR** operation is supported. This parameter is invalid if it
+  /// is set to `0`.
+  int? initConversions;
+
+  /// Geofence coordinate type.
+  int? coordinateType;
 
   GeofenceRequest({
     this.geofenceList,
@@ -44,15 +64,13 @@ class GeofenceRequest {
 
   Map<String, dynamic> toMap() {
     return {
-      'geofenceList': geofenceList?.map((x) => x?.toMap())?.toList(),
+      'geofenceList': geofenceList?.map((x) => x?.toMap()).toList(),
       'initConversions': initConversions,
       'coordinateType': coordinateType,
     };
   }
 
   factory GeofenceRequest.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return GeofenceRequest(
       geofenceList: List<Geofence>.from(
           map['geofenceList']?.map((x) => Geofence.fromMap(x))),

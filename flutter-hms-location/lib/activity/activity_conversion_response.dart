@@ -22,7 +22,10 @@ import 'package:flutter/foundation.dart';
 import 'activity_conversion_data.dart';
 
 class ActivityConversionResponse {
-  List<ActivityConversionData> activityConversionDatas;
+  /// All activity conversion events in the result.
+  ///
+  /// The obtained activity events are sorted by time in ascending order.
+  List<ActivityConversionData?>? activityConversionDatas;
 
   ActivityConversionResponse({
     this.activityConversionDatas,
@@ -31,16 +34,15 @@ class ActivityConversionResponse {
   Map<String, dynamic> toMap() {
     return {
       'activityConversionDatas':
-          activityConversionDatas?.map((x) => x?.toMap())?.toList(),
+          activityConversionDatas?.map((x) => x?.toMap()).toList(),
     };
   }
 
   factory ActivityConversionResponse.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return ActivityConversionResponse(
-      activityConversionDatas: List<ActivityConversionData>.from(
-          map['activityConversionDatas']
+      activityConversionDatas: map['activityConversionDatas'] == null
+          ? null
+          : List<ActivityConversionData>.from(map['activityConversionDatas']
               ?.map((x) => ActivityConversionData.fromMap(x))),
     );
   }

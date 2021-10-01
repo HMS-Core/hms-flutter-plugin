@@ -18,9 +18,20 @@ import 'dart:convert';
 import 'dart:ui';
 
 class ActivityConversionData {
-  int activityType;
-  int conversionType;
-  int elapsedTimeFromReboot;
+  /// Activity type of the conversion.
+  ///
+  /// The value is one of the activity types defined in
+  /// [ActivityIdentificationData].
+  int? activityType;
+
+  /// Activity conversion information.
+  ///
+  /// The options are [ActivityConversionInfo.ENTER_ACTIVITY_CONVERSION] and
+  /// [ActivityConversionInfo.EXIT_ACTIVITY_CONVERSION].
+  int? conversionType;
+
+  /// Time elapsed since system boot, in milliseconds.
+  int? elapsedTimeFromReboot;
 
   ActivityConversionData({
     this.activityType,
@@ -37,8 +48,6 @@ class ActivityConversionData {
   }
 
   factory ActivityConversionData.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return ActivityConversionData(
       activityType: map['activityType'],
       conversionType: map['conversionType'],

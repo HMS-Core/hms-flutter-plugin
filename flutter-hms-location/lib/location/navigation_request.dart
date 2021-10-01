@@ -18,12 +18,16 @@ import 'dart:convert';
 import 'dart:ui';
 
 class NavigationRequest {
+  /// Used to request the device navigation status.
   static const int OVERPASS = 1;
+
+  /// Used to check whether the device supports high-precision location.
   static const int IS_SUPPORT_EX = 2;
 
+  /// Requested navigation type.
   int type;
 
-  NavigationRequest({this.type});
+  NavigationRequest({required this.type});
 
   Map<String, dynamic> toMap() {
     return {
@@ -32,8 +36,6 @@ class NavigationRequest {
   }
 
   factory NavigationRequest.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return NavigationRequest(
       type: map['type'],
     );

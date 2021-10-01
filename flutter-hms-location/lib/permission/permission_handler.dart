@@ -17,7 +17,7 @@
 import 'package:flutter/services.dart';
 
 class PermissionHandler {
-  static PermissionHandler _instance;
+  static PermissionHandler? _instance;
 
   final MethodChannel _methodChannel;
 
@@ -31,33 +31,50 @@ class PermissionHandler {
           'com.huawei.flutter.location/permission_methodchannel');
       _instance = PermissionHandler._create(methodChannel);
     }
-    return _instance;
+    return _instance!;
   }
 
+  /// Checks whether the location permission is available.
   Future<bool> hasLocationPermission() async {
-    return _methodChannel.invokeMethod<bool>('hasLocationPermission');
+    return (await _methodChannel.invokeMethod<bool>('hasLocationPermission'))!;
   }
 
+  /// Checks whether the background location permission is available.
   Future<bool> hasBackgroundLocationPermission() async {
-    return _methodChannel.invokeMethod<bool>('hasBackgroundLocationPermission');
+    return (await _methodChannel
+        .invokeMethod<bool>('hasBackgroundLocationPermission'))!;
   }
 
+  /// Checks whether the activity permission is available.
   Future<bool> hasActivityRecognitionPermission() async {
-    return _methodChannel
-        .invokeMethod<bool>('hasActivityRecognitionPermission');
+    return (await _methodChannel
+        .invokeMethod<bool>('hasActivityRecognitionPermission'))!;
   }
 
+  /// Requests the location permission.
+  ///
+  /// The value `true` is returned if the permission is granted.
+  /// Otherwise, `false` is returned.
   Future<bool> requestLocationPermission() async {
-    return _methodChannel.invokeMethod<bool>('requestLocationPermission');
+    return (await _methodChannel
+        .invokeMethod<bool>('requestLocationPermission'))!;
   }
 
+  /// Requests the background location permission.
+  ///
+  /// The value `true` is returned if the permission is granted.
+  /// Otherwise, `false` is returned.
   Future<bool> requestBackgroundLocationPermission() async {
-    return _methodChannel
-        .invokeMethod<bool>('requestBackgroundLocationPermission');
+    return (await _methodChannel
+        .invokeMethod<bool>('requestBackgroundLocationPermission'))!;
   }
 
+  /// Requests the activity permission.
+  ///
+  /// The value `true` is returned if the permission is granted.
+  /// Otherwise, `false` is returned.
   Future<bool> requestActivityRecognitionPermission() async {
-    return _methodChannel
-        .invokeMethod<bool>('requestActivityRecognitionPermission');
+    return (await _methodChannel
+        .invokeMethod<bool>('requestActivityRecognitionPermission'))!;
   }
 }

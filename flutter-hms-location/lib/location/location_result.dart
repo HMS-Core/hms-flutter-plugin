@@ -23,10 +23,17 @@ import 'hwlocation.dart' show HWLocation;
 import 'location.dart' show Location;
 
 class LocationResult {
-  List<Location> locations;
-  List<HWLocation> hwLocations;
-  Location lastLocation;
-  HWLocation lastHWLocation;
+  /// Available locations, which are sorted from oldest to newest.
+  List<Location?>? locations;
+
+  /// List of available locations sorted from oldest to newest, including the detailed address.
+  List<HWLocation?>? hwLocations;
+
+  /// Available location of the last request.
+  Location? lastLocation;
+
+  /// Available location of the last request, including the detailed address.
+  HWLocation? lastHWLocation;
 
   LocationResult({
     this.locations,
@@ -37,16 +44,14 @@ class LocationResult {
 
   Map<String, dynamic> toMap() {
     return {
-      'locations': locations?.map((x) => x?.toMap())?.toList(),
-      'hwLocations': hwLocations?.map((x) => x?.toMap())?.toList(),
+      'locations': locations?.map((x) => x?.toMap()).toList(),
+      'hwLocations': hwLocations?.map((x) => x?.toMap()).toList(),
       'lastLocation': lastLocation?.toMap(),
       'lastHWLocation': lastHWLocation?.toMap(),
     };
   }
 
   factory LocationResult.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return LocationResult(
       locations: map["locations"] == null
           ? null

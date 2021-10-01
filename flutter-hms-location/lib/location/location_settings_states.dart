@@ -18,32 +18,62 @@ import 'dart:convert';
 import 'dart:ui';
 
 class LocationSettingsStates {
+  /// Indicates whether the BLE is available on the device.
   bool blePresent;
+
+  /// Indicates whether the BLE is enabled and can be used by the app.
   bool bleUsable;
+
+  /// Indicates whether the GPS provider is available on the device.
+  ///
+  /// **Deprecated.**
   bool gpsPresent;
+
+  /// Indicates whether the GPS provider is enabled and can be used by the app.
+  ///
+  /// **Deprecated.**
   bool gpsUsable;
+
+  /// Indicates whether the location provider is available on the device.
   bool locationPresent;
+
+  /// Indicates whether the location provider is enabled and can be used by
+  /// the app.
   bool locationUsable;
+
+  /// Indicates whether the network location provider is available on the device.
   bool networkLocationPresent;
+
+  /// Indicates whether the network location provider is enabled and can be used by the app.
   bool networkLocationUsable;
+
+  /// Indicates whether HMS Core (APK) is available for location.
   bool hmsLocationPresent;
+
+  /// Indicates whether the location function is enabled for HMS Core (APK).
   bool hmsLocationUsable;
+
+  /// `True` if the GNSS service is available on the device; `false`
+  /// otherwise.
   bool gnssPresent;
+
+  /// `True` if the GNSS function is enabled on the device; `false`
+  /// otherwise.
   bool gnssUsable;
 
   LocationSettingsStates(
-      {this.blePresent,
-      this.bleUsable,
-      this.gpsPresent,
-      this.gpsUsable,
-      this.locationPresent,
-      this.locationUsable,
-      this.networkLocationPresent,
-      this.networkLocationUsable,
-      this.hmsLocationPresent,
-      this.hmsLocationUsable,
-      this.gnssPresent,
-      this.gnssUsable});
+      {required this.blePresent,
+      required this.bleUsable,
+      required this.gpsPresent,
+      required this.gpsUsable,
+      required this.locationPresent,
+      required this.locationUsable,
+      required this.networkLocationPresent,
+      required this.networkLocationUsable,
+      required this.hmsLocationPresent,
+      required this.hmsLocationUsable,
+      required this.gnssPresent,
+      required this.gnssUsable});
 
   Map<String, dynamic> toMap() {
     return {
@@ -63,8 +93,6 @@ class LocationSettingsStates {
   }
 
   factory LocationSettingsStates.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return LocationSettingsStates(
       blePresent: map['blePresent'],
       bleUsable: map['bleUsable'],

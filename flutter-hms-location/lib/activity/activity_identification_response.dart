@@ -22,9 +22,14 @@ import 'package:flutter/foundation.dart';
 import 'activity_identification_data.dart';
 
 class ActivityIdentificationResponse {
-  int time;
-  int elapsedTimeFromReboot;
-  List<ActivityIdentificationData> activityIdentificationDatas;
+  /// Time of the identification, in milliseconds since January 1, 1970.
+  int? time;
+
+  /// Time elapsed since system boot, in milliseconds.
+  int? elapsedTimeFromReboot;
+
+  /// List of activity identifications, which are sorted by possibility in descending order.
+  List<ActivityIdentificationData>? activityIdentificationDatas;
 
   ActivityIdentificationResponse({
     this.activityIdentificationDatas,
@@ -32,17 +37,19 @@ class ActivityIdentificationResponse {
     this.elapsedTimeFromReboot,
   });
 
-  ActivityIdentificationData get mostActivityIdentification {
+  /// Obtains the most probable activity identification of the user.
+  ActivityIdentificationData? get mostActivityIdentification {
     return activityIdentificationDatas != null &&
-            activityIdentificationDatas.length > 0
-        ? activityIdentificationDatas[0]
+            activityIdentificationDatas!.length > 0
+        ? activityIdentificationDatas![0]
         : null;
   }
 
-  int getActivityPossibility(int activityType) {
+  /// Obtains the confidence of an activity type.
+  int? getActivityPossibility(int activityType) {
     if (activityIdentificationDatas != null &&
-        activityIdentificationDatas.length > 0) {
-      Iterator iterator = activityIdentificationDatas.iterator;
+        activityIdentificationDatas!.length > 0) {
+      Iterator iterator = activityIdentificationDatas!.iterator;
 
       while (iterator.moveNext()) {
         ActivityIdentificationData currentData = iterator.current;
@@ -60,19 +67,19 @@ class ActivityIdentificationResponse {
       'time': time,
       'elapsedTimeFromReboot': elapsedTimeFromReboot,
       'activityIdentificationDatas':
-          activityIdentificationDatas?.map((x) => x?.toMap())?.toList(),
+          activityIdentificationDatas?.map((x) => x.toMap()).toList(),
     };
   }
 
   factory ActivityIdentificationResponse.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return ActivityIdentificationResponse(
       time: map['time'],
       elapsedTimeFromReboot: map['elapsedTimeFromReboot'],
-      activityIdentificationDatas: List<ActivityIdentificationData>.from(
-          map['activityIdentificationDatas']
-              ?.map((x) => ActivityIdentificationData.fromMap(x))),
+      activityIdentificationDatas: map['activityIdentificationDatas'] == null
+          ? null
+          : List<ActivityIdentificationData>.from(
+              map['activityIdentificationDatas']
+                  ?.map((x) => ActivityIdentificationData.fromMap(x))),
     );
   }
 

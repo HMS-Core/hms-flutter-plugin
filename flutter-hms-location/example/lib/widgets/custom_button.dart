@@ -24,13 +24,14 @@ class Btn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      color: Colors.blueGrey,
-      textColor: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      splashColor: Colors.blueAccent,
+    return ElevatedButton(
       child: Text(_text, style: TextStyle(fontSize: 14)),
       onPressed: _onPressed,
+      style: ElevatedButton.styleFrom(
+        primary: Colors.blueGrey,
+        onPrimary: Colors.white,
+        padding: EdgeInsets.symmetric(horizontal: 10),
+      ),
     );
   }
 }

@@ -18,18 +18,59 @@ import 'dart:convert';
 import 'dart:ui';
 
 class Location {
-  String provider;
-  double latitude;
-  double longitude;
-  double altitude;
-  double speed;
-  double bearing;
-  double horizontalAccuracyMeters;
-  double verticalAccuracyMeters;
-  double speedAccuracyMetersPerSecond;
-  double bearingAccuracyDegrees;
-  int time;
-  int elapsedRealtimeNanos;
+  /// Location provider, such as network location, GNSS, Wi-Fi, and Bluetooth.
+  String? provider;
+
+  /// Latitude of a location.
+  ///
+  /// If no latitude is available, `0.0` is returned.
+  double? latitude;
+
+  /// Longitude of a location.
+  ///
+  /// If no longitude is available, `0.0` is returned.
+  double? longitude;
+
+  /// Altitude of a location.
+  ///
+  /// If no altitude is available, `0.0` is returned.
+  double? altitude;
+
+  /// Speed of a device at the current location, in meters per second.
+  ///
+  /// If no speed is available, `0.0` is returned.
+  double? speed;
+
+  /// Bearing of a device at the current location, in degrees.
+  ///
+  /// If no bearing is available, `0.0` is returned.
+  double? bearing;
+
+  /// Horizontal accuracy of a location, in meters.
+  ///
+  /// If no horizontal accuracy is available, `0.0` is returned.
+  double? horizontalAccuracyMeters;
+
+  /// Vertical accuracy of a location, in meters.
+  ///
+  /// If no vertical accuracy is available, `0.0` is returned.
+  double? verticalAccuracyMeters;
+
+  /// Speed accuracy of a device at the current location, in meters per second.
+  ///
+  /// If no speed accuracy is available, `0.0` is returned.
+  double? speedAccuracyMetersPerSecond;
+
+  /// Bearing accuracy at the current location, in degrees.
+  ///
+  /// If no bearing accuracy is available, `0.0` is returned.
+  double? bearingAccuracyDegrees;
+
+  /// Timestamp, in milliseconds.
+  int? time;
+
+  /// Time elapsed since system boot, in nanoseconds.
+  int? elapsedRealtimeNanos;
 
   Location({
     this.provider = 'HMS Mock Location',
@@ -63,32 +104,20 @@ class Location {
     };
   }
 
-  factory Location.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
+  factory Location.fromMap(Map<dynamic, dynamic>? map) {
     return Location(
-      provider: map["provider"] == null ? null : map["provider"],
-      latitude: map["latitude"] == null ? null : map["latitude"],
-      longitude: map["longitude"] == null ? null : map["longitude"],
-      altitude: map["altitude"] == null ? null : map["altitude"],
-      speed: map["speed"] == null ? null : map["speed"],
-      bearing: map["bearing"] == null ? null : map["bearing"],
-      horizontalAccuracyMeters: map["horizontalAccuracyMeters"] == null
-          ? null
-          : map["horizontalAccuracyMeters"],
-      verticalAccuracyMeters: map["verticalAccuracyMeters"] == null
-          ? null
-          : map["verticalAccuracyMeters"],
-      speedAccuracyMetersPerSecond: map["speedAccuracyMetersPerSecond"] == null
-          ? null
-          : map["speedAccuracyMetersPerSecond"],
-      bearingAccuracyDegrees: map["bearingAccuracyDegrees"] == null
-          ? null
-          : map["bearingAccuracyDegrees"],
-      time: map["time"] == null ? null : map["time"],
-      elapsedRealtimeNanos: map["elapsedRealtimeNanos"] == null
-          ? null
-          : map["elapsedRealtimeNanos"],
+      provider: map?["provider"],
+      latitude: map?["latitude"],
+      longitude: map?["longitude"],
+      altitude: map?["altitude"],
+      speed: map?["speed"],
+      bearing: map?["bearing"],
+      horizontalAccuracyMeters: map?["horizontalAccuracyMeters"],
+      verticalAccuracyMeters: map?["verticalAccuracyMeters"],
+      speedAccuracyMetersPerSecond: map?["speedAccuracyMetersPerSecond"],
+      bearingAccuracyDegrees: map?["bearingAccuracyDegrees"],
+      time: map?["time"],
+      elapsedRealtimeNanos: map?["elapsedRealtimeNanos"],
     );
   }
 

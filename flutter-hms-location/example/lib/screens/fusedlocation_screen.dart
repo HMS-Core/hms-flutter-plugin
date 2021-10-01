@@ -48,7 +48,7 @@ class _FusedLocationScreenState extends State<FusedLocationScreen> {
 
   String _topText = "";
   String _bottomText = "";
-  LocationSettingsRequest _locationSettingsRequest;
+  late LocationSettingsRequest _locationSettingsRequest;
 
   @override
   void initState() {

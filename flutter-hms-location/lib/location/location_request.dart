@@ -20,25 +20,84 @@ import 'dart:ui';
 import 'package:flutter/foundation.dart';
 
 class LocationRequest {
+  /// Used to request the most accurate location.
   static const int PRIORITY_HIGH_ACCURACY = 100;
+
+  /// Used to request the block-level location.
   static const int PRIORITY_BALANCED_POWER_ACCURACY = 102;
+
+  /// Used to request the city-level location.
   static const int PRIORITY_LOW_POWER = 104;
+
+  /// Used to request the location with the optimal accuracy without additional power consumption.
   static const int PRIORITY_NO_POWER = 105;
+
+  /// Used to request the high-precision location information.
+  ///
+  /// Currently, this parameter is available only for the
+  /// [requestLocationUpdatesEx] method.
   static const int PRIORITY_HD_ACCURACY = 200;
   static const double _FASTEST_INTERVAL_FACTOR = 6.0;
 
-  int _priority;
-  int _interval;
-  int _fastestInterval;
-  bool _isFastestIntervalExplicitlySet;
-  int _expirationTime;
-  int _numUpdates;
-  double _smallestDisplacement;
-  int _maxWaitTime;
-  bool needAddress;
-  String language;
-  String countryCode;
-  Map<String, String> extras;
+  /// Request priority.
+  ///
+  /// The default value is `100`.
+  late int _priority;
+
+  /// Callback interval, in milliseconds.
+  ///
+  /// The default value is `3600000`.
+  late int _interval;
+
+  /// Shortest request interval, in milliseconds.
+  ///
+  /// The default value is `600000`. If another app initiates a location
+  /// request, the location is also reported to that app at the interval
+  /// specified in [fastestInterval].
+  late int _fastestInterval;
+
+  /// Indicates whether to use the shortest interval.
+  ///
+  /// The options are `true` (yes) and `false` (no).
+  late bool _isFastestIntervalExplicitlySet;
+
+  /// Request expiration time, in milliseconds.
+  ///
+  /// The default value is `9223372036854775807`.
+  late int _expirationTime;
+
+  /// Number of requested location updates.
+  ///
+  /// The default value is `2147483647`.
+  late int _numUpdates;
+
+  /// Minimum displacement between location updates, in meters.
+  ///
+  /// The default value is `0`.
+  late double _smallestDisplacement;
+
+  /// Maximum waiting time, in milliseconds.
+  ///
+  /// The default value is `0`.
+  late int _maxWaitTime;
+
+  /// Indicates whether to return the address information.
+  ///
+  /// The default value is `false`.
+  late bool needAddress;
+
+  /// Language.
+  ///
+  /// The value is a two-letter code complying with the **ISO 639-1 standard**.
+  /// By default, the value is empty.
+  late String language;
+
+  /// Country code.
+  ///
+  /// The value is a two-letter code complying with the **ISO 3166-1 standard**.
+  /// By default, the value is empty.
+  late String countryCode;
+  Map<String, String>? extras;
 
   LocationRequest._create(
     this._priority,
@@ -107,7 +166,8 @@ class LocationRequest {
     }
   }
 
-  bool get isFastestIntervalExplicitlySet => _isFastestIntervalExplicitlySet;
+  /// Indicates whether the fastest interval explicitly set or default value is being used.
+  bool? get isFastestIntervalExplicitlySet => _isFastestIntervalExplicitlySet;
 
   int get expirationTime => _expirationTime;
 
@@ -143,7 +203,7 @@ class LocationRequest {
     if (extras == null) {
       extras = Map<String, String>();
     }
-    extras.putIfAbsent(key, () => value);
+    extras!.putIfAbsent(key, () => value);
   }
 
   Map<String, dynamic> toMap() {
@@ -164,8 +224,6 @@ class LocationRequest {
   }
 
   factory LocationRequest.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
-
     return LocationRequest._create(
       map['priority'],
       map['interval'],

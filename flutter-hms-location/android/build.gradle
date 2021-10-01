@@ -41,5 +41,5 @@ android {
 }
 
 dependencies {
-    implementation 'com.huawei.hms:location:5.1.0.301'
+    implementation 'com.huawei.hms:location:6.0.0.302'
 }
