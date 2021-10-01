@@ -14,11 +14,11 @@
     limitations under the License.
 */
 
-import 'account_auth_params.dart';
 import '../common/scope.dart';
+import 'account_auth_params.dart';
 
 class AccountAuthParamsHelper {
-  AccountAuthParams? _params;
+  int? _param;
   bool? _needUid;
   bool? _needAuthorizationCode;
   bool? _needAccessToken;
@@ -27,6 +27,9 @@ class AccountAuthParamsHelper {
   bool? _needIdToken;
   bool? _needProfile;
   bool? _needAuthDialog;
+
+  /// test et
+  bool? _needCarrierId;
   late List<String> _scopeList;
 
   AccountAuthParamsHelper() {
@@ -38,8 +41,9 @@ class AccountAuthParamsHelper {
     _needIdToken = false;
     _needProfile = false;
     _needAuthDialog = false;
+    _needCarrierId = false;
     _scopeList = [];
-    _params = AccountAuthParams.defaultAuthRequestParam;
+    _param = AccountAuthParams.defaultAuthRequestParam.create;
   }
 
   /// Creates a map object from attributes.
@@ -54,13 +58,14 @@ class AccountAuthParamsHelper {
       "setProfile": _needProfile,
       "setAuthDialog": _needAuthDialog,
       "scopeList": _scopeList,
-      "defaultParam": _params?.getId
+      "setCarrierId": _needCarrierId,
+      "defaultParam": _param
     }..removeWhere((k, v) => v == null);
   }
 
   /// Sets the default auth parameter for signing in.
-  void setDefaultParam(AccountAuthParams p) {
-    _params = p;
+  void setDefaultParam(int p) {
+    _param = p;
   }
 
   /// Requests an ID user to authorize an app to obtain the user ID.
@@ -102,6 +107,11 @@ class AccountAuthParamsHelper {
   /// Sets the ID sign-in authorization screen to be displayed in a dialog box.
   void setDialogAuth() {
     _needAuthDialog = true;
+  }
+
+  /// Requests an ID user to authorize an app to obtain the carrier ID.
+  void setCarrierId() {
+    _needCarrierId = true;
   }
 
   /// Adds specified scopes to authorization configurations to request an ID user to

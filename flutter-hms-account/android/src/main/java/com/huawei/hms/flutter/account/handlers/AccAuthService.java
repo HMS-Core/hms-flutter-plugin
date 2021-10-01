@@ -18,6 +18,7 @@ package com.huawei.hms.flutter.account.handlers;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
@@ -51,7 +52,7 @@ public class AccAuthService implements MethodChannel.MethodCallHandler, PluginRe
         this.activity = activity1;
         mResultsForRequests = new HashMap<>();
     }
-    
+
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         HMSLogger.getInstance(activity.getApplicationContext()).startMethodExecutionTimer(call.method);
@@ -61,6 +62,9 @@ public class AccAuthService implements MethodChannel.MethodCallHandler, PluginRe
                 break;
             case "silentSignIn":
                 silent(call, result);
+                break;
+            case "independentSignIn":
+                independent(call, result);
                 break;
             case "signOut":
                 signOut(call, result);
@@ -98,6 +102,23 @@ public class AccAuthService implements MethodChannel.MethodCallHandler, PluginRe
         activity.startActivityForResult(service.getSignInIntent(), mRequestNumber);
     }
 
+    private void independent(@NonNull MethodCall call, MethodChannel.Result result) {
+        AccountAuthParams authParams = new AccountAuthParamsHelper().setProfile().createParams();
+        service = AccountAuthManager.getService(activity, authParams);
+
+        String accessToken = FromMap.toString("accessToken", call.argument("accessToken"), false);
+
+        if (accessToken == null) {
+            ResultSender.illegal(activity, TAG, call.method, result);
+            return;
+        }
+
+        mRequestNumber++;
+        mResultsForRequests.put(mRequestNumber, Pair.create(result, null));
+
+        activity.startActivityForResult(service.getIndependentSignInIntent(accessToken), mRequestNumber);
+    }
+
     private void silent(@NonNull MethodCall call, MethodChannel.Result result) {
         if (service == null) {
             ResultSender.noService(activity, TAG, call.method, result);
@@ -105,7 +126,7 @@ public class AccAuthService implements MethodChannel.MethodCallHandler, PluginRe
         }
 
         service.silentSignIn()
-                .addOnSuccessListener(authAccount -> ResultSender.success(activity, call.method, result, AccountBuilder.authAccountToMap(authAccount)))
+                .addOnSuccessListener(authAccount -> ResultSender.success(activity, call.method, result, AccountBuilder.authAccountToMap(authAccount, activity.getApplicationContext())))
                 .addOnFailureListener(e -> ResultSender.exception(activity, TAG, e, call.method, result));
     }
 
@@ -152,7 +173,7 @@ public class AccAuthService implements MethodChannel.MethodCallHandler, PluginRe
 
         if (result != null) {
             AccountAuthManager.parseAuthResultFromIntent(data)
-                    .addOnSuccessListener(authAccount -> ResultSender.success(activity, "signIn", result, AccountBuilder.authAccountToMap(authAccount)))
+                    .addOnSuccessListener(authAccount -> ResultSender.success(activity, "signIn", result, AccountBuilder.authAccountToMap(authAccount, activity.getApplicationContext())))
                     .addOnFailureListener(e -> ResultSender.exception(activity, TAG, e, "signIn", result));
         }
         return true;

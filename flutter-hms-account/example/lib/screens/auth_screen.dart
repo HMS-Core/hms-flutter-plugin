@@ -14,8 +14,9 @@
     limitations under the License.
 */
 
-import 'package:huawei_account/huawei_account.dart';
 import 'package:flutter/material.dart';
+import 'package:huawei_account/huawei_account.dart';
+
 import '../ui/auth_button.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -93,15 +94,12 @@ class _AuthScreenState extends State<AuthScreen> {
   _signIn() async {
     final helper = AccountAuthParamsHelper();
     helper
-      ..setAccessToken()
-      ..setEmail()
-      ..setIdToken()
-      ..setAuthorizationCode()
-      ..setProfile();
+      ..setProfile()
+      ..setAccessToken();
 
     try {
       _account = await AccountAuthService.signIn(helper);
-      _addToLogs("FROM SIGN IN: " + _account.displayName!);
+      _addToLogs("FROM SIGN IN: " + _account.toMap().toString());
     } on Exception catch (e) {
       _addToLogs(e.toString());
     }

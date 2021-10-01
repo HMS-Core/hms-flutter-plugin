@@ -40,5 +40,5 @@ android {
 }
 
 dependencies {
-    implementation 'com.huawei.hms:hwid:5.2.0.300'
+    implementation 'com.huawei.hms:hwid:6.1.0.302'
 }

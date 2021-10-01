@@ -80,7 +80,7 @@ public class HwAuthTool implements MethodChannel.MethodCallHandler {
         Account account = new Account(name, type);
         List<Scope> scopes = Commons.getScopeList(scopeList);
 
-        Tasks.callInBackground(() -> HuaweiIdAuthTool.requestAccessToken(activity, account, scopes))
+        Tasks.callInBackground(() -> HuaweiIdAuthTool.requestAccessToken(activity.getApplicationContext(), account, scopes))
                 .addOnSuccessListener(s -> ResultSender.success(activity, call.method, result, s))
                 .addOnFailureListener(e -> ResultSender.exception(activity, TAG, e, call.method, result));
     }

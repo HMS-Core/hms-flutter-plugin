@@ -104,7 +104,7 @@ public class AccAuthManager implements MethodChannel.MethodCallHandler {
             return;
         }
 
-        ResultSender.success(activity, call.method, result, AccountBuilder.authAccountToMap(authAccount));
+        ResultSender.success(activity, call.method, result, AccountBuilder.authAccountToMap(authAccount, activity.getApplicationContext()));
     }
 
     private void getAuthResWithScopes(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
@@ -126,7 +126,7 @@ public class AccAuthManager implements MethodChannel.MethodCallHandler {
                 return;
             }
 
-            ResultSender.success(activity, call.method, result, AccountBuilder.authAccountToMap(authAccount));
+            ResultSender.success(activity, call.method, result, AccountBuilder.authAccountToMap(authAccount, activity.getApplicationContext()));
         } catch (AccountAuthException e) {
             HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, e.getMessage());
             result.error(TAG, e.getMessage(), null);
@@ -153,7 +153,7 @@ public class AccAuthManager implements MethodChannel.MethodCallHandler {
             return;
         }
 
-        ResultSender.success(activity, call.method, result, AccountBuilder.authAccountToMap(account));
+        ResultSender.success(activity, call.method, result, AccountBuilder.authAccountToMap(account, activity.getApplicationContext()));
     }
 
     private void containScp(@NonNull MethodCall call, MethodChannel.Result result) {

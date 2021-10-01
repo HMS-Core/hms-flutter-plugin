@@ -17,6 +17,7 @@
 package com.huawei.hms.flutter.account.util;
 
 import android.accounts.Account;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
 
@@ -40,28 +41,49 @@ public class AccountBuilder {
 
     public static AccountAuthParams buildAccountAuthParams(AccountAuthParamsHelper helper, MethodCall call) {
         Boolean uidSet = FromMap.toBoolean("setUid", call.argument("setUid"));
-        if (uidSet) helper.setUid();
+        if (uidSet) {
+            helper.setUid();
+        }
 
         Boolean authCodeSet = FromMap.toBoolean("setAuthorizationCode", call.argument("setAuthorizationCode"));
-        if (authCodeSet) helper.setAuthorizationCode();
+        if (authCodeSet) {
+            helper.setAuthorizationCode();
+        }
 
         Boolean accTokenSet = FromMap.toBoolean("setAccessToken", call.argument("setAccessToken"));
-        if (accTokenSet) helper.setAccessToken();
+        if (accTokenSet) {
+            helper.setAccessToken();
+        }
 
         Boolean emailSet = FromMap.toBoolean("setEmail", call.argument("setEmail"));
-        if (emailSet) helper.setEmail();
+        if (emailSet) {
+            helper.setEmail();
+        }
 
         Boolean idSet = FromMap.toBoolean("setId", call.argument("setId"));
-        if (idSet) helper.setId();
+        if (idSet) {
+            helper.setId();
+        }
 
         Boolean idTokenSet = FromMap.toBoolean("setIdToken", call.argument("setIdToken"));
-        if (idTokenSet) helper.setIdToken();
+        if (idTokenSet) {
+            helper.setIdToken();
+        }
 
         Boolean profileSet = FromMap.toBoolean("setProfile", call.argument("setProfile"));
-        if (profileSet) helper.setProfile();
+        if (profileSet) {
+            helper.setProfile();
+        }
 
         Boolean authDialogSet = FromMap.toBoolean("setAuthDialog", call.argument("setAuthDialog"));
-        if (authDialogSet) helper.setDialogAuth();
+        if (authDialogSet) {
+            helper.setDialogAuth();
+        }
+        
+        Boolean carrierIdSet = FromMap.toBoolean("setCarrierId", call.argument("setCarrierId"));
+        if (carrierIdSet) {
+            helper.setCarrierId();
+        }
 
         List<String> scopeList = FromMap.toStringArrayList("scopeList", call.argument("scopeList"));
         if (!scopeList.isEmpty()) {
@@ -79,7 +101,7 @@ public class AccountBuilder {
         return helper.createParams();
     }
 
-    public static Map<String, Object> authAccountToMap(AuthAccount authAccount) {
+    public static Map<String, Object> authAccountToMap(AuthAccount authAccount, Context context) {
         Map<String, Object> acc = new HashMap<>();
         acc.put("accessToken", authAccount.getAccessToken());
         acc.put("serviceCountryCode", authAccount.getServiceCountryCode());
@@ -95,8 +117,9 @@ public class AccountBuilder {
         acc.put("unionId", authAccount.getUnionId());
         acc.put("openId", authAccount.getOpenId());
         acc.put("accountFlag", authAccount.getAccountFlag());
-        if (authAccount.getAccount() != null) {
-            acc.put("account", androidAccountToMap(authAccount.getAccount()));
+        acc.put("carrierId", authAccount.getCarrierId());
+        if (authAccount.getAccount(context) != null) {
+            acc.put("account", androidAccountToMap(authAccount.getAccount(context)));
         }
         return acc;
     }
@@ -111,6 +134,7 @@ public class AccountBuilder {
         List<String> scopeList = FromMap.toStringArrayList("authorizedScopes", map.get("authorizedScopes"));
         String authorizationCode = FromMap.toString("authorizationCode", map.get("authorizationCode"), false);
         String unionId = FromMap.toString("unionId", map.get("unionId"), false);
+        Integer carrierId = FromMap.toInteger("carrierId", map.get("carrierId"));
 
         return AuthAccount.build(
                 openId,
@@ -124,7 +148,7 @@ public class AccountBuilder {
                 Commons.getScopeSet(scopeList),
                 authorizationCode,
                 unionId,
-                null);
+                null, carrierId);
     }
 
     public static Map<String, Object> accountIconToMap(AccountIcon icon) {

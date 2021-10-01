@@ -1,3 +1,8 @@
+## 6.1.0+302
+
+Added **carrierId** to signed id.
+Added **independentSignIn** method to AccountAuthService.
+
 ## 5.2.0+301
 
 Migrated to **null safety**.

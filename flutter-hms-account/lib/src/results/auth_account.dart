@@ -34,6 +34,7 @@ class AuthAccount {
   String? unionId;
   String? openId;
   int? accountFlag;
+  int? carrierId;
 
   AuthAccount(
       {this.accessToken,
@@ -50,7 +51,8 @@ class AuthAccount {
       this.idToken,
       this.openId,
       this.serviceCountryCode,
-      this.unionId});
+      this.unionId,
+      this.carrierId});
 
   factory AuthAccount.fromMap(Map<dynamic, dynamic> map) {
     return AuthAccount(
@@ -69,7 +71,8 @@ class AuthAccount {
         idToken: map['idToken'] ?? null,
         openId: map['openId'] ?? null,
         serviceCountryCode: map['serviceCountryCode'] ?? null,
-        unionId: map['unionId'] ?? null);
+        unionId: map['unionId'] ?? null,
+        carrierId: map['carrierId'] ?? null);
   }
 
   /// Creates a map object from attributes.
@@ -89,7 +92,8 @@ class AuthAccount {
       "idToken": idToken,
       "openId": openId,
       "serviceCountryCode": serviceCountryCode,
-      "unionId": unionId
+      "unionId": unionId,
+      "carrierId": carrierId
     };
   }
 

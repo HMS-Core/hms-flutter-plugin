@@ -1,6 +1,6 @@
 name: huawei_account_example
 description: Demonstrates how to use the Huawei Account plugin.
-version: 5.2.0+301
+version: 6.1.0+302
 publish_to: none
 
 environment:

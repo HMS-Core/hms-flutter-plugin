@@ -38,7 +38,7 @@ public final class HMSLogger {
 
     private static final String KIT = "Account";
     private static final String PLATFORM = "Flutter";
-    private static final String VERSION = "5.2.0.301";
+    private static final String VERSION = "6.1.0.302";
 
     private static final String SERVICE = "Cross-Platform";
 

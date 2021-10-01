@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'huawei_account'
-  s.version          = '5.2.0+301'
+  s.version          = '6.1.0+302'
   s.summary          = 'HUAWEI Account Kit plugin for Flutter.'
   s.description      = <<-DESC
   It enables user login processes to be carried out quickly and easily with HUAWEI Account Kit's two factor authentication.

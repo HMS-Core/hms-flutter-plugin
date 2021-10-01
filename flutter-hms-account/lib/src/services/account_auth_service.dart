@@ -15,6 +15,7 @@
 */
 
 import 'package:flutter/services.dart';
+
 import '../request/account_auth_params_helper.dart';
 import '../results/account_icon.dart';
 import '../results/auth_account.dart';
@@ -34,6 +35,12 @@ class AccountAuthService {
   /// In this process, the authorization screen is not displayed to the ID user.
   static Future<AuthAccount> silentSignIn() async {
     return AuthAccount.fromMap(await _c.invokeMethod("silentSignIn"));
+  }
+
+  /// Obtains the Intent object of the dialog box that requests independent authorization from users.
+  static Future<AuthAccount> independentSignIn(String accessToken) async {
+    return AuthAccount.fromMap(await _c
+        .invokeMethod("independentSignIn", {'accessToken': accessToken}));
   }
 
   /// Signs out of the current ID. The account SDK deletes the cached ID information.

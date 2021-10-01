@@ -27,7 +27,7 @@ class AccountAuthParams {
   static final AccountAuthParams defaultAuthRequestParamGame =
       AccountAuthParams._(1);
 
-  int get getId => _id;
+  int get create => _id;
 
   @override
   bool operator ==(o) {
