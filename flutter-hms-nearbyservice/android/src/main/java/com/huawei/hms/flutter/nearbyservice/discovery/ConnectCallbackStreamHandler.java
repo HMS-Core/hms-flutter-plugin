@@ -20,22 +20,24 @@ import android.content.Context;
 import android.util.Log;
 
 import com.huawei.hms.flutter.nearbyservice.logger.HMSLogger;
+import com.huawei.hms.flutter.nearbyservice.utils.HmsHelper;
 import com.huawei.hms.flutter.nearbyservice.utils.ToMap;
 import com.huawei.hms.flutter.nearbyservice.utils.constants.ErrorCodes;
 import com.huawei.hms.nearby.discovery.ConnectCallback;
 import com.huawei.hms.nearby.discovery.ConnectInfo;
 import com.huawei.hms.nearby.discovery.ConnectResult;
 
-import java.util.HashMap;
-
 import io.flutter.plugin.common.EventChannel;
+
+import java.util.HashMap;
 
 public class ConnectCallbackStreamHandler extends ConnectCallback implements EventChannel.StreamHandler {
 
     private static final String TAG = "ConnectCallbackHandler";
 
-    private EventChannel.EventSink event;
     private final Context context;
+
+    private EventChannel.EventSink event;
 
     ConnectCallbackStreamHandler(Context context) {
         this.context = context;
@@ -43,13 +45,13 @@ public class ConnectCallbackStreamHandler extends ConnectCallback implements Eve
 
     @Override
     public void onListen(Object arguments, EventChannel.EventSink event) {
-        Log.i(TAG, "onListen");
+        Log.i(TAG, "ConnectCallbackHandler onListen");
         this.event = event;
     }
 
     @Override
     public void onCancel(Object arguments) {
-        Log.i(TAG, "onCancel");
+        Log.i(TAG, "ConnectCallbackHandler onCancel");
         this.event = null;
     }
 
@@ -82,6 +84,7 @@ public class ConnectCallbackStreamHandler extends ConnectCallback implements Eve
 
         HashMap<String, Object> res = new HashMap<>();
         res.put("statusCode", connectResult.getStatus().getStatusCode());
+        res.put("getPolicy", HmsHelper.getChannelPolicyNumber(connectResult.getChannelPolicy()));
         Log.i(TAG, "onResult");
         event.success(ToMap.fromArgs("event", "onResult", "endpointId", endpointId, "connectResult", res));
         HMSLogger.getInstance(context).sendSingleEvent("ConnectCallback.onResult");
@@ -91,8 +94,10 @@ public class ConnectCallbackStreamHandler extends ConnectCallback implements Eve
     public void onDisconnected(String endpointId) {
         HMSLogger.getInstance(context).startMethodExecutionTimer("ConnectCallback.onDisconnected");
         if (event == null) {
-            HMSLogger.getInstance(context).sendSingleEvent("ConnectCallback.onDisconnected", ErrorCodes.ERROR_DISCOVERY);
-            Log.e(TAG, "onDisconnected | EventSink is null. You should define a listener for the ConnectCallbackStream.");
+            HMSLogger.getInstance(context)
+                .sendSingleEvent("ConnectCallback.onDisconnected", ErrorCodes.ERROR_DISCOVERY);
+            Log.e(TAG,
+                "onDisconnected | EventSink is null. You should define a listener for the ConnectCallbackStream.");
             return;
         }
 

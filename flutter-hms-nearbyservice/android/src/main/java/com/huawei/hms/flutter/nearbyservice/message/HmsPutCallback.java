@@ -27,10 +27,12 @@ import com.huawei.hms.nearby.message.PutCallback;
 import io.flutter.plugin.common.EventChannel;
 
 public class HmsPutCallback extends PutCallback {
-    private static final String TAG = "HmsPutCallback";
     public static final SparseArray<HmsPutCallback> PUT_CBS = new SparseArray<>();
 
+    private static final String TAG = "HmsPutCallback";
+
     private final int id;
+
     private final EventChannel.EventSink event;
 
     private final Context context;

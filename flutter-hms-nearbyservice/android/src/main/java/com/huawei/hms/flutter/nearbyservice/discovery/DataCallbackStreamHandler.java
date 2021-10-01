@@ -27,16 +27,17 @@ import com.huawei.hms.nearby.transfer.DataCallback;
 import com.huawei.hms.nearby.transfer.TransferStateUpdate;
 import com.huawei.hms.utils.IOUtils;
 
+import io.flutter.plugin.common.EventChannel;
+
 import java.io.IOException;
 import java.util.HashMap;
-
-import io.flutter.plugin.common.EventChannel;
 
 public class DataCallbackStreamHandler extends DataCallback implements EventChannel.StreamHandler {
     private static final String TAG = "DataCallbackHandler";
 
-    private EventChannel.EventSink event;
     private final Context context;
+
+    private EventChannel.EventSink event;
 
     DataCallbackStreamHandler(Context context) {
         this.context = context;
@@ -57,7 +58,8 @@ public class DataCallbackStreamHandler extends DataCallback implements EventChan
         HMSLogger.getInstance(context).startMethodExecutionTimer("DataCallbackStreamHandler.onReceived");
         Log.i(TAG, "onReceived");
         if (event == null) {
-            HMSLogger.getInstance(context).sendSingleEvent("DataCallbackStreamHandler.onReceived", ErrorCodes.ERROR_TRANSFER);
+            HMSLogger.getInstance(context)
+                .sendSingleEvent("DataCallbackStreamHandler.onReceived", ErrorCodes.ERROR_TRANSFER);
             Log.e(TAG, "onReceived | EventSink is null. You should define a listener for the DataCallbackStream.");
             return;
         }
@@ -80,13 +82,15 @@ public class DataCallbackStreamHandler extends DataCallback implements EventChan
                 streamMap.put("content", IOUtils.toByteArray(data.asStream().asInputStream()));
                 dataMap.put("stream", streamMap);
             } catch (IOException e) {
-                HMSLogger.getInstance(context).sendSingleEvent("DataCallbackStreamHandler.onReceived", ErrorCodes.STREAM_CONVERSION);
+                HMSLogger.getInstance(context)
+                    .sendSingleEvent("DataCallbackStreamHandler.onReceived", ErrorCodes.STREAM_CONVERSION);
                 Log.e(TAG, "onReceived | " + e.getMessage());
                 errorCode = ErrorCodes.STREAM_CONVERSION;
             }
         }
 
-        event.success(ToMap.fromArgs("event", "onReceived", "endpointId", endpointId, "data", dataMap, "errorCode", errorCode));
+        event.success(
+            ToMap.fromArgs("event", "onReceived", "endpointId", endpointId, "data", dataMap, "errorCode", errorCode));
         HMSLogger.getInstance(context).sendSingleEvent("DataCallbackStreamHandler.onReceived");
     }
 
@@ -95,8 +99,10 @@ public class DataCallbackStreamHandler extends DataCallback implements EventChan
         HMSLogger.getInstance(context).startMethodExecutionTimer("DataCallbackStreamHandler.onTransferUpdate");
         Log.i(TAG, "onTransferUpdate");
         if (event == null) {
-            HMSLogger.getInstance(context).sendSingleEvent("DataCallbackStreamHandler.onTransferUpdate", ErrorCodes.ERROR_TRANSFER);
-            Log.e(TAG, "onTransferUpdate | EventSink is null. You should define a listener for the DataCallbackStream.");
+            HMSLogger.getInstance(context)
+                .sendSingleEvent("DataCallbackStreamHandler.onTransferUpdate", ErrorCodes.ERROR_TRANSFER);
+            Log.e(TAG,
+                "onTransferUpdate | EventSink is null. You should define a listener for the DataCallbackStream.");
             return;
         }
 
@@ -108,7 +114,8 @@ public class DataCallbackStreamHandler extends DataCallback implements EventChan
         stateUpdate.put("status", transferStateUpdate.getStatus());
         stateUpdate.put("totalBytes", transferStateUpdate.getTotalBytes());
 
-        event.success(ToMap.fromArgs("event", "onTransferUpdate", "endpointId", endpointId, "transferStateUpdate", stateUpdate));
+        event.success(
+            ToMap.fromArgs("event", "onTransferUpdate", "endpointId", endpointId, "transferStateUpdate", stateUpdate));
         HMSLogger.getInstance(context).sendSingleEvent("DataCallbackStreamHandler.onTransferUpdate");
     }
 }

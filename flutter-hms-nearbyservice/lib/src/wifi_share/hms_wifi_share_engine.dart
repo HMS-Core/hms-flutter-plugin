@@ -26,11 +26,11 @@ class HMSWifiShareEngine {
   HMSWifiShareEngine._(this._methodChannel, this._eventChannel);
 
   /// Streams for DataCallback events
-  Stream<dynamic> _wifiBroadcastStream;
-  Stream<WifiOnFoundResponse> _wifiOnFound;
-  Stream<String> _wifiOnLost;
-  Stream<WifiOnFetchAuthCodeResponse> _wifiOnFetchAuthCode;
-  Stream<WifiShareResultResponse> _wifiOnShareResult;
+  Stream<dynamic>? _wifiBroadcastStream;
+  Stream<WifiOnFoundResponse>? _wifiOnFound;
+  Stream<String>? _wifiOnLost;
+  Stream<WifiOnFetchAuthCodeResponse>? _wifiOnFetchAuthCode;
+  Stream<WifiShareResultResponse>? _wifiOnShareResult;
 
   static final HMSWifiShareEngine _instance = HMSWifiShareEngine._(
       const MethodChannel(WIFI_METHOD_CHANNEL),
@@ -40,7 +40,7 @@ class HMSWifiShareEngine {
 
   Future<void> startWifiShare(WifiSharePolicy policy) {
     return _methodChannel.invokeMethod("startWifiShare", <String, dynamic>{
-      'policy': policy?.toMap(),
+      'policy': policy.toMap(),
     });
   }
 
@@ -54,7 +54,7 @@ class HMSWifiShareEngine {
     });
   }
 
-  Stream<dynamic> get _getWifiBroadcastStream {
+  Stream<dynamic>? get _getWifiBroadcastStream {
     if (_wifiBroadcastStream == null) {
       _wifiBroadcastStream = _eventChannel.receiveBroadcastStream();
     }
@@ -62,54 +62,54 @@ class HMSWifiShareEngine {
     return _wifiBroadcastStream;
   }
 
-  Stream<WifiOnFoundResponse> get wifiOnFound {
+  Stream<WifiOnFoundResponse>? get wifiOnFound {
     if (_wifiOnFound == null) {
-      _wifiOnFound = _getWifiBroadcastStream.map((eventMap) {
+      _wifiOnFound = _getWifiBroadcastStream!.map((eventMap) {
         if (eventMap['event'] == 'onFound') {
           return WifiOnFoundResponse.fromMap(eventMap);
         } else {
-          return null;
+          throw FormatException('WifiOnFoundResponse is null');
         }
-      }).where((event) => event != null);
+      });
     }
     return _wifiOnFound;
   }
 
-  Stream<String> get wifiOnLost {
+  Stream<String>? get wifiOnLost {
     if (_wifiOnLost == null) {
-      _wifiOnLost = _getWifiBroadcastStream.map((eventMap) {
+      _wifiOnLost = _getWifiBroadcastStream!.map((eventMap) {
         if (eventMap['event'] == 'onLost') {
           return eventMap['endpointId'].toString();
         } else {
-          return null;
+          throw FormatException('wifiOnLost is null');
         }
-      }).where((event) => event != null);
+      });
     }
     return _wifiOnLost;
   }
 
-  Stream<WifiOnFetchAuthCodeResponse> get wifiOnFetchAuthCode {
+  Stream<WifiOnFetchAuthCodeResponse>? get wifiOnFetchAuthCode {
     if (_wifiOnFetchAuthCode == null) {
-      _wifiOnFetchAuthCode = _getWifiBroadcastStream.map((eventMap) {
+      _wifiOnFetchAuthCode = _getWifiBroadcastStream!.map((eventMap) {
         if (eventMap['event'] == 'onFetchAuthCode') {
           return WifiOnFetchAuthCodeResponse.fromMap(eventMap);
         } else {
-          return null;
+          throw FormatException('WifiOnFetchAuthCodeResponse is null');
         }
-      }).where((event) => event != null);
+      });
     }
     return _wifiOnFetchAuthCode;
   }
 
-  Stream<WifiShareResultResponse> get wifiOnShareResult {
+  Stream<WifiShareResultResponse>? get wifiOnShareResult {
     if (_wifiOnShareResult == null) {
-      _wifiOnShareResult = _getWifiBroadcastStream.map((eventMap) {
+      _wifiOnShareResult = _getWifiBroadcastStream!.map((eventMap) {
         if (eventMap['event'] == 'onWifiShareResult') {
           return WifiShareResultResponse.fromMap(eventMap);
         } else {
-          return null;
+          throw FormatException('WifiShareResultResponse is null');
         }
-      }).where((event) => event != null);
+      });
     }
     return _wifiOnShareResult;
   }

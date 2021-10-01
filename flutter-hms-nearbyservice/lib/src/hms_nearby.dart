@@ -31,11 +31,11 @@ class HMSNearby {
     const MethodChannel(NEARBY_METHOD_CHANNEL),
   );
 
-  static Future<String> getVersion() {
+  static Future<String?> getVersion() {
     return _instance._channel.invokeMethod("getVersion");
   }
 
-  static Future<bool> equalsMessage(Message object, Message other) {
+  static Future<bool?> equalsMessage(Message object, Message other) {
     ArgumentError.checkNotNull(object);
     ArgumentError.checkNotNull(other);
     return _instance._channel.invokeMethod("equalsMessage",
@@ -57,15 +57,12 @@ class HMSNearbyApiContext {
   static HMSNearbyApiContext get instance => _instance;
 
   Future<void> setApiKey(String apiKey) async {
-    if (apiKey == null) {
-      throw ArgumentError.notNull("apiKey");
-    }
     return HMSNearby._instance._channel
         .invokeMethod("setApiKey", {"apiKey": apiKey});
   }
 
-  Future<String> getApiKey() async {
-    String apiKey =
+  Future<String?> getApiKey() async {
+    String? apiKey =
         await HMSNearby._instance._channel.invokeMethod("getApiKey");
     return apiKey;
   }

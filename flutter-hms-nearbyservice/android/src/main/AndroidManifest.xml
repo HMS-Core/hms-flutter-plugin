@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.huawei.hms.flutter.nearbyservice">
+        package="com.huawei.hms.flutter.nearbyservice">
     <!-- Permission fo HMS Logger -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- Mandatory permissions for Nearby Connection -->
@@ -10,12 +10,10 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- Read permission, which is mandatory for sending files -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!--Write permission-->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!--For Android 10-->
-    <application
-        android:requestLegacyExternalStorage="true">
-    </application>
+    <application android:requestLegacyExternalStorage="true"></application>
 </manifest>

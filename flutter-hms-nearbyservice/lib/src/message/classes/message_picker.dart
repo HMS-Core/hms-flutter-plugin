@@ -55,7 +55,7 @@ class MessagePicker {
 
   @override
   String toString() {
-    List<NamespaceType> types = List<NamespaceType>();
+    List<NamespaceType> types = List<NamespaceType>.empty(growable: true);
     eddystoneUids.forEach((element) {
       types.add(NamespaceType('_reserved_namespace', '_eddystone_uid'));
     });
@@ -100,9 +100,10 @@ class MessagePicker {
 
 class MessagePickerBuilder {
   bool _includeAllTypes = false;
-  List<IBeaconInfo> _iBeaconIds = List<IBeaconInfo>();
-  List<UidInstance> _eddystoneUids = List<UidInstance>();
-  List<NamespaceType> _namespaceTypes = List<NamespaceType>();
+  List<IBeaconInfo> _iBeaconIds = List<IBeaconInfo>.empty(growable: true);
+  List<UidInstance> _eddystoneUids = List<UidInstance>.empty(growable: true);
+  List<NamespaceType> _namespaceTypes =
+      List<NamespaceType>.empty(growable: true);
 
   MessagePickerBuilder();
 
@@ -112,20 +113,17 @@ class MessagePickerBuilder {
   }
 
   MessagePickerBuilder includeEddyStoneUids(List<UidInstance> eddystoneUids) {
-    if (eddystoneUids == null) throw ArgumentError.notNull("eddystoneUids");
     _eddystoneUids.addAll(eddystoneUids);
     return this;
   }
 
   MessagePickerBuilder includeIBeaconIds(List<IBeaconInfo> iBeaconIds) {
-    if (iBeaconIds == null) throw ArgumentError.notNull("iBeaconIds");
     _iBeaconIds.addAll(iBeaconIds);
     return this;
   }
 
   MessagePickerBuilder includeNamespaceType(
       List<NamespaceType> namespaceTypes) {
-    if (namespaceTypes == null) throw ArgumentError.notNull("namespaceTypes");
     _namespaceTypes.addAll(namespaceTypes);
     return this;
   }

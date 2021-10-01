@@ -17,9 +17,9 @@
 import 'package:huawei_nearbyservice/src/transfer/classes.dart';
 
 class DataOnReceivedResponse {
-  final String endpointId;
-  final TransferData data;
-  final String errorCode;
+  final String? endpointId;
+  final TransferData? data;
+  final String? errorCode;
 
   DataOnReceivedResponse({this.endpointId, this.data, this.errorCode});
 
@@ -34,8 +34,8 @@ class DataOnReceivedResponse {
 }
 
 class DataOnTransferUpdateResponse {
-  final String endpointId;
-  final TransferStateUpdate transferStateUpdate;
+  final String? endpointId;
+  final TransferStateUpdate? transferStateUpdate;
 
   DataOnTransferUpdateResponse({this.endpointId, this.transferStateUpdate});
 

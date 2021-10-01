@@ -16,6 +16,8 @@
 
 package com.huawei.hms.flutter.nearbyservice.message;
 
+import static com.huawei.hms.nearby.discovery.Distance.DISTANCE_UNKNOWN;
+
 import android.content.Context;
 import android.util.Log;
 import android.util.SparseArray;
@@ -27,18 +29,19 @@ import com.huawei.hms.nearby.discovery.Distance;
 import com.huawei.hms.nearby.message.Message;
 import com.huawei.hms.nearby.message.MessageHandler;
 
-import java.util.HashMap;
-
 import io.flutter.plugin.common.EventChannel;
 
-import static com.huawei.hms.nearby.discovery.Distance.DISTANCE_UNKNOWN;
+import java.util.HashMap;
 
 public class HmsMessageHandler extends MessageHandler {
-    private static final String TAG = "HmsMessageHandler";
     public static final SparseArray<HmsMessageHandler> MESSAGE_CBS = new SparseArray<>();
 
+    private static final String TAG = "HmsMessageHandler";
+
     private final int id;
+
     private final EventChannel.EventSink event;
+
     private final Context context;
 
     public HmsMessageHandler(EventChannel.EventSink event, int id, Context context) {
@@ -91,9 +94,11 @@ public class HmsMessageHandler extends MessageHandler {
         HashMap<String, Object> distanceMap = new HashMap<>();
 
         distanceMap.put("isUnknown", DISTANCE_UNKNOWN.compareTo(distance));
-        distanceMap.put("meters", Double.isNaN(distance.getMeters()) ? DISTANCE_UNKNOWN.getMeters() : distance.getMeters());
+        distanceMap.put("meters",
+            Double.isNaN(distance.getMeters()) ? DISTANCE_UNKNOWN.getMeters() : distance.getMeters());
         distanceMap.put("precision", distance.getPrecision());
-        event.success(ToMap.fromArgs("event", "onDistanceChanged", "message", messageMap, "distance", distanceMap, "id", id));
+        event.success(
+            ToMap.fromArgs("event", "onDistanceChanged", "message", messageMap, "distance", distanceMap, "id", id));
         HMSLogger.getInstance(context).sendSingleEvent("MessageHandler.onDistanceChanged");
     }
 
@@ -111,7 +116,8 @@ public class HmsMessageHandler extends MessageHandler {
         bleMap.put("rssi", bleSignal.getRssi());
         bleMap.put("txPower", bleSignal.getTxPower());
 
-        event.success(ToMap.fromArgs("event", "onBleSignalChanged", "message", messageMap, "bleSignal", bleMap, "id", id));
+        event.success(
+            ToMap.fromArgs("event", "onBleSignalChanged", "message", messageMap, "bleSignal", bleMap, "id", id));
         HMSLogger.getInstance(context).sendSingleEvent("MessageHandler.onBleSignalChanged");
     }
 }

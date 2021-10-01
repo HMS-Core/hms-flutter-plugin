@@ -27,10 +27,12 @@ import com.huawei.hms.nearby.message.GetCallback;
 import io.flutter.plugin.common.EventChannel;
 
 public class HmsGetCallback extends GetCallback {
-    private static final String TAG = "HmsGetCallback";
     public static final SparseArray<HmsGetCallback> GET_CBS = new SparseArray<>();
 
+    private static final String TAG = "HmsGetCallback";
+
     private final int id;
+
     private final EventChannel.EventSink event;
 
     private final Context context;

@@ -47,16 +47,16 @@ class HmsNearbyDemo extends StatelessWidget {
 }
 
 void requestPermissions() async {
-  List<NearbyPermission> permissions = List<NearbyPermission>();
-  bool location = await NearbyPermissionHandler.hasLocationPermission();
+  List<NearbyPermission> permissions = [];
+  bool? location = await NearbyPermissionHandler.hasLocationPermission();
   print('Location Permission : $location');
-  if (!location) {
+  if (!location!) {
     permissions.add(NearbyPermission.location);
   }
 
-  bool storage = await NearbyPermissionHandler.hasExternalStoragePermission();
+  bool? storage = await NearbyPermissionHandler.hasExternalStoragePermission();
   print('Storage Permission : $storage');
-  if (!storage) {
+  if (!storage!) {
     permissions.add(NearbyPermission.externalStorage);
   }
 

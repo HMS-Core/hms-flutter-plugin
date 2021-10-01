@@ -22,14 +22,14 @@ class BeaconId {
   static const int eddystoneNamespaceLength = 10;
   static const int eddystoneInstanceLength = 6;
 
-  final String iBeaconUuid;
-  final String hexId;
-  final String instance;
-  final String namespace;
-  final int major;
-  final int minor;
-  final int length;
-  final int type;
+  final String? iBeaconUuid;
+  final String? hexId;
+  final String? instance;
+  final String? namespace;
+  final int? major;
+  final int? minor;
+  final int? length;
+  final int? type;
 
   BeaconId._builder(BeaconIdBuilder builder)
       : this.iBeaconUuid = builder._uuid,
@@ -63,23 +63,23 @@ class BeaconId {
 class BeaconIdBuilder {
   /// [BeaconId.typeIBeacon] or
   /// [BeaconId.typeEddystoneUid]
-  int _type;
+  int? _type;
 
   /// 20 if [BeaconId.typeIBeacon]
   /// 16 if [BeaconId.typeEddystoneUid]
-  int _length;
+  int? _length;
 
   /// [BeaconId.typeIBeacon] properties
   /// otherwise null
-  String _uuid;
-  int _major;
-  int _minor;
+  String? _uuid;
+  int? _major;
+  int? _minor;
 
   /// [BeaconId.typeEddystoneUid] beacon properties
   /// otherwise null
-  String _hexId;
-  String _instance;
-  String _namespace;
+  String? _hexId;
+  String? _instance;
+  String? _namespace;
 
   BeaconIdBuilder();
 

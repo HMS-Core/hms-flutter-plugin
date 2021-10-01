@@ -29,9 +29,9 @@ class HMSTransferEngine {
   HMSTransferEngine._(this._methodChannel, this._eventChannel);
 
   /// Streams for DataCallback events
-  Stream<dynamic> _dataBroadcastStream;
-  Stream<DataOnReceivedResponse> _dataOnReceived;
-  Stream<DataOnTransferUpdateResponse> _dataOnTransferUpdate;
+  Stream<dynamic>? _dataBroadcastStream;
+  Stream<DataOnReceivedResponse>? _dataOnReceived;
+  Stream<DataOnTransferUpdateResponse>? _dataOnTransferUpdate;
 
   static final HMSTransferEngine _instance = HMSTransferEngine._(
       const MethodChannel(TRANSFER_METHOD_CHANNEL),
@@ -43,7 +43,7 @@ class HMSTransferEngine {
       {bool isUri = false}) {
     return _methodChannel.invokeMethod("sendData", <String, dynamic>{
       'endpointId': endpointId,
-      'data': data?.toMap(),
+      'data': data.toMap(),
       'isUri': isUri
     });
   }
@@ -54,7 +54,7 @@ class HMSTransferEngine {
     return _methodChannel.invokeMethod(
         "sendMultiEndpointData", <String, dynamic>{
       'endpointIds': endpointIds,
-      'data': data?.toMap(),
+      'data': data.toMap(),
       'isUri': isUri
     });
   }
@@ -65,7 +65,7 @@ class HMSTransferEngine {
     });
   }
 
-  Stream<dynamic> get _getDataBroadcastStream {
+  Stream<dynamic>? get _getDataBroadcastStream {
     if (_dataBroadcastStream == null) {
       _dataBroadcastStream = _eventChannel.receiveBroadcastStream();
     }
@@ -73,28 +73,28 @@ class HMSTransferEngine {
     return _dataBroadcastStream;
   }
 
-  Stream<DataOnReceivedResponse> get dataOnReceived {
+  Stream<DataOnReceivedResponse>? get dataOnReceived {
     if (_dataOnReceived == null) {
-      _dataOnReceived = _getDataBroadcastStream.map((eventMap) {
+      _dataOnReceived = _getDataBroadcastStream!.map((eventMap) {
         if (eventMap['event'] == 'onReceived') {
           return DataOnReceivedResponse.fromMap(eventMap);
         } else {
-          return null;
+          throw FormatException('DataOnReceivedResponse is null');
         }
-      }).where((event) => event != null);
+      });
     }
     return _dataOnReceived;
   }
 
-  Stream<DataOnTransferUpdateResponse> get dataOnTransferUpdate {
+  Stream<DataOnTransferUpdateResponse>? get dataOnTransferUpdate {
     if (_dataOnTransferUpdate == null) {
-      _dataOnTransferUpdate = _getDataBroadcastStream.map((eventMap) {
+      _dataOnTransferUpdate = _getDataBroadcastStream!.map((eventMap) {
         if (eventMap['event'] == 'onTransferUpdate') {
           return DataOnTransferUpdateResponse.fromMap(eventMap);
         } else {
-          return null;
+          throw FormatException('DataOnTransferUpdateResponse is null');
         }
-      }).where((event) => event != null);
+      });
     }
     return _dataOnTransferUpdate;
   }

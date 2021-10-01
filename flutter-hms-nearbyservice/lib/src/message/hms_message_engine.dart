@@ -31,11 +31,11 @@ class HMSMessageEngine {
     _methodChannel.setMethodCallHandler(onMethodCall);
   }
 
-  Stream<dynamic> _messageBroadcastStream;
-  StreamSubscription<dynamic> _messageSub;
+  Stream<dynamic>? _messageBroadcastStream;
+  StreamSubscription<dynamic>? _messageSub;
 
-  static NearbyMessageHandler _pendingHandler;
-  static MessageGetOption _pendingGetOption;
+  static NearbyMessageHandler? _pendingHandler;
+  static MessageGetOption? _pendingGetOption;
 
   static final HMSMessageEngine _instance = HMSMessageEngine._(
       const MethodChannel(MESSAGE_METHOD_CHANNEL),
@@ -45,7 +45,7 @@ class HMSMessageEngine {
     return _instance;
   }
 
-  Stream<dynamic> get _getMessageBroadcastStream {
+  Stream<dynamic>? get _getMessageBroadcastStream {
     if (_messageBroadcastStream == null) {
       _messageBroadcastStream = _eventChannel.receiveBroadcastStream();
     }
@@ -62,20 +62,20 @@ class HMSMessageEngine {
     ArgumentError.checkNotNull(message, "message");
     _listen();
     return _methodChannel.invokeMethod('putWithOption',
-        {'message': message.toMap(), 'putOption': putOption?.toMap()});
+        {'message': message.toMap(), 'putOption': putOption.toMap()});
   }
 
   Future<void> registerStatusCallback(MessageStatusCallback statusCallback) {
     ArgumentError.checkNotNull(statusCallback, "statusCallback");
     _listen();
     return _methodChannel.invokeMethod(
-        'registerStatusCallback', {'statusCallback': statusCallback?.id});
+        'registerStatusCallback', {'statusCallback': statusCallback.id});
   }
 
   Future<void> get(NearbyMessageHandler handler) {
     ArgumentError.checkNotNull(handler, "handler");
     _listen();
-    return _methodChannel.invokeMethod('get', {'handler': handler?.id});
+    return _methodChannel.invokeMethod('get', {'handler': handler.id});
   }
 
   Future<void> getWithOption(
@@ -83,11 +83,11 @@ class HMSMessageEngine {
     ArgumentError.checkNotNull(handler, "handler");
     _listen();
     return _methodChannel.invokeMethod('getWithOption',
-        {'handler': handler?.id, 'getOption': getOption?.toMap()});
+        {'handler': handler.id, 'getOption': getOption.toMap()});
   }
 
   Future<void> getPending(NearbyMessageHandler handler,
-      [MessageGetOption option]) {
+      [MessageGetOption? option]) {
     _listen();
     ArgumentError.checkNotNull(handler);
     ArgumentError.checkNotNull(handler.onFound);
@@ -99,12 +99,12 @@ class HMSMessageEngine {
         <String, dynamic>{'getOption': _pendingGetOption?.toMap()});
   }
 
-  Future<void> unput(Message message, [MessagePutOption putOption]) async {
+  Future<void> unput(Message message, [MessagePutOption? putOption]) async {
     ArgumentError.checkNotNull(message, "message");
     await _methodChannel.invokeMethod(
         'unput', {'message': message.toMap(), 'putOption': putOption?.toMap()});
     if (putOption?.putCallback?.id != null)
-      MessagePutCallback.putCbs.remove(putOption.putCallback.id);
+      MessagePutCallback.putCbs.remove(putOption!.putCallback!.id);
   }
 
   Future<void> unregisterStatusCallback(
@@ -116,13 +116,13 @@ class HMSMessageEngine {
   }
 
   Future<void> unget(NearbyMessageHandler handler,
-      [MessageGetOption getOption]) async {
+      [MessageGetOption? getOption]) async {
     ArgumentError.checkNotNull(handler, "handler");
     await _methodChannel.invokeMethod(
         'unget', {'handler': handler.id, 'getOption': getOption?.toMap()});
     NearbyMessageHandler.msgHandlerCbs.remove(handler.id);
     if (getOption?.getCallback?.id != null)
-      MessageGetCallback.getCbs.remove(getOption.getCallback.id);
+      MessageGetCallback.getCbs.remove(getOption!.getCallback!.id);
   }
 
   Future<void> ungetPending() async {
@@ -144,18 +144,18 @@ class HMSMessageEngine {
 
   void _listen() {
     if (_messageSub == null) {
-      _messageSub = _getMessageBroadcastStream.listen((channelEvent) {
+      _messageSub = _getMessageBroadcastStream!.listen((channelEvent) {
         Map<dynamic, dynamic> argsMap = channelEvent;
-        String event = argsMap['event'];
-        int id = argsMap['id'];
+        String? event = argsMap['event'];
+        int? id = argsMap['id'];
         if (id == null) {
           print('HMSMessageEngine | id is null.');
           return;
         }
 
-        _MessageEvent msgEvent = _toMessageEvent(event);
+        _MessageEvent? msgEvent = _toMessageEvent(event);
         if (msgEvent != null) {
-          NearbyMessageHandler handler = NearbyMessageHandler.msgHandlerCbs[id];
+          NearbyMessageHandler? handler = NearbyMessageHandler.msgHandlerCbs[id];
           switch (msgEvent) {
             case _MessageEvent.onBleSignalChanged:
               handler?.onBleSignalChanged?.call(
@@ -193,13 +193,13 @@ class HMSMessageEngine {
   }
 
   static Future<dynamic> onMethodCall(MethodCall call) {
-    final Map<dynamic, dynamic> argsMap = call.arguments;
+    final Map<dynamic, dynamic>? argsMap = call.arguments;
     switch (call.method) {
       case 'pendingOnFound':
-        _pendingHandler?.onFound?.call(Message.fromMap(argsMap['message']));
+        _pendingHandler?.onFound?.call(Message.fromMap(argsMap!['message']));
         break;
       case 'pendingOnLost':
-        _pendingHandler?.onLost?.call(Message.fromMap(argsMap['message']));
+        _pendingHandler?.onLost?.call(Message.fromMap(argsMap!['message']));
         break;
       case 'pendingOnTimeout':
         _pendingGetOption?.getCallback?.onTimeout?.call();
@@ -212,8 +212,8 @@ class HMSMessageEngine {
     return Future<dynamic>.value(null);
   }
 
-  static _MessageEvent _toMessageEvent(String event) =>
-      _messageHandlerEventMap[event];
+  static _MessageEvent? _toMessageEvent(String? event) =>
+      _messageHandlerEventMap[event!];
 
   static const Map<String, _MessageEvent> _messageHandlerEventMap =
       <String, _MessageEvent>{

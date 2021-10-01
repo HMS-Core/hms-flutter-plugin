@@ -15,6 +15,7 @@
 */
 
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -56,9 +57,9 @@ class _MessagingPageContentState extends State<MessagingPageContent> {
   String _sdkVersion = 'Unknown';
   String _logs = 'Double tap to clear the logs.\n';
   String _receivedMsg = 'Unknown';
-  Message _message = Message(content: utf8.encode("Hello there!"));
-  NearbyMessageHandler _handler;
-  MessageStatusCallback _statusCb;
+  Message _message = Message(content: (Uint8List.fromList(utf8.encode("Hello there!"))));
+  NearbyMessageHandler _handler = NearbyMessageHandler();
+  MessageStatusCallback _statusCb = MessageStatusCallback();
   bool _isGetActive = false;
   bool _isPutActive = false;
   bool _isCallbackRegistered = false;
@@ -66,12 +67,13 @@ class _MessagingPageContentState extends State<MessagingPageContent> {
   void _get(context) async {
     try {
       if (_isGetActive) {
-        Scaffold.of(context)
+        ScaffoldMessenger.of(context)
             .showSnackBar(createSnack("Get already started.", true));
         return;
       }
       await HMSMessageEngine.instance.get(_handler);
-      Scaffold.of(context).showSnackBar(createSnack("Message get started."));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(createSnack("Message get started."));
       setState(() {
         _isGetActive = true;
       });
@@ -82,13 +84,13 @@ class _MessagingPageContentState extends State<MessagingPageContent> {
 
   void _unget(context) async {
     if (!_isGetActive) {
-      Scaffold.of(context)
+      ScaffoldMessenger.of(context)
           .showSnackBar(createSnack("Get already stopped.", true));
       return;
     }
     try {
       await HMSMessageEngine.instance.unget(_handler);
-      Scaffold.of(context)
+      ScaffoldMessenger.of(context)
           .showSnackBar(createSnack("Message unget successful."));
       setState(() {
         _isGetActive = false;
@@ -100,13 +102,14 @@ class _MessagingPageContentState extends State<MessagingPageContent> {
 
   void _put(context) async {
     if (_isPutActive) {
-      Scaffold.of(context)
+      ScaffoldMessenger.of(context)
           .showSnackBar(createSnack("Put already started.", true));
       return;
     }
     try {
       await HMSMessageEngine.instance.put(_message);
-      Scaffold.of(context).showSnackBar(createSnack("Message put started."));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(createSnack("Message put started."));
       setState(() {
         _isPutActive = true;
       });
@@ -118,12 +121,12 @@ class _MessagingPageContentState extends State<MessagingPageContent> {
   void _unput(context) async {
     try {
       if (!_isPutActive) {
-        Scaffold.of(context)
+        ScaffoldMessenger.of(context)
             .showSnackBar(createSnack("Put already stopped.", true));
         return;
       }
       HMSMessageEngine.instance.unput(_message);
-      Scaffold.of(context)
+      ScaffoldMessenger.of(context)
           .showSnackBar(createSnack("Message unput successful."));
       setState(() {
         _isPutActive = false;
@@ -136,12 +139,12 @@ class _MessagingPageContentState extends State<MessagingPageContent> {
   void _registerStatusCallback(context) async {
     try {
       if (_isCallbackRegistered) {
-        Scaffold.of(context).showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
             createSnack("Status callback already registered.", true));
         return;
       }
       HMSMessageEngine.instance.registerStatusCallback(_statusCb);
-      Scaffold.of(context)
+      ScaffoldMessenger.of(context)
           .showSnackBar(createSnack("Register callback successful."));
       setState(() {
         _isCallbackRegistered = true;
@@ -154,12 +157,12 @@ class _MessagingPageContentState extends State<MessagingPageContent> {
   void _unregisterStatusCallback(context) async {
     try {
       if (!_isCallbackRegistered) {
-        Scaffold.of(context)
+        ScaffoldMessenger.of(context)
             .showSnackBar(createSnack("No callback registered.", true));
         return;
       }
       HMSMessageEngine.instance.unregisterStatusCallback(_statusCb);
-      Scaffold.of(context)
+      ScaffoldMessenger.of(context)
           .showSnackBar(createSnack("Unregister callback successful."));
       setState(() {
         _isCallbackRegistered = false;
@@ -174,7 +177,7 @@ class _MessagingPageContentState extends State<MessagingPageContent> {
     setState(() {
       _logs += e.message + '\n';
     });
-    Scaffold.of(context).showSnackBar(snackBar);
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override
@@ -319,36 +322,36 @@ class _MessagingPageContentState extends State<MessagingPageContent> {
   Future<void> initPlatformState() async {
     String sdkVersion;
     _handler = NearbyMessageHandler(onBleSignalChanged: (message, signal) {
-      String msg = jsonEncode(message?.toMap());
-      String snl = jsonEncode(signal?.toMap());
+      String msg = jsonEncode(message.toMap());
+      String snl = jsonEncode(signal.toMap());
       setState(() {
         _logs += 'onBleSignalChanged\n $msg\n $snl\n';
       });
     }, onDistanceChanged: (message, distance) {
-      String msg = jsonEncode(message?.toMap());
-      String dst = jsonEncode(distance?.toMap());
+      String msg = jsonEncode(message.toMap());
+      String dst = jsonEncode(distance.toMap());
       setState(() {
         _logs += 'onDistanceChanged\n $msg\n $dst\n';
       });
     }, onFound: (message) {
       setState(() {
-        _receivedMsg = utf8.decode(message.content);
+        _receivedMsg = utf8.decode(message.content!.toList());
         _logs += 'onFound\n';
       });
     }, onLost: (message) {
-      String msg = jsonEncode(message?.toMap());
+      String msg = jsonEncode(message.toMap());
       setState(() {
         _logs += 'onLost\n $msg\n';
       });
     });
 
     _statusCb = MessageStatusCallback(
-      onPermissionChanged: (bool granted) =>
+      onPermissionChanged: (bool? granted) =>
           setState(() => _logs += 'onPermissionChanged\n Granted : $granted'),
     );
 
     try {
-      sdkVersion = await HMSNearby.getVersion();
+      sdkVersion = (await HMSNearby.getVersion())!;
     } on PlatformException {
       sdkVersion = 'Failed to get SDK version.';
     }

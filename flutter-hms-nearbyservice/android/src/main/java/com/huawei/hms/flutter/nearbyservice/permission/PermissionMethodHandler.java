@@ -28,17 +28,19 @@ import com.huawei.hms.flutter.nearbyservice.logger.HMSLogger;
 import com.huawei.hms.flutter.nearbyservice.utils.FromMap;
 import com.huawei.hms.flutter.nearbyservice.utils.constants.ErrorCodes;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.PluginRegistry;
 
-public class PermissionMethodHandler implements MethodChannel.MethodCallHandler, PluginRegistry.RequestPermissionsResultListener {
+import java.util.ArrayList;
+import java.util.List;
+
+public class PermissionMethodHandler
+    implements MethodChannel.MethodCallHandler, PluginRegistry.RequestPermissionsResultListener {
     private static final String TAG = "PermissionMethodHandler";
 
     private final Activity activity;
+
     MethodChannel.Result result;
 
     public PermissionMethodHandler(Activity activity) {
@@ -60,7 +62,8 @@ public class PermissionMethodHandler implements MethodChannel.MethodCallHandler,
                 result.success(hasExternalStoragePermission());
                 break;
             default:
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.NOT_FOUND);
+                HMSLogger.getInstance(activity.getApplicationContext())
+                    .sendSingleEvent(call.method, ErrorCodes.NOT_FOUND);
                 result.notImplemented();
                 return;
         }
@@ -95,12 +98,14 @@ public class PermissionMethodHandler implements MethodChannel.MethodCallHandler,
 
     boolean hasLocationPermission() {
         Log.i(TAG, "hasLocationPermission");
-        return hasPermission(Manifest.permission.ACCESS_FINE_LOCATION) && hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION);
+        return hasPermission(Manifest.permission.ACCESS_FINE_LOCATION) && hasPermission(
+            Manifest.permission.ACCESS_COARSE_LOCATION);
     }
 
     boolean hasExternalStoragePermission() {
         Log.i(TAG, "hasExternalStoragePermission");
-        return hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) && hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        return hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE) && hasPermission(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
     boolean hasPermission(String permission) {

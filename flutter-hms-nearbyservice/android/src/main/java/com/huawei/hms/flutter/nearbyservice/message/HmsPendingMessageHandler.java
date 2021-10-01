@@ -24,15 +24,16 @@ import com.huawei.hms.flutter.nearbyservice.utils.ToMap;
 import com.huawei.hms.nearby.message.Message;
 import com.huawei.hms.nearby.message.MessageHandler;
 
-import java.util.HashMap;
-
 import io.flutter.plugin.common.MethodChannel;
+
+import java.util.HashMap;
 
 public class HmsPendingMessageHandler extends MessageHandler {
 
     private static final String TAG = "PendingMessageHandler";
 
     private final MethodChannel channel;
+
     private final Context context;
 
     public HmsPendingMessageHandler(MethodChannel channel, Context context) {

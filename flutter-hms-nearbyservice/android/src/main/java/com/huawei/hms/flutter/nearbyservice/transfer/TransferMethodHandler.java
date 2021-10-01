@@ -30,16 +30,17 @@ import com.huawei.hms.nearby.Nearby;
 import com.huawei.hms.nearby.transfer.Data;
 import com.huawei.hms.nearby.transfer.TransferEngine;
 
-import java.util.List;
-import java.util.Map;
-
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
+
+import java.util.List;
+import java.util.Map;
 
 public class TransferMethodHandler implements MethodChannel.MethodCallHandler {
     private static final String TAG = "TransferMethodHandler";
 
     private final Activity activity;
+
     private final TransferEngine transferEngine;
 
     public TransferMethodHandler(Activity activity) {
@@ -61,122 +62,9 @@ public class TransferMethodHandler implements MethodChannel.MethodCallHandler {
                 cancelDataTransfer(call, result);
                 break;
             default:
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.NOT_FOUND);
+                HMSLogger.getInstance(activity.getApplicationContext())
+                    .sendSingleEvent(call.method, ErrorCodes.NOT_FOUND);
                 result.notImplemented();
-        }
-    }
-
-    class SendDataThread extends Thread {
-        private final MethodCall call;
-        private final MethodChannel.Result result;
-
-        SendDataThread(MethodCall call, MethodChannel.Result result) {
-            super("sendData");
-            this.call = call;
-            this.result = result;
-        }
-
-        @Override
-        public void run() {
-            Log.i(TAG, "sendData");
-            String endpointId = FromMap.toString("endpointId", call.argument("endpointId"), false);
-            if (endpointId == null) {
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.NULL_PARAM);
-                Log.e(TAG, "Remote endpoint id is null or empty.");
-                HmsHelper.errorHandler(result, ErrorCodes.NULL_PARAM, "Remote endpoint id is null or empty.", "");
-                return;
-            }
-
-            Map<String, Object> dataMap = ToMap.fromObject(call.argument("data"));
-            if (dataMap.isEmpty()) {
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.NULL_PARAM);
-                Log.e(TAG, "Data is null or empty.");
-                HmsHelper.errorHandler(result, ErrorCodes.NULL_PARAM, "Data is null or empty.", "");
-                return;
-            }
-
-            Integer type = FromMap.toInteger("type", dataMap.get("type"));
-            if (type == null) {
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.NULL_PARAM);
-                Log.e(TAG, "Data type is null.");
-                HmsHelper.errorHandler(result, ErrorCodes.NULL_PARAM, "Data type is null.", "");
-                return;
-            }
-
-            Data data = HmsHelper.parseData(dataMap, type, FromMap.toBoolean("isUri", call.argument("isUri")), activity.getContentResolver());
-
-            if (data == null) {
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.NULL_PARAM);
-                Log.e(TAG, "Data is null.");
-                HmsHelper.errorHandler(result, ErrorCodes.ERROR_TRANSFER, "Data is null.", "");
-            } else {
-                transferEngine.sendData(endpointId, data).addOnSuccessListener(aVoid -> {
-                    HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method);
-                    Log.i(TAG, "sendData success");
-                    HmsHelper.successHandler(result);
-                }).addOnFailureListener(e -> {
-                    HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.ERROR_TRANSFER);
-                    Log.e(TAG, "sendData | " + e.getMessage());
-                    HmsHelper.errorHandler(result, ErrorCodes.ERROR_TRANSFER, e.getMessage(), "");
-                });
-            }
-        }
-    }
-
-    class SendMultiEndpointDataThread extends Thread {
-        private final MethodCall call;
-        private final MethodChannel.Result result;
-
-        SendMultiEndpointDataThread(MethodCall call, MethodChannel.Result result) {
-            super("sendMultiEndpointData");
-            this.call = call;
-            this.result = result;
-        }
-
-        @Override
-        public void run() {
-            Log.i(TAG, "sendMultiEndpointData");
-            List<String> endpointIds = FromMap.toStringArrayList("endpointIds", call.argument("endpointIds"));
-            if (endpointIds.isEmpty()) {
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.NULL_PARAM);
-                Log.e(TAG, "Remote endpoint ids are null or empty.");
-                HmsHelper.errorHandler(result, ErrorCodes.NULL_PARAM, "Remote endpoint ids are null or empty.", "");
-                return;
-            }
-
-            Map<String, Object> dataMap = ToMap.fromObject(call.argument("data"));
-            if (dataMap.isEmpty()) {
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.NULL_PARAM);
-                Log.e(TAG, "Data is null or empty.");
-                HmsHelper.errorHandler(result, ErrorCodes.NULL_PARAM, "Data is null or empty.", "");
-                return;
-            }
-
-            Integer type = FromMap.toInteger("type", dataMap.get("type"));
-            if (type == null) {
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.NULL_PARAM);
-                Log.e(TAG, "Data type is null.");
-                HmsHelper.errorHandler(result, ErrorCodes.NULL_PARAM, "Data type is null.", "");
-                return;
-            }
-
-            Data data = HmsHelper.parseData(dataMap, type, FromMap.toBoolean("isUri", call.argument("usePfd")), activity.getContentResolver());
-
-            if (data == null) {
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.ERROR_TRANSFER);
-                Log.e(TAG, "Data is null.");
-                HmsHelper.errorHandler(result, ErrorCodes.ERROR_TRANSFER, "Data is null.", "");
-            } else {
-                transferEngine.sendData(endpointIds, data).addOnSuccessListener(aVoid -> {
-                    HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method);
-                    Log.i(TAG, "sendMultiEndpointData success");
-                    HmsHelper.successHandler(result);
-                }).addOnFailureListener(e -> {
-                    HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.ERROR_TRANSFER);
-                    Log.e(TAG, "sendMultiEndpointData | " + e.getMessage());
-                    HmsHelper.errorHandler(result, ErrorCodes.ERROR_TRANSFER, e.getMessage(), "");
-                });
-            }
         }
     }
 
@@ -195,9 +83,138 @@ public class TransferMethodHandler implements MethodChannel.MethodCallHandler {
             Log.i(TAG, "cancelDataTransfer success");
             HmsHelper.successHandler(result);
         }).addOnFailureListener(e -> {
-            HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.ERROR_TRANSFER);
+            HMSLogger.getInstance(activity.getApplicationContext())
+                .sendSingleEvent(call.method, ErrorCodes.ERROR_TRANSFER);
             Log.e(TAG, "cancelDataTransfer | " + e.getMessage());
             HmsHelper.errorHandler(result, ErrorCodes.ERROR_TRANSFER, e.getMessage(), "");
         });
+    }
+
+    class SendDataThread extends Thread {
+        private final MethodCall call;
+
+        private final MethodChannel.Result result;
+
+        SendDataThread(MethodCall call, MethodChannel.Result result) {
+            super("sendData");
+            this.call = call;
+            this.result = result;
+        }
+
+        @Override
+        public void run() {
+            Log.i(TAG, "sendData");
+            String endpointId = FromMap.toString("endpointId", call.argument("endpointId"), false);
+            if (endpointId == null) {
+                HMSLogger.getInstance(activity.getApplicationContext())
+                    .sendSingleEvent(call.method, ErrorCodes.NULL_PARAM);
+                Log.e(TAG, "sendMultiEndpointData Remote endpoint id is null or empty.");
+                HmsHelper.errorHandler(result, ErrorCodes.NULL_PARAM, "Remote endpoint id is null or empty.", "");
+                return;
+            }
+
+            Map<String, Object> dataMap = ToMap.fromObject(call.argument("data"));
+            if (dataMap.isEmpty()) {
+                HMSLogger.getInstance(activity.getApplicationContext())
+                    .sendSingleEvent(call.method, ErrorCodes.NULL_PARAM);
+                Log.e(TAG, "sendMultiEndpointData Data is null or empty.");
+                HmsHelper.errorHandler(result, ErrorCodes.NULL_PARAM, "Data is null or empty.", "");
+                return;
+            }
+
+            Integer type = FromMap.toInteger("type", dataMap.get("type"));
+            if (type == null) {
+                HMSLogger.getInstance(activity.getApplicationContext())
+                    .sendSingleEvent(call.method, ErrorCodes.NULL_PARAM);
+                Log.e(TAG, "sendMultiEndpointData Data type is null.");
+                HmsHelper.errorHandler(result, ErrorCodes.NULL_PARAM, "Data type is null.", "");
+                return;
+            }
+
+            Data data = HmsHelper.parseData(dataMap, type, FromMap.toBoolean("isUri", call.argument("isUri")),
+                activity.getContentResolver());
+
+            if (data == null) {
+                HMSLogger.getInstance(activity.getApplicationContext())
+                    .sendSingleEvent(call.method, ErrorCodes.NULL_PARAM);
+                Log.e(TAG, "Data is null.");
+                HmsHelper.errorHandler(result, ErrorCodes.ERROR_TRANSFER, "Data is null.", "");
+            } else {
+                transferEngine.sendData(endpointId, data).addOnSuccessListener(aVoid -> {
+                    HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method);
+                    Log.i(TAG, "sendMultiEndpointData sendData success");
+                    HmsHelper.successHandler(result);
+                }).addOnFailureListener(e -> {
+                    HMSLogger.getInstance(activity.getApplicationContext())
+                        .sendSingleEvent(call.method, ErrorCodes.ERROR_TRANSFER);
+                    Log.e(TAG, "sendMultiEndpointData sendData | " + e.getMessage());
+                    HmsHelper.errorHandler(result, ErrorCodes.ERROR_TRANSFER, e.getMessage(), "");
+                });
+            }
+        }
+    }
+
+    class SendMultiEndpointDataThread extends Thread {
+        private final MethodCall call;
+
+        private final MethodChannel.Result result;
+
+        SendMultiEndpointDataThread(MethodCall call, MethodChannel.Result result) {
+            super("sendMultiEndpointData");
+            this.call = call;
+            this.result = result;
+        }
+
+        @Override
+        public void run() {
+            Log.i(TAG, "sendMultiEndpointData");
+            List<String> endpointIds = FromMap.toStringArrayList("endpointIds", call.argument("endpointIds"));
+            if (endpointIds.isEmpty()) {
+                HMSLogger.getInstance(activity.getApplicationContext())
+                    .sendSingleEvent(call.method, ErrorCodes.NULL_PARAM);
+                Log.e(TAG, "Remote endpoint ids are null or empty.");
+                HmsHelper.errorHandler(result, ErrorCodes.NULL_PARAM, "Remote endpoint ids are null or empty.", "");
+                return;
+            }
+
+            Map<String, Object> dataMap = ToMap.fromObject(call.argument("data"));
+            if (dataMap.isEmpty()) {
+                HMSLogger.getInstance(activity.getApplicationContext())
+                    .sendSingleEvent(call.method, ErrorCodes.NULL_PARAM);
+                Log.e(TAG, "Data is null or empty.");
+                HmsHelper.errorHandler(result, ErrorCodes.NULL_PARAM, "Data is null or empty.", "");
+                return;
+            }
+
+            Integer type = FromMap.toInteger("type", dataMap.get("type"));
+            if (type == null) {
+                HMSLogger.getInstance(activity.getApplicationContext())
+                    .sendSingleEvent(call.method, ErrorCodes.NULL_PARAM);
+                Log.e(TAG, "Data type is null.");
+                HmsHelper.errorHandler(result, ErrorCodes.NULL_PARAM, "Data type is null.", "");
+                return;
+            }
+
+            Data data = HmsHelper.parseData(dataMap, type, FromMap.toBoolean("isUri", call.argument("usePfd")),
+                activity.getContentResolver());
+
+            if (data == null) {
+                HMSLogger.getInstance(activity.getApplicationContext())
+                    .sendSingleEvent(call.method, ErrorCodes.ERROR_TRANSFER);
+                Log.e(TAG, "Data is null.");
+                HmsHelper.errorHandler(result, ErrorCodes.ERROR_TRANSFER, "Data is null.", "");
+            } else {
+                transferEngine.sendData(endpointIds, data).addOnSuccessListener(aVoid -> {
+                    HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method);
+                    Log.i(TAG, "success");
+                    HmsHelper.successHandler(result);
+                }).addOnFailureListener(e -> {
+                    HMSLogger.getInstance(activity.getApplicationContext())
+                        .sendSingleEvent(call.method, ErrorCodes.ERROR_TRANSFER);
+                    Log.e(TAG, "sendMultiEndpointData | " + e.getMessage());
+                    HmsHelper.errorHandler(result, ErrorCodes.ERROR_TRANSFER, e.getMessage(), "");
+                });
+            }
+        }
     }
 }

@@ -22,7 +22,7 @@ class MessageGetCallback {
       Map<int, MessageGetCallback>();
   int get id => hashCode;
 
-  OnTimeout onTimeout;
+  OnTimeout? onTimeout;
 
   MessageGetCallback({this.onTimeout}) {
     getCbs[id] = this;
@@ -34,7 +34,7 @@ class MessagePutCallback {
       Map<int, MessagePutCallback>();
   int get id => hashCode;
 
-  OnTimeout onTimeout;
+  OnTimeout? onTimeout;
 
   MessagePutCallback({this.onTimeout}) {
     putCbs[id] = this;
@@ -46,7 +46,7 @@ class MessageStatusCallback {
       Map<int, MessageStatusCallback>();
   int get id => hashCode;
 
-  OnPermissionChanged onPermissionChanged;
+  OnPermissionChanged? onPermissionChanged;
 
   MessageStatusCallback({this.onPermissionChanged}) {
     statusCbs[id] = this;
@@ -58,10 +58,10 @@ class NearbyMessageHandler {
       Map<int, NearbyMessageHandler>();
   int get id => hashCode;
 
-  OnBleSignalChanged onBleSignalChanged;
-  OnDistanceChanged onDistanceChanged;
-  OnFound onFound;
-  OnLost onLost;
+  OnBleSignalChanged? onBleSignalChanged;
+  OnDistanceChanged? onDistanceChanged;
+  OnFound? onFound;
+  OnLost? onLost;
 
   NearbyMessageHandler(
       {this.onBleSignalChanged,
@@ -76,7 +76,7 @@ class NearbyMessageHandler {
 typedef void OnTimeout();
 
 /// StatusCallback
-typedef void OnPermissionChanged(bool granted);
+typedef void OnPermissionChanged(bool? granted);
 
 /// MessageHandler
 typedef void OnBleSignalChanged(Message message, BleSignal signal);

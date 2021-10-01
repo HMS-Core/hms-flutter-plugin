@@ -48,38 +48,38 @@ class WifiSharePageContent extends StatefulWidget {
 
 class _WifiSharePageContentState extends State<WifiSharePageContent> {
   String _sdkVersion = 'Unknown';
-  String _endpointId;
+  String? _endpointId;
   String _authCode = 'Unknown';
   int _statusCode = 234;
   String _logs = 'Double tap to clear the logs.\n';
 
   void _setListeners() {
-    HMSWifiShareEngine.instance.wifiOnFound
-        .listen((WifiOnFoundResponse response) {
-      String res = jsonEncode(response.toMap());
+    HMSWifiShareEngine.instance.wifiOnFound!
+        .listen((WifiOnFoundResponse? response) {
+      String res = jsonEncode(response!.toMap());
       setState(() {
-        _endpointId = response.endpointId;
+        _endpointId = response.endpointId!;
         _logs += 'wifiOnFound\n $res \n';
       });
     });
 
-    HMSWifiShareEngine.instance.wifiOnFetchAuthCode
-        .listen((WifiOnFetchAuthCodeResponse response) {
+    HMSWifiShareEngine.instance.wifiOnFetchAuthCode!
+        .listen((WifiOnFetchAuthCodeResponse? response) {
       setState(() {
-        _authCode = response.authCode;
+        _authCode = response!.authCode!;
         _logs += 'wifiOnFetchAuthCode\n';
       });
     });
 
-    HMSWifiShareEngine.instance.wifiOnShareResult
-        .listen((WifiShareResultResponse response) {
+    HMSWifiShareEngine.instance.wifiOnShareResult!
+        .listen((WifiShareResultResponse? response) {
       setState(() {
-        _statusCode = response.statusCode;
+        _statusCode = response!.statusCode!;
         _logs += 'wifiOnShareResult\n';
       });
     });
 
-    HMSWifiShareEngine.instance.wifiOnLost.listen((String endpointId) {
+    HMSWifiShareEngine.instance.wifiOnLost!.listen((String? endpointId) {
       setState(() {
         _logs += 'Endpoint lost! $_endpointId \n';
       });
@@ -89,7 +89,8 @@ class _WifiSharePageContentState extends State<WifiSharePageContent> {
   void _startWifiBroadcast(context) async {
     try {
       await HMSWifiShareEngine.instance.startWifiShare(WifiSharePolicy.set);
-      Scaffold.of(context).showSnackBar(createSnack("Wifi broadcast started."));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(createSnack("Wifi broadcast started."));
     } on PlatformException catch (e) {
       _handleException(e, context);
     }
@@ -98,7 +99,8 @@ class _WifiSharePageContentState extends State<WifiSharePageContent> {
   void _startWifiScan(context) async {
     try {
       await HMSWifiShareEngine.instance.startWifiShare(WifiSharePolicy.share);
-      Scaffold.of(context).showSnackBar(createSnack("Wifi scan started."));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(createSnack("Wifi scan started."));
     } on PlatformException catch (e) {
       _handleException(e, context);
     }
@@ -106,14 +108,14 @@ class _WifiSharePageContentState extends State<WifiSharePageContent> {
 
   void _shareWifiConfig(context) async {
     if (_endpointId == null) {
-      Scaffold.of(context)
+      ScaffoldMessenger.of(context)
           .showSnackBar(createSnack("No endpoint found!", true));
       return;
     }
     try {
-      Scaffold.of(context)
+      ScaffoldMessenger.of(context)
           .showSnackBar(createSnack("Attempting to share wifi config..."));
-      await HMSWifiShareEngine.instance.shareWifiConfig(_endpointId);
+      await HMSWifiShareEngine.instance.shareWifiConfig(_endpointId!);
     } on PlatformException catch (e) {
       _handleException(e, context);
     }
@@ -122,7 +124,8 @@ class _WifiSharePageContentState extends State<WifiSharePageContent> {
   void _stopWifiSharing(context) async {
     try {
       await HMSWifiShareEngine.instance.stopWifiShare();
-      Scaffold.of(context).showSnackBar(createSnack("Wifi share stopped."));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(createSnack("Wifi share stopped."));
     } on PlatformException catch (e) {
       _handleException(e, context);
     }
@@ -133,7 +136,7 @@ class _WifiSharePageContentState extends State<WifiSharePageContent> {
     setState(() {
       _logs += e.message + '\n';
     });
-    Scaffold.of(context).showSnackBar(snackBar);
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override
@@ -255,7 +258,7 @@ class _WifiSharePageContentState extends State<WifiSharePageContent> {
     _setListeners();
     String sdkVersion;
     try {
-      sdkVersion = await HMSNearby.getVersion();
+      sdkVersion = (await HMSNearby.getVersion())!;
     } on PlatformException {
       sdkVersion = 'Failed to get sdk version.';
     }

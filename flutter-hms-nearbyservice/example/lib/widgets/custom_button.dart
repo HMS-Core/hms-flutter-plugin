@@ -18,19 +18,19 @@ import 'package:huawei_nearbyservice_example/utils/constants.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
-  final Function onPressed;
+  final Function()? onPressed;
   final double width;
   final double height;
 
   CustomButton(
-      {@required this.text,
-      @required this.onPressed,
+      {required this.text,
+      required this.onPressed,
       this.width = 90,
       this.height = 40});
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
+    return TextButton(
       child: Container(
         child: Center(
           child: Text(

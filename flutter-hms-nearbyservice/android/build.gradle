@@ -40,5 +40,5 @@ android {
 }
 
 dependencies {
-    implementation 'com.huawei.hms:nearby:5.0.4.302'
+    implementation 'com.huawei.hms:nearby:6.1.0.300'
 }

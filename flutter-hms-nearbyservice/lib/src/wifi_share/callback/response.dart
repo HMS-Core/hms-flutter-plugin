@@ -17,8 +17,8 @@
 import 'package:huawei_nearbyservice/src/discovery/classes.dart';
 
 class WifiOnFoundResponse {
-  final String endpointId;
-  final ScanEndpointInfo scanEndpointInfo;
+  final String? endpointId;
+  final ScanEndpointInfo? scanEndpointInfo;
 
   WifiOnFoundResponse({this.endpointId, this.scanEndpointInfo});
 
@@ -37,8 +37,8 @@ class WifiOnFoundResponse {
 }
 
 class WifiOnFetchAuthCodeResponse {
-  final String endpointId;
-  final String authCode;
+  final String? endpointId;
+  final String? authCode;
 
   WifiOnFetchAuthCodeResponse({this.endpointId, this.authCode});
 
@@ -55,8 +55,8 @@ class WifiOnFetchAuthCodeResponse {
 }
 
 class WifiShareResultResponse {
-  final String endpointId;
-  final int statusCode;
+  final String? endpointId;
+  final int? statusCode;
 
   WifiShareResultResponse({this.endpointId, this.statusCode});
 

@@ -100,6 +100,13 @@ class NearbyStatus {
       NearbyStatus(8066, "STATUS_WIFI_SHARE_WIFI_CLOSED");
   static const NearbyStatus wifiConnectFail =
       NearbyStatus(8067, "STATUS_WIFI_CONNECT_FAIL");
+  static const NearbyStatus wifiNotSupportShare =
+  NearbyStatus(8068, "STATUS_WIFI_NOT_SUPPORT_SHARE");
+  static const NearbyStatus wifiMustBeEnabled =
+  NearbyStatus(8069, "STATUS_WIFI_MUST_BE_ENABLED");
+  static const NearbyStatus androidHmsRestricted =
+  NearbyStatus(8070, "STATUS_ANDROID_HMS_RESTRICTED");
+
 
   static NearbyStatus getStatus(int code) {
     switch (code) {
@@ -222,6 +229,15 @@ class NearbyStatus {
         break;
       case 8067:
         return NearbyStatus.wifiConnectFail;
+        break;
+      case 8068:
+        return NearbyStatus.wifiNotSupportShare;
+        break;
+      case 8069:
+        return NearbyStatus.wifiMustBeEnabled;
+        break;
+      case 8070:
+        return NearbyStatus.androidHmsRestricted;
         break;
       case -1:
         return NearbyStatus.failure;

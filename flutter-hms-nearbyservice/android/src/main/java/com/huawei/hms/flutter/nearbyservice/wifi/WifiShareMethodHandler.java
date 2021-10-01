@@ -38,7 +38,9 @@ public class WifiShareMethodHandler implements MethodChannel.MethodCallHandler {
     private static final String TAG = "WifiShareMethodHandler";
 
     private final WifiCallbackStreamHandler wifiCallbackHandler;
+
     private final WifiShareEngine wifiShareEngine;
+
     private final Activity activity;
 
     public WifiShareMethodHandler(EventChannel eventChannel, Activity activity) {
@@ -62,7 +64,8 @@ public class WifiShareMethodHandler implements MethodChannel.MethodCallHandler {
                 shareWifiConfig(call, result);
                 break;
             default:
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.NOT_FOUND);
+                HMSLogger.getInstance(activity.getApplicationContext())
+                    .sendSingleEvent(call.method, ErrorCodes.NOT_FOUND);
                 result.notImplemented();
                 break;
         }

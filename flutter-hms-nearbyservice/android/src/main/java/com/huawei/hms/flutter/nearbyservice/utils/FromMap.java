@@ -88,7 +88,7 @@ public class FromMap {
     public static byte[] toByteArray(String key, Object value) {
         if (!(value instanceof byte[])) {
             Log.w(TAG, "toByteArray | Byte array expected for " + key);
-            return null;
+            return new byte[0];
         }
         return (byte[]) value;
     }

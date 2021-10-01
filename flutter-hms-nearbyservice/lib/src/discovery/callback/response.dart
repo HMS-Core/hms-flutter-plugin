@@ -17,8 +17,8 @@
 import 'package:huawei_nearbyservice/src/discovery/classes.dart';
 
 class ConnectOnEstablishResponse {
-  final String endpointId;
-  final ConnectInfo connectInfo;
+  final String? endpointId;
+  final ConnectInfo? connectInfo;
 
   ConnectOnEstablishResponse({this.endpointId, this.connectInfo});
 
@@ -37,8 +37,8 @@ class ConnectOnEstablishResponse {
 }
 
 class ConnectOnResultResponse {
-  final String endpointId;
-  final ConnectResult connectResult;
+  final String? endpointId;
+  final ConnectResult? connectResult;
 
   ConnectOnResultResponse({this.endpointId, this.connectResult});
 
@@ -57,8 +57,8 @@ class ConnectOnResultResponse {
 }
 
 class ScanOnFoundResponse {
-  final String endpointId;
-  final ScanEndpointInfo scanEndpointInfo;
+  final String? endpointId;
+  final ScanEndpointInfo? scanEndpointInfo;
 
   ScanOnFoundResponse({this.endpointId, this.scanEndpointInfo});
 

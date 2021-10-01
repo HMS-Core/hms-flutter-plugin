@@ -25,31 +25,32 @@ import com.huawei.hms.flutter.nearbyservice.utils.constants.ErrorCodes;
 import com.huawei.hms.nearby.discovery.ScanEndpointCallback;
 import com.huawei.hms.nearby.discovery.ScanEndpointInfo;
 
-import java.util.HashMap;
-
 import io.flutter.plugin.common.EventChannel;
+
+import java.util.HashMap;
 
 public class ScanEndpointCallbackStreamHandler extends ScanEndpointCallback implements EventChannel.StreamHandler {
 
     private static final String TAG = "ScanCallbackHandler";
 
-    private EventChannel.EventSink event;
     private final Context context;
+
+    private EventChannel.EventSink event;
 
     ScanEndpointCallbackStreamHandler(Context context) {
         this.context = context;
     }
 
     @Override
-    public void onListen(Object arguments, EventChannel.EventSink event) {
-        Log.i(TAG, "onListen");
-        this.event = event;
+    public void onCancel(Object arguments) {
+        Log.i(TAG, "ScanCallbackHandler onCancel");
+        this.event = null;
     }
 
     @Override
-    public void onCancel(Object arguments) {
-        Log.i(TAG, "onCancel");
-        this.event = null;
+    public void onListen(Object arguments, EventChannel.EventSink event) {
+        Log.i(TAG, "ScanCallbackHandler onListen");
+        this.event = event;
     }
 
     @Override

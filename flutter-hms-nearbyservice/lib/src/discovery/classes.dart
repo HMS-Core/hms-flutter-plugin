@@ -16,8 +16,8 @@
 
 class BleSignal {
   static final int bleUnknownTxPower = 0x80;
-  final int rssi;
-  final int txPower;
+  final int? rssi;
+  final int? txPower;
 
   BleSignal({this.rssi, this.txPower});
 
@@ -31,13 +31,13 @@ class BleSignal {
 }
 
 class BroadcastOption {
-  final DiscoveryPolicy policy;
+  final DiscoveryPolicy? policy;
 
   BroadcastOption(this.policy);
 
   bool equals(object) =>
       identical(this, object) ||
-      (object is BroadcastOption && policy == object?.policy);
+      (object is BroadcastOption && policy == object.policy);
 
   factory BroadcastOption.fromMap(Map<dynamic, dynamic> map) =>
       BroadcastOption(map['policy']);
@@ -48,9 +48,9 @@ class BroadcastOption {
 }
 
 class ConnectInfo {
-  final String endpointName;
-  final String authCode;
-  final bool isRemoteConnect;
+  final String? endpointName;
+  final String? authCode;
+  final bool? isRemoteConnect;
 
   ConnectInfo({this.endpointName, this.authCode, this.isRemoteConnect});
 
@@ -68,14 +68,18 @@ class ConnectInfo {
 }
 
 class ConnectResult {
-  final int statusCode;
-  ConnectResult(this.statusCode);
+  final int? statusCode;
+  ChannelPolicy _channelPolicy;
+  ConnectResult(this.statusCode, this._channelPolicy);
 
   factory ConnectResult.fromMap(Map<dynamic, dynamic> map) =>
-      ConnectResult(map['statusCode']);
-
+      ConnectResult(map['statusCode'], ChannelPolicy(map['getPolicy']));
+  ChannelPolicy getPolicy() {
+    return _channelPolicy;
+  }
   Map<String, dynamic> toMap() => {
         'statusCode': statusCode,
+        'getPolicy': _channelPolicy.toMap()
       };
 }
 
@@ -90,7 +94,7 @@ class DiscoveryPolicy {
 
   bool equals(object) =>
       identical(this, object) ||
-      (object is DiscoveryPolicy && _topology == object?._topology);
+      (object is DiscoveryPolicy && _topology == object._topology);
 
   @override
   String toString() {
@@ -117,8 +121,8 @@ class DiscoveryPolicy {
 
 class Distance {
   static final int precisionLow = 1;
-  final int precision;
-  final double meters;
+  final int? precision;
+  final double? meters;
 
   const Distance({this.precision, this.meters});
   static const Distance unknown = Distance(precision: 1, meters: double.nan);
@@ -136,7 +140,7 @@ class ScanEndpointInfo {
   final String serviceId;
   final String name;
 
-  ScanEndpointInfo({this.serviceId, this.name});
+  ScanEndpointInfo({required this.serviceId, required this.name});
 
   factory ScanEndpointInfo.fromMap(Map<dynamic, dynamic> map) =>
       ScanEndpointInfo(serviceId: map['serviceId'], name: map['name']);
@@ -145,12 +149,12 @@ class ScanEndpointInfo {
 }
 
 class ScanOption {
-  final DiscoveryPolicy policy;
+  final DiscoveryPolicy? policy;
   ScanOption(this.policy);
 
   bool equals(object) =>
       identical(this, object) ||
-      (object is ScanOption && policy.equals(object.policy));
+      (object is ScanOption && policy!.equals(object.policy));
 
   factory ScanOption.fromMap(Map<dynamic, dynamic> map) =>
       ScanOption(map['policy']);
@@ -158,4 +162,56 @@ class ScanOption {
   Map<String, dynamic> toMap() => {
         'policy': policy?.toMap(),
       };
+}
+
+class ChannelPolicy {
+  final int _policy;
+
+  const ChannelPolicy(this._policy);
+
+  static const ChannelPolicy auto = ChannelPolicy(1);
+  static const ChannelPolicy highThroughput = ChannelPolicy(2);
+  static const ChannelPolicy instance = ChannelPolicy(3);
+
+  bool equals(object) =>
+      identical(this, object) ||
+          (object is ChannelPolicy && _policy == object._policy);
+
+  @override
+  String toString() {
+    String desc;
+    switch (_policy) {
+      case 1:
+        desc = "CHANNEL_AUTO";
+        break;
+      case 2:
+        desc = "CHANNEL_HIGH_THROUGHPUT";
+        break;
+      case 3:
+        desc = "CHANNEL_INSTANCE";
+        break;
+      default:
+        desc = "POLICY_UNKNOWN";
+        break;
+    }
+    return desc;
+  }
+
+  Map<String, dynamic> toMap() => {'policy': _policy};
+}
+
+class ConnectOption {
+  final ChannelPolicy? policy;
+  ConnectOption(this.policy);
+
+  bool equals(object) =>
+      identical(this, object) ||
+          (object is ConnectOption && policy!.equals(object.policy));
+
+  factory ConnectOption.fromMap(Map<dynamic, dynamic> map) =>
+      ConnectOption(map['policyMap']);
+
+  Map<String, dynamic> toMap() => {
+    'policyMap': policy?.toMap(),
+  };
 }

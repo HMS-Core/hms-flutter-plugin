@@ -16,6 +16,8 @@
 
 package com.huawei.hms.flutter.nearbyservice.discovery;
 
+import static com.huawei.hms.flutter.nearbyservice.utils.constants.ErrorCodes.ERROR_DISCOVERY;
+
 import android.app.Activity;
 import android.util.Log;
 
@@ -27,26 +29,32 @@ import com.huawei.hms.flutter.nearbyservice.utils.HmsHelper;
 import com.huawei.hms.flutter.nearbyservice.utils.ToMap;
 import com.huawei.hms.flutter.nearbyservice.utils.constants.ErrorCodes;
 import com.huawei.hms.nearby.Nearby;
+import com.huawei.hms.nearby.discovery.ChannelPolicy;
+import com.huawei.hms.nearby.discovery.ConnectOption;
 import com.huawei.hms.nearby.discovery.DiscoveryEngine;
-
-import java.util.Map;
 
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
-import static com.huawei.hms.flutter.nearbyservice.utils.constants.ErrorCodes.ERROR_DISCOVERY;
+import java.util.Locale;
+import java.util.Map;
 
 public class DiscoveryMethodHandler implements MethodChannel.MethodCallHandler {
     private static final String TAG = "DiscoveryMethodHandler";
 
     private final ConnectCallbackStreamHandler connectCallback;
+
     private final ScanEndpointCallbackStreamHandler scanCallback;
+
     private final DataCallbackStreamHandler dataCallback;
+
     private final DiscoveryEngine discoveryEngine;
+
     private final Activity activity;
 
-    public DiscoveryMethodHandler(EventChannel eventChannelConnect, EventChannel eventChannelScan, EventChannel eventChannelData, Activity activity) {
+    public DiscoveryMethodHandler(EventChannel eventChannelConnect, EventChannel eventChannelScan,
+        EventChannel eventChannelData, Activity activity) {
         this.activity = activity;
         this.discoveryEngine = Nearby.getDiscoveryEngine(activity);
 
@@ -72,8 +80,8 @@ public class DiscoveryMethodHandler implements MethodChannel.MethodCallHandler {
             case "rejectConnect":
                 rejectConnect(call, result);
                 break;
-            case "requestConnect":
-                requestConnect(call, result);
+            case "requestConnectEx":
+                requestConnectEx(call, result);
                 break;
             case "startBroadcasting":
                 startBroadcasting(call, result);
@@ -91,7 +99,8 @@ public class DiscoveryMethodHandler implements MethodChannel.MethodCallHandler {
                 stopScan(call, result);
                 break;
             default:
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.NOT_FOUND);
+                HMSLogger.getInstance(activity.getApplicationContext())
+                    .sendSingleEvent(call.method, ErrorCodes.NOT_FOUND);
                 result.notImplemented();
                 break;
         }
@@ -112,7 +121,8 @@ public class DiscoveryMethodHandler implements MethodChannel.MethodCallHandler {
             Log.i(TAG, "acceptConnect success");
             HmsHelper.successHandler(result);
         }).addOnFailureListener(e -> {
-            HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.ERROR_DISCOVERY);
+            HMSLogger.getInstance(activity.getApplicationContext())
+                .sendSingleEvent(call.method, ErrorCodes.ERROR_DISCOVERY);
             Log.e(TAG, "acceptConnect | " + e.getMessage());
             HmsHelper.errorHandler(result, ErrorCodes.ERROR_DISCOVERY, e.getMessage(), "");
         });
@@ -144,21 +154,19 @@ public class DiscoveryMethodHandler implements MethodChannel.MethodCallHandler {
             return;
         }
 
-        discoveryEngine.rejectConnect(endpointId)
-            .addOnSuccessListener(aVoid -> {
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ERROR_DISCOVERY);
-                Log.i(TAG, "rejectConnect success");
-                HmsHelper.successHandler(result);
-            })
-            .addOnFailureListener(e -> {
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ERROR_DISCOVERY);
-                Log.e(TAG, "rejectConnect | " + e.getMessage());
-                HmsHelper.errorHandler(result, ErrorCodes.ERROR_DISCOVERY, e.getMessage(), "");
-            });
+        discoveryEngine.rejectConnect(endpointId).addOnSuccessListener(aVoid -> {
+            HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ERROR_DISCOVERY);
+            Log.i(TAG, "rejectConnect success");
+            HmsHelper.successHandler(result);
+        }).addOnFailureListener(e -> {
+            HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ERROR_DISCOVERY);
+            Log.e(TAG, "rejectConnect | " + e.getMessage());
+            HmsHelper.errorHandler(result, ErrorCodes.ERROR_DISCOVERY, e.getMessage(), "");
+        });
     }
 
-    void requestConnect(MethodCall call, MethodChannel.Result result) {
-        Log.i(TAG, "requestConnect");
+    public void requestConnectEx(MethodCall call, MethodChannel.Result result) {
+        Log.i(TAG, "requestConnectEx");
         String name = FromMap.toString("name", call.argument("name"), false);
         if (name == null) {
             HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.NULL_PARAM);
@@ -175,16 +183,28 @@ public class DiscoveryMethodHandler implements MethodChannel.MethodCallHandler {
             return;
         }
 
-        discoveryEngine.requestConnect(name, endpointId, connectCallback)
-            .addOnSuccessListener(aVoid -> {
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method);
-                Log.i(TAG, "requestConnect success");
+        Map<String, Object> optionMap = ToMap.fromObject(call.argument("ConnectOption"));
+
+        Map<String, Object> policyMap = ToMap.fromObject(optionMap.get("policyMap"));
+        if (optionMap.isEmpty() && policyMap.isEmpty()) {
+            HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.NULL_PARAM);
+            Log.e(TAG, "ConnectOption is null or empty.");
+            result.error(ErrorCodes.NULL_PARAM, "ConnectOption is null or empty.", "");
+            return;
+        }
+
+        int channelPolicyNumber = FromMap.toInteger("policy", policyMap.get("policy"));
+        ChannelPolicy channelPolicy = HmsHelper.getChannelPolicyByNumber(channelPolicyNumber);
+
+        ConnectOption connectOption = new ConnectOption.Builder().setPolicy(channelPolicy).build();
+
+        discoveryEngine.requestConnectEx(name, endpointId, connectCallback, connectOption)
+            .addOnSuccessListener(unused -> {
                 HmsHelper.successHandler(result);
             })
             .addOnFailureListener(e -> {
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ERROR_DISCOVERY);
-                Log.e(TAG, "requestConnect | " + e.getMessage());
-                HmsHelper.errorHandler(result, ErrorCodes.ERROR_DISCOVERY, e.getMessage(), "");
+                HmsHelper.errorHandler(result, ErrorCodes.ERROR_DISCOVERY,
+                    String.format(Locale.ENGLISH, "requestConnectEx: %s", e.getMessage()), "");
             });
     }
 
@@ -215,17 +235,15 @@ public class DiscoveryMethodHandler implements MethodChannel.MethodCallHandler {
         }
 
         discoveryEngine.startBroadcasting(name, serviceId, connectCallback,
-            HmsHelper.createBroadcastOption(ToMap.fromObject(optionMap.get("policy"))))
-            .addOnSuccessListener(aVoid -> {
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method);
-                Log.i(TAG, "startBroadcasting success");
-                HmsHelper.successHandler(result);
-            })
-            .addOnFailureListener(e -> {
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ERROR_DISCOVERY);
-                Log.e(TAG, "startBroadcasting | " + e.getMessage());
-                HmsHelper.errorHandler(result, ErrorCodes.ERROR_DISCOVERY, e.getMessage(), "");
-            });
+            HmsHelper.createBroadcastOption(ToMap.fromObject(optionMap.get("policy")))).addOnSuccessListener(aVoid -> {
+            HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method);
+            Log.i(TAG, "startBroadcasting success");
+            HmsHelper.successHandler(result);
+        }).addOnFailureListener(e -> {
+            HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ERROR_DISCOVERY);
+            Log.e(TAG, "startBroadcasting | " + e.getMessage());
+            HmsHelper.errorHandler(result, ErrorCodes.ERROR_DISCOVERY, e.getMessage(), "");
+        });
     }
 
     void startScan(MethodCall call, MethodChannel.Result result) {
@@ -247,17 +265,15 @@ public class DiscoveryMethodHandler implements MethodChannel.MethodCallHandler {
         }
 
         discoveryEngine.startScan(serviceId, scanCallback,
-            HmsHelper.createScanOption(ToMap.fromObject(optionMap.get("policy"))))
-            .addOnSuccessListener(aVoid -> {
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method);
-                Log.i(TAG, "startScan success");
-                HmsHelper.successHandler(result);
-            })
-            .addOnFailureListener(e -> {
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ERROR_DISCOVERY);
-                Log.e(TAG, "startScan | " + e.getMessage());
-                HmsHelper.errorHandler(result, ErrorCodes.ERROR_DISCOVERY, e.getMessage(), "");
-            });
+            HmsHelper.createScanOption(ToMap.fromObject(optionMap.get("policy")))).addOnSuccessListener(aVoid -> {
+            HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method);
+            Log.i(TAG, "startScan success");
+            HmsHelper.successHandler(result);
+        }).addOnFailureListener(e -> {
+            HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ERROR_DISCOVERY);
+            Log.e(TAG, "startScan | " + e.getMessage());
+            HmsHelper.errorHandler(result, ErrorCodes.ERROR_DISCOVERY, e.getMessage(), "");
+        });
     }
 
     void stopBroadCasting(MethodCall call, MethodChannel.Result result) {

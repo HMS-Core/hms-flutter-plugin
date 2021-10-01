@@ -19,12 +19,12 @@ import 'package:huawei_nearbyservice/src/message/classes/message_picker.dart';
 import 'package:huawei_nearbyservice/src/message/classes/message_policy.dart';
 
 class MessageGetOption {
-  MessagePolicy policy;
-  MessagePicker messagePicker;
-  MessageGetCallback getCallback;
+  MessagePolicy? policy;
+  MessagePicker? messagePicker;
+  MessageGetCallback? getCallback;
 
   MessageGetOption(
-      {MessagePolicy policy, MessagePicker messagePicker, this.getCallback}) {
+      {MessagePolicy? policy, MessagePicker? messagePicker, this.getCallback}) {
     this.policy = policy ?? MessagePolicyBuilder().build();
     this.messagePicker = messagePicker ?? MessagePicker.includeAll;
   }
@@ -45,10 +45,10 @@ class MessageGetOption {
 }
 
 class MessagePutOption {
-  MessagePolicy policy;
-  MessagePutCallback putCallback;
+  MessagePolicy? policy;
+  MessagePutCallback? putCallback;
 
-  MessagePutOption({MessagePolicy policy, this.putCallback}) {
+  MessagePutOption({MessagePolicy? policy, this.putCallback}) {
     this.policy = policy ?? MessagePolicyBuilder().build();
   }
 

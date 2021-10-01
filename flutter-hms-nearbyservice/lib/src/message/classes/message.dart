@@ -16,8 +16,6 @@
 
 import 'dart:typed_data';
 
-import 'package:flutter/foundation.dart';
-
 class Message {
   static const int maxContentSize = 65536;
   static const int maxTypeLength = 16;
@@ -25,11 +23,11 @@ class Message {
   static const String messageTypeEddystoneUid = "_eddystone_uid";
   static const String messageTypeIBeaconId = "_ibeacon_id";
 
-  final Uint8List content;
-  final String type;
-  final String namespace;
+  final Uint8List? content;
+  final String? type;
+  final String? namespace;
 
-  Message({@required this.content, this.type, this.namespace});
+  Message({required this.content, this.type, this.namespace});
 
   factory Message.fromMap(Map<dynamic, dynamic> map) => Message(
       content: map['content'], type: map['type'], namespace: map['namespace']);
@@ -39,7 +37,7 @@ class Message {
 
   @override
   String toString() {
-    int length = content?.length;
+    int? length = content?.length;
     return "Message{namespace='$namespace', type='$type', content[$length bytes]}";
   }
 

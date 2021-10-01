@@ -36,21 +36,28 @@ import com.huawei.hms.nearby.message.GetOption;
 import com.huawei.hms.nearby.message.Message;
 import com.huawei.hms.nearby.message.MessageEngine;
 
-import java.util.Map;
-
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
+import java.util.Map;
+
 public class MessageMethodHandler implements MethodChannel.MethodCallHandler {
 
     private static final String TAG = "MessageMethodHandler";
+
     private static final String PENDING_MESSAGE_ACTION = "com.huawei.hms.flutter.nearby.PENDING_MESSAGE";
+
     private final MessageEngineStreamHandler messageEngineStreamHandler;
+
     private final HmsPendingGetCallback pendingGetCallback;
+
     private final MessageBroadcastReceiver broadcastReceiver;
+
     private final MessageEngine messageEngine;
+
     private final Activity activity;
+
     private PendingIntent pendingMsgIntent;
 
     public MessageMethodHandler(MethodChannel methodChannel, EventChannel eventChannel, Activity activity) {
@@ -58,7 +65,8 @@ public class MessageMethodHandler implements MethodChannel.MethodCallHandler {
         this.messageEngine = Nearby.getMessageEngine(activity);
         this.messageEngineStreamHandler = new MessageEngineStreamHandler(activity);
         eventChannel.setStreamHandler(messageEngineStreamHandler);
-        HmsPendingMessageHandler pendingMessageHandler = new HmsPendingMessageHandler(methodChannel, activity.getApplicationContext());
+        HmsPendingMessageHandler pendingMessageHandler = new HmsPendingMessageHandler(methodChannel,
+            activity.getApplicationContext());
         this.pendingGetCallback = new HmsPendingGetCallback(methodChannel, activity.getApplicationContext());
         this.broadcastReceiver = new MessageBroadcastReceiver(pendingMessageHandler);
     }
@@ -102,7 +110,8 @@ public class MessageMethodHandler implements MethodChannel.MethodCallHandler {
                 break;
             default:
                 result.notImplemented();
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.NOT_FOUND);
+                HMSLogger.getInstance(activity.getApplicationContext())
+                    .sendSingleEvent(call.method, ErrorCodes.NOT_FOUND);
                 break;
         }
     }
@@ -121,7 +130,8 @@ public class MessageMethodHandler implements MethodChannel.MethodCallHandler {
             Log.i(TAG, "put success");
             HmsHelper.successHandler(result);
         }).addOnFailureListener(e -> {
-            HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.ERROR_MESSAGE);
+            HMSLogger.getInstance(activity.getApplicationContext())
+                .sendSingleEvent(call.method, ErrorCodes.ERROR_MESSAGE);
             Log.e(TAG, "put failure | " + e.getMessage());
             HmsHelper.errorHandler(result, ErrorCodes.ERROR_MESSAGE, "put failure | " + e.getMessage(), "");
         });
@@ -148,11 +158,14 @@ public class MessageMethodHandler implements MethodChannel.MethodCallHandler {
                 HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method);
                 Log.i(TAG, "putWithOption success");
                 HmsHelper.successHandler(result);
-            }).addOnFailureListener(e -> {
-            HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.ERROR_MESSAGE);
-            Log.e(TAG, "putWithOption failure | " + e.getMessage());
-            HmsHelper.errorHandler(result, ErrorCodes.ERROR_MESSAGE, "putWithOption failure | " + e.getMessage(), "");
-        });
+            })
+            .addOnFailureListener(e -> {
+                HMSLogger.getInstance(activity.getApplicationContext())
+                    .sendSingleEvent(call.method, ErrorCodes.ERROR_MESSAGE);
+                Log.e(TAG, "putWithOption failure | " + e.getMessage());
+                HmsHelper.errorHandler(result, ErrorCodes.ERROR_MESSAGE, "putWithOption failure | " + e.getMessage(),
+                    "");
+            });
     }
 
     void registerStatusCallback(MethodCall call, MethodChannel.Result result) {
@@ -170,11 +183,14 @@ public class MessageMethodHandler implements MethodChannel.MethodCallHandler {
                 HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method);
                 Log.i(TAG, "registerStatusCallback success");
                 HmsHelper.successHandler(result);
-            }).addOnFailureListener(e -> {
-            HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.ERROR_MESSAGE);
-            Log.e(TAG, "registerStatusCallback failure | " + e.getMessage());
-            HmsHelper.errorHandler(result, ErrorCodes.ERROR_MESSAGE, "registerStatusCallback failure | " + e.getMessage(), "");
-        });
+            })
+            .addOnFailureListener(e -> {
+                HMSLogger.getInstance(activity.getApplicationContext())
+                    .sendSingleEvent(call.method, ErrorCodes.ERROR_MESSAGE);
+                Log.e(TAG, "registerStatusCallback failure | " + e.getMessage());
+                HmsHelper.errorHandler(result, ErrorCodes.ERROR_MESSAGE,
+                    "registerStatusCallback failure | " + e.getMessage(), "");
+            });
     }
 
     void get(MethodCall call, MethodChannel.Result result) {
@@ -192,7 +208,8 @@ public class MessageMethodHandler implements MethodChannel.MethodCallHandler {
             Log.i(TAG, "get success");
             HmsHelper.successHandler(result);
         }).addOnFailureListener(e -> {
-            HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.ERROR_MESSAGE);
+            HMSLogger.getInstance(activity.getApplicationContext())
+                .sendSingleEvent(call.method, ErrorCodes.ERROR_MESSAGE);
             Log.e(TAG, "get failure | " + e.getMessage());
             HmsHelper.errorHandler(result, ErrorCodes.ERROR_MESSAGE, "get failure | " + e.getMessage(), "");
         });
@@ -215,13 +232,14 @@ public class MessageMethodHandler implements MethodChannel.MethodCallHandler {
             result.error(ErrorCodes.NULL_PARAM, "GetOption is null.", "");
         }
 
-        messageEngine.get(messageEngineStreamHandler.createMessageHandler(id), HmsHelper.createGetOption(optionMap, messageEngineStreamHandler))
-            .addOnSuccessListener(aVoid -> {
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method);
-                Log.i(TAG, "getWithOption success");
-                HmsHelper.successHandler(result);
-            }).addOnFailureListener(e -> {
-            HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.ERROR_MESSAGE);
+        messageEngine.get(messageEngineStreamHandler.createMessageHandler(id),
+            HmsHelper.createGetOption(optionMap, messageEngineStreamHandler)).addOnSuccessListener(aVoid -> {
+            HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method);
+            Log.i(TAG, "getWithOption success");
+            HmsHelper.successHandler(result);
+        }).addOnFailureListener(e -> {
+            HMSLogger.getInstance(activity.getApplicationContext())
+                .sendSingleEvent(call.method, ErrorCodes.ERROR_MESSAGE);
             Log.e(TAG, "getWithOption failure | " + e.getMessage());
             HmsHelper.errorHandler(result, ErrorCodes.ERROR_MESSAGE, "getWithOption failure | " + e.getMessage(), "");
         });
@@ -240,7 +258,8 @@ public class MessageMethodHandler implements MethodChannel.MethodCallHandler {
         intent.setPackage(activity.getPackageName());
         intent.setAction(PENDING_MESSAGE_ACTION);
 
-        pendingMsgIntent = PendingIntent.getBroadcast(activity.getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        pendingMsgIntent = PendingIntent.getBroadcast(activity.getApplicationContext(), 0, intent,
+            PendingIntent.FLAG_UPDATE_CURRENT);
         activity.getApplicationContext().registerReceiver(broadcastReceiver, new IntentFilter(PENDING_MESSAGE_ACTION));
 
         Task<Void> pendingTask;
@@ -255,7 +274,8 @@ public class MessageMethodHandler implements MethodChannel.MethodCallHandler {
             Log.i(TAG, "getPending success");
             HmsHelper.successHandler(result);
         }).addOnFailureListener(e -> {
-            HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.ERROR_MESSAGE);
+            HMSLogger.getInstance(activity.getApplicationContext())
+                .sendSingleEvent(call.method, ErrorCodes.ERROR_MESSAGE);
             Log.e(TAG, "getPending failure | " + e.getMessage());
             HmsHelper.errorHandler(result, ErrorCodes.ERROR_MESSAGE, "getPending failure | " + e.getMessage(), "");
         });
@@ -285,7 +305,8 @@ public class MessageMethodHandler implements MethodChannel.MethodCallHandler {
             Log.i(TAG, "unput success");
             HmsHelper.successHandler(result);
         }).addOnFailureListener(e -> {
-            HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.ERROR_MESSAGE);
+            HMSLogger.getInstance(activity.getApplicationContext())
+                .sendSingleEvent(call.method, ErrorCodes.ERROR_MESSAGE);
             Log.e(TAG, "unput | " + e.getMessage());
             HmsHelper.errorHandler(result, ErrorCodes.ERROR_MESSAGE, "unput | " + e.getMessage(), "");
         });
@@ -309,16 +330,17 @@ public class MessageMethodHandler implements MethodChannel.MethodCallHandler {
             return;
         }
 
-        messageEngine.unregisterStatusCallback(statusCallback)
-            .addOnSuccessListener(aVoid -> {
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method);
-                Log.i(TAG, "unregisterStatusCallback success");
-                messageEngineStreamHandler.removeCallback(CallbackTypes.STATUS_CALLBACK, id);
-                HmsHelper.successHandler(result);
-            }).addOnFailureListener(e -> {
-            HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.ERROR_MESSAGE);
+        messageEngine.unregisterStatusCallback(statusCallback).addOnSuccessListener(aVoid -> {
+            HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method);
+            Log.i(TAG, "unregisterStatusCallback success");
+            messageEngineStreamHandler.removeCallback(CallbackTypes.STATUS_CALLBACK, id);
+            HmsHelper.successHandler(result);
+        }).addOnFailureListener(e -> {
+            HMSLogger.getInstance(activity.getApplicationContext())
+                .sendSingleEvent(call.method, ErrorCodes.ERROR_MESSAGE);
             Log.e(TAG, "unregisterStatusCallback failure | " + e.getMessage());
-            HmsHelper.errorHandler(result, ErrorCodes.ERROR_MESSAGE, "unregisterStatusCallback failure | " + e.getMessage(), "");
+            HmsHelper.errorHandler(result, ErrorCodes.ERROR_MESSAGE,
+                "unregisterStatusCallback failure | " + e.getMessage(), "");
         });
     }
 
@@ -340,24 +362,24 @@ public class MessageMethodHandler implements MethodChannel.MethodCallHandler {
             return;
         }
 
-        messageEngine.unget(messageHandler)
-            .addOnSuccessListener(aVoid -> {
-                Map<String, Object> optionMap = ToMap.fromObject(call.argument("getOption"));
-                Integer id1 = null;
-                if (!optionMap.isEmpty()) {
-                    Log.i(TAG, "Get option found.");
-                    id1 = FromMap.toInteger("getCallback", optionMap.get("getCallback"));
-                }
-                if (id1 != null) {
-                    messageEngineStreamHandler.removeCallback(CallbackTypes.GET_CALLBACK, id1);
-                }
+        messageEngine.unget(messageHandler).addOnSuccessListener(aVoid -> {
+            Map<String, Object> optionMap = ToMap.fromObject(call.argument("getOption"));
+            Integer id1 = null;
+            if (!optionMap.isEmpty()) {
+                Log.i(TAG, "Get option found.");
+                id1 = FromMap.toInteger("getCallback", optionMap.get("getCallback"));
+            }
+            if (id1 != null) {
+                messageEngineStreamHandler.removeCallback(CallbackTypes.GET_CALLBACK, id1);
+            }
 
-                messageEngineStreamHandler.removeCallback(CallbackTypes.MESSAGE_HANDLER_CALLBACK, id);
-                HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method);
-                Log.i(TAG, "unget success");
-                HmsHelper.successHandler(result);
-            }).addOnFailureListener(e -> {
-            HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.ERROR_MESSAGE);
+            messageEngineStreamHandler.removeCallback(CallbackTypes.MESSAGE_HANDLER_CALLBACK, id);
+            HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method);
+            Log.i(TAG, "unget success");
+            HmsHelper.successHandler(result);
+        }).addOnFailureListener(e -> {
+            HMSLogger.getInstance(activity.getApplicationContext())
+                .sendSingleEvent(call.method, ErrorCodes.ERROR_MESSAGE);
             Log.e(TAG, "unget failure | " + e.getMessage());
             HmsHelper.errorHandler(result, ErrorCodes.ERROR_MESSAGE, "unget failure | " + e.getMessage(), "");
         });
@@ -372,7 +394,8 @@ public class MessageMethodHandler implements MethodChannel.MethodCallHandler {
             activity.getApplicationContext().unregisterReceiver(broadcastReceiver);
             HmsHelper.successHandler(result);
         }).addOnFailureListener(e -> {
-            HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(call.method, ErrorCodes.ERROR_MESSAGE);
+            HMSLogger.getInstance(activity.getApplicationContext())
+                .sendSingleEvent(call.method, ErrorCodes.ERROR_MESSAGE);
             Log.e(TAG, "ungetPending failure | " + e.getMessage());
             HmsHelper.errorHandler(result, ErrorCodes.ERROR_MESSAGE, "getPending failure | " + e.getMessage(), "");
         });

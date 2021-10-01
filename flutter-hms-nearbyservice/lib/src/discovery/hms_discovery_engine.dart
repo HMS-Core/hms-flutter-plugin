@@ -27,15 +27,15 @@ class HMSDiscoveryEngine {
   final EventChannel _channelScan;
 
   /// Streams for ConnectCallback events
-  Stream<dynamic> _connectBroadcastStream;
-  Stream<ConnectOnEstablishResponse> _connectOnEstablish;
-  Stream<ConnectOnResultResponse> _connectOnResult;
-  Stream<String> _connectOnDisconnected;
+  Stream<dynamic>? _connectBroadcastStream;
+  Stream<ConnectOnEstablishResponse>? _connectOnEstablish;
+  Stream<ConnectOnResultResponse>? _connectOnResult;
+  Stream<String>? _connectOnDisconnected;
 
   /// Streams for ScanEndpointCallback events
-  Stream<dynamic> _scanBroadcastStream;
-  Stream<ScanOnFoundResponse> _scanOnFound;
-  Stream<String> _scanOnLost;
+  Stream<dynamic>? _scanBroadcastStream;
+  Stream<ScanOnFoundResponse>? _scanOnFound;
+  Stream<String>? _scanOnLost;
 
   HMSDiscoveryEngine._(this._channel, this._channelConnect, this._channelScan);
 
@@ -63,26 +63,27 @@ class HMSDiscoveryEngine {
     });
   }
 
-  Future<void> requestConnect({String name, String endpointId}) {
-    return _channel.invokeMethod('requestConnect', <String, dynamic>{
+  Future<void> requestConnectEx({required String name, required String endpointId, required ConnectOption channelPolicy}) {
+    return _channel.invokeMethod('requestConnectEx', <String, dynamic>{
       'name': name,
       'endpointId': endpointId,
+      'ConnectOption': channelPolicy.toMap()
     });
   }
 
   Future<void> startBroadcasting(
-      {String name, String serviceId, BroadcastOption broadcastOption}) {
+      {required String name, required String serviceId, required BroadcastOption broadcastOption}) {
     return _channel.invokeMethod('startBroadcasting', <String, dynamic>{
       'name': name,
       'serviceId': serviceId,
-      'broadcastOption': broadcastOption?.toMap()
+      'broadcastOption': broadcastOption.toMap()
     });
   }
 
-  Future<void> startScan({String serviceId, ScanOption scanOption}) {
+  Future<void> startScan({required String serviceId, required ScanOption scanOption}) {
     return _channel.invokeMethod('startScan', <String, dynamic>{
       'serviceId': serviceId,
-      'scanOption': scanOption?.toMap(),
+      'scanOption': scanOption.toMap(),
     });
   }
 
@@ -98,7 +99,7 @@ class HMSDiscoveryEngine {
     return _channel.invokeMethod('stopScan');
   }
 
-  Stream<dynamic> get _getConnectBroadcastStream {
+  Stream<dynamic>? get _getConnectBroadcastStream {
     if (_connectBroadcastStream == null) {
       _connectBroadcastStream = _channelConnect.receiveBroadcastStream();
     }
@@ -106,46 +107,46 @@ class HMSDiscoveryEngine {
     return _connectBroadcastStream;
   }
 
-  Stream<ConnectOnEstablishResponse> get connectOnEstablish {
+  Stream<ConnectOnEstablishResponse>? get connectOnEstablish {
     if (_connectOnEstablish == null) {
-      _connectOnEstablish = _getConnectBroadcastStream.map((eventMap) {
+      _connectOnEstablish = _getConnectBroadcastStream!.map((eventMap) {
         if (eventMap['event'] == 'onEstablish') {
           return ConnectOnEstablishResponse.fromMap(eventMap);
         } else {
-          return null;
+          throw ArgumentError('ConnectOnEstablishResponse event is null');
         }
-      }).where((event) => event != null);
+      });
     }
     return _connectOnEstablish;
   }
 
-  Stream<ConnectOnResultResponse> get connectOnResult {
+  Stream<ConnectOnResultResponse>? get connectOnResult {
     if (_connectOnResult == null) {
-      _connectOnResult = _getConnectBroadcastStream.map((eventMap) {
+      _connectOnResult = _getConnectBroadcastStream!.map((eventMap) {
         if (eventMap['event'] == 'onResult') {
           return ConnectOnResultResponse.fromMap(eventMap);
         } else {
-          return null;
+          throw ArgumentError('ConnectOnResultResponse event is null');
         }
-      }).where((event) => event != null);
+      });
     }
     return _connectOnResult;
   }
 
-  Stream<String> get connectOnDisconnected {
+  Stream<String>? get connectOnDisconnected {
     if (_connectOnDisconnected == null) {
-      _connectOnDisconnected = _getConnectBroadcastStream.map((eventMap) {
+      _connectOnDisconnected = _getConnectBroadcastStream!.map((eventMap) {
         if (eventMap['event'] == 'onDisconnected') {
           return eventMap['endpointId'].toString();
         } else {
-          return null;
+          throw ArgumentError('connectOnDisconnected event is null');
         }
-      }).where((event) => event != null);
+      });
     }
     return _connectOnDisconnected;
   }
 
-  Stream<dynamic> get _getScanBroadcastStream {
+  Stream<dynamic>? get _getScanBroadcastStream {
     if (_scanBroadcastStream == null) {
       _scanBroadcastStream = _channelScan.receiveBroadcastStream();
     }
@@ -153,28 +154,28 @@ class HMSDiscoveryEngine {
     return _scanBroadcastStream;
   }
 
-  Stream<ScanOnFoundResponse> get scanOnFound {
+  Stream<ScanOnFoundResponse>? get scanOnFound {
     if (_scanOnFound == null) {
-      _scanOnFound = _getScanBroadcastStream.map((eventMap) {
+      _scanOnFound = _getScanBroadcastStream!.map((eventMap) {
         if (eventMap['event'] == 'onFound') {
           return ScanOnFoundResponse.fromMap(eventMap);
         } else {
-          return null;
+          throw ArgumentError('ScanOnFoundResponse response is null');
         }
-      }).where((event) => event != null);
+      });
     }
     return _scanOnFound;
   }
 
-  Stream<String> get scanOnLost {
+  Stream<String>? get scanOnLost {
     if (_scanOnLost == null) {
-      _scanOnLost = _getScanBroadcastStream.map((eventMap) {
+      _scanOnLost = _getScanBroadcastStream!.map((eventMap) {
         if (eventMap['event'] == 'onLost') {
           return eventMap['endpointId'].toString();
         } else {
-          return null;
+          throw ArgumentError('scanOnLost event is null');
         }
-      }).where((event) => event != null);
+      });
     }
     return _scanOnLost;
   }

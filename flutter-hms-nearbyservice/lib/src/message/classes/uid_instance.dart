@@ -14,15 +14,13 @@
     limitations under the License.
 */
 
-import 'package:flutter/foundation.dart';
-
 class UidInstance {
   /// Hex namespace
-  final String uid;
-  final String instance;
+  final String? uid;
+  final String? instance;
   final bool _isIncludeInstance;
 
-  UidInstance({@required this.uid, String instance})
+  UidInstance({required this.uid, String? instance})
       : this.instance = instance,
         this._isIncludeInstance = instance != null ? true : false;
 

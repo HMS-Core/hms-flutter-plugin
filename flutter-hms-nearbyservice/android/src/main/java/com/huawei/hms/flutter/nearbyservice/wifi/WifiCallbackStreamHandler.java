@@ -27,33 +27,33 @@ import com.huawei.hms.flutter.nearbyservice.utils.constants.ErrorCodes;
 import com.huawei.hms.nearby.discovery.ScanEndpointInfo;
 import com.huawei.hms.nearby.wifishare.WifiShareCallback;
 
+import io.flutter.plugin.common.EventChannel;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import io.flutter.plugin.common.EventChannel;
 
 public class WifiCallbackStreamHandler extends WifiShareCallback implements EventChannel.StreamHandler {
     private static final String TAG = "WifiCallbackHandler";
 
-    private EventChannel.EventSink event;
     private final Context context;
+
+    private EventChannel.EventSink event;
 
     WifiCallbackStreamHandler(Context context) {
         this.context = context;
     }
 
     @Override
-    public void onListen(Object arguments, EventChannel.EventSink event) {
-        Log.i(TAG, "onListen");
-        this.event = event;
-    }
-
-    @Override
     public void onCancel(Object arguments) {
-        Log.i(TAG, "onCancel");
+        Log.i(TAG, "WifiCallbackHandler onCancel");
         this.event = null;
     }
 
+    @Override
+    public void onListen(Object arguments, EventChannel.EventSink event) {
+        Log.i(TAG, "WifiCallbackHandler onListen");
+        this.event = event;
+    }
 
     @Override
     public void onFound(String endpointId, ScanEndpointInfo scanEndpointInfo) {
@@ -92,7 +92,8 @@ public class WifiCallbackStreamHandler extends WifiShareCallback implements Even
         Log.i(TAG, "onFetchAuthCode");
         if (event == null) {
             HMSLogger.getInstance(context).sendSingleEvent("WifiShareCallback.onLost", ErrorCodes.ERROR_WIFI);
-            Log.e(TAG, "onFetchAuthCode | EventSink is null. You should define a listener for the WifiCallbackHandler.");
+            Log.e(TAG,
+                "onFetchAuthCode | EventSink is null. You should define a listener for the WifiCallbackHandler.");
             return;
         }
 
@@ -105,12 +106,15 @@ public class WifiCallbackStreamHandler extends WifiShareCallback implements Even
         HMSLogger.getInstance(context).startMethodExecutionTimer("WifiShareCallback.onWifiShareResult");
         Log.i(TAG, "onWifiShareResult");
         if (event == null) {
-            HMSLogger.getInstance(context).sendSingleEvent("WifiShareCallback.onWifiShareResult", ErrorCodes.ERROR_WIFI);
-            Log.e(TAG, "onWifiShareResult | EventSink is null. You should define a listener for the WifiCallbackHandler.");
+            HMSLogger.getInstance(context)
+                .sendSingleEvent("WifiShareCallback.onWifiShareResult", ErrorCodes.ERROR_WIFI);
+            Log.e(TAG,
+                "onWifiShareResult | EventSink is null. You should define a listener for the WifiCallbackHandler.");
             return;
         }
 
-        eventSuccess(event, ToMap.fromArgs("event", "onWifiShareResult", "endpointId", endpointId, "statusCode", statusCode));
+        eventSuccess(event,
+            ToMap.fromArgs("event", "onWifiShareResult", "endpointId", endpointId, "statusCode", statusCode));
         HMSLogger.getInstance(context).sendSingleEvent("WifiShareCallback.onWifiShareResult");
     }
 

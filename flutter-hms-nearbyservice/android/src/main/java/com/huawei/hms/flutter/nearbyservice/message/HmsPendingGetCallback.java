@@ -28,6 +28,7 @@ public class HmsPendingGetCallback extends GetCallback {
     private static final String TAG = "HmsPendingGetCallback";
 
     private final MethodChannel channel;
+
     private final Context context;
 
     public HmsPendingGetCallback(MethodChannel channel, Context context) {

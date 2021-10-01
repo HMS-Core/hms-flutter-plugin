@@ -34,7 +34,7 @@ class NearbyMenuPage extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          RaisedButton(
+          TextButton(
             child: Text(
               'Discovery and Transfer',
               style: Styles.menuButtonStyle,
@@ -43,7 +43,7 @@ class NearbyMenuPage extends StatelessWidget {
               Navigator.pushNamed(context, Routes.discoveryAndTransfer);
             },
           ),
-          RaisedButton(
+          TextButton(
             child: Text(
               'Wifi Sharing',
               style: Styles.menuButtonStyle,
@@ -52,7 +52,7 @@ class NearbyMenuPage extends StatelessWidget {
               Navigator.pushNamed(context, Routes.wifi);
             },
           ),
-          RaisedButton(
+          TextButton(
             child: Text(
               'Messaging',
               style: Styles.menuButtonStyle,

@@ -37,8 +37,6 @@ import com.huawei.hms.nearby.Nearby;
 import com.huawei.hms.nearby.NearbyApiContext;
 import com.huawei.hms.nearby.message.Message;
 
-import java.util.Map;
-
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
@@ -50,11 +48,13 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
+import java.util.Map;
+
 /**
  * HMS Nearby Plugin
  *
  * @author Huawei Technologies
- * @since (5.0.4 + 302)
+ * @since (6.1.0 + 300)
  */
 public class HuaweiNearbyServicePlugin implements FlutterPlugin, MethodCallHandler, ActivityAware {
     private static final String TAG = "HMSNearbyServicePlugin";
@@ -66,25 +66,39 @@ public class HuaweiNearbyServicePlugin implements FlutterPlugin, MethodCallHandl
     private MethodChannel channel;
 
     private MethodChannel discoveryMethodChannel;
+
     private EventChannel discoveryEventChannelConnect;
+
     private EventChannel discoveryEventChannelScan;
 
     private MethodChannel transferMethodChannel;
+
     private EventChannel transferEventChannel;
 
     private MethodChannel wifiMethodChannel;
+
     private EventChannel wifiEventChannel;
 
     private MethodChannel messageMethodChannel;
+
     private EventChannel messageEventChannel;
 
     private MethodChannel permissionMethodChannel;
 
     private DiscoveryMethodHandler discoveryMethodHandler;
+
     private TransferMethodHandler transferMethodHandler;
+
     private WifiShareMethodHandler wifiMethodHandler;
+
     private MessageMethodHandler messageMethodHandler;
+
     private PermissionMethodHandler permissionMethodHandler;
+
+    public static void registerWith(Registrar registrar) {
+        final HuaweiNearbyServicePlugin instance = new HuaweiNearbyServicePlugin();
+        instance.onAttachedToEngine(registrar.messenger(), registrar.activity());
+    }
 
     private void initChannels(final BinaryMessenger messenger) {
         channel = new MethodChannel(messenger, Channels.NEARBY_METHOD_CHANNEL);
@@ -102,7 +116,8 @@ public class HuaweiNearbyServicePlugin implements FlutterPlugin, MethodCallHandl
 
     private void initHandlers(Activity activity) {
         permissionMethodHandler = new PermissionMethodHandler(activity);
-        discoveryMethodHandler = new DiscoveryMethodHandler(discoveryEventChannelConnect, discoveryEventChannelScan, transferEventChannel, activity);
+        discoveryMethodHandler = new DiscoveryMethodHandler(discoveryEventChannelConnect, discoveryEventChannelScan,
+            transferEventChannel, activity);
         transferMethodHandler = new TransferMethodHandler(activity);
         wifiMethodHandler = new WifiShareMethodHandler(wifiEventChannel, activity);
         messageMethodHandler = new MessageMethodHandler(messageMethodChannel, messageEventChannel, activity);
@@ -150,11 +165,6 @@ public class HuaweiNearbyServicePlugin implements FlutterPlugin, MethodCallHandl
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         this.flutterPluginBinding = flutterPluginBinding;
-    }
-
-    public static void registerWith(Registrar registrar) {
-        final HuaweiNearbyServicePlugin instance = new HuaweiNearbyServicePlugin();
-        instance.onAttachedToEngine(registrar.messenger(), registrar.activity());
     }
 
     private void onAttachedToEngine(BinaryMessenger messenger, Activity activity) {

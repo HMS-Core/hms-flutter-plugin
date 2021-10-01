@@ -14,16 +14,14 @@
     limitations under the License.
 */
 
-import 'package:flutter/material.dart';
-
 class IBeaconInfo {
-  final String uuid;
-  final int major;
-  final int minor;
+  final String? uuid;
+  final int? major;
+  final int? minor;
   final bool _isIncludeMajor;
   final bool _isIncludeMinor;
 
-  IBeaconInfo({@required this.uuid, int major, int minor})
+  IBeaconInfo({required this.uuid, int? major, int? minor})
       : this.major = major,
         this.minor = minor,
         this._isIncludeMajor = major != null ? true : false,

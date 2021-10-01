@@ -15,8 +15,8 @@
 */
 
 class NamespaceType {
-  final String namespace;
-  final String type;
+  final String? namespace;
+  final String? type;
 
   NamespaceType(this.namespace, this.type);
 

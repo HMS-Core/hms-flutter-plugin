@@ -15,6 +15,7 @@
 */
 
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -51,24 +52,24 @@ class DiscoveryTransferPageContent extends StatefulWidget {
 class _DiscoveryTransferPageContentState
     extends State<DiscoveryTransferPageContent> {
   String _sdkVersion = 'Unknown';
-  String _endpointId;
-  String _endpointName;
+  String _endpointId = 'Unknown';
+  String _endpointName = 'Unknown';
   String _msg = 'Unknown';
   String _logs = 'Double tap to clear the logs.\n';
-  bool _isEstablished;
+  late bool _isEstablished;
   bool _isConnected = false;
 
   void _setListeners() {
-    HMSDiscoveryEngine.instance.scanOnFound
+    HMSDiscoveryEngine.instance.scanOnFound!
         .listen((ScanOnFoundResponse response) {
       setState(() {
-        _endpointId = response.endpointId;
-        _endpointName = response.scanEndpointInfo.name;
+        _endpointId = response.endpointId!;
+        _endpointName = response.scanEndpointInfo!.name;
         _logs += 'scanOnFound\n';
       });
     });
 
-    HMSDiscoveryEngine.instance.scanOnLost.listen((String endpointId) {
+    HMSDiscoveryEngine.instance.scanOnLost!.listen((String endpointId) {
       setState(() {
         _endpointId = 'Unknown';
         _endpointName = 'Unknown';
@@ -76,27 +77,27 @@ class _DiscoveryTransferPageContentState
       });
     });
 
-    HMSDiscoveryEngine.instance.connectOnEstablish
+    HMSDiscoveryEngine.instance.connectOnEstablish!
         .listen((ConnectOnEstablishResponse response) {
       setState(() {
         _isEstablished = true;
-        _endpointId = response.endpointId;
-        _endpointName = response.connectInfo.endpointName;
+        _endpointId = response.endpointId!;
+        _endpointName = response.connectInfo!.endpointName!;
         _logs += 'connectOnEstablish\n';
       });
     });
 
-    HMSDiscoveryEngine.instance.connectOnResult
+    HMSDiscoveryEngine.instance.connectOnResult!
         .listen((ConnectOnResultResponse response) {
       String res = jsonEncode(response.toMap());
       setState(() {
         _logs += 'connectOnResult\n' + res + '\n';
-        if (response.connectResult.statusCode == NearbyStatus.success.code)
+        if (response.connectResult!.statusCode == NearbyStatus.success.code)
           _isConnected = true;
       });
     });
 
-    HMSTransferEngine.instance.dataOnTransferUpdate
+    HMSTransferEngine.instance.dataOnTransferUpdate!
         .listen((DataOnTransferUpdateResponse response) {
       String res = jsonEncode(response.toMap());
       setState(() {
@@ -104,15 +105,15 @@ class _DiscoveryTransferPageContentState
       });
     });
 
-    HMSTransferEngine.instance.dataOnReceived
+    HMSTransferEngine.instance.dataOnReceived!
         .listen((DataOnReceivedResponse response) {
       String msg;
       if (response.data?.type == DataTypes.bytes) {
-        msg = utf8.decode(response.data.bytes);
+        msg = utf8.decode(response.data!.bytes!.toList());
       } else if (response.data?.type == DataTypes.stream) {
-        msg = utf8.decode(response.data.stream.content);
-      } else if (response?.data?.type == DataTypes.file) {
-        msg = response.data.file.filePath;
+        msg = utf8.decode(response.data!.stream!.content!.toList());
+      } else if (response.data?.type == DataTypes.file) {
+        msg = response.data!.file!.filePath!;
       } else {
         msg = 'Unsupported data type';
       }
@@ -129,7 +130,8 @@ class _DiscoveryTransferPageContentState
         serviceId: "SERVICE-1",
         broadcastOption: BroadcastOption(DiscoveryPolicy.p2p),
       );
-      Scaffold.of(context).showSnackBar(createSnack("Broadcast started."));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(createSnack("Broadcast started."));
     } on PlatformException catch (e) {
       _handleException(e, context);
     }
@@ -137,14 +139,15 @@ class _DiscoveryTransferPageContentState
 
   void _stopBroadcast(context) async {
     HMSDiscoveryEngine.instance.stopBroadcasting();
-    Scaffold.of(context).showSnackBar(createSnack("Broadcast stopped."));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(createSnack("Broadcast stopped."));
   }
 
   void _startScan(context) async {
     try {
       await HMSDiscoveryEngine.instance.startScan(
           serviceId: "SERVICE-1", scanOption: ScanOption(DiscoveryPolicy.p2p));
-      Scaffold.of(context).showSnackBar(createSnack("Scan started."));
+      ScaffoldMessenger.of(context).showSnackBar(createSnack("Scan started."));
     } on PlatformException catch (e) {
       _handleException(e, context);
     }
@@ -152,26 +155,26 @@ class _DiscoveryTransferPageContentState
 
   void _stopScan(context) async {
     HMSDiscoveryEngine.instance.stopScan();
-    Scaffold.of(context).showSnackBar(createSnack("Scan stopped."));
+    ScaffoldMessenger.of(context).showSnackBar(createSnack("Scan stopped."));
   }
 
-  void _requestConnect(context) async {
-    if (_endpointId == null || _endpointName == null) {
-      Scaffold.of(context)
+  void _requestConnectEx(context) async {
+    if (_endpointName == 'Unknown') {
+      ScaffoldMessenger.of(context)
           .showSnackBar(createSnack("No endpoint found!", true));
       return;
     }
     try {
       await HMSDiscoveryEngine.instance
-          .requestConnect(name: _endpointName, endpointId: _endpointId);
+          .requestConnectEx(name: _endpointName, endpointId: _endpointId, channelPolicy: ConnectOption(ChannelPolicy.highThroughput));
     } on PlatformException catch (e) {
       _handleException(e, context);
     }
   }
 
   void _acceptConnect(context) async {
-    if (_endpointId == null) {
-      Scaffold.of(context)
+    if (_endpointId == 'Unknown') {
+      ScaffoldMessenger.of(context)
           .showSnackBar(createSnack("No endpoint found!", true));
       return;
     }
@@ -183,8 +186,8 @@ class _DiscoveryTransferPageContentState
   }
 
   void _rejectConnect(context) async {
-    if (_endpointName == null || !_isEstablished) {
-      Scaffold.of(context)
+    if (!_isEstablished) {
+      ScaffoldMessenger.of(context)
           .showSnackBar(createSnack('There no established connection!', true));
       return;
     }
@@ -199,8 +202,8 @@ class _DiscoveryTransferPageContentState
   }
 
   void _disconnect(context) async {
-    if (_endpointName == null || !_isConnected) {
-      Scaffold.of(context).showSnackBar(
+    if (!_isConnected) {
+      ScaffoldMessenger.of(context).showSnackBar(
           createSnack('You are not connected to an endpoint!', true));
       return;
     }
@@ -211,14 +214,15 @@ class _DiscoveryTransferPageContentState
   }
 
   void _sendByteData(context) async {
-    if (_endpointName == null || !_isConnected) {
-      Scaffold.of(context).showSnackBar(
+    if (!_isConnected) {
+      ScaffoldMessenger.of(context).showSnackBar(
           createSnack('You are not connected to an endpoint!', true));
       return;
     }
     try {
       String msg = "Hello there  $_endpointId!";
-      TransferData data = TransferData.fromBytes(utf8.encode(msg));
+      TransferData data =
+          TransferData.fromBytes((Uint8List.fromList(utf8.encode(msg))));
       await HMSTransferEngine.instance.sendData(_endpointId, data);
     } on PlatformException catch (e) {
       _handleException(e, context);
@@ -226,14 +230,15 @@ class _DiscoveryTransferPageContentState
   }
 
   void _sendStreamData(context) async {
-    if (_endpointName == null || !_isConnected) {
-      Scaffold.of(context).showSnackBar(
+    if (!_isConnected) {
+      ScaffoldMessenger.of(context).showSnackBar(
           createSnack('You are not connected to an endpoint!', true));
       return;
     }
     try {
       String msg = "Hello there  $_endpointId, with streams!";
-      TransferData data = TransferData.fromStream(content: utf8.encode(msg));
+      TransferData data = TransferData.fromStream(
+          content: (Uint8List.fromList(utf8.encode(msg))));
       await HMSTransferEngine.instance.sendData(_endpointId, data);
     } on PlatformException catch (e) {
       _handleException(e, context);
@@ -245,7 +250,7 @@ class _DiscoveryTransferPageContentState
     setState(() {
       _logs += e.message + '\n';
     });
-    Scaffold.of(context).showSnackBar(snackBar);
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override
@@ -360,7 +365,7 @@ class _DiscoveryTransferPageContentState
                         CustomButton(
                           text: 'Request Connect',
                           onPressed: () async {
-                            _requestConnect(context);
+                            _requestConnectEx(context);
                           },
                         ),
                         CustomButton(
@@ -436,11 +441,15 @@ class _DiscoveryTransferPageContentState
 
   Future<void> initPlatformState() async {
     _setListeners();
-    String sdkVersion;
+    late String sdkVersion;
     try {
-      sdkVersion = await HMSNearby.getVersion();
+      if (await HMSNearby.getVersion() != null) {
+        sdkVersion = (await HMSNearby.getVersion())!;
+      } else {
+        throw ArgumentError('SDK version is null');
+      }
     } on PlatformException {
-      sdkVersion = 'Failed to get sdk version.';
+      sdkVersion = 'Failed to get SDK version.';
     }
 
     if (!mounted) return;

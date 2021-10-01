@@ -22,11 +22,11 @@ class NearbyPermissionHandler {
   static final MethodChannel _channel =
       MethodChannel(PERMISSION_METHOD_CHANNEL);
 
-  static Future<bool> requestPermission(List<NearbyPermission> permissions) {
-    if (permissions == null || permissions.length == 0) {
+  static Future<bool?> requestPermission(List<NearbyPermission> permissions) {
+    if (permissions.length == 0) {
       throw ArgumentError('List of permissions cannot be null or empty.');
     }
-    List<String> permList = List<String>();
+    List<String> permList = List<String>.empty(growable: true);
     permissions.forEach((NearbyPermission permission) {
       permList.add(describeEnum(permission));
     });
@@ -34,11 +34,11 @@ class NearbyPermissionHandler {
         'requestPermission', <String, dynamic>{'permissions': permList});
   }
 
-  static Future<bool> hasLocationPermission() {
+  static Future<bool?> hasLocationPermission() {
     return _channel.invokeMethod('hasLocationPermission');
   }
 
-  static Future<bool> hasExternalStoragePermission() {
+  static Future<bool?> hasExternalStoragePermission() {
     return _channel.invokeMethod('hasExternalStoragePermission');
   }
 }

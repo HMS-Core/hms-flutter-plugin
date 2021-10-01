@@ -26,6 +26,7 @@ import android.util.Log;
 import com.huawei.hms.flutter.nearbyservice.message.HmsPendingGetCallback;
 import com.huawei.hms.flutter.nearbyservice.message.MessageEngineStreamHandler;
 import com.huawei.hms.nearby.discovery.BroadcastOption;
+import com.huawei.hms.nearby.discovery.ChannelPolicy;
 import com.huawei.hms.nearby.discovery.Policy;
 import com.huawei.hms.nearby.discovery.ScanOption;
 import com.huawei.hms.nearby.message.GetOption;
@@ -34,6 +35,8 @@ import com.huawei.hms.nearby.message.MessagePicker;
 import com.huawei.hms.nearby.message.PutOption;
 import com.huawei.hms.nearby.transfer.Data;
 import com.huawei.hms.nearby.wifishare.WifiSharePolicy;
+
+import io.flutter.plugin.common.MethodChannel;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -44,8 +47,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import io.flutter.plugin.common.MethodChannel;
 
 public class HmsHelper {
 
@@ -72,10 +73,6 @@ public class HmsHelper {
         }
 
         byte[] content = FromMap.toByteArray("content", messageMap.get("content"));
-        if (content == null) {
-            Log.e(TAG, "createMessage | Content is null.");
-            return null;
-        }
 
         String type = FromMap.toString("type", messageMap.get("type"), true);
         String namespace = FromMap.toString("namespace", messageMap.get("namespace"), true);
@@ -103,7 +100,8 @@ public class HmsHelper {
             Log.w(TAG, "createPutOption | putCallback is null.");
         }
 
-        com.huawei.hms.nearby.message.Policy policy = HmsHelper.getMessagePolicy(ToMap.fromObject(optionMap.get("policy")));
+        com.huawei.hms.nearby.message.Policy policy = HmsHelper.getMessagePolicy(
+            ToMap.fromObject(optionMap.get("policy")));
         builder.setPolicy(policy);
         Log.i(TAG, "createPutOption | set policy.");
         return builder.build();
@@ -113,22 +111,23 @@ public class HmsHelper {
         GetOption.Builder builder = new GetOption.Builder();
         Integer id = FromMap.toInteger("getCallback", optionMap.get("getCallback"));
         if (id != null) {
-            Log.i(TAG, "createGetOption | set getCallback.");
+            Log.i(TAG, "HmsHelper createGetOption | set getCallback.");
             builder.setCallback(streamHandler.createGetCallback(id));
         } else {
-            Log.w(TAG, "createGetOption | getCallback is null.");
+            Log.w(TAG, "HmsHelper createGetOption | getCallback is null.");
         }
 
         MessagePicker picker = createMessagePicker(ToMap.fromObject(optionMap.get("messagePicker")));
         if (picker == null) {
-            Log.w(TAG, "createGetOption | Message picker is null.");
+            Log.w(TAG, "HmsHelper createGetOption | Message picker is null.");
         } else {
             builder.setPicker(picker);
         }
 
-        com.huawei.hms.nearby.message.Policy policy = HmsHelper.getMessagePolicy(ToMap.fromObject(optionMap.get("policy")));
+        com.huawei.hms.nearby.message.Policy policy = HmsHelper.getMessagePolicy(
+            ToMap.fromObject(optionMap.get("policy")));
         builder.setPolicy(policy);
-        Log.i(TAG, "createGetOption | set policy.");
+        Log.i(TAG, "HmsHelper createGetOption | set policy.");
         return builder.build();
     }
 
@@ -144,7 +143,8 @@ public class HmsHelper {
             builder.setPicker(picker);
         }
 
-        com.huawei.hms.nearby.message.Policy policy = HmsHelper.getMessagePolicy(ToMap.fromObject(optionMap.get("policy")));
+        com.huawei.hms.nearby.message.Policy policy = HmsHelper.getMessagePolicy(
+            ToMap.fromObject(optionMap.get("policy")));
         builder.setPolicy(policy);
         Log.i(TAG, "createGetOption | set policy.");
         return builder.build();
@@ -164,7 +164,8 @@ public class HmsHelper {
         }
 
         if (pickerMap.containsKey("iBeaconIds")) {
-            List<Map<String, Object>> iBeaconMapList = FromMap.toMapArrayList("iBeaconIds", pickerMap.get("iBeaconIds"));
+            List<Map<String, Object>> iBeaconMapList = FromMap.toMapArrayList("iBeaconIds",
+                pickerMap.get("iBeaconIds"));
             for (Map<String, Object> el : iBeaconMapList) {
                 String uuid = FromMap.toString("uuid", el.get("uuid"), true);
                 Short major = FromMap.toShort("major", el.get("major"));
@@ -182,7 +183,8 @@ public class HmsHelper {
         }
 
         if (pickerMap.containsKey("eddystoneUids")) {
-            List<Map<String, Object>> eddystoneMapList = FromMap.toMapArrayList("eddystoneUids", pickerMap.get("eddystoneUids"));
+            List<Map<String, Object>> eddystoneMapList = FromMap.toMapArrayList("eddystoneUids",
+                pickerMap.get("eddystoneUids"));
             for (Map<String, Object> el : eddystoneMapList) {
                 String uid = FromMap.toString("uid", el.get("uid"), true);
                 String instance = FromMap.toString("instance", el.get("instance"), false);
@@ -195,7 +197,8 @@ public class HmsHelper {
         }
 
         if (pickerMap.containsKey("namespaceTypes")) {
-            List<Map<String, Object>> namespaceMapList = FromMap.toMapArrayList("namespaceTypes", pickerMap.get("namespaceTypes"));
+            List<Map<String, Object>> namespaceMapList = FromMap.toMapArrayList("namespaceTypes",
+                pickerMap.get("namespaceTypes"));
             for (Map<String, Object> el : namespaceMapList) {
                 String namespace = FromMap.toString("namespace", el.get("namespace"), true);
                 String type = FromMap.toString("type", el.get("type"), true);
@@ -292,7 +295,8 @@ public class HmsHelper {
         return policy;
     }
 
-    public static Data parseData(Map<String, Object> dataMap, int type, boolean isUri, ContentResolver contentResolver) {
+    public static Data parseData(Map<String, Object> dataMap, int type, boolean isUri,
+        ContentResolver contentResolver) {
         Data data;
         Long id = FromMap.toLong("id", dataMap.get("id"));
         if (id == null) {
@@ -319,7 +323,7 @@ public class HmsHelper {
 
     private static Data parseBytes(Long id, Map<String, Object> dataMap) {
         byte[] bytes = FromMap.toByteArray("bytes", dataMap.get("bytes"));
-        if (bytes == null || bytes.length == 0) {
+        if (bytes.length == 0) {
             Log.e(TAG, "parseBytes | Byte data is null or empty.");
             return null;
         }
@@ -331,7 +335,8 @@ public class HmsHelper {
         }
     }
 
-    private static Data parseFile(Long id, Map<String, Object> dataMap, boolean isUri, ContentResolver contentResolver) {
+    private static Data parseFile(Long id, Map<String, Object> dataMap, boolean isUri,
+        ContentResolver contentResolver) {
         Map<String, Object> fileMap = ToMap.fromObject(dataMap.get("file"));
         Data data = null;
         if (fileMap.isEmpty()) {
@@ -362,7 +367,8 @@ public class HmsHelper {
         return data;
     }
 
-    private static Data parseStream(Long id, Map<String, Object> dataMap, boolean isUri, ContentResolver contentResolver) {
+    private static Data parseStream(Long id, Map<String, Object> dataMap, boolean isUri,
+        ContentResolver contentResolver) {
         Map<String, Object> streamMap = ToMap.fromObject(dataMap.get("stream"));
         Data data = null;
         if (streamMap.isEmpty()) {
@@ -392,10 +398,6 @@ public class HmsHelper {
             } else {
                 Log.i(TAG, "parseStream | No url is specified, proceeding to transfer stream content instead.");
                 byte[] content = FromMap.toByteArray("content", streamMap.get("content"));
-                if (content == null) {
-                    Log.e(TAG, "parseStream | Stream content is null.");
-                    return null;
-                }
 
                 InputStream stream = new ByteArrayInputStream(content);
                 if (id != null) {
@@ -410,7 +412,32 @@ public class HmsHelper {
         return data;
     }
 
-    public static void errorHandler(MethodChannel.Result result, String errorCode, String errorMessage, String errorDetails) {
+    public static ChannelPolicy getChannelPolicyByNumber(int channelPolicyNumber) {
+        if (channelPolicyNumber == 1) {
+            return ChannelPolicy.CHANNEL_AUTO;
+        } else if (channelPolicyNumber == 2) {
+            return ChannelPolicy.CHANNEL_HIGH_THROUGHPUT;
+        } else if (channelPolicyNumber == 3) {
+            return ChannelPolicy.CHANNEL_INSTANCE;
+        } else {
+            return null;
+        }
+    }
+
+    public static int getChannelPolicyNumber(ChannelPolicy channelPolicy) {
+        if (channelPolicy.equals(ChannelPolicy.CHANNEL_AUTO)) {
+            return 1;
+        } else if (channelPolicy.equals(ChannelPolicy.CHANNEL_HIGH_THROUGHPUT)) {
+            return 2;
+        } else if (channelPolicy.equals(ChannelPolicy.CHANNEL_INSTANCE)) {
+            return 3;
+        } else {
+            return -1;
+        }
+    }
+
+    public static void errorHandler(MethodChannel.Result result, String errorCode, String errorMessage,
+        String errorDetails) {
         new Handler(Looper.getMainLooper()).post(() -> result.error(errorCode, errorMessage, ""));
     }
 

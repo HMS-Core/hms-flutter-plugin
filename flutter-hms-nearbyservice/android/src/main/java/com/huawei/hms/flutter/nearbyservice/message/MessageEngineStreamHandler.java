@@ -27,9 +27,9 @@ public class MessageEngineStreamHandler implements EventChannel.StreamHandler {
 
     private static final String TAG = "MessageStreamHandler";
 
-    EventChannel.EventSink event;
-
     private final Context context;
+
+    EventChannel.EventSink event;
 
     MessageEngineStreamHandler(Context context) {
         this.context = context;
@@ -37,13 +37,13 @@ public class MessageEngineStreamHandler implements EventChannel.StreamHandler {
 
     @Override
     public void onListen(Object arguments, EventChannel.EventSink event) {
-        Log.i(TAG, "onListen");
+        Log.i(TAG, "MessageStreamHandler onListen");
         this.event = event;
     }
 
     @Override
     public void onCancel(Object arguments) {
-        Log.i(TAG, "onCancel");
+        Log.i(TAG, "MessageStreamHandler onCancel");
         event = null;
     }
 
