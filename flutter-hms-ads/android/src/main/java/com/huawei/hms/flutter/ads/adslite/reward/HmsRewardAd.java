@@ -78,6 +78,10 @@ public class HmsRewardAd {
         this.rewardAdListener = rewardAdListener;
     }
 
+    void setMobileDataAlertSwitch(boolean alertSwitch){
+        this.rewardAdInstance.setMobileDataAlertSwitch(alertSwitch);
+    }
+
     boolean isPreparing() {
         return this.status.equals(AdStatus.PREPARING);
     }

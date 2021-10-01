@@ -90,4 +90,4 @@ class _NativeAdState extends State<NativeAd> {
   }
 }
 
-enum NativeAdType { banner, small, full, video }
+enum NativeAdType { banner, small, full, video, app_download }

@@ -51,6 +51,7 @@ class RewardAd {
   String? userId;
   String? data;
   bool? openInHmsCore;
+  bool? setMobileDataAlertSwitch;
   RewardVerifyConfig? rewardVerifyConfig;
   RewardAdListener? _listener;
   late EventChannel _streamReward;
@@ -60,6 +61,7 @@ class RewardAd {
     this.userId,
     this.data,
     @deprecated this.openInHmsCore,
+    this.setMobileDataAlertSwitch = true,
     RewardAdListener? listener,
   }) {
     rewardAds[id] = this;
@@ -96,6 +98,7 @@ class RewardAd {
       'adParam': adParam.toJson(),
       'userId': userId,
       'data': data,
+      'setMobileDataAlertSwitch': setMobileDataAlertSwitch,
       'rewardVerifyConfig': rewardVerifyConfig?.toJson(),
     });
   }

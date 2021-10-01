@@ -51,6 +51,18 @@ class NativeStyles {
     color: Colors.white,
     bgColor: Color(0xFF1D9CE7),
   );
+  Map<String, dynamic> _appDownloadButtonNormal = _createNativeStyle(
+    fontSize: 12,
+    color: Color(0xFF1D9CE7),
+  );
+  Map<String, dynamic> _appDownloadButtonProcessing = _createNativeStyle(
+    fontSize: 12,
+    color: Color(0xFF1D9CE7),
+  );
+  Map<String, dynamic> _appDownloadButtonInstalling = _createNativeStyle(
+    fontSize: 12,
+    color: Color(0xFF1D9CE7),
+  );
 
   NativeStyles();
 
@@ -99,6 +111,33 @@ class NativeStyles {
       _buildNativeStyle(
           _callToAction, isVisible, fontSize, fontWeight, color, bgColor);
 
+  void setAppDownloadButtonNormal(
+          {bool? isVisible,
+          double? fontSize,
+          NativeFontWeight? fontWeight,
+          Color? color,
+          Color? bgColor}) =>
+      _buildNativeStyle(_appDownloadButtonNormal, isVisible, fontSize,
+          fontWeight, color, bgColor);
+
+  void setAppDownloadButtonProcessing(
+          {bool? isVisible,
+          double? fontSize,
+          NativeFontWeight? fontWeight,
+          Color? color,
+          Color? bgColor}) =>
+      _buildNativeStyle(_appDownloadButtonProcessing, isVisible, fontSize,
+          fontWeight, color, bgColor);
+
+  void setAppDownloadButtonInstalling(
+          {bool? isVisible,
+          double? fontSize,
+          NativeFontWeight? fontWeight,
+          Color? color,
+          Color? bgColor}) =>
+      _buildNativeStyle(_appDownloadButtonInstalling, isVisible, fontSize,
+          fontWeight, color, bgColor);
+
   static Map<String, dynamic> _createNativeStyle(
       {double? fontSize,
       NativeFontWeight? fontWeight,
@@ -140,5 +179,8 @@ class NativeStyles {
         "source": _source,
         "description": _description,
         "callToAction": _callToAction,
+        "appDownloadButtonNormal": _appDownloadButtonNormal,
+        "appDownloadButtonProcessing": _appDownloadButtonProcessing,
+        "appDownloadButtonInstalling": _appDownloadButtonInstalling,
       };
 }

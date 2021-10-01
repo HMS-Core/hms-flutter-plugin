@@ -26,6 +26,7 @@ class NativeAdPage extends StatefulWidget {
 class _NativeAdPageState extends State<NativeAdPage> {
   static final String _imageTestAdSlotId = "testu7m3hc4gvm"; // Image
   static final String _videoTestAdSlotId = "testy63txaom86"; // Video ad
+  static final String _appDownloadTestAdSlotId = "testy63txaom86";
   String logs = "Double tap to clear the logs.\n\n";
 
   NativeAdController createVideoAdController() {
@@ -84,6 +85,13 @@ class _NativeAdPageState extends State<NativeAdPage> {
     NativeStyles stylesFull = NativeStyles();
     stylesFull.setSource(color: Colors.redAccent);
     stylesFull.setCallToAction(color: Colors.white, bgColor: Colors.redAccent);
+
+    NativeStyles stylesAppDownloadButton = NativeStyles();
+    stylesAppDownloadButton.setAppDownloadButtonNormal(fontSize: 10);
+    stylesAppDownloadButton.setAppDownloadButtonProcessing(fontSize: 12);
+    stylesAppDownloadButton.setAppDownloadButtonInstalling(fontSize: 14);
+    stylesAppDownloadButton.setCallToAction(fontSize: 10);
+    stylesAppDownloadButton.setFlag(fontSize: 10);
 
     NativeAdConfiguration configuration = NativeAdConfiguration();
     configuration.choicesPosition = NativeAdChoicesPosition.bottomRight;
@@ -187,7 +195,7 @@ class _NativeAdPageState extends State<NativeAdPage> {
                         ),
                       ),
                       Container(
-                        height: 500,
+                        height: 270,
                         padding: EdgeInsets.symmetric(horizontal: 10),
                         margin: EdgeInsets.only(bottom: 20.0),
                         child: NativeAd(
@@ -195,6 +203,27 @@ class _NativeAdPageState extends State<NativeAdPage> {
                           controller: createVideoAdController(),
                           type: NativeAdType.video,
                           styles: stylesVideo,
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(vertical: 20),
+                        color: Colors.black12,
+                        child: Center(
+                          child: Text(
+                            "Native Ad with App Download Button",
+                            style: Styles.headerTextStyle,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 500,
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        margin: EdgeInsets.only(bottom: 20.0),
+                        child: NativeAd(
+                          adSlotId: _appDownloadTestAdSlotId,
+                          controller: createVideoAdController(),
+                          type: NativeAdType.app_download,
+                          styles: stylesAppDownloadButton,
                         ),
                       ),
                     ],

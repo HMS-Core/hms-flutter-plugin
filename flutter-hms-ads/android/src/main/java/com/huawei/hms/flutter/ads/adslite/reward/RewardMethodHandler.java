@@ -141,6 +141,9 @@ public class RewardMethodHandler implements MethodChannel.MethodCallHandler {
             hmsRewardAd.setRewardVerifyConfig(rewardVerifyConfig);
         }
 
+        boolean setMobileDataAlertSwitch = FromMap.toBoolean("setMobileDataAlertSwitch", call.argument("setMobileDataAlertSwitch"));
+        hmsRewardAd.setMobileDataAlertSwitch(setMobileDataAlertSwitch);
+
         hmsRewardAd.loadAd(adSlotId, adParam);
         result.success(true);
         HMSLogger.getInstance(context).sendSingleEvent("loadRewardAd");

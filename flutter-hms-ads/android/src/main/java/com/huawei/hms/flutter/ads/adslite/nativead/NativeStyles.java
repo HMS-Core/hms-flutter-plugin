@@ -34,6 +34,9 @@ public class NativeStyles {
     Map<String, Object> title = createNativeStyle(15f, Color.BLACK);
     Map<String, Object> description = createNativeStyle(12f, Color.GRAY);
     Map<String, Object> callToAction = createNativeStyle(14f, Color.WHITE, Color.parseColor("#1D9CE7"));
+    Map<String, Object> appDownloadButtonNormal = createNativeStyle(12f, Color.WHITE);
+    Map<String, Object> appDownloadButtonProcessing = createNativeStyle(12f, Color.WHITE);
+    Map<String, Object> appDownloadButtonInstalling = createNativeStyle(12f, Color.WHITE);
 
     public NativeStyles build(Map<String, Object> args) {
         NativeStyles styles = new NativeStyles();
@@ -71,6 +74,21 @@ public class NativeStyles {
         Map<String, Object> callToActionMap = ToMap.fromObject(args.get("callToAction"));
         if (!callToActionMap.isEmpty()) {
             buildNativeStyle(styles.callToAction, callToActionMap);
+        }
+
+        Map<String, Object> appDownloadButtonNormalMap = ToMap.fromObject(args.get("appDownloadButtonNormal"));
+        if (!appDownloadButtonNormalMap.isEmpty()) {
+            buildNativeStyle(styles.appDownloadButtonNormal, appDownloadButtonNormalMap);
+        }
+
+        Map<String, Object> appDownloadButtonProcessingMap = ToMap.fromObject(args.get("appDownloadButtonProcessing"));
+        if (!appDownloadButtonProcessingMap.isEmpty()) {
+            buildNativeStyle(styles.appDownloadButtonProcessing, appDownloadButtonProcessingMap);
+        }
+
+        Map<String, Object> appDownloadButtonInstallingMap = ToMap.fromObject(args.get("appDownloadButtonInstalling"));
+        if (!appDownloadButtonInstallingMap.isEmpty()) {
+            buildNativeStyle(styles.appDownloadButtonInstalling, appDownloadButtonInstallingMap);
         }
 
         return styles;

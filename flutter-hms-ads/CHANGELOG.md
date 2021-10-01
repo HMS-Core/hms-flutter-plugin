@@ -1,3 +1,8 @@
+## 13.4.45+308
+
+* Native Ad - New template with App Download Button.
+* Ads Kit sdk updated to 13.4.45.308.
+
 ## 13.4.40+302
 
 * Nullsafety migration.

@@ -26,6 +26,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.huawei.hms.ads.AppDownloadButton;
+import com.huawei.hms.ads.AppDownloadButtonStyle;
 import com.huawei.hms.ads.nativead.MediaView;
 import com.huawei.hms.ads.nativead.NativeAd;
 import com.huawei.hms.ads.nativead.NativeView;
@@ -42,6 +44,7 @@ public class HmsNativeView extends LinearLayout {
     private TextView source;
     private TextView description;
     private Button callToAction;
+    private AppDownloadButton appDownloadButton;
     ImageView.ScaleType mediaImageScaleType = ImageView.ScaleType.FIT_CENTER;
 
     public HmsNativeView(Context context, int layout) {
@@ -78,6 +81,8 @@ public class HmsNativeView extends LinearLayout {
 
         callToAction = nativeView.findViewById(R.id.call_to_action);
         nativeView.setCallToActionView(callToAction);
+
+        appDownloadButton = nativeView.findViewById(R.id.app_download_btn);
 
         nativeView.setIconView(nativeView.findViewById(R.id.icon));
     }
@@ -120,7 +125,7 @@ public class HmsNativeView extends LinearLayout {
         nativeView.setNativeAd(nativeAd);
     }
 
-    public void setNativeStyles(NativeStyles nativeStyles) {
+    public void setNativeStyles(Context context, NativeStyles nativeStyles) {
         if (media != null) {
             media.setVisibility(nativeStyles.showMediaContent ? View.VISIBLE : View.GONE);
         }
@@ -145,6 +150,21 @@ public class HmsNativeView extends LinearLayout {
             setStyle(callToAction, nativeStyles.callToAction);
         }
 
+        if(appDownloadButton != null){
+            appDownloadButton.setAppDownloadButtonStyle(new AppDownloadStyle(context,
+                    nativeStyles.appDownloadButtonNormal,
+                    nativeStyles.appDownloadButtonProcessing,
+                    nativeStyles.appDownloadButtonInstalling));
+            if (nativeView.register(appDownloadButton)) {
+                appDownloadButton.setVisibility(View.VISIBLE);
+                appDownloadButton.refreshAppStatus();
+                nativeView.getCallToActionView().setVisibility(View.GONE);
+            } else {
+                appDownloadButton.setVisibility(View.GONE);
+                nativeView.getCallToActionView().setVisibility(View.VISIBLE);
+            }
+        }
+
         mediaImageScaleType = nativeStyles.mediaImageScaleType;
     }
 
@@ -156,6 +176,40 @@ public class HmsNativeView extends LinearLayout {
         int bgColor = (int) nativeStyle.get(NativeStyles.Keys.BACKGROUND_COLOR);
         if (bgColor != 0) {
             textView.setBackground(new ColorDrawable(bgColor));
+        }
+    }
+
+    private static class AppDownloadStyle extends AppDownloadButtonStyle {
+        final Map<String, Object> normalStyleMap;
+        final Map<String, Object> processingStyleMap;
+        final Map<String, Object> installingStyleMap;
+
+        public AppDownloadStyle(Context context, Map<String, Object> normalStyleMap, Map<String, Object> processingStyleMap, Map<String, Object> installingStyleMap) {
+            super(context);
+            this.normalStyleMap = normalStyleMap;
+            this.processingStyleMap = processingStyleMap;
+            this.installingStyleMap = installingStyleMap;
+
+            normalStyle.setTextColor((int) this.normalStyleMap.get(NativeStyles.Keys.COLOR));
+            normalStyle.setTextSize(Math.round((float) this.normalStyleMap.get(NativeStyles.Keys.FONT_SIZE)));
+            int bgColor = (int) this.normalStyleMap.get(NativeStyles.Keys.BACKGROUND_COLOR);
+            if (bgColor != 0) {
+                normalStyle.setBackground(new ColorDrawable(bgColor));
+            }
+
+            processingStyle.setTextColor((int) this.processingStyleMap.get(NativeStyles.Keys.COLOR));
+            processingStyle.setTextSize(Math.round((float) this.processingStyleMap.get(NativeStyles.Keys.FONT_SIZE)));
+            int bgColorP = (int) this.processingStyleMap.get(NativeStyles.Keys.BACKGROUND_COLOR);
+            if (bgColorP != 0) {
+                processingStyle.setBackground(new ColorDrawable(bgColorP));
+            }
+
+            installingStyle.setTextColor((int) this.installingStyleMap.get(NativeStyles.Keys.COLOR));
+            installingStyle.setTextSize(Math.round((float) this.installingStyleMap.get(NativeStyles.Keys.FONT_SIZE)));
+            int bgColorI = (int) this.installingStyleMap.get(NativeStyles.Keys.BACKGROUND_COLOR);
+            if (bgColorI != 0) {
+                installingStyle.setBackground(new ColorDrawable(bgColorI));
+            }
         }
     }
 }

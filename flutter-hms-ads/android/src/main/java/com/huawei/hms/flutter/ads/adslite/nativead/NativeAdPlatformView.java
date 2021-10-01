@@ -28,7 +28,7 @@ import io.flutter.plugin.platform.PlatformView;
 
 public class NativeAdPlatformView implements PlatformView {
     enum AdType {
-        banner, small, full, video
+        banner, small, full, video, app_download
     }
 
     private NativeAdController nativeAdController;
@@ -55,14 +55,12 @@ public class NativeAdPlatformView implements PlatformView {
                 case video:
                     layout = R.layout.native_ad_video_template;
                     break;
+                case app_download:
+                    layout = R.layout.native_ad_app_download_template;
             }
         }
 
         hmsNativeView = new HmsNativeView(context, layout != null ? layout : R.layout.native_ad_banner_template);
-        Map<String, Object> stylesMap = ToMap.fromObject(params.get("nativeStyles"));
-        if (!stylesMap.isEmpty()) {
-            hmsNativeView.setNativeStyles(new NativeStyles().build(stylesMap));
-        }
         Integer id = FromMap.toInteger("id", params.get("id"));
         if (id != null) {
             NativeAdController controller = NativeAdControllerFactory.get(id);
@@ -73,6 +71,10 @@ public class NativeAdPlatformView implements PlatformView {
         }
         if (nativeAdController != null && nativeAdController.getNativeAd() != null) {
             hmsNativeView.setNativeAd(nativeAdController.getNativeAd());
+        }
+        Map<String, Object> stylesMap = ToMap.fromObject(params.get("nativeStyles"));
+        if (!stylesMap.isEmpty()) {
+            hmsNativeView.setNativeStyles(context, new NativeStyles().build(stylesMap));
         }
     }
 
