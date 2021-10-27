@@ -41,6 +41,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.huawei.hms:dtm-api:5.0.4.301'
-    implementation 'com.huawei.hms:hianalytics:5.0.3.300'
+    implementation 'com.huawei.hms:dtm-api:6.1.0.301'
+    implementation 'com.huawei.hms:hianalytics:6.2.0.301'
 }

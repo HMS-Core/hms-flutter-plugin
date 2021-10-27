@@ -20,26 +20,27 @@ class CustomButton extends StatelessWidget {
   final String title;
   final VoidCallback onPressed;
 
-  const CustomButton({Key key, @required this.title, @required this.onPressed})
+  const CustomButton({Key? key, required this.title, required this.onPressed})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 70,
-      padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          side: BorderSide(color: Colors.orange),
-        ),
-        color: Colors.black,
-        child: Text(
-          title,
-          style: TextStyle(color: Colors.orange, fontWeight: FontWeight.bold),
-        ),
-        onPressed: onPressed,
-      ),
-    );
+        height: 70,
+        padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+        child: ElevatedButton(
+          onPressed: onPressed,
+          child: Text(
+            title,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          style: ElevatedButton.styleFrom(
+              primary: Colors.blueGrey[400], // background
+              onPrimary: Colors.white, // foreground
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                side: BorderSide(color: Colors.grey[600]!),
+              )),
+        ));
   }
 }

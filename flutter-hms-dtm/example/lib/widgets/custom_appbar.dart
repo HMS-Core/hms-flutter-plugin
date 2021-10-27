@@ -14,25 +14,30 @@
     limitations under the License.
 */
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-PreferredSizeWidget customAppBar({String title}) {
+PreferredSizeWidget customAppBar({required String title}) {
   return AppBar(
-    title: Text(
-      title,
-      style: TextStyle(color: Colors.orange),
+    backgroundColor: Colors.blueGrey[400],
+    title: Padding(
+      padding: const EdgeInsets.only(top: 20.0),
+      child: Text(
+        title,
+        style: TextStyle(color: Colors.white),
+      ),
     ),
     actions: <Widget>[
       Padding(
-        padding: const EdgeInsets.only(right: 15.0),
+        padding: const EdgeInsets.fromLTRB(0, 10, 5, 0),
         child: Image.asset("assets/hw_icon.png"),
       ),
     ],
-    bottom: new PreferredSize(
-        child: new SizedBox(
+    bottom: PreferredSize(
+        child: SizedBox(
           height: 1,
           child: Container(
-            color: Colors.orange,
+            color: Colors.grey[600],
           ),
         ),
         preferredSize: const Size.fromHeight(20.0)),

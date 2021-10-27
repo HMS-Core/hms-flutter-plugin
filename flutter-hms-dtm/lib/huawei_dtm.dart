@@ -25,8 +25,10 @@ class HMSDTM {
   static StreamController<Map<String, dynamic>> _controller =
       StreamController<Map<String, dynamic>>.broadcast();
 
+  /// Returns a stream which can be used to listen to the triggered Custom Tags.
   static Stream<Map<String, dynamic>> get customTagStream => _controller.stream;
 
+  /// Records events.
   static Future<void> onEvent(String key, Map<String, dynamic> value) async {
     if (key == null || value == null) {
       throw ArgumentError.notNull("key | value");
@@ -38,6 +40,8 @@ class HMSDTM {
     await _channel.invokeMethod('onEvent', params);
   }
 
+  /// Sets the value that will be returned for a custom variable created in
+  /// the DTM console.
   static Future<void> setCustomVariable(String varName, dynamic value) async {
     dynamic params = {
       'varName': varName,
@@ -46,10 +50,14 @@ class HMSDTM {
     await _channel.invokeMethod('setCustomVariable', params);
   }
 
+  /// Enables the HMSLogger capability which is used for sending usage
+  /// analytics of DTM SDK's methods to improve the service quality.
   static Future<void> enableLogger() async {
     await _channel.invokeMethod('enableLogger');
   }
 
+  /// Disables the HMSLogger capability which is used for sending usage
+  /// analytics of DTM SDK's methods to improve the service quality.
   static Future<void> disableLogger() async {
     await _channel.invokeMethod('disableLogger');
   }

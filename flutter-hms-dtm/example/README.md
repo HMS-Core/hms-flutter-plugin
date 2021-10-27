@@ -1,4 +1,4 @@
-# Huawei DTM Kit Flutter Plugin - Demo
+# Huawei DTM Flutter Plugin - Demo
 
 ---
 
@@ -260,15 +260,11 @@ Go to **Tag** section in **Dynamic Tag Manager** page.
 
 #### Create Version
 
-Go to **Version** section in **Dynamic Tag Manager** page. Press **Create** button in **Version** page. Enter a version name and click **OK**. Press the version which is created. Then click the **Release** button. After that click the **Download** button. DTM-\*\*\*\*.json file will be downloaded.
-
-### Adding DTM-\**\**\**\*.json File To the Project
-
-Go to **android/app/src/main/assets** directory in your project and add a new Directory named **containers**. Then copy the **DTM-\*\*\*\*.json** file and paste it in **containers** directory.
+Go to **Version** section in **Dynamic Tag Manager** page. Press **Create** button in **Version** page. Enter a version name and click **OK**. Press the version which is created. 
 
 #### Note
 
-> After each release, you need to replace the **DTM-\*\*\*\*.json** with the new one.
+> You do not need to manually download **DTM-\*\*\*\*.json** file and import it to your Andorid Studio project.
 
 ---
 

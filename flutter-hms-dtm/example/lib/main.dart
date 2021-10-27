@@ -17,9 +17,9 @@
 import 'package:flutter/material.dart';
 import 'package:huawei_dtm/huawei_dtm.dart';
 
-import 'widgets/custom_button.dart';
-import 'widgets/custom_appbar.dart';
 import 'keys.dart';
+import 'widgets/custom_appbar.dart';
+import 'widgets/custom_button.dart';
 
 void main() => runApp(HomePage());
 
@@ -29,7 +29,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var subscription;
+  late var subscription;
   bool _showFourthButton = false;
 
   @override
@@ -56,11 +56,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(primaryColor: Colors.black),
+      theme: ThemeData(primaryColor: Colors.white),
       home: Scaffold(
-        backgroundColor: Colors.black,
         appBar: customAppBar(
-          title: 'HMS DTM Kit Flutter Demo',
+          title: 'HMS DTM Flutter Demo',
         ),
         body: Container(
           padding: EdgeInsets.all(30.0),
@@ -117,7 +116,7 @@ class _HomePageState extends State<HomePage> {
   _customTag() async {
     try {
       const eventName = "PurchaseShoes";
-      await HMSDTM.onEvent(eventName, Map<String, dynamic>());
+      await HMSDTM.onEvent(eventName, {"price": "70"});
     } catch (e) {
       print("CustomTag error: " + e.toString());
     }

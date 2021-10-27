@@ -22,8 +22,6 @@ import android.util.SparseArray;
 
 import androidx.annotation.NonNull;
 
-import com.huawei.hms.flutter.dtm.logger.HMSLogger;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,13 +31,12 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 /**
  * Hms DTM Plugin
  *
  * @author Huawei Technologies
- * @since (5.0.4+301)
+ * @since (5.0.4 + 301)
  */
 public class DTMPlugin implements FlutterPlugin, MethodCallHandler {
     private static final String TAG = "HmsFlutterDTM";
@@ -48,17 +45,14 @@ public class DTMPlugin implements FlutterPlugin, MethodCallHandler {
     public static final SparseArray<MethodChannel> CHANNELS = new SparseArray<>();
     private static final Map<String, String> ALL_RETURN_VALUES = new HashMap<>();
     private static FlutterPluginBinding pluginBinding;
-    private static Registrar pluginRegistrar;
     private MethodChannel channel;
     private DTMService dtmService;
 
     public static Context getContext() {
         if (pluginBinding != null) {
             return pluginBinding.getApplicationContext();
-        } else if (pluginRegistrar != null) {
-            return pluginRegistrar.context();
         } else {
-            Log.e(TAG, "Both pluginBinding & registrar were null.");
+            Log.e(TAG, "pluginBinding is null.");
             return null;
         }
     }
@@ -67,12 +61,8 @@ public class DTMPlugin implements FlutterPlugin, MethodCallHandler {
         return ALL_RETURN_VALUES;
     }
 
-    private static void setPluginBinding(FlutterPluginBinding flutterPluginBinding) {
+    private static void setPluginBinding(final FlutterPluginBinding flutterPluginBinding) {
         pluginBinding = flutterPluginBinding;
-    }
-
-    private static void setPluginRegistrar(Registrar registrar) {
-        pluginRegistrar = registrar;
     }
 
     @Override
@@ -86,12 +76,6 @@ public class DTMPlugin implements FlutterPlugin, MethodCallHandler {
         channel = new MethodChannel(messenger, METHOD_CHANNEL_NAME);
         channel.setMethodCallHandler(this);
         CHANNELS.put(0, channel);
-    }
-
-    public static void registerWith(final Registrar registrar) {
-        setPluginRegistrar(registrar);
-        final DTMPlugin instance = new DTMPlugin();
-        instance.onAttachedToEngine(registrar.context(), registrar.messenger());
     }
 
     @Override
@@ -121,7 +105,6 @@ public class DTMPlugin implements FlutterPlugin, MethodCallHandler {
             channel.setMethodCallHandler(null);
         }
         setPluginBinding(null);
-        setPluginRegistrar(null);
         channel = null;
         dtmService = null;
         CHANNELS.clear();

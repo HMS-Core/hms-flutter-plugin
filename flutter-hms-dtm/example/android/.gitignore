@@ -1,8 +1,12 @@
-gradle-wrapper.jar
 /.gradle
 /captures/
-/gradlew
-/gradlew.bat
 /local.properties
 GeneratedPluginRegistrant.java
-DTM*.json
+agconnect-services.json
+*.jks
+.project
+.settings
+app/.classpath
+/gradlew
+/gradlew.bat
+gradle-wrapper.jar
