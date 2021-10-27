@@ -25,38 +25,39 @@ class SharedKeysDataMapping {
   static const int _DAYS_SINCE_CREATION_TO_CONTAGIOUSNESS_MAX_SIZE = 29;
   static const int _MAX_DAYS_SINCE_CREATION = 14;
 
-  List<int> _daysSinceCreationToContagiousness;
-  int _defaultContagiousness = 0;
-  int _defaultReportType = 0;
+  List<int>? _daysSinceCreationToContagiousness;
+  int? _defaultContagiousness = 0;
+  int? _defaultReportType = 0;
 
-  SharedKeysDataMapping();
+  SharedKeysDataMapping(
+    this._daysSinceCreationToContagiousness,
+    this._defaultContagiousness,
+    this._defaultReportType,
+  );
 
-  Map<int, int> getDaysSinceCreationToContagiousness() {
+  Map<int, int>? getDaysSinceCreationToContagiousness() {
     if (_daysSinceCreationToContagiousness == null ||
-        _daysSinceCreationToContagiousness.length == 0) {
+        _daysSinceCreationToContagiousness!.length == 0) {
       return null;
     } else {
       Map<int, int> map = <int, int>{};
-      for (int i = 0; i < _daysSinceCreationToContagiousness.length; i++) {
-        map.putIfAbsent(i, () => _daysSinceCreationToContagiousness[i]);
+      for (int i = 0; i < _daysSinceCreationToContagiousness!.length; i++) {
+        map.putIfAbsent(i, () => _daysSinceCreationToContagiousness![i]);
       }
       return map;
     }
   }
 
-  int getDefaultContagiousness() {
+  int? getDefaultContagiousness() {
     return _defaultContagiousness;
   }
 
-  int getDefaultReportType() {
+  int? getDefaultReportType() {
     return _defaultReportType;
   }
 
   void setDaysSinceCreationToContagiousness(
       Map<int, int> daysSinceCreationToContagiousness) {
-    if (!(daysSinceCreationToContagiousness != null)) {
-      throw ArgumentError("daysSinceCreationToContagiousness must not be null");
-    }
     if (!(daysSinceCreationToContagiousness.length <=
         _DAYS_SINCE_CREATION_TO_CONTAGIOUSNESS_MAX_SIZE)) {
       throw ArgumentError(
@@ -98,23 +99,16 @@ class SharedKeysDataMapping {
 
   String toJson() => json.encode(toMap());
 
-  factory SharedKeysDataMapping.fromMap(Map<String, dynamic> json) {
-    if (json == null) return null;
-
-    final SharedKeysDataMapping sharedKeysDataMapping = SharedKeysDataMapping();
-    sharedKeysDataMapping._daysSinceCreationToContagiousness =
-        json["daysSinceCreationToContagiousness"] == null
-            ? null
-            : List<int>.from(
-                json["daysSinceCreationToContagiousness"].map((x) => x));
-    sharedKeysDataMapping._defaultContagiousness =
-        json["defaultContagiousness"] == null
-            ? null
-            : json["defaultContagiousness"];
-    sharedKeysDataMapping._defaultReportType =
-        json["defaultReportType"] == null ? null : json["defaultReportType"];
-
-    return sharedKeysDataMapping;
+  factory SharedKeysDataMapping.fromMap(Map<String, dynamic>? json) {
+    if (json == null) return SharedKeysDataMapping(null, null, null);
+    return SharedKeysDataMapping(
+      json["daysSinceCreationToContagiousness"] == null
+          ? null
+          : List<int>.from(
+              json["daysSinceCreationToContagiousness"].map((x) => x)),
+      json["defaultContagiousness"],
+      json["defaultReportType"],
+    );
   }
 
   Map<String, dynamic> toMap() => {
@@ -122,11 +116,9 @@ class SharedKeysDataMapping {
             _daysSinceCreationToContagiousness == null
                 ? null
                 : List<dynamic>.from(
-                    _daysSinceCreationToContagiousness.map((x) => x)),
-        "defaultContagiousness":
-            _defaultContagiousness == null ? null : _defaultContagiousness,
-        "defaultReportType":
-            _defaultReportType == null ? null : _defaultReportType,
+                    _daysSinceCreationToContagiousness!.map((x) => x)),
+        "defaultContagiousness": _defaultContagiousness,
+        "defaultReportType": _defaultReportType,
       };
 
   @override

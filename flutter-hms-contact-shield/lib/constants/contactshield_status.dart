@@ -42,9 +42,8 @@ class ContactShieldStatus {
       case 128:
         return RUNNING_FOR_ANOTHER_APP;
       case 1024:
-        return UNKNOWN;
       default:
-        return null;
+        return UNKNOWN;
     }
   }
 
@@ -67,9 +66,8 @@ class ContactShieldStatus {
       case "RUNNING_FOR_ANOTHER_APP":
         return RUNNING_FOR_ANOTHER_APP;
       case "UNKNOWN":
-        return UNKNOWN;
       default:
-        return null;
+        return UNKNOWN;
     }
   }
 

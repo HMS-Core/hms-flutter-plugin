@@ -21,6 +21,7 @@ public final class RequestCode {
     public static final int PUT_SHARED_KEY_FILES_CB = 2;
     public static final int PUT_SHARED_KEY_FILES_CB_WITH_PROVIDER = 3;
     public static final int PUT_SHARED_KEY_FILES_CB_WITH_KEYS = 4;
+    public static final int PUT_SHARED_KEY_FILES_CB_PROVIDER_KEYS = 5;
 
     private RequestCode() {
     }

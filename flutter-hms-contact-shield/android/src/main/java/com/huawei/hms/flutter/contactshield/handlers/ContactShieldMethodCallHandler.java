@@ -71,6 +71,9 @@ public class ContactShieldMethodCallHandler implements MethodCallHandler {
             case Method.PUT_SHARED_KEY_FILES_CB_WITH_KEYS:
                 service.putSharedKeyFilesCbWithKeys();
                 break;
+            case Method.PUT_SHARED_KEY_FILES_CB_PROVIDER_KEYS:
+                service.putSharedKeyFilesCbProviderKeys();
+                break;
             case Method.GET_CONTACT_DETAIL:
                 service.getContactDetail();
                 break;

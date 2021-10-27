@@ -154,6 +154,18 @@ public class ContactShieldService {
                 returnError(Method.PUT_SHARED_KEY_FILES_CB_WITH_KEYS, e));
     }
 
+    public void putSharedKeyFilesCbProviderKeys() {
+        final List<String> publicKeys = call.argument("publicKeys");
+        final SharedKeyFileProvider sharedKeyFileProvider = ObjectProvider.getSharedKeyFileProvider(call);
+        final PendingIntent pendingIntent = ObjectProvider.getPendingIntent(context,
+                IntentAction.PUT_SHARED_KEY_FILES_CB_PROVIDER_KEYS, RequestCode.PUT_SHARED_KEY_FILES_CB_PROVIDER_KEYS);
+
+        engine.putSharedKeyFiles(pendingIntent, sharedKeyFileProvider, publicKeys).addOnSuccessListener(aVoid ->
+                returnSuccess(Method.PUT_SHARED_KEY_FILES_CB_PROVIDER_KEYS, null))
+                .addOnFailureListener(e ->
+                        returnError(Method.PUT_SHARED_KEY_FILES_CB_PROVIDER_KEYS, e));
+    }
+
     public void getContactDetail() {
         final String token = call.arguments();
 

@@ -22,9 +22,9 @@ class SketchData {
   double weightedDurationSum;
 
   SketchData({
-    double maxScore,
-    double scoreSum,
-    double weightedDurationSum,
+    double? maxScore,
+    double? scoreSum,
+    double? weightedDurationSum,
   })  : maxScore = maxScore ?? 0.0,
         scoreSum = scoreSum ?? 0.0,
         weightedDurationSum = weightedDurationSum ?? 0.0;
@@ -35,18 +35,15 @@ class SketchData {
   String toJson() => json.encode(toMap());
 
   factory SketchData.fromMap(Map<String, dynamic> json) => SketchData(
-        maxScore: json["maxScore"] == null ? null : json["maxScore"],
-        scoreSum: json["scoreSum"] == null ? null : json["scoreSum"],
-        weightedDurationSum: json["weightedDurationSum"] == null
-            ? null
-            : json["weightedDurationSum"],
+        maxScore: json["maxScore"],
+        scoreSum: json["scoreSum"],
+        weightedDurationSum: json["weightedDurationSum"],
       );
 
   Map<String, dynamic> toMap() => {
-        "maxScore": maxScore == null ? null : maxScore,
-        "scoreSum": scoreSum == null ? null : scoreSum,
-        "weightedDurationSum":
-            weightedDurationSum == null ? null : weightedDurationSum,
+        "maxScore": maxScore,
+        "scoreSum": scoreSum,
+        "weightedDurationSum": weightedDurationSum,
       };
 
   @override

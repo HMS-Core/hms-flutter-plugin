@@ -82,6 +82,7 @@ public final class ObjectProvider {
         intentFilter.addAction(IntentAction.PUT_SHARED_KEY_FILES_CB);
         intentFilter.addAction(IntentAction.PUT_SHARED_KEY_FILES_CB_WITH_PROVIDER);
         intentFilter.addAction(IntentAction.PUT_SHARED_KEY_FILES_CB_WITH_KEYS);
+        intentFilter.addAction(IntentAction.PUT_SHARED_KEY_FILES_CB_PROVIDER_KEYS);
         return intentFilter;
     }
 }

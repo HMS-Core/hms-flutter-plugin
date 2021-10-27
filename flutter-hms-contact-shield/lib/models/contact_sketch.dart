@@ -20,7 +20,7 @@ import 'package:flutter/foundation.dart';
 
 class ContactSketch {
   ContactSketch({
-    List<int> attenuationDurations,
+    List<int>? attenuationDurations,
     this.daysSinceLastHit = 0,
     this.maxRiskValue = 0,
     this.numberOfHits = 0,
@@ -28,10 +28,10 @@ class ContactSketch {
   }) : attenuationDurations = attenuationDurations ?? <int>[0, 0, 0];
 
   List<int> attenuationDurations;
-  int daysSinceLastHit;
-  int maxRiskValue;
-  int numberOfHits;
-  int summationRiskValue;
+  int? daysSinceLastHit;
+  int? maxRiskValue;
+  int? numberOfHits;
+  int? summationRiskValue;
 
   factory ContactSketch.fromJson(String str) =>
       ContactSketch.fromMap(json.decode(str));
@@ -42,26 +42,19 @@ class ContactSketch {
         attenuationDurations: json["attenuationDurations"] == null
             ? null
             : List<int>.from(json["attenuationDurations"].map((x) => x)),
-        daysSinceLastHit:
-            json["daysSinceLastHit"] == null ? null : json["daysSinceLastHit"],
-        maxRiskValue:
-            json["maxRiskValue"] == null ? null : json["maxRiskValue"],
-        numberOfHits:
-            json["numberOfHits"] == null ? null : json["numberOfHits"],
-        summationRiskValue: json["summationRiskValue"] == null
-            ? null
-            : json["summationRiskValue"],
+        daysSinceLastHit: json["daysSinceLastHit"],
+        maxRiskValue: json["maxRiskValue"],
+        numberOfHits: json["numberOfHits"],
+        summationRiskValue: json["summationRiskValue"],
       );
 
   Map<String, dynamic> toMap() => {
-        "attenuationDurations": attenuationDurations == null
-            ? null
-            : List<dynamic>.from(attenuationDurations.map((x) => x)),
-        "daysSinceLastHit": daysSinceLastHit == null ? null : daysSinceLastHit,
-        "maxRiskValue": maxRiskValue == null ? null : maxRiskValue,
-        "numberOfHits": numberOfHits == null ? null : numberOfHits,
-        "summationRiskValue":
-            summationRiskValue == null ? null : summationRiskValue,
+        "attenuationDurations":
+            List<dynamic>.from(attenuationDurations.map((x) => x)),
+        "daysSinceLastHit": daysSinceLastHit,
+        "maxRiskValue": maxRiskValue,
+        "numberOfHits": numberOfHits,
+        "summationRiskValue": summationRiskValue,
       };
 
   @override

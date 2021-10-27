@@ -33,10 +33,10 @@ class ContactShieldEngine {
   static const int DEFAULT_INCUBATION_PERIOD = 14;
   static const String TOKEN_A = 'TOKEN_WINDOW_MODE';
 
-  static ContactShieldEngine _instance;
+  static ContactShieldEngine? _instance;
   final MethodChannel _channel;
 
-  ContactShieldCallback contactShieldCallback;
+  ContactShieldCallback? contactShieldCallback;
 
   ContactShieldEngine._create(this._channel) {
     _channel.setMethodCallHandler(_methodCallHandler);
@@ -49,18 +49,18 @@ class ContactShieldEngine {
             'com.huawei.hms.flutter.contactshield_MethodChannel'),
       );
     }
-    return _instance;
+    return _instance!;
   }
 
   Future<void> _methodCallHandler(MethodCall methodCall) async {
     if (contactShieldCallback != null) {
-      final String token = methodCall.arguments;
+      final String? token = methodCall.arguments;
       switch (methodCall.method) {
         case _Method._ON_HAS_CONTACT:
-          contactShieldCallback.onHasContact(token);
+          contactShieldCallback!.onHasContact(token);
           break;
         case _Method._ON_NO_CONTACT:
-          contactShieldCallback.onNoContact(token);
+          contactShieldCallback!.onNoContact(token);
           break;
         default:
           break;
@@ -68,7 +68,7 @@ class ContactShieldEngine {
     }
   }
 
-  Future<bool> isContactShieldRunning() async {
+  Future<bool?> isContactShieldRunning() async {
     return await _channel
         .invokeMethod<bool>(_Method._IS_CONTACT_SHIELD_RUNNING);
   }
@@ -93,8 +93,9 @@ class ContactShieldEngine {
   }
 
   Future<List<PeriodicKey>> getPeriodicKey() async {
-    final String response =
+    final String? response =
         await _channel.invokeMethod<String>(_Method._GET_PERIODIC_KEY);
+    if (response == null) throw Exception();
     final List<dynamic> items = json.decode(response);
     return List<PeriodicKey>.from(items.map((i) => PeriodicKey.fromMap(i)));
   }
@@ -144,23 +145,38 @@ class ContactShieldEngine {
         _Method._PUT_SHARED_KEY_FILES_CB_WITH_KEYS, args);
   }
 
+  Future<void> putSharedKeyFilesCbProviderKeys(
+    List<String> filePaths,
+    List<String> publicKeys,
+  ) async {
+    final Map<String, dynamic> args = <String, dynamic>{
+      'filePaths': filePaths,
+      'publicKeys': publicKeys,
+    };
+    return await _channel.invokeMethod<void>(
+        _Method._PUT_SHARED_KEY_FILES_CB_PROVIDER_KEYS, args);
+  }
+
   @deprecated
   Future<List<ContactDetail>> getContactDetail(String token) async {
-    final String response =
+    final String? response =
         await _channel.invokeMethod<String>(_Method._GET_CONTACT_DETAIL, token);
+    if (response == null) throw Exception();
     final List<dynamic> items = json.decode(response);
     return List<ContactDetail>.from(items.map((i) => ContactDetail.fromMap(i)));
   }
 
   Future<ContactSketch> getContactSketch(String token) async {
-    final String response =
+    final String? response =
         await _channel.invokeMethod<String>(_Method._GET_CONTACT_SKETCH, token);
+    if (response == null) throw Exception();
     return ContactSketch.fromJson(response);
   }
 
   Future<List<ContactWindow>> getContactWindow([String token = TOKEN_A]) async {
-    final String response =
+    final String? response =
         await _channel.invokeMethod<String>(_Method._GET_CONTACT_WINDOW, token);
+    if (response == null) throw Exception();
     final List<dynamic> items = json.decode(response);
     return List<ContactWindow>.from(items.map((i) => ContactWindow.fromMap(i)));
   }
@@ -172,37 +188,39 @@ class ContactShieldEngine {
   }
 
   Future<SharedKeysDataMapping> getSharedKeysDataMapping() async {
-    final String response = await _channel
+    final String? response = await _channel
         .invokeMethod<String>(_Method._GET_SHARED_KEYS_DATA_MAPPING);
-    return SharedKeysDataMapping.fromJson(response);
+    return SharedKeysDataMapping.fromJson(response!);
   }
 
   Future<List<DailySketch>> getDailySketch(
       DailySketchConfiguration config) async {
-    final String response = await _channel.invokeMethod<String>(
+    final String? response = await _channel.invokeMethod<String>(
         _Method._GET_DAILY_SKETCH, config.toJson());
+    if (response == null) throw Exception();
     final List<dynamic> items = json.decode(response);
     return List<DailySketch>.from(items.map((i) => DailySketch.fromMap(i)));
   }
 
-  Future<int> getContactShieldVersion() async {
+  Future<int?> getContactShieldVersion() async {
     return await _channel
         .invokeMethod<int>(_Method._GET_CONTACT_SHIELD_VERSION);
   }
 
-  Future<int> getDeviceCalibrationConfidence() async {
+  Future<int?> getDeviceCalibrationConfidence() async {
     return await _channel
         .invokeMethod<int>(_Method._GET_DEVICE_CALIBRATION_CONFIDENCE);
   }
 
-  Future<bool> isSupportScanningWithoutLocation() async {
+  Future<bool?> isSupportScanningWithoutLocation() async {
     return await _channel
         .invokeMethod<bool>(_Method._IS_SUPPORT_SCANNING_WITHOUT_LOCATION);
   }
 
   Future<Set<ContactShieldStatus>> getStatus() async {
-    final String response =
+    final String? response =
         await _channel.invokeMethod<String>(_Method._GET_STATUS);
+    if (response == null) throw Exception();
     final List<dynamic> items = json.decode(response);
     return Set<ContactShieldStatus>.from(
         items.map((i) => ContactShieldStatus.fromText(i)));
@@ -237,6 +255,8 @@ class _Method {
       "putSharedKeyFilesCbWithProvider";
   static const String _PUT_SHARED_KEY_FILES_CB_WITH_KEYS =
       "putSharedKeyFilesCbWithKeys";
+  static const String _PUT_SHARED_KEY_FILES_CB_PROVIDER_KEYS =
+      "putSharedKeyFilesCbProviderKeys";
   static const String _SET_SHARED_KEYS_DATA_MAPPING =
       "setSharedKeysDataMapping";
   static const String _GET_SHARED_KEYS_DATA_MAPPING =

@@ -25,6 +25,8 @@ public final class IntentAction {
         "putSharedKeyFilesCbWithProvider";
     public static final String PUT_SHARED_KEY_FILES_CB_WITH_KEYS = "com.huawei.hms.flutter.contactshield." +
         "putSharedKeyFilesCbWithKeys";
+    public static final String PUT_SHARED_KEY_FILES_CB_PROVIDER_KEYS = "com.huawei.hms.flutter.contactshield." +
+            "putSharedKeyFilesCbProviderKeys";
 
     private IntentAction() {
     }

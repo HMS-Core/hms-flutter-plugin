@@ -20,54 +20,54 @@ import 'dart:core';
 import 'package:flutter/foundation.dart';
 
 class DailySketchConfiguration {
-  List<double> weightsOfReportType;
-  List<double> weightsOfContagiousness;
-  List<int> thresholdOfAttenuationInDb;
-  List<double> weightsOfAttenuationBucket;
-  int thresholdOfDaysSinceHit;
-  double minWindowScore;
+  List<double?>? weightsOfReportType;
+  List<double?>? weightsOfContagiousness;
+  List<int>? thresholdOfAttenuationInDb;
+  List<double>? weightsOfAttenuationBucket;
+  int? thresholdOfDaysSinceHit;
+  double? minWindowScore;
 
   DailySketchConfiguration()
-      : weightsOfReportType = <double>[null, null, null, null, null, null],
-        weightsOfContagiousness = <double>[null, null, null],
+      : weightsOfReportType = <double?>[null, null, null, null, null, null],
+        weightsOfContagiousness = <double?>[null, null, null],
         thresholdOfAttenuationInDb = <int>[],
         weightsOfAttenuationBucket = <double>[],
         thresholdOfDaysSinceHit = 0,
         minWindowScore = 0.0;
 
-  Map<int, double> getWeightsOfReportType() {
-    Map<int, double> map = <int, double>{};
-    for (int i = 0; i < weightsOfReportType.length; i++) {
+  Map<int, double?> getWeightsOfReportType() {
+    Map<int, double?> map = <int, double?>{};
+    for (int i = 0; i < weightsOfReportType!.length; i++) {
       if (i < 5 && i > 0) {
-        map.putIfAbsent(i, () => weightsOfReportType[i]);
+        map.putIfAbsent(i, () => weightsOfReportType![i]);
       }
     }
     return map;
   }
 
-  Map<int, double> getWeightsOfContagiousness() {
-    Map<int, double> map = <int, double>{};
-    for (int i = 0; i < weightsOfContagiousness.length; i++) {
+  Map<int, double?> getWeightsOfContagiousness() {
+    Map<int, double?> map = <int, double?>{};
+    for (int i = 0; i < weightsOfContagiousness!.length; i++) {
       if (i != 0) {
-        map.putIfAbsent(i, () => weightsOfContagiousness[i]);
+        map.putIfAbsent(i, () => weightsOfContagiousness![i]);
       }
     }
     return map;
   }
 
   List<int> getThresholdOfAttenuationInDb() {
-    return List<int>.from(thresholdOfAttenuationInDb);
+    return List<int>.from(thresholdOfAttenuationInDb!);
   }
 
   List<double> getWeightsOfAttenuationBucket() {
-    return List<double>.from(weightsOfAttenuationBucket);
+    return List<double>.from(weightsOfAttenuationBucket!);
   }
 
-  int getThresholdOfDaysSinceHit() {
+  int? getThresholdOfDaysSinceHit() {
     return thresholdOfDaysSinceHit;
   }
 
-  double getMinWindowScore() {
+  double? getMinWindowScore() {
     return minWindowScore;
   }
 
@@ -78,14 +78,14 @@ class DailySketchConfiguration {
     if (!(weightOfReportType >= 0.0 && weightOfReportType <= 2.5)) {
       throw ArgumentError("weightOfReportType must be in [0.0,2.5]");
     }
-    weightsOfReportType.insert(reportType, weightOfReportType);
+    weightsOfReportType!.insert(reportType, weightOfReportType);
   }
 
   void setWeightOfContagiousness(int index, double weightOfContagiousness) {
     if (!(index >= 0 && index < 3)) {
       throw ArgumentError("index must be in [0,2]");
     }
-    weightsOfContagiousness.insert(index, weightOfContagiousness);
+    weightsOfContagiousness!.insert(index, weightOfContagiousness);
   }
 
   void setThresholdsOfAttenuationInDb(List<int> thresholdOfAttenuationInDb,
@@ -159,19 +159,18 @@ class DailySketchConfiguration {
   Map<String, dynamic> toMap() => {
         "weightsOfReportType": weightsOfReportType == null
             ? null
-            : List<dynamic>.from(weightsOfReportType.map((x) => x)),
+            : List<dynamic>.from(weightsOfReportType!.map((x) => x)),
         "weightsOfContagiousness": weightsOfContagiousness == null
             ? null
-            : List<dynamic>.from(weightsOfContagiousness.map((x) => x)),
+            : List<dynamic>.from(weightsOfContagiousness!.map((x) => x)),
         "thresholdOfAttenuationInDb": thresholdOfAttenuationInDb == null
             ? null
-            : List<dynamic>.from(thresholdOfAttenuationInDb.map((x) => x)),
+            : List<dynamic>.from(thresholdOfAttenuationInDb!.map((x) => x)),
         "weightsOfAttenuationBucket": weightsOfAttenuationBucket == null
             ? null
-            : List<dynamic>.from(weightsOfAttenuationBucket.map((x) => x)),
-        "thresholdOfDaysSinceHit":
-            thresholdOfDaysSinceHit == null ? null : thresholdOfDaysSinceHit,
-        "minWindowScore": minWindowScore == null ? null : minWindowScore,
+            : List<dynamic>.from(weightsOfAttenuationBucket!.map((x) => x)),
+        "thresholdOfDaysSinceHit": thresholdOfDaysSinceHit,
+        "minWindowScore": minWindowScore,
       };
 
   @override

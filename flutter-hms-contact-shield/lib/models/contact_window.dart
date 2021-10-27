@@ -28,9 +28,9 @@ class ContactWindow {
   int calibrationConfidence;
 
   ContactWindow({
-    final int dateMillis,
+    final int? dateMillis,
     final reportType,
-    final List<ScanInfo> scanInfos,
+    final List<ScanInfo>? scanInfos,
     final contagiousness,
     final calibrationConfidence,
   })  : dateMillis = 0,
@@ -45,28 +45,22 @@ class ContactWindow {
   String toJson() => json.encode(toMap());
 
   factory ContactWindow.fromMap(Map<String, dynamic> json) => ContactWindow(
-        dateMillis: json["mDateMillis"] == null ? null : json["mDateMillis"],
-        reportType: json["mReportType"] == null ? null : json["mReportType"],
+        dateMillis: json["mDateMillis"],
+        reportType: json["mReportType"],
         scanInfos: json["mScanInfos"] == null
             ? null
             : List<ScanInfo>.from(
                 json["mScanInfos"].map((x) => ScanInfo.fromMap(x))),
-        contagiousness:
-            json["mContagiousness"] == null ? null : json["mContagiousness"],
-        calibrationConfidence: json["mCalibrationConfidence"] == null
-            ? null
-            : json["mCalibrationConfidence"],
+        contagiousness: json["mContagiousness"],
+        calibrationConfidence: json["mCalibrationConfidence"],
       );
 
   Map<String, dynamic> toMap() => {
-        "mDateMillis": dateMillis == null ? null : dateMillis,
-        "mReportType": reportType == null ? null : reportType,
-        "mScanInfos": scanInfos == null
-            ? null
-            : List<dynamic>.from(scanInfos.map((x) => x.toMap())),
-        "mContagiousness": contagiousness == null ? null : contagiousness,
-        "mCalibrationConfidence":
-            calibrationConfidence == null ? null : calibrationConfidence,
+        "mDateMillis": dateMillis,
+        "mReportType": reportType,
+        "mScanInfos": List<dynamic>.from(scanInfos.map((x) => x.toMap())),
+        "mContagiousness": contagiousness,
+        "mCalibrationConfidence": calibrationConfidence,
       };
 
   @override

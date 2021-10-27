@@ -11,7 +11,7 @@ APPLICABLE LICENSES FOR MORE DETAILS.
 
 Copyright Notice and License Texts
 
-Software: file_picker 1.13.3
+Software: file_picker 4.1.3
 ----------------------------------------------------------------------
 Copyright notice:
 

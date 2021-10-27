@@ -20,12 +20,12 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 
 class PeriodicKey {
-  Int8List content;
-  int initialRiskLevel;
-  int periodicKeyLifeTime;
-  int periodicKeyValidTime;
-  int reportType;
-  int daysSinceStartOfSymptoms;
+  Int8List? content;
+  int? initialRiskLevel;
+  int? periodicKeyLifeTime;
+  int? periodicKeyValidTime;
+  int? reportType;
+  int? daysSinceStartOfSymptoms;
 
   PeriodicKey({
     this.content,
@@ -46,15 +46,10 @@ class PeriodicKey {
       content: json["content"] == null
           ? null
           : _parseIntListAsInt8List(json["content"]),
-      initialRiskLevel:
-          json["initialRiskLevel"] == null ? null : json["initialRiskLevel"],
-      periodicKeyLifeTime: json["periodicKeyLifeTime"] == null
-          ? null
-          : json["periodicKeyLifeTime"],
-      periodicKeyValidTime: json["periodicKeyValidTime"] == null
-          ? null
-          : json["periodicKeyValidTime"],
-      reportType: json["reportType"] == null ? null : json["reportType"],
+      initialRiskLevel: json["initialRiskLevel"],
+      periodicKeyLifeTime: json["periodicKeyLifeTime"],
+      periodicKeyValidTime: json["periodicKeyValidTime"],
+      reportType: json["reportType"],
       daysSinceStartOfSymptoms: json["daysSinceStartOfSymptoms"] == null
           ? null
           : json["daysSinceStartOfSymptoms"],
@@ -63,7 +58,7 @@ class PeriodicKey {
 
   Map<String, dynamic> toMap() => {
         "content":
-            content == null ? null : List<dynamic>.from(content.map((x) => x)),
+            content == null ? null : List<dynamic>.from(content!.map((x) => x)),
         "initialRiskLevel": initialRiskLevel,
         "periodicKeyLifeTime": periodicKeyLifeTime,
         "periodicKeyValidTime": periodicKeyValidTime,
@@ -81,7 +76,7 @@ class PeriodicKey {
     if (identical(this, o)) return true;
 
     return o is PeriodicKey &&
-        listEquals(o.content.toList(), content.toList()) &&
+        listEquals(o.content?.toList(), content?.toList()) &&
         o.initialRiskLevel == initialRiskLevel &&
         o.periodicKeyLifeTime == periodicKeyLifeTime &&
         o.periodicKeyValidTime == periodicKeyValidTime &&

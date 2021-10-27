@@ -24,11 +24,10 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      color: Colors.blueGrey,
-      textColor: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      splashColor: Colors.blueAccent,
+    return ElevatedButton(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(Colors.blueGrey),
+      ),
       child: Text(_text, style: TextStyle(fontSize: 14)),
       onPressed: () async {
         _onPressed(context);

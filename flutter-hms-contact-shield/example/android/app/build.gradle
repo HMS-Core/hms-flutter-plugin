@@ -41,7 +41,7 @@ android {
         // Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         // The Application ID here should match with the Package Name on the AppGalleryConnect.
         applicationId '<package_name>'
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

@@ -27,7 +27,7 @@ class ContactDetail {
   int totalRiskValue;
 
   ContactDetail({
-    List<int> attenuationDurations,
+    List<int>? attenuationDurations,
     attenuationRiskValue,
     dayNumber,
     durationMinutes,
@@ -49,28 +49,21 @@ class ContactDetail {
         attenuationDurations: map["attenuationDurations"] == null
             ? null
             : List<int>.from(map["attenuationDurations"].map((x) => x)),
-        attenuationRiskValue: map["attenuationRiskValue"] == null
-            ? null
-            : map["attenuationRiskValue"],
-        dayNumber: map["dayNumber"] == null ? null : map["dayNumber"],
-        durationMinutes:
-            map["durationMinutes"] == null ? null : map["durationMinutes"],
-        initialRiskLevel:
-            map["initialRiskLevel"] == null ? null : map["initialRiskLevel"],
-        totalRiskValue:
-            map["totalRiskValue"] == null ? null : map["totalRiskValue"],
+        attenuationRiskValue: map["attenuationRiskValue"],
+        dayNumber: map["dayNumber"],
+        durationMinutes: map["durationMinutes"],
+        initialRiskLevel: map["initialRiskLevel"],
+        totalRiskValue: map["totalRiskValue"],
       );
 
   Map<String, dynamic> toMap() => {
-        "attenuationDurations": attenuationDurations == null
-            ? null
-            : List<dynamic>.from(attenuationDurations.map((x) => x)),
-        "attenuationRiskValue":
-            attenuationRiskValue == null ? null : attenuationRiskValue,
-        "dayNumber": dayNumber == null ? null : dayNumber,
-        "durationMinutes": durationMinutes == null ? null : durationMinutes,
-        "initialRiskLevel": initialRiskLevel == null ? null : initialRiskLevel,
-        "totalRiskValue": totalRiskValue == null ? null : totalRiskValue,
+        "attenuationDurations":
+            List<dynamic>.from(attenuationDurations.map((x) => x)),
+        "attenuationRiskValue": attenuationRiskValue,
+        "dayNumber": dayNumber,
+        "durationMinutes": durationMinutes,
+        "initialRiskLevel": initialRiskLevel,
+        "totalRiskValue": totalRiskValue,
       };
 
   @override

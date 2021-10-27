@@ -42,6 +42,7 @@ public class ContactShieldBroadcastReceiver extends BroadcastReceiver {
                 case IntentAction.PUT_SHARED_KEY_FILES_CB:
                 case IntentAction.PUT_SHARED_KEY_FILES_CB_WITH_PROVIDER:
                 case IntentAction.PUT_SHARED_KEY_FILES_CB_WITH_KEYS:
+                case IntentAction.PUT_SHARED_KEY_FILES_CB_PROVIDER_KEYS:
                     engine.handleIntent(intent, callback);
                     break;
                 default:

@@ -21,24 +21,24 @@ import 'package:flutter/foundation.dart';
 class DiagnosisConfiguration {
   List<int> attenuationDurationThresholds;
   List<int> attenuationRiskValues;
-  int attenuationWeight;
+  int? attenuationWeight;
   List<int> daysAfterContactedRiskValues;
-  int daysAfterContactedWeight;
+  int? daysAfterContactedWeight;
   List<int> durationRiskValues;
-  int durationWeight;
+  int? durationWeight;
   List<int> initialRiskLevelRiskValues;
-  int initialRiskLevelWeight;
-  int minimumRiskValueThreshold;
+  int? initialRiskLevelWeight;
+  int? minimumRiskValueThreshold;
 
   DiagnosisConfiguration({
-    List<int> attenuationDurationThresholds,
-    List<int> attenuationRiskValues,
+    List<int>? attenuationDurationThresholds,
+    List<int>? attenuationRiskValues,
     this.attenuationWeight = 50,
-    List<int> daysAfterContactedRiskValues,
+    List<int>? daysAfterContactedRiskValues,
     this.daysAfterContactedWeight = 50,
-    List<int> durationRiskValues,
+    List<int>? durationRiskValues,
     this.durationWeight = 50,
-    List<int> initialRiskLevelRiskValues,
+    List<int>? initialRiskLevelRiskValues,
     this.initialRiskLevelWeight = 50,
     this.minimumRiskValueThreshold = 1,
   })  : attenuationDurationThresholds =
@@ -67,59 +67,40 @@ class DiagnosisConfiguration {
         attenuationRiskValues: json["mAttenuationRiskValues"] == null
             ? null
             : List<int>.from(json["mAttenuationRiskValues"].map((x) => x)),
-        attenuationWeight: json["mAttenuationWight"] == null
-            ? null
-            : json["mAttenuationWight"],
+        attenuationWeight: json["mAttenuationWight"],
         daysAfterContactedRiskValues:
             json["mDaysAfterContactedRiskValues"] == null
                 ? null
                 : List<int>.from(
                     json["mDaysAfterContactedRiskValues"].map((x) => x)),
-        daysAfterContactedWeight: json["mDaysAfterContactedWeight"] == null
-            ? null
-            : json["mDaysAfterContactedWeight"],
+        daysAfterContactedWeight: json["mDaysAfterContactedWeight"],
         durationRiskValues: json["mDurationRiskValues"] == null
             ? null
             : List<int>.from(json["mDurationRiskValues"].map((x) => x)),
-        durationWeight:
-            json["mDurationWeight"] == null ? null : json["mDurationWeight"],
+        durationWeight: json["mDurationWeight"],
         initialRiskLevelRiskValues: json["mInitialRiskLevelRiskValues"] == null
             ? null
             : List<int>.from(json["mInitialRiskLevelRiskValues"].map((x) => x)),
-        initialRiskLevelWeight: json["mInitialRiskLevelWeight"] == null
-            ? null
-            : json["mInitialRiskLevelWeight"],
-        minimumRiskValueThreshold: json["mMinimumRiskValueThreshold"] == null
-            ? null
-            : json["mMinimumRiskValueThreshold"],
+        initialRiskLevelWeight: json["mInitialRiskLevelWeight"],
+        minimumRiskValueThreshold: json["mMinimumRiskValueThreshold"],
       );
 
   Map<String, dynamic> toMap() => {
-        "mAttenuationDurationThresholds": attenuationDurationThresholds == null
-            ? null
-            : List<dynamic>.from(attenuationDurationThresholds.map((x) => x)),
-        "mAttenuationRiskValues": attenuationRiskValues == null
-            ? null
-            : List<dynamic>.from(attenuationRiskValues.map((x) => x)),
-        "mAttenuationWight":
-            attenuationWeight == null ? null : attenuationWeight,
-        "mDaysAfterContactedRiskValues": daysAfterContactedRiskValues == null
-            ? null
-            : List<dynamic>.from(daysAfterContactedRiskValues.map((x) => x)),
-        "mDaysAfterContactedWeight":
-            daysAfterContactedWeight == null ? null : daysAfterContactedWeight,
-        "mDurationRiskValues": durationRiskValues == null
-            ? null
-            : List<dynamic>.from(durationRiskValues.map((x) => x)),
-        "mDurationWeight": durationWeight == null ? null : durationWeight,
-        "mInitialRiskLevelRiskValues": initialRiskLevelRiskValues == null
-            ? null
-            : List<dynamic>.from(initialRiskLevelRiskValues.map((x) => x)),
-        "mInitialRiskLevelWeight":
-            initialRiskLevelWeight == null ? null : initialRiskLevelWeight,
-        "mMinimumRiskValueThreshold": minimumRiskValueThreshold == null
-            ? null
-            : minimumRiskValueThreshold,
+        "mAttenuationDurationThresholds":
+            List<dynamic>.from(attenuationDurationThresholds.map((x) => x)),
+        "mAttenuationRiskValues":
+            List<dynamic>.from(attenuationRiskValues.map((x) => x)),
+        "mAttenuationWight": attenuationWeight,
+        "mDaysAfterContactedRiskValues":
+            List<dynamic>.from(daysAfterContactedRiskValues.map((x) => x)),
+        "mDaysAfterContactedWeight": daysAfterContactedWeight,
+        "mDurationRiskValues":
+            List<dynamic>.from(durationRiskValues.map((x) => x)),
+        "mDurationWeight": durationWeight,
+        "mInitialRiskLevelRiskValues":
+            List<dynamic>.from(initialRiskLevelRiskValues.map((x) => x)),
+        "mInitialRiskLevelWeight": initialRiskLevelWeight,
+        "mMinimumRiskValueThreshold": minimumRiskValueThreshold,
       };
 
   @override

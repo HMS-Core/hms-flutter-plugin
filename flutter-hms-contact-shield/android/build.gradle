@@ -28,7 +28,7 @@ android {
     buildToolsVersion '29.0.3'
 
     defaultConfig {
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 29
     }
 
@@ -43,5 +43,5 @@ android {
 }
 
 dependencies {
-    implementation 'com.huawei.hms:contactshield:5.1.0.300'
+    implementation 'com.huawei.hms:contactshield:6.1.0.301'
 }

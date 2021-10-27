@@ -26,6 +26,7 @@ public final class Method {
     public static final String PUT_SHARED_KEY_FILES_CB = "putSharedKeyFilesCb";
     public static final String PUT_SHARED_KEY_FILES_CB_WITH_PROVIDER = "putSharedKeyFilesCbWithProvider";
     public static final String PUT_SHARED_KEY_FILES_CB_WITH_KEYS = "putSharedKeyFilesCbWithKeys";
+    public static final String PUT_SHARED_KEY_FILES_CB_PROVIDER_KEYS = "putSharedKeyFilesCbProviderKeys";
     public static final String SET_SHARED_KEYS_DATA_MAPPING = "setSharedKeysDataMapping";
     public static final String GET_SHARED_KEYS_DATA_MAPPING = "getSharedKeysDataMapping";
     public static final String GET_DAILY_SKETCH = "getDailySketch";

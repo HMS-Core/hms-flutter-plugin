@@ -14,15 +14,15 @@
     limitations under the License.
 */
 
-typedef void OnHasContact(String token);
-typedef void OnNoContact(String token);
+typedef void OnHasContact(String? token);
+typedef void OnNoContact(String? token);
 
 class ContactShieldCallback {
   OnHasContact onHasContact;
   OnNoContact onNoContact;
 
   ContactShieldCallback({
-    this.onHasContact,
-    this.onNoContact,
+    required this.onHasContact,
+    required this.onNoContact,
   });
 }

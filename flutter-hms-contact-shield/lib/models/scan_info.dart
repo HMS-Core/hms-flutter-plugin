@@ -22,9 +22,9 @@ class ScanInfo {
   int secondsSinceLastScan;
 
   ScanInfo({
-    int averageAttenuation,
-    int minimumAttenuation,
-    int secondsSinceLastScan,
+    int? averageAttenuation,
+    int? minimumAttenuation,
+    int? secondsSinceLastScan,
   })  : averageAttenuation = averageAttenuation ?? 0,
         minimumAttenuation = minimumAttenuation ?? 0,
         secondsSinceLastScan = secondsSinceLastScan ?? 0;
@@ -34,24 +34,15 @@ class ScanInfo {
   String toJson() => json.encode(toMap());
 
   factory ScanInfo.fromMap(Map<String, dynamic> json) => ScanInfo(
-        averageAttenuation: json["mAverageAttenuation"] == null
-            ? null
-            : json["mAverageAttenuation"],
-        minimumAttenuation: json["mMinimumAttenuation"] == null
-            ? null
-            : json["mMinimumAttenuation"],
-        secondsSinceLastScan: json["mSecondsSinceLastScan"] == null
-            ? null
-            : json["mSecondsSinceLastScan"],
+        averageAttenuation: json["mAverageAttenuation"],
+        minimumAttenuation: json["mMinimumAttenuation"],
+        secondsSinceLastScan: json["mSecondsSinceLastScan"],
       );
 
   Map<String, dynamic> toMap() => {
-        "mAverageAttenuation":
-            averageAttenuation == null ? null : averageAttenuation,
-        "mMinimumAttenuation":
-            minimumAttenuation == null ? null : minimumAttenuation,
-        "mSecondsSinceLastScan":
-            secondsSinceLastScan == null ? null : secondsSinceLastScan,
+        "mAverageAttenuation": averageAttenuation,
+        "mMinimumAttenuation": minimumAttenuation,
+        "mSecondsSinceLastScan": secondsSinceLastScan,
       };
 
   @override

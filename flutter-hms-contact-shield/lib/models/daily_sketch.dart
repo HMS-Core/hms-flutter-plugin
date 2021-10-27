@@ -21,20 +21,20 @@ import 'package:huawei_contactshield/models/sketch_data.dart';
 
 class DailySketch {
   int daysSinceEpoch;
-  List<SketchData> reportSketches;
-  SketchData sketchData;
+  List<SketchData?>? reportSketches;
+  SketchData? sketchData;
 
   DailySketch({
-    int daysSinceEpoch,
+    int? daysSinceEpoch,
     this.reportSketches,
     this.sketchData,
   }) : daysSinceEpoch = daysSinceEpoch ?? 0;
 
-  SketchData getSketchDataForReportType(int reportType) {
+  SketchData? getSketchDataForReportType(int reportType) {
     if (!(reportType >= 0 && reportType <= 5)) {
       throw ArgumentError("reportType must be in [0,5]");
     }
-    return reportSketches[reportType];
+    return reportSketches?[reportType];
   }
 
   factory DailySketch.fromJson(String str) =>
@@ -43,25 +43,22 @@ class DailySketch {
   String toJson() => json.encode(toMap());
 
   factory DailySketch.fromMap(Map<String, dynamic> map) {
-    return map == null
-        ? null
-        : DailySketch(
-            daysSinceEpoch:
-                map["daysSinceEpoch"] == null ? null : map["daysSinceEpoch"],
-            reportSketches: map["reportSketches"] == null
-                ? null
-                : List<SketchData>.from(
-                    map["reportSketches"].map((x) => SketchData.fromMap(x)),
-                  ),
-            sketchData: map["sketchData"] == null
-                ? null
-                : SketchData.fromMap(map["sketchData"]),
-          );
+    return DailySketch(
+      daysSinceEpoch: map["daysSinceEpoch"],
+      reportSketches: map["reportSketches"] == null
+          ? null
+          : List<SketchData>.from(
+              map["reportSketches"].map((x) => SketchData.fromMap(x)),
+            ),
+      sketchData: map["sketchData"] == null
+          ? null
+          : SketchData.fromMap(map["sketchData"]),
+    );
   }
 
   Map<String, dynamic> toMap() => {
-        "daysSinceEpoch": daysSinceEpoch == null ? null : daysSinceEpoch,
-        "reportSketches": reportSketches?.map((x) => x?.toMap())?.toList(),
+        "daysSinceEpoch": daysSinceEpoch,
+        "reportSketches": reportSketches?.map((x) => x?.toMap()).toList(),
         "sketchData": sketchData?.toMap(),
       };
 

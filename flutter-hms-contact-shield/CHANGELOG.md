@@ -1,3 +1,8 @@
+## 6.1.0+301
+
+* Nullsafety migration.
+* Contact Shield SDK is updated to the newest version.
+
 ## 5.1.0+301
 
 * Updated HMSLogger.

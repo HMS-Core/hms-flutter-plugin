@@ -13,9 +13,6 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-
-import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,8 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
   String _exposureText = 'Click the following buttons ' +
       'if you want to check the exposures in the past 14 days';
 
-  ContactShieldEngine _engine;
-  ContactShieldCallback _callback;
+  late ContactShieldEngine _engine;
+  late ContactShieldCallback _callback;
 
   @override
   void initState() {
@@ -63,20 +60,21 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<List<String>> _pickFiles(BuildContext context) async {
-    List<File> files = await FilePicker.getMultiFile(
-        type: FileType.custom, allowedExtensions: <String>['zip']);
+  Future<List<String>?> _pickFiles(BuildContext context) async {
+    FilePickerResult? result = await FilePicker.platform
+        .pickFiles(type: FileType.custom, allowedExtensions: <String>['zip']);
+    List<PlatformFile>? files = result?.files;
     if (files == null) {
       return null;
     } else {
-      List<String> paths = files.map((e) => e.path).toList();
+      List<String> paths = files.map((e) => e.path!).toList();
       return paths;
     }
   }
 
   void _isContactShieldRunning(BuildContext context) async {
     try {
-      final bool isRunning = await _engine.isContactShieldRunning();
+      final bool? isRunning = await _engine.isContactShieldRunning();
       _showDialog(context, 'Is Contact Shield running: $isRunning');
     } on PlatformException catch (e) {
       _showDialog(context, e.toString());
@@ -180,6 +178,21 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void _putSharedKeyFilesCbProviderKeys(BuildContext context) async {
+    try {
+      final List<String> publicKeys = <String>["0", "1", "2"];
+      final files = await _pickFiles(context);
+      if (files != null) {
+        await _engine.putSharedKeyFilesCbProviderKeys(files, publicKeys);
+        _showDialog(context, 'putSharedKeyFilesCbProviderKeys success.');
+      } else {
+        _showDialog(context, 'You have not selected any file(s).');
+      }
+    } on PlatformException catch (e) {
+      _showDialog(context, e.toString());
+    }
+  }
+
   void _getContactDetail(BuildContext context) async {
     try {
       final List<ContactDetail> contactDetails =
@@ -213,7 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _setSharedKeysDataMapping(BuildContext context) async {
     try {
       final SharedKeysDataMapping sharedKeysDataMapping =
-          SharedKeysDataMapping();
+          SharedKeysDataMapping(null, null, null);
       await _engine.setSharedKeysDataMapping(sharedKeysDataMapping);
       _showDialog(context, 'setSharedKeysDataMapping success.');
     } on PlatformException catch (e) {
@@ -244,7 +257,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _getContactShieldVersion(BuildContext context) async {
     try {
-      final int version = await _engine.getContactShieldVersion();
+      final int? version = await _engine.getContactShieldVersion();
       _showDialog(context, 'Contact Shield version: $version');
     } on PlatformException catch (e) {
       _showDialog(context, e.toString());
@@ -253,7 +266,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _getDeviceCalibrationConfidence(BuildContext context) async {
     try {
-      final int confidence = await _engine.getDeviceCalibrationConfidence();
+      final int? confidence = await _engine.getDeviceCalibrationConfidence();
       _showDialog(context, 'Device calibration confidence: $confidence');
     } on PlatformException catch (e) {
       _showDialog(context, e.toString());
@@ -262,7 +275,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _isSupportScanningWithoutLocation(BuildContext context) async {
     try {
-      final bool isSupported = await _engine.isSupportScanningWithoutLocation();
+      final bool? isSupported =
+          await _engine.isSupportScanningWithoutLocation();
       _showDialog(
           context, 'Is support scanning without location: $isSupported');
     } on PlatformException catch (e) {
@@ -351,6 +365,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           _putSharedKeyFilesCbWithProvider),
                       CustomButton('putSharedKeyFilesCbWithKeys',
                           _putSharedKeyFilesCbWithKeys),
+                      CustomButton('putSharedKeyFilesCbProviderKeys',
+                          _putSharedKeyFilesCbProviderKeys),
                       CustomButton('Get Contact Detail', _getContactDetail),
                       CustomButton('Get Contact Sketch', _getContactSketch),
                       CustomButton('Get Contact Window', _getContactWindow),
@@ -388,7 +404,7 @@ class _HomeScreenState extends State<HomeScreen> {
             title: Text('Result'),
             content: Text(content),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 child: new Text('Close'),
                 onPressed: () {
                   Navigator.of(context).pop();

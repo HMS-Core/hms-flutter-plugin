@@ -21,8 +21,8 @@ import 'package:flutter/services.dart';
 
 @immutable
 class CsApiException {
-  final String message;
-  final int code;
+  final String? message;
+  final int? code;
 
   CsApiException(
     this.message,
@@ -38,17 +38,15 @@ class CsApiException {
   String toJson() => json.encode(toMap());
 
   factory CsApiException.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return CsApiException(
-      map['message'] == null ? null : map['message'],
-      map['code'] == null ? null : map['code'],
+      map['message'],
+      map['code'],
     );
   }
 
   Map<String, dynamic> toMap() => {
-        'message': message == null ? null : message,
-        'code': code == null ? null : code,
+        'message': message,
+        'code': code,
       };
 
   @override
