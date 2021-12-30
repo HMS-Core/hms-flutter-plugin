@@ -30,11 +30,11 @@ class MLRemoteTranslator {
     return await _channel.invokeMethod("syncGetCloudAllLanguages");
   }
 
-  Future<String> asyncTranslate({@required MLTranslateSetting setting}) async {
+  Future<String> asyncTranslate({required MLTranslateSetting setting}) async {
     return await _channel.invokeMethod("asyncTranslate", setting.toMap());
   }
 
-  Future<String> syncTranslate({@required MLTranslateSetting setting}) async {
+  Future<String> syncTranslate({required MLTranslateSetting setting}) async {
     return await _channel.invokeMethod("syncTranslate", setting.toMap());
   }
 

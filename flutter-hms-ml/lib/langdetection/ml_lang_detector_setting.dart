@@ -17,15 +17,15 @@
 import 'package:flutter/material.dart';
 
 class MLLangDetectorSetting {
-  String sourceText;
+  String? sourceText;
   double trustedThreshold;
   bool isRemote;
 
-  MLLangDetectorSetting() {
-    isRemote = true;
-    sourceText = null;
-    trustedThreshold = 0.5;
-  }
+  MLLangDetectorSetting({
+    this.isRemote = true,
+    this.sourceText,
+    this.trustedThreshold = 0.5
+});
 
   double get getTrustedThreshold => trustedThreshold;
 

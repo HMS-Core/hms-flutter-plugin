@@ -20,22 +20,22 @@ import 'package:huawei_ml/models/ml_frame_property.dart';
 import 'package:huawei_ml/utils/ml_utils.dart';
 
 class MLSceneDetectionAnalyzerSetting {
-  String path;
-  MLFrameType frameType;
-  MLFrameProperty property;
-  double confidence;
+  final String? path;
+  final MLFrameType frameType;
+  final MLFrameProperty? property;
+  final double confidence;
 
-  MLSceneDetectionAnalyzerSetting() {
-    path = null;
-    property = null;
-    frameType = MLFrameType.fromBitmap;
-    confidence = 0.5;
-  }
+  MLSceneDetectionAnalyzerSetting( {
+    this.path,
+    this.property,
+    this.frameType = MLFrameType.fromBitmap,
+    this.confidence = 0.5
+  });
 
   Map<String, dynamic> toMap() {
     return {
       "path": path,
-      "property": property != null ? property.toJson() : null,
+      "property": property != null ? property?.toJson() : null,
       "frameType": describeEnum(frameType),
       "confidence": confidence
     };

@@ -24,13 +24,13 @@ class MLFrameProperty {
   static const int IMAGE_FORMAT_NV21 = 17;
   static const int IMAGE_FORMAT_YV12 = 842094169;
 
-  Ext ext;
-  int formatType;
-  int height;
-  int itemIdentity;
-  int quadrant;
-  int timestamp;
-  int width;
+  Ext? ext;
+  int? formatType;
+  int? height;
+  int? itemIdentity;
+  int? quadrant;
+  int? timestamp;
+  int? width;
 
   MLFrameProperty(
       {this.ext,
@@ -54,7 +54,7 @@ class MLFrameProperty {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.ext != null) {
-      data['ext'] = this.ext.toJson();
+      data['ext'] = this.ext?.toJson();
     }
     data['formatType'] = this.formatType;
     data['height'] = this.height;
@@ -67,10 +67,10 @@ class MLFrameProperty {
 }
 
 class Ext {
-  MLBorder border;
-  int lensId;
-  int maxZoom;
-  int zoom;
+  MLBorder? border;
+  int? lensId;
+  int? maxZoom;
+  int? zoom;
 
   Ext({this.lensId, this.maxZoom, this.zoom, this.border});
 
@@ -87,7 +87,7 @@ class Ext {
     data['maxZoom'] = this.maxZoom;
     data['zoom'] = this.zoom;
     if (this.border != null) {
-      data['border'] = this.border.toJson();
+      data['border'] = this.border?.toJson();
     }
     return data;
   }

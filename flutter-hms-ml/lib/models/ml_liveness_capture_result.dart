@@ -15,18 +15,18 @@
 */
 
 class MLLivenessCaptureResult {
-  String bitmap;
-  bool isLive;
-  double score;
-  double pitch;
-  double roll;
-  double yaw;
+  final String? bitmap;
+  final bool? isLive;
+  final double? score;
+  final double? pitch;
+  final double? roll;
+  final double? yaw;
 
   MLLivenessCaptureResult(
       {this.score, this.bitmap, this.pitch, this.roll, this.yaw, this.isLive});
 
-  factory MLLivenessCaptureResult.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
+  factory MLLivenessCaptureResult.fromMap(Map<dynamic, dynamic>? map) {
+    if (map == null) return MLLivenessCaptureResult();
 
     return MLLivenessCaptureResult(
         bitmap: map['bitmap'] ?? null,

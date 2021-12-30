@@ -24,18 +24,18 @@ import 'package:huawei_ml/utils/channels.dart';
 class MLHandKeypointAnalyzer {
   final MethodChannel _channel = Channels.handAnalyzerMethodChannel;
 
-  Future<List<MLHandKeypoints>> asyncHandDetection(
+  Future<List<MLHandKeyPoints>> asyncHandDetection(
       MLHandKeypointAnalyzerSetting setting) async {
     var res = json.decode(await _channel.invokeMethod(
         "asyncHandKeyPointAnalyze", setting.toMap()));
-    return (res as List).map((e) => MLHandKeypoints.fromJson(e)).toList();
+    return (res as List).map((e) => MLHandKeyPoints.fromJson(e)).toList();
   }
 
-  Future<List<MLHandKeypoints>> syncHandDetection(
+  Future<List<MLHandKeyPoints>> syncHandDetection(
       MLHandKeypointAnalyzerSetting setting) async {
     var res = json.decode(await _channel.invokeMethod(
         "syncHandKeyPointAnalyze", setting.toMap()));
-    return (res as List).map((e) => MLHandKeypoints.fromJson(e)).toList();
+    return (res as List).map((e) => MLHandKeyPoints.fromJson(e)).toList();
   }
 
   Future<bool> stopHandDetection() async {

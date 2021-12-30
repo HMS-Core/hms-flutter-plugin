@@ -31,22 +31,22 @@ class MLImageSuperResolutionAnalyzerSetting {
   /// The long edge of an input image should contain at least 64 px.
   static const double ISR_SCALE_3X = 3.0;
 
-  String path;
+  String? path;
   MLFrameType frameType;
-  MLFrameProperty property;
+  MLFrameProperty? property;
   double scale;
 
-  MLImageSuperResolutionAnalyzerSetting() {
-    path = null;
-    property = null;
-    frameType = MLFrameType.fromBitmap;
-    scale = ISR_SCALE_1X;
-  }
+  MLImageSuperResolutionAnalyzerSetting({
+    this.path,
+    this.property,
+    this.frameType = MLFrameType.fromBitmap,
+    this.scale = ISR_SCALE_1X
+});
 
   Map<String, dynamic> toMap() {
     return {
       "path": path,
-      "property": property != null ? property.toJson() : null,
+      "property": property != null ? property?.toJson() : null,
       "frameType": describeEnum(frameType),
       "scale": scale
     };

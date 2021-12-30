@@ -17,12 +17,12 @@
 import 'package:flutter/material.dart';
 
 class MLTextImageSuperResolution {
-  String bitmap;
+  String? bitmap;
 
   MLTextImageSuperResolution({this.bitmap});
 
-  factory MLTextImageSuperResolution.fromJson(Map<String, dynamic> json) {
-    if (json == null) return null;
+  factory MLTextImageSuperResolution.fromJson(Map<String, dynamic>? json) {
+    if (json == null) return MLTextImageSuperResolution();
     return MLTextImageSuperResolution(bitmap: json['bitmap'] ?? null);
   }
 

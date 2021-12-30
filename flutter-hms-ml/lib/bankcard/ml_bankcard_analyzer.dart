@@ -29,7 +29,7 @@ class MLBankcardAnalyzer {
         await _channel.invokeMethod("analyzeBankcard", settings.toMap())));
   }
 
-  Future<MLBankcard> captureBankcard({MlBankcardSettings settings}) async {
+  Future<MLBankcard> captureBankcard({MlBankcardSettings? settings}) async {
     return new MLBankcard.fromJson(json.decode(await _channel.invokeMethod(
         "captureBankcard",
         settings == null

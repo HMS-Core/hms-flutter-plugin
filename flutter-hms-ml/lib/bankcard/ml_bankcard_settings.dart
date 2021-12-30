@@ -47,26 +47,26 @@ class MlBankcardSettings {
   /// Strict recognition mode.
   static const int STRICT_MODE = 1;
 
-  String path;
+  String? path;
   MLFrameType frameType;
-  MLFrameProperty property;
+  MLFrameProperty? property;
   int orientation;
   int resultType;
   int rectMode;
 
-  MlBankcardSettings() {
-    path = null;
-    property = null;
-    frameType = MLFrameType.fromBitmap;
-    orientation = ORIENTATION_AUTO;
-    resultType = RESULT_ALL;
-    rectMode = STRICT_MODE;
-  }
+  MlBankcardSettings({
+    this.path,
+    this.property ,
+    this.frameType = MLFrameType.fromBitmap,
+    this.orientation = ORIENTATION_AUTO,
+    this.resultType = RESULT_ALL,
+    this.rectMode = RESULT_ALL
+});
 
   Map<String, dynamic> toMap() {
     return {
       "path": path,
-      "property": property != null ? property.toJson() : null,
+      "property": property != null ? property!.toJson() : null,
       "frameType": describeEnum(frameType),
       "orientation": orientation,
       "resultType": resultType,

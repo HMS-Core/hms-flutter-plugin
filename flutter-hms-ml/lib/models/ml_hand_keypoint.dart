@@ -16,18 +16,18 @@
 
 import 'ml_border.dart';
 
-class MLHandKeypoints {
-  List<MLHandKeypoint> handKeypoints;
-  MLBorder rect;
-  double score;
+class MLHandKeyPoints {
+  List<MLHandKeypoint>? handKeyPoints;
+  MLBorder? rect;
+  double? score;
 
-  MLHandKeypoints({this.handKeypoints, this.rect, this.score});
+  MLHandKeyPoints({this.handKeyPoints, this.rect, this.score});
 
-  MLHandKeypoints.fromJson(Map<String, dynamic> json) {
+  MLHandKeyPoints.fromJson(Map<String, dynamic> json) {
     if (json['handKeypoints'] != null) {
-      handKeypoints = new List<MLHandKeypoint>();
+      handKeyPoints = <MLHandKeypoint>[];
       json['handKeypoints'].forEach((v) {
-        handKeypoints.add(new MLHandKeypoint.fromJson(v));
+        handKeyPoints?.add(new MLHandKeypoint.fromJson(v));
       });
     }
     rect =
@@ -102,8 +102,8 @@ class MLHandKeypoint {
 
   dynamic pointX;
   dynamic pointY;
-  double score;
-  int type;
+  double? score;
+  int? type;
 
   MLHandKeypoint({this.pointX, this.pointY, this.score, this.type});
 

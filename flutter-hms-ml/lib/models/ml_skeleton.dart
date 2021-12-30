@@ -15,15 +15,15 @@
 */
 
 class MLSkeleton {
-  List<MLJoint> joints;
+  List<MLJoint>? joints;
 
   MLSkeleton({this.joints});
 
   MLSkeleton.fromJson(Map<String, dynamic> json) {
     if (json['joints'] != null) {
-      joints = new List<MLJoint>();
+      joints = <MLJoint>[];
       json['joints'].forEach((v) {
-        joints.add(new MLJoint.fromJson(v));
+        joints?.add(new MLJoint.fromJson(v));
       });
     }
   }
@@ -31,7 +31,7 @@ class MLSkeleton {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.joints != null) {
-      data['joints'] = this.joints.map((v) => v.toJson()).toList();
+      data['joints'] = this.joints?.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -80,18 +80,19 @@ class MLJoint {
   /// Right wrist point.
   static const int TYPE_RIGHT_WRIST = 103;
 
-  dynamic pointX;
-  dynamic pointY;
-  int type;
-  dynamic score;
+  final dynamic pointX;
+  final dynamic pointY;
+  final int? type;
+  final dynamic score;
 
   MLJoint({this.pointY, this.pointX, this.type, this.score});
 
-  MLJoint.fromJson(Map<String, dynamic> json) {
-    pointX = json['pointX'];
-    pointY = json['pointY'];
-    type = json['type'];
-    score = json['score'];
+  factory MLJoint.fromJson(Map<String, dynamic> json) {
+   return MLJoint(
+       pointX : json['pointX'],
+       pointY : json['pointY'],
+       type : json['type'],
+       score : json['score'],);
   }
 
   Map<String, dynamic> toJson() {

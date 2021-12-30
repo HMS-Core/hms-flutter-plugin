@@ -23,19 +23,19 @@ class MLLandmarkAnalyzerSetting {
   static const int STEADY_PATTERN = 1;
   static const int NEWEST_PATTERN = 2;
 
-  String path;
+  String? path;
   MLFrameType frameType;
-  MLFrameProperty property;
+  MLFrameProperty? property;
   int patternType;
   int largestNumberOfReturns;
 
-  MLLandmarkAnalyzerSetting() {
-    path = null;
-    property = null;
-    frameType = MLFrameType.fromBitmap;
-    largestNumberOfReturns = 10;
-    patternType = STEADY_PATTERN;
-  }
+  MLLandmarkAnalyzerSetting({
+    this.path ,
+    this.property ,
+    this.frameType = MLFrameType.fromBitmap,
+    this.largestNumberOfReturns = 10,
+    this.patternType = STEADY_PATTERN
+});
 
   int get getPatternType => patternType;
 
@@ -44,7 +44,7 @@ class MLLandmarkAnalyzerSetting {
   Map<String, dynamic> toMap() {
     return {
       "path": path,
-      "property": property != null ? property.toJson() : null,
+      "property": property != null ? property?.toJson() : null,
       "frameType": describeEnum(frameType),
       "largestNumberOfReturns": largestNumberOfReturns,
       "patternType": patternType

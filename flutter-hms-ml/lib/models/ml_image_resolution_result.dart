@@ -15,12 +15,12 @@
 */
 
 class MLImageSuperResolutionResult {
-  String bitmap;
+  String? bitmap;
 
   MLImageSuperResolutionResult({this.bitmap});
 
-  factory MLImageSuperResolutionResult.fromJson(Map<String, dynamic> json) {
-    if (json == null) return null;
+  factory MLImageSuperResolutionResult.fromJson(Map<String, dynamic>? json) {
+    if (json == null) return MLImageSuperResolutionResult();
     return MLImageSuperResolutionResult(bitmap: json['imagePath'] ?? null);
   }
 }

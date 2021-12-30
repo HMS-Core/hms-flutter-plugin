@@ -42,27 +42,27 @@ class MLTextAnalyzerSetting {
   /// Sparse text type, such as business cards.
   static const int OCR_LOOSE_SCENE = 1;
 
-  int ocrMode;
-  String language;
-  String path;
-  MLFrameType frameType;
-  MLFrameProperty property;
-  List<String> languageList;
-  String borderType;
-  int textDensityScene;
-  bool isRemote;
+  final int ocrMode;
+  final String language;
+  final String? path;
+  final MLFrameType frameType;
+  final MLFrameProperty? property;
+  final List<String> languageList;
+  final String borderType;
+  final int textDensityScene;
+  final bool isRemote;
 
-  MLTextAnalyzerSetting() {
-    path = null;
-    property = null;
-    frameType = MLFrameType.fromBitmap;
-    ocrMode = OCR_DETECT_MODE;
-    language = "zh";
-    languageList = null;
-    borderType = ARC;
-    textDensityScene = OCR_COMPACT_SCENE;
-    isRemote = true;
-  }
+  MLTextAnalyzerSetting( {
+    this.path ,
+    this.property ,
+    this.frameType = MLFrameType.fromBitmap,
+    this.ocrMode = OCR_DETECT_MODE,
+    this.language = "zh",
+    this.languageList=const [] ,
+    this.borderType = ARC,
+    this.textDensityScene = OCR_COMPACT_SCENE,
+    this.isRemote = true
+  });
 
   int get getOcrMode => ocrMode;
 
@@ -77,7 +77,7 @@ class MLTextAnalyzerSetting {
   Map<String, dynamic> toMap() {
     return {
       "path": path,
-      "property": property != null ? property.toJson() : null,
+      "property": property != null ? property?.toJson() : null,
       "frameType": describeEnum(frameType),
       "ocrMode": ocrMode,
       "language": language,

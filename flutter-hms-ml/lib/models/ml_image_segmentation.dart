@@ -15,16 +15,16 @@
 */
 
 class MLImageSegmentation {
-  String foregroundUri;
-  String grayscaleUri;
-  String originalUri;
-  List<dynamic> masks;
+  String? foregroundUri;
+  String? grayscaleUri;
+  String? originalUri;
+  List<dynamic>? masks;
 
   MLImageSegmentation(
       {this.foregroundUri, this.grayscaleUri, this.originalUri, this.masks});
 
-  factory MLImageSegmentation.fromJson(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory MLImageSegmentation.fromJson(Map<String, dynamic>? map) {
+    if (map == null) return MLImageSegmentation();
 
     return MLImageSegmentation(
         foregroundUri: map['bitmapForeground'] ?? null,

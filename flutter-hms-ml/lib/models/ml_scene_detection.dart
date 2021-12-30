@@ -17,13 +17,13 @@
 import 'package:flutter/material.dart';
 
 class MLSceneDetection {
-  String result;
-  dynamic confidence;
+  final String? result;
+  final dynamic confidence;
 
   MLSceneDetection({this.confidence, this.result});
 
-  factory MLSceneDetection.fromJson(Map<String, dynamic> json) {
-    if (json == null) return null;
+  factory MLSceneDetection.fromJson(Map<String, dynamic>? json) {
+    if (json == null) return MLSceneDetection();
     return MLSceneDetection(
         result: json['result'] ?? null, confidence: json['confidence'] ?? null);
   }

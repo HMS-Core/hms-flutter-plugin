@@ -23,7 +23,7 @@ class MLCustomModel {
   final MethodChannel _channel = Channels.customModelMethodChannel;
 
   Future<bool> prepareCustomModel(
-      {@required MLCustomModelSetting setting}) async {
+      {required MLCustomModelSetting setting}) async {
     return await _channel.invokeMethod("loadCustomModel", setting.toMap());
   }
 

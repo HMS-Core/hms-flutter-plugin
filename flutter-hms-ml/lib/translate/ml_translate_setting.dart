@@ -15,7 +15,7 @@
 */
 
 class MLTranslateSetting {
-  String sourceTextOnRemote;
+  String? sourceTextOnRemote;
   String sourceLangCode;
   String targetLangCode;
   int region;
@@ -23,15 +23,15 @@ class MLTranslateSetting {
   bool needCharging;
   bool needDeviceIdle;
 
-  MLTranslateSetting() {
-    sourceTextOnRemote = null;
-    sourceLangCode = "en";
-    targetLangCode = "zh";
-    region = 1002;
-    needWifi = true;
-    needCharging = false;
-    needDeviceIdle = false;
-  }
+  MLTranslateSetting({
+    this.sourceTextOnRemote,
+    this.sourceLangCode = "en",
+    this.targetLangCode = "zh",
+    this.region = 1002,
+    this.needWifi = true,
+    this.needCharging = false,
+    this.needDeviceIdle = false
+  }) ;
 
   Map<String, dynamic> toMap() {
     return {

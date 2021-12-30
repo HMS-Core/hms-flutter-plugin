@@ -17,11 +17,11 @@
 import 'ml_point.dart';
 
 class MLDocumentSkewDetectResult {
-  MLPoint leftTop;
-  MLPoint leftBottom;
-  MLPoint rightTop;
-  MLPoint rightBottom;
-  int resultCode;
+  MLPoint? leftTop;
+  MLPoint? leftBottom;
+  MLPoint? rightTop;
+  MLPoint? rightBottom;
+  int? resultCode;
 
   MLDocumentSkewDetectResult(
       {this.leftBottom,
@@ -46,8 +46,8 @@ class MLDocumentSkewDetectResult {
 }
 
 class MLDocumentSkewCorrectionResult {
-  String imagePath;
-  int resultCode;
+  String? imagePath;
+  int? resultCode;
 
   MLDocumentSkewCorrectionResult({this.imagePath, this.resultCode});
 

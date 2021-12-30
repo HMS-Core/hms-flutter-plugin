@@ -20,29 +20,29 @@ import 'ml_border.dart';
 import 'ml_point.dart';
 
 class MLText {
-  String stringValue;
-  List<Blocks> blocks;
+  String? stringValue;
+  List<Blocks>? blocks;
 
   MLText({this.stringValue, this.blocks});
 
   MLText.fromJson(Map<String, dynamic> json) {
     stringValue = json['stringValue'];
     if (json['blocks'] != null) {
-      blocks = new List<Blocks>();
+      blocks = <Blocks>[];
       json['blocks'].forEach((v) {
-        blocks.add(new Blocks.fromJson(v));
+        blocks?.add(new Blocks.fromJson(v));
       });
     }
   }
 }
 
 class Blocks {
-  MLBorder border;
-  String stringValue;
-  List<TextLines> textLines;
-  List<MLPoint> vertexes;
-  String language;
-  List<MLTextLanguage> languageList;
+  MLBorder? border;
+  String? stringValue;
+  List<TextLines>? textLines;
+  List<MLPoint>? vertexes;
+  String? language;
+  List<MLTextLanguage>? languageList;
   dynamic possibility;
 
   Blocks(
@@ -59,22 +59,22 @@ class Blocks {
         json['border'] != null ? new MLBorder.fromJson(json['border']) : null;
     stringValue = json['stringValue'];
     if (json['textLines'] != null) {
-      textLines = new List<TextLines>();
+      textLines = <TextLines>[];
       json['textLines'].forEach((v) {
-        textLines.add(new TextLines.fromJson(v));
+        textLines?.add(new TextLines.fromJson(v));
       });
     }
     if (json['vertexes'] != null) {
-      vertexes = new List<MLPoint>();
+      vertexes =<MLPoint>[];
       json['vertexes'].forEach((v) {
-        vertexes.add(new MLPoint.fromJson(v));
+        vertexes?.add(new MLPoint.fromJson(v));
       });
     }
     language = json['language'];
     if (json['languageList'] != null) {
-      languageList = new List<MLTextLanguage>();
+      languageList = <MLTextLanguage>[];
       json['languageList'].forEach((v) {
-        languageList.add(new MLTextLanguage.fromJson(v));
+        languageList?.add(new MLTextLanguage.fromJson(v));
       });
     }
     possibility = json['possibility'];
@@ -82,14 +82,14 @@ class Blocks {
 }
 
 class TextLines {
-  MLBorder border;
-  String stringValue;
-  bool isVertical;
+  MLBorder? border;
+  String? stringValue;
+  bool? isVertical;
   dynamic rotationDegree;
-  List<Words> words;
-  List<MLPoint> vertexes;
-  String language;
-  List<MLTextLanguage> languageList;
+  List<Words>? words;
+  List<MLPoint>? vertexes;
+  String? language;
+  List<MLTextLanguage>? languageList;
   dynamic possibility;
 
   TextLines(
@@ -110,22 +110,22 @@ class TextLines {
     isVertical = json['isVertical'];
     rotationDegree = json['rotationDegree'];
     if (json['words'] != null) {
-      words = new List<Words>();
+      words = <Words>[];
       json['words'].forEach((v) {
-        words.add(new Words.fromJson(v));
+        words?.add(new Words.fromJson(v));
       });
     }
     if (json['vertexes'] != null) {
-      vertexes = new List<MLPoint>();
+      vertexes = <MLPoint>[];
       json['vertexes'].forEach((v) {
-        vertexes.add(new MLPoint.fromJson(v));
+        vertexes?.add(new MLPoint.fromJson(v));
       });
     }
     language = json['language'];
     if (json['languageList'] != null) {
-      languageList = new List<MLTextLanguage>();
+      languageList = <MLTextLanguage>[];
       json['languageList'].forEach((v) {
-        languageList.add(new MLTextLanguage.fromJson(v));
+        languageList?.add(new MLTextLanguage.fromJson(v));
       });
     }
     possibility = json['possibility'];
@@ -133,11 +133,11 @@ class TextLines {
 }
 
 class Words {
-  MLBorder border;
-  String stringValue;
-  List<MLPoint> vertexes;
-  String language;
-  List<MLTextLanguage> languageList;
+  MLBorder? border;
+  String? stringValue;
+  List<MLPoint>? vertexes;
+  String? language;
+  List<MLTextLanguage>? languageList;
   dynamic possibility;
 
   Words(
@@ -153,16 +153,16 @@ class Words {
         json['border'] != null ? new MLBorder.fromJson(json['border']) : null;
     stringValue = json['stringValue'];
     if (json['vertexes'] != null) {
-      vertexes = new List<MLPoint>();
+      vertexes = <MLPoint>[];
       json['vertexes'].forEach((v) {
-        vertexes.add(new MLPoint.fromJson(v));
+        vertexes?.add(new MLPoint.fromJson(v));
       });
     }
     language = json['language'];
     if (json['languageList'] != null) {
-      languageList = new List<MLTextLanguage>();
+      languageList =<MLTextLanguage>[];
       json['languageList'].forEach((v) {
-        languageList.add(new MLTextLanguage.fromJson(v));
+        languageList?.add(new MLTextLanguage.fromJson(v));
       });
     }
     possibility = json['possibility'];

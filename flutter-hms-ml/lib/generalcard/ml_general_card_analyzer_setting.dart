@@ -17,27 +17,26 @@
 import 'package:flutter/material.dart';
 
 class MLGeneralCardAnalyzerSetting {
-  String path;
-  String language;
-  int backButtonResId;
-  int photoButtonResId;
-  Color scanBoxCornerColor;
-  Color tipTextColor;
-  String tipText;
-  int torchOnResId;
-  int torchOffResId;
+  final String? path;
+  final String language;
+  final int backButtonResId;
+  final int photoButtonResId;
+  final Color scanBoxCornerColor;
+  final Color tipTextColor;
+  final String tipText;
+  final int torchOnResId;
+  final int torchOffResId;
 
-  MLGeneralCardAnalyzerSetting() {
-    path = null;
-    language = "zh";
-    scanBoxCornerColor = Colors.green;
-    tipText = "Recognizing..";
-    tipTextColor = Colors.white;
-    backButtonResId = 2131165292;
-    photoButtonResId = 2131165293;
-    torchOnResId = 2131165294;
-    torchOffResId = 2131165295;
-  }
+  MLGeneralCardAnalyzerSetting({
+    this.path,
+  this.language = "zh",
+  this.scanBoxCornerColor = Colors.green,
+  this.tipText = "Recognizing..",
+  this.tipTextColor = Colors.white,
+  this.backButtonResId = 2131165292,
+  this.photoButtonResId = 2131165293,
+  this.torchOnResId = 2131165294,
+  this.torchOffResId = 2131165295});
 
   Map<String, dynamic> toMap() {
     return {

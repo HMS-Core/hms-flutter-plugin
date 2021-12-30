@@ -17,17 +17,17 @@
 import 'package:huawei_ml/models/ml_border.dart';
 
 class MlProductVisualSearch {
-  List<MLVisionSearchProduct> productList;
-  MLBorder border;
-  String type;
+  List<MLVisionSearchProduct>? productList;
+  MLBorder? border;
+  String? type;
 
   MlProductVisualSearch({this.border, this.type, this.productList});
 
   MlProductVisualSearch.fromJson(Map<String, dynamic> json) {
     if (json['productList'] != null) {
-      productList = new List<MLVisionSearchProduct>();
+      productList = <MLVisionSearchProduct>[];
       json['productList'].forEach((v) {
-        productList.add(new MLVisionSearchProduct.fromJson(v));
+        productList?.add(new MLVisionSearchProduct.fromJson(v));
       });
     }
     border = json['border'] != null ? MLBorder.fromJson(json['border']) : null;
@@ -36,11 +36,11 @@ class MlProductVisualSearch {
 }
 
 class MLVisionSearchProduct {
-  List<MLVisionSearchProductImage> imageList;
-  String customContent;
-  dynamic possibility;
-  String productId;
-  String productUrl;
+  final List<MLVisionSearchProductImage>? imageList;
+  final String? customContent;
+  final dynamic possibility;
+  final String? productId;
+  final String? productUrl;
 
   MLVisionSearchProduct(
       {this.productId,
@@ -49,24 +49,27 @@ class MLVisionSearchProduct {
       this.customContent,
       this.imageList});
 
-  MLVisionSearchProduct.fromJson(Map<String, dynamic> json) {
+  factory MLVisionSearchProduct.fromJson(Map<String, dynamic> json) {
+    List<MLVisionSearchProductImage> _list = <MLVisionSearchProductImage>[];
+
     if (json['imageList'] != null) {
-      imageList = new List<MLVisionSearchProductImage>();
       json['imageList'].forEach((v) {
-        imageList.add(new MLVisionSearchProductImage.fromJson(v));
+        _list.add(new MLVisionSearchProductImage.fromJson(v));
       });
     }
-    customContent = json['customContent'] ?? null;
-    possibility = json['possibility'] ?? null;
-    productId = json['productId'] ?? null;
-    productUrl = json['productUrl'] ?? null;
+    return MLVisionSearchProduct(
+        imageList: _list,
+        customContent: json['customContent'],
+        possibility: json['possibility'],
+        productId: json['productId'],
+        productUrl: json['productUrl']);
   }
 }
 
 class MLVisionSearchProductImage {
-  double possibility;
-  String imageId;
-  String productId;
+  double? possibility;
+  String? imageId;
+  String? productId;
 
   MLVisionSearchProductImage({this.possibility, this.imageId, this.productId});
 
@@ -78,9 +81,9 @@ class MLVisionSearchProductImage {
 }
 
 class MLProductCaptureResult {
-  String imageUrl;
-  String id;
-  String other;
+  String? imageUrl;
+  String? id;
+  String? other;
 
   MLProductCaptureResult({this.id, this.imageUrl, this.other});
 

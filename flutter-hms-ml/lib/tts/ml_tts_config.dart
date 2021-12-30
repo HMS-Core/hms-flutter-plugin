@@ -52,7 +52,7 @@ class MLTtsConfig {
   static const String TTS_ONLINE_MODE = "online";
   static const String TTS_OFFLINE_MODE = "offline";
 
-  String text;
+  String? text;
   String language;
   String person;
   String synthesizeMode;
@@ -60,15 +60,15 @@ class MLTtsConfig {
   double volume;
   int queuingMode;
 
-  MLTtsConfig() {
-    text = null;
-    speed = 1.0;
-    volume = 1.0;
-    queuingMode = MLTtsEngine.QUEUE_APPEND;
-    person = TTS_SPEAKER_FEMALE_EN;
-    language = TTS_EN_US;
-    synthesizeMode = TTS_ONLINE_MODE;
-  }
+  MLTtsConfig( {
+    this.text ,
+    this.speed = 1.0,
+    this.volume = 1.0,
+    this.queuingMode = MLTtsEngine.QUEUE_APPEND,
+    this.person = TTS_SPEAKER_FEMALE_EN,
+    this.language = TTS_EN_US,
+    this.synthesizeMode = TTS_ONLINE_MODE
+  });
 
   String get getLanguage => language;
 

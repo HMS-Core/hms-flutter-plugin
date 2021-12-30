@@ -19,7 +19,7 @@ import 'package:huawei_ml/models/ml_face.dart';
 class ML3DFace {
   static const int LANDMARK_FIVE = 0;
 
-  List<Points> allVertexes;
+  List<Points>? allVertexes;
   dynamic eulerX;
   dynamic eulerY;
   dynamic eulerZ;
@@ -28,9 +28,9 @@ class ML3DFace {
 
   ML3DFace.fromJson(Map<String, dynamic> json) {
     if (json['allVertexes'] != null) {
-      allVertexes = new List<Points>();
+      allVertexes = <Points>[];
       json['allVertexes'].forEach((v) {
-        allVertexes.add(new Points.fromJson(v));
+        allVertexes?.add(new Points.fromJson(v));
       });
     }
     eulerX = json['eulerX'] ?? null;

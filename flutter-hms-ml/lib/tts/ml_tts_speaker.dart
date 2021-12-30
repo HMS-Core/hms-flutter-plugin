@@ -15,15 +15,15 @@
 */
 
 class MLTtsSpeaker {
-  String language;
-  String name;
-  String modelSize;
-  String speakerDesc;
+  String? language;
+  String? name;
+  String? modelSize;
+  String? speakerDesc;
 
   MLTtsSpeaker({this.language, this.name, this.modelSize, this.speakerDesc});
 
-  factory MLTtsSpeaker.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
+  factory MLTtsSpeaker.fromMap(Map<dynamic, dynamic>? map) {
+    if (map == null) return MLTtsSpeaker();
 
     return MLTtsSpeaker(
         language: map['language'] ?? null,

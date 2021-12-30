@@ -38,11 +38,11 @@ class MLSpeechRealTimeTranscription {
 
   final MethodChannel _channel = Channels.rttMethodChannel;
 
-  RttListener _listener;
-  StreamSubscription _subscription;
+  RttListener? _listener;
+  StreamSubscription? _subscription;
 
   Future<void> startRecognizing(
-      {@required MLSpeechRealTimeTranscriptionConfig config}) async {
+      {required MLSpeechRealTimeTranscriptionConfig config}) async {
     _listenEvents();
     return await _channel.invokeMethod("startRecognizing", config.toMap());
   }

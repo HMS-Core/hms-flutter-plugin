@@ -20,11 +20,11 @@ class MLTextEmbeddingAnalyzerSetting {
   static const String LANGUAGE_ZH = "zh";
   static const String LANGUAGE_EN = "en";
 
-  String language;
+  final String language;
 
-  MLTextEmbeddingAnalyzerSetting() {
-    language = LANGUAGE_EN;
-  }
+  MLTextEmbeddingAnalyzerSetting( {
+    this.language = LANGUAGE_EN
+  });
 
   String get getLanguage => language;
 

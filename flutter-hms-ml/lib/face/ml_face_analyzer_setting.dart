@@ -80,8 +80,8 @@ class MLFaceAnalyzerSetting {
   /// this mode can make the greatest improvements to the detection performance.
   static const int MODE_TRACING_FAST = 1;
 
-  String path;
-  MLFrameProperty property;
+  String? path;
+  MLFrameProperty? property;
   MLFrameType frameType;
   int featureType;
   int keyPointType;
@@ -93,25 +93,25 @@ class MLFaceAnalyzerSetting {
   bool tracingAllowed;
   int tracingMode;
 
-  MLFaceAnalyzerSetting() {
-    path = null;
-    property = null;
-    frameType = MLFrameType.fromBitmap;
-    featureType = TYPE_FEATURES;
-    keyPointType = TYPE_KEY_POINTS;
-    maxSizeFaceOnly = true;
-    minFaceProportion = 0.5;
-    performanceType = TYPE_PRECISION;
-    poseDisabled = false;
-    shapeType = TYPE_SHAPES;
-    tracingAllowed = false;
-    tracingMode = MODE_TRACING_ROBUST;
-  }
+  MLFaceAnalyzerSetting({
+    this.path,
+    this.property,
+    this.frameType = MLFrameType.fromBitmap,
+    this.featureType = TYPE_FEATURES,
+    this.keyPointType = TYPE_KEY_POINTS,
+    this.maxSizeFaceOnly = true,
+    this.minFaceProportion = 0.5,
+    this.performanceType = TYPE_PRECISION,
+    this.poseDisabled = false,
+    this.shapeType = TYPE_SHAPES,
+    this.tracingAllowed = false,
+    this.tracingMode = MODE_TRACING_ROBUST
+});
 
   Map<String, dynamic> toMap() {
     return {
       "path": path,
-      "property": property != null ? property.toJson() : null,
+      "property": property != null ? property?.toJson() : null,
       "frameType": describeEnum(frameType),
       "featureType": featureType,
       "keyPointType": keyPointType,

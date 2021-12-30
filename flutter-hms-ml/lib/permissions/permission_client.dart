@@ -23,29 +23,29 @@ enum MLPermission { camera, storage, audio, connectionState }
 class MLPermissionClient {
   final MethodChannel _channel = Channels.permissionMethodChannel;
 
-  Future<bool> requestPermission(List<MLPermission> permissions) {
+  Future<bool> requestPermission(List<MLPermission>? permissions) async {
     if (permissions == null || permissions.isEmpty) {
       throw ArgumentError("List of permissions must not be empty");
     }
 
-    List<String> permissionList = new List();
+    List<String> permissionList = <String>[];
     permissions.forEach((element) {
       permissionList.add(describeEnum(element));
     });
 
-    return _channel.invokeMethod(
+    return await _channel.invokeMethod(
         "requestPermission", <String, dynamic>{'list': permissionList});
   }
 
-  Future<bool> hasCameraPermission() {
-    return _channel.invokeMethod("hasCameraPermission");
+  Future<bool> hasCameraPermission()async {
+    return await _channel.invokeMethod("hasCameraPermission");
   }
 
-  Future<bool> hasRecordAudioPermission() {
-    return _channel.invokeMethod("hasRecordAudioPermission");
+  Future<bool> hasRecordAudioPermission()async {
+    return await _channel.invokeMethod("hasRecordAudioPermission");
   }
 
-  Future<bool> hasStoragePermission() {
-    return _channel.invokeMethod("hasStoragePermission");
+  Future<bool> hasStoragePermission()async {
+    return await _channel.invokeMethod("hasStoragePermission");
   }
 }

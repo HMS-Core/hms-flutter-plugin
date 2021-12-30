@@ -15,12 +15,12 @@
 */
 
 class MLAftResult {
-  List<Segment> segments;
-  List<Segment> sentences;
-  List<Segment> words;
-  String text;
-  String taskId;
-  bool isComplete;
+  List<Segment>? segments;
+  List<Segment>? sentences;
+  List<Segment>? words;
+  String? text;
+  String? taskId;
+  bool? isComplete;
 
   MLAftResult(
       {this.taskId,
@@ -32,21 +32,21 @@ class MLAftResult {
 
   MLAftResult.fromJson(Map<String, dynamic> json) {
     if (json['segments'] != null) {
-      segments = new List<Segment>();
+      segments = <Segment>[];
       json['segments'].forEach((v) {
-        segments.add(new Segment.fromJson(v));
+        segments?.add(new Segment.fromJson(v));
       });
     }
     if (json['sentences'] != null) {
-      segments = new List<Segment>();
+      segments = <Segment>[];
       json['sentences'].forEach((v) {
-        segments.add(new Segment.fromJson(v));
+        segments?.add(new Segment.fromJson(v));
       });
     }
     if (json['words'] != null) {
-      segments = new List<Segment>();
+      segments =<Segment>[];
       json['words'].forEach((v) {
-        segments.add(new Segment.fromJson(v));
+        segments?.add(new Segment.fromJson(v));
       });
     }
     text = json['text'] ?? null;
@@ -56,9 +56,9 @@ class MLAftResult {
 }
 
 class Segment {
-  String text;
-  int startTime;
-  int endTime;
+  String? text;
+  int? startTime;
+  int? endTime;
 
   Segment({this.text, this.startTime, this.endTime});
 

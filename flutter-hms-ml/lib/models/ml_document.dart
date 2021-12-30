@@ -20,29 +20,29 @@ import 'ml_border.dart';
 import 'ml_text_language.dart';
 
 class MLDocument {
-  String stringValue;
-  List<MLDocumentBlocks> blocks;
+  String? stringValue;
+  List<MLDocumentBlocks>? blocks;
 
   MLDocument({this.stringValue, this.blocks});
 
   MLDocument.fromJson(Map<String, dynamic> json) {
     stringValue = json['stringValue'];
     if (json['blocks'] != null) {
-      blocks = new List<MLDocumentBlocks>();
+      blocks = <MLDocumentBlocks>[];
       json['blocks'].forEach((v) {
-        blocks.add(new MLDocumentBlocks.fromJson(v));
+        blocks?.add(new MLDocumentBlocks.fromJson(v));
       });
     }
   }
 }
 
 class MLDocumentBlocks {
-  MLBorder border;
-  String stringValue;
-  Interval interval;
-  List<MLTextLanguage> languageList;
+  MLBorder? border;
+  String? stringValue;
+  Interval? interval;
+  List<MLTextLanguage>? languageList;
   dynamic possibility;
-  List<Sections> sections;
+  List<Sections>? sections;
 
   MLDocumentBlocks(
       {this.border,
@@ -60,16 +60,16 @@ class MLDocumentBlocks {
         ? new Interval.fromJson(json['interval'])
         : null;
     if (json['languageList'] != null) {
-      languageList = new List<MLTextLanguage>();
+      languageList = <MLTextLanguage>[];
       json['languageList'].forEach((v) {
-        languageList.add(new MLTextLanguage.fromJson(v));
+        languageList?.add(new MLTextLanguage.fromJson(v));
       });
     }
     possibility = json['possibility'];
     if (json['sections'] != null) {
-      sections = new List<Sections>();
+      sections = <Sections>[];
       json['sections'].forEach((v) {
-        sections.add(new Sections.fromJson(v));
+        sections?.add(new Sections.fromJson(v));
       });
     }
   }
@@ -83,8 +83,8 @@ class Interval {
   static const int END_OF_LINE_HYPHEN = 9;
   static const int SESSION_INTERVAL = 10;
 
-  bool isTextFollowed;
-  int type;
+  bool? isTextFollowed;
+  int? type;
 
   Interval({this.isTextFollowed, this.type});
 
@@ -95,12 +95,12 @@ class Interval {
 }
 
 class Sections {
-  MLBorder border;
-  String stringValue;
-  List<WordList> wordList;
-  List<LineList> lineList;
-  Interval interval;
-  List<MLTextLanguage> languageList;
+  MLBorder? border;
+  String? stringValue;
+  List<WordList>? wordList;
+  List<LineList>? lineList;
+  Interval? interval;
+  List<MLTextLanguage>? languageList;
   dynamic possibility;
 
   Sections(
@@ -117,24 +117,24 @@ class Sections {
         json['border'] != null ? new MLBorder.fromJson(json['border']) : null;
     stringValue = json['stringValue'];
     if (json['wordList'] != null) {
-      wordList = new List<WordList>();
+      wordList = <WordList>[];
       json['wordList'].forEach((v) {
-        wordList.add(new WordList.fromJson(v));
+        wordList?.add(new WordList.fromJson(v));
       });
     }
     if (json['lineList'] != null) {
-      lineList = new List<LineList>();
+      lineList = <LineList>[];
       json['lineList'].forEach((v) {
-        lineList.add(new LineList.fromJson(v));
+        lineList?.add(new LineList.fromJson(v));
       });
     }
     interval = json['interval'] != null
         ? new Interval.fromJson(json['interval'])
         : null;
     if (json['languageList'] != null) {
-      languageList = new List<MLTextLanguage>();
+      languageList = <MLTextLanguage>[];
       json['languageList'].forEach((v) {
-        languageList.add(new MLTextLanguage.fromJson(v));
+        languageList?.add(new MLTextLanguage.fromJson(v));
       });
     }
     possibility = json['possibility'];
@@ -142,11 +142,11 @@ class Sections {
 }
 
 class WordList {
-  MLBorder border;
-  String stringValue;
-  Interval interval;
-  List<MLTextLanguage> languageList;
-  List<CharacterList> characterList;
+  MLBorder? border;
+  String? stringValue;
+  Interval? interval;
+  List<MLTextLanguage>? languageList;
+  List<CharacterList>? characterList;
   dynamic possibility;
 
   WordList(
@@ -165,15 +165,15 @@ class WordList {
         ? new Interval.fromJson(json['interval'])
         : null;
     if (json['languageList'] != null) {
-      languageList = new List<MLTextLanguage>();
+      languageList = <MLTextLanguage>[];
       json['languageList'].forEach((v) {
-        languageList.add(new MLTextLanguage.fromJson(v));
+        languageList?.add(new MLTextLanguage.fromJson(v));
       });
     }
     if (json['characterList'] != null) {
-      characterList = new List<CharacterList>();
+      characterList = <CharacterList>[];
       json['characterList'].forEach((v) {
-        characterList.add(new CharacterList.fromJson(v));
+        characterList?.add(new CharacterList.fromJson(v));
       });
     }
     possibility = json['possibility'];
@@ -181,11 +181,11 @@ class WordList {
 }
 
 class CharacterList {
-  MLBorder border;
-  String stringValue;
-  List<MLTextLanguage> languageList;
+  MLBorder? border;
+  String? stringValue;
+  List<MLTextLanguage>? languageList;
   dynamic possibility;
-  Interval interval;
+  Interval? interval;
 
   CharacterList(
       {this.border,
@@ -199,9 +199,9 @@ class CharacterList {
         json['border'] != null ? new MLBorder.fromJson(json['border']) : null;
     stringValue = json['stringValue'];
     if (json['languageList'] != null) {
-      languageList = new List<MLTextLanguage>();
+      languageList = <MLTextLanguage>[];
       json['languageList'].forEach((v) {
-        languageList.add(new MLTextLanguage.fromJson(v));
+        languageList?.add(new MLTextLanguage.fromJson(v));
       });
     }
     possibility = json['possibility'];
@@ -212,13 +212,13 @@ class CharacterList {
 }
 
 class LineList {
-  MLBorder border;
-  String stringValue;
-  List<WordList> wordList;
-  Interval interval;
-  List<MLTextLanguage> languageList;
+  MLBorder? border;
+  String? stringValue;
+  List<WordList>? wordList;
+  Interval? interval;
+  List<MLTextLanguage>? languageList;
   dynamic possibility;
-  List<MLPoint> points;
+  List<MLPoint>? points;
 
   LineList(
       {this.border,
@@ -234,25 +234,25 @@ class LineList {
         json['border'] != null ? new MLBorder.fromJson(json['border']) : null;
     stringValue = json['stringValue'];
     if (json['wordList'] != null) {
-      wordList = new List<WordList>();
+      wordList = <WordList>[];
       json['wordList'].forEach((v) {
-        wordList.add(new WordList.fromJson(v));
+        wordList?.add(new WordList.fromJson(v));
       });
     }
     interval = json['interval'] != null
         ? new Interval.fromJson(json['interval'])
         : null;
     if (json['languageList'] != null) {
-      languageList = new List<MLTextLanguage>();
+      languageList = <MLTextLanguage>[];
       json['languageList'].forEach((v) {
-        languageList.add(new MLTextLanguage.fromJson(v));
+        languageList?.add(new MLTextLanguage.fromJson(v));
       });
     }
     possibility = json['possibility'];
     if (json['points'] != null) {
-      points = new List<MLPoint>();
+      points = <MLPoint>[];
       json['points'].forEach((v) {
-        points.add(new MLPoint.fromJson(v));
+        points?.add(new MLPoint.fromJson(v));
       });
     }
   }

@@ -15,8 +15,8 @@
 */
 
 class MLTable {
-  int retCode;
-  MLTableContent tableContent;
+  int? retCode;
+  MLTableContent? tableContent;
 
   MLTable({this.retCode, this.tableContent});
 
@@ -29,27 +29,27 @@ class MLTable {
 }
 
 class MLTableContent {
-  int tableCount;
-  List<MLTables> tables;
+  int? tableCount;
+  List<MLTables>? tables;
 
   MLTableContent({this.tableCount, this.tables});
 
   MLTableContent.fromJson(Map<String, dynamic> json) {
     tableCount = json['tableCount'];
     if (json['tables'] != null) {
-      tables = new List<MLTables>();
+      tables = <MLTables>[];
       json['tables'].forEach((v) {
-        tables.add(new MLTables.fromJson(v));
+        tables?.add(new MLTables.fromJson(v));
       });
     }
   }
 }
 
 class MLTables {
-  int tableID;
-  String headerInfo;
-  String footerInfo;
-  List<MLTableBody> tableBody;
+  int? tableID;
+  String? headerInfo;
+  String? footerInfo;
+  List<MLTableBody>? tableBody;
 
   MLTables({this.tableID, this.headerInfo, this.footerInfo, this.tableBody});
 
@@ -58,21 +58,21 @@ class MLTables {
     headerInfo = json['headerInfo'];
     footerInfo = json['footerInfo'];
     if (json['tableBody'] != null) {
-      tableBody = new List<MLTableBody>();
+      tableBody = <MLTableBody>[];
       json['tableBody'].forEach((v) {
-        tableBody.add(new MLTableBody.fromJson(v));
+        tableBody?.add(new MLTableBody.fromJson(v));
       });
     }
   }
 }
 
 class MLTableBody {
-  int startRow;
-  int endRow;
-  int startCol;
-  int endCol;
-  MLCellCoordinate cellCoordinate;
-  String textInfo;
+  int? startRow;
+  int? endRow;
+  int? startCol;
+  int? endCol;
+  MLCellCoordinate? cellCoordinate;
+  String? textInfo;
 
   MLTableBody(
       {this.startRow,

@@ -20,10 +20,10 @@ import 'lens_view_controller.dart';
 
 class LensView extends StatelessWidget {
   final LensViewController controller;
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
 
-  LensView({Key key, @required this.controller, this.width, this.height})
+  LensView({Key? key, required this.controller, this.width, this.height})
       : super(key: key);
 
   @override

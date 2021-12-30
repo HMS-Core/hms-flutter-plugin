@@ -15,14 +15,14 @@
 */
 
 class MLBankcard {
-  String expire;
-  String number;
-  String type;
-  String organization;
-  String issuer;
-  String originalBitmap;
-  String numberBitmap;
-  int errorCode;
+  String? expire;
+  String? number;
+  String? type;
+  String? organization;
+  String? issuer;
+  String? originalBitmap;
+  String? numberBitmap;
+  int? errorCode;
 
   MLBankcard(
       {this.expire,
@@ -34,8 +34,8 @@ class MLBankcard {
       this.issuer,
       this.organization});
 
-  factory MLBankcard.fromJson(Map<String, dynamic> json) {
-    if (json == null) return null;
+  factory MLBankcard.fromJson(Map<String, dynamic>? json) {
+    if (json == null) return MLBankcard();
     return MLBankcard(
         expire: json['expire'] ?? null,
         number: json['number'] ?? null,

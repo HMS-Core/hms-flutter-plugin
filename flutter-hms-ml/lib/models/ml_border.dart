@@ -15,10 +15,10 @@
 */
 
 class MLBorder {
-  int bottom;
-  int left;
-  int right;
-  int top;
+  int? bottom;
+  int? left;
+  int? right;
+  int? top;
 
   MLBorder({this.bottom, this.left, this.right, this.top});
 

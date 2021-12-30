@@ -59,11 +59,11 @@ class MLAftEngine {
   static const int STOP_EVENT = 3;
 
   final MethodChannel _channel = Channels.aftMethodChannel;
-  MLAftListener _listener;
-  StreamSubscription _subscription;
+  MLAftListener? _listener;
+  StreamSubscription? _subscription;
 
-  void startRecognition({@required MLAftSetting setting}) async {
-    File file = new File(setting.path);
+  void startRecognition({required MLAftSetting setting}) async {
+    File file = new File(setting.path!);
     int i = await file.length();
     double kb = i / 1024;
     double mb = kb / 1024;
@@ -74,32 +74,32 @@ class MLAftEngine {
     }
   }
 
-  Future<void> _shortRecognize({@required MLAftSetting setting}) async {
+  Future<void> _shortRecognize({required MLAftSetting setting}) async {
     _getAftEvents();
     await _channel.invokeMethod("shortRecognize", setting.toMap());
   }
 
-  Future<void> _longRecognize({@required MLAftSetting setting}) async {
+  Future<void> _longRecognize({required MLAftSetting setting}) async {
     _getAftEvents();
     await _channel.invokeMethod("longRecognize", setting.toMap());
   }
 
-  Future<void> startTask({@required String taskId}) async {
+  Future<void> startTask({required String taskId}) async {
     await _channel
         .invokeMethod("startTask", <String, dynamic>{'taskId': taskId});
   }
 
-  Future<void> pauseTask({@required String taskId}) async {
+  Future<void> pauseTask({required String taskId}) async {
     return await _channel
         .invokeMethod("pauseTask", <String, dynamic>{'taskId': taskId});
   }
 
-  Future<void> destroyTask({@required String taskId}) async {
+  Future<void> destroyTask({required String taskId}) async {
     await _channel
         .invokeMethod("destroyTask", <String, dynamic>{'taskId': taskId});
   }
 
-  Future<void> getLongAftResult({@required String taskId}) async {
+  Future<void> getLongAftResult({required String taskId}) async {
     await _channel
         .invokeMethod("getLongAftResult", <String, dynamic>{'taskId': taskId});
   }

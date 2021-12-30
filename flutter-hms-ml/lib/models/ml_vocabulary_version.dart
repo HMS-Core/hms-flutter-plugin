@@ -15,16 +15,16 @@
 */
 
 class MlVocabularyVersion {
-  String dictionaryDimension;
-  String dictionarySize;
-  String versionNumber;
+  String? dictionaryDimension;
+  String? dictionarySize;
+  String? versionNumber;
 
   MlVocabularyVersion(
       {this.dictionaryDimension, this.dictionarySize, this.versionNumber});
 
   MlVocabularyVersion.fromJson(Map<String, dynamic> map) {
-    dictionaryDimension = map['dictionaryDimension'] ?? null;
-    dictionarySize = map['dictionarySize'] ?? null;
-    versionNumber = map['versionNumber'] ?? null;
+    dictionaryDimension = map['dictionaryDimension'];
+    dictionarySize = map['dictionarySize'] ;
+    versionNumber = map['versionNumber'];
   }
 }

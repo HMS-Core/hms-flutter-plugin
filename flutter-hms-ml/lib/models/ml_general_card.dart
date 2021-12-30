@@ -20,13 +20,13 @@ class MLGeneralCard {
   static const int CAPTURE_CONTINUE = 0;
   static const int CAPTURE_STOP = -1;
 
-  MLText text;
-  String bitmap;
+  MLText? text;
+  String? bitmap;
 
   MLGeneralCard({this.text, this.bitmap});
 
-  factory MLGeneralCard.fromJson(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory MLGeneralCard.fromJson(Map<String, dynamic>? map) {
+    if (map == null) return MLGeneralCard();
 
     return MLGeneralCard(
         text: map['text'] != null ? new MLText.fromJson(map['text']) : null,

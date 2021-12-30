@@ -53,10 +53,10 @@ class MLTtsEngine {
   static const int ERR_UNKNOWN = 11399;
   static const int WARN_INSUFFICIENT_BANDWIDTH = 113001;
 
-  TtsCallback _callback;
-  StreamSubscription _subscription;
+  TtsCallback? _callback;
+  StreamSubscription? _subscription;
 
-  MLTtsEngine({TtsCallback callback}) {
+  MLTtsEngine({required TtsCallback callback}) {
     _callback = callback;
   }
 
@@ -145,7 +145,7 @@ class MLTtsEngine {
     });
   }
 
-  static MLTtsEvent _toTtsEvent(String event) => _eventMap[event];
+  static MLTtsEvent _toTtsEvent(String event) => _eventMap[event]!;
   static const Map<String, MLTtsEvent> _eventMap = {
     'onError': MLTtsEvent.onError,
     'onWarn': MLTtsEvent.onWarn,

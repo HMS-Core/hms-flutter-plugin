@@ -26,17 +26,17 @@ class LensViewController {
   static const String FOCUS_MODE_CONTINUOUS_VIDEO = "continuous-video";
   static const String FOCUS_MODE_CONTINUOUS_PICTURE = "continuous-picture";
 
-  int _textureId;
-  int lensType;
-  LensEngineAnalyzerOptions analyzerType;
-  double applyFps;
-  int dimensionWidth;
-  int dimensionHeight;
-  String flashMode;
-  String focusMode;
-  bool automaticFocus;
-  List<String> analyzerList;
-  int maxFrameLostCount;
+   int? _textureId;
+  final int lensType;
+  final LensEngineAnalyzerOptions? analyzerType;
+  final double applyFps;
+  final int dimensionWidth;
+  final int dimensionHeight;
+  final String flashMode;
+  final String focusMode;
+  final bool automaticFocus;
+  final List<String>? analyzerList;
+  final int maxFrameLostCount;
 
   LensViewController(
       {this.lensType = BACK_LENS,
@@ -53,7 +53,7 @@ class LensViewController {
   Map<String, dynamic> toMap() {
     return {
       "lensType": lensType,
-      "analyzerType": describeEnum(analyzerType),
+      "analyzerType": describeEnum(analyzerType!),
       "applyFps": applyFps,
       "automaticFocus": automaticFocus,
       "dimensionHeight": dimensionHeight,
@@ -67,7 +67,7 @@ class LensViewController {
 
   bool get isInitialized => _textureId != null;
 
-  int get textureId => _textureId;
+  int get textureId => _textureId??-1;
 
   void setTextureId(int id) {
     _textureId = id;

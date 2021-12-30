@@ -35,36 +35,36 @@ class MLTextEmbeddingAnalyzer {
   final MethodChannel _channel = Channels.textEmbeddingMethodChannel;
 
   Future<bool> createTextEmbeddingAnalyzer(
-      {@required MLTextEmbeddingAnalyzerSetting setting}) async {
+      {required MLTextEmbeddingAnalyzerSetting setting}) async {
     return await _channel.invokeMethod(
         "createTextEmbeddingAnalyzer", setting.toMap());
   }
 
   Future<List<dynamic>> analyzeSentenceVector(
-      {@required String sentence}) async {
+      {required String sentence}) async {
     return await _channel.invokeMethod(
         "analyseSentenceVector", <String, dynamic>{'sentence': sentence});
   }
 
   Future<double> analyseSentencesSimilarity(
-      {@required String sentence1, @required String sentence2}) async {
+      {required String sentence1, required String sentence2}) async {
     return await _channel.invokeMethod("analyseSentencesSimilarity",
         <String, dynamic>{'sentence1': sentence1, 'sentence2': sentence2});
   }
 
-  Future<List<dynamic>> analyseWordVector({@required String word}) async {
+  Future<List<dynamic>> analyseWordVector({required String word}) async {
     return await _channel
         .invokeMethod("analyseWordVector", <String, dynamic>{'word': word});
   }
 
   Future<double> analyseWordsSimilarity(
-      {@required String word1, @required String word2}) async {
+      {required String word1, required String word2}) async {
     return await _channel.invokeMethod("analyseWordsSimilarity",
         <String, dynamic>{'word1': word1, 'word2': word2});
   }
 
   Future<List<dynamic>> analyseSimilarWords(
-      {@required String word, @required int number}) async {
+      {required String word, required int number}) async {
     return await _channel.invokeMethod("analyseSimilarWords",
         <String, dynamic>{'word': word, 'number': number});
   }

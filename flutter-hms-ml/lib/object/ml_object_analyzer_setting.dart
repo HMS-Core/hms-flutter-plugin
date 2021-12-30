@@ -23,21 +23,21 @@ class MLObjectAnalyzerSetting {
   static const int TYPE_PICTURE = 0;
   static const int TYPE_VIDEO = 1;
 
-  String path;
-  MLFrameType frameType;
-  MLFrameProperty property;
-  bool allowMultiResults;
-  bool allowClassification;
-  int analyzerType;
+  final String? path;
+  final MLFrameType frameType;
+  final MLFrameProperty? property;
+  final bool allowMultiResults;
+  final bool allowClassification;
+  final int analyzerType;
 
-  MLObjectAnalyzerSetting() {
-    path = null;
-    property = null;
-    frameType = MLFrameType.fromBitmap;
-    analyzerType = TYPE_PICTURE;
-    allowMultiResults = true;
-    allowClassification = true;
-  }
+  MLObjectAnalyzerSetting( {
+    this.path ,
+    this.property ,
+    this.frameType = MLFrameType.fromBitmap,
+    this.analyzerType = TYPE_PICTURE,
+    this.allowMultiResults = true,
+    this.allowClassification = true
+  });
 
   bool get isMultiResultsAllowed => allowMultiResults;
 
@@ -48,7 +48,7 @@ class MLObjectAnalyzerSetting {
   Map<String, dynamic> toMap() {
     return {
       "path": path,
-      "property": property != null ? property.toJson() : null,
+      "property": property != null ? property?.toJson() : null,
       "frameType": describeEnum(frameType),
       "analyzerType": analyzerType,
       "allowMultiResults": allowMultiResults,

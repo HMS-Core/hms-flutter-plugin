@@ -38,10 +38,10 @@ class MLObject {
   /// Object type 6: faces
   static const int TYPE_FACE = 6;
 
-  MLBorder border;
+  MLBorder? border;
   dynamic possibility;
-  int type;
-  int tracingIdentity;
+  int? type;
+  int? tracingIdentity;
 
   MLObject({this.border, this.possibility, this.type});
 

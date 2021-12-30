@@ -21,21 +21,21 @@ class MLFace {
   /// Default value of facial expression and feature possibility, such as eye opening and age.
   static const double UNANALYZED_POSSIBILITY = 1.0;
 
-  MLBorder border;
-  Emotions emotions;
-  List<FaceShapeList> faceShapeList;
+  MLBorder? border;
+  Emotions? emotions;
+  List<FaceShapeList>? faceShapeList;
   dynamic rotationAngleY;
   dynamic rotationAngleZ;
   dynamic rotationAngleX;
-  int tracingIdentity;
+  int? tracingIdentity;
   dynamic opennessOfRightEye;
-  Features features;
-  List<KeyPoints> keyPoints;
-  int width;
-  List<Points> allPoints;
+  Features? features;
+  List<KeyPoints>? keyPoints;
+  int? width;
+  List<Points>? allPoints;
   dynamic possibilityOfSmiling;
   dynamic opennessOfLeftEye;
-  int height;
+  int? height;
 
   MLFace(
       {this.border,
@@ -61,9 +61,9 @@ class MLFace {
         ? new Emotions.fromJson(json['emotions'])
         : null;
     if (json['faceShapeList'] != null) {
-      faceShapeList = new List<FaceShapeList>();
+      faceShapeList = <FaceShapeList>[];
       json['faceShapeList'].forEach((v) {
-        faceShapeList.add(new FaceShapeList.fromJson(v));
+        faceShapeList?.add(new FaceShapeList.fromJson(v));
       });
     }
     rotationAngleY = json['rotationAngleY'];
@@ -75,16 +75,16 @@ class MLFace {
         ? new Features.fromJson(json['features'])
         : null;
     if (json['keyPoints'] != null) {
-      keyPoints = new List<KeyPoints>();
+      keyPoints =<KeyPoints>[];
       json['keyPoints'].forEach((v) {
-        keyPoints.add(new KeyPoints.fromJson(v));
+        keyPoints?.add(new KeyPoints.fromJson(v));
       });
     }
     width = json['width'];
     if (json['allPoints'] != null) {
-      allPoints = new List<Points>();
+      allPoints = <Points>[];
       json['allPoints'].forEach((v) {
-        allPoints.add(new Points.fromJson(v));
+        allPoints?.add(new Points.fromJson(v));
       });
     }
     possibilityOfSmiling = json['possibilityOfSmiling'];
@@ -138,24 +138,24 @@ class FaceShapeList {
   static const int TYPE_BOTTOM_OF_NOSE = 12;
   static const int TYPE_BRIDGE_OF_NOSE = 13;
 
-  int faceShapeType;
-  List<MLPoint> coordinatePoints;
-  List<Points> points;
+  int? faceShapeType;
+  List<MLPoint>? coordinatePoints;
+  List<Points>? points;
 
   FaceShapeList({this.faceShapeType, this.coordinatePoints, this.points});
 
   FaceShapeList.fromJson(Map<String, dynamic> json) {
     faceShapeType = json['faceShapeType'];
     if (json['coordinatePoints'] != null) {
-      coordinatePoints = new List<MLPoint>();
+      coordinatePoints = <MLPoint>[];
       json['coordinatePoints'].forEach((v) {
-        coordinatePoints.add(new MLPoint.fromJson(v));
+        coordinatePoints?.add(new MLPoint.fromJson(v));
       });
     }
     if (json['points'] != null) {
-      points = new List<Points>();
+      points = <Points>[];
       json['points'].forEach((v) {
-        points.add(new Points.fromJson(v));
+        points?.add(new Points.fromJson(v));
       });
     }
   }
@@ -181,7 +181,7 @@ class Features {
   dynamic sexProbability;
   dynamic leftEyeOpenProbability;
   dynamic sunGlassProbability;
-  int age;
+  int? age;
   dynamic rightEyeOpenProbability;
 
   Features(
@@ -218,9 +218,9 @@ class KeyPoints {
   static const int TYPE_RIGHT_EYE = 11;
   static const int TYPE_RIGHT_SIDE_OF_MOUTH = 12;
 
-  int type;
-  MLPoint coordinatePoint;
-  Points point;
+  int? type;
+  MLPoint? coordinatePoint;
+  Points? point;
 
   KeyPoints({this.type, this.coordinatePoint, this.point});
 

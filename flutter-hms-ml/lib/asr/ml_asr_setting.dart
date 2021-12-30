@@ -30,11 +30,10 @@ class MLAsrSetting {
   String scene;
   int feature;
 
-  MLAsrSetting() {
-    language = LAN_EN_US;
-    scene = SCENES_SHOPPING;
-    feature = FEATURE_WORD_FLUX;
-  }
+  MLAsrSetting(
+      {this.language = LAN_EN_US,
+      this.scene = SCENES_SHOPPING,
+      this.feature = FEATURE_WORD_FLUX});
 
   Map<String, dynamic> toMap() {
     return {"language": language, "scene": scene, "feature": feature};

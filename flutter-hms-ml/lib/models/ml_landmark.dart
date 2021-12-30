@@ -17,10 +17,10 @@
 import 'ml_border.dart';
 
 class MLLandmark {
-  MLBorder border;
-  String landmark;
-  String landmarkId;
-  List<PositionInfo> positionInfos;
+  MLBorder? border;
+  String? landmark;
+  String? landmarkId;
+  List<PositionInfo>? positionInfos;
   dynamic possibility;
 
   MLLandmark(
@@ -36,9 +36,9 @@ class MLLandmark {
     landmark = json['landmark'] ?? null;
     landmarkId = json['landmarkIdentity'] ?? null;
     if (json['positionInfos'] != null) {
-      positionInfos = new List<PositionInfo>();
+      positionInfos = <PositionInfo>[];
       json['positionInfos'].forEach((v) {
-        positionInfos.add(new PositionInfo.fromJson(v));
+        positionInfos?.add(new PositionInfo.fromJson(v));
       });
     }
     possibility = json['possibility'] ?? null;
@@ -46,8 +46,8 @@ class MLLandmark {
 }
 
 class PositionInfo {
-  double lat;
-  double lng;
+  double? lat;
+  double? lng;
 
   PositionInfo({this.lat, this.lng});
 

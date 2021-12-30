@@ -31,7 +31,7 @@ class _HandExampleState extends State<HandExample> {
 
   MLHandKeypointAnalyzer analyzer;
   MLHandKeypointAnalyzerSetting setting;
-  List<MLHandKeypoints> keypoints;
+  List<MLHandKeyPoints> keypoints;
 
   double _x = 0;
   double _y = 0;
@@ -83,7 +83,7 @@ class _HandExampleState extends State<HandExample> {
     setting.path = path;
     try {
       keypoints = await analyzer.asyncHandDetection(setting);
-      _updateHandExample(keypoints.first.handKeypoints.elementAt(2));
+      _updateHandExample(keypoints.first.handKeyPoints.elementAt(2));
     } on Exception catch (e) {
       print(e.toString());
     }

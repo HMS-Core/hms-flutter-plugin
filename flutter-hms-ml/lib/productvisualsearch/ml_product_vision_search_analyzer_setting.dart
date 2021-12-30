@@ -40,19 +40,18 @@ class MLProductVisionSearchAnalyzerSetting {
   /// Unknown
   static const int REGION_DR_UNKNOWN = 1001;
 
-  String path;
+  String? path;
   String productSetId;
   MLFrameType frameType;
   int largestNumberOfReturns;
   int region;
 
-  MLProductVisionSearchAnalyzerSetting() {
-    path = null;
-    productSetId = "vmall";
-    frameType = MLFrameType.fromBitmap;
-    largestNumberOfReturns = 20;
-    region = REGION_DR_CHINA;
-  }
+  MLProductVisionSearchAnalyzerSetting(
+      {this.path,
+      this.productSetId = "vmall",
+      this.frameType = MLFrameType.fromBitmap,
+      this.largestNumberOfReturns = 20,
+      this.region = REGION_DR_CHINA});
 
   String get getProductSetId => productSetId;
 

@@ -34,8 +34,8 @@ class MLAsrRecognizer {
   static const int STATE_WAITING = 9;
 
   final MethodChannel _channel = Channels.asrMethodChannel;
-  MLAsrListener _listener;
-  StreamSubscription _subscription;
+  MLAsrListener? _listener;
+  StreamSubscription? _subscription;
 
   Future<String> startRecognizing(MLAsrSetting setting) async {
     _listenEvents();
@@ -66,7 +66,7 @@ class MLAsrRecognizer {
     });
   }
 
-  static MLAsrEvent _toAsrEvent(String event) => _eventMap[event];
+  static MLAsrEvent _toAsrEvent(String event) => _eventMap[event]!;
   static const Map<String, MLAsrEvent> _eventMap = {
     'onStartListening': MLAsrEvent.onStartListening,
     'onStartingOfSpeech': MLAsrEvent.onStartingOfSpeech,

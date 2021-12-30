@@ -16,7 +16,7 @@
 
 class MLDetectedLang {
   dynamic probability;
-  String langCode;
+  String? langCode;
 
   MLDetectedLang({this.probability, this.langCode});
 

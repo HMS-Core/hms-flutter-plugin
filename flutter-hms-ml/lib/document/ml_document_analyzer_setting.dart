@@ -20,32 +20,31 @@ import 'package:huawei_ml/models/ml_frame_property.dart';
 import 'package:huawei_ml/utils/ml_utils.dart';
 
 class MLDocumentAnalyzerSetting {
-  String path;
+  String? path;
   MLFrameType frameType;
-  MLFrameProperty property;
+  MLFrameProperty? property;
   String borderType;
-  List<String> languageList;
+  List<String>? languageList;
   bool enableFingerPrintVerification;
 
-  MLDocumentAnalyzerSetting() {
-    path = null;
-    property = null;
-    frameType = MLFrameType.fromBitmap;
-    borderType = "ARC";
-    languageList = null;
-    enableFingerPrintVerification = true;
-  }
-
+  MLDocumentAnalyzerSetting({
+    this.path,
+    this.property,
+    this.frameType = MLFrameType.fromBitmap,
+    this.borderType = "ARC",
+    this.languageList,
+    this.enableFingerPrintVerification = true
+});
   String get getBorderType => borderType;
 
-  List<String> get getLanguageList => languageList;
+  List<String> get getLanguageList => languageList??<String>[];
 
   bool get isFingerPrintVerificationEnabled => enableFingerPrintVerification;
 
   Map<String, dynamic> toMap() {
     return {
       "path": path,
-      "property": property != null ? property.toJson() : null,
+      "property": property != null ? property?.toJson() : null,
       "frameType": describeEnum(frameType),
       "borderType": borderType,
       "languageList": languageList,

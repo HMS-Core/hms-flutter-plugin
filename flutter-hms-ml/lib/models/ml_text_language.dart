@@ -15,7 +15,7 @@
 */
 
 class MLTextLanguage {
-  String language;
+  String? language;
 
   MLTextLanguage({this.language});
 

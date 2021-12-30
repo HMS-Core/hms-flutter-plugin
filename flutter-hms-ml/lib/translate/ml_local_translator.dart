@@ -30,7 +30,7 @@ class MLLocalTranslator {
     return await _channel.invokeMethod("syncGetLocalAllLanguages");
   }
 
-  Future<bool> prepareModel({@required MLTranslateSetting setting}) async {
+  Future<bool> prepareModel({required MLTranslateSetting setting}) async {
     return await _channel.invokeMethod("prepareModel", setting.toMap());
   }
 
@@ -39,12 +39,12 @@ class MLLocalTranslator {
         .invokeMethod("deleteModel", <String, dynamic>{'langCode': langCode});
   }
 
-  Future<String> asyncTranslate({@required String sourceText}) async {
+  Future<String> asyncTranslate({required String sourceText}) async {
     return await _channel.invokeMethod(
         "asyncTranslate", <String, dynamic>{'sourceText': sourceText});
   }
 
-  Future<String> syncTranslate({@required String sourceText}) async {
+  Future<String> syncTranslate({required String sourceText}) async {
     return await _channel.invokeMethod(
         "syncTranslate", <String, dynamic>{'sourceText': sourceText});
   }

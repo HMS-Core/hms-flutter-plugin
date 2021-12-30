@@ -32,24 +32,24 @@ class MLHandKeypointAnalyzerSetting {
   /// Recognition result return mode. TYPE_RECT_ONLY indicates that only palm information is returned.
   static const int TYPE_RECT_ONLY = 2;
 
-  String path;
+  String? path;
   MLFrameType frameType;
-  MLFrameProperty property;
+  MLFrameProperty? property;
   int sceneType;
   int maxHandResults;
 
-  MLHandKeypointAnalyzerSetting() {
-    path = null;
-    property = null;
-    frameType = MLFrameType.fromBitmap;
-    sceneType = TYPE_ALL;
-    maxHandResults = MAX_HANDS_NUM;
-  }
+  MLHandKeypointAnalyzerSetting({
+    this.path ,
+    this.property ,
+    this.frameType = MLFrameType.fromBitmap,
+    this.sceneType = TYPE_ALL,
+    this.maxHandResults = MAX_HANDS_NUM
+});
 
   Map<String, dynamic> toMap() {
     return {
       "path": path,
-      "property": property != null ? property.toJson() : null,
+      "property": property != null ? property?.toJson() : null,
       "frameType": describeEnum(frameType),
       "sceneType": sceneType,
       "maxHandResults": maxHandResults

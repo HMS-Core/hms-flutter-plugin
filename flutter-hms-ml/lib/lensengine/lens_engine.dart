@@ -33,19 +33,17 @@ import 'package:huawei_ml/utils/ml_utils.dart';
 import 'lens_view_controller.dart';
 
 class LensEngine {
-  final MethodChannel _channel = Channels.lensMethodChannel;
+  MethodChannel _channel = Channels.lensMethodChannel;
 
-  LensTransactor _transactor;
-  LensViewController _controller;
-  StreamSubscription _subscription;
+  LensTransactor? _transactor;
+  final LensViewController controller;
+  StreamSubscription? _subscription;
 
-  LensEngine({@required LensViewController controller}) {
-    _controller = controller;
-  }
+  LensEngine({required  this.controller});
 
   Future<void> initLens() async {
     _startTransactor();
-    _controller.setTextureId(await _channel.invokeMethod("initializeLensView", _controller.toMap()));
+    controller.setTextureId(await _channel.invokeMethod("initializeLensView", controller.toMap()));
   }
 
   Future<void> run() async {
@@ -67,7 +65,7 @@ class LensEngine {
   }
 
   Future<bool> getLens() async {
-    return _channel.invokeMethod("getLens");
+    return await _channel.invokeMethod("getLens");
   }
 
   Future<int> getLensType() async {
@@ -91,7 +89,7 @@ class LensEngine {
 
   _startTransactor() {
     _subscription?.cancel();
-    switch (_controller.analyzerType) {
+    switch (controller.analyzerType) {
       case LensEngineAnalyzerOptions.FACE:
         _subscription = Channels.faceAnalyzerEventChannel
             .receiveBroadcastStream()
@@ -124,8 +122,8 @@ class LensEngine {
             .receiveBroadcastStream()
             .listen((event) {
           Map<String, dynamic> map = json.decode(event);
-          MLHandKeypoints mlHandKeypoints =
-              new MLHandKeypoints.fromJson(map['result']);
+          MLHandKeyPoints mlHandKeypoints =
+              new MLHandKeyPoints.fromJson(map['result']);
           bool isAvailable = map['isAnalyzerAvailable'];
           _transactor?.call(
               result: mlHandKeypoints, isAnalyzerAvailable: isAvailable);

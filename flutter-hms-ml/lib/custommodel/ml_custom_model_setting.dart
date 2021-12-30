@@ -22,13 +22,13 @@ class MLCustomModelSetting {
   static const int REGION_DR_EUROPE = 1004;
   static const int REGION_DR_RUSSIA = 1005;
 
-  String imagePath;
-  String modelName;
+  String? imagePath;
+  String? modelName;
   int modelDataType;
-  String assetPathFile;
-  String localFullPathFile;
+  String? assetPathFile;
+  String? localFullPathFile;
   bool isFromAsset;
-  String labelFileName;
+  String? labelFileName;
   int bitmapSize;
   int channelSize;
   int outputLength;
@@ -37,22 +37,22 @@ class MLCustomModelSetting {
   bool needCharging;
   bool needDeviceIdle;
 
-  MLCustomModelSetting() {
-    imagePath = null;
-    modelName = null;
-    modelDataType = FLOAT32;
-    assetPathFile = null;
-    localFullPathFile = null;
-    isFromAsset = true;
-    labelFileName = null;
-    bitmapSize = 224;
-    channelSize = 3;
-    outputLength = 1001;
-    region = REGION_DR_CHINA;
-    needWifi = true;
-    needCharging = false;
-    needDeviceIdle = false;
-  }
+  MLCustomModelSetting({
+    this.imagePath,
+    this.modelName,
+    this.modelDataType = FLOAT32,
+    this.assetPathFile,
+    this.localFullPathFile,
+    this.isFromAsset = true,
+    this.labelFileName,
+    this.bitmapSize = 224,
+    this.channelSize = 3,
+    this.outputLength = 1001,
+    this.region = REGION_DR_CHINA,
+    this.needWifi = true,
+    this.needCharging = false,
+    this.needDeviceIdle = false
+});
 
   Map<String, dynamic> toMap() {
     return {

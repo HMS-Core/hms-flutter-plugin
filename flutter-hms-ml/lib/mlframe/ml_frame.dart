@@ -25,7 +25,7 @@ class MLFrame {
   static const int SCREEN_FOURTH_QUADRANT = 3;
 
   final MethodChannel _channel = Channels.frameMethodChannel;
-  MLFrameProperty property;
+  MLFrameProperty? property;
 
   MLFrame({this.property});
 

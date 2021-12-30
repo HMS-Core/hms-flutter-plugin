@@ -29,24 +29,24 @@ class ML3DFaceAnalyzerSetting {
   /// this mode will detect fewer faces and be less precise in detecting key points and contours, but will run faster.
   static const int TYPE_SPEED = 2;
 
-  String path;
+  String? path;
   MLFrameType frameType;
-  MLFrameProperty property;
+  MLFrameProperty? property;
   int performanceType;
   bool tracingAllowed;
 
-  ML3DFaceAnalyzerSetting() {
-    path = null;
-    property = null;
-    frameType = MLFrameType.fromBitmap;
-    performanceType = TYPE_PRECISION;
-    tracingAllowed = false;
-  }
+  ML3DFaceAnalyzerSetting({
+    this.path,
+    this.property,
+    this.frameType = MLFrameType.fromBitmap,
+    this.performanceType = TYPE_PRECISION,
+    this.tracingAllowed = false,
+});
 
   Map<String, dynamic> toMap() {
     return {
       "path": path,
-      "property": property != null ? property.toJson() : null,
+      "property": property != null ? property?.toJson() : null,
       "frameType": describeEnum(frameType),
       "performanceType": performanceType,
       "tracingAllowed": tracingAllowed
@@ -74,7 +74,7 @@ class ML3DFaceAnalyzerSetting {
     return 'ML3DFaceAnalyzerSetting(path: $path, frameType: $frameType, performanceType: $performanceType, tracingAllowed: $tracingAllowed)';
   }
 
-  int get getPerformanceType => performanceType;
+  int get getPerformanceType => performanceType??TYPE_PRECISION;
 
-  bool get isTracingAllowed => tracingAllowed;
+  bool get isTracingAllowed => tracingAllowed??false;
 }

@@ -30,20 +30,20 @@ class MLLangDetector {
 
   final MethodChannel _channel = Channels.langDetectionMethodChannel;
 
-  Future<String> firstBestDetect({@required MLLangDetectorSetting setting}) async {
+  Future<String> firstBestDetect({required MLLangDetectorSetting setting}) async {
     return await _channel.invokeMethod("firstBestDetect", setting.toMap());
   }
 
-  Future<String> syncFirstBestDetect({@required MLLangDetectorSetting setting}) async {
+  Future<String> syncFirstBestDetect({required MLLangDetectorSetting setting}) async {
     return await _channel.invokeMethod("syncFirstBestDetect", setting.toMap());
   }
 
-  Future<List<MLDetectedLang>> probabilityDetect({@required MLLangDetectorSetting setting}) async {
+  Future<List<MLDetectedLang>> probabilityDetect({required MLLangDetectorSetting setting}) async {
     var res = json.decode(await _channel.invokeMethod("probabilityDetect", setting.toMap()));
     return (res as List).map((e) => MLDetectedLang.fromJson(e)).toList();
   }
 
-  Future<List<MLDetectedLang>> syncProbabilityDetect({@required MLLangDetectorSetting setting}) async {
+  Future<List<MLDetectedLang>> syncProbabilityDetect({required MLLangDetectorSetting setting}) async {
     var res = json.decode(await _channel.invokeMethod("syncProbabilityDetect", setting.toMap()));
     return (res as List).map((e) => MLDetectedLang.fromJson(e)).toList();
   }

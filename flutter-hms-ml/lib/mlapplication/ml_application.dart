@@ -22,11 +22,11 @@ import 'package:huawei_ml/utils/channels.dart';
 class MLApplication {
   final MethodChannel _channel = Channels.mlApplicationMethodChannel;
 
-  Future<void> setApiKey({@required String apiKey}) async {
+  Future<void> setApiKey({required String apiKey}) async {
     await _channel.invokeMethod("setApiKey", <String, dynamic>{'key': apiKey});
   }
 
-  Future<void> setAccessToken({@required String accessToken}) async {
+  Future<void> setAccessToken({required String accessToken}) async {
     await _channel.invokeMethod("setAccessToken", <String, dynamic>{'accessToken': accessToken});
   }
 

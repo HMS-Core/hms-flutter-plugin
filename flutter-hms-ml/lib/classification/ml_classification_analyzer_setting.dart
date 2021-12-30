@@ -20,23 +20,23 @@ import 'package:huawei_ml/models/ml_frame_property.dart';
 import 'package:huawei_ml/utils/ml_utils.dart';
 
 class MLClassificationAnalyzerSetting {
-  String path;
+  String? path;
   MLFrameType frameType;
-  MLFrameProperty property;
+  MLFrameProperty? property;
   double minAcceptablePossibility;
   bool fingerprintVerification;
   bool isRemote;
   int largestNumberOfReturns;
 
-  MLClassificationAnalyzerSetting() {
-    path = null;
-    property = null;
-    frameType = MLFrameType.fromBitmap;
-    minAcceptablePossibility = 0.5;
-    fingerprintVerification = false;
-    isRemote = true;
-    largestNumberOfReturns = 10;
-  }
+  MLClassificationAnalyzerSetting({
+    this.path,
+    this.property,
+    this.frameType = MLFrameType.fromBitmap,
+    this.minAcceptablePossibility = 0.5,
+    this.fingerprintVerification = false,
+    this.isRemote = true,
+    this.largestNumberOfReturns = 10,
+  });
 
   double get getMinAcceptablePossibility => minAcceptablePossibility;
 
@@ -45,7 +45,7 @@ class MLClassificationAnalyzerSetting {
   Map<String, dynamic> toMap() {
     return {
       "path": path,
-      "property": property != null ? property.toJson() : null,
+      "property": property != null ? property?.toJson() : null,
       "frameType": describeEnum(frameType),
       "fingerprintVerification": fingerprintVerification,
       "isRemote": isRemote,

@@ -15,8 +15,8 @@
 */
 
 class MLImageClassification {
-  String classificationIdentity;
-  String name;
+  String? classificationIdentity;
+  String? name;
   dynamic possibility;
 
   MLImageClassification(

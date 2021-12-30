@@ -38,21 +38,21 @@ class MLImageSegmentationAnalyzerSetting {
   /// Detection mode 1: detection based on the multi class image mode
   static const int IMAGE_SEG = 1;
 
-  String path;
+  String? path;
   MLFrameType frameType;
-  MLFrameProperty property;
+  MLFrameProperty? property;
   int analyzerType;
   int scene;
   bool exactMode;
 
-  MLImageSegmentationAnalyzerSetting() {
-    path = null;
-    property = null;
-    frameType = MLFrameType.fromBitmap;
-    analyzerType = IMAGE_SEG;
-    scene = ALL;
-    exactMode = true;
-  }
+  MLImageSegmentationAnalyzerSetting({
+    this.path,
+    this.property,
+    this.frameType = MLFrameType.fromBitmap,
+    this.analyzerType = IMAGE_SEG,
+    this.scene = ALL,
+    this.exactMode = true
+});
 
   int get getAnalyzerType => analyzerType;
 
@@ -63,7 +63,7 @@ class MLImageSegmentationAnalyzerSetting {
   Map<String, dynamic> toMap() {
     return {
       "path": path,
-      "property": property != null ? property.toJson() : null,
+      "property": property != null ? property?.toJson() : null,
       "frameType": describeEnum(frameType),
       "scene": scene,
       "analyzerType": analyzerType,

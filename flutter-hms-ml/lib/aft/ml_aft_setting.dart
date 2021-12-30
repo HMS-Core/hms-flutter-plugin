@@ -18,19 +18,17 @@ class MLAftSetting {
   static const String LANGUAGE_ZH = "zh";
   static const String LANGUAGE_EN_US = "en-US";
 
-  String path;
+  String? path;
   String language;
   bool enablePunctuation;
   bool enableWordTimeOffset;
   bool enableSentenceTimeOffset;
 
-  MLAftSetting() {
-    path = null;
-    language = LANGUAGE_EN_US;
-    enablePunctuation = false;
-    enableWordTimeOffset = false;
-    enableSentenceTimeOffset = false;
-  }
+  MLAftSetting({    this.path,
+  this.language = LANGUAGE_EN_US,
+  this.enablePunctuation = false,
+  this.enableWordTimeOffset = false,
+  this.enableSentenceTimeOffset = false});
 
   Map<String, dynamic> toMap() {
     return {

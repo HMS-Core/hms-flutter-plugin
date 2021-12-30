@@ -25,19 +25,19 @@ class MLSpeechRealTimeTranscriptionConfig {
   static const String LAN_DE_DE = "de-DE";
   static const String SCENES_SHOPPING = "shopping";
 
-  String language;
-  String scene;
-  bool punctuationEnabled;
-  bool sentenceTimeOffsetEnabled;
-  bool wordTimeOffsetEnabled;
+  final String language;
+  final String scene;
+  final bool punctuationEnabled;
+  final bool sentenceTimeOffsetEnabled;
+  final bool wordTimeOffsetEnabled;
 
-  MLSpeechRealTimeTranscriptionConfig() {
-    language = LAN_EN_US;
-    scene = SCENES_SHOPPING;
-    punctuationEnabled = true;
-    sentenceTimeOffsetEnabled = false;
-    wordTimeOffsetEnabled = false;
-  }
+  MLSpeechRealTimeTranscriptionConfig( {
+    this.language = LAN_EN_US,
+    this.scene = SCENES_SHOPPING,
+    this.punctuationEnabled = true,
+    this.sentenceTimeOffsetEnabled = false,
+    this.wordTimeOffsetEnabled = false,
+  });
 
   String get getLanguage => language;
 

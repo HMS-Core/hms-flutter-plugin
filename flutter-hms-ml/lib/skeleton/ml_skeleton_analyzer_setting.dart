@@ -25,22 +25,22 @@ class MLSkeletonAnalyzerSetting {
   /// Detection mode 1: Detect skeleton points for yoga postures.
   static const int TYPE_YOGA = 1;
 
-  String path;
-  MLFrameType frameType;
-  MLFrameProperty property;
-  int analyzerType;
+  final String? path;
+  final MLFrameType frameType;
+  final MLFrameProperty? property;
+  final int analyzerType;
 
-  MLSkeletonAnalyzerSetting() {
-    path = null;
-    property = null;
-    frameType = MLFrameType.fromBitmap;
-    analyzerType = TYPE_NORMAL;
-  }
+  MLSkeletonAnalyzerSetting( {
+    this.path,
+    this.property,
+    this.frameType = MLFrameType.fromBitmap,
+    this.analyzerType = TYPE_NORMAL
+  });
 
   Map<String, dynamic> toMap() {
     return {
       "path": path,
-      "property": property != null ? property.toJson() : null,
+      "property": property != null ? property?.toJson() : null,
       "frameType": describeEnum(frameType),
       "analyzerType": analyzerType
     };

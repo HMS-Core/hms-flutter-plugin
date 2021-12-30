@@ -15,15 +15,13 @@
 */
 
 class MLApplicationSetting {
-  String apiKey;
-  String appId;
-  String certFingerprint;
+  final String? apiKey;
+  final String? appId;
+  final String? certFingerprint;
 
-  MLApplicationSetting() {
-    apiKey = null;
-    appId = null;
-    certFingerprint = null;
-  }
+  MLApplicationSetting({this.apiKey, this.appId, this.certFingerprint});
+
+
 
   Map<String, dynamic> toMap() {
     return {
