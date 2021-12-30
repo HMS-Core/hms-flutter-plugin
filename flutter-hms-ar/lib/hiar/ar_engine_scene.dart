@@ -34,12 +34,12 @@ typedef void ARTrackableCallback(ARTrackableBase arTrackable);
 enum ARSceneType { HAND, FACE, BODY, WORLD }
 
 class AREngineScene extends StatefulWidget {
-  final double height;
-  final double width;
+  final double? height;
+  final double? width;
 
   final ARSceneType arSceneType;
   final ARSceneBaseConfig arSceneConfig;
-  final ARSceneCreatedCallback onArSceneCreated;
+  final ARSceneCreatedCallback? onArSceneCreated;
 
   final String notSupportedText;
   final String permissionTitleText;
@@ -66,7 +66,7 @@ class AREngineScene extends StatefulWidget {
   AREngineScene(
     this.arSceneType,
     this.arSceneConfig, {
-    Key key,
+    Key? key,
     this.height,
     this.width,
     this.onArSceneCreated,
@@ -90,12 +90,12 @@ class _AREngineSceneState extends State<AREngineScene>
     with WidgetsBindingObserver {
   bool _hasPermission = false;
 
-  MethodChannel _channel;
+  MethodChannel? _channel;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance?.addObserver(this);
     checkCameraPermission();
   }
 
@@ -172,19 +172,19 @@ class _AREngineSceneState extends State<AREngineScene>
       return;
     }
     _channel = MethodChannel(CHANNEL.AR_SCENE_METHOD_CHANNEL + id.toString());
-    widget.onArSceneCreated(ARSceneController._(id, _channel));
+    if(widget.onArSceneCreated!=null) widget.onArSceneCreated!(ARSceneController._(id, _channel!));
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance?.removeObserver(this);
     super.dispose();
   }
 }
 
 class ARSceneController {
   final MethodChannel _channel;
-  ARTrackableCallback onDetectTrackable;
+  ARTrackableCallback? onDetectTrackable;
 
   ARSceneController._(int id, this._channel) {
     _channel.setMethodCallHandler((call) => _onMethodCallHandler(call));
@@ -212,7 +212,7 @@ class ARSceneController {
     try {
       if (call.arguments != null) {
         arHand = ARHand.fromJSON(call.arguments);
-        onDetectTrackable(arHand);
+        if(onDetectTrackable!=null) onDetectTrackable!(arHand);
       }
     } catch (e) {
       debugPrint("Cannot convert json arguments to ARHand. " + e.toString());
@@ -224,7 +224,7 @@ class ARSceneController {
     try {
       if (call.arguments != null) {
         arFace = ARFace.fromJSON(call.arguments);
-        onDetectTrackable(arFace);
+        if(onDetectTrackable!=null) onDetectTrackable!(arFace);
       }
     } catch (e) {
       debugPrint("Cannot convert json arguments to ARFace. " + e.toString());
@@ -236,7 +236,7 @@ class ARSceneController {
     try {
       if (call.arguments != null) {
         arBody = ARBody.fromJSON(call.arguments);
-        onDetectTrackable(arBody);
+        if(onDetectTrackable!=null) onDetectTrackable!(arBody);
       }
     } catch (e) {
       debugPrint("Cannot convert json arguments to ARBody. " + e.toString());
@@ -248,7 +248,7 @@ class ARSceneController {
     try {
       if (call.arguments != null) {
         arPlane = ARPlane.fromJSON(call.arguments);
-        onDetectTrackable(arPlane);
+        if(onDetectTrackable!=null) onDetectTrackable!(arPlane);
       }
     } catch (e) {
       debugPrint("Cannot convert json arguments to ARPlane. " + e.toString());

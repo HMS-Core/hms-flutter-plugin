@@ -60,7 +60,7 @@ class ARSceneHandConfig implements ARSceneBaseConfig {
 class ARSceneFaceConfig implements ARSceneBaseConfig {
   double pointSize;
   Color depthColor;
-  String texturePath;
+  String? texturePath;
   bool drawFace;
 
   ARSceneFaceConfig(
@@ -124,16 +124,15 @@ class ARSceneBodyConfig implements ARSceneBaseConfig {
 }
 
 class ARSceneWorldConfig implements ARSceneBaseConfig {
-  String objPath;
-  String texturePath;
+  String? objPath;
+  String? texturePath;
   bool drawLabel;
-
-  String imageOther;
-  String imageWall;
-  String imageFloor;
-  String imageSeat;
-  String imageTable;
-  String imageCeiling;
+  String? imageOther;
+  String? imageWall;
+  String? imageFloor;
+  String? imageSeat;
+  String? imageTable;
+  String? imageCeiling;
   String textOther;
   String textWall;
   String textFloor;

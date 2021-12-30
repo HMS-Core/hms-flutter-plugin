@@ -21,13 +21,13 @@ class ARPose {
   static const ARPose IDENTITY =
       ARPose(translation: IDENTITY_TRANSLATION, rotation: IDENTITY_ROTATION);
 
-  final List<double> translation;
-  final List<double> rotation;
+  final List<double>? translation;
+  final List<double>? rotation;
 
   const ARPose({this.translation, this.rotation});
 
-  factory ARPose.fromMap(Map<String, dynamic> jsonMap) {
-    if (jsonMap == null) return null;
+  factory ARPose.fromMap(Map<String, dynamic>? jsonMap) {
+    if (jsonMap == null) return ARPose();
     return ARPose(
       translation: jsonMap['translation'] != null
           ? List<double>.from(jsonMap['translation'].map((x) => x.toDouble()))

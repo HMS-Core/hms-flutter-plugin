@@ -28,14 +28,14 @@ import 'ar_trackable_base.dart';
 /// anchor status. The data obtained through getPose() is valid only when the
 /// anchor status is ARTrackable.TrackingState.TRACKING.
 class ARAnchor {
-  final ARPose arPose;
-  final TrackingState trackingState;
+  final ARPose? arPose;
+  final TrackingState? trackingState;
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (runtimeType != other.runtimeType) return false;
-    final ARAnchor check = other;
+    final ARAnchor check = other as ARAnchor;
     return other is ARAnchor &&
         check.arPose == arPose &&
         check.trackingState == trackingState;
@@ -43,8 +43,8 @@ class ARAnchor {
 
   ARAnchor._({this.trackingState, this.arPose});
 
-  factory ARAnchor.fromMap(Map<String, dynamic> jsonMap) {
-    if (jsonMap == null) return null;
+  factory ARAnchor.fromMap(Map<String, dynamic>? jsonMap) {
+    if (jsonMap == null) return ARAnchor._();
     return ARAnchor._(
       arPose: jsonMap['arPose'] != null ? jsonMap['arPose'] : null,
       trackingState: jsonMap['trackingState'] != null

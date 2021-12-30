@@ -17,10 +17,10 @@
 import 'dart:convert';
 
 class ARFaceBlendShapes {
-  final Map<String, dynamic> blendShapeDataMap;
-  final List<double> blendShapeData;
-  final List<String> blendShapeType;
-  final int blendShapeCount;
+  final Map<String, dynamic>? blendShapeDataMap;
+  final List<double>? blendShapeData;
+  final List<String>? blendShapeType;
+  final int? blendShapeCount;
 
   ARFaceBlendShapes._(
       {this.blendShapeCount,
@@ -28,8 +28,8 @@ class ARFaceBlendShapes {
       this.blendShapeType,
       this.blendShapeDataMap});
 
-  factory ARFaceBlendShapes.fromMap(Map<String, dynamic> jsonMap) {
-    if (jsonMap == null) return null;
+  factory ARFaceBlendShapes.fromMap(Map<String, dynamic>? jsonMap) {
+    if (jsonMap == null) return ARFaceBlendShapes._();
     return ARFaceBlendShapes._(
         blendShapeDataMap: jsonMap['blendShapeDataMap'] != null
             ? Map<String, dynamic>.from(jsonMap['blendShapeDataMap'])
@@ -46,8 +46,8 @@ class ARFaceBlendShapes {
             : null);
   }
 
-  factory ARFaceBlendShapes.fromJSON(String json) {
-    if (json == null) return null;
+  factory ARFaceBlendShapes.fromJSON(String? json) {
+    if (json == null) return ARFaceBlendShapes._();
     return ARFaceBlendShapes.fromMap(jsonDecode(json));
   }
 

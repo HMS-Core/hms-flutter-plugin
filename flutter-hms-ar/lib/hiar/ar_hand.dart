@@ -21,19 +21,19 @@ import 'ar_anchor.dart';
 import 'ar_trackable_base.dart';
 
 class ARHand implements ARTrackableBase {
-  final List<double> gestureHandBox;
-  final List<double> gestureCenter;
-  final List<double> handSkeletonArray;
-  final List<int> handSkeletonConnection;
-  final List<ARHandSkeletonType> handSkeletonTypes;
-  final int gestureType;
+  final List<double>? gestureHandBox;
+  final List<double>? gestureCenter;
+  final List<double>? handSkeletonArray;
+  final List<int>? handSkeletonConnection;
+  final List<ARHandSkeletonType>? handSkeletonTypes;
+  final int? gestureType;
 
-  final ARHandType handType;
-  final ARCoordinateSystemType gestureCoordinateSystem;
-  final ARCoordinateSystemType skeletonCoordinateSystem;
+  final ARHandType? handType;
+  final ARCoordinateSystemType? gestureCoordinateSystem;
+  final ARCoordinateSystemType? skeletonCoordinateSystem;
 
-  final List<ARAnchor> anchors;
-  final TrackingState trackingState;
+  final List<ARAnchor>? anchors;
+  final TrackingState? trackingState;
 
   ARHand._(
       {this.gestureType,
@@ -48,8 +48,8 @@ class ARHand implements ARTrackableBase {
       this.skeletonCoordinateSystem,
       this.trackingState});
 
-  factory ARHand.fromMap(Map<String, dynamic> jsonMap) {
-    if (jsonMap == null) return null;
+  factory ARHand.fromMap(Map<String, dynamic>? jsonMap) {
+    if (jsonMap == null) return ARHand._();
     return ARHand._(
       gestureType:
           jsonMap['gestureType'] != null ? jsonMap['gestureType'] : null,
@@ -92,8 +92,8 @@ class ARHand implements ARTrackableBase {
     );
   }
 
-  factory ARHand.fromJSON(String json) {
-    if (json == null) return null;
+  factory ARHand.fromJSON(String? json) {
+    if (json == null) return ARHand._();
     return ARHand.fromMap(jsonDecode(json));
   }
 

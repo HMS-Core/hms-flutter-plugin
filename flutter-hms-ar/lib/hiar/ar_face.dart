@@ -22,10 +22,10 @@ import 'ar_pose.dart';
 import 'ar_trackable_base.dart';
 
 class ARFace implements ARTrackableBase {
-  final List<ARAnchor> anchors;
-  final TrackingState trackingState;
-  final ARPose pose;
-  final ARFaceBlendShapes faceBlendShapes;
+  final List<ARAnchor>? anchors;
+  final TrackingState? trackingState;
+  final ARPose? pose;
+  final ARFaceBlendShapes? faceBlendShapes;
 
   ARFace._({
     this.anchors,
@@ -49,8 +49,8 @@ class ARFace implements ARTrackableBase {
             : null);
   }
 
-  factory ARFace.fromJSON(String json) {
-    if (json == null) return null;
+  factory ARFace.fromJSON(String? json) {
+    if (json == null) return ARFace._();
     return ARFace.fromMap(jsonDecode(json));
   }
 

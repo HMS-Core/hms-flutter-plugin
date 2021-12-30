@@ -21,19 +21,19 @@ import 'ar_anchor.dart';
 import 'ar_trackable_base.dart';
 
 class ARBody implements ARTrackableBase {
-  final int bodyAction;
+  final int? bodyAction;
 
-  final List<ARAnchor> anchors;
-  final TrackingState trackingState;
+  final List<ARAnchor>? anchors;
+  final TrackingState? trackingState;
 
-  final List<ARBodySkeletonType> bodySkeletonTypes;
-  final List<double> skeletonPoint2D;
-  final List<double> skeletonPoint3D;
-  final List<double> skeletonConfidence;
-  final List<int> bodySkeletonConnection;
-  final List<bool> skeletonPointIsExist2D;
-  final List<bool> skeletonPointIsExist3D;
-  final ARCoordinateSystemType coordinateSystemType;
+  final List<ARBodySkeletonType>? bodySkeletonTypes;
+  final List<double>? skeletonPoint2D;
+  final List<double>? skeletonPoint3D;
+  final List<double>? skeletonConfidence;
+  final List<int>? bodySkeletonConnection;
+  final List<bool>? skeletonPointIsExist2D;
+  final List<bool>? skeletonPointIsExist3D;
+  final ARCoordinateSystemType? coordinateSystemType;
 
   ARBody._({
     this.bodyAction,
@@ -49,8 +49,8 @@ class ARBody implements ARTrackableBase {
     this.coordinateSystemType,
   });
 
-  factory ARBody.fromMap(Map<String, dynamic> jsonMap) {
-    if (jsonMap == null) return null;
+  factory ARBody.fromMap(Map<String, dynamic>? jsonMap) {
+    if (jsonMap == null) return ARBody._();
     return ARBody._(
       bodyAction: jsonMap['bodyAction'] != null ? jsonMap['bodyAction'] : null,
       anchors: jsonMap['anchors'] != null
@@ -93,8 +93,8 @@ class ARBody implements ARTrackableBase {
     );
   }
 
-  factory ARBody.fromJSON(String json) {
-    if (json == null) return null;
+  factory ARBody.fromJSON(String? json) {
+    if (json == null) return ARBody._();
     return ARBody.fromMap(jsonDecode(json));
   }
 

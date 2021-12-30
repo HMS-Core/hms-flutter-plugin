@@ -21,17 +21,17 @@ import 'ar_pose.dart';
 import 'ar_trackable_base.dart';
 
 class ARPlane implements ARTrackableBase {
-  final ARPose centerPose;
+  final ARPose? centerPose;
 
-  final double extentX;
-  final double extentZ;
+  final double? extentX;
+  final double? extentZ;
 
-  final List<double> planePolygon;
-  final SemanticPlaneLabel label;
-  final PlaneType type;
+  final List<double>? planePolygon;
+  final SemanticPlaneLabel? label;
+  final PlaneType? type;
 
-  final List<ARAnchor> anchors;
-  final TrackingState trackingState;
+  final List<ARAnchor>? anchors;
+  final TrackingState? trackingState;
 
   ARPlane._(
       {this.centerPose,
@@ -43,8 +43,8 @@ class ARPlane implements ARTrackableBase {
       this.trackingState,
       this.type});
 
-  factory ARPlane.fromMap(Map<String, dynamic> jsonMap) {
-    if (jsonMap == null) return null;
+  factory ARPlane.fromMap(Map<String, dynamic>? jsonMap) {
+    if (jsonMap == null) return ARPlane._();
     return ARPlane._(
         centerPose: jsonMap['centerPose'] != null
             ? ARPose.fromMap(jsonMap['centerPose'])
@@ -71,8 +71,8 @@ class ARPlane implements ARTrackableBase {
             jsonMap['type'] != null ? PlaneType.values[jsonMap['type']] : null);
   }
 
-  factory ARPlane.fromJSON(String json) {
-    if (json == null) return null;
+  factory ARPlane.fromJSON(String? json) {
+    if (json == null) return ARPlane._();
     return ARPlane.fromMap(jsonDecode(json));
   }
 

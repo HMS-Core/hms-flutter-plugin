@@ -17,9 +17,9 @@
 import 'ar_anchor.dart';
 
 abstract class ARTrackableBase {
-  final List<ARAnchor> anchors;
+  final List<ARAnchor>? anchors;
 
-  final TrackingState trackingState;
+  final TrackingState? trackingState;
 
   ARTrackableBase._({this.trackingState, this.anchors});
 }
