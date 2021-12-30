@@ -25,7 +25,7 @@ class MLSkeletonAnalyzerSetting {
   /// Detection mode 1: Detect skeleton points for yoga postures.
   static const int TYPE_YOGA = 1;
 
-  final String? path;
+   String? path;
   final MLFrameType frameType;
   final MLFrameProperty? property;
   final int analyzerType;

@@ -21,9 +21,9 @@ class MLGeneralCardAnalyzerSetting {
   final String language;
   final int backButtonResId;
   final int photoButtonResId;
-  final Color scanBoxCornerColor;
-  final Color tipTextColor;
-  final String tipText;
+   Color scanBoxCornerColor;
+   Color tipTextColor;
+   String tipText;
   final int torchOnResId;
   final int torchOffResId;
 

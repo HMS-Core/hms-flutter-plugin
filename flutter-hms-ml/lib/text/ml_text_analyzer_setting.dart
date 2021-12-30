@@ -43,14 +43,14 @@ class MLTextAnalyzerSetting {
   static const int OCR_LOOSE_SCENE = 1;
 
   final int ocrMode;
-  final String language;
-  final String? path;
+   String language;
+   String? path;
   final MLFrameType frameType;
   final MLFrameProperty? property;
-  final List<String> languageList;
+   List<String> languageList;
   final String borderType;
   final int textDensityScene;
-  final bool isRemote;
+   bool isRemote;
 
   MLTextAnalyzerSetting( {
     this.path ,

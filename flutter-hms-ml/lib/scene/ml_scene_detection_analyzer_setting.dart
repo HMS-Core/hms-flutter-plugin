@@ -20,7 +20,7 @@ import 'package:huawei_ml/models/ml_frame_property.dart';
 import 'package:huawei_ml/utils/ml_utils.dart';
 
 class MLSceneDetectionAnalyzerSetting {
-  final String? path;
+   String? path;
   final MLFrameType frameType;
   final MLFrameProperty? property;
   final double confidence;

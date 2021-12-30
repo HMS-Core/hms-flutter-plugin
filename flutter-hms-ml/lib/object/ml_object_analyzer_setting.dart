@@ -23,7 +23,7 @@ class MLObjectAnalyzerSetting {
   static const int TYPE_PICTURE = 0;
   static const int TYPE_VIDEO = 1;
 
-  final String? path;
+   String? path;
   final MLFrameType frameType;
   final MLFrameProperty? property;
   final bool allowMultiResults;
