@@ -20,10 +20,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:huawei_awareness/hmsAwarenessLibrary.dart';
 
-import 'CustomWidgets/customAppBar.dart';
-import 'CustomWidgets/customButton.dart';
-import 'CustomWidgets/customConsole.dart';
-import 'CustomWidgets/customRaisedButton.dart';
+import 'CustomWidgets/custom_appbar.dart';
+import 'CustomWidgets/custom_button.dart';
+import 'CustomWidgets/custom_console.dart';
+import 'CustomWidgets/custom_raised_button.dart';
 
 class CaptureClientDemo extends StatefulWidget {
   @override
@@ -37,9 +37,9 @@ class _CaptureClientDemoState extends State<CaptureClientDemo> {
   List<String> responses = [];
   List<int> capabilityList = [];
 
-  bool locationPermission;
-  bool backgroundLocationPermission;
-  bool activityRecognitionPermission;
+  late bool locationPermission;
+  late bool backgroundLocationPermission;
+  late bool activityRecognitionPermission;
 
   @override
   void initState() {
@@ -51,7 +51,7 @@ class _CaptureClientDemoState extends State<CaptureClientDemo> {
     CapabilityResponse capabilities =
         await AwarenessCaptureClient.querySupportingCapabilities();
     setState(() {
-      capabilityList = capabilities.deviceSupportCapabilities;
+      capabilityList = capabilities.deviceSupportCapabilities??[];
       isQueried = true;
       log(capabilityList.toString(), name: "Supported Capability Codes");
     });
@@ -117,17 +117,21 @@ class _CaptureClientDemoState extends State<CaptureClientDemo> {
 
     BeaconResponse response = await AwarenessCaptureClient.getBeaconStatus(
         filters: [filter, filter2, filter3]);
-    setState(() {
-      responses.add("Beacons Found: " + response.beacons.length.toString());
-      log(response.toJson(), name: "beaconData");
-    });
+   if(response.beacons!=null){
+     setState(() {
+       responses.add("Beacons Found: " +response.beacons!.length.toString());
+       log(response.toJson(), name: "beaconData");
+     });
+   }
   }
 
   void captureBehavior() async {
     BehaviorResponse response = await AwarenessCaptureClient.getBehavior();
+  if(response.mostLikelyBehavior?.type!=null){
     setState(() {
-      responses.add("Behavior: " + response.mostLikelyBehavior.type.toString());
+      responses.add("Behavior: " + response.mostLikelyBehavior!.type.toString());
     });
+  }
     log(response.toJson(), name: "captureBehavior");
   }
 
@@ -232,11 +236,13 @@ class _CaptureClientDemoState extends State<CaptureClientDemo> {
   void captureWeatherByDevice() async {
     WeatherResponse response =
         await AwarenessCaptureClient.getWeatherByDevice();
-    setState(() {
-      responses.add("Temperature: " +
-          response.weatherSituation.situation.temperatureC.toString());
-    });
-    log(response.toJson(), name: "captureWeatherByDevice");
+   if(response.weatherSituation?.situation!=null) {
+     setState(() {
+       responses.add("Temperature: " +
+           response.weatherSituation!.situation!.temperatureC.toString());
+     });
+     log(response.toJson(), name: "captureWeatherByDevice");
+   }
   }
 
   void captureWeatherByPosition() async {
@@ -244,10 +250,12 @@ class _CaptureClientDemoState extends State<CaptureClientDemo> {
         await AwarenessCaptureClient.getWeatherByPosition(
             weatherPosition: WeatherPosition(
                 city: "London", locale: "en_GB", country: "United Kingdom"));
-    setState(() {
-      responses.add("Temperature: " +
-          response.weatherSituation.situation.temperatureC.toString());
-    });
+ if(response.weatherSituation?.situation!= null){
+   setState(() {
+     responses.add("Temperature: " +
+         response.weatherSituation!.situation!.temperatureC.toString());
+   });
+ }
     log(response.toJson(), name: "captureWeatherByPosition");
   }
 

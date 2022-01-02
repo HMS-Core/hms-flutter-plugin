@@ -21,10 +21,10 @@ import 'dart:developer';
 import 'dart:typed_data';
 import 'package:huawei_awareness/hmsAwarenessLibrary.dart';
 
-import 'CustomWidgets/customButton.dart';
-import 'CustomWidgets/customAppBar.dart';
-import 'CustomWidgets/customConsole.dart';
-import 'CustomWidgets/customRaisedButton.dart';
+import 'CustomWidgets/custom_button.dart';
+import 'CustomWidgets/custom_appbar.dart';
+import 'CustomWidgets/custom_console.dart';
+import 'CustomWidgets/custom_raised_button.dart';
 
 class BarrierClientDemo extends StatefulWidget {
   @override
@@ -34,13 +34,13 @@ class BarrierClientDemo extends StatefulWidget {
 class _BarrierClientDemoState extends State<BarrierClientDemo> {
   bool isQueried = false;
   bool permissions = false;
-  StreamSubscription<dynamic> subscription;
+  StreamSubscription<dynamic>? subscription;
   List<String> responses = [];
   List<int> capabilityList = [];
 
-  bool locationPermission;
-  bool backgroundLocationPermission;
-  bool activityRecognitionPermission;
+  bool locationPermission=false;
+  bool backgroundLocationPermission=false;
+  bool activityRecognitionPermission=false;
 
   @override
   void initState() {
@@ -52,7 +52,7 @@ class _BarrierClientDemoState extends State<BarrierClientDemo> {
     CapabilityResponse capabilities =
         await AwarenessCaptureClient.querySupportingCapabilities();
     setState(() {
-      capabilityList = capabilities.deviceSupportCapabilities;
+      capabilityList = capabilities.deviceSupportCapabilities??[];
       isQueried = true;
       log(capabilityList.toString(), name: "Supported Capability Codes");
     });
@@ -104,10 +104,12 @@ class _BarrierClientDemoState extends State<BarrierClientDemo> {
     BarrierQueryResponse response =
         await AwarenessBarrierClient.queryBarriers(BarrierQueryRequest.all());
     log(response.toJson(), name: "queryBarriers");
+  if( response.barriers!=null){
     setState(() {
       responses
-          .add("Registered Barriers: " + response.barriers.length.toString());
+          .add("Registered Barriers: " + response.barriers!.length.toString());
     });
+  }
   }
 
   void deleteBarriers() async {
@@ -499,14 +501,16 @@ class _BarrierClientDemoState extends State<BarrierClientDemo> {
                                               .onBarrierStatusStream
                                               .listen((event) {
                                             if (mounted) {
-                                              setState(() {
-                                                String name =
-                                                    event.barrierLabel;
-                                                responses.add("($name) - " +
-                                                    "Present Status: " +
-                                                    event.presentStatus
-                                                        .toString());
-                                              });
+                                             if(event.barrierLabel!=null){
+                                               setState(() {
+                                                 String name =
+                                                     event.barrierLabel!;
+                                                 responses.add("($name) - " +
+                                                     "Present Status: " +
+                                                     event.presentStatus
+                                                         .toString());
+                                               });
+                                             }
                                             }
                                           }, onError: (error) {
                                             log(error.toString());
@@ -524,7 +528,7 @@ class _BarrierClientDemoState extends State<BarrierClientDemo> {
                                         child: Text("Stop Listening"),
                                         onPressed: () {
                                           if (subscription != null) {
-                                            subscription.cancel();
+                                            subscription?.cancel();
                                             log("Stopped listening.");
                                             setState(() {
                                               responses.add(

@@ -15,9 +15,9 @@
 */
 
 import 'package:flutter/material.dart';
-import 'customClipper.dart';
+import 'custom_clipper.dart';
 
-class CustomAppBar extends PreferredSize {
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final String title2;
   final double size;
@@ -26,10 +26,10 @@ class CustomAppBar extends PreferredSize {
   final bool backButton;
 
   CustomAppBar({
-    this.title,
-    this.size,
+    required this.title,
+    required this.size,
     this.title2 = "",
-    this.icon,
+    this.icon=false,
     this.fontSize = 30,
     this.backButton = false,
   });

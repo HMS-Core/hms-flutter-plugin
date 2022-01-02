@@ -23,10 +23,10 @@ class CustomRaisedButton extends StatelessWidget {
   final Function onPressed;
 
   CustomRaisedButton({
-    this.buttonText,
-    this.capabilityList,
-    this.capabilityCode,
-    this.onPressed,
+    required this.buttonText,
+    required this.capabilityList,
+    required this.capabilityCode,
+    required this.onPressed,
   });
 
   @override
@@ -46,7 +46,7 @@ class CustomRaisedButton extends StatelessWidget {
               ),
             ),
             onPressed:
-                capabilityList.contains(capabilityCode) ? onPressed : null),
+                capabilityList.contains(capabilityCode) ? onPressed() : null),
       ),
     );
   }

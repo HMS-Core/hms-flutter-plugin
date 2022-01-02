@@ -16,28 +16,29 @@
 
 import 'package:flutter/material.dart';
 
-class CustomButton extends StatelessWidget {
-  final String text;
-  final VoidCallback onPressed;
+class CustomConsole extends StatelessWidget {
+  final List<String> responses;
 
-  const CustomButton({
-    @required this.text,
-    @required this.onPressed,
-  });
+  CustomConsole({required this.responses});
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(30.0))),
-      onPressed: onPressed,
-      color: Color.fromRGBO(255, 110, 64, 1),
-      textColor: Colors.white,
-      splashColor: Colors.redAccent,
-      padding: EdgeInsets.all(12.0),
-      child: Text(
-        text,
-        style: TextStyle(color: Color.fromRGBO(245, 240, 225, 1)),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        height: 300,
+        decoration: BoxDecoration(
+            border: Border.all(
+          width: 2,
+          color: Color.fromRGBO(30, 61, 89, 1),
+        )),
+        child: ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: responses.length,
+            itemBuilder: (context, index) {
+              List<String> reversedList = responses.reversed.toList();
+              return Text(" > " + reversedList[index]);
+            }),
       ),
     );
   }

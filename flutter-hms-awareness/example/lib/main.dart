@@ -16,11 +16,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:huawei_awareness/awarenessUtilsClient.dart';
-import 'package:huawei_awareness_example/CustomWidgets/customAppBar.dart';
+import 'package:huawei_awareness_example/CustomWidgets/custom_appbar.dart';
 
-import 'CustomWidgets/customButton.dart';
-import 'barrierClientDemo.dart';
-import 'captureClientDemo.dart';
+import 'CustomWidgets/custom_button.dart';
+import 'barrier_client_demo.dart';
+import 'capture_client_demo.dart';
 
 void main() {
   runApp(MaterialApp(
