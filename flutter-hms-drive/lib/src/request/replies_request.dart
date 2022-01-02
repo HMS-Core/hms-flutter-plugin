@@ -19,34 +19,36 @@ import 'dart:convert';
 import 'package:huawei_drive/huawei_drive.dart';
 
 class RepliesRequest extends Batchable implements DriveRequest {
-  @override
-  String fields;
 
   @override
-  String form;
+  String? fields;
 
   @override
-  Map<String, dynamic> parameters;
+  String? form;
 
   @override
-  bool prettyPrint;
+  Map<String, dynamic>? parameters;
 
   @override
-  String quotaId;
+  bool? prettyPrint;
 
-  bool includeDeleted;
+  @override
+  String? quotaId;
 
-  int pageSize;
+  bool? includeDeleted;
 
-  String commentId;
+  int? pageSize;
 
-  String cursor;
+  String? commentId;
 
-  String fileId;
+  String? cursor;
 
-  String replyId;
+  String? fileId;
 
-  DriveReply reply;
+  String? replyId;
+
+  DriveReply? reply;
+
 
   RepliesRequest._({
     this.commentId,
@@ -128,8 +130,8 @@ class RepliesRequest extends Batchable implements DriveRequest {
     }..removeWhere((k, v) => v == null);
   }
 
-  factory RepliesRequest.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory RepliesRequest.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return RepliesRequest._();
 
     return RepliesRequest._(
       commentId: map['commentId'],
@@ -159,4 +161,7 @@ class RepliesRequest extends Batchable implements DriveRequest {
   String toString() {
     return 'RepliesRequest(commentId: $commentId, cursor: $cursor, fields: $fields, fileId: $fileId, form: $form, includeDeleted: $includeDeleted, pageSize: $pageSize, parameters: $parameters, prettyPrint: $prettyPrint, quotaId: $quotaId, replyId: $replyId, reply: $reply)';
   }
+
+
+
 }

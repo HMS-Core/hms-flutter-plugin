@@ -21,10 +21,10 @@ class StartCursor {
   /// Resource type.
   ///
   /// The value is always `drive#startCursor`.
-  String category;
+  String? category;
 
   /// Cursor for the start page of file changes.
-  String cursor;
+  String? cursor;
 
   /// Default constructor.
   StartCursor({
@@ -34,8 +34,8 @@ class StartCursor {
 
   /// Clones a StartCursor object.
   StartCursor clone({
-    String category,
-    String startCursor,
+    String? category,
+    String? startCursor,
   }) {
     return StartCursor(
       category: category ?? this.category,
@@ -50,8 +50,8 @@ class StartCursor {
     };
   }
 
-  factory StartCursor.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory StartCursor.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return StartCursor();
 
     return StartCursor(
       category: map['category'],

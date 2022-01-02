@@ -23,31 +23,31 @@ import 'drive_user.dart';
 /// File reply class.
 class DriveReply with ExtraParameter {
   /// Operation of replying to a parent comment.
-  String operate;
+  String? operate;
 
   /// User who creates a reply.
-  DriveUser creator;
+  DriveUser? creator;
 
   /// Reply in plain text format.
-  String description;
+  String? description;
 
   /// Reply creation time.
-  DateTime createdTime;
+  DateTime? createdTime;
 
   /// Whether a reply is deleted.
-  bool deleted;
+  bool? deleted;
 
   /// Reply in HTML format.
-  String htmlDescription;
+  String? htmlDescription;
 
   /// Reply ID.
-  String id;
+  String? id;
 
   /// Resource type.
-  String resourceType;
+  String? resourceType;
 
   /// Last modification time of a reply.
-  DateTime editedTime;
+  DateTime? editedTime;
 
   DriveReply({
     this.operate,
@@ -62,15 +62,15 @@ class DriveReply with ExtraParameter {
   });
 
   DriveReply clone({
-    String operate,
-    DriveUser creator,
-    String description,
-    DateTime createdTime,
-    bool deleted,
-    String htmlDescription,
-    String id,
-    String resourceType,
-    DateTime editedTime,
+    String? operate,
+    DriveUser? creator,
+    String? description,
+    DateTime? createdTime,
+    bool? deleted,
+    String? htmlDescription,
+    String? id,
+    String? resourceType,
+    DateTime? editedTime,
   }) {
     return DriveReply(
       operate: operate ?? this.operate,
@@ -99,8 +99,8 @@ class DriveReply with ExtraParameter {
     };
   }
 
-  factory DriveReply.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory DriveReply.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return DriveReply();
 
     return DriveReply(
       operate: map['operate'],

@@ -19,27 +19,28 @@ import 'dart:convert';
 import 'package:huawei_drive/huawei_drive.dart';
 
 class HistoryVersionsRequest extends Batchable implements DriveRequest {
-  String historyVersionId;
-  String fileId;
-  String cursor;
-  int pageSize;
-  bool acknowledgeDownloadRisk;
-  HistoryVersion historyVersion;
+  String? historyVersionId;
+  String? fileId;
+  String? cursor;
+  int? pageSize;
+  bool? acknowledgeDownloadRisk;
+  HistoryVersion?  historyVersion;
 
   @override
-  String fields;
+  String? fields;
 
   @override
-  String form;
+  String? form;
 
   @override
-  Map<String, dynamic> parameters;
+  Map<String, dynamic>? parameters;
 
   @override
-  bool prettyPrint;
+  bool? prettyPrint;
 
   @override
-  String quotaId;
+  String? quotaId;
+
 
   HistoryVersionsRequest._({
     this.historyVersionId,
@@ -116,8 +117,8 @@ class HistoryVersionsRequest extends Batchable implements DriveRequest {
     }..removeWhere((k, v) => v == null);
   }
 
-  factory HistoryVersionsRequest.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory HistoryVersionsRequest.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return HistoryVersionsRequest._();
 
     return HistoryVersionsRequest._(
       historyVersionId: map['historyVersionId'],
@@ -145,4 +146,6 @@ class HistoryVersionsRequest extends Batchable implements DriveRequest {
   String toString() {
     return 'HistoryVersionsRequest(historyVersionId: $historyVersionId, fileId: $fileId, cursor: $cursor, pageSize: $pageSize, acknowledgeDownloadRisk: $acknowledgeDownloadRisk, fields: $fields, form: $form, parameters: $parameters, prettyPrint: $prettyPrint, quotaId: $quotaId)';
   }
+
+
 }

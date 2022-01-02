@@ -20,41 +20,43 @@ import 'package:huawei_drive/src/request/batchable.dart';
 
 class FilesRequest extends Batchable implements DriveRequest {
   //Common
-  String fileId;
-  DriveFile file;
-  DriveFileContent fileContent;
-  String containers;
+  String? fileId;
+  DriveFile? file;
+  DriveFileContent? fileContent;
+  String? containers;
 
   //Get request
-  bool acknowledgeDownloadRisk;
+  bool? acknowledgeDownloadRisk;
 
   //List request
-  String orderBy;
-  String queryParam;
-  int pageSize;
-  String cursor;
+  String? orderBy;
+  String? queryParam;
+  int? pageSize;
+  String? cursor;
 
   //Subscribe request
-  DriveChannel channel;
+  DriveChannel? channel;
 
   //Update Request
-  String addParentFolder;
-  String removeParentFolder;
+  String? addParentFolder;
+  String? removeParentFolder;
 
   @override
-  String fields;
+  String? fields;
 
   @override
-  String form;
+  String? form;
 
   @override
-  Map<String, dynamic> parameters;
+  Map<String, dynamic>? parameters;
 
   @override
-  bool prettyPrint;
+  bool? prettyPrint;
 
   @override
-  String quotaId;
+  String? quotaId;
+
+
 
   FilesRequest._(
       {this.fileId,
@@ -171,8 +173,8 @@ class FilesRequest extends Batchable implements DriveRequest {
     return 'FilesRequest(fileId: $fileId, file: $file, fileContent: $fileContent, containers: $containers, acknowledgeDownloadRisk: $acknowledgeDownloadRisk, orderBy: $orderBy, queryParam: $queryParam, pageSize: $pageSize, cursor: $cursor, channel: $channel, addParentFolder: $addParentFolder, removeParentFolder: $removeParentFolder, fields: $fields, form: $form, parameters: $parameters, prettyPrint: $prettyPrint, quotaId: $quotaId)';
   }
 
-  factory FilesRequest.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory FilesRequest.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return FilesRequest._();
 
     return FilesRequest._(
       fileId: map['fileId'],
@@ -200,4 +202,6 @@ class FilesRequest extends Batchable implements DriveRequest {
 
   factory FilesRequest.fromJson(String source) =>
       FilesRequest.fromMap(json.decode(source));
+
+
 }

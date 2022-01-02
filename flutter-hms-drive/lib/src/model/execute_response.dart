@@ -18,10 +18,10 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 class ExecuteResponse {
-  Int8List content;
-  String contentEncoding;
-  int contentLoggingLimit;
-  String contentType;
+  Int8List? content;
+  String? contentEncoding;
+  int? contentLoggingLimit;
+  String? contentType;
 
   ExecuteResponse({
     this.content,
@@ -31,10 +31,10 @@ class ExecuteResponse {
   });
 
   ExecuteResponse clone({
-    Int8List content,
-    String contentEncoding,
-    int contentLoggingLimit,
-    String contentType,
+    Int8List? content,
+    String? contentEncoding,
+    int? contentLoggingLimit,
+    String ?contentType,
   }) {
     return ExecuteResponse(
       content: content ?? this.content,
@@ -53,8 +53,8 @@ class ExecuteResponse {
     };
   }
 
-  factory ExecuteResponse.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory ExecuteResponse.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return ExecuteResponse();
 
     return ExecuteResponse(
       content: map['content'] == null

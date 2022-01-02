@@ -17,17 +17,17 @@
 import 'dart:convert';
 
 class DrivePermission {
-  bool canDiscoverFile;
-  bool deleted;
-  String displayName;
-  DateTime expirationTime;
-  String id;
-  String category;
-  String profilePhotoLink;
-  String role;
-  String type;
-  String userAccount;
-  String accountType;
+  bool? canDiscoverFile;
+  bool? deleted;
+  String? displayName;
+  DateTime? expirationTime;
+  String? id;
+  String? category;
+  String? profilePhotoLink;
+  String? role;
+  String? type;
+  String? userAccount;
+  String? accountType;
 
   DrivePermission({
     this.canDiscoverFile,
@@ -44,17 +44,17 @@ class DrivePermission {
   });
 
   DrivePermission clone({
-    bool canDiscoverFile,
-    bool deleted,
-    String displayName,
-    DateTime expirationTime,
-    String id,
-    String category,
-    String profilePhotoLink,
-    String role,
-    String type,
-    String userAccount,
-    String accountType,
+    bool? canDiscoverFile,
+    bool? deleted,
+    String? displayName,
+    DateTime? expirationTime,
+    String? id,
+    String? category,
+    String? profilePhotoLink,
+    String? role,
+    String? type,
+    String? userAccount,
+    String? accountType,
   }) {
     return DrivePermission(
       canDiscoverFile: canDiscoverFile ?? this.canDiscoverFile,
@@ -87,8 +87,8 @@ class DrivePermission {
     };
   }
 
-  factory DrivePermission.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory DrivePermission.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return DrivePermission();
 
     return DrivePermission(
       canDiscoverFile: map['canDiscoverFile'],

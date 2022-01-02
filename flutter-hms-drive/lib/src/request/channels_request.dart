@@ -20,21 +20,21 @@ import 'package:huawei_drive/huawei_drive.dart';
 
 class ChannelsRequest extends Batchable implements DriveRequest {
   @override
-  String fields;
+  String? fields;
 
   @override
-  String form;
+  String? form;
 
   @override
-  Map<String, dynamic> parameters;
+  Map<String, dynamic>? parameters;
 
   @override
-  bool prettyPrint;
+  bool? prettyPrint;
 
   @override
-  String quotaId;
+  String? quotaId;
 
-  DriveChannel channel;
+  DriveChannel? channel;
 
   ChannelsRequest._(
       {this.channel,
@@ -62,8 +62,8 @@ class ChannelsRequest extends Batchable implements DriveRequest {
     };
   }
 
-  factory ChannelsRequest.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory ChannelsRequest.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return ChannelsRequest._();
 
     return ChannelsRequest._(
       fields: map['fields'],

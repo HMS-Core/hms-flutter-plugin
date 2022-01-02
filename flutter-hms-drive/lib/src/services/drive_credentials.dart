@@ -30,7 +30,7 @@ class DriveCredentials {
   String accessToken;
 
   /// Sets the validity period of an access token.
-  int expiresInSeconds;
+  int? expiresInSeconds;
 
   /// User defined callback for obtaining a new access token.
   RefreshTokenCallback callback;
@@ -60,10 +60,10 @@ class DriveCredentials {
 
   /// Copies the current object and updates the specified attributes.
   DriveCredentials clone({
-    String unionId,
-    String accessToken,
-    int expiresInSeconds,
-    RefreshTokenCallback callback,
+    String? unionId,
+    String? accessToken,
+    int? expiresInSeconds,
+    RefreshTokenCallback? callback,
   }) {
     return DriveCredentials(
       unionId ?? this.unionId,

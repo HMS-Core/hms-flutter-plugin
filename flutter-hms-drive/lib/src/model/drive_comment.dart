@@ -25,40 +25,40 @@ import 'drive_reply.dart';
 /// File comment model class.
 class DriveComment with ExtraParameter {
   /// File position in JSON format.
-  String position;
+  String? position;
 
   /// Information about the user who creates a comment.
-  DriveUser creator;
+  DriveUser? creator;
 
   /// Comment content.
-  String description;
+  String? description;
 
   ///	Time when the comment is created.
-  DateTime createdTime;
+  DateTime? createdTime;
 
   /// Whether a comment is deleted.
-  bool deleted;
+  bool? deleted;
 
   /// Comment in HTML format.
-  String htmlDescription;
+  String? htmlDescription;
 
   /// All replies to a comment.
-  List<DriveReply> replies;
+  List<DriveReply>? replies;
 
   /// Comment ID.
-  String id;
+  String? id;
 
   /// Resource type.
-  String category;
+  String? category;
 
   /// Last modification time of a comment.
-  DateTime editedTime;
+  DateTime? editedTime;
 
   /// Content of a commented file.
-  QuotedContent quotedComment;
+  QuotedContent? quotedComment;
 
   /// Whether a comment is resolved by one of its replies.
-  bool resolved;
+  bool? resolved;
 
   DriveComment({
     this.position,
@@ -76,18 +76,18 @@ class DriveComment with ExtraParameter {
   });
 
   DriveComment clone({
-    String position,
-    DriveUser creator,
-    String description,
-    DateTime createdTime,
-    bool deleted,
-    String htmlDescription,
-    List<DriveReply> replies,
-    String id,
-    String category,
-    DateTime editedTime,
-    QuotedContent quotedComment,
-    bool resolved,
+    String? position,
+    DriveUser? creator,
+    String? description,
+    DateTime? createdTime,
+    bool? deleted,
+    String? htmlDescription,
+    List<DriveReply>? replies,
+    String? id,
+    String? category,
+    DateTime? editedTime,
+    QuotedContent? quotedComment,
+    bool? resolved,
   }) {
     return DriveComment(
       position: position ?? this.position,
@@ -113,7 +113,7 @@ class DriveComment with ExtraParameter {
       'createdTime': createdTime?.toIso8601String(),
       'deleted': deleted,
       'htmlDescription': htmlDescription,
-      'replies': replies?.map((x) => x?.toMap())?.toList(),
+      'replies': replies?.map((x) => x.toMap()).toList(),
       'id': id,
       'category': category,
       'editedTime': editedTime?.toIso8601String(),
@@ -122,8 +122,8 @@ class DriveComment with ExtraParameter {
     };
   }
 
-  factory DriveComment.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory DriveComment.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return DriveComment();
 
     return DriveComment(
       position: map['position'],

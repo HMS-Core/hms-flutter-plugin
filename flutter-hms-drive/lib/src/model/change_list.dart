@@ -24,23 +24,23 @@ class ChangeList {
   /// The resource type.
   ///
   /// The value is always `drive#changeList`.
-  String category;
+  String? category;
 
   /// List of changes.
   ///
   /// If nextCursor is contained, the returned list is incomplete and another request
   /// needs to be sent to obtain other results.
-  List<Change> changes;
+  List<Change>? changes;
 
   ///	Cursor for the next page of changes, which is contained only when there are
   /// still changes to be returned.
   ///
   /// If the cursor is rejected for any reason, paging should be restarted from
   /// the first page of results.
-  String nextCursor;
+  String? nextCursor;
 
   /// Cursor for the start page of new changes.
-  String newStartCursor;
+  String? newStartCursor;
 
   ChangeList({
     this.category,
@@ -50,10 +50,10 @@ class ChangeList {
   });
 
   ChangeList clone({
-    String category,
-    List<Change> changes,
-    String nextCursor,
-    String newStartCursor,
+    String? category,
+    List<Change>? changes,
+    String? nextCursor,
+    String? newStartCursor,
   }) {
     return ChangeList(
       category: category ?? this.category,
@@ -66,14 +66,14 @@ class ChangeList {
   Map<String, dynamic> toMap() {
     return {
       'category': category,
-      'changes': changes?.map((x) => x?.toMap())?.toList(),
+      'changes': changes?.map((x) => x.toMap()).toList(),
       'nextCursor': nextCursor,
       'newStartCursor': newStartCursor,
     };
   }
 
-  factory ChangeList.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory ChangeList.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return ChangeList();
 
     return ChangeList(
       category: map['category'],

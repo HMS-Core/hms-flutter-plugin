@@ -20,19 +20,19 @@ import 'package:huawei_drive/huawei_drive.dart';
 
 class AboutRequest extends Batchable implements DriveRequest {
   @override
-  String fields;
+  String? fields;
 
   @override
-  String form;
+  String? form;
 
   @override
-  Map<String, dynamic> parameters;
+  Map<String, dynamic>? parameters;
 
   @override
-  bool prettyPrint;
+  bool? prettyPrint;
 
   @override
-  String quotaId;
+  String? quotaId;
 
   AboutRequest({
     this.fields = "*",
@@ -54,8 +54,8 @@ class AboutRequest extends Batchable implements DriveRequest {
     };
   }
 
-  factory AboutRequest.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory AboutRequest.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return AboutRequest();
 
     return AboutRequest(
       fields: map['fields'],

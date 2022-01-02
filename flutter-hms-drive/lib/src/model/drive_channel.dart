@@ -19,16 +19,16 @@ import 'dart:convert';
 import 'package:huawei_drive/huawei_drive.dart';
 
 class DriveChannel with ExtraParameter {
-  String url;
-  String id;
-  String category;
-  String resourceId;
-  String resourceUri;
-  String userToken;
-  String type;
-  int expirationTime;
-  Map<String, String> params;
-  bool payload;
+  String? url;
+  String? id;
+  String? category;
+  String? resourceId;
+  String? resourceUri;
+  String? userToken;
+  String? type;
+  int? expirationTime;
+  Map<String, String>? params;
+  bool? payload;
 
   DriveChannel({
     this.url,
@@ -44,16 +44,16 @@ class DriveChannel with ExtraParameter {
   });
 
   DriveChannel clone({
-    String url,
-    String id,
-    String category,
-    String resourceId,
-    String resourceUri,
-    String userToken,
-    String type,
-    int expirationTime,
-    Map<String, String> params,
-    bool payload,
+    String? url,
+    String? id,
+    String? category,
+    String? resourceId,
+    String? resourceUri,
+    String? userToken,
+    String? type,
+    int? expirationTime,
+    Map<String, String>? params,
+    bool? payload,
   }) {
     return DriveChannel(
       url: url ?? this.url,
@@ -84,8 +84,8 @@ class DriveChannel with ExtraParameter {
     };
   }
 
-  factory DriveChannel.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory DriveChannel.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return DriveChannel();
 
     return DriveChannel(
       url: map['url'],

@@ -19,9 +19,9 @@ import 'dart:convert';
 import 'drive_reply.dart';
 
 class DriveReplyList {
-  String category;
-  List<DriveReply> replies;
-  String nextCursor;
+  String? category;
+  List<DriveReply>? replies;
+  String? nextCursor;
 
   DriveReplyList({
     this.category,
@@ -30,9 +30,9 @@ class DriveReplyList {
   });
 
   DriveReplyList clone({
-    String category,
-    List<DriveReply> replies,
-    String nextCursor,
+    String? category,
+    List<DriveReply>? replies,
+    String? nextCursor,
   }) {
     return DriveReplyList(
       category: category ?? this.category,
@@ -44,13 +44,13 @@ class DriveReplyList {
   Map<String, dynamic> toMap() {
     return {
       'category': category,
-      'replies': replies?.map((x) => x?.toMap())?.toList(),
+      'replies': replies?.map((x) => x.toMap()).toList(),
       'nextCursor': nextCursor,
     };
   }
 
-  factory DriveReplyList.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory DriveReplyList.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return DriveReplyList();
 
     return DriveReplyList(
       category: map['category'],

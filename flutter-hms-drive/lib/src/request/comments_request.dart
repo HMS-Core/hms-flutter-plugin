@@ -25,36 +25,36 @@ import 'batchable.dart';
 /// Contains the request methods about Comments.
 class CommentsRequest extends Batchable implements DriveRequest {
   /// File ID.
-  String fileId;
+  String? fileId;
 
   /// Response data format.
   ///
   /// The default data format is json, and only this format is supported currently.
   @override
-  String form;
+  String? form;
 
   /// Fields to be contained in a response.
   ///
   /// By default an asterisk (`*`) is used to match all related fields.
   @override
-  String fields;
+  String? fields;
 
   /// Indicates whether to return a response containing indentations and newline characters.
   @override
-  bool prettyPrint;
+  bool? prettyPrint;
 
   ///A string of less than 40 characters to identify a user.
   ///
   ///The string is used by the server to restrict the user's API calls.
   @override
-  String quotaId;
+  String? quotaId;
 
   /// Parameters for the request.
   @override
-  Map<String, dynamic> parameters = {};
+  Map<String, dynamic>? parameters = {};
 
   /// Page Size for list request.
-  int pageSize;
+  int? pageSize;
 
   /// Cursor for the current page, which is obtained from nextCursor in the previous response.
   ///
@@ -64,19 +64,19 @@ class CommentsRequest extends Batchable implements DriveRequest {
   ///
   /// This process repeats until nextCursor in the response is empty, which indicates that
   /// all comments have been returned.
-  String cursor;
+  String? cursor;
 
   /// Comment ID.
-  String commentId;
+  String? commentId;
 
   /// Comment instance to specify on the create request.
-  DriveComment comment;
+  DriveComment? comment;
 
   /// Whether to return deleted comments on a get request.
-  bool includeDeleted;
+  bool? includeDeleted;
 
   /// Earliest modification time of a comment.
-  DateTime startEditedTime;
+  DateTime? startEditedTime;
 
   CommentsRequest._(
       {this.fileId,
@@ -158,8 +158,8 @@ class CommentsRequest extends Batchable implements DriveRequest {
     return 'CommentsRequest(fileId: $fileId, form: $form, fields: $fields, prettyPrint: $prettyPrint, quotaId: $quotaId, pageSize: $pageSize, cursor: $cursor, commentId: $commentId, comment: $comment, includeDeleted: $includeDeleted, startEditedTime: $startEditedTime)';
   }
 
-  factory CommentsRequest.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory CommentsRequest.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return CommentsRequest._();
 
     return CommentsRequest._(
         fileId: map['fileId'],

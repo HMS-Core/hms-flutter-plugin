@@ -33,7 +33,7 @@ class Comments {
   Future<DriveComment> create(CommentsRequest request) async {
     final String result = await _channel.invokeMethod("Comments#Create", {
       "request": request.toJson(),
-      "comment": request.comment.toJson(),
+      "comment": request.comment?.toJson(),
       "extraParams": request.comment?.paramsToSet,
     });
     return DriveComment.fromJson(result);
@@ -62,7 +62,7 @@ class Comments {
   Future<DriveComment> update(CommentsRequest request) async {
     final String result = await _channel.invokeMethod("Comments#Update", {
       "request": request.toJson(),
-      "comment": request.comment.toJson(),
+      "comment": request.comment?.toJson(),
       "extraParams": request.comment?.paramsToSet,
     });
     return DriveComment.fromJson(result);

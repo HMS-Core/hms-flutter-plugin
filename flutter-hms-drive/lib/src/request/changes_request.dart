@@ -20,25 +20,25 @@ import 'package:huawei_drive/huawei_drive.dart';
 
 class ChangesRequest extends Batchable implements DriveRequest {
   @override
-  String fields;
+  String? fields;
 
   @override
-  String form;
+  String? form;
 
   @override
-  Map<String, dynamic> parameters;
+  Map<String, dynamic>? parameters;
 
   @override
-  bool prettyPrint;
+  bool? prettyPrint;
 
   @override
-  String quotaId;
+  String? quotaId;
 
-  String cursor;
-  String containers;
-  int pageSize;
-  bool includeDeleted;
-  DriveChannel channel;
+  String? cursor;
+  String? containers;
+  int? pageSize;
+  bool? includeDeleted;
+  DriveChannel? channel;
 
   ChangesRequest.getStartCursor({
     this.fields,
@@ -103,8 +103,8 @@ class ChangesRequest extends Batchable implements DriveRequest {
     }..removeWhere((k, v) => v == null);
   }
 
-  factory ChangesRequest.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory ChangesRequest.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return ChangesRequest._();
 
     return ChangesRequest._(
       fields: map['fields'],

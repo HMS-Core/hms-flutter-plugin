@@ -32,7 +32,7 @@ class Replies {
   Future<DriveReply> create(RepliesRequest request) async {
     final String result = await _channel.invokeMethod("Replies#Create", {
       "request": request.toJson(),
-      "reply": request.reply.toJson(),
+      "reply": request.reply?.toJson(),
       "extraParams": request.reply?.paramsToSet,
     });
     return DriveReply.fromJson(result);
@@ -61,7 +61,7 @@ class Replies {
   Future<DriveReply> update(RepliesRequest request) async {
     final String result = await _channel.invokeMethod("Replies#Update", {
       "request": request.toJson(),
-      "reply": request.reply.toJson(),
+      "reply": request.reply?.toJson(),
       "extraParams": request.reply?.paramsToSet,
     });
     return DriveReply.fromJson(result);

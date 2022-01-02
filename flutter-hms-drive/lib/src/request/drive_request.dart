@@ -17,11 +17,11 @@
 import 'dart:convert';
 
 class DriveRequest {
-  String fields;
-  String form;
-  bool prettyPrint;
-  String quotaId;
-  Map<String, dynamic> parameters;
+  String? fields;
+  String? form;
+  bool? prettyPrint;
+  String? quotaId;
+  Map<String, dynamic>? parameters;
 
   DriveRequest({
     this.fields,
@@ -41,8 +41,8 @@ class DriveRequest {
     }..removeWhere((k, v) => v == null);
   }
 
-  factory DriveRequest.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory DriveRequest.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return DriveRequest();
 
     return DriveRequest(
       fields: map['fields'],

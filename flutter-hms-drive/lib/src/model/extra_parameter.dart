@@ -15,12 +15,12 @@
 */
 
 mixin ExtraParameter {
-  Map<String, dynamic> paramsToSet;
+  Map<String, dynamic>? paramsToSet;
 
   setParams(String fieldName, dynamic value) {
     if (paramsToSet == null) {
       paramsToSet = {};
     }
-    paramsToSet[fieldName] = value;
+    paramsToSet![fieldName] = value;
   }
 }

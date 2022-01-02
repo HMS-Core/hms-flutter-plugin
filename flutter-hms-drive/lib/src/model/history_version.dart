@@ -23,37 +23,37 @@ import 'drive_user.dart';
 /// Metadata class for historical file versions.
 class HistoryVersion with ExtraParameter {
   /// ID of a historical file version.
-  String id;
+  String? id;
 
   /// Whether to permanently keep a historical version, even if it is not the
   /// latest version.
-  bool keepPermanent;
+  bool? keepPermanent;
 
   /// Resource type.
   ///
   /// The value is always `drive#historyVersion`.
-  String category;
+  String? category;
 
   /// Last user who modified a historical file version.
-  DriveUser lastEditor;
+  DriveUser? lastEditor;
 
   /// SHA-256 value for verifying a historical file version.
   ///
   /// This parameter may not be set on the client. If it is set, the server will
   /// use the SHA-256 value for verifying the historical file version.
-  String sha256;
+  String? sha256;
 
   /// MIME type of the file.
-  String mimeType;
+  String? mimeType;
 
   /// Time when a historical version is modified.
-  DateTime editedTime;
+  DateTime? editedTime;
 
   ///	Original file name of a historical version.
-  String originalFilename;
+  String? originalFilename;
 
   /// File size of a historical version, in bytes.
-  int size;
+  int? size;
 
   HistoryVersion({
     this.id,
@@ -68,15 +68,15 @@ class HistoryVersion with ExtraParameter {
   });
 
   HistoryVersion clone({
-    String id,
-    bool keepPermanent,
-    String category,
-    DriveUser lastEditor,
-    String sha256,
-    String mimeType,
-    DateTime editedTime,
-    String originalFileName,
-    int size,
+    String? id,
+    bool? keepPermanent,
+    String? category,
+    DriveUser? lastEditor,
+    String? sha256,
+    String? mimeType,
+    DateTime? editedTime,
+    String? originalFileName,
+    int? size,
   }) {
     return HistoryVersion(
       id: id ?? this.id,
@@ -105,8 +105,8 @@ class HistoryVersion with ExtraParameter {
     };
   }
 
-  factory HistoryVersion.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory HistoryVersion.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return HistoryVersion();
 
     return HistoryVersion(
       id: map['id'],

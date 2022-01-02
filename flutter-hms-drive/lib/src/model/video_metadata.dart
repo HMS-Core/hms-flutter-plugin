@@ -17,9 +17,9 @@
 import 'dart:convert';
 
 class VideoMetadata {
-  int durationTime;
-  int height;
-  int width;
+  int? durationTime;
+  int? height;
+  int? width;
 
   VideoMetadata({
     this.durationTime,
@@ -28,9 +28,9 @@ class VideoMetadata {
   });
 
   VideoMetadata clone({
-    int durationTime,
-    int height,
-    int width,
+    int? durationTime,
+    int? height,
+    int? width,
   }) {
     return VideoMetadata(
       durationTime: durationTime ?? this.durationTime,
@@ -47,8 +47,8 @@ class VideoMetadata {
     };
   }
 
-  factory VideoMetadata.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory VideoMetadata.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return VideoMetadata();
 
     return VideoMetadata(
       durationTime: map['durationTime'],

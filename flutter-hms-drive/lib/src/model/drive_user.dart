@@ -19,22 +19,22 @@ import 'dart:convert';
 /// User details class.
 class DriveUser {
   /// Resource type. The value is always drive#user.
-  String category;
+  String? category;
 
   /// Display name of the user.
-  String displayName;
+  String? displayName;
 
   /// Whether a user is the current requesting user.
-  bool me;
+  bool? me;
 
   /// ID of the user's permission.
-  String permissionId;
+  String? permissionId;
 
   /// Link to the user's profile picture.
-  String profilePhotoLink;
+  String? profilePhotoLink;
 
   ///	Account of the user.
-  String userAccount;
+  String? userAccount;
 
   DriveUser({
     this.category,
@@ -46,12 +46,12 @@ class DriveUser {
   });
 
   DriveUser clone({
-    String category,
-    String displayName,
-    bool me,
-    String permissionId,
-    String profilePhotoLink,
-    String userAccount,
+    String? category,
+    String? displayName,
+    bool? me,
+    String? permissionId,
+    String? profilePhotoLink,
+    String? userAccount,
   }) {
     return DriveUser(
       category: category ?? this.category,
@@ -74,8 +74,8 @@ class DriveUser {
     };
   }
 
-  factory DriveUser.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory DriveUser.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return DriveUser();
 
     return DriveUser(
       category: map['category'],

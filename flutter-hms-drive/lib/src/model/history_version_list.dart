@@ -24,15 +24,15 @@ class HistoryVersionList {
   /// Resource type.
   ///
   /// The value is always `drive#historyVersionList`.
-  String category;
+  String? category;
 
   ///	Next page cursor for query.
   ///
   /// If nextCursor is empty, there is no next page.
-  String nextCursor;
+  String? nextCursor;
 
   /// List of historical file versions.
-  List<HistoryVersion> historyVersions;
+  List<HistoryVersion>? historyVersions;
 
   HistoryVersionList({
     this.category,
@@ -41,9 +41,9 @@ class HistoryVersionList {
   });
 
   HistoryVersionList clone({
-    String category,
-    String nextCursor,
-    List<HistoryVersion> historyVersion,
+    String? category,
+    String? nextCursor,
+    List<HistoryVersion>? historyVersion,
   }) {
     return HistoryVersionList(
       category: category ?? this.category,
@@ -56,12 +56,12 @@ class HistoryVersionList {
     return {
       'category': category,
       'nextCursor': nextCursor,
-      'historyVersions': historyVersions?.map((x) => x?.toMap())?.toList(),
+      'historyVersions': historyVersions?.map((x) => x.toMap()).toList(),
     };
   }
 
-  factory HistoryVersionList.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory HistoryVersionList.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return HistoryVersionList();
     HistoryVersionList instance = HistoryVersionList(
       category: map['category'],
       nextCursor: map['nextCursor'],

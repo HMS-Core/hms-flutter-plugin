@@ -23,11 +23,11 @@ class HmsDrivePermissions {
 
   /// Requests the read/write to external storage permission from the user.
   static Future<bool> requestReadAndWritePermission() async {
-    return _permissionChannel.invokeMethod("request");
+    return await _permissionChannel.invokeMethod("request");
   }
 
   /// Checks whether the user has given the read/write to external storage permission.
   static Future<bool> hasReadAndWritePermission() async {
-    return _permissionChannel.invokeMethod("has");
+    return await _permissionChannel.invokeMethod("has");
   }
 }

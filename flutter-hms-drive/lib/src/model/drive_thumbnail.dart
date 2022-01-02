@@ -17,9 +17,9 @@
 import 'dart:convert';
 
 class DriveThumbnail {
-  String content;
-  String mimeType;
-  bool thumbnailPublic;
+  String? content;
+  String? mimeType;
+  bool? thumbnailPublic;
 
   DriveThumbnail({
     this.content,
@@ -28,9 +28,9 @@ class DriveThumbnail {
   });
 
   DriveThumbnail clone({
-    String content,
-    String mimeType,
-    bool thumbnailPublic,
+    String? content,
+    String? mimeType,
+    bool? thumbnailPublic,
   }) {
     return DriveThumbnail(
       content: content ?? this.content,
@@ -47,8 +47,8 @@ class DriveThumbnail {
     };
   }
 
-  factory DriveThumbnail.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory DriveThumbnail.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return DriveThumbnail();
 
     return DriveThumbnail(
       content: map['content'],

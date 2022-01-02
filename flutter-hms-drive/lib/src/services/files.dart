@@ -34,7 +34,7 @@ class Files {
   Future<DriveFile> copy(FilesRequest request) async {
     return DriveFile.fromJson(await _channel.invokeMethod("Files#Copy", {
       "request": request.toJson(),
-      "file": request.file.toJson(),
+      "file": request.file?.toJson(),
       "extraParams": request.file?.paramsToSet,
     }));
   }
@@ -43,7 +43,7 @@ class Files {
   Future<DriveFile> create(FilesRequest request) async {
     return DriveFile.fromJson(await _channel.invokeMethod("Files#Create", {
       "request": request.toJson(),
-      "file": request.file.toJson(),
+      "file": request.file?.toJson(),
       "extraParams": request.file?.paramsToSet,
       "fileContent": request.fileContent?.toMap(),
     }));
@@ -75,7 +75,7 @@ class Files {
   Future<DriveFile> update(FilesRequest request) async {
     return DriveFile.fromJson(await _channel.invokeMethod("Files#Update", {
       "request": request.toJson(),
-      "file": request.file.toJson(),
+      "file": request.file?.toJson(),
       "extraParams": request.file?.paramsToSet,
       "fileContent": request.fileContent?.toMap()
     }));
@@ -86,7 +86,7 @@ class Files {
     return DriveChannel.fromJson(
         await _channel.invokeMethod("Files#Subscribe", {
       "request": request.toJson(),
-      "channel": request.channel.toJson(),
+      "channel": request.channel?.toJson(),
       "extraParams": request.channel?.paramsToSet,
     }));
   }

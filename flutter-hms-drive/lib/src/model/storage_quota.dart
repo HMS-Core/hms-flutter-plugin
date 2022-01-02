@@ -19,10 +19,10 @@ import 'dart:convert';
 /// Information about a user's storage quota limits and usage, in bytes.
 class StorageQuota {
   /// Storage usage of a user.
-  final int usedSpace;
+  final int? usedSpace;
 
   /// Storage usage of a user.
-  final int userCapacity;
+  final int? userCapacity;
 
   StorageQuota({
     this.usedSpace,
@@ -30,8 +30,8 @@ class StorageQuota {
   });
 
   StorageQuota clone({
-    int usedSpace,
-    int userCapacity,
+    int? usedSpace,
+    int? userCapacity,
   }) {
     return StorageQuota(
       usedSpace: usedSpace ?? this.usedSpace,
@@ -46,8 +46,8 @@ class StorageQuota {
     };
   }
 
-  factory StorageQuota.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory StorageQuota.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return StorageQuota();
 
     return StorageQuota(
       usedSpace: map['usedSpace'] != null ? int.parse(map['usedSpace']) : null,

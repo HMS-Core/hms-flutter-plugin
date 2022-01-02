@@ -34,7 +34,7 @@ class Changes {
   /// Obtains a cursor.
   ///
   /// After the cursor is obtained, file change notification is enabled.
-  Future<StartCursor> getStartCursor({ChangesRequest changesRequest}) async {
+  Future<StartCursor> getStartCursor({ChangesRequest? changesRequest}) async {
     final String result = await _channel.invokeMethod(
         "Changes#GetStartCursor", changesRequest?.toJson());
     return StartCursor.fromJson(result);
@@ -46,13 +46,13 @@ class Changes {
   Future<DriveChannel> subscribe(ChangesRequest changesRequest) async {
     if (changesRequest.channel == null) {
       throw "Please provide a channel";
-    } else if (changesRequest.cursor == null || changesRequest.cursor.isEmpty) {
+    } else if (changesRequest.cursor == null || changesRequest.cursor!.isEmpty) {
       throw "Please provide a cursor";
     }
 
     final String result = await _channel.invokeMethod("Changes#Subscribe", {
-      "channel": changesRequest.channel.toJson(),
-      "request": changesRequest?.toJson(),
+      "channel": changesRequest.channel?.toJson(),
+      "request": changesRequest.toJson(),
       "extraParams": changesRequest.channel?.paramsToSet
     });
     return DriveChannel.fromJson(result);
@@ -60,7 +60,7 @@ class Changes {
 
   /// Lists changes.
   Future<ChangeList> list(ChangesRequest changesRequest) async {
-    if (changesRequest.cursor == null || changesRequest.cursor.isEmpty) {
+    if (changesRequest.cursor == null || changesRequest.cursor!.isEmpty) {
       throw "Please provide a cursor";
     }
 

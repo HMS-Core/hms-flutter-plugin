@@ -19,10 +19,10 @@ import 'dart:convert';
 /// Class of file content quoted in comments.
 class QuotedContent {
   /// MIME type of the file.
-  String mimeType;
+  String? mimeType;
 
   /// Quoted content.
-  String quotedContent;
+  String? quotedContent;
 
   QuotedContent({
     this.mimeType,
@@ -30,8 +30,8 @@ class QuotedContent {
   });
 
   QuotedContent clone({
-    String mimetype,
-    String quotedContent,
+    String? mimetype,
+    String? quotedContent,
   }) {
     return QuotedContent(
       mimeType: mimeType ?? this.mimeType,
@@ -46,8 +46,8 @@ class QuotedContent {
     };
   }
 
-  factory QuotedContent.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory QuotedContent.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return QuotedContent();
 
     return QuotedContent(
       mimeType: map['mimeType'],

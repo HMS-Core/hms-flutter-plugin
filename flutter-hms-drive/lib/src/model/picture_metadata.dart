@@ -19,26 +19,26 @@ import 'dart:convert';
 import 'package:huawei_drive/src/model/metadata_location.dart';
 
 class PictureMetadata {
-  double aperture;
-  String cameraMake;
-  String cameraModel;
-  String colorSpace;
-  double exposureBias;
-  String exposureMode;
-  double exposureTime;
-  bool flashUsed;
-  double focalLenght;
-  int height;
-  int isoSpeed;
-  String lens;
-  MetadataLocation location;
-  double maxApertureValue;
-  String meteringMode;
-  String sensor;
-  int subjectDistance;
-  String exifTime;
-  String whiteBalance;
-  int width;
+  double? aperture;
+  String? cameraMake;
+  String? cameraModel;
+  String? colorSpace;
+  double? exposureBias;
+  String? exposureMode;
+  double? exposureTime;
+  bool? flashUsed;
+  double? focalLenght;
+  int? height;
+  int? isoSpeed;
+  String? lens;
+  MetadataLocation? location;
+  double? maxApertureValue;
+  String? meteringMode;
+  String? sensor;
+  int? subjectDistance;
+  String? exifTime;
+  String? whiteBalance;
+  int? width;
 
   PictureMetadata({
     this.aperture,
@@ -64,26 +64,26 @@ class PictureMetadata {
   });
 
   PictureMetadata clone({
-    double aperture,
-    String cameraMake,
-    String cameraModel,
-    String colorSpace,
-    double exposureBias,
-    String exposureMode,
-    double exposureTime,
-    bool flashUsed,
-    double focalLenght,
-    int height,
-    int isoSpeed,
-    String lens,
-    MetadataLocation location,
-    double maxApertureValue,
-    String meteringMode,
-    String sensor,
-    int subjectDistance,
-    String exifTime,
-    String whiteBalance,
-    int width,
+    double? aperture,
+    String? cameraMake,
+    String? cameraModel,
+    String? colorSpace,
+    double? exposureBias,
+    String? exposureMode,
+    double? exposureTime,
+    bool? flashUsed,
+    double? focalLenght,
+    int? height,
+    int? isoSpeed,
+    String? lens,
+    MetadataLocation? location,
+    double? maxApertureValue,
+    String? meteringMode,
+    String? sensor,
+    int? subjectDistance,
+    String? exifTime,
+    String? whiteBalance,
+    int? width,
   }) {
     return PictureMetadata(
       aperture: aperture ?? this.aperture,
@@ -134,8 +134,8 @@ class PictureMetadata {
     };
   }
 
-  factory PictureMetadata.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory PictureMetadata.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return PictureMetadata();
 
     return PictureMetadata(
       aperture: map['aperture'],

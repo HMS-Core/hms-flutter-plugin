@@ -21,29 +21,29 @@ import 'drive_file.dart';
 /// File or drive change class.
 class Change {
   ///	Change type, which can be file or drive.
-  String changeType;
+  String? changeType;
 
   /// Information about a changed file.
   ///
   /// The file field is available only when the changed file is not deleted and
   /// the value of changeType is file.
-  DriveFile file;
+  DriveFile? file;
 
   /// ID of a changed file.
-  String fileId;
+  String? fileId;
 
   /// Resource type.
   ///
   /// The value is always `drive#change`.
-  String category;
+  String? category;
 
   /// Change time, in RFC 3339 date-time format.
-  DateTime time;
+  DateTime? time;
 
   /// Indicates whether a change is removed from the change list.
   ///
   /// true if a change is removed from the change list; false otherwise.
-  bool deleted;
+  bool? deleted;
 
   Change({
     this.changeType,
@@ -55,12 +55,12 @@ class Change {
   });
 
   Change clone({
-    String changeType,
-    DriveFile file,
-    String fileId,
-    String category,
-    DateTime time,
-    bool deleted,
+    String? changeType,
+    DriveFile? file,
+    String? fileId,
+    String? category,
+    DateTime? time,
+    bool? deleted,
   }) {
     return Change(
       changeType: changeType ?? this.changeType,
@@ -83,8 +83,8 @@ class Change {
     };
   }
 
-  factory Change.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory Change.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return Change();
 
     return Change(
       changeType: map['changeType'],

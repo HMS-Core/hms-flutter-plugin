@@ -19,10 +19,10 @@ import 'dart:convert';
 import 'package:huawei_drive/huawei_drive.dart';
 
 class DriveFileList {
-  String category;
-  List<DriveFile> files;
-  String nextCursor;
-  bool searchCompleted;
+  String? category;
+  List<DriveFile>? files;
+  String? nextCursor;
+  bool? searchCompleted;
 
   DriveFileList({
     this.category,
@@ -32,10 +32,10 @@ class DriveFileList {
   });
 
   DriveFileList clone({
-    String category,
-    List<DriveFile> files,
-    String nextCursor,
-    bool searchCompleted,
+    String? category,
+    List<DriveFile>? files,
+    String? nextCursor,
+    bool? searchCompleted,
   }) {
     return DriveFileList(
       category: category ?? this.category,
@@ -48,14 +48,14 @@ class DriveFileList {
   Map<String, dynamic> toMap() {
     return {
       'category': category,
-      'files': files?.map((x) => x?.toMap())?.toList(),
+      'files': files?.map((x) => x.toMap()).toList(),
       'nextCursor': nextCursor,
       'searchCompleted': searchCompleted,
     };
   }
 
-  factory DriveFileList.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory DriveFileList.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return DriveFileList();
 
     return DriveFileList(
       category: map['category'],

@@ -15,12 +15,13 @@
 */
 
 import 'dart:convert';
+import 'package:collection/collection.dart';
 
 class DriveProgress {
-  String fileName;
-  double progress;
-  ProgressState state;
-  int totalTimeElapsed;
+  String? fileName;
+  double? progress;
+  ProgressState? state;
+  int? totalTimeElapsed;
 
   DriveProgress({
     this.fileName,
@@ -30,10 +31,10 @@ class DriveProgress {
   });
 
   DriveProgress clone({
-    String fileName,
-    double progress,
-    ProgressState state,
-    int totalTimeElapsed,
+    String? fileName,
+    double? progress,
+    ProgressState? state,
+    int? totalTimeElapsed,
   }) {
     return DriveProgress(
       fileName: fileName ?? this.fileName,
@@ -54,13 +55,12 @@ class DriveProgress {
 
   //ProgressState.fromMap(map['state'])
 
-  factory DriveProgress.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory DriveProgress.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return DriveProgress();
 
-    T enumFromString<T>(Iterable<T> values, String value) {
-      return values.firstWhere(
-          (type) => type.toString().split(".").last == value,
-          orElse: () => null);
+    T? enumFromString<T>(Iterable<T> values, String value) {
+      return values.firstWhereOrNull(
+          (type) => type.toString().split(".").last == value);
     }
 
     return DriveProgress(

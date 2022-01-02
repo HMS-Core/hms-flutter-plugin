@@ -17,9 +17,9 @@
 import 'dart:convert';
 
 class MetadataLocation {
-  double altitude;
-  double latitude;
-  double longitude;
+  double? altitude;
+  double? latitude;
+  double? longitude;
 
   MetadataLocation({
     this.altitude,
@@ -28,9 +28,9 @@ class MetadataLocation {
   });
 
   MetadataLocation clone({
-    double altitude,
-    double latitude,
-    double longitude,
+    double? altitude,
+    double? latitude,
+    double? longitude,
   }) {
     return MetadataLocation(
       altitude: altitude ?? this.altitude,
@@ -47,8 +47,8 @@ class MetadataLocation {
     };
   }
 
-  factory MetadataLocation.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory MetadataLocation.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return MetadataLocation();
 
     return MetadataLocation(
       altitude: map['altitude'],

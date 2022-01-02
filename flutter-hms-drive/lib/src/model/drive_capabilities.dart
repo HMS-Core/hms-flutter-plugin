@@ -1,4 +1,4 @@
-/*
+ /*
     Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
@@ -17,22 +17,22 @@
 import 'dart:convert';
 
 class DriveCapabilities {
-  bool addChildNodePermission;
-  bool writerHasCopyPermission;
-  bool commentPermission;
-  bool copyPermission;
-  bool deletePermission;
-  bool deleteChildNodePermission;
-  bool downloadPermission;
-  bool editPermission;
-  bool listChildNodePermission;
-  bool readHistoryVersionPermission;
-  bool removeChildNodePermission;
-  bool renameFilePermission;
-  bool shareFilePermission;
-  bool recyclePermission;
-  bool recycleChildNodePermission;
-  bool unrecyclePermission;
+  bool? addChildNodePermission;
+  bool? writerHasCopyPermission;
+  bool? commentPermission;
+  bool? copyPermission;
+  bool? deletePermission;
+  bool? deleteChildNodePermission;
+  bool? downloadPermission;
+  bool? editPermission;
+  bool? listChildNodePermission;
+  bool? readHistoryVersionPermission;
+  bool? removeChildNodePermission;
+  bool? renameFilePermission;
+  bool? shareFilePermission;
+  bool? recyclePermission;
+  bool? recycleChildNodePermission;
+  bool? unrecyclePermission;
 
   DriveCapabilities({
     this.addChildNodePermission,
@@ -54,22 +54,22 @@ class DriveCapabilities {
   });
 
   DriveCapabilities clone({
-    bool addChildNodePermission,
-    bool writerHasCopyPermission,
-    bool commentPermission,
-    bool copyPermission,
-    bool deletePermission,
-    bool deleteChildNodePermission,
-    bool downloadPermission,
-    bool editPermission,
-    bool listChildNodePermission,
-    bool readHistoryVersionPermission,
-    bool removeChildNodePermission,
-    bool renameFilePermission,
-    bool shareFilePermission,
-    bool recyclePermission,
-    bool recycleChildNodePermission,
-    bool unrecyclePermission,
+    bool? addChildNodePermission,
+    bool? writerHasCopyPermission,
+    bool? commentPermission,
+    bool? copyPermission,
+    bool? deletePermission,
+    bool? deleteChildNodePermission,
+    bool? downloadPermission,
+    bool? editPermission,
+    bool? listChildNodePermission,
+    bool? readHistoryVersionPermission,
+    bool? removeChildNodePermission,
+    bool? renameFilePermission,
+    bool? shareFilePermission,
+    bool? recyclePermission,
+    bool? recycleChildNodePermission,
+    bool? unrecyclePermission,
   }) {
     return DriveCapabilities(
       addChildNodePermission:
@@ -119,8 +119,8 @@ class DriveCapabilities {
     };
   }
 
-  factory DriveCapabilities.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory DriveCapabilities.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return DriveCapabilities();
 
     return DriveCapabilities(
       addChildNodePermission: map['addChildNodePermission'],

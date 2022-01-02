@@ -19,55 +19,55 @@ import 'dart:convert';
 import 'package:huawei_drive/huawei_drive.dart';
 
 class DriveFile with ExtraParameter {
-  String category;
-  String id;
-  String fileName;
-  int size;
-  String mimeType;
-  List<String> parentFolder;
-  DateTime createdTime;
-  DateTime editedTime;
-  String description;
-  List<DriveUser> owners;
-  bool favorite;
-  bool recycled;
-  Map<String, String> appSettings;
-  Map<String, String> properties;
-  DriveCapabilities capabilities;
-  ContentExtras contentExtras;
-  bool writerHasCopyPermission;
-  bool directlyRecycled;
-  String fileSuffix;
-  String fullFileSuffix;
-  bool existThumbnail;
-  String iconDownloadLink;
-  PictureMetadata pictureMetadata;
-  bool isAppAuthorized;
-  DriveUser lastEditor;
-  bool editedByMe;
-  DateTime editedByMeTime;
-  bool ownedByMe;
-  List<String> permissionIds;
-  List<DrivePermission> permissions;
-  int occupiedSpace;
-  String sha256;
-  bool hasShared;
-  DateTime sharedWithMeTime;
-  DriveUser sharer;
-  List<String> containers;
-  String thumbnailDownloadLink;
-  String smallThumbnailDownloadLink;
-  DateTime recycledTime;
-  DriveUser recyclingUser;
-  VideoMetadata videoMetadata;
-  String contentDownloadLink;
-  bool writersHasSharePermission;
-  String contentVersion;
-  String lastHistoryVersionId;
-  String originalFilename;
-  int thumbnailVersion;
-  int version;
-  String onLineViewLink;
+  String? category;
+  String? id;
+  String? fileName;
+  int? size;
+  String? mimeType;
+  List<String>? parentFolder;
+  DateTime? createdTime;
+  DateTime? editedTime;
+  String? description;
+  List<DriveUser>? owners;
+  bool? favorite;
+  bool? recycled;
+  Map<String, String>? appSettings;
+  Map<String, String>? properties;
+  DriveCapabilities? capabilities;
+  ContentExtras? contentExtras;
+  bool? writerHasCopyPermission;
+  bool? directlyRecycled;
+  String? fileSuffix;
+  String? fullFileSuffix;
+  bool? existThumbnail;
+  String? iconDownloadLink;
+  PictureMetadata? pictureMetadata;
+  bool? isAppAuthorized;
+  DriveUser? lastEditor;
+  bool? editedByMe;
+  DateTime? editedByMeTime;
+  bool? ownedByMe;
+  List<String>? permissionIds;
+  List<DrivePermission>? permissions;
+  int? occupiedSpace;
+  String? sha256;
+  bool? hasShared;
+  DateTime? sharedWithMeTime;
+  DriveUser? sharer;
+  List<String>? containers;
+  String? thumbnailDownloadLink;
+  String? smallThumbnailDownloadLink;
+  DateTime? recycledTime;
+  DriveUser? recyclingUser;
+  VideoMetadata? videoMetadata;
+  String? contentDownloadLink;
+  bool? writersHasSharePermission;
+  String? contentVersion;
+  String? lastHistoryVersionId;
+  String? originalFilename;
+  int? thumbnailVersion;
+  int? version;
+  String? onLineViewLink;
 
   DriveFile({
     this.category,
@@ -122,55 +122,55 @@ class DriveFile with ExtraParameter {
   });
 
   DriveFile clone({
-    String category,
-    String id,
-    String fileName,
-    int size,
-    String mimeType,
-    List<String> parentFolder,
-    DateTime createdTime,
-    DateTime editedTime,
-    String description,
-    List<DriveUser> owners,
-    bool favorite,
-    bool recycled,
-    Map<String, String> appSettings,
-    Map<String, String> properties,
-    DriveCapabilities capabilities,
-    ContentExtras contentExtras,
-    bool writerHasCopyPermission,
-    bool directlyRecycled,
-    String fileSuffix,
-    String fullFileSuffix,
-    bool existThumbnail,
-    String iconDownloadLink,
-    PictureMetadata pictureMetadata,
-    bool isAppAuthorized,
-    DriveUser lastEditor,
-    bool editedByMe,
-    DateTime editedByMeTime,
-    bool ownedByMe,
-    List<String> permissionIds,
-    List<DrivePermission> permissions,
-    int occupiedSpace,
-    String sha256,
-    bool hasShared,
-    DateTime sharedWithMeTime,
-    DriveUser sharer,
-    List<String> containers,
-    String thumbnailDownloadLink,
-    String smallThumbnailDownloadLink,
-    DateTime recycledTime,
-    DriveUser recyclingUser,
-    VideoMetadata videoMetadata,
-    String contentDownloadLink,
-    bool writersHasSharePermission,
-    String contentVersion,
-    String lastHistoryVersionId,
-    String originalFilename,
-    int thumbnailVersion,
-    int version,
-    String onLineViewLink,
+    String? category,
+    String? id,
+    String? fileName,
+    int? size,
+    String? mimeType,
+    List<String>? parentFolder,
+    DateTime? createdTime,
+    DateTime? editedTime,
+    String? description,
+    List<DriveUser>? owners,
+    bool? favorite,
+    bool? recycled,
+    Map<String, String>? appSettings,
+    Map<String, String>? properties,
+    DriveCapabilities? capabilities,
+    ContentExtras? contentExtras,
+    bool? writerHasCopyPermission,
+    bool? directlyRecycled,
+    String? fileSuffix,
+    String? fullFileSuffix,
+    bool? existThumbnail,
+    String? iconDownloadLink,
+    PictureMetadata? pictureMetadata,
+    bool? isAppAuthorized,
+    DriveUser? lastEditor,
+    bool? editedByMe,
+    DateTime? editedByMeTime,
+    bool? ownedByMe,
+    List<String>? permissionIds,
+    List<DrivePermission>? permissions,
+    int? occupiedSpace,
+    String? sha256,
+    bool? hasShared,
+    DateTime? sharedWithMeTime,
+    DriveUser? sharer,
+    List<String>? containers,
+    String? thumbnailDownloadLink,
+    String? smallThumbnailDownloadLink,
+    DateTime? recycledTime,
+    DriveUser? recyclingUser,
+    VideoMetadata? videoMetadata,
+    String? contentDownloadLink,
+    bool? writersHasSharePermission,
+    String? contentVersion,
+    String? lastHistoryVersionId,
+    String? originalFilename,
+    int? thumbnailVersion,
+    int? version,
+    String? onLineViewLink
   }) {
     return DriveFile(
       category: category ?? this.category,
@@ -240,7 +240,7 @@ class DriveFile with ExtraParameter {
       'createdTime': createdTime?.toIso8601String(),
       'editedTime': editedTime?.toIso8601String(),
       'description': description,
-      'owners': owners?.map((x) => x?.toMap())?.toList(),
+      'owners': owners?.map((x) => x.toMap()).toList(),
       'favorite': favorite,
       'recycled': recycled,
       'appSettings': appSettings,
@@ -260,7 +260,7 @@ class DriveFile with ExtraParameter {
       'editedByMeTime': editedByMeTime?.toIso8601String(),
       'ownedByMe': ownedByMe,
       'permissionIds': permissionIds,
-      'permissions': permissions?.map((x) => x?.toMap())?.toList(),
+      'permissions': permissions?.map((x) => x.toMap()).toList(),
       'occupiedSpace': occupiedSpace,
       'sha256': sha256,
       'hasShared': hasShared,
@@ -283,8 +283,8 @@ class DriveFile with ExtraParameter {
     };
   }
 
-  factory DriveFile.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory DriveFile.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return DriveFile();
 
     return DriveFile(
       category: map['category'] == null ? null : map['category'],

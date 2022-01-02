@@ -26,7 +26,7 @@ class BatchRequest {
   );
 
   BatchRequest clone({
-    List<Batchable> driveRequests,
+    List<Batchable>? driveRequests,
   }) {
     return BatchRequest(
       driveRequests ?? this.driveRequests,
@@ -35,7 +35,7 @@ class BatchRequest {
 
   Map<String, dynamic> toMap() {
     return {
-      'driveRequests': driveRequests?.map((x) => x?.toMap())?.toList(),
+      'driveRequests': driveRequests.map((x) => x.toMap()).toList(),
     }..removeWhere((k, v) => v == null);
   }
 

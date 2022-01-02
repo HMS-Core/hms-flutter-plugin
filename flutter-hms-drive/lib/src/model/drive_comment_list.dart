@@ -19,9 +19,9 @@ import 'dart:convert';
 import 'drive_comment.dart';
 
 class DriveCommentList {
-  String category;
-  List<DriveComment> comments;
-  String nextCursor;
+  String? category;
+  List<DriveComment>? comments;
+  String? nextCursor;
 
   DriveCommentList({
     this.category,
@@ -30,9 +30,9 @@ class DriveCommentList {
   });
 
   DriveCommentList clone({
-    String category,
-    List<DriveComment> comments,
-    String nextCursor,
+    String? category,
+    List<DriveComment>? comments,
+    String? nextCursor,
   }) {
     return DriveCommentList(
       category: category ?? this.category,
@@ -44,13 +44,13 @@ class DriveCommentList {
   Map<String, dynamic> toMap() {
     return {
       'category': category,
-      'comments': comments?.map((x) => x?.toMap())?.toList(),
+      'comments': comments?.map((x) => x.toMap()).toList(),
       'nextCursor': nextCursor,
     };
   }
 
-  factory DriveCommentList.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory DriveCommentList.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return DriveCommentList();
 
     return DriveCommentList(
       category: map['category'],

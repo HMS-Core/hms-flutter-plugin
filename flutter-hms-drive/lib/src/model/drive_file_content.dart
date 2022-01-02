@@ -18,9 +18,9 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 class DriveFileContent {
-  String type;
-  String path;
-  Int8List byteArray;
+  String? type;
+  String? path;
+  Int8List? byteArray;
 
   DriveFileContent({
     this.type,
@@ -29,9 +29,9 @@ class DriveFileContent {
   });
 
   DriveFileContent clone({
-    String type,
-    String path,
-    Int8List byteArray,
+    String? type,
+    String? path,
+    Int8List? byteArray,
   }) {
     return DriveFileContent(
       type: type ?? this.type,
@@ -48,8 +48,8 @@ class DriveFileContent {
     };
   }
 
-  factory DriveFileContent.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory DriveFileContent.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return DriveFileContent();
 
     return DriveFileContent(
       type: map['type'],

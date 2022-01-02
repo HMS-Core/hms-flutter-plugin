@@ -19,14 +19,14 @@ import 'dart:convert';
 import 'package:huawei_drive/src/model/drive_thumbnail.dart';
 
 class ContentExtras {
-  DriveThumbnail thumbnail;
+  DriveThumbnail? thumbnail;
 
   ContentExtras({
     this.thumbnail,
   });
 
   ContentExtras clone({
-    DriveThumbnail thumbnail,
+    DriveThumbnail? thumbnail,
   }) {
     return ContentExtras(
       thumbnail: thumbnail ?? this.thumbnail,
@@ -39,11 +39,11 @@ class ContentExtras {
     };
   }
 
-  factory ContentExtras.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory ContentExtras.fromMap(Map<String, dynamic>? map) {
+    if (map == null) ContentExtras() ;
 
     return ContentExtras(
-      thumbnail: map['thumbnail'] == null
+      thumbnail: map!['thumbnail'] == null
           ? null
           : DriveThumbnail.fromMap(map['thumbnail']),
     );
