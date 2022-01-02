@@ -26,9 +26,9 @@ class HmsFaceManager {
       const MethodChannel("com.huawei.hms.flutter.fido/face_manager");
 
   int get id => hashCode;
-  EventChannel _eventChannel;
-  BioAuthnCallback _callback;
-  StreamSubscription _subscription;
+  EventChannel? _eventChannel;
+  BioAuthnCallback? _callback;
+  StreamSubscription? _subscription;
 
   HmsFaceManager() {
     _eventChannel =
@@ -169,7 +169,7 @@ class HmsFaceManager {
 
   void _startCallback() {
     _subscription?.cancel();
-    _subscription = _eventChannel.receiveBroadcastStream(id).listen((event) {
+    _subscription = _eventChannel?.receiveBroadcastStream(id).listen((event) {
       Map<dynamic, dynamic> map = event;
       BioAuthnEvent bioAuthnEvent = Fido2PluginUtil.toBioEvent(map['event']);
       if (bioAuthnEvent == BioAuthnEvent.onAuthError) {

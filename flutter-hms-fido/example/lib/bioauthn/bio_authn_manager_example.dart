@@ -24,7 +24,7 @@ class BioAuthnManagerExample extends StatefulWidget {
 }
 
 class _BioAuthnManagerExampleState extends State<BioAuthnManagerExample> {
-  HmsBioAuthnManager manager;
+  HmsBioAuthnManager? manager;
   String _result = "Result will be here";
 
   @override
@@ -34,7 +34,7 @@ class _BioAuthnManagerExampleState extends State<BioAuthnManagerExample> {
   }
 
   _canAuth() async {
-    final int res = await manager.canAuth();
+    final int res = await manager!.canAuth();
     setState(() => _result = res.toString());
   }
 

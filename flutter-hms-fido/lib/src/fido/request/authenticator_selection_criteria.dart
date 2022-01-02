@@ -18,24 +18,24 @@ import 'package:flutter/foundation.dart';
 import '../constant/fido_constants.dart';
 
 class AuthenticatorSelectionCriteria {
-  Attachment attachment;
-  bool resident;
-  UserVerificationRequirement requirement;
+  Attachment? attachment;
+  bool? resident;
+  UserVerificationRequirement? requirement;
 
   AuthenticatorSelectionCriteria(
       {this.attachment, this.requirement, this.resident});
 
   Map<String, dynamic> toMap() {
     return {
-      "attachment": attachment != null ? describeEnum(attachment) : null,
+      "attachment": attachment != null ? describeEnum(attachment!) : null,
       "resident": resident != null ? resident : null,
-      "requirement": requirement != null ? describeEnum(requirement) : null
+      "requirement": requirement != null ? describeEnum(requirement!) : null
     };
   }
 
-  Attachment get getAuthenticatorAttachment => attachment;
+  Attachment? get getAuthenticatorAttachment => attachment;
 
-  bool get isRequireResidentKey => resident;
+  bool? get isRequireResidentKey => resident;
 
-  UserVerificationRequirement get getUserVerification => requirement;
+  UserVerificationRequirement? get getUserVerification => requirement;
 }

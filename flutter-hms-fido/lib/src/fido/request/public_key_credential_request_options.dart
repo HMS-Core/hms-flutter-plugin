@@ -20,12 +20,12 @@ import 'native_fido2_options.dart';
 import 'public_key_credential_descriptor.dart';
 
 class PublicKeyCredentialRequestOptions {
-  String rpId;
-  Uint8List challenge;
-  List<PublicKeyCredentialDescriptor> allowList;
-  NativeFido2Options nativeFido2Options;
-  Map<String, dynamic> extensions;
-  double timeoutSeconds;
+  String? rpId;
+  Uint8List? challenge;
+  List<PublicKeyCredentialDescriptor>? allowList;
+  NativeFido2Options? nativeFido2Options;
+  Map<String, dynamic>? extensions;
+  double? timeoutSeconds;
 
   PublicKeyCredentialRequestOptions(
       {this.timeoutSeconds,
@@ -39,21 +39,21 @@ class PublicKeyCredentialRequestOptions {
     return {
       "rpId": rpId,
       "challenge": challenge,
-      "options": nativeFido2Options != null ? nativeFido2Options.toMap() : null,
+      "options": nativeFido2Options != null ? nativeFido2Options?.toMap() : null,
       "allowList":
-          allowList != null ? allowList.map((e) => e.toMap()).toList() : null,
+          allowList != null ? allowList?.map((e) => e.toMap()).toList() : null,
       "extensions": extensions,
       "timeoutSeconds": timeoutSeconds
     };
   }
 
-  String get getRpId => rpId;
+  String? get getRpId => rpId;
 
-  Uint8List get getChallenge => challenge;
+  Uint8List? get getChallenge => challenge;
 
-  List<PublicKeyCredentialDescriptor> get getAllowList => allowList;
+  List<PublicKeyCredentialDescriptor>? get getAllowList => allowList;
 
-  Map<String, dynamic> get getExtensions => extensions;
+  Map<String, dynamic>? get getExtensions => extensions;
 
-  double get getTimeoutSeconds => timeoutSeconds;
+  double? get getTimeoutSeconds => timeoutSeconds;
 }

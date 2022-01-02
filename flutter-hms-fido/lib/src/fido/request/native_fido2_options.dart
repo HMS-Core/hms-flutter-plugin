@@ -20,19 +20,19 @@ import '../constant/fido_constants.dart';
 import 'biometric_prompt_info.dart';
 
 class NativeFido2Options {
-  OriginFormat originFormat;
-  BiometricPromptInfo info;
+  OriginFormat? originFormat;
+  BiometricPromptInfo? info;
 
   NativeFido2Options({this.info, this.originFormat});
 
   Map<String, dynamic> toMap() {
     return {
-      "originFormat": originFormat != null ? describeEnum(originFormat) : null,
-      "info": info != null ? info.toMap() : null
+      "originFormat": originFormat != null ? describeEnum(originFormat!) : null,
+      "info": info != null ? info?.toMap() : null
     };
   }
 
-  OriginFormat get getOriginFormat => originFormat;
+  OriginFormat? get getOriginFormat => originFormat;
 
-  BiometricPromptInfo get getBiometricPromptInfo => info;
+  BiometricPromptInfo? get getBiometricPromptInfo => info;
 }

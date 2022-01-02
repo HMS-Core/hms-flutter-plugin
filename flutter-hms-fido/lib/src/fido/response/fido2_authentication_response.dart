@@ -18,12 +18,12 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 class Fido2AuthenticationResponse {
-  bool isSuccess;
-  int ctapStatus;
-  String ctapStatusMessage;
-  int fido2Status;
-  String fido2StatusMessage;
-  AuthenticatorAssertionResponse assertionResponse;
+  bool? isSuccess;
+  int? ctapStatus;
+  String? ctapStatusMessage;
+  int? fido2Status;
+  String? fido2StatusMessage;
+  AuthenticatorAssertionResponse? assertionResponse;
 
   Fido2AuthenticationResponse(
       {this.assertionResponse,
@@ -33,8 +33,8 @@ class Fido2AuthenticationResponse {
       this.ctapStatus,
       this.isSuccess});
 
-  factory Fido2AuthenticationResponse.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
+  factory Fido2AuthenticationResponse.fromMap(Map<dynamic, dynamic>? map) {
+    if (map == null) return Fido2AuthenticationResponse();
     return Fido2AuthenticationResponse(
         isSuccess: map['isSuccess'] ?? null,
         ctapStatus: map['ctapStatus'] ?? null,
@@ -48,10 +48,10 @@ class Fido2AuthenticationResponse {
 }
 
 class AuthenticatorAssertionResponse {
-  Uint8List authenticatorData;
-  Uint8List clientDataJson;
-  Uint8List credentialId;
-  Uint8List signature;
+  Uint8List? authenticatorData;
+  Uint8List? clientDataJson;
+  Uint8List? credentialId;
+  Uint8List? signature;
 
   AuthenticatorAssertionResponse(
       {this.credentialId,
@@ -59,8 +59,8 @@ class AuthenticatorAssertionResponse {
       this.signature,
       this.authenticatorData});
 
-  factory AuthenticatorAssertionResponse.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
+  factory AuthenticatorAssertionResponse.fromMap(Map<dynamic, dynamic>? map) {
+    if (map == null) return AuthenticatorAssertionResponse();
     return AuthenticatorAssertionResponse(
         authenticatorData: map['authenticatorData'] ?? null,
         clientDataJson: map['clientDataJson'] ?? null,

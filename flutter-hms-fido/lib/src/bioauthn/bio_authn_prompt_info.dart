@@ -15,10 +15,10 @@
 */
 
 class HmsBioAuthnPromptInfo {
-  int _id;
-  String title;
-  String subtitle;
-  String description;
+  int? _id;
+  String? title;
+  String? subtitle;
+  String? description;
   String navigateButtonText;
   bool confirmationRequired;
   bool deviceCredentialAllowed;
@@ -44,11 +44,11 @@ class HmsBioAuthnPromptInfo {
     };
   }
 
-  String get getTitle => title;
+  String? get getTitle => title;
 
-  String get getSubtitle => subtitle;
+  String? get getSubtitle => subtitle;
 
-  String get getDescription => description;
+  String? get getDescription => description;
 
   String get getNavigateButtonText => navigateButtonText;
 

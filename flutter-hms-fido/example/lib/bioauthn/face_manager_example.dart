@@ -25,7 +25,7 @@ class FaceManagerExample extends StatefulWidget {
 }
 
 class _FaceManagerExampleState extends State<FaceManagerExample> {
-  HmsFaceManager faceManager;
+  late HmsFaceManager faceManager;
   List<String> _results = ["Results will be here"];
 
   @override

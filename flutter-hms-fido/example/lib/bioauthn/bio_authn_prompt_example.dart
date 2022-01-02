@@ -25,13 +25,13 @@ class BioAuthnPromptExample extends StatefulWidget {
 }
 
 class _BioAuthnPromptExampleState extends State<BioAuthnPromptExample> {
-  HmsBioAuthnPrompt prompt;
+  HmsBioAuthnPrompt? prompt;
   List<String> _results = ["Results will be listed here"];
 
   @override
   void initState() {
     prompt = new HmsBioAuthnPrompt();
-    prompt.setCallback((event, {errCode, result}) {
+    prompt?.setCallback((event, {errCode, result}) {
       _updateList("Auth event: " + describeEnum(event));
     });
     super.initState();
@@ -45,7 +45,7 @@ class _BioAuthnPromptExampleState extends State<BioAuthnPromptExample> {
         deviceCredentialAllowed: false);
 
     try {
-      bool result = await prompt.configurePrompt(info);
+      bool result = await prompt!.configurePrompt(info);
       _updateList("Configured: $result");
     } on Exception catch (e) {
       _updateList(e.toString());
@@ -54,7 +54,7 @@ class _BioAuthnPromptExampleState extends State<BioAuthnPromptExample> {
 
   _authWithoutCryptoObject() async {
     try {
-      await prompt.authenticateWithoutCryptoObject();
+      await prompt?.authenticateWithoutCryptoObject();
     } on Exception catch (e) {
       _updateList(e.toString());
     }
@@ -67,7 +67,7 @@ class _BioAuthnPromptExampleState extends State<BioAuthnPromptExample> {
     factory.userAuthenticationRequired = true;
 
     try {
-      await prompt.authenticateWithCryptoObject(factory);
+      await prompt!.authenticateWithCryptoObject(factory);
     } on Exception catch (e) {
       _updateList(e.toString());
     }
@@ -75,7 +75,7 @@ class _BioAuthnPromptExampleState extends State<BioAuthnPromptExample> {
 
   _cancelAuth() async {
     try {
-      bool res = await prompt.cancelAuth();
+      bool res = await prompt!.cancelAuth();
       _updateList("Auth canceled: $res");
     } on Exception catch (e) {
       _updateList(e.toString());

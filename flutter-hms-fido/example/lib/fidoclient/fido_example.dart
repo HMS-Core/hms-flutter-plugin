@@ -26,13 +26,13 @@ class FidoExample extends StatefulWidget {
 }
 
 class _FidoExampleState extends State<FidoExample> {
-  HmsFido2Client fido2client;
-  PublicKeyCredentialCreationOptions options;
-  PublicKeyCredentialRequestOptions requestOptions;
+  late HmsFido2Client fido2client;
+  late PublicKeyCredentialCreationOptions options;
+  late PublicKeyCredentialRequestOptions requestOptions;
 
   Map<String, dynamic> extensionMap = {};
-  Uint8List _challenge;
-  Uint8List _credentialId;
+  late Uint8List _challenge;
+  Uint8List? _credentialId;
   List<String> _results = ["Results will be listed here\n"];
 
   @override
@@ -52,23 +52,24 @@ class _FidoExampleState extends State<FidoExample> {
       List<AuthenticatorMetadata> metaList =
           await fido2client.getPlatformAuthenticators();
       for (AuthenticatorMetadata data in metaList) {
-        if (!data.isAvailable) {
+        if (data.isAvailable!=null && !data.isAvailable!) {
           continue;
         }
         if (data.isSupportedUvm(AuthenticatorMetadata.UVM_FINGERPRINT)) {
-          list.add(data.aaGuid);
-          if (data.extensions
+          list.add(data.aaGuid!);
+          if (data.extensions!=null && data.extensions!
               .contains(Fido2Extension.webAuthN.getIdentifier())) {
-            extensionMap[Fido2Extension.webAuthN.getIdentifier()] = true;
+            extensionMap[Fido2Extension.webAuthN.getIdentifier()!] = true;
           }
-          if (data.extensions.contains(Fido2Extension.cIBBe.getIdentifier())) {
-            extensionMap[Fido2Extension.cIBBe.getIdentifier()] = true;
+          if (data.extensions!=null &&data.extensions!.contains(Fido2Extension.cIBBe.getIdentifier())) {
+            extensionMap[Fido2Extension.cIBBe.getIdentifier()!] = true;
           }
         } else if (data.isSupportedUvm(AuthenticatorMetadata.UVM_FACEPRINT)) {
           print("Lock screen 3D face authenticator");
         }
       }
-      extensionMap[Fido2Extension.pAcl.getIdentifier()] = list;
+      if(Fido2Extension.pAcl.getIdentifier()!=null)
+      extensionMap[Fido2Extension.pAcl.getIdentifier()!] = list;
     }
   }
 
@@ -112,9 +113,9 @@ class _FidoExampleState extends State<FidoExample> {
     Fido2RegistrationResponse response =
         await fido2client.getRegistrationIntent(options);
     _updateList(
-        "REGISTRATION SUCCESS: ${response.isSuccess} \n\n CREDENTIAL ID: ${response.authenticatorAttestationResponse.credentialId}");
+        "REGISTRATION SUCCESS: ${response.isSuccess} \n\n CREDENTIAL ID: ${response.authenticatorAttestationResponse?.credentialId}");
     setState(() =>
-        _credentialId = response.authenticatorAttestationResponse.credentialId);
+        _credentialId = response.authenticatorAttestationResponse?.credentialId);
   }
 
   void _authenticate() async {
@@ -128,7 +129,8 @@ class _FidoExampleState extends State<FidoExample> {
     List<AuthenticatorMetadata> list =
         await fido2client.getPlatformAuthenticators();
     for (AuthenticatorMetadata meta in list) {
-      _updateList(meta.aaGuid);
+      if(meta.aaGuid!=null)
+      _updateList(meta.aaGuid!);
     }
     print(list.length);
   }

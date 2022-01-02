@@ -18,16 +18,16 @@ class AuthenticatorMetadata {
   static const int UVM_FINGERPRINT = 2;
   static const int UVM_FACEPRINT = 16;
 
-  String aaGuid;
-  int uVms;
-  List<dynamic> extensions;
-  bool isAvailable;
+  String? aaGuid;
+  int? uVms;
+  List<dynamic>? extensions;
+  bool? isAvailable;
 
   AuthenticatorMetadata(
       {this.extensions, this.aaGuid, this.isAvailable, this.uVms});
 
-  factory AuthenticatorMetadata.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
+  factory AuthenticatorMetadata.fromMap(Map<String, dynamic>? map) {
+    if (map == null) return AuthenticatorMetadata();
     return AuthenticatorMetadata(
         aaGuid: map['aaGuid'] ?? null,
         uVms: map['uVms'] ?? null,
@@ -36,6 +36,6 @@ class AuthenticatorMetadata {
   }
 
   bool isSupportedUvm(int var1) {
-    return (this.uVms & var1) != 0;
+    return uVms!=null &&  (this.uVms! & var1) != 0;
   }
 }

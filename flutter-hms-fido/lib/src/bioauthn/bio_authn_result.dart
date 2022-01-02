@@ -17,12 +17,12 @@
 import 'dart:typed_data';
 
 class HmsBioAuthnResult {
-  HmsCryptoObject cryptoObject;
+  HmsCryptoObject? cryptoObject;
 
   HmsBioAuthnResult({this.cryptoObject});
 
-  factory HmsBioAuthnResult.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
+  factory HmsBioAuthnResult.fromMap(Map<dynamic, dynamic>? map) {
+    if (map == null) return HmsBioAuthnResult();
     return HmsBioAuthnResult(
         cryptoObject: map['cryptoObject'] != null
             ? new HmsCryptoObject.fromMap(map['cryptoObject'])
@@ -31,14 +31,14 @@ class HmsBioAuthnResult {
 }
 
 class HmsCryptoObject {
-  HmsCipher cipher;
-  HmsMac mac;
-  HmsSignature signature;
+  HmsCipher? cipher;
+  HmsMac? mac;
+  HmsSignature? signature;
 
   HmsCryptoObject({this.cipher, this.mac, this.signature});
 
-  factory HmsCryptoObject.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
+  factory HmsCryptoObject.fromMap(Map<dynamic, dynamic>? map) {
+    if (map == null) return HmsCryptoObject();
     return HmsCryptoObject(
         cipher: map['cipher'] != null ? HmsCipher.fromMap(map['cipher']) : null,
         mac: map['mac'] != null ? HmsMac.fromMap(map['mac']) : null,
@@ -49,16 +49,16 @@ class HmsCryptoObject {
 }
 
 class HmsCipher {
-  String algorithm;
-  int blockSize;
-  Uint8List iv;
-  HmsAlgorithmParameters algorithmParameters;
+  String? algorithm;
+  int? blockSize;
+  Uint8List? iv;
+  HmsAlgorithmParameters? algorithmParameters;
 
   HmsCipher(
       {this.algorithmParameters, this.algorithm, this.blockSize, this.iv});
 
-  factory HmsCipher.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
+  factory HmsCipher.fromMap(Map<dynamic, dynamic>? map) {
+    if (map == null) return HmsCipher();
     return HmsCipher(
         algorithm: map['algorithm'] ?? null,
         blockSize: map['blockSize'] ?? null,
@@ -70,14 +70,14 @@ class HmsCipher {
 }
 
 class HmsAlgorithmParameters {
-  String algorithm;
-  Uint8List encoded;
-  HmsBioAuthnProvider provider;
+  String? algorithm;
+  Uint8List? encoded;
+  HmsBioAuthnProvider? provider;
 
   HmsAlgorithmParameters({this.algorithm, this.encoded, this.provider});
 
-  factory HmsAlgorithmParameters.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
+  factory HmsAlgorithmParameters.fromMap(Map<dynamic, dynamic>? map) {
+    if (map == null) return HmsAlgorithmParameters();
     return HmsAlgorithmParameters(
         algorithm: map['algorithm'] ?? null,
         encoded: map['encoded'] ?? null,
@@ -88,14 +88,14 @@ class HmsAlgorithmParameters {
 }
 
 class HmsBioAuthnProvider {
-  String info;
-  String name;
-  double version;
+  String? info;
+  String? name;
+  double? version;
 
   HmsBioAuthnProvider({this.info, this.name, this.version});
 
-  factory HmsBioAuthnProvider.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
+  factory HmsBioAuthnProvider.fromMap(Map<dynamic, dynamic>? map) {
+    if (map == null) return HmsBioAuthnProvider();
     return HmsBioAuthnProvider(
         info: map['info'] ?? null,
         name: map['name'] ?? null,
@@ -104,14 +104,14 @@ class HmsBioAuthnProvider {
 }
 
 class HmsSignature {
-  String algorithm;
-  HmsAlgorithmParameters algorithmParameters;
-  HmsBioAuthnProvider provider;
+  String? algorithm;
+  HmsAlgorithmParameters? algorithmParameters;
+  HmsBioAuthnProvider? provider;
 
   HmsSignature({this.algorithmParameters, this.provider, this.algorithm});
 
-  factory HmsSignature.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
+  factory HmsSignature.fromMap(Map<dynamic, dynamic>? map) {
+    if (map == null) return HmsSignature();
     return HmsSignature(
         algorithm: map['algorithm'] ?? null,
         algorithmParameters: map['algorithmParameters'] != null
@@ -124,14 +124,14 @@ class HmsSignature {
 }
 
 class HmsMac {
-  String algorithm;
-  HmsBioAuthnProvider provider;
-  int length;
+  String? algorithm;
+  HmsBioAuthnProvider? provider;
+  int? length;
 
   HmsMac({this.algorithm, this.provider, this.length});
 
-  factory HmsMac.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
+  factory HmsMac.fromMap(Map<dynamic, dynamic>? map) {
+    if (map == null) return HmsMac();
     return HmsMac(
         algorithm: map['algorithm'] ?? null,
         provider: map['provider'] != null

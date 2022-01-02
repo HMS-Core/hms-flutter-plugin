@@ -24,7 +24,7 @@ class Fido2Extension {
   static const int COMPONENT_ROAMING_AUTHENTICATOR = 4;
 
   final String name;
-  String _identifier;
+  String? _identifier;
   final int specification;
   final int apis;
   final int components;
@@ -115,7 +115,7 @@ class Fido2Extension {
 
   String getName() => this.name;
 
-  String getIdentifier() => this._identifier;
+  String? getIdentifier() => this._identifier;
 
   int getVersion() => this.version;
 

@@ -27,9 +27,9 @@ class HmsBioAuthnPrompt {
       const MethodChannel("com.huawei.hms.flutter.fido/bio_authn_prompt");
 
   int get id => hashCode;
-  EventChannel _eventChannel;
-  BioAuthnCallback _callback;
-  StreamSubscription _subscription;
+  EventChannel? _eventChannel;
+  BioAuthnCallback? _callback;
+  StreamSubscription? _subscription;
 
   HmsBioAuthnPrompt() {
     _eventChannel =
@@ -123,7 +123,7 @@ class HmsBioAuthnPrompt {
 
   void _startCallback() {
     _subscription?.cancel();
-    _subscription = _eventChannel.receiveBroadcastStream(id).listen((event) {
+    _subscription = _eventChannel?.receiveBroadcastStream(id).listen((event) {
       Map<dynamic, dynamic> map = event;
       BioAuthnEvent bioAuthnEvent = Fido2PluginUtil.toBioEvent(map['event']);
       if (bioAuthnEvent == BioAuthnEvent.onAuthError) {

@@ -15,15 +15,15 @@
 */
 
 class HmsCipherFactory {
-  String storeKey;
-  String password;
+  String? storeKey;
+  String? password;
   bool userAuthenticationRequired;
 
-  HmsCipherFactory() {
-    storeKey = null;
-    password = null;
-    userAuthenticationRequired = true;
-  }
+  HmsCipherFactory({
+    this.storeKey,
+    this.password,
+    this.userAuthenticationRequired = true
+});
 
   Map<String, dynamic> toMap() {
     return {

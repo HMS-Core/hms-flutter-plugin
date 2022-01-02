@@ -15,8 +15,8 @@
 */
 
 class BiometricPromptInfo {
-  String title;
-  String description;
+  String? title;
+  String? description;
 
   BiometricPromptInfo({this.title, this.description});
 
@@ -24,7 +24,7 @@ class BiometricPromptInfo {
     return {"title": title, "description": description};
   }
 
-  String get getTitle => title;
+  String? get getTitle => title;
 
-  String get getDescription => description;
+  String? get getDescription => description;
 }

@@ -15,9 +15,9 @@
 */
 
 class PublicKeyCredentialRpEntity {
-  String id;
-  String name;
-  String icon;
+  String? id;
+  String? name;
+  String? icon;
 
   PublicKeyCredentialRpEntity({this.name, this.id, this.icon});
 
@@ -25,9 +25,9 @@ class PublicKeyCredentialRpEntity {
     return {"id": id, "name": name, "icon": icon};
   }
 
-  String get getId => id;
+  String? get getId => id;
 
-  String get getName => name;
+  String? get getName => name;
 
-  String get getIcon => icon;
+  String? get getIcon => icon;
 }

@@ -19,16 +19,16 @@ import 'package:flutter/foundation.dart';
 import '../constant/fido_constants.dart';
 
 class TokenBinding {
-  String id;
+  String? id;
   TokenBindingStatus status;
 
-  TokenBinding({this.id, this.status});
+  TokenBinding({this.id, required this.status});
 
   Map<String, dynamic> toMap() {
     return {"id": id, "status": describeEnum(status)};
   }
 
-  String get getId => id;
+  String? get getId => id;
 
   TokenBindingStatus get getStatus => status;
 }

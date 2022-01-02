@@ -18,19 +18,19 @@ import 'package:flutter/foundation.dart';
 import '../constant/fido_constants.dart';
 
 class PublicKeyCredentialParameters {
-  PublicKeyCredentialType type;
-  Algorithm algorithm;
+  PublicKeyCredentialType? type;
+  Algorithm? algorithm;
 
   PublicKeyCredentialParameters({this.type, this.algorithm});
 
   Map<String, dynamic> toMap() {
     return {
       "type": describeEnum(PublicKeyCredentialType.PUBLIC_KEY),
-      "algorithm": algorithm != null ? describeEnum(algorithm) : null
+      "algorithm": algorithm != null ? describeEnum(algorithm!) : null
     };
   }
 
-  PublicKeyCredentialType get getType => type;
+  PublicKeyCredentialType? get getType => type;
 
-  Algorithm get getAlgorithm => algorithm;
+  Algorithm? get getAlgorithm => algorithm;
 }

@@ -17,8 +17,8 @@
 import 'dart:typed_data';
 
 class PublicKeyCredentialUserEntity {
-  String displayName;
-  Uint8List id;
+  String? displayName;
+  Uint8List? id;
 
   PublicKeyCredentialUserEntity({this.id, this.displayName});
 
@@ -26,7 +26,7 @@ class PublicKeyCredentialUserEntity {
     return {"displayName": displayName, "id": id};
   }
 
-  String get getDisplayName => displayName;
+  String? get getDisplayName => displayName;
 
-  Uint8List get getId => id;
+  Uint8List? get getId => id;
 }
