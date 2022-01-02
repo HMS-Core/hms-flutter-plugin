@@ -18,10 +18,10 @@ import 'dart:convert' show json;
 import 'package:huawei_awareness/constants/param.dart';
 
 class City {
-  String cityCode;
-  String name;
-  String provinceName;
-  String timeZone;
+  String? cityCode;
+  String? name;
+  String? provinceName;
+  String? timeZone;
 
   City({
     this.cityCode,

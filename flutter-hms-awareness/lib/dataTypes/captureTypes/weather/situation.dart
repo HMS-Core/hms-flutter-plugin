@@ -18,19 +18,19 @@ import 'dart:convert' show json;
 import 'package:huawei_awareness/constants/param.dart';
 
 class Situation {
-  int cnWeatherId;
-  String humidity;
-  int pressure;
-  int realFeelC;
-  int realFeelF;
-  int temperatureC;
-  int temperatureF;
-  int updateTime;
-  int uvIndex;
-  int weatherId;
-  String windDir;
-  int windSpeed;
-  int windLevel;
+  int? cnWeatherId;
+  String? humidity;
+  int? pressure;
+  int? realFeelC;
+  int? realFeelF;
+  int? temperatureC;
+  int? temperatureF;
+  int? updateTime;
+  int? uvIndex;
+  int? weatherId;
+  String? windDir;
+  int? windSpeed;
+  int? windLevel;
 
   Situation({
     this.cnWeatherId,

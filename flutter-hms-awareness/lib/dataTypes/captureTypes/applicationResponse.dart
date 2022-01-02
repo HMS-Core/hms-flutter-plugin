@@ -18,7 +18,7 @@ import 'dart:convert' show json;
 import 'package:huawei_awareness/constants/param.dart';
 
 class ApplicationResponse {
-  int applicationStatus;
+  int? applicationStatus;
 
   ApplicationResponse({
     this.applicationStatus,

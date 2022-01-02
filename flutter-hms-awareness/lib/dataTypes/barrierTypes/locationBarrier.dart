@@ -21,11 +21,11 @@ import 'package:huawei_awareness/hmsAwarenessLibrary.dart'
 import 'package:huawei_awareness/constants/param.dart';
 
 class LocationBarrier extends AwarenessBarrier {
-  String barrierLabel;
-  double latitude;
-  double longitude;
-  double radius;
-  int timeOfDuration;
+  String? barrierLabel;
+  double? latitude;
+  double? longitude;
+  double? radius;
+  int? timeOfDuration;
 
   LocationBarrier.enter({
     @required this.barrierLabel,

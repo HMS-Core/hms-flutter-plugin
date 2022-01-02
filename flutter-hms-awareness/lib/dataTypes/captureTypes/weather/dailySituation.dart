@@ -18,11 +18,11 @@ import 'dart:convert' show json;
 import 'package:huawei_awareness/constants/param.dart';
 
 class DailySituation {
-  int cnWeatherId;
-  int weatherId;
-  String windDir;
-  int windLevel;
-  int windSpeed;
+  int? cnWeatherId;
+  int? weatherId;
+  String? windDir;
+  int? windLevel;
+  int? windSpeed;
 
   DailySituation({
     this.cnWeatherId,

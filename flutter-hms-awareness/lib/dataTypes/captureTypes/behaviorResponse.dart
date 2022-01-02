@@ -20,10 +20,10 @@ import 'package:huawei_awareness/hmsAwarenessLibrary.dart'
 import 'package:huawei_awareness/constants/param.dart';
 
 class BehaviorResponse {
-  int elapsedRealtimeMillis;
-  int time;
-  DetectedBehavior mostLikelyBehavior;
-  List<DetectedBehavior> probableBehavior;
+  int? elapsedRealtimeMillis;
+  int? time;
+  DetectedBehavior? mostLikelyBehavior;
+  List<DetectedBehavior>? probableBehavior;
 
   BehaviorResponse({
     this.elapsedRealtimeMillis,
@@ -58,10 +58,10 @@ class BehaviorResponse {
           elapsedRealtimeMillis == null ? null : elapsedRealtimeMillis,
       Param.time: time == null ? null : time,
       Param.mostLikelyBehavior:
-          mostLikelyBehavior == null ? null : mostLikelyBehavior.toMap(),
+          mostLikelyBehavior == null ? null : mostLikelyBehavior?.toMap(),
       Param.probableBehavior: probableBehavior == null
           ? null
-          : List<DetectedBehavior>.from(probableBehavior.map((x) => x)),
+          : List<DetectedBehavior>.from(probableBehavior!.map((x) => x)),
     };
   }
 }

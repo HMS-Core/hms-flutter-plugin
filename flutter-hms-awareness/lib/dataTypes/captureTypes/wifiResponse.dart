@@ -18,9 +18,9 @@ import 'dart:convert' show json;
 import 'package:huawei_awareness/constants/param.dart';
 
 class WiFiResponse {
-  int status;
-  String bssid;
-  String ssid;
+  int? status;
+  String? bssid;
+  String? ssid;
 
   WiFiResponse({
     this.status,

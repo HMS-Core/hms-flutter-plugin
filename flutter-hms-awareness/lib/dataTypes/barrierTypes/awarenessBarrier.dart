@@ -15,9 +15,9 @@
 */
 
 abstract class AwarenessBarrier {
-  String barrierEventType;
-  String barrierType;
-  String barrierLabel;
+  String?barrierEventType;
+  String? barrierType;
+  String? barrierLabel;
   Map<String, dynamic> toMap();
 
   AwarenessBarrier({

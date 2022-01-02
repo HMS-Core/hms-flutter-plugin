@@ -18,7 +18,7 @@ import 'dart:convert' show json;
 import 'package:huawei_awareness/constants/param.dart';
 
 class TimeCategoriesResponse {
-  List<int> timeCategories;
+  List<int>? timeCategories;
 
   TimeCategoriesResponse({
     this.timeCategories,
@@ -40,7 +40,7 @@ class TimeCategoriesResponse {
     return {
       Param.timeCategories: timeCategories == null
           ? null
-          : List<dynamic>.from(timeCategories.map((x) => x)),
+          : List<dynamic>.from(timeCategories!.map((x) => x)),
     };
   }
 }

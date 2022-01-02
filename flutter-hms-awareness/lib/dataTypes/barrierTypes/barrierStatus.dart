@@ -22,10 +22,10 @@ class BarrierStatus {
   static const int False = 0;
   static const int Unknown = 2;
 
-  String barrierLabel;
-  int lastBarrierUpdateTime;
-  int lastStatus;
-  int presentStatus;
+  String? barrierLabel;
+  int? lastBarrierUpdateTime;
+  int? lastStatus;
+  int? presentStatus;
 
   BarrierStatus({
     this.barrierLabel,

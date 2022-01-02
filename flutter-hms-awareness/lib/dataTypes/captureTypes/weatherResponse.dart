@@ -50,11 +50,11 @@ class WeatherResponse {
   static const String Strong = "4";
   static const String VeryStrong = "5";
 
-  List<DailyWeather> dailyWeather;
-  List<HourlyWeather> hourlyWeather;
-  List<LiveInfo> liveInfo;
-  Aqi aqi;
-  WeatherSituation weatherSituation;
+  List<DailyWeather>? dailyWeather;
+  List<HourlyWeather>? hourlyWeather;
+  List<LiveInfo>? liveInfo;
+  Aqi? aqi;
+  WeatherSituation? weatherSituation;
 
   WeatherResponse({
     this.dailyWeather,
@@ -93,15 +93,15 @@ class WeatherResponse {
   Map<String, dynamic> toMap() => {
         Param.dailyWeather: dailyWeather == null
             ? null
-            : List<dynamic>.from(dailyWeather.map((x) => x.toMap())),
+            : List<dynamic>.from(dailyWeather!.map((x) => x.toMap())),
         Param.hourlyWeather: hourlyWeather == null
             ? null
-            : List<dynamic>.from(hourlyWeather.map((x) => x.toMap())),
+            : List<dynamic>.from(hourlyWeather!.map((x) => x.toMap())),
         Param.liveInfo: liveInfo == null
             ? null
-            : List<dynamic>.from(liveInfo.map((x) => x.toMap())),
-        Param.aqi: aqi == null ? null : aqi.toMap(),
+            : List<dynamic>.from(liveInfo!.map((x) => x.toMap())),
+        Param.aqi: aqi == null ? null : aqi?.toMap(),
         Param.weatherSituation:
-            weatherSituation == null ? null : weatherSituation.toMap(),
+            weatherSituation == null ? null : weatherSituation?.toMap(),
       };
 }

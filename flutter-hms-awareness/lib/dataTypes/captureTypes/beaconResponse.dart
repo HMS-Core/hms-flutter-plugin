@@ -19,7 +19,7 @@ import 'package:huawei_awareness/hmsAwarenessLibrary.dart' show BeaconData;
 import 'package:huawei_awareness/constants/param.dart';
 
 class BeaconResponse {
-  List<BeaconData> beacons;
+  List<BeaconData>? beacons;
 
   BeaconResponse({
     this.beacons,
@@ -39,8 +39,8 @@ class BeaconResponse {
   String toJson() => json.encode(toMap());
 
   Map<String, dynamic> toMap() => {
-        Param.beacons: BeaconResponse == null
+        Param.beacons: beacons == null
             ? null
-            : List<dynamic>.from(beacons.map((x) => x.toMap())),
+            : List<dynamic>.from(beacons!.map((x) => x.toMap())),
       };
 }

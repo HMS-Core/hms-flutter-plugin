@@ -20,11 +20,11 @@ import 'package:flutter/foundation.dart' show required;
 import 'package:huawei_awareness/constants/param.dart';
 
 class BeaconFilter {
-  String beaconNamespace;
-  String beaconType;
-  Uint8List beaconContent;
-  String beaconId;
-  String _filterType;
+  String? beaconNamespace;
+  String? beaconType;
+  Uint8List? beaconContent;
+  String? beaconId;
+  String? _filterType;
 
   BeaconFilter.matchByNameType({
     @required this.beaconNamespace,

@@ -19,8 +19,8 @@ import 'package:huawei_awareness/hmsAwarenessLibrary.dart' show DailyLiveInfo;
 import 'package:huawei_awareness/constants/param.dart';
 
 class LiveInfo {
-  String code;
-  List<DailyLiveInfo> levelList;
+  String? code;
+  List<DailyLiveInfo>? levelList;
 
   LiveInfo({
     this.code,
@@ -43,6 +43,6 @@ class LiveInfo {
         Param.code: code == null ? null : code,
         Param.dailyLiveInfo: levelList == null
             ? null
-            : List<DailyLiveInfo>.from(levelList.map((x) => x.toMap())),
+            : List<DailyLiveInfo>.from(levelList!.map((x) => x.toMap())),
       };
 }

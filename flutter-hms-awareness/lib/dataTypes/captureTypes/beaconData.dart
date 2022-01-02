@@ -18,10 +18,10 @@ import 'dart:convert' show json;
 import 'package:huawei_awareness/constants/param.dart';
 
 class BeaconData {
-  String beaconId;
-  String namespace;
-  String type;
-  List<int> content;
+  String? beaconId;
+  String? namespace;
+  String? type;
+  List<int>? content;
 
   BeaconData({
     this.beaconId,
@@ -51,6 +51,6 @@ class BeaconData {
         Param.beaconNamespace: namespace == null ? null : namespace,
         Param.beaconType: type == null ? null : type,
         Param.beaconContent:
-            content == null ? null : List<dynamic>.from(content.map((x) => x)),
+            content == null ? null : List<dynamic>.from(content!.map((x) => x)),
       };
 }

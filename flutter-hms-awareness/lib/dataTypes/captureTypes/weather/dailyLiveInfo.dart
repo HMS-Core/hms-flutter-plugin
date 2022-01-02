@@ -18,8 +18,8 @@ import 'dart:convert' show json;
 import 'package:huawei_awareness/constants/param.dart';
 
 class DailyLiveInfo {
-  int dateTimeStamp;
-  String level;
+  int? dateTimeStamp;
+  String? level;
 
   DailyLiveInfo({
     this.dateTimeStamp,

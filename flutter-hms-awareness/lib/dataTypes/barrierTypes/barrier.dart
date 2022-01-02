@@ -19,8 +19,8 @@ import 'package:huawei_awareness/hmsAwarenessLibrary.dart' show BarrierStatus;
 import 'package:huawei_awareness/constants/param.dart';
 
 class Barrier {
-  String barrierLabel;
-  BarrierStatus barrierStatus;
+  String? barrierLabel;
+  BarrierStatus? barrierStatus;
 
   Barrier({
     this.barrierLabel,
@@ -42,6 +42,6 @@ class Barrier {
   Map<String, dynamic> toMap() => {
         Param.barrierLabel: barrierLabel == null ? null : barrierLabel,
         Param.barrierStatus:
-            barrierStatus == null ? null : barrierStatus.toMap(),
+            barrierStatus == null ? null : barrierStatus?.toMap(),
       };
 }

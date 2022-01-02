@@ -18,13 +18,13 @@ import 'dart:convert' show json;
 import 'package:huawei_awareness/constants/param.dart';
 
 class Aqi {
-  int aqiValue;
-  int co;
-  int no2;
-  int o3;
-  int pm10;
-  int pm25;
-  int so2;
+  int? aqiValue;
+  int? co;
+  int? no2;
+  int? o3;
+  int? pm10;
+  int? pm25;
+  int? so2;
 
   Aqi({
     this.aqiValue,

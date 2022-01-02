@@ -21,8 +21,8 @@ import 'package:huawei_awareness/hmsAwarenessLibrary.dart'
 import 'package:huawei_awareness/constants/param.dart';
 
 class ScreenBarrier extends AwarenessBarrier {
-  String barrierLabel;
-  int screenStatus;
+  String? barrierLabel;
+  int? screenStatus;
 
   ScreenBarrier.keeping({
     @required this.barrierLabel,

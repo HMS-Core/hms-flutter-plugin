@@ -26,7 +26,7 @@ class AwarenessCaptureClient {
       const MethodChannel(Channel.AwarenessCaptureChannel);
 
   static Future<BeaconResponse> getBeaconStatus(
-      {@required List<BeaconFilter> filters}) async {
+      {required List<BeaconFilter> filters}) async {
     return BeaconResponse.fromJson(
         await _captureChannel.invokeMethod(Method.GetBeaconStatus, {
       Param.beaconFilters: List<dynamic>.from(filters.map((x) => x.toMap())),
@@ -59,7 +59,7 @@ class AwarenessCaptureClient {
   }
 
   static Future<TimeCategoriesResponse> getTimeCategoriesByUser(
-      {@required double latitude, @required double longitude}) async {
+      {required double latitude, required double longitude}) async {
     return TimeCategoriesResponse.fromJson(
         await _captureChannel.invokeMethod(Method.GetTimeCategoriesByUser, {
       Param.latitude: latitude,
@@ -68,7 +68,7 @@ class AwarenessCaptureClient {
   }
 
   static Future<TimeCategoriesResponse> getTimeCategoriesByCountryCode(
-      {@required String countryCode}) async {
+      {required String countryCode}) async {
     return TimeCategoriesResponse.fromJson(await _captureChannel
         .invokeMethod(Method.GetTimeCategoriesByCountryCode, {
       Param.countryCode: countryCode,
@@ -81,7 +81,7 @@ class AwarenessCaptureClient {
   }
 
   static Future<TimeCategoriesResponse> getTimeCategoriesForFuture(
-      {@required int futureTimestamp}) async {
+      {required int futureTimestamp}) async {
     return TimeCategoriesResponse.fromJson(
         await _captureChannel.invokeMethod(Method.GetTimeCategoriesForFuture, {
       Param.futureTimestamp: futureTimestamp,
@@ -99,13 +99,13 @@ class AwarenessCaptureClient {
   }
 
   static Future<WeatherResponse> getWeatherByPosition(
-      {@required WeatherPosition weatherPosition}) async {
+      {required WeatherPosition weatherPosition}) async {
     return WeatherResponse.fromJson(await _captureChannel.invokeMethod(
         Method.GetWeatherByPosition, weatherPosition.toMap()));
   }
 
   static Future<BluetoothResponse> getBluetoothStatus(
-      {@required int deviceType}) async {
+      {required int deviceType}) async {
     return BluetoothResponse.fromJson(
         await _captureChannel.invokeMethod(Method.GetBluetoothStatus, {
       Param.deviceType: deviceType,
@@ -134,7 +134,7 @@ class AwarenessCaptureClient {
   }
 
   static Future<ApplicationResponse> getApplicationStatus(
-      {@required String packageName}) async {
+      {required String packageName}) async {
     return ApplicationResponse.fromJson(
         await _captureChannel.invokeMethod(Method.GetApplicationStatus, {
       Param.packageName: packageName,

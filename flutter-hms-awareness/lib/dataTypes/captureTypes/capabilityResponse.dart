@@ -18,7 +18,7 @@ import 'dart:convert' show json;
 import 'package:huawei_awareness/constants/param.dart';
 
 class CapabilityResponse {
-  List<int> deviceSupportCapabilities;
+  List<int>? deviceSupportCapabilities;
 
   CapabilityResponse({
     this.deviceSupportCapabilities,
@@ -41,6 +41,6 @@ class CapabilityResponse {
   Map<String, dynamic> toMap() => {
         Param.deviceSupportCapabilities: deviceSupportCapabilities == null
             ? null
-            : List<dynamic>.from(deviceSupportCapabilities.map((x) => x)),
+            : List<dynamic>.from(deviceSupportCapabilities!.map((x) => x)),
       };
 }

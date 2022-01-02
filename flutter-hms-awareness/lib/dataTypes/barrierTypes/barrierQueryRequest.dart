@@ -19,14 +19,14 @@ import 'package:flutter/foundation.dart' show required;
 import 'package:huawei_awareness/constants/param.dart';
 
 class BarrierQueryRequest {
-  String _type;
-  List<String> _barrierKeys;
+  String? _type;
+  List<String>? _barrierKeys;
 
   BarrierQueryRequest.all() {
     _type = Param.queryTypeAll;
   }
 
-  BarrierQueryRequest.forBarriers({@required List<String> barrierKeys}) {
+  BarrierQueryRequest.forBarriers({@required List<String>? barrierKeys}) {
     _barrierKeys = barrierKeys;
     _type = Param.queryTypeKey;
   }
@@ -37,6 +37,6 @@ class BarrierQueryRequest {
         Param.queryType: _type == null ? null : _type,
         Param.barrierKeys: _barrierKeys == null
             ? null
-            : List<String>.from(_barrierKeys.map((x) => x)),
+            : List<String>.from(_barrierKeys!.map((x) => x)),
       };
 }

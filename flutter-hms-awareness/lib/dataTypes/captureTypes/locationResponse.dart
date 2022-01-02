@@ -18,17 +18,17 @@ import 'dart:convert' show json;
 import 'package:huawei_awareness/constants/param.dart';
 
 class LocationResponse {
-  double latitude;
-  double longitude;
-  double altitude;
-  double speed;
-  double bearing;
-  double accuracy;
-  double verticalAccuracyMeters;
-  double bearingAccuracyDegrees;
-  double speedAccuracyMetersPerSecond;
-  int time;
-  bool fromMockProvider;
+  double? latitude;
+  double? longitude;
+  double? altitude;
+  double? speed;
+  double? bearing;
+  double? accuracy;
+  double? verticalAccuracyMeters;
+  double? bearingAccuracyDegrees;
+  double? speedAccuracyMetersPerSecond;
+  int? time;
+  bool? fromMockProvider;
 
   LocationResponse({
     this.latitude,

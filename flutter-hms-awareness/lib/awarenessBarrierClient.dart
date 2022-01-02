@@ -56,8 +56,8 @@ class AwarenessBarrierClient {
   }
 
   static Future<bool> updateBarriers(
-      {@required AwarenessBarrier barrier, bool autoRemove}) async {
-    return _barrierChannel.invokeMethod(Method.UpdateBarrier, {
+      {required AwarenessBarrier barrier, bool autoRemove=false}) async {
+    return await _barrierChannel.invokeMethod(Method.UpdateBarrier, {
       Param.request: barrier.toMap(),
       Param.autoRemove: autoRemove,
     });

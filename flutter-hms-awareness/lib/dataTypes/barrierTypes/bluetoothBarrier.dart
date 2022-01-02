@@ -21,9 +21,9 @@ import 'package:huawei_awareness/hmsAwarenessLibrary.dart'
 import 'package:huawei_awareness/constants/param.dart';
 
 class BluetoothBarrier extends AwarenessBarrier {
-  String barrierLabel;
-  int bluetoothStatus;
-  int deviceType;
+  String? barrierLabel;
+  int? bluetoothStatus;
+  int? deviceType;
 
   BluetoothBarrier.keeping({
     @required this.barrierLabel,

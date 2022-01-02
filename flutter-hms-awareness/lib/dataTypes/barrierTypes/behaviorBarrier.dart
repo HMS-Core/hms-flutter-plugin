@@ -29,8 +29,8 @@ class BehaviorBarrier extends AwarenessBarrier {
   static const int BehaviorWalking = 7;
   static const int BehaviorRunning = 8;
 
-  String barrierLabel;
-  List<int> behaviorTypes;
+  String? barrierLabel;
+  List<int>? behaviorTypes;
 
   BehaviorBarrier.keeping({
     @required this.barrierLabel,
@@ -69,6 +69,6 @@ class BehaviorBarrier extends AwarenessBarrier {
         Param.barrierLabel: barrierLabel == null ? null : barrierLabel,
         Param.behaviorTypes: behaviorTypes == null
             ? null
-            : List<int>.from(behaviorTypes.map((x) => x)),
+            : List<int>.from(behaviorTypes!.map((x) => x)),
       };
 }

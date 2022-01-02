@@ -21,8 +21,8 @@ import 'package:huawei_awareness/hmsAwarenessLibrary.dart'
 import 'package:huawei_awareness/constants/param.dart';
 
 class BeaconBarrier extends AwarenessBarrier {
-  String barrierLabel;
-  List<BeaconFilter> filters;
+  String? barrierLabel;
+  List<BeaconFilter>? filters;
 
   BeaconBarrier.discover({
     @required this.barrierLabel,
@@ -61,6 +61,6 @@ class BeaconBarrier extends AwarenessBarrier {
         Param.barrierLabel: barrierLabel == null ? null : barrierLabel,
         Param.beaconFilters: filters == null
             ? null
-            : List<dynamic>.from(filters.map((x) => x.toMap())),
+            : List<dynamic>.from(filters!.map((x) => x.toMap())),
       };
 }

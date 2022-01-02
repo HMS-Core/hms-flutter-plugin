@@ -19,14 +19,14 @@ import 'package:flutter/foundation.dart' show required;
 import 'package:huawei_awareness/constants/param.dart';
 
 class BarrierDeleteRequest {
-  String _type;
-  String _barrierKey;
+  String? _type;
+  String? _barrierKey;
 
   BarrierDeleteRequest.all() {
     _type = Param.deleteAll;
   }
 
-  BarrierDeleteRequest.withLabel({@required String barrierLabel}) {
+  BarrierDeleteRequest.withLabel({@required String? barrierLabel}) {
     _type = Param.withLabel;
     _barrierKey = barrierLabel;
   }

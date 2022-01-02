@@ -21,10 +21,10 @@ import 'package:huawei_awareness/hmsAwarenessLibrary.dart'
 import 'package:huawei_awareness/constants/param.dart';
 
 class WiFiBarrier extends AwarenessBarrier {
-  String barrierLabel;
-  int wifiStatus;
-  String bssid;
-  String ssid;
+  String? barrierLabel;
+  int? wifiStatus;
+  String? bssid;
+  String? ssid;
 
   WiFiBarrier.keeping({
     @required this.barrierLabel,

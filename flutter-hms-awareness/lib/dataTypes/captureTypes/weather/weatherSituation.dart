@@ -19,8 +19,8 @@ import 'package:huawei_awareness/hmsAwarenessLibrary.dart' show Situation, City;
 import 'package:huawei_awareness/constants/param.dart';
 
 class WeatherSituation {
-  City city;
-  Situation situation;
+  City? city;
+  Situation? situation;
 
   WeatherSituation({
     this.city,
@@ -43,7 +43,7 @@ class WeatherSituation {
   String toJson() => json.encode(toMap());
 
   Map<String, dynamic> toMap() => {
-        Param.city: city == null ? null : city.toMap(),
-        Param.situation: situation == null ? null : situation.toMap(),
+        Param.city: city == null ? null : city?.toMap(),
+        Param.situation: situation == null ? null : situation?.toMap(),
       };
 }

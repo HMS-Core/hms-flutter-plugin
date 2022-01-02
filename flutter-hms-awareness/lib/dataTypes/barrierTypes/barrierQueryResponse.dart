@@ -19,7 +19,7 @@ import 'package:huawei_awareness/hmsAwarenessLibrary.dart' show Barrier;
 import 'package:huawei_awareness/constants/param.dart';
 
 class BarrierQueryResponse {
-  List<Barrier> barriers;
+  List<Barrier>? barriers;
 
   BarrierQueryResponse({
     this.barriers,
@@ -41,6 +41,6 @@ class BarrierQueryResponse {
   Map<String, dynamic> toMap() => {
         Param.barriers: barriers == null
             ? null
-            : List<dynamic>.from(barriers.map((x) => x.toMap())),
+            : List<dynamic>.from(barriers!.map((x) => x.toMap())),
       };
 }

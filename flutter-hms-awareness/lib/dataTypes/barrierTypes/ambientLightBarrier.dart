@@ -21,13 +21,13 @@ import 'package:huawei_awareness/hmsAwarenessLibrary.dart'
 import 'package:huawei_awareness/constants/param.dart';
 
 class AmbientLightBarrier extends AwarenessBarrier {
-  String barrierLabel;
-  double minLightIntensity;
-  double maxLightIntensity;
+  String? barrierLabel;
+  double? minLightIntensity;
+  double? maxLightIntensity;
 
   AmbientLightBarrier.above({
-    @required this.barrierLabel,
-    @required this.minLightIntensity,
+    required this.barrierLabel,
+    required this.minLightIntensity,
   }) : super(
           barrierEventType: Param.ambientLightBarrierReceiverAction,
           barrierType: Param.ambientLightAboveBarrier,

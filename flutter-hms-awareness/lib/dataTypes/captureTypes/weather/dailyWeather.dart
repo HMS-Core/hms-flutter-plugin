@@ -19,19 +19,19 @@ import 'package:huawei_awareness/hmsAwarenessLibrary.dart' show DailySituation;
 import 'package:huawei_awareness/constants/param.dart';
 
 class DailyWeather {
-  int aqiValue;
-  int dateTimeStamp;
-  int maxTempC;
-  int maxTempF;
-  int minTempC;
-  int minTempF;
-  int moonRise;
-  int moonSet;
-  String moonPhase;
-  DailySituation situationDay;
-  DailySituation situationNight;
-  int sunRise;
-  int sunSet;
+  int? aqiValue;
+  int? dateTimeStamp;
+  int? maxTempC;
+  int? maxTempF;
+  int? minTempC;
+  int? minTempF;
+  int? moonRise;
+  int? moonSet;
+  String? moonPhase;
+  DailySituation? situationDay;
+  DailySituation? situationNight;
+  int? sunRise;
+  int? sunSet;
 
   DailyWeather({
     this.aqiValue,
@@ -93,9 +93,9 @@ class DailyWeather {
         Param.moonRise: moonRise == null ? null : moonRise,
         Param.moonSet: moonSet == null ? null : moonSet,
         Param.moonPhase: moonPhase == null ? null : moonPhase,
-        Param.situationDay: situationDay == null ? null : situationDay.toMap(),
+        Param.situationDay: situationDay == null ? null : situationDay?.toMap(),
         Param.situationNight:
-            situationNight == null ? null : situationNight.toMap(),
+            situationNight == null ? null : situationNight?.toMap(),
         Param.sunRise: sunRise == null ? null : sunRise,
         Param.sunSet: sunSet == null ? null : sunSet,
       };

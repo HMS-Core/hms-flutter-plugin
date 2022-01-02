@@ -19,12 +19,12 @@ import 'package:flutter/foundation.dart' show required;
 import 'package:huawei_awareness/constants/param.dart';
 
 class WeatherPosition {
-  String country;
-  String province;
-  String city;
-  String district;
-  String county;
-  String locale;
+  String? country;
+  String? province;
+  String? city;
+  String? district;
+  String? county;
+  String? locale;
 
   WeatherPosition({
     @required this.city,

@@ -21,13 +21,13 @@ import 'package:huawei_awareness/hmsAwarenessLibrary.dart'
 import 'package:huawei_awareness/constants/param.dart';
 
 class CombinationBarrier extends AwarenessBarrier {
-  String barrierLabel;
-  AwarenessBarrier _barrier;
-  List<AwarenessBarrier> _barriers;
+  String? barrierLabel;
+  AwarenessBarrier? _barrier;
+  List<AwarenessBarrier>? _barriers;
 
   CombinationBarrier.not({
     @required this.barrierLabel,
-    @required AwarenessBarrier barrier,
+    @required AwarenessBarrier? barrier,
   }) : super(
           barrierEventType: Param.combinedBarrierReceiverAction,
           barrierType: Param.combinedNot,
@@ -38,7 +38,7 @@ class CombinationBarrier extends AwarenessBarrier {
 
   CombinationBarrier.and({
     @required this.barrierLabel,
-    @required List<AwarenessBarrier> barriers,
+    @required List<AwarenessBarrier>? barriers,
   }) : super(
           barrierEventType: Param.combinedBarrierReceiverAction,
           barrierType: Param.combinedAnd,
@@ -49,7 +49,7 @@ class CombinationBarrier extends AwarenessBarrier {
 
   CombinationBarrier.or({
     @required this.barrierLabel,
-    @required List<AwarenessBarrier> barriers,
+    @required List<AwarenessBarrier>? barriers,
   }) : super(
           barrierEventType: Param.combinedBarrierReceiverAction,
           barrierType: Param.combinedOr,
@@ -66,9 +66,9 @@ class CombinationBarrier extends AwarenessBarrier {
         Param.barrierEventType:
             barrierEventType == null ? null : barrierEventType,
         Param.barrierType: barrierType == null ? null : barrierType,
-        Param.barrier: _barrier == null ? null : _barrier.toMap(),
+        Param.barrier: _barrier == null ? null : _barrier?.toMap(),
         Param.barriers: _barriers == null
             ? null
-            : List<dynamic>.from(_barriers.map((x) => x.toMap())),
+            : List<dynamic>.from(_barriers!.map((x) => x.toMap())),
       };
 }

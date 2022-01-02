@@ -18,8 +18,8 @@ import 'dart:convert' show json;
 import 'package:huawei_awareness/constants/param.dart';
 
 class DetectedBehavior {
-  int confidence;
-  int type;
+  int? confidence;
+  int? type;
 
   DetectedBehavior({
     this.confidence,

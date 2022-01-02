@@ -41,31 +41,31 @@ class TimeBarrier extends AwarenessBarrier {
   static const int CategoryWeekend = 7;
   static const int CategoryNotHoliday = 8;
 
-  String barrierLabel;
+  String? barrierLabel;
 
   //inSunriseOrSunsetPeriod
-  int timeInstant;
-  int startTimeOffset;
-  int stopTimeOffset;
+  int? timeInstant;
+  int? startTimeOffset;
+  int? stopTimeOffset;
 
   //duringPeriodOfDay
-  int startTimeOfDay;
-  int stopTimeOfDay;
+  int? startTimeOfDay;
+  int? stopTimeOfDay;
 
   //duringTimePeriod
-  int startTimeStamp;
-  int stopTimeStamp;
+  int? startTimeStamp;
+  int? stopTimeStamp;
 
   //duringPeriodOfWeek
-  int dayOfWeek;
-  int startTimeOfSpecifiedDay;
-  int stopTimeOfSpecifiedDay;
+  int? dayOfWeek;
+  int? startTimeOfSpecifiedDay;
+  int? stopTimeOfSpecifiedDay;
 
   //inTimeCategory
-  int inTimeCategory;
+  int? inTimeCategory;
 
   //for duringPeriodOfDay and duringPeriodOfWeek
-  String timeZoneId;
+  String? timeZoneId;
 
   TimeBarrier.inSunriseOrSunsetPeriod({
     @required this.barrierLabel,

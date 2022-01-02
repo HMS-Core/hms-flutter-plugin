@@ -34,30 +34,30 @@ class AwarenessUtilsClient {
   }
 
   static Future<bool> hasLocationPermission() async {
-    return _permissionChannel.invokeMethod(Method.HasLocationPermission);
+    return await  _permissionChannel.invokeMethod(Method.HasLocationPermission);
   }
 
   static Future<bool> hasBackgroundLocationPermission() async {
-    return _permissionChannel
+    return await _permissionChannel
         .invokeMethod(Method.HasBackgroundLocationPermission);
   }
 
   static Future<bool> hasActivityRecognitionPermission() async {
-    return _permissionChannel
+    return await _permissionChannel
         .invokeMethod(Method.HasActivityRecognitionPermission);
   }
 
   static Future<bool> requestLocationPermission() async {
-    return _permissionChannel.invokeMethod(Method.RequestLocationPermission);
+    return await _permissionChannel.invokeMethod(Method.RequestLocationPermission);
   }
 
   static Future<bool> requestBackgroundLocationPermission() async {
-    return _permissionChannel
+    return await _permissionChannel
         .invokeMethod(Method.RequestBackgroundLocationPermission);
   }
 
   static Future<bool> requestActivityRecognitionPermission() async {
-    return _permissionChannel
+    return await _permissionChannel
         .invokeMethod(Method.RequestActivityRecognitionPermission);
   }
 }

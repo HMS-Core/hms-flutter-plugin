@@ -18,13 +18,13 @@ import 'dart:convert' show json;
 import 'package:huawei_awareness/constants/param.dart';
 
 class HourlyWeather {
-  int cnWeatherId;
-  int dateTimeStamp;
-  bool isDayNight;
-  int rainProbability;
-  int tempC;
-  int tempF;
-  int weatherId;
+  int? cnWeatherId;
+  int? dateTimeStamp;
+  bool? isDayNight;
+  int? rainProbability;
+  int? tempC;
+  int? tempF;
+  int? weatherId;
 
   HourlyWeather({
     this.cnWeatherId,

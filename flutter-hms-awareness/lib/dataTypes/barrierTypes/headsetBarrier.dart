@@ -21,8 +21,8 @@ import 'package:huawei_awareness/hmsAwarenessLibrary.dart'
 import 'package:huawei_awareness/constants/param.dart';
 
 class HeadsetBarrier extends AwarenessBarrier {
-  String barrierLabel;
-  int headsetStatus;
+  String? barrierLabel;
+  int? headsetStatus;
 
   HeadsetBarrier.keeping({
     @required this.barrierLabel,
