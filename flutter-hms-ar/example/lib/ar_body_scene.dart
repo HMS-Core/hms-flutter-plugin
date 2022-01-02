@@ -16,25 +16,26 @@
 
 import 'package:flutter/material.dart';
 import 'package:huawei_ar/ar_engine_library.dart';
+import 'package:huawei_ar/hiar/ar_trackable_base.dart';
 
 class ArBodyScene extends StatefulWidget {
-  ArBodyScene({Key key}) : super(key: key);
+  ArBodyScene({Key? key}) : super(key: key);
 
   @override
   _ArBodySceneState createState() => _ArBodySceneState();
 }
 
 class _ArBodySceneState extends State<ArBodyScene> {
-  ARSceneController arSceneController;
+  ARSceneController? arSceneController;
 
   _onARSceneCreated(ARSceneController controller) {
     arSceneController = controller;
-    arSceneController.onDetectTrackable =
+    arSceneController?.onDetectTrackable =
         (arHand) => _bodyDetectCallback(arHand);
   }
 
-  _bodyDetectCallback(ARBody arBody) {
-    print("ARBody detected: " + arBody?.toString());
+  _bodyDetectCallback(ARTrackableBase arBody) {
+    print("ARBody detected: " + arBody.toString());
   }
 
   @override

@@ -16,6 +16,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:huawei_ar/ar_engine_library.dart';
+import 'package:huawei_ar/hiar/ar_trackable_base.dart';
 
 class ArHandScene extends StatefulWidget {
   @override
@@ -26,21 +27,21 @@ class _ArHandSceneState extends State<ArHandScene> {
   String detectionResult = "";
   bool _showLogs = false;
 
-  ARSceneController arSceneController;
-  Alignment _alignment;
+  ARSceneController? arSceneController;
+  Alignment? _alignment;
 
   _onARSceneCreated(ARSceneController controller) {
     print("ARScene created");
     arSceneController = controller;
-    arSceneController.onDetectTrackable =
+    arSceneController?.onDetectTrackable =
         (arHand) => _handDetectCallback(arHand);
   }
 
-  _handDetectCallback(ARHand arHand) {
+  _handDetectCallback(ARTrackableBase arHand) {
     if (!mounted) return;
     setState(() {
       detectionResult = arHand.toString();
-      switch (arHand.gestureType) {
+      switch ((arHand as ARHand).gestureType) {
         case -1:
           _alignment = Alignment.center;
           break;

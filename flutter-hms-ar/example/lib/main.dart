@@ -114,14 +114,16 @@ class _MyAppState extends State<MyApp> {
 
   Widget _expandedButton(
       Function onPressed, String buttonText, IconData iconData,
-      {Color color}) {
+      {Color? color}) {
     return Flexible(
       flex: 2,
       child: SizedBox(
         child: Padding(
           padding: const EdgeInsets.all(5.0),
           child: MaterialButton(
-            onPressed: onPressed,
+            onPressed:(){
+              onPressed();
+            },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

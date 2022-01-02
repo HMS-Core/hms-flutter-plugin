@@ -16,6 +16,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:huawei_ar/ar_engine_library.dart';
+import 'package:huawei_ar/hiar/ar_trackable_base.dart';
 
 class ARWorldScene extends StatefulWidget {
   @override
@@ -23,16 +24,16 @@ class ARWorldScene extends StatefulWidget {
 }
 
 class _ARWorldSceneState extends State<ARWorldScene> {
-  ARSceneController arSceneController;
+  ARSceneController? arSceneController;
 
   _onARSceneCreated(ARSceneController controller) {
     arSceneController = controller;
-    arSceneController.onDetectTrackable =
+    arSceneController?.onDetectTrackable =
         (arPlane) => _onDetectARPlane(arPlane);
   }
 
-  _onDetectARPlane(ARPlane arPlane) {
-    print("ARPlane detected: " + arPlane?.toString());
+  _onDetectARPlane(ARTrackableBase arPlane) {
+    print("ARPlane detected: " + arPlane.toString());
   }
 
   @override

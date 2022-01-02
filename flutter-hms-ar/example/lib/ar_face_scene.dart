@@ -16,26 +16,27 @@
 
 import 'package:flutter/material.dart';
 import 'package:huawei_ar/ar_engine_library.dart';
+import 'package:huawei_ar/hiar/ar_trackable_base.dart';
 
 class ArFaceScreen extends StatefulWidget {
-  ArFaceScreen({Key key}) : super(key: key);
+  ArFaceScreen({Key? key}) : super(key: key);
 
   @override
   _ArFaceScreenState createState() => _ArFaceScreenState();
 }
 
 class _ArFaceScreenState extends State<ArFaceScreen> {
-  ARSceneController arSceneController;
+  ARSceneController? arSceneController;
 
   _onSceneCreated(ARSceneController controller) {
     print("ARScene created");
     arSceneController = controller;
-    arSceneController.onDetectTrackable =
+    arSceneController?.onDetectTrackable =
         (arFace) => _faceDetectCallback(arFace);
   }
 
-  void _faceDetectCallback(ARFace arFace) {
-    print("ARFace detected: " + arFace?.toString());
+  void _faceDetectCallback(ARTrackableBase arFace) {
+    print("ARFace detected: " + arFace.toString());
   }
 
   @override
