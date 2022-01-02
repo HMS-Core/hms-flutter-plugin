@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 class CustomConsole extends StatelessWidget {
   final List<String> responses;
 
-  CustomConsole({this.responses});
+  CustomConsole({this.responses=const []});
 
   @override
   Widget build(BuildContext context) {

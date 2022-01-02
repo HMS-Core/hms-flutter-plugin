@@ -38,21 +38,21 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  String fileId;
+  String? fileId;
   List<String> responsesToDisplay = [];
-  String commentId;
+  String? commentId;
 
-  RefreshCallback refreshTokenCallback;
-  HmsAuthHuaweiId _id;
-  Drive drive;
+  RefreshCallback? refreshTokenCallback;
+  HmsAuthHuaweiId? _id;
+  Drive? drive;
 
-  void fileIdSnackbar() {
-    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+  void fileIdSnackBar() {
+    _scaffoldKey.currentState?.showSnackBar(new SnackBar(
         content: new Text("FileId is empty. Please create a file.")));
   }
 
-  void fileCommentIdSnackbar() {
-    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+  void fileCommentIdSnackBar() {
+    _scaffoldKey.currentState?.showSnackBar(new SnackBar(
         content: new Text(
             "Either file or comment id is empty. Please create a comment on created file.")));
   }
@@ -99,12 +99,12 @@ class _MyAppState extends State<MyApp> {
   Future<String> refreshToken() async {
     _id = await HmsAuthService.silentSignIn(authParamHelper: helper);
     log('RefreshToken called', name: "FlutterDEMO");
-    return _id.accessToken;
+    return _id!.accessToken;
   }
 
   void _onBatchError(Object error) {
     if (error is PlatformException) {
-      log("BatchError: ${jsonDecode(error.message)}");
+      log("BatchError: ${jsonDecode(error.message ?? "")}");
     }
   }
 
@@ -119,25 +119,25 @@ class _MyAppState extends State<MyApp> {
     if (!mounted) return;
     try {
       _id = await HmsAuthService.signIn(authParamHelper: helper);
-      String unionId = _id.unionId;
-      RefreshTokenCallback refreshTokenCallback = refreshToken;
+      String unionId = _id!.unionId;
+      RefreshTokenCallback refreshTokenCallback = await refreshToken;
       DriveCredentials deviceCredentials =
-          DriveCredentials(unionId, _id.accessToken, refreshTokenCallback);
+          DriveCredentials(unionId, _id!.accessToken, refreshTokenCallback);
       drive = await Drive.init(deviceCredentials);
-      print("User: ${_id.displayName}");
+      print("User: ${_id!.displayName}");
     } on Exception catch (e) {
       print(e.toString());
     }
-    drive.batch.onBatchResult.listen(_onBatchEvent, onError: _onBatchError);
+    drive?.batch.onBatchResult.listen(_onBatchEvent, onError: _onBatchError);
   }
 
   void _getAbout() async {
-    DriveAbout about = await drive.about(AboutRequest());
+    DriveAbout? about = await drive?.about(AboutRequest());
 
     log("About: $about");
 
     setState(() {
-      responsesToDisplay.add("User Display Name: " + about.user.displayName);
+      responsesToDisplay.add("User Display Name: " + about!.user!.displayName!);
     });
   }
 
@@ -156,7 +156,7 @@ class _MyAppState extends State<MyApp> {
       byteArray: byteArray,
     );
 
-    DriveFile createdFile = await drive.files.create(FilesRequest.create(
+    DriveFile? createdFile = await drive?.files.create(FilesRequest.create(
       fileMetadata,
       fileContent: fileContent,
     ));
@@ -164,13 +164,13 @@ class _MyAppState extends State<MyApp> {
     log("Created File: $createdFile");
 
     setState(() {
-      responsesToDisplay.add("Created Files Name: " + createdFile.fileName);
+      responsesToDisplay.add("Created Files Name: " + createdFile!.fileName!);
       fileId = createdFile.id;
     });
   }
 
   void _listFiles() async {
-    DriveFileList fileList = await drive.files.list(FilesRequest.list(
+    DriveFileList? fileList = await drive?.files.list(FilesRequest.list(
       fields: "*",
       pageSize: 5,
     ));
@@ -178,10 +178,11 @@ class _MyAppState extends State<MyApp> {
     log("File List: $fileList");
 
     List<String> fileNames = [];
-    for (int i = 0; i < fileList.files.length; i++) {
-      fileNames.add(fileList.files[i].fileName);
+    if (fileList?.files != null) {
+      for (int i = 0; i < fileList!.files!.length; i++) {
+        fileNames.add(fileList.files![i].fileName!);
+      }
     }
-
     setState(() {
       responsesToDisplay.add("Files on Drive: " + fileNames.toString());
     });
@@ -190,20 +191,20 @@ class _MyAppState extends State<MyApp> {
   void _updateFileName() async {
     DriveFile updatedMetadata = DriveFile(fileName: "updatedFile.jpg");
 
-    DriveFile updatedFile =
-        await drive.files.update(FilesRequest.update(fileId, updatedMetadata));
+    DriveFile? updatedFile =
+        await drive?.files.update(FilesRequest.update(fileId, updatedMetadata));
 
     log("Updated File: $updatedFile");
 
     setState(() {
-      responsesToDisplay.add("Updated File Name: " + updatedFile.fileName);
+      responsesToDisplay.add("Updated File Name: " + updatedFile!.fileName!);
     });
   }
 
   void _downloadFile() async {
     final directory = await getExternalStorageDirectory();
 
-    bool result = await drive.files.getContentAndDownloadTo(
+    bool? result = await drive?.files.getContentAndDownloadTo(
       FilesRequest.getRequest(
         fileId,
         fields: "*",
@@ -223,32 +224,34 @@ class _MyAppState extends State<MyApp> {
       description: "This is a comment.",
     );
 
-    DriveComment createdComment =
-        await drive.comments.create(CommentsRequest.create(fileId, comment));
+    DriveComment? createdComment =
+        await drive?.comments.create(CommentsRequest.create(fileId, comment));
 
     log("Created Comment: $createdComment");
 
     setState(() {
-      commentId = createdComment.id;
-      responsesToDisplay.add("Comment Added: " + createdComment.description);
+      commentId = createdComment?.id;
+      responsesToDisplay.add("Comment Added: " + createdComment!.description!);
     });
   }
 
   void _commentList() async {
-    DriveCommentList commentList =
-        await drive.comments.list(CommentsRequest.list(fileId));
+    DriveCommentList? commentList =
+        await drive?.comments.list(CommentsRequest.list(fileId));
 
     log("Comment List: $commentList");
 
-    List<String> commentDescriptions = [];
-    for (int i = 0; i < commentList.comments.length; i++) {
-      commentDescriptions.add(commentList.comments[i].description);
-    }
+    if (commentList?.comments != null) {
+      List<String> commentDescriptions = [];
+      for (int i = 0; i < commentList!.comments!.length; i++) {
+        commentDescriptions.add(commentList.comments![i].description!);
+      }
 
-    setState(() {
-      responsesToDisplay
-          .add("Comments on File: " + commentDescriptions.toString());
-    });
+      setState(() {
+        responsesToDisplay
+            .add("Comments on File: " + commentDescriptions.toString());
+      });
+    }
   }
 
   void _replyComment() async {
@@ -256,31 +259,32 @@ class _MyAppState extends State<MyApp> {
       description: "This is a reply.",
     );
 
-    DriveReply createdReply = await drive.replies
+    DriveReply? createdReply = await drive?.replies
         .create(RepliesRequest.create(fileId, commentId, reply));
 
     log("Created Reply: $createdReply");
 
     setState(() {
-      responsesToDisplay.add("Reply Added: " + createdReply.description);
+      responsesToDisplay.add("Reply Added: " + createdReply!.description!);
     });
   }
 
   void _replyList() async {
-    DriveReplyList replyList =
-        await drive.replies.list(RepliesRequest.list(fileId, commentId));
+    DriveReplyList? replyList =
+        await drive?.replies.list(RepliesRequest.list(fileId, commentId));
 
     log("Reply List: $replyList");
+    if (replyList?.replies != null) {
+      List<String> replyDescriptions = [];
+      for (int i = 0; i < replyList!.replies!.length; i++) {
+        replyDescriptions.add(replyList.replies![i].description!);
+      }
 
-    List<String> replyDescriptions = [];
-    for (int i = 0; i < replyList.replies.length; i++) {
-      replyDescriptions.add(replyList.replies[i].description);
+      setState(() {
+        responsesToDisplay
+            .add("Comments on File: " + replyDescriptions.toString());
+      });
     }
-
-    setState(() {
-      responsesToDisplay
-          .add("Comments on File: " + replyDescriptions.toString());
-    });
   }
 
   void _batch() async {
@@ -313,11 +317,11 @@ class _MyAppState extends State<MyApp> {
       );
     }
 
-    await drive.batch.execute(BatchRequest(batchRequests));
+    await drive?.batch.execute(BatchRequest(batchRequests));
   }
 
   void _deleteFile() async {
-    bool result = await drive.files.delete(FilesRequest.delete(fileId));
+    bool? result = await drive?.files.delete(FilesRequest.delete(fileId));
 
     log(result.toString());
 
@@ -329,7 +333,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _emptyRecycle() async {
-    bool result = await drive.files.emptyRecycle(FilesRequest.emptyRecycle());
+    bool? result = await drive?.files.emptyRecycle(FilesRequest.emptyRecycle());
 
     log(result.toString());
 
@@ -370,30 +374,30 @@ class _MyAppState extends State<MyApp> {
                 text: "List Files",
               ),
               CustomButton(
-                onPressed: fileId == null ? fileIdSnackbar : _updateFileName,
+                onPressed: fileId == null ? fileIdSnackBar : _updateFileName,
                 text: "Update File Name",
               ),
               CustomButton(
-                onPressed: fileId == null ? fileIdSnackbar : _downloadFile,
+                onPressed: fileId == null ? fileIdSnackBar : _downloadFile,
                 text: "Download File to Local Storage",
               ),
               CustomButton(
-                onPressed: fileId == null ? fileIdSnackbar : _createComment,
+                onPressed: fileId == null ? fileIdSnackBar : _createComment,
                 text: "Create Comment",
               ),
               CustomButton(
-                onPressed: fileId == null ? fileIdSnackbar : _commentList,
+                onPressed: fileId == null ? fileIdSnackBar : _commentList,
                 text: "List Comments",
               ),
               CustomButton(
                 onPressed: (fileId == null || commentId == null)
-                    ? fileCommentIdSnackbar
+                    ? fileCommentIdSnackBar
                     : _replyComment,
                 text: "Reply the Comment",
               ),
               CustomButton(
                 onPressed: (fileId == null || commentId == null)
-                    ? fileCommentIdSnackbar
+                    ? fileCommentIdSnackBar
                     : _replyList,
                 text: "List Replies",
               ),
@@ -402,7 +406,7 @@ class _MyAppState extends State<MyApp> {
                 text: "Batch Operations",
               ),
               CustomButton(
-                onPressed: fileId == null ? fileIdSnackbar : _deleteFile,
+                onPressed: fileId == null ? fileIdSnackBar : _deleteFile,
                 text: "Delete the File",
               ),
               CustomButton(
