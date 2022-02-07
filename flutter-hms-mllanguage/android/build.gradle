@@ -1,0 +1,64 @@
+group 'com.huawei.hms.flutter.mllanguage'
+version '1.0'
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+        maven {url 'https://developer.huawei.com/repo/'}
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.6.0'
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven {url 'https://developer.huawei.com/repo/'}
+    }
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 29
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    // TRANSLATE
+    implementation 'com.huawei.hms:ml-computer-translate:3.2.0.300'
+    implementation 'com.huawei.hms:ml-computer-translate-model:3.2.0.300'
+    // LANG DETECTION
+    implementation 'com.huawei.hms:ml-computer-language-detection:3.2.0.300'
+    implementation 'com.huawei.hms:ml-computer-language-detection-model:3.2.0.300'
+    // ASR
+    implementation 'com.huawei.hms:ml-computer-voice-asr-plugin:3.2.0.300'
+    // TTS
+    implementation 'com.huawei.hms:ml-computer-voice-tts:3.2.0.300'
+    implementation 'com.huawei.hms:ml-computer-voice-tts-model-bee:3.2.0.300'
+    implementation 'com.huawei.hms:ml-computer-voice-tts-model-eagle:3.2.0.300'
+    // AFT
+    implementation 'com.huawei.hms:ml-computer-voice-aft:3.2.0.300'
+    // RTT
+    implementation 'com.huawei.hms:ml-computer-voice-realtimetranscription:3.2.0.300'
+    // SOUND DETECTION
+    implementation 'com.huawei.hms:ml-speech-semantics-sounddect-sdk:3.2.0.300'
+    implementation 'com.huawei.hms:ml-speech-semantics-sounddect-model:3.2.0.300'
+
+    implementation 'com.huawei.hms:stats:5.0.3.301'
+}
