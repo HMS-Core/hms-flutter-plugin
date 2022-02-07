@@ -4,13 +4,13 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'huawei_iap'
-  s.version          = '6.0.0+300'
-  s.summary          = 'Huawei HMS Flutter IAP Plugin.'
+  s.version          = '6.2.0+300'
+  s.summary          = 'Huawei IAP Plugin for Flutter.'
   s.description      = <<-DESC
 HUAWEI IAP Kit plugin for Flutter. Huawei's In-App Purchases (IAP) service allows you to offer in-app purchases and facilitates in-app payment.
                        DESC
   s.homepage         = 'https://www.huawei.com'
-  s.license          = { :file => '../LICENSE' }
+  s.license          = { :type => 'Apache 2.0', :file => '../LICENSE' }
   s.author           = { 'Huawei Technologies' => 'huaweideveloper1@gmail.com' }
   s.source           = { :git => 'https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-iap' }
   s.source_files = 'Classes/**/*'

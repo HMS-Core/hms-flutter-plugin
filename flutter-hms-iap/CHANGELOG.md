@@ -1,3 +1,7 @@
+## 6.2.0+300
+
+* Updated to support Huawei In-App Purchases SDK version 6.2.0.300.
+* Added the offerUsedStatus property to ProductInfo.
 ## 6.0.0+300
 
 * Updated to support Huawei In-App Purchases SDK version 6.0.0.300.

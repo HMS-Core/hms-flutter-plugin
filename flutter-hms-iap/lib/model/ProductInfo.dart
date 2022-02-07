@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+
 import 'dart:convert' show json;
 
 /// Details of a product.
@@ -30,6 +31,7 @@ class ProductInfo {
   int? subSpecialPeriodCycles;
   int? subProductLevel;
   int? status;
+  int? offerUsedStatus;
   String? subFreeTrialPeriod;
   String? subGroupId;
   String? subGroupTitle;
@@ -51,6 +53,7 @@ class ProductInfo {
     this.subSpecialPeriodCycles,
     this.subProductLevel,
     this.status,
+    this.offerUsedStatus,
     this.subFreeTrialPeriod,
     this.subGroupId,
     this.subGroupTitle,
@@ -87,6 +90,8 @@ class ProductInfo {
         subProductLevel:
             map["subProductLevel"] == null ? null : map["subProductLevel"],
         status: map["status"] == null ? null : map["status"],
+        offerUsedStatus:
+            map["offerUsedStatus"] == null ? null : map["offerUsedStatus"],
         subFreeTrialPeriod: map["subFreeTrialPeriod"] == null
             ? null
             : map["subFreeTrialPeriod"],
@@ -115,6 +120,7 @@ class ProductInfo {
       'subSpecialPeriodCycles': subSpecialPeriodCycles,
       'subProductLevel': subProductLevel,
       'status': status,
+      'offerUsedStatus': offerUsedStatus,
       'subPeriod': subPeriod,
       'subSpecialPrice': subSpecialPrice,
       'subSpecialPeriod': subSpecialPeriod,
@@ -143,6 +149,7 @@ class ProductInfo {
         this.subSpecialPeriodCycles == other.subSpecialPeriodCycles &&
         this.subProductLevel == other.subProductLevel &&
         this.status == other.status &&
+        this.offerUsedStatus == other.offerUsedStatus &&
         this.subFreeTrialPeriod == other.subFreeTrialPeriod &&
         this.subGroupId == other.subGroupId &&
         this.subGroupTitle == other.subGroupTitle &&
@@ -166,6 +173,7 @@ class ProductInfo {
       subSpecialPeriodCycles.hashCode ^
       subProductLevel.hashCode ^
       status.hashCode ^
+      offerUsedStatus.hashCode ^
       subFreeTrialPeriod.hashCode ^
       subGroupId.hashCode ^
       subGroupTitle.hashCode ^

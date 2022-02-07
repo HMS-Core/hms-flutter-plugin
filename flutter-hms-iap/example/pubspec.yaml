@@ -1,6 +1,6 @@
 name: huawei_iap_example
 description: Demonstrates how to use the Huawei IAP plugin.
-version: 6.0.0+300
+version: 6.2.0+300
 publish_to: none
 
 environment:
