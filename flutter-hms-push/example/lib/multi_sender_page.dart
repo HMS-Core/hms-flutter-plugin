@@ -44,6 +44,7 @@ class _MultiSenderPageState extends State<MultiSenderPage> {
   TextEditingController logTextController = TextEditingController();
   final padding = EdgeInsets.symmetric(vertical: 1.0, horizontal: 10);
   final TextStyle _textStyle = TextStyle(fontSize: 16);
+
   Widget customTextField(TextEditingController controller, String hintText,
       {EdgeInsets? customPadding}) {
     return Padding(
@@ -127,7 +128,7 @@ class _MultiSenderPageState extends State<MultiSenderPage> {
         'isSupportProfile', (await HmsProfile.isSupportProfile()).toString());
   }
 
-  void getMultiSenderTOken() {
+  void getMultiSenderToken() {
     Push.getMultiSenderToken("<subjectId>").then(
       (_) => print("[getMultiSenderToken] Success"),
       onError: (e) => print("[getMultiSenderToken] Error: " + e.toString()),

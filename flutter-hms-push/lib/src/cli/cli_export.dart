@@ -14,7 +14,6 @@
     limitations under the License.
 */
 
-export 'fcm_push_proxy.dart';
 export 'hms_profile.dart';
 export 'proxy_settings.dart';
 export 'push.dart';

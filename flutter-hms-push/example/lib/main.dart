@@ -21,10 +21,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:huawei_push/huawei_push.dart';
-import 'package:huawei_push_example/multi_sender_page.dart';
 
 import 'custom_intent_page.dart';
 import 'local_notification_page.dart';
+import 'multi_sender_page.dart';
 
 void main() {
   runApp(MaterialApp(home: MyApp()));

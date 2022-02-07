@@ -40,7 +40,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.huawei.hms:push-fcm:5.3.0.304'
-    implementation 'com.huawei.hms:push:5.3.0.304'
+    implementation 'com.huawei.hms:push:6.1.0.300'
     implementation 'com.facebook.fresco:fresco:2.5.0'
 }

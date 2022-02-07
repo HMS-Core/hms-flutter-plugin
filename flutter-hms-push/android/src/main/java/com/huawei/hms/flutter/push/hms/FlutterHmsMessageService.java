@@ -129,6 +129,7 @@ public class FlutterHmsMessageService extends HmsMessageService {
                     PushIntent.DATA_MESSAGE, jsonObject.toString());
             }
         } else {
+            PluginContext.initialize(applicationContext);
             HMSLogger.getInstance(applicationContext).sendPeriodicEvent("onMessageReceived");
             Intent intent = new Intent(applicationContext, BackgroundMessageBroadcastReceiver.class);
             intent.setAction(BackgroundMessageBroadcastReceiver.BACKGROUND_REMOTE_MESSAGE);

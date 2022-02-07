@@ -65,9 +65,6 @@ public enum Method {
     deleteProfile,
     deleteMultiSenderProfile,
 
-    setCountryCode,
-    initFcmPushProxy,
-
     enableLogger,
     disableLogger,
 

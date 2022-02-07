@@ -50,8 +50,6 @@ import com.huawei.hms.flutter.push.receiver.local.LocalNotificationClickEventRec
 import com.huawei.hms.flutter.push.receiver.remote.RemoteMessageNotificationIntentReceiver;
 import com.huawei.hms.flutter.push.receiver.remote.RemoteMessageSentDeliveredReceiver;
 import com.huawei.hms.flutter.push.utils.Utils;
-import com.huawei.hms.push.plugin.base.proxy.ProxySettings;
-import com.huawei.hms.push.plugin.fcm.FcmPushProxy;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -346,25 +344,6 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
                 break;
             case deleteMultiSenderToken:
                 hmsInstanceId.deleteMultiSenderToken(Utils.getStringArgument(call, Param.SUBJECT_ID.code()), result);
-                break;
-            default:
-                onMethodCallProxy(call, result);
-                break;
-        }
-    }
-
-    private void onMethodCallProxy(final @NonNull MethodCall call, final @NonNull Result result) {
-        switch (Method.valueOf(call.method)) {
-            case setCountryCode:
-                HMSLogger.getInstance(context).startMethodExecutionTimer(Method.setCountryCode.name());
-                ProxySettings.setCountryCode(context, call.argument("countryCode"));
-                result.success(Code.RESULT_SUCCESS.code());
-                HMSLogger.getInstance(context).sendSingleEvent(Method.setCountryCode.name());
-                break;
-            case initFcmPushProxy:
-                HMSLogger.getInstance(context).startMethodExecutionTimer(Method.initFcmPushProxy.name());
-                result.success(FcmPushProxy.init(context));
-                HMSLogger.getInstance(context).sendSingleEvent(Method.initFcmPushProxy.name());
                 break;
             default:
                 result.notImplemented();
