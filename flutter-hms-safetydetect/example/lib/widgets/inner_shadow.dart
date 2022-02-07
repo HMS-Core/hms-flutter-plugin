@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -22,11 +22,11 @@ import 'package:huawei_safetydetect_example/style.dart';
 
 class InnerShadow extends SingleChildRenderObjectWidget {
   const InnerShadow({
-    Key key,
+    Key? key,
     this.blur = 8,
     this.color = emperor,
     this.offset = const Offset(4, 4),
-    Widget child,
+    Widget? child,
   }) : super(key: key, child: child);
 
   final double blur;
@@ -52,10 +52,10 @@ class InnerShadow extends SingleChildRenderObjectWidget {
 }
 
 class _RenderInnerShadow extends RenderProxyBox {
-  double blur;
-  Color color;
-  double dx;
-  double dy;
+  late double blur;
+  late Color color;
+  late double dx;
+  late double dy;
 
   @override
   void paint(PaintingContext context, Offset offset) {
@@ -69,7 +69,7 @@ class _RenderInnerShadow extends RenderProxyBox {
       size.height,
     );
     context.canvas..saveLayer(rectOuter, Paint());
-    context.paintChild(child, offset);
+    context.paintChild(child!, offset);
     final Paint shadowPaint = Paint()
       ..blendMode = BlendMode.srcATop
       ..imageFilter = ImageFilter.blur(sigmaX: blur, sigmaY: blur)
@@ -79,7 +79,10 @@ class _RenderInnerShadow extends RenderProxyBox {
       ..saveLayer(rectOuter, shadowPaint)
       ..saveLayer(rectInner, Paint())
       ..translate(dx, dy);
-    context.paintChild(child, offset);
-    context.canvas..restore()..restore()..restore();
+    context.paintChild(child!, offset);
+    context.canvas
+      ..restore()
+      ..restore()
+      ..restore();
   }
 }

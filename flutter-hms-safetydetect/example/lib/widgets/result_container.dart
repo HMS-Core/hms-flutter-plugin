@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -20,13 +20,13 @@ import '../style.dart';
 import 'inner_shadow.dart';
 
 class ResultContainer extends StatelessWidget {
-  final String methodName;
-  final String methodResult;
+  final String? methodName;
+  final String? methodResult;
 
   final EdgeInsets componentPadding =
       const EdgeInsets.symmetric(horizontal: 40, vertical: 20);
 
-  const ResultContainer({Key key, this.methodName, this.methodResult})
+  const ResultContainer({Key? key, this.methodName, this.methodResult})
       : super(key: key);
 
   @override
@@ -56,7 +56,7 @@ class ResultContainer extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      methodName.isEmpty ? "Method Result" : methodName,
+                      methodName ?? "Method Result",
                       style: TextStyle(fontSize: 24, color: textColor),
                     ),
                   ),
@@ -79,7 +79,7 @@ class ResultContainer extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        methodResult.isEmpty ? "Result" : methodResult,
+                        methodResult ?? "Result",
                         style: TextStyle(
                           fontSize: 16,
                           color: textColor,

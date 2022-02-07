@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -19,16 +19,16 @@ import 'package:flutter/material.dart';
 import '../style.dart';
 
 class ListTileButton extends StatefulWidget {
-  final Function onTap;
+  final Function() onTap;
   final String title;
   final IconData iconData;
   final Color iconColor;
 
   const ListTileButton(
-      {Key key,
-      @required this.onTap,
-      @required this.iconData,
-      @required this.title,
+      {Key? key,
+      required this.onTap,
+      required this.iconData,
+      required this.title,
       this.iconColor = emperor})
       : super(key: key);
 

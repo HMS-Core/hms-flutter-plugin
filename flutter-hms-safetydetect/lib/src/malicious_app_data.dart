@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -20,7 +20,10 @@ class MaliciousAppData {
   final String apkPackageName;
   final String apkSha256;
 
-  MaliciousAppData._({this.apkCategory, this.apkPackageName, this.apkSha256});
+  MaliciousAppData._(
+      {required this.apkCategory,
+      required this.apkPackageName,
+      required this.apkSha256});
 
   factory MaliciousAppData.fromMap(Map<String, dynamic> map) {
     return MaliciousAppData._(

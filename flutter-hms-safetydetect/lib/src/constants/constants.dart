@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -108,6 +108,11 @@ const Map SafetyDetectStatusCodes = {
   ///
   /// [Solution:] Verify that the passed app ID is valid.
   '19802': 'USER_DETECT_INVALID_APPID',
+
+  /// [Description:] Failed to display a popup on a non-Huawei phone.
+  ///
+  /// [Solution:] Go to Settings (or your phone manager app), assign HMS Core (APK) with the permission to display a popup while running in the background, and try again.
+  '19803': 'USER_DETECT_PERMISSION',
 
   /// [Description:] Failed to initialize imperceptible fake user detection.
   ///

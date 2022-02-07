@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -31,10 +31,16 @@ class SafetyDetect {
   }
 
   /// Initiates a request to check the system integrity of the current device.
-  static Future<String> sysIntegrity(Uint8List nonce, String appId) async {
-    if (nonce == null || appId == null) throw ("Arguments can't be null");
-    return await methodChannel
-        .invokeMethod('sysIntegrity', {"nonce": nonce, "appId": appId});
+  static Future<String> sysIntegrity(
+    Uint8List nonce,
+    String appId, {
+    String? alg,
+  }) async {
+    return await methodChannel.invokeMethod('sysIntegrity', {
+      "nonce": nonce,
+      "appId": appId,
+      "alg": alg,
+    });
   }
 
   /// Checks whether app security check is enabled.
@@ -96,7 +102,7 @@ class SafetyDetect {
   /// Initiates a fake user detection request.
   ///
   /// Note: This feature is not available in the Chinise Mainland.
-  static Future<String> userDetection(String appId) async {
+  static Future<String?> userDetection(String appId) async {
     return await methodChannel.invokeMethod('userDetection', {"appId": appId});
   }
 
@@ -119,7 +125,7 @@ class SafetyDetect {
   }
 
   /// Obtains a risk token.
-  static Future<String> getRiskToken() async {
+  static Future<String?> getRiskToken() async {
     return await methodChannel.invokeMethod('getRiskToken');
   }
 

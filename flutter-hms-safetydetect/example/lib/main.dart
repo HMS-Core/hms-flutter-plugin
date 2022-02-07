@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -36,14 +36,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
-  Animation animation;
-  AnimationController animationController;
+  late Animation animation;
+  late AnimationController animationController;
 
   String selectedMethodName = '';
   String currentMethodResult = '';
-  String appId;
+  late String appId;
   String urlToCheck = "http://example.com/hms/safetydetect/malware";
-  TextEditingController urlTextController;
+  TextEditingController? urlTextController;
   bool antiFraudEnabled = true;
 
   @override
@@ -78,14 +78,18 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   void checkSysIntegrity() async {
     selectedMethodName = "Sys Integrity Check";
     Random secureRandom = Random.secure();
-    List randomIntegers = List<int>();
+    List randomIntegers = <int>[];
     for (var i = 0; i < 24; i++) {
       randomIntegers.add(secureRandom.nextInt(255));
     }
-    Uint8List nonce = Uint8List.fromList(randomIntegers);
+    Uint8List nonce = Uint8List.fromList(randomIntegers as List<int>);
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      String sysintegrityresult = await SafetyDetect.sysIntegrity(nonce, appId);
+      String sysintegrityresult = await SafetyDetect.sysIntegrity(
+        nonce,
+        appId,
+        alg: "RS256",
+      );
       List<String> jwsSplit = sysintegrityresult.split(".");
       String decodedText = utf8.decode(base64Url.decode(jwsSplit[1]));
       Map<String, dynamic> jsonMap = json.decode(decodedText);
@@ -119,16 +123,16 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
       UrlThreatType.phishing
     ];
 
-    List<UrlCheckThreat> urlCheckResults =
-        await SafetyDetect.urlCheck(urlTextController.text, appId, threatTypes);
+    List<UrlCheckThreat> urlCheckResults = await SafetyDetect.urlCheck(
+        urlTextController!.text, appId, threatTypes);
 
     if (urlCheckResults.length == 0) {
       urlCheckRes =
-          "No threat is detected for the URL: ${urlTextController.text}";
+          "No threat is detected for the URL: ${urlTextController!.text}";
     } else {
       urlCheckResults.forEach((element) {
         urlCheckRes +=
-            "${element.getUrlThreatType} is detected on the URL: ${urlTextController.text}";
+            "${element.getUrlThreatType} is detected on the URL: ${urlTextController!.text}";
       });
     }
     currentMethodResult = urlCheckRes;
@@ -138,7 +142,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   void userDetection() async {
     selectedMethodName = "User Detection";
     try {
-      String token = await SafetyDetect.userDetection(appId);
+      String? token = await SafetyDetect.userDetection(appId);
       currentMethodResult = "User verification succeeded, user token: $token";
     } on PlatformException catch (e) {
       currentMethodResult =
@@ -155,7 +159,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
       currentMethodResult = "Wifi detect status is: " +
           wifiDetectStatus.getWifiDetectType.toString();
     } on PlatformException catch (e) {
-      String resultCodeDesc = SafetyDetectStatusCodes[e.code];
+      String? resultCodeDesc = SafetyDetectStatusCodes[e.code];
       currentMethodResult =
           "Error occurred with status code: ${e.code}, Description: $resultCodeDesc";
     }
@@ -164,7 +168,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
 
   void getRiskToken() async {
     selectedMethodName = "Get Risk Token";
-    String riskToken = await SafetyDetect.getRiskToken();
+    String? riskToken = await SafetyDetect.getRiskToken();
     currentMethodResult = "Risk Token: $riskToken";
     animateResult();
   }
@@ -223,127 +227,123 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                     ),
                   ),
                   // App Body
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.75,
-                    color: bgColor,
-                    child: Column(
-                      children: [
-                        FadeTransition(
-                            opacity: animation,
-                            child: ResultContainer(
-                                methodName: selectedMethodName,
-                                methodResult: currentMethodResult)),
-                        // Button List
-                        Container(
-                            height: 160,
-                            child: ListView(
-                                scrollDirection: Axis.horizontal,
-                                padding: componentPadding.copyWith(
-                                    left: 5.0, right: 5.0),
-                                children: [
-                                  ListTileButton(
-                                      onTap: () => userDetection(),
-                                      title: "User Detect",
-                                      iconData: Icons.person,
-                                      iconColor: darkGrey),
-                                  ListTileButton(
-                                    onTap: () => getMaliciousAppsList(),
-                                    title: "Malicious App List",
-                                    iconData: Icons.bug_report,
-                                    iconColor: Colors.red,
-                                  ),
-                                  ListTileButton(
-                                      onTap: () => checkSysIntegrity(),
-                                      title: "Sys Integrity",
-                                      iconData: Icons.security,
-                                      iconColor: Colors.blue),
-                                  ListTileButton(
-                                      onTap: () => getWifiDetectStatus(),
-                                      iconData: Icons.wifi,
-                                      iconColor: Colors.deepOrange,
-                                      title: "Wifi Detect"),
-                                  ListTileButton(
-                                      onTap: () => getRiskToken(),
-                                      iconData: Icons.vpn_key,
-                                      iconColor: Colors.amber,
-                                      title: "Get Risk Token"),
-                                  ListTileButton(
-                                    onTap: () => antiFraudEnabled
-                                        ? releaseAntiFraud()
-                                        : initAntiFraud(),
-                                    iconData: Icons.power_settings_new,
-                                    iconColor: antiFraudEnabled
-                                        ? Colors.red
-                                        : Colors.green,
-                                    title: antiFraudEnabled
-                                        ? "Release AntiFraud"
-                                        : "Init Anti Fraud",
-                                  )
-                                ])),
-                        // Url Check Widget
-                        Container(
-                          height: 150,
-                          width: double.infinity,
-                          margin: componentPadding,
-                          decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)),
-                              gradient: LinearGradient(
-                                  colors: [galleryGrey, mercuryGrey],
-                                  begin: Alignment.centerLeft,
-                                  end: Alignment.centerRight),
-                              boxShadow: [
-                                BoxShadow(
-                                  blurRadius: 8,
-                                  color: alto,
-                                  offset: Offset(4, 4),
+                  Column(
+                    children: [
+                      FadeTransition(
+                          opacity: animation as Animation<double>,
+                          child: ResultContainer(
+                              methodName: selectedMethodName,
+                              methodResult: currentMethodResult)),
+                      // Button List
+                      Container(
+                          height: 160,
+                          child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              padding: componentPadding.copyWith(
+                                  left: 5.0, right: 5.0),
+                              children: [
+                                ListTileButton(
+                                    onTap: () => userDetection(),
+                                    title: "User Detect",
+                                    iconData: Icons.person,
+                                    iconColor: darkGrey),
+                                ListTileButton(
+                                  onTap: () => getMaliciousAppsList(),
+                                  title: "Malicious App List",
+                                  iconData: Icons.bug_report,
+                                  iconColor: Colors.red,
                                 ),
-                                BoxShadow(
-                                  blurRadius: 8,
-                                  color: alabaster,
-                                  offset: Offset(-4, -4),
+                                ListTileButton(
+                                    onTap: () => checkSysIntegrity(),
+                                    title: "Sys Integrity",
+                                    iconData: Icons.security,
+                                    iconColor: Colors.blue),
+                                ListTileButton(
+                                    onTap: () => getWifiDetectStatus(),
+                                    iconData: Icons.wifi,
+                                    iconColor: Colors.deepOrange,
+                                    title: "Wifi Detect"),
+                                ListTileButton(
+                                    onTap: () => getRiskToken(),
+                                    iconData: Icons.vpn_key,
+                                    iconColor: Colors.amber,
+                                    title: "Get Risk Token"),
+                                ListTileButton(
+                                  onTap: () => antiFraudEnabled
+                                      ? releaseAntiFraud()
+                                      : initAntiFraud(),
+                                  iconData: Icons.power_settings_new,
+                                  iconColor: antiFraudEnabled
+                                      ? Colors.red
+                                      : Colors.green,
+                                  title: antiFraudEnabled
+                                      ? "Release AntiFraud"
+                                      : "Init Anti Fraud",
                                 )
-                              ]),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 20.0),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(5.0))),
-                                  child: TextField(
-                                    textAlign: TextAlign.start,
-                                    controller: urlTextController,
-                                    style: TextStyle(
-                                        fontSize: 12.0, color: mineShaft),
-                                    maxLines: 1,
-                                    decoration: InputDecoration(
-                                        enabledBorder: OutlineInputBorder(
-                                            borderSide:
-                                                BorderSide(color: Colors.white),
-                                            borderRadius:
-                                                BorderRadius.circular(5.0))),
-                                  )),
-                              Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20.0, vertical: 5.0),
-                                child: FlatButton(
-                                  color: darkGrey,
-                                  onPressed: () => urlCheck(),
-                                  child: Text(
-                                    'Check Url Safety',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
+                              ])),
+                      // Url Check Widget
+                      Container(
+                        height: 150,
+                        width: double.infinity,
+                        margin: componentPadding,
+                        decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                            gradient: LinearGradient(
+                                colors: [galleryGrey, mercuryGrey],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight),
+                            boxShadow: [
+                              BoxShadow(
+                                blurRadius: 8,
+                                color: alto,
+                                offset: Offset(4, 4),
+                              ),
+                              BoxShadow(
+                                blurRadius: 8,
+                                color: alabaster,
+                                offset: Offset(-4, -4),
                               )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
+                            ]),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 20.0),
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5.0))),
+                                child: TextField(
+                                  textAlign: TextAlign.start,
+                                  controller: urlTextController,
+                                  style: TextStyle(
+                                      fontSize: 12.0, color: mineShaft),
+                                  maxLines: 1,
+                                  decoration: InputDecoration(
+                                      enabledBorder: OutlineInputBorder(
+                                          borderSide:
+                                              BorderSide(color: Colors.white),
+                                          borderRadius:
+                                              BorderRadius.circular(5.0))),
+                                )),
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20.0, vertical: 5.0),
+                              child: FlatButton(
+                                color: darkGrey,
+                                onPressed: () => urlCheck(),
+                                child: Text(
+                                  'Check Url Safety',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
                   ),
                 ],
               ),

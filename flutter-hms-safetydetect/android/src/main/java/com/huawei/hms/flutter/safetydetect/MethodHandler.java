@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import com.huawei.hms.flutter.safetydetect.util.PlatformUtil;
 import com.huawei.hms.flutter.safetydetect.util.SerializerUtil;
 import com.huawei.hms.support.api.entity.core.CommonCode;
 import com.huawei.hms.support.api.entity.safetydetect.MaliciousAppsData;
+import com.huawei.hms.support.api.entity.safetydetect.SysIntegrityRequest;
 import com.huawei.hms.support.api.entity.safetydetect.UrlCheckThreat;
 import com.huawei.hms.support.api.entity.safetydetect.VerifyAppsCheckEnabledResp;
 import com.huawei.hms.support.api.safetydetect.SafetyDetect;
@@ -73,7 +74,12 @@ public class MethodHandler implements MethodCallHandler {
     private void sysIntegrity(final Result result, final MethodCall call) {
         byte[] nonce = PlatformUtil.getByteArrayArg(call, "nonce");
         String appId = PlatformUtil.getStringArg(call, Constants.APP_ID);
-        mClient.sysIntegrity(nonce, appId).addOnSuccessListener(sysIntegrityResp -> {
+        String alg = PlatformUtil.getStringArg(call, "alg");
+        SysIntegrityRequest sir = new SysIntegrityRequest();
+        sir.setNonce(nonce);
+        sir.setAppId(appId);
+        sir.setAlg(alg);
+        (alg == null ? mClient.sysIntegrity(nonce, appId) : mClient.sysIntegrity(sir)).addOnSuccessListener(sysIntegrityResp -> {
             if (sysIntegrityResp.getRtnCode() == CommonCode.OK) {
                 hmsLogger.sendSingleEvent(call.method);
                 result.success(sysIntegrityResp.getResult());
