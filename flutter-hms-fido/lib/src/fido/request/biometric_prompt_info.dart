@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
 */
 
 class BiometricPromptInfo {
-  String title;
-  String description;
+  String? title;
+  String? description;
 
   BiometricPromptInfo({this.title, this.description});
 
@@ -24,7 +24,7 @@ class BiometricPromptInfo {
     return {"title": title, "description": description};
   }
 
-  String get getTitle => title;
+  String? get getTitle => title;
 
-  String get getDescription => description;
+  String? get getDescription => description;
 }

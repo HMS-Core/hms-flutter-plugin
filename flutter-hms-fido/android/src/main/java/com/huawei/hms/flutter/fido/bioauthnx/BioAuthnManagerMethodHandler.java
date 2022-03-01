@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -63,6 +63,7 @@ public class BioAuthnManagerMethodHandler implements MethodChannel.MethodCallHan
 
     /**
      * Checks whether fingerprint authentication is available.
+     * @param result MethodChannel.Result
      */
     private void performCanAuth(MethodChannel.Result result) {
         HMSLogger.getInstance(activity.getApplicationContext()).startMethodExecutionTimer("bioAuthnManagerCanAuth");

@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -27,9 +27,9 @@ class HmsBioAuthnPrompt {
       const MethodChannel("com.huawei.hms.flutter.fido/bio_authn_prompt");
 
   int get id => hashCode;
-  EventChannel _eventChannel;
-  BioAuthnCallback _callback;
-  StreamSubscription _subscription;
+  late EventChannel _eventChannel;
+  BioAuthnCallback? _callback;
+  StreamSubscription? _subscription;
 
   HmsBioAuthnPrompt() {
     _eventChannel =
@@ -100,7 +100,7 @@ class HmsBioAuthnPrompt {
     _callback = callback;
   }
 
-  Future<bool> configurePrompt(HmsBioAuthnPromptInfo info) async {
+  Future<bool?> configurePrompt(HmsBioAuthnPromptInfo info) async {
     info.setId(id);
     return await _channel.invokeMethod("initPrompt", info.toMap());
   }
@@ -116,7 +116,7 @@ class HmsBioAuthnPrompt {
         "authenticateWithCryptoObject", factory.toMap());
   }
 
-  Future<bool> cancelAuth() async {
+  Future<bool?> cancelAuth() async {
     _subscription?.cancel();
     return await _channel.invokeMethod("cancel");
   }
@@ -125,12 +125,16 @@ class HmsBioAuthnPrompt {
     _subscription?.cancel();
     _subscription = _eventChannel.receiveBroadcastStream(id).listen((event) {
       Map<dynamic, dynamic> map = event;
-      BioAuthnEvent bioAuthnEvent = Fido2PluginUtil.toBioEvent(map['event']);
+      BioAuthnEvent? bioAuthnEvent = Fido2PluginUtil.toBioEvent(map['event']);
       if (bioAuthnEvent == BioAuthnEvent.onAuthError) {
         _callback?.call(bioAuthnEvent, errCode: map['msgCode']);
       } else if (bioAuthnEvent == BioAuthnEvent.onAuthSucceeded) {
-        _callback?.call(bioAuthnEvent,
-            result: HmsBioAuthnResult.fromMap(map['result']));
+        _callback?.call(
+          bioAuthnEvent,
+          result: map['result'] != null
+              ? HmsBioAuthnResult.fromMap(map['result'])
+              : null,
+        );
       } else {
         _callback?.call(bioAuthnEvent);
       }

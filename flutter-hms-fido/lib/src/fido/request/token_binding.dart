@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -19,16 +19,19 @@ import 'package:flutter/foundation.dart';
 import '../constant/fido_constants.dart';
 
 class TokenBinding {
-  String id;
-  TokenBindingStatus status;
+  String? id;
+  TokenBindingStatus? status;
 
   TokenBinding({this.id, this.status});
 
   Map<String, dynamic> toMap() {
-    return {"id": id, "status": describeEnum(status)};
+    return {
+      "id": id,
+      "status": status != null ? describeEnum(status!) : null,
+    };
   }
 
-  String get getId => id;
+  String? get getId => id;
 
-  TokenBindingStatus get getStatus => status;
+  TokenBindingStatus? get getStatus => status;
 }

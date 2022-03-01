@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
 */
 
 import 'package:flutter/material.dart';
+import 'package:huawei_fido_example/bioauthn/face_manager_example.dart';
 import './bioauthn/bio_authn_manager_example.dart';
 import './bioauthn/bio_authn_prompt_example.dart';
 import './fidoclient/fido_example.dart';
@@ -45,6 +46,10 @@ class Home extends StatelessWidget {
             customButton("BIOAUTHN PROMPT EXAMPLE", () {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => BioAuthnPromptExample()));
+            }),
+            customButton("FACE MANAGER EXAMPLE", () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => FaceManagerExample()));
             }),
             customButton("FIDO2CLIENT EXAMPLE", () {
               Navigator.of(context)

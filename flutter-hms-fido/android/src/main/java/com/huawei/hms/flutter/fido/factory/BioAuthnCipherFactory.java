@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -80,7 +80,7 @@ public class BioAuthnCipherFactory {
         createSecretKey(storeKey);
 
         try {
-            defaultCipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
+            defaultCipher = Cipher.getInstance("AES/GCM/NoPadding");
         } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             Log.e(TAG, "Failed to get an instance of Cipher. " + e.getMessage());
         }
@@ -102,9 +102,9 @@ public class BioAuthnCipherFactory {
         try {
             keyStore.load(null);
             KeyGenParameterSpec.Builder builder = new KeyGenParameterSpec.Builder(storeKeyName, KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
-                    .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                    .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
                     .setUserAuthenticationRequired(isUserAuthenticationRequired)
-                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7);
+                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 builder.setInvalidatedByBiometricEnrollment(true);
             }

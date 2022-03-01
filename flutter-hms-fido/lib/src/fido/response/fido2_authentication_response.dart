@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -18,12 +18,12 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 class Fido2AuthenticationResponse {
-  bool isSuccess;
-  int ctapStatus;
-  String ctapStatusMessage;
-  int fido2Status;
-  String fido2StatusMessage;
-  AuthenticatorAssertionResponse assertionResponse;
+  bool? isSuccess;
+  int? ctapStatus;
+  String? ctapStatusMessage;
+  int? fido2Status;
+  String? fido2StatusMessage;
+  AuthenticatorAssertionResponse? assertionResponse;
 
   Fido2AuthenticationResponse(
       {this.assertionResponse,
@@ -34,7 +34,6 @@ class Fido2AuthenticationResponse {
       this.isSuccess});
 
   factory Fido2AuthenticationResponse.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
     return Fido2AuthenticationResponse(
         isSuccess: map['isSuccess'] ?? null,
         ctapStatus: map['ctapStatus'] ?? null,
@@ -48,10 +47,10 @@ class Fido2AuthenticationResponse {
 }
 
 class AuthenticatorAssertionResponse {
-  Uint8List authenticatorData;
-  Uint8List clientDataJson;
-  Uint8List credentialId;
-  Uint8List signature;
+  Uint8List? authenticatorData;
+  Uint8List? clientDataJson;
+  Uint8List? credentialId;
+  Uint8List? signature;
 
   AuthenticatorAssertionResponse(
       {this.credentialId,
@@ -60,7 +59,6 @@ class AuthenticatorAssertionResponse {
       this.authenticatorData});
 
   factory AuthenticatorAssertionResponse.fromMap(Map<dynamic, dynamic> map) {
-    if (map == null) return null;
     return AuthenticatorAssertionResponse(
         authenticatorData: map['authenticatorData'] ?? null,
         clientDataJson: map['clientDataJson'] ?? null,

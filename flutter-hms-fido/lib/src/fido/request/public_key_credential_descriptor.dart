@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -20,16 +20,16 @@ import 'package:flutter/foundation.dart';
 import '../constant/fido_constants.dart';
 
 class PublicKeyCredentialDescriptor {
-  PublicKeyCredentialType type;
-  List<AuthenticatorTransport> transports;
-  List<String> _transportValues;
-  Uint8List id;
+  PublicKeyCredentialType? type;
+  List<AuthenticatorTransport>? transports;
+  List<String>? _transportValues;
+  Uint8List? id;
 
   PublicKeyCredentialDescriptor({this.type, this.id, this.transports}) {
-    _transportValues = new List();
-    if (transports != null && transports.isNotEmpty) {
-      transports.forEach((element) {
-        _transportValues.add(describeEnum(element));
+    _transportValues = [];
+    if (transports != null && transports!.isNotEmpty) {
+      transports!.forEach((element) {
+        _transportValues!.add(describeEnum(element));
       });
     }
   }
@@ -42,9 +42,9 @@ class PublicKeyCredentialDescriptor {
     };
   }
 
-  PublicKeyCredentialType get getType => type;
+  PublicKeyCredentialType? get getType => type;
 
-  Uint8List get getId => id;
+  Uint8List? get getId => id;
 
-  List<AuthenticatorTransport> get getTransports => transports;
+  List<AuthenticatorTransport>? get getTransports => transports;
 }

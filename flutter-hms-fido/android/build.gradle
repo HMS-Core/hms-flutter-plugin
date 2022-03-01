@@ -41,6 +41,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.huawei.hms:fido-fido2:5.0.5.304'
-    implementation 'com.huawei.hms:fido-bioauthn-androidx:5.0.5.304'
+    implementation 'com.huawei.hms:fido-fido2:6.1.0.301'
+    implementation 'com.huawei.hms:fido-bioauthn-androidx:6.1.0.301'
 }

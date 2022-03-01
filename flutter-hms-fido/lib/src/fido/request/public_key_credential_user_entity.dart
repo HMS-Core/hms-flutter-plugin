@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 import 'dart:typed_data';
 
 class PublicKeyCredentialUserEntity {
-  String displayName;
-  Uint8List id;
+  String? displayName;
+  Uint8List? id;
 
   PublicKeyCredentialUserEntity({this.id, this.displayName});
 
@@ -26,7 +26,7 @@ class PublicKeyCredentialUserEntity {
     return {"displayName": displayName, "id": id};
   }
 
-  String get getDisplayName => displayName;
+  String? get getDisplayName => displayName;
 
-  Uint8List get getId => id;
+  Uint8List? get getId => id;
 }

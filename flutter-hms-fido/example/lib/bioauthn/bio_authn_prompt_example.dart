@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -25,14 +25,14 @@ class BioAuthnPromptExample extends StatefulWidget {
 }
 
 class _BioAuthnPromptExampleState extends State<BioAuthnPromptExample> {
-  HmsBioAuthnPrompt prompt;
+  late HmsBioAuthnPrompt prompt;
   List<String> _results = ["Results will be listed here"];
 
   @override
   void initState() {
     prompt = new HmsBioAuthnPrompt();
     prompt.setCallback((event, {errCode, result}) {
-      _updateList("Auth event: " + describeEnum(event));
+      _updateList("Auth event: " + describeEnum(event!));
     });
     super.initState();
   }
@@ -45,7 +45,7 @@ class _BioAuthnPromptExampleState extends State<BioAuthnPromptExample> {
         deviceCredentialAllowed: false);
 
     try {
-      bool result = await prompt.configurePrompt(info);
+      bool? result = await prompt.configurePrompt(info);
       _updateList("Configured: $result");
     } on Exception catch (e) {
       _updateList(e.toString());
@@ -75,7 +75,7 @@ class _BioAuthnPromptExampleState extends State<BioAuthnPromptExample> {
 
   _cancelAuth() async {
     try {
-      bool res = await prompt.cancelAuth();
+      bool? res = await prompt.cancelAuth();
       _updateList("Auth canceled: $res");
     } on Exception catch (e) {
       _updateList(e.toString());

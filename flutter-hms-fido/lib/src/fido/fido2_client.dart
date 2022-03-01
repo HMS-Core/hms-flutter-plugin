@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -27,29 +27,82 @@ class HmsFido2Client {
   MethodChannel _channel =
       const MethodChannel("com.huawei.hms.flutter.fido/fido_client");
 
-  Future<bool> isSupported() async {
+  Future<bool?> isSupported() async {
     return await _channel.invokeMethod("isSupported");
   }
 
-  Future<bool> hasPlatformAuthenticators() async {
+  Future<bool?> hasPlatformAuthenticators() async {
     return await _channel.invokeMethod("hasPlatformAuthenticators");
   }
 
-  Future<List<AuthenticatorMetadata>> getPlatformAuthenticators() async {
-    var res =
-        json.decode(await _channel.invokeMethod("getPlatformAuthenticators"));
-    return (res as List).map((e) => AuthenticatorMetadata.fromMap(e)).toList();
+  Future<List<AuthenticatorMetadata?>?> getPlatformAuthenticators() async {
+    var res = await _channel.invokeMethod("getPlatformAuthenticators");
+    if (res == null) return null;
+    var list = json.decode(res as String);
+    return (list as List).map((e) {
+      return e != null ? AuthenticatorMetadata.fromMap(e) : null;
+    }).toList();
   }
 
-  Future<Fido2RegistrationResponse> getRegistrationIntent(
+  Future<Fido2RegistrationResponse?> getRegistrationIntent(
       PublicKeyCredentialCreationOptions options) async {
-    return new Fido2RegistrationResponse.fromMap(
-        await _channel.invokeMethod("getRegistrationIntent", options.toMap()));
+    var res =
+        await _channel.invokeMethod("getRegistrationIntent", options.toMap());
+    return res != null ? new Fido2RegistrationResponse.fromMap(res) : null;
   }
 
-  Future<Fido2AuthenticationResponse> getAuthenticationIntent(
+  Future<Fido2AuthenticationResponse?> getAuthenticationIntent(
       PublicKeyCredentialRequestOptions options) async {
-    return new Fido2AuthenticationResponse.fromMap(await _channel.invokeMethod(
-        "getAuthenticationIntent", options.toMap()));
+    var res =
+        await _channel.invokeMethod("getAuthenticationIntent", options.toMap());
+    return res != null ? new Fido2AuthenticationResponse.fromMap(res) : null;
+  }
+
+  Future<void> isSupportedExAsync(
+    Function({int? resultCode, String? errString}) callback,
+  ) async {
+    var res = await _channel.invokeMethod("isSupportedExAsync");
+    if (res == null) return null;
+    Map result = Map.from(res);
+    callback(resultCode: result['resultCode'], errString: result['errString']);
+  }
+
+  Future<void> hasPlatformAuthenticatorsWithCb(
+    Function({bool? result}) onSuccess,
+    Function({int? errorCode, String? errString}) onFailure,
+  ) async {
+    var res = await _channel.invokeMethod("hasPlatformAuthenticatorsCb");
+    if (res == null) return null;
+    if (res.runtimeType == bool) {
+      onSuccess(result: res);
+    } else {
+      Map result = Map.from(res);
+      onFailure(
+        errorCode: result['errorCode'],
+        errString: result['errString'],
+      );
+    }
+  }
+
+  Future<void> getPlatformAuthenticatorsWithCb(
+    Function({List<AuthenticatorMetadata?>? result}) onSuccess,
+    Function({int? errorCode, String? errString}) onFailure,
+  ) async {
+    var res = await _channel.invokeMethod("getPlatformAuthenticatorsCb");
+    if (res == null) return null;
+    if (res.runtimeType == String) {
+      var list = json.decode(res as String);
+      onSuccess(
+        result: (list as List).map((e) {
+          return e != null ? AuthenticatorMetadata.fromMap(e) : null;
+        }).toList(),
+      );
+    } else {
+      Map result = Map.from(res);
+      onFailure(
+        errorCode: result['errorCode'],
+        errString: result['errString'],
+      );
+    }
   }
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ class HmsBioAuthnManager {
   static const int BIO_AUTHN_ERROR_UNSUPPORTED_OS_VER = 1004;
 
   /// Checks whether fingerprint authentication is available.
-  Future<int> canAuth() async {
+  Future<int?> canAuth() async {
     return await _channel.invokeMethod("canAuth");
   }
 

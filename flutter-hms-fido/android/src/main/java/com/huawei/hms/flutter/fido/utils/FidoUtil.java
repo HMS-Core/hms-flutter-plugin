@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -37,7 +37,9 @@ public class FidoUtil {
     private static final String TAG = FidoUtil.class.getSimpleName();
 
     public static Algorithm getAlgorithm(String s) {
-        if (s == null) return null;
+        if (s == null) {
+            return null;
+        }
 
         switch (s) {
             case "ES256":
@@ -66,7 +68,9 @@ public class FidoUtil {
     }
 
     public static Attachment getAttachment(String s) {
-        if (s == null) return null;
+        if (s == null) {
+            return null;
+        }
 
         switch (s) {
             case "PLATFORM":
@@ -79,7 +83,9 @@ public class FidoUtil {
     }
 
     public static UserVerificationRequirement getVerificationRequirement(String s) {
-        if (s == null) return null;
+        if (s == null) {
+            return null;
+        }
 
         switch (s) {
             case "PREFERRED":
@@ -94,7 +100,9 @@ public class FidoUtil {
     }
 
     public static AttestationConveyancePreference getAttestation(String s) {
-        if (s == null) return null;
+        if (s == null) {
+            return null;
+        }
 
         switch (s) {
             case "DIRECT":
@@ -109,7 +117,9 @@ public class FidoUtil {
     }
 
     public static OriginFormat getOriginFormat(String s) {
-        if (s == null) return null;
+        if (s == null) {
+            return null;
+        }
 
         switch (s) {
             case "HTML":
@@ -122,7 +132,9 @@ public class FidoUtil {
     }
 
     public static TokenBindingStatus getTokenStatus(String s) {
-        if (s == null) return null;
+        if (s == null) {
+            return null;
+        }
 
         switch (s) {
             case "SUPPORTED":
@@ -135,7 +147,9 @@ public class FidoUtil {
     }
 
     public static AuthenticatorTransport getTransport(String s) {
-        if (s == null) return null;
+        if (s == null) {
+            return null;
+        }
 
         switch (s) {
             case "NFC":

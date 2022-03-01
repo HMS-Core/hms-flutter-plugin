@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -26,13 +26,13 @@ class FidoExample extends StatefulWidget {
 }
 
 class _FidoExampleState extends State<FidoExample> {
-  HmsFido2Client fido2client;
-  PublicKeyCredentialCreationOptions options;
-  PublicKeyCredentialRequestOptions requestOptions;
+  late HmsFido2Client fido2client;
+  late PublicKeyCredentialCreationOptions options;
+  late PublicKeyCredentialRequestOptions requestOptions;
 
   Map<String, dynamic> extensionMap = {};
-  Uint8List _challenge;
-  Uint8List _credentialId;
+  late Uint8List _challenge;
+  Uint8List? _credentialId;
   List<String> _results = ["Results will be listed here\n"];
 
   @override
@@ -46,22 +46,26 @@ class _FidoExampleState extends State<FidoExample> {
   }
 
   void prepareExtensions() async {
-    bool hasAuthenticators = await fido2client.hasPlatformAuthenticators();
-    if (hasAuthenticators) {
-      List<String> list = [];
-      List<AuthenticatorMetadata> metaList =
+    bool? hasAuthenticators = await fido2client.hasPlatformAuthenticators();
+    if (hasAuthenticators ?? false) {
+      List<String?> list = [];
+      List<AuthenticatorMetadata?>? metaList =
           await fido2client.getPlatformAuthenticators();
-      for (AuthenticatorMetadata data in metaList) {
-        if (!data.isAvailable) {
+      if (metaList == null) {
+        return;
+      }
+      for (AuthenticatorMetadata? data in metaList) {
+        if (!(data?.isAvailable ?? false)) {
           continue;
         }
-        if (data.isSupportedUvm(AuthenticatorMetadata.UVM_FINGERPRINT)) {
+        if (data!.isSupportedUvm(AuthenticatorMetadata.UVM_FINGERPRINT)) {
           list.add(data.aaGuid);
-          if (data.extensions
+          if (data.extensions!
               .contains(Fido2Extension.webAuthN.getIdentifier())) {
             extensionMap[Fido2Extension.webAuthN.getIdentifier()] = true;
           }
-          if (data.extensions.contains(Fido2Extension.cIBBe.getIdentifier())) {
+          if (data.extensions?.contains(Fido2Extension.cIBBe.getIdentifier()) ??
+              false) {
             extensionMap[Fido2Extension.cIBBe.getIdentifier()] = true;
           }
         } else if (data.isSupportedUvm(AuthenticatorMetadata.UVM_FACEPRINT)) {
@@ -86,7 +90,7 @@ class _FidoExampleState extends State<FidoExample> {
       new PublicKeyCredentialParameters(algorithm: Algorithm.ES256)
     ];
     options.excludeList = [new PublicKeyCredentialDescriptor(id: _challenge)];
-    options.extensions = extensionMap;
+    options.extensions = Map.from(extensionMap);
     options.authenticatorSelection = new AuthenticatorSelectionCriteria(
         attachment: null, requirement: null, resident: null);
     options.timeoutSeconds = 15874587;
@@ -101,36 +105,73 @@ class _FidoExampleState extends State<FidoExample> {
     requestOptions.rpId = "rp_id";
     requestOptions.challenge = _challenge;
     requestOptions.timeoutSeconds = 15874587;
-    requestOptions.extensions = extensionMap;
+    requestOptions.extensions = Map.from(extensionMap);
     requestOptions.allowList = [
       new PublicKeyCredentialDescriptor(id: _credentialId)
     ];
   }
 
+  void _isSupported() async {
+    var result = await fido2client.isSupported();
+    _updateList("\n\nIS SUPPORTED result: $result");
+  }
+
+  void _isSupportedCb() async {
+    await fido2client
+        .isSupportedExAsync(({int? resultCode, String? errString}) {
+      _updateList("\n\nIS SUPPORTED CB result: $resultCode");
+    });
+  }
+
   void _register() async {
     setRegistrationOptions();
-    Fido2RegistrationResponse response =
+    Fido2RegistrationResponse? response =
         await fido2client.getRegistrationIntent(options);
     _updateList(
-        "REGISTRATION SUCCESS: ${response.isSuccess} \n\n CREDENTIAL ID: ${response.authenticatorAttestationResponse.credentialId}");
-    setState(() =>
-        _credentialId = response.authenticatorAttestationResponse.credentialId);
+        "REGISTRATION SUCCESS: ${response?.isSuccess} \n\n CREDENTIAL ID: ${response?.authenticatorAttestationResponse?.credentialId}");
+    setState(() => _credentialId =
+        response?.authenticatorAttestationResponse?.credentialId);
   }
 
   void _authenticate() async {
     setAuthenticationOptions();
-    Fido2AuthenticationResponse response =
+    Fido2AuthenticationResponse? response =
         await fido2client.getAuthenticationIntent(requestOptions);
-    _updateList("\n\nAUTHENTICATION SUCCESS: ${response.isSuccess}");
+    _updateList("\n\nAUTHENTICATION SUCCESS: ${response?.isSuccess}");
+  }
+
+  void _hasPlatformAuthenticatorsCb() async {
+    await fido2client.hasPlatformAuthenticatorsWithCb(({result}) {
+      _updateList("\n\nHAS PLATFORM AUTHENTICATORS CB: $result");
+    }, ({errString, errorCode}) {
+      _updateList(
+          "\n\nHAS PLATFORM AUTHENTICATORS CB: $errorCode - $errString");
+    });
   }
 
   void _getPlatformAuthenticators() async {
-    List<AuthenticatorMetadata> list =
+    List<AuthenticatorMetadata?>? list =
         await fido2client.getPlatformAuthenticators();
-    for (AuthenticatorMetadata meta in list) {
-      _updateList(meta.aaGuid);
+    if (list == null) {
+      return;
+    }
+    for (AuthenticatorMetadata? meta in list) {
+      _updateList(meta?.aaGuid ?? '');
     }
     print(list.length);
+  }
+
+  void _getPlatformAuthenticatorsCb() async {
+    await fido2client.getPlatformAuthenticatorsWithCb(({result}) {
+      if (result == null) return;
+      for (AuthenticatorMetadata? meta in result) {
+        _updateList(meta?.aaGuid ?? '');
+      }
+      print(result.length);
+    }, ({errString, errorCode}) {
+      _updateList(
+          "\n\nGET PLATFORM AUTHENTICATORS CB: $errorCode - $errString");
+    });
   }
 
   @override
@@ -139,9 +180,13 @@ class _FidoExampleState extends State<FidoExample> {
       appBar: AppBar(title: Text("FIDO EXAMPLE")),
       body: Column(
         children: [
+          customButton("IS SUPPORTED", _isSupported),
+          customButton("IS SUPPORTED CB", _isSupportedCb),
           customButton("REGISTER", _register),
           customButton("AUTHENTICATE", _authenticate),
+          customButton("HAS AUTHENTICATORS CB", _hasPlatformAuthenticatorsCb),
           customButton("GET AUTHENTICATORS", _getPlatformAuthenticators),
+          customButton("GET AUTHENTICATORS CB", _getPlatformAuthenticatorsCb),
           Expanded(
               child: GestureDetector(
             onDoubleTap: () {

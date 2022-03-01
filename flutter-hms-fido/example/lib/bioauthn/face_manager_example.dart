@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -25,14 +25,14 @@ class FaceManagerExample extends StatefulWidget {
 }
 
 class _FaceManagerExampleState extends State<FaceManagerExample> {
-  HmsFaceManager faceManager;
+  late HmsFaceManager faceManager;
   List<String> _results = ["Results will be here"];
 
   @override
   void initState() {
     faceManager = new HmsFaceManager();
     faceManager.setCallback((event, {errCode, result}) {
-      _updateList(describeEnum(event));
+      _updateList(describeEnum(event!));
     });
     _init();
     super.initState();
@@ -44,17 +44,17 @@ class _FaceManagerExampleState extends State<FaceManagerExample> {
   }
 
   _canAuth() async {
-    final int result = await faceManager.canAuth();
+    final int? result = await faceManager.canAuth();
     _updateList(result.toString());
   }
 
   _isHardwareDetected() async {
-    final bool result = await faceManager.isHardwareDetected();
+    final bool? result = await faceManager.isHardwareDetected();
     _updateList(result.toString());
   }
 
   _hasEnrolledTemplates() async {
-    final bool result = await faceManager.hasEnrolledTemplates();
+    final bool? result = await faceManager.hasEnrolledTemplates();
     _updateList(result.toString());
   }
 
@@ -70,6 +70,11 @@ class _FaceManagerExampleState extends State<FaceManagerExample> {
     await faceManager.authWithCryptoObject(factory);
   }
 
+  _getFaceModality() async {
+    final int? result = await faceManager.getFaceModality();
+    _updateList(result.toString());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,6 +87,7 @@ class _FaceManagerExampleState extends State<FaceManagerExample> {
           customButton("HAS ENROLLED TEMPLATES", _hasEnrolledTemplates),
           customButton("AUTH WITHOUT CRYPTO OBJECT", _authWithoutCryptoObject),
           customButton("AUTH WITH CRYPTO OBJECT", _authWithCryptoObject),
+          customButton("GET FACE MODALITY", _getFaceModality),
           Expanded(
               child: GestureDetector(
             onDoubleTap: () {

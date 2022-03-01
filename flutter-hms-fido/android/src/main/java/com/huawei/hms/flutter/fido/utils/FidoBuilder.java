@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -68,10 +68,12 @@ public class FidoBuilder {
             String origin = (String) options.get("originFormat");
             Map<String, Object> promptInfo = FidoUtil.fromObject(options.get("info"));
 
-            if (origin != null)
+            if (origin != null) {
                 builder.setOriginFormat(FidoUtil.getOriginFormat(origin));
-            if (!promptInfo.isEmpty())
+            }
+            if (!promptInfo.isEmpty()) {
                 builder.setBiometricPromptInfo(buildPromptInfo(promptInfo));
+            }
 
             Log.i(TAG, "Native registration options created.");
             registrationOptions = builder.build();
@@ -93,10 +95,12 @@ public class FidoBuilder {
             String origin1 = (String) options1.get("originFormat");
             Map<String, Object> promptInfo = FidoUtil.fromObject(options1.get("info"));
 
-            if (origin1 != null)
+            if (origin1 != null) {
                 builder1.setOriginFormat(FidoUtil.getOriginFormat(origin1));
-            if (!promptInfo.isEmpty())
+            }
+            if (!promptInfo.isEmpty()) {
                 builder1.setBiometricPromptInfo(buildPromptInfo(promptInfo));
+            }
 
             Log.i(TAG, "Native authentication options created.");
             authenticationOptions = builder1.build();
@@ -138,20 +142,27 @@ public class FidoBuilder {
 
         PublicKeyCredentialCreationOptions.Builder builder = new PublicKeyCredentialCreationOptions.Builder();
         builder.setChallenge(challenge).setExtensions(extensions);
-        if (!rpEntity.isEmpty())
+        if (!rpEntity.isEmpty()) {
             builder.setRp(buildRpEntity(rpEntity));
-        if (!userEntity.isEmpty())
+        }
+        if (!userEntity.isEmpty()) {
             builder.setUser(buildUserEntity(userEntity));
-        if (keyCredParams != null)
+        }
+        if (keyCredParams != null) {
             builder.setPubKeyCredParams(buildParamList(keyCredParams));
-        if (excludeList != null)
+        }
+        if (excludeList != null) {
             builder.setExcludeList(buildDescriptorList(excludeList));
-        if (attestation != null)
+        }
+        if (attestation != null) {
             builder.setAttestation(FidoUtil.getAttestation(attestation));
-        if (!criteria.isEmpty())
+        }
+        if (!criteria.isEmpty()) {
             builder.setAuthenticatorSelection(getCriteria(criteria));
-        if (timeoutSeconds != null)
+        }
+        if (timeoutSeconds != null) {
             builder.setTimeoutSeconds(timeoutSeconds.longValue());
+        }
         return builder.build();
     }
 
@@ -163,13 +174,16 @@ public class FidoBuilder {
         Map<String, Object> extensions = call.argument("extensions");
         Double timeoutSeconds = call.argument("timeoutSeconds");
 
-        return new PublicKeyCredentialRequestOptions.Builder()
+        PublicKeyCredentialRequestOptions.Builder builder = new PublicKeyCredentialRequestOptions.Builder()
                 .setRpId(rpId)
                 .setAllowList(buildDescriptorList(allowList))
                 .setExtensions(extensions)
-                .setTimeoutSeconds(timeoutSeconds.longValue())
-                .setChallenge(challenge)
-                .build();
+                .setChallenge(challenge);
+
+        if (timeoutSeconds != null) {
+            builder.setTimeoutSeconds(timeoutSeconds.longValue());
+        }
+        return builder.build();
     }
 
     public static PublicKeyCredentialRpEntity buildRpEntity(Map<String, Object> map) {
@@ -201,7 +215,9 @@ public class FidoBuilder {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static List<PublicKeyCredentialDescriptor> buildDescriptorList(List<Map<String, Object>> list) {
-        if (list == null || list.isEmpty()) return new ArrayList<>(0);
+        if (list == null || list.isEmpty()) {
+            return new ArrayList<>(0);
+        }
         List<PublicKeyCredentialDescriptor> list1 = new ArrayList<>();
         PublicKeyCredentialDescriptor descriptor;
         for (int i = 0; i < list.size(); i++) {
@@ -255,8 +271,9 @@ public class FidoBuilder {
         map.put("ctapStatus", response.getCtapStatus());
         map.put("ctapStatusMessage", response.getCtapStatusMessage());
         map.put("fido2StatusMessage", response.getFido2StatusMessage());
-        if (response.getAuthenticatorAttestationResponse() != null)
+        if (response.getAuthenticatorAttestationResponse() != null) {
             map.put("authenticatorAttestationResponse", getAuthenticatorAttestation(response.getAuthenticatorAttestationResponse()));
+        }
         return map;
     }
 
@@ -277,8 +294,9 @@ public class FidoBuilder {
         map.put("ctapStatusMessage", response.getCtapStatusMessage());
         map.put("fido2Status", response.getFido2Status());
         map.put("fido2StatusMessage", response.getFido2StatusMessage());
-        if (response.getAuthenticatorAssertionResponse() != null)
+        if (response.getAuthenticatorAssertionResponse() != null) {
             map.put("assertionResponse", getAssertionResponse(response.getAuthenticatorAssertionResponse()));
+        }
         return map;
     }
 

@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ class Fido2PluginUtil {
   }
 
   static Algorithm getAlgorithmFromName(String s) {
-    Algorithm a;
+    Algorithm? a;
     Algorithm.values.forEach((element) {
       if (s == describeEnum(element)) {
         a = element;
@@ -45,7 +45,7 @@ class Fido2PluginUtil {
     if (a == null) {
       throw new IllegalParameterException("No enum constant Algorithm: $s");
     } else {
-      return a;
+      return a!;
     }
   }
 
@@ -116,7 +116,7 @@ class Fido2PluginUtil {
   }
 
   static Attachment attachmentFromValue(String s) {
-    Attachment attachment;
+    Attachment? attachment;
     Attachment.values.forEach((element) {
       if (s == describeEnum(element)) {
         attachment = element;
@@ -125,7 +125,7 @@ class Fido2PluginUtil {
     if (attachment == null) {
       throw new IllegalParameterException("No enum Attachment $s");
     } else {
-      return attachment;
+      return attachment!;
     }
   }
 
@@ -134,7 +134,7 @@ class Fido2PluginUtil {
   }
 
   static AttestationConveyancePreference preferenceFromValue(String s) {
-    AttestationConveyancePreference p;
+    AttestationConveyancePreference? p;
     AttestationConveyancePreference.values.forEach((element) {
       if (s == describeEnum(element)) {
         p = element;
@@ -144,7 +144,7 @@ class Fido2PluginUtil {
       throw new IllegalParameterException(
           "No enum AttestationConveyancePreference $s");
     } else {
-      return p;
+      return p!;
     }
   }
 
@@ -158,7 +158,7 @@ class Fido2PluginUtil {
   }
 
   static TokenBindingStatus tokenBindingStatusFromValue(String s) {
-    TokenBindingStatus t;
+    TokenBindingStatus? t;
     TokenBindingStatus.values.forEach((element) {
       if (s == describeEnum(element)) {
         t = element;
@@ -167,7 +167,7 @@ class Fido2PluginUtil {
     if (t == null) {
       throw new IllegalParameterException("No enum TokenBindingStatus $s");
     } else {
-      return t;
+      return t!;
     }
   }
 
@@ -177,7 +177,7 @@ class Fido2PluginUtil {
 
   static UserVerificationRequirement userVerificationRequirementFromValue(
       String s) {
-    UserVerificationRequirement u;
+    UserVerificationRequirement? u;
     UserVerificationRequirement.values.forEach((element) {
       if (s == describeEnum(element)) {
         u = element;
@@ -187,7 +187,7 @@ class Fido2PluginUtil {
       throw new IllegalParameterException(
           "No enum UserVerificationRequirement $s");
     } else {
-      return u;
+      return u!;
     }
   }
 
@@ -196,8 +196,8 @@ class Fido2PluginUtil {
     return describeEnum(u);
   }
 
-  static AuthenticatorTransport authenticatorTransportFromValue(String s) {
-    AuthenticatorTransport a;
+  static AuthenticatorTransport? authenticatorTransportFromValue(String s) {
+    AuthenticatorTransport? a;
     AuthenticatorTransport.values.forEach((element) {
       if (s == describeEnum(element)) {
         a = element;
@@ -214,7 +214,8 @@ class Fido2PluginUtil {
     return describeEnum(t);
   }
 
-  static BioAuthnEvent toBioEvent(String event) => _eventMap[event];
+  static BioAuthnEvent? toBioEvent(String? event) =>
+      _eventMap.containsKey(event) ? _eventMap[event] : null;
   static const Map<String, BioAuthnEvent> _eventMap = {
     'onAuthError': BioAuthnEvent.onAuthError,
     'onAuthSucceeded': BioAuthnEvent.onAuthSucceeded,
@@ -223,8 +224,8 @@ class Fido2PluginUtil {
   };
 }
 
-typedef void BioAuthnCallback(BioAuthnEvent event,
-    {HmsBioAuthnResult result, int errCode});
+typedef void BioAuthnCallback(BioAuthnEvent? event,
+    {HmsBioAuthnResult? result, int? errCode});
 
 enum BioAuthnEvent { onAuthError, onAuthSucceeded, onAuthFailed, onAuthHelp }
 

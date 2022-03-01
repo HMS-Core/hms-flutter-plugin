@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -29,9 +29,11 @@ import com.huawei.hms.support.api.fido.fido2.AuthenticatorMetadata;
 import com.huawei.hms.support.api.fido.fido2.Fido2;
 import com.huawei.hms.support.api.fido.fido2.Fido2AuthenticationRequest;
 import com.huawei.hms.support.api.fido.fido2.Fido2AuthenticationResponse;
+import com.huawei.hms.support.api.fido.fido2.Fido2Callback;
 import com.huawei.hms.support.api.fido.fido2.Fido2Client;
 import com.huawei.hms.support.api.fido.fido2.Fido2Intent;
 import com.huawei.hms.support.api.fido.fido2.Fido2IntentCallback;
+import com.huawei.hms.support.api.fido.fido2.Fido2IsSupportedExCallback;
 import com.huawei.hms.support.api.fido.fido2.Fido2RegistrationRequest;
 import com.huawei.hms.support.api.fido.fido2.Fido2RegistrationResponse;
 import com.huawei.hms.support.api.fido.fido2.NativeFido2AuthenticationOptions;
@@ -42,7 +44,9 @@ import com.huawei.hms.support.api.fido.fido2.TokenBinding;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -82,6 +86,15 @@ public class FidoClientMethodHandler implements MethodChannel.MethodCallHandler,
                 loggerKey = "getAuthenticationIntent";
                 getAuthIntent(call);
                 break;
+            case "isSupportedExAsync":
+                isSupportedExAsync();
+                break;
+            case "hasPlatformAuthenticatorsCb":
+                hasPlatformAuthenticatorsCb();
+                break;
+            case "getPlatformAuthenticatorsCb":
+                getPlatformAuthenticatorsCb();
+                break;
             default:
                 mResult.notImplemented();
                 break;
@@ -115,6 +128,77 @@ public class FidoClientMethodHandler implements MethodChannel.MethodCallHandler,
         HMSLogger.getInstance(activity.getApplicationContext())
                 .sendSingleEvent("fidoGetPlatformAuthenticators");
         mResult.success(FidoBuilder.authMetadataToMap(arrayList).toString());
+    }
+
+    private void isSupportedExAsync() {
+        HMSLogger.getInstance(activity.getApplicationContext())
+                .startMethodExecutionTimer("isSupportedExAsync");
+        fido2Client = Fido2.getFido2Client(activity);
+        HMSLogger.getInstance(activity.getApplicationContext())
+                .sendSingleEvent("isSupportedExAsync");
+        fido2Client.isSupportedExAsync(new Fido2IsSupportedExCallback() {
+            @Override
+            public void onResult(int i, CharSequence charSequence) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("resultCode", i);
+                map.put("errString", charSequence.toString());
+                HMSLogger.getInstance(activity.getApplicationContext())
+                    .sendSingleEvent("isSupportedExAsync");
+                mResult.success(map);
+            }
+        });
+    }
+
+    private void hasPlatformAuthenticatorsCb() {
+        HMSLogger.getInstance(activity.getApplicationContext())
+                .startMethodExecutionTimer("hasPlatformAuthenticatorsCb");
+        fido2Client = Fido2.getFido2Client(activity);
+        fido2Client.hasPlatformAuthenticators(new Fido2Callback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean aBoolean) {
+                HMSLogger.getInstance(activity.getApplicationContext())
+                        .sendSingleEvent("hasPlatformAuthenticatorsCb");
+                mResult.success(aBoolean);
+            }
+            @Override
+            public void onFailure(long l, CharSequence charSequence) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("errorCode", l);
+                map.put("errString", charSequence.toString());
+                HMSLogger.getInstance(activity.getApplicationContext())
+                        .sendSingleEvent("hasPlatformAuthenticatorsCb");
+                mResult.success(map);
+            }
+        });
+
+    }
+
+    private void getPlatformAuthenticatorsCb() {
+        HMSLogger.getInstance(activity.getApplicationContext())
+                .startMethodExecutionTimer("getPlatformAuthenticatorsCb");
+        fido2Client = Fido2.getFido2Client(activity);
+        fido2Client.getPlatformAuthenticators(new Fido2Callback<Collection<AuthenticatorMetadata>>() {
+            @Override
+            public void onSuccess(Collection<AuthenticatorMetadata> authenticatorMetadata) {
+                Collection<AuthenticatorMetadata> collection = fido2Client.getPlatformAuthenticators();
+                List<AuthenticatorMetadata> arrayList = new ArrayList<>(collection);
+                HMSLogger.getInstance(activity.getApplicationContext())
+                        .sendSingleEvent("getPlatformAuthenticatorsCb");
+                mResult.success(FidoBuilder.authMetadataToMap(arrayList).toString());
+            }
+
+            @Override
+            public void onFailure(long l, CharSequence charSequence) {
+                HMSLogger.getInstance(activity.getApplicationContext())
+                        .sendSingleEvent("getPlatformAuthenticatorsCb");
+                Map<String, Object> map = new HashMap<>();
+                map.put("errorCode", l);
+                map.put("errString", charSequence.toString());
+                HMSLogger.getInstance(activity.getApplicationContext())
+                        .sendSingleEvent("getPlatformAuthenticatorsCb");
+                mResult.success(map);
+            }
+        });
     }
 
     private void getRegisterIntent(MethodCall call) {

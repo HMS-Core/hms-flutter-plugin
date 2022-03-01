@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
 */
 
 class PublicKeyCredentialRpEntity {
-  String id;
-  String name;
-  String icon;
+  String? id;
+  String? name;
+  String? icon;
 
   PublicKeyCredentialRpEntity({this.name, this.id, this.icon});
 
@@ -25,9 +25,9 @@ class PublicKeyCredentialRpEntity {
     return {"id": id, "name": name, "icon": icon};
   }
 
-  String get getId => id;
+  String? get getId => id;
 
-  String get getName => name;
+  String? get getName => name;
 
-  String get getIcon => icon;
+  String? get getIcon => icon;
 }

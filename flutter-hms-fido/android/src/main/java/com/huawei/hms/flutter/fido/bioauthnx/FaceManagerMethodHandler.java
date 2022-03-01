@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -69,6 +69,9 @@ public class FaceManagerMethodHandler implements MethodChannel.MethodCallHandler
                 break;
             case "authenticateWithCryptoObject":
                 authenticateWithCryptoObject(call);
+                break;
+            case "getFaceModality":
+                getFaceModality();
                 break;
             default:
                 mResult.notImplemented();
@@ -182,5 +185,24 @@ public class FaceManagerMethodHandler implements MethodChannel.MethodCallHandler
         CancellationSignal cancellationSignal = new CancellationSignal();
 
         faceManager.auth(cryptoObject, cancellationSignal, 0, new BioAuthEvent(activity), null);
+    }
+
+    /**
+     * Checks whether the current face modality is 3D or 2D.
+     */
+    private void getFaceModality() {
+        HMSLogger.getInstance(activity.getApplicationContext())
+                .startMethodExecutionTimer("getFaceModality");
+
+        if (faceManager == null) {
+            HMSLogger.getInstance(activity.getApplicationContext())
+                    .sendSingleEvent("getFaceModality", Constants.UNINITIALIZED_OBJECT);
+            mResult.error(TAG, "Face manager must be initialized first!", Constants.UNINITIALIZED_OBJECT);
+            return;
+        }
+
+        HMSLogger.getInstance(activity.getApplicationContext())
+                .sendSingleEvent("getFaceModality");
+        mResult.success(faceManager.getFaceModality());
     }
 }

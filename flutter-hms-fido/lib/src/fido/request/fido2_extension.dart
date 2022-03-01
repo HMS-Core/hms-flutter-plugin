@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ class Fido2Extension {
   static const int COMPONENT_ROAMING_AUTHENTICATOR = 4;
 
   final String name;
-  String _identifier;
+  late String _identifier;
   final int specification;
   final int apis;
   final int components;
@@ -42,12 +42,7 @@ class Fido2Extension {
   static Fido2Extension webAuthN = Fido2Extension("uvi", 0, 3, 6, 0);
 
   String _specName() {
-    int var1;
-    if ((var1 = this.specification) != null) {
-      return var1 != 1 ? "undefined" : "hms";
-    } else {
-      return "w3c-webauthn";
-    }
+    return this.specification != 1 ? "undefined" : "hms";
   }
 
   String _apiName() {

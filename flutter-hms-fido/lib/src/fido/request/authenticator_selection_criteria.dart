@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -18,24 +18,24 @@ import 'package:flutter/foundation.dart';
 import '../constant/fido_constants.dart';
 
 class AuthenticatorSelectionCriteria {
-  Attachment attachment;
-  bool resident;
-  UserVerificationRequirement requirement;
+  Attachment? attachment;
+  bool? resident;
+  UserVerificationRequirement? requirement;
 
   AuthenticatorSelectionCriteria(
       {this.attachment, this.requirement, this.resident});
 
   Map<String, dynamic> toMap() {
     return {
-      "attachment": attachment != null ? describeEnum(attachment) : null,
+      "attachment": attachment != null ? describeEnum(attachment!) : null,
       "resident": resident != null ? resident : null,
-      "requirement": requirement != null ? describeEnum(requirement) : null
+      "requirement": requirement != null ? describeEnum(requirement!) : null
     };
   }
 
-  Attachment get getAuthenticatorAttachment => attachment;
+  Attachment? get getAuthenticatorAttachment => attachment;
 
-  bool get isRequireResidentKey => resident;
+  bool? get isRequireResidentKey => resident;
 
-  UserVerificationRequirement get getUserVerification => requirement;
+  UserVerificationRequirement? get getUserVerification => requirement;
 }

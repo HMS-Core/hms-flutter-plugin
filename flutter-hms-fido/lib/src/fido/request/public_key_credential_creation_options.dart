@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -27,17 +27,17 @@ import 'public_key_credential_user_entity.dart';
 import 'public_key_credential_rp_entity.dart';
 
 class PublicKeyCredentialCreationOptions {
-  Uint8List challenge;
-  NativeFido2Options nativeFido2Options;
-  TokenBinding tokenBinding;
-  PublicKeyCredentialRpEntity rp;
-  PublicKeyCredentialUserEntity user;
-  List<PublicKeyCredentialParameters> pubKeyCredParams;
-  List<PublicKeyCredentialDescriptor> excludeList;
-  Map<String, dynamic> extensions;
-  AuthenticatorSelectionCriteria authenticatorSelection;
-  AttestationConveyancePreference attestation;
-  double timeoutSeconds;
+  Uint8List? challenge;
+  NativeFido2Options? nativeFido2Options;
+  TokenBinding? tokenBinding;
+  PublicKeyCredentialRpEntity? rp;
+  PublicKeyCredentialUserEntity? user;
+  List<PublicKeyCredentialParameters>? pubKeyCredParams;
+  List<PublicKeyCredentialDescriptor>? excludeList;
+  Map<String, dynamic>? extensions;
+  AuthenticatorSelectionCriteria? authenticatorSelection;
+  AttestationConveyancePreference? attestation;
+  double? timeoutSeconds;
 
   PublicKeyCredentialCreationOptions(
       {this.attestation,
@@ -57,44 +57,45 @@ class PublicKeyCredentialCreationOptions {
       "challenge": challenge,
       "extensions": extensions,
       "timeoutSeconds": timeoutSeconds,
-      "rp": rp != null ? rp.toMap() : null,
-      "user": user != null ? user.toMap() : null,
-      "tokenBinding": tokenBinding != null ? tokenBinding.toMap() : null,
-      "options": nativeFido2Options != null ? nativeFido2Options.toMap() : null,
+      "rp": rp != null ? rp!.toMap() : null,
+      "user": user != null ? user!.toMap() : null,
+      "tokenBinding": tokenBinding != null ? tokenBinding!.toMap() : null,
+      "options":
+          nativeFido2Options != null ? nativeFido2Options!.toMap() : null,
       "excludeList": excludeList != null
-          ? excludeList.map((e) => e.toMap()).toList()
+          ? excludeList!.map((e) => e.toMap()).toList()
           : null,
       "authenticatorSelection": authenticatorSelection != null
-          ? authenticatorSelection.toMap()
+          ? authenticatorSelection!.toMap()
           : null,
       "pubKeyCredParams": pubKeyCredParams != null
-          ? pubKeyCredParams.map((e) => e.toMap()).toList()
+          ? pubKeyCredParams!.map((e) => e.toMap()).toList()
           : null,
-      "attestation": attestation != null ? describeEnum(attestation) : null
+      "attestation": attestation != null ? describeEnum(attestation!) : null
     };
   }
 
-  Uint8List get getChallenge => challenge;
+  Uint8List? get getChallenge => challenge;
 
-  NativeFido2Options get getNativeFido2Options => nativeFido2Options;
+  NativeFido2Options? get getNativeFido2Options => nativeFido2Options;
 
-  TokenBinding get getTokenBinding => tokenBinding;
+  TokenBinding? get getTokenBinding => tokenBinding;
 
-  PublicKeyCredentialRpEntity get getRp => rp;
+  PublicKeyCredentialRpEntity? get getRp => rp;
 
-  PublicKeyCredentialUserEntity get getUser => user;
+  PublicKeyCredentialUserEntity? get getUser => user;
 
-  List<PublicKeyCredentialParameters> get getPubKeyCredParams =>
+  List<PublicKeyCredentialParameters>? get getPubKeyCredParams =>
       pubKeyCredParams;
 
-  List<PublicKeyCredentialDescriptor> get getExcludeList => excludeList;
+  List<PublicKeyCredentialDescriptor>? get getExcludeList => excludeList;
 
-  Map<String, dynamic> get getExtensions => extensions;
+  Map<String, dynamic>? get getExtensions => extensions;
 
-  AuthenticatorSelectionCriteria get getAuthenticatorSelection =>
+  AuthenticatorSelectionCriteria? get getAuthenticatorSelection =>
       authenticatorSelection;
 
-  AttestationConveyancePreference get getAttestation => attestation;
+  AttestationConveyancePreference? get getAttestation => attestation;
 
-  double get getTimeoutSeconds => timeoutSeconds;
+  double? get getTimeoutSeconds => timeoutSeconds;
 }

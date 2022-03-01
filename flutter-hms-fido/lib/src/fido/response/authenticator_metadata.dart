@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -18,16 +18,15 @@ class AuthenticatorMetadata {
   static const int UVM_FINGERPRINT = 2;
   static const int UVM_FACEPRINT = 16;
 
-  String aaGuid;
-  int uVms;
-  List<dynamic> extensions;
-  bool isAvailable;
+  String? aaGuid;
+  int? uVms;
+  List<dynamic>? extensions;
+  bool? isAvailable;
 
   AuthenticatorMetadata(
       {this.extensions, this.aaGuid, this.isAvailable, this.uVms});
 
   factory AuthenticatorMetadata.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
     return AuthenticatorMetadata(
         aaGuid: map['aaGuid'] ?? null,
         uVms: map['uVms'] ?? null,
@@ -36,6 +35,7 @@ class AuthenticatorMetadata {
   }
 
   bool isSupportedUvm(int var1) {
-    return (this.uVms & var1) != 0;
+    if (this.uVms == null) return false;
+    return (this.uVms! & var1) != 0;
   }
 }
