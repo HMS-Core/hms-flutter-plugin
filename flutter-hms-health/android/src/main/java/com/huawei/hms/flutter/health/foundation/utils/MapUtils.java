@@ -1,18 +1,18 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.health.foundation.utils;
 
@@ -55,7 +55,7 @@ public final class MapUtils {
      * Converts an Object to a Map.
      *
      * @param instance T instance.
-     * @param <T>      Generic class type.
+     * @param <T> Generic class type.
      * @return Result Map for Flutter.
      */
     public static <T> Map<String, Object> toResultMap(final @Nullable T instance, final @Nullable Boolean isSuccess) {
@@ -92,7 +92,7 @@ public final class MapUtils {
     /**
      * Adds isSuccess value to an empty or already initialized Map instance.
      *
-     * @param map       Map<String, Object> instance, that can either be null or already initialized.
+     * @param map Map<String, Object> instance, that can either be null or already initialized.
      * @param isSuccess Boolean Value.
      * @return Map<String, Object> instance.
      */
@@ -112,7 +112,7 @@ public final class MapUtils {
      *
      * @param json String value that represents json object in string format.
      * @param type Requested class type.
-     * @param <T>  Generic class type.
+     * @param <T> Generic class type.
      * @return Requested Instance.
      */
     public static <T> T fromJson(final String json, final Class<T> type) {
@@ -146,4 +146,3 @@ public final class MapUtils {
     }
 
 }
-

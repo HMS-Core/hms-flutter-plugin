@@ -1,18 +1,18 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.health.modules.autorecorder;
 
@@ -29,17 +29,14 @@ import com.huawei.hms.flutter.health.foundation.utils.Utils;
 import com.huawei.hms.flutter.health.modules.autorecorder.service.DefaultAutoRecorderService;
 import com.huawei.hms.flutter.health.modules.autorecorder.utils.AutoRecorderConstants;
 import com.huawei.hms.hihealth.AutoRecorderController;
-import com.huawei.hms.hihealth.HiHealthOptions;
 import com.huawei.hms.hihealth.HuaweiHiHealth;
 import com.huawei.hms.hihealth.data.DataType;
-import com.huawei.hms.support.hwid.HuaweiIdAuthManager;
-import com.huawei.hms.support.hwid.result.AuthHuaweiId;
-
-import java.util.Map;
 
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
+
+import java.util.Map;
 
 /**
  * {@link AutoRecorderMethodHandler} class is a module that refers to {@link AutoRecorderController}
@@ -62,6 +59,14 @@ public class AutoRecorderMethodHandler implements MethodCallHandler {
     // Whether is recording now
     private boolean isRecording;
 
+    /**
+     * Initialization
+     */
+    public AutoRecorderMethodHandler(@Nullable Activity activity) {
+        this.activity = activity;
+        isRecording = false;
+    }
+
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
         HMSLogger.getInstance(context).startMethodExecutionTimer(call.method);
@@ -72,14 +77,6 @@ public class AutoRecorderMethodHandler implements MethodCallHandler {
         } else {
             result.notImplemented();
         }
-    }
-
-    /**
-     * Initialization
-     */
-    public AutoRecorderMethodHandler(@Nullable Activity activity) {
-        this.activity = activity;
-        isRecording = false;
     }
 
     public void setActivity(@Nullable Activity activity) {
@@ -96,11 +93,11 @@ public class AutoRecorderMethodHandler implements MethodCallHandler {
      * Start record By DataType, the data from sensor will be inserted into database automatically until call Stop
      * Interface
      *
-     * @param call   Flutter Method Call instance to get {@link DataType} object that contains request information.
+     * @param call Flutter Method Call instance to get {@link DataType} object that contains request information.
      * @param result In the success scenario, Void instance is returned , or Exception is returned in the failure
-     *               scenario. Also, the interface won't always success, onCompleteStartRecordByType event will be
-     *               triggered once the task is completed to get the judgement of result is successful or not. The fail
-     *               reason includes: 1. The app hasn't been granted the scopes. 2. This type is not supported so far.
+     * scenario. Also, the interface won't always success, onCompleteStartRecordByType event will be
+     * triggered once the task is completed to get the judgement of result is successful or not. The fail
+     * reason includes: 1. The app hasn't been granted the scopes. 2. This type is not supported so far.
      */
     public void startRecord(final MethodCall call, final Result result) {
         checkAutoRecorderController();
@@ -130,12 +127,12 @@ public class AutoRecorderMethodHandler implements MethodCallHandler {
      * type in the data collector is the same as that in the record information. Otherwise, errors will occur.
      * </p>
      *
-     * @param call   Flutter MethodCall instance instance to get {@link DataType} object that contains request
-     *               information.
+     * @param call Flutter MethodCall instance instance to get {@link DataType} object that contains request
+     * information.
      * @param result In the success scenario, Void instance is returned , or Exception is returned in the failure
-     *               scenario. Also, the interface won't always success, onCompleteStartRecordByType event will be
-     *               triggered once the task is completed to get the judgement of result is successful or not. The fail
-     *               reason includes: 1. The app hasn't been granted the scopes. 2. This type is not supported so far.
+     * scenario. Also, the interface won't always success, onCompleteStartRecordByType event will be
+     * triggered once the task is completed to get the judgement of result is successful or not. The fail
+     * reason includes: 1. The app hasn't been granted the scopes. 2. This type is not supported so far.
      */
     public void stopRecord(final MethodCall call, final Result result) {
         checkAutoRecorderController();
@@ -160,9 +157,7 @@ public class AutoRecorderMethodHandler implements MethodCallHandler {
      * Initialize {@link AutoRecorderController}.
      */
     private void initAutoRecorderController() {
-        HiHealthOptions options = HiHealthOptions.builder().build();
-        AuthHuaweiId signInHuaweiId = HuaweiIdAuthManager.getExtendedAuthResult(options);
-        this.autoRecorderController = HuaweiHiHealth.getAutoRecorderController(activity, signInHuaweiId);
+        this.autoRecorderController = HuaweiHiHealth.getAutoRecorderController(activity);
     }
 
     /**
@@ -180,5 +175,4 @@ public class AutoRecorderMethodHandler implements MethodCallHandler {
     public void unregisterReceiver() {
         autoRecorderService.unregisterReceiver();
     }
-
 }

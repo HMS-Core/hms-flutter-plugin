@@ -42,5 +42,6 @@ android {
 
 dependencies {
     implementation "com.google.code.gson:gson:2.8.6"
-    implementation 'com.huawei.hms:health:5.0.5.300'
+    implementation 'com.huawei.hms:health:6.3.0.301'
+    implementation 'com.huawei.hms:base:5.2.0.300'
 }

@@ -1,18 +1,18 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.health.modules.datacontroller.service;
 
@@ -41,8 +41,8 @@ public class DefaultDataController implements DataControllerService {
     /**
      * Insert the user's fitness and health data into the Health platform.
      *
-     * @param dataController     {@link DataController} instance.
-     * @param sampleSet          {@link SampleSet} instance.
+     * @param dataController {@link DataController} instance.
+     * @param sampleSet {@link SampleSet} instance.
      * @param voidResultListener {@link VoidResultListener} listener.
      */
     @Override
@@ -71,8 +71,8 @@ public class DefaultDataController implements DataControllerService {
      * Note: Only historical data that has been inserted by the current app can be deleted from the Health platform.
      * </p>
      *
-     * @param dataController     {@link DataController} instance.
-     * @param deleteOptions      {@link DeleteOptions} instance.
+     * @param dataController {@link DataController} instance.
+     * @param deleteOptions {@link DeleteOptions} instance.
      * @param voidResultListener {@link VoidResultListener} listener.
      */
     @Override
@@ -103,8 +103,8 @@ public class DefaultDataController implements DataControllerService {
      * updated sampling points to the sampling data set for the update. 6. Build a parameter object for the update. 7.
      * Use the specified parameter object for the update to call the data controller to modify the sampling dataset.
      *
-     * @param dataController     {@link DataController} instance.
-     * @param updateOptions      {@link UpdateOptions} instance.
+     * @param dataController {@link DataController} instance.
+     * @param updateOptions {@link UpdateOptions} instance.
      * @param voidResultListener {@link VoidResultListener} listener.
      */
     @Override
@@ -134,8 +134,8 @@ public class DefaultDataController implements DataControllerService {
      * collector, data type, and detailed data. If data is read, the data set will be returned.
      * </p>
      *
-     * @param dataController     {@link DataController} instance.
-     * @param readOptions        {@link ReadOptions} instance.
+     * @param dataController {@link DataController} instance.
+     * @param readOptions {@link ReadOptions} instance.
      * @param dataResultListener {@link VoidResultListener} listener.
      */
     @Override
@@ -159,8 +159,8 @@ public class DefaultDataController implements DataControllerService {
     /**
      * Querying the Summary Fitness and Health Data of the User of the Current day
      *
-     * @param dataController     {@link DataController} instance.
-     * @param dataType           {@link DataType} instance.
+     * @param dataController {@link DataController} instance.
+     * @param dataType {@link DataType} instance.
      * @param dataResultListener {@link VoidResultListener} listener.
      */
     @Override
@@ -189,7 +189,7 @@ public class DefaultDataController implements DataControllerService {
     /**
      * Clearing the User's Fitness and Health Data from the Device and Cloud
      *
-     * @param dataController     {@link DataController} instance.
+     * @param dataController {@link DataController} instance.
      * @param dataResultListener {@link VoidResultListener} listener.
      */
     @Override
@@ -214,10 +214,10 @@ public class DefaultDataController implements DataControllerService {
     /**
      * Querying the Summary Fitness and Health Data of the User between selected dates.
      *
-     * @param dataController     {@link DataController} instance.
-     * @param dataType           {@link DataType} instance.
-     * @param startTime          An 8-digit integer in the format of YYYYMMDD, for example, 20200803.
-     * @param endTime            An 8-digit integer in the format of YYYYMMDD, for example, 20200903.
+     * @param dataController {@link DataController} instance.
+     * @param dataType {@link DataType} instance.
+     * @param startTime An 8-digit integer in the format of YYYYMMDD, for example, 20200803.
+     * @param endTime An 8-digit integer in the format of YYYYMMDD, for example, 20200903.
      * @param dataResultListener {@link ResultListener } listener.
      */
     @Override
@@ -238,6 +238,4 @@ public class DefaultDataController implements DataControllerService {
             dataResultListener.onFail(error);
         });
     }
-
 }
-

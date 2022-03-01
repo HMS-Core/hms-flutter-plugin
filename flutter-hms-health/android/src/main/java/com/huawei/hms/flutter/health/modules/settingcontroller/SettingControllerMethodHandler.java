@@ -1,23 +1,25 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.health.modules.settingcontroller;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,31 +34,37 @@ import com.huawei.hms.flutter.health.foundation.utils.Utils;
 import com.huawei.hms.flutter.health.modules.settingcontroller.service.DefaultSettingController;
 import com.huawei.hms.flutter.health.modules.settingcontroller.utils.SettingControllerConstants.SettingControllerMethods;
 import com.huawei.hms.hihealth.ConsentsController;
-import com.huawei.hms.hihealth.HiHealthOptions;
 import com.huawei.hms.hihealth.HuaweiHiHealth;
 import com.huawei.hms.hihealth.SettingController;
 import com.huawei.hms.hihealth.data.DataType;
 import com.huawei.hms.hihealth.data.ScopeLangItem;
 import com.huawei.hms.hihealth.options.DataTypeAddOptions;
 import com.huawei.hms.hihealth.options.DataTypeAddOptions.Builder;
-import com.huawei.hms.support.hwid.HuaweiIdAuthManager;
-import com.huawei.hms.support.hwid.result.AuthHuaweiId;
+import com.huawei.hms.hihealth.result.HealthKitAuthResult;
+
+import io.flutter.plugin.common.MethodCall;
+import io.flutter.plugin.common.MethodChannel;
+import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
+import io.flutter.plugin.common.MethodChannel.Result;
+import io.flutter.plugin.common.PluginRegistry;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.flutter.plugin.common.MethodCall;
-import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
-import io.flutter.plugin.common.MethodChannel.Result;
-
-public class SettingControllerMethodHandler implements MethodCallHandler {
+public class SettingControllerMethodHandler implements MethodCallHandler, PluginRegistry.ActivityResultListener {
     private Activity activity;
+
     private Context context;
+
     private SettingController settingController;
+
     private ConsentsController consentsController;
+
     private DefaultSettingController settingControllerImpl;
+
+    private MethodChannel.Result mResult;
 
     public SettingControllerMethodHandler(@Nullable Activity activity) {
         this.activity = activity;
@@ -124,10 +132,35 @@ public class SettingControllerMethodHandler implements MethodCallHandler {
             case DISABLE_LOGGER:
                 HMSLogger.getInstance(activity).disableLogger();
                 break;
+            case REQUEST_AUTHORIZATION_INTENT:
+                reqAuthIntent(call, result);
+                break;
             default:
                 result.notImplemented();
                 break;
         }
+    }
+
+    private String[] toStringArray(List<String> strings) {
+        String[] res = new String[strings.size()];
+        for (int i = 0; i < res.length; i++) {
+            res[i] = strings.get(i);
+        }
+        return res;
+    }
+
+    private void reqAuthIntent(MethodCall call, Result result) {
+        checkControllers();
+        mResult = result;
+        List<String> list = call.argument("scopes");
+        Log.i("test", list.toString());
+
+        String[] array = toStringArray(list);
+
+        checkControllers();
+
+        Intent intent = settingController.requestAuthorizationIntent(array, true);
+        activity.startActivityForResult(intent, 8888);
     }
 
     private void addDataType(final MethodCall call, final Result result) {
@@ -210,10 +243,8 @@ public class SettingControllerMethodHandler implements MethodCallHandler {
      * Initialize variable of settingController with no dataType params, in case it is null.
      */
     private void initControllers() {
-        HiHealthOptions options = HiHealthOptions.builder().build();
-        AuthHuaweiId mSignInHuaweiId = HuaweiIdAuthManager.getExtendedAuthResult(options);
-        this.settingController = HuaweiHiHealth.getSettingController(activity, mSignInHuaweiId);
-        this.consentsController = HuaweiHiHealth.getConsentsController(activity, mSignInHuaweiId);
+        this.settingController = HuaweiHiHealth.getSettingController(activity);
+        this.consentsController = HuaweiHiHealth.getConsentsController(activity);
     }
 
     /**
@@ -240,5 +271,15 @@ public class SettingControllerMethodHandler implements MethodCallHandler {
             }
         }
         return builder.build();
+    }
+
+    @Override
+    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 8888) {
+            HealthKitAuthResult result = settingController.parseHealthKitAuthResultFromIntent(data);
+            Log.i("sinan", result.toJson());
+            mResult.success(result.toJson());
+        }
+        return true;
     }
 }

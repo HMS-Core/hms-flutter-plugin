@@ -1,18 +1,18 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.health.modules.activityrecord.utils;
 
@@ -27,19 +27,24 @@ import androidx.annotation.Nullable;
 
 import com.huawei.hms.flutter.health.foundation.constants.Constants;
 import com.huawei.hms.flutter.health.foundation.utils.Utils;
+import com.huawei.hms.flutter.health.modules.healthcontroller.HealthRecordUtils;
 import com.huawei.hms.hihealth.data.ActivityRecord;
 import com.huawei.hms.hihealth.data.ActivitySummary;
 import com.huawei.hms.hihealth.data.DataCollector;
 import com.huawei.hms.hihealth.data.DataType;
 import com.huawei.hms.hihealth.data.DeviceInfo;
 import com.huawei.hms.hihealth.data.Field;
+import com.huawei.hms.hihealth.data.MapValue;
 import com.huawei.hms.hihealth.data.PaceSummary;
 import com.huawei.hms.hihealth.data.SamplePoint;
 import com.huawei.hms.hihealth.data.SampleSet;
 import com.huawei.hms.hihealth.data.ScopeLangItem;
 import com.huawei.hms.hihealth.data.Value;
+import com.huawei.hms.hihealth.options.ActivityRecordDeleteOptions;
 import com.huawei.hms.hihealth.options.ActivityRecordReadOptions;
 import com.huawei.hms.hihealth.result.ActivityRecordReply;
+
+import io.flutter.plugin.common.MethodCall;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,17 +53,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
-import io.flutter.plugin.common.MethodCall;
-
 public final class ActivityRecordUtils {
-    /**
-     * ActivityBuilder Record Types
-     */
-    enum RecordTypes {
-        ID,
-        NAME
-    }
-
     /**
      * Looks for each key and converts Flutter callMap instance into {@link ActivityRecord} instance.
      *
@@ -84,8 +79,6 @@ public final class ActivityRecordUtils {
 
         return builder.build();
     }
-
-    /* Private Methods */
 
     /**
      * Sets {@link ActivityRecord.Builder} Time
@@ -114,6 +107,8 @@ public final class ActivityRecordUtils {
         }
     }
 
+    /* Private Methods */
+
     /**
      * Converts into {@link ActivityRecordReadOptions} instance.
      */
@@ -138,7 +133,6 @@ public final class ActivityRecordUtils {
         if (recordVal == null) {
             return;
         }
-
         if (types == RecordTypes.ID) {
             builder.setActivityRecordId(recordVal);
         } else if (types == RecordTypes.NAME) {
@@ -177,6 +171,7 @@ public final class ActivityRecordUtils {
             map.put("isKeepGoing", activityRecord.isKeepGoing());
             map.put("timeZone", activityRecord.getTimeZone());
             map.put("activitySummary", activitySummaryToMap(activityRecord.getActivitySummary()));
+            map.put("deviceInfo", deviceInfoToMap(activityRecord.getDeviceInfo()));
         }
         return map;
     }
@@ -224,7 +219,7 @@ public final class ActivityRecordUtils {
         return map;
     }
 
-    private static synchronized Map<String, Object> fieldValuesToMap(Map<String, Value> fieldValue) {
+    public static synchronized Map<String, Object> fieldValuesToMap(Map<String, Value> fieldValue) {
         HashMap<String, Object> resultMap = new HashMap<>();
         for (Entry<String, Value> pair : fieldValue.entrySet()) {
             Value value = pair.getValue();
@@ -239,7 +234,7 @@ public final class ActivityRecordUtils {
                     resultMap.put(pair.getKey(), value.asStringValue());
                     break;
                 case Field.FORMAT_MAP:
-                    HashMap<String, Float> floatMap = new HashMap<>();
+                    HashMap<String, MapValue> floatMap = new HashMap<>();
                     for (String key : value.getMap().keySet()) {
                         floatMap.put(key, value.getMapValue(key));
                     }
@@ -337,5 +332,45 @@ public final class ActivityRecordUtils {
         resultMap.put("authTime", scopeLangItem.getAuthTime());
         resultMap.put("url2Desc", scopeLangItem.getUrl2Desc());
         return resultMap;
+    }
+
+    public static ActivityRecordDeleteOptions buildDeleteOptions(Map<String, Object> map) {
+        ActivityRecordDeleteOptions.Builder builder = new ActivityRecordDeleteOptions.Builder();
+        List<DataType> types = new ArrayList<>();
+        String packageName = (String) map.get("packageName");
+        Long startTime = HealthRecordUtils.toLong("startTime", map.get("startTime"));
+        Long endTime = HealthRecordUtils.toLong("endTime", map.get("endTime"));
+        String timeUnit = (String) map.get("timeUnit");
+        List<String> activityRecordIDs = HealthRecordUtils.toTypeOfArrayList(map.get("activityRecordIDs"),
+            String.class);
+        List<Map<String, Object>> subDataTypeList = HealthRecordUtils.toMapArrayList("subDataTypes",
+            map.get("subDataTypes"));
+        Boolean deleteSubData = HealthRecordUtils.toBoolean("deleteSubData", map.get("deleteSubData"));
+
+        TimeUnit unit = Utils.toTimeUnit(timeUnit);
+
+        if (startTime != null && endTime != null) {
+            builder.setTimeInterval(startTime, endTime, unit);
+        }
+        if (activityRecordIDs != null) {
+            builder.setActivityRecordIds(activityRecordIDs);
+        }
+        if (!subDataTypeList.isEmpty()) {
+            for (Map<String, Object> m : subDataTypeList) {
+                final DataType dataType = Utils.toDataType(m, packageName);
+                types.add(dataType);
+            }
+            builder.setSubDataTypeList(types);
+        }
+        builder.isDeleteSubData(deleteSubData);
+        return builder.build();
+    }
+
+    /**
+     * ActivityBuilder Record Types
+     */
+    enum RecordTypes {
+        ID,
+        NAME
     }
 }

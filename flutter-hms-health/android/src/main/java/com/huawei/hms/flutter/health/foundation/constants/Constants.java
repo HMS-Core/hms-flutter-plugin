@@ -1,29 +1,29 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.health.foundation.constants;
 
 import com.huawei.hms.hihealth.data.DataType;
 import com.huawei.hms.hihealth.data.Field;
 
+import io.flutter.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import io.flutter.Log;
 
 public interface Constants {
     String UNKNOWN_ERROR_CODE = "-1";
@@ -35,7 +35,7 @@ public interface Constants {
     String ID_KEY = "id";
     String NAME_KEY = "name";
     String DESCRIPTION_KEY = "description";
-    String ACTIVITY_TYPE_KEY = "activityType";
+    String ACTIVITY_TYPE_KEY = "activityTypeId";
     String START_TIME_KEY = "startTime";
     String END_TIME_KEY = "endTime";
     String FORMAT_KEY = "format";
@@ -44,50 +44,6 @@ public interface Constants {
     String IS_SUCCESS_KEY = "isSuccess";
     String DATA_COLLECTOR_KEY = "dataCollector";
     String FIELDS_KEY = "fields";
-
-    /**
-     * {@link TimeConstants} used among converting time params from Flutter Call Maps into Java Side.
-     */
-    enum TimeConstants {
-        START,
-        END,
-        DURATION
-    }
-
-    /**
-     * {@link TimeUnit} types.
-     */
-    enum TimeUnitTypes {
-        /* Time units */
-        NANOSECONDS("NANOSECONDS", TimeUnit.NANOSECONDS),
-        MICROSECONDS("MICROSECONDS", TimeUnit.MICROSECONDS),
-        MILLISECONDS("MILLISECONDS", TimeUnit.MILLISECONDS),
-        SECONDS("SECONDS", TimeUnit.SECONDS),
-        MINUTES("MINUTES", TimeUnit.MINUTES),
-        HOURS("HOURS", TimeUnit.HOURS),
-        DAYS("DAYS", TimeUnit.DAYS);
-
-        private final String value;
-        private final TimeUnit type;
-
-        TimeUnitTypes(String value, TimeUnit type) {
-            this.value = value;
-            this.type = type;
-        }
-
-        public TimeUnit getTimeUnitType() {
-            return type;
-        }
-
-        public static TimeUnitTypes fromString(String text) {
-            for (TimeUnitTypes variable : TimeUnitTypes.values()) {
-                if (variable.value.equalsIgnoreCase(text)) {
-                    return variable;
-                }
-            }
-            return null;
-        }
-    }
 
     /**
      * Returns a {@link DataType} constant from the dataTypeName by using reflection on {@link DataType} class. If a
@@ -143,5 +99,50 @@ public interface Constants {
             }
         }
         return null;
+    }
+
+    /**
+     * {@link TimeConstants} used among converting time params from Flutter Call Maps into Java Side.
+     */
+    enum TimeConstants {
+        START,
+        END,
+        DURATION
+    }
+
+    /**
+     * {@link TimeUnit} types.
+     */
+    enum TimeUnitTypes {
+        /* Time units */
+        NANOSECONDS("NANOSECONDS", TimeUnit.NANOSECONDS),
+        MICROSECONDS("MICROSECONDS", TimeUnit.MICROSECONDS),
+        MILLISECONDS("MILLISECONDS", TimeUnit.MILLISECONDS),
+        SECONDS("SECONDS", TimeUnit.SECONDS),
+        MINUTES("MINUTES", TimeUnit.MINUTES),
+        HOURS("HOURS", TimeUnit.HOURS),
+        DAYS("DAYS", TimeUnit.DAYS);
+
+        private final String value;
+
+        private final TimeUnit type;
+
+        TimeUnitTypes(String value, TimeUnit type) {
+            this.value = value;
+            this.type = type;
+        }
+
+        public static TimeUnitTypes fromString(String text) {
+            for (TimeUnitTypes variable : TimeUnitTypes.values()) {
+                if (variable.value.equalsIgnoreCase(text)) {
+                    return variable;
+                }
+            }
+            return null;
+        }
+
+        public TimeUnit getTimeUnitType() {
+            return type;
+        }
     }
 }

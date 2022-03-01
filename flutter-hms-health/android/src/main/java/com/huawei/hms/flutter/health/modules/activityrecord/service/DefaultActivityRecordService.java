@@ -1,18 +1,18 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.health.modules.activityrecord.service;
 
@@ -25,14 +25,15 @@ import com.huawei.hms.flutter.health.modules.activityrecord.utils.ActivityRecord
 import com.huawei.hms.hihealth.ActivityRecordsController;
 import com.huawei.hms.hihealth.data.ActivityRecord;
 import com.huawei.hms.hihealth.data.SampleSet;
+import com.huawei.hms.hihealth.options.ActivityRecordDeleteOptions;
 import com.huawei.hms.hihealth.options.ActivityRecordInsertOptions;
 import com.huawei.hms.hihealth.options.ActivityRecordInsertOptions.Builder;
 import com.huawei.hms.hihealth.options.ActivityRecordReadOptions;
 import com.huawei.hms.hihealth.result.ActivityRecordReply;
 
-import java.util.List;
-
 import io.flutter.Log;
+
+import java.util.List;
 
 public class DefaultActivityRecordService implements ActivityRecordService {
     private static final String TAG = ActivityRecordsConstants.ACTIVITY_RECORDS_MODULE;
@@ -48,8 +49,8 @@ public class DefaultActivityRecordService implements ActivityRecordService {
      * </p>
      *
      * @param activityRecordsController {@link DefaultActivityRecordService} instance.
-     * @param activityRecord            {@link ActivityRecord} instance.
-     * @param listener                  {@link VoidResultListener} instance.
+     * @param activityRecord {@link ActivityRecord} instance.
+     * @param listener {@link VoidResultListener} instance.
      */
     @Override
     public void startActivityRecord(ActivityRecordsController activityRecordsController, ActivityRecord activityRecord,
@@ -78,8 +79,8 @@ public class DefaultActivityRecordService implements ActivityRecordService {
      * </p>
      *
      * @param activityRecordsController {@link DefaultActivityRecordService} instance.
-     * @param activityRecordId          the ID string of {@link ActivityRecord}.
-     * @param listener                  List ActivityRecord instance.
+     * @param activityRecordId the ID string of {@link ActivityRecord}.
+     * @param listener List ActivityRecord instance.
      */
     @Override
     public void endActivityRecord(ActivityRecordsController activityRecordsController,
@@ -114,9 +115,9 @@ public class DefaultActivityRecordService implements ActivityRecordService {
      * </p>
      *
      * @param activityRecordsController {@link DefaultActivityRecordService} instance.
-     * @param activityRecord            {@link ActivityRecord} instance.
-     * @param sampleSets                {@link List<SampleSet>} sampleSets to add for the activity record.
-     * @param listener                  {@link VoidResultListener} instance.
+     * @param activityRecord {@link ActivityRecord} instance.
+     * @param sampleSets {@link List<SampleSet>} sampleSets to add for the activity record.
+     * @param listener {@link VoidResultListener} instance.
      */
     @Override
     public void addActivityRecord(com.huawei.hms.hihealth.ActivityRecordsController activityRecordsController,
@@ -151,8 +152,8 @@ public class DefaultActivityRecordService implements ActivityRecordService {
      * </p>
      *
      * @param activityRecordsController {@link ActivityRecordsController} instance.
-     * @param readRequest               {@link ActivityRecordReadOptions} request.
-     * @param listener                  {@link ResultListener<ActivityRecordReply>} instance.
+     * @param readRequest {@link ActivityRecordReadOptions} request.
+     * @param listener {@link ResultListener<ActivityRecordReply>} instance.
      */
     @Override
     public void getActivityRecord(ActivityRecordsController activityRecordsController,
@@ -167,6 +168,27 @@ public class DefaultActivityRecordService implements ActivityRecordService {
         }).addOnFailureListener(error -> {
             Log.i("ActivityRecords", "getActivityRecord error");
             listener.onFail(error);
+        });
+    }
+
+    /**
+     * Deletes health records from Health Kit according to the record ID, start time and end time,
+     * or data type carried in the request parameters.
+     *
+     * @param activityRecordsController {@link com.huawei.hms.hihealth.ActivityRecordsController} instance.
+     * @param deleteOptions {@link ActivityRecordDeleteOptions} delete options.
+     * @param listener {@link VoidResultListener} instance.
+     */
+    @Override
+    public void deleteActivityRecord(ActivityRecordsController activityRecordsController,
+        ActivityRecordDeleteOptions deleteOptions, VoidResultListener listener) {
+        Task<Void> deleteTask = activityRecordsController.deleteActivityRecord(deleteOptions);
+        deleteTask.addOnSuccessListener(aVoid -> {
+            Log.i("ActivityRecords", "deleteActivityRecord success");
+            listener.onSuccess(aVoid);
+        }).addOnFailureListener(e -> {
+            Log.i("ActivityRecords", "deleteActivityRecord error");
+            listener.onFail(e);
         });
     }
 }

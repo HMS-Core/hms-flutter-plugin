@@ -1,18 +1,18 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.health.modules.auth;
 
@@ -40,39 +40,53 @@ import com.huawei.hms.support.hwid.result.AuthHuaweiId;
 import com.huawei.hms.support.hwid.result.HuaweiIdAuthResult;
 import com.huawei.hms.support.hwid.service.HuaweiIdAuthService;
 
+import io.flutter.plugin.common.MethodCall;
+import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
+import io.flutter.plugin.common.MethodChannel.Result;
+import io.flutter.plugin.common.PluginRegistry;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.flutter.plugin.common.MethodCall;
-import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
-import io.flutter.plugin.common.MethodChannel.Result;
-import io.flutter.plugin.common.PluginRegistry;
-
 public class HealthAuthMethodHandler implements MethodCallHandler, PluginRegistry.ActivityResultListener {
-    private static final String TAG = "HMSHealthAuth";
-
     /**
      * Request code for displaying the sign in authorization screen using the startActivityForResult method. The value
      * can be defined by developers.
      */
     public static final int REQUEST_SIGN_IN_LOGIN = 1002;
 
-    private @Nullable
-    Activity mActivity;
-    private Result mResult;
-    private HMSLogger hmsLogger;
+    private static final String TAG = "HMSHealthAuth";
 
     // Silent sign-in. If authorization has been granted by the current account,
     // the authorization screen will not display. This is an asynchronous method.
-    private HealthAuthService healthAuthService = this::silentSignIn;
+    private final HealthAuthService healthAuthService = this::silentSignIn;
+
+    private @Nullable
+    Activity mActivity;
+
+    private Result mResult;
+
+    private HMSLogger hmsLogger;
 
     private boolean replied = false;
 
     public HealthAuthMethodHandler(@Nullable Activity activity) {
         mActivity = activity;
+    }
+
+    private static List<Scope> getScopeArgs(final MethodCall call) {
+        List<Scope> scopes = new ArrayList<>();
+        List<String> requestedScopes = call.argument("scopes");
+        if (requestedScopes != null) {
+            for (String scopeStr : requestedScopes) {
+                scopes.add(new Scope(scopeStr));
+            }
+            return scopes;
+        }
+        return new ArrayList<>();
     }
 
     public void setActivity(@Nullable Activity activity) {
@@ -200,17 +214,5 @@ public class HealthAuthMethodHandler implements MethodCallHandler, PluginRegistr
             }
         }
         return true;
-    }
-
-    private static List<Scope> getScopeArgs(final MethodCall call) {
-        List<Scope> scopes = new ArrayList<>();
-        List<String> requestedScopes = call.argument("scopes");
-        if (requestedScopes != null) {
-            for (String scopeStr : requestedScopes) {
-                scopes.add(new Scope(scopeStr));
-            }
-            return scopes;
-        }
-        return new ArrayList<>();
     }
 }

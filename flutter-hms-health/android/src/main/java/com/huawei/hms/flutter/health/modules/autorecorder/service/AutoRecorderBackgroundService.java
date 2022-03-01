@@ -1,18 +1,18 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.health.modules.autorecorder.service;
 
@@ -43,22 +43,53 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
 import com.huawei.hms.hihealth.AutoRecorderController;
-import com.huawei.hms.hihealth.HiHealthOptions;
 import com.huawei.hms.hihealth.HuaweiHiHealth;
 import com.huawei.hms.hihealth.data.DataType;
-import com.huawei.hms.support.hwid.HuaweiIdAuthManager;
-import com.huawei.hms.support.hwid.result.AuthHuaweiId;
 
 import io.flutter.Log;
 
 public class AutoRecorderBackgroundService extends Service {
     private static final String TAG = "HMSAutoRecorder";
+
     private static final String NOTIFICATION_CHANNEL_ID = "hms-health";
 
     // HMS Health AutoRecorderController
     private AutoRecorderController autoRecorderController;
 
     private Context context;
+
+    private static int configSmallIcon(Bundle bundle, Context context) {
+        Resources res = context.getResources();
+        String packageName = context.getPackageName();
+
+        int resourceId;
+        String value = null;
+        if (bundle != null) {
+            value = bundle.getString("smallIcon");
+        }
+        resourceId = value != null
+            ? res.getIdentifier(value, MIPMAP, packageName)
+            : res.getIdentifier("ic_notification", MIPMAP, packageName);
+
+        if (resourceId == 0) {
+            resourceId = res.getIdentifier("ic_launcher", MIPMAP, packageName);
+
+            if (resourceId == 0) {
+                resourceId = android.R.drawable.ic_dialog_info;
+            }
+        }
+        return resourceId;
+    }
+
+    private static boolean hasValue(Bundle bundle, String key) {
+        if (bundle != null) {
+            String val = bundle.getString(key);
+            if (val != null) {
+                return !val.isEmpty();
+            }
+        }
+        return false;
+    }
 
     @Override
     public void onCreate() {
@@ -96,9 +127,7 @@ public class AutoRecorderBackgroundService extends Service {
      * init AutoRecorderController
      */
     private void initAutoRecorderController() {
-        HiHealthOptions options = HiHealthOptions.builder().build();
-        AuthHuaweiId signInHuaweiId = HuaweiIdAuthManager.getExtendedAuthResult(options);
-        autoRecorderController = HuaweiHiHealth.getAutoRecorderController(context, signInHuaweiId);
+        autoRecorderController = HuaweiHiHealth.getAutoRecorderController(context);
     }
 
     /**
@@ -171,39 +200,6 @@ public class AutoRecorderBackgroundService extends Service {
             boolValue = bundle.getBoolean(key);
         }
         return boolValue;
-    }
-
-    private static int configSmallIcon(Bundle bundle, Context context) {
-        Resources res = context.getResources();
-        String packageName = context.getPackageName();
-
-        int resourceId;
-        String value = null;
-        if (bundle != null) {
-            value = bundle.getString("smallIcon");
-        }
-        resourceId = value != null
-            ? res.getIdentifier(value, MIPMAP, packageName)
-            : res.getIdentifier("ic_notification", MIPMAP, packageName);
-
-        if (resourceId == 0) {
-            resourceId = res.getIdentifier("ic_launcher", MIPMAP, packageName);
-
-            if (resourceId == 0) {
-                resourceId = android.R.drawable.ic_dialog_info;
-            }
-        }
-        return resourceId;
-    }
-
-    private static boolean hasValue(Bundle bundle, String key) {
-        if (bundle != null) {
-            String val = bundle.getString(key);
-            if (val != null) {
-                return !val.isEmpty();
-            }
-        }
-        return false;
     }
 
     @Override

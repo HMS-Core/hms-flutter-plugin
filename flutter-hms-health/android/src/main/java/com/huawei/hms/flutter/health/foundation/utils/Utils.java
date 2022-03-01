@@ -1,18 +1,18 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.health.foundation.utils;
 
@@ -29,9 +29,9 @@ import static com.huawei.hms.flutter.health.modules.datacontroller.utils.DataCon
 
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.huawei.hms.common.ApiException;
 import com.huawei.hms.flutter.health.foundation.constants.Constants;
+import com.huawei.hms.flutter.health.modules.healthcontroller.HealthRecordUtils;
 import com.huawei.hms.hihealth.data.ActivitySummary;
 import com.huawei.hms.hihealth.data.DataCollector;
 import com.huawei.hms.hihealth.data.DataType;
@@ -41,6 +41,11 @@ import com.huawei.hms.hihealth.data.PaceSummary;
 import com.huawei.hms.hihealth.data.SamplePoint;
 import com.huawei.hms.hihealth.data.SampleSet;
 
+import com.google.gson.Gson;
+
+import io.flutter.plugin.common.MethodCall;
+import io.flutter.plugin.common.MethodChannel.Result;
+
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,9 +53,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-
-import io.flutter.plugin.common.MethodCall;
-import io.flutter.plugin.common.MethodChannel.Result;
 
 /**
  * All the util methods for internal {@link com.huawei.hms.flutter.health} modules.
@@ -65,7 +67,7 @@ public final class Utils {
      * Returns whether key is in the Map instance or not.
      *
      * @param callMap Flutter call map instance.
-     * @param key     String key.
+     * @param key String key.
      * @return Boolean
      */
     public static synchronized boolean hasKey(final Map<String, Object> callMap, final String key) {
@@ -79,7 +81,7 @@ public final class Utils {
      * In case callMap instance has requested key, returns the String Value, in case not, returns empty string.
      *
      * @param callMap HashMap<String, Object> instance.
-     * @param key     String key value.
+     * @param key String key value.
      * @return String
      */
     public static synchronized String createEmptyStringIfNull(final Map<String, Object> callMap, final String key) {
@@ -118,19 +120,19 @@ public final class Utils {
      * Converts into {@link SampleSet} instance.
      *
      * @param sampleSetMap sampleSetMap that includes {@link SampleSet data} from the Flutter Platform.
-     * @param result       Flutter Result that resolved with fail status in case of missing parameters.
-     * @param packageName  Package name of the application.
+     * @param result Flutter Result that resolved with fail status in case of missing parameters.
+     * @param packageName Package name of the application.
      * @return SampleSet instance.
      */
     public static synchronized SampleSet toSampleSet(final Map<String, Object> sampleSetMap, final Result result,
         final String packageName) {
         if (sampleSetMap.get(Constants.DATA_COLLECTOR_KEY) != null) {
             DataCollector dataCollector = toDataCollector(
-                (HashMap<String, Object>) sampleSetMap.get(Constants.DATA_COLLECTOR_KEY), packageName);
+                HealthRecordUtils.fromObject(sampleSetMap.get(Constants.DATA_COLLECTOR_KEY)), packageName);
             final SampleSet sampleSet = SampleSet.create(dataCollector);
-            ArrayList<Map<String, Object>> samplePoints = (ArrayList<Map<String, Object>>) sampleSetMap.get(
-                "samplePoints");
-            if (samplePoints != null) {
+            ArrayList<Map<String, Object>> samplePoints = HealthRecordUtils.toMapArrayList("samplePoints",
+                sampleSetMap.get("samplePoints"));
+            if (!samplePoints.isEmpty()) {
                 for (Map<String, Object> sp : samplePoints) {
                     // Build a sampling point.
                     SamplePoint samplePoint = toSamplePoint(sampleSet, sp);
@@ -171,7 +173,7 @@ public final class Utils {
      * @param dataSummaryList List that contains the {@link SamplePoint} data
      * @return List of SamplePoint Object
      */
-    private static synchronized List<SamplePoint> toDataSummary(final List<Map<String, Object>> dataSummaryList,
+    public static synchronized List<SamplePoint> toDataSummary(final List<Map<String, Object>> dataSummaryList,
         String packageName) {
         List<SamplePoint> dataSummary = new ArrayList<>();
         for (Map<String, Object> samplePointMap : dataSummaryList) {
@@ -209,74 +211,14 @@ public final class Utils {
         if (Utils.hasKey(paceMap, "britishPartTimeMap")) {
             paceSummary.setBritishPartTimeMap((HashMap<String, Double>) paceMap.get("britishPartTimeMap"));
         }
-        if (Utils.hasKey(paceMap, "sportHealthPaceMap")) {
-            paceSummary.setSportHealthPaceMap((HashMap<String, Double>) paceMap.get("sportHealthPaceMap"));
-        }
 
         return paceSummary;
-    }
-
-    /**
-     * Class that represents SamplePoint from Flutter Platform
-     */
-    private static class FlutterSamplePoint {
-        boolean isSampling;
-        long startTime;
-        long endTime;
-        long samplingTime;
-        FieldValue fieldValue;
-        String timeUnit;
-
-        public FlutterSamplePoint(boolean isSampling, long startTime, long endTime, long samplingTime,
-            FieldValue fieldValue, String timeUnit) {
-            this.isSampling = isSampling;
-            this.startTime = startTime;
-            this.endTime = endTime;
-            this.samplingTime = samplingTime;
-            this.fieldValue = fieldValue;
-            this.timeUnit = timeUnit;
-        }
-    }
-
-    /**
-     * Class that contains Field and value from Flutter Platform
-     */
-    private static class FieldValue {
-        FieldData field;
-        Integer intValue;
-        Long longValue;
-        Float floatValue;
-        String stringValue;
-        Map<String, Float> mapValue;
-
-        public FieldValue(FieldData field, Integer intValue, Long longValue, Float floatValue, String stringValue,
-            Map<String, Float> mapValue) {
-            this.field = field;
-            this.intValue = intValue;
-            this.longValue = longValue;
-            this.floatValue = floatValue;
-            this.stringValue = stringValue;
-            this.mapValue = mapValue;
-        }
-
-        private static class FieldData {
-            String name;
-            int format;
-
-            public FieldData(String name, int format) {
-                this.name = name;
-                this.format = format;
-            }
-
-            public Field getField() {
-                return Utils.toField(name, format);
-            }
-        }
     }
 
     public static synchronized SamplePoint toSamplePoint(final SampleSet sampleSet,
         final Map<String, Object> sampleSetMap) {
         Gson gson = new Gson();
+        sampleSetMap.remove(Constants.DATA_COLLECTOR_KEY);
         FlutterSamplePoint flutterSamplePoint = gson.fromJson(sampleSetMap.toString(), FlutterSamplePoint.class);
         Field requestedField = flutterSamplePoint.fieldValue.field.getField();
         boolean isSampling = flutterSamplePoint.isSampling;
@@ -317,7 +259,8 @@ public final class Utils {
 
     public static synchronized SamplePoint toSamplePoint(final Map<String, Object> samplePointMap, String packageName) {
         SamplePoint.Builder samplePoint = new SamplePoint.Builder(
-            toDataCollector((Map<String, Object>) samplePointMap.get(Constants.DATA_COLLECTOR_KEY), packageName));
+            toDataCollector(HealthRecordUtils.fromObject(samplePointMap.get(Constants.DATA_COLLECTOR_KEY)),
+                packageName));
         samplePointMap.remove(Constants.DATA_COLLECTOR_KEY);
         Gson gson = new Gson();
         FlutterSamplePoint flutterSamplePoint = gson.fromJson(samplePointMap.toString(), FlutterSamplePoint.class);
@@ -339,7 +282,7 @@ public final class Utils {
                 samplePoint.setFieldValue(requestedField, flutterSamplePoint.fieldValue.stringValue);
                 break;
             case Field.FORMAT_MAP:
-                samplePoint.setFieldValue(requestedField, flutterSamplePoint.fieldValue.mapValue);
+                samplePoint.setFieldValue(requestedField, String.valueOf(flutterSamplePoint.fieldValue.mapValue));
                 break;
             case Field.FORMAT_LONG:
                 samplePoint.setFieldValue(requestedField, flutterSamplePoint.fieldValue.longValue);
@@ -347,8 +290,17 @@ public final class Utils {
             default:
                 break;
         }
-
-        return samplePoint.build();
+        SamplePoint sp = samplePoint.build();
+        List<Map<String, Object>> metadataList = HealthRecordUtils.toMapArrayList("metadataValues",
+            samplePointMap.get("metadataValues"));
+        if (!metadataList.isEmpty()) {
+            for (Map<String, Object> m : metadataList) {
+                String key = (String) m.get("key");
+                String value = (String) m.get("value");
+                sp.addMetadata(key, value);
+            }
+        }
+        return sp;
     }
 
     /**
@@ -368,7 +320,194 @@ public final class Utils {
         return builder.setPackageName(packageName).build();
     }
 
+    public static boolean getBoolOrDefault(final Map<String, Object> callMap, final String key) {
+        if (callMap.get(key) != null) {
+            return (boolean) callMap.get(key);
+        } else {
+            return false;
+        }
+    }
+
+    public static long getLong(final MethodCall call, final String key) {
+        if (call.argument(key) != null) {
+            return (long) call.argument(key);
+        } else {
+            throw new InvalidParameterException("Long type parameter is null or empty");
+        }
+    }
+
     /* Private Declarations */
+
+    public static long getLong(final Map<String, Object> callMap, final String key) {
+        if (callMap.containsKey(key)) {
+            return (long) callMap.get(key);
+        } else {
+            throw new InvalidParameterException("Long type parameter is null or empty");
+        }
+    }
+
+    public static int getInt(final MethodCall call, final String key) {
+        if (call.argument(key) != null) {
+            return (int) call.argument(key);
+        } else {
+            throw new InvalidParameterException("int type parameter is null or empty");
+        }
+    }
+
+    public static Map<String, Object> getMap(final MethodCall call, final String key) {
+        if (call.argument(key) instanceof HashMap) {
+            return (HashMap<String, Object>) call.argument(key);
+        } else {
+            throw new InvalidParameterException(key + " is null or empty");
+        }
+    }
+
+    public static DataType toDataType(final Map<String, Object> map, final String packageName) {
+        DataType dataType;
+        //Try to convert DataTypeConstant.
+        dataType = Constants.toDataType((String) map.get("name"));
+        if (dataType != null) {
+            return dataType;
+        } else {
+            //Create DataType from map.
+            String name = (String) map.get("name");
+            boolean isPolymerizedFlag = Utils.getBoolOrDefault(map, "isPolymerizedFlag");
+            boolean isSelfDefined = Utils.getBoolOrDefault(map, "isSelfDefined");
+            String scopeNameRead = (String) map.get("scopeNameRead");
+            String scopeNameWrite = (String) map.get("scopeNameWrite");
+
+            List<Map<String, Object>> fieldList = HealthRecordUtils.toMapArrayList("fields", map.get("fields"));
+            Log.i("qqq", String.valueOf(fieldList));
+            List<Field> convertedFields = new ArrayList<>();
+            if (!fieldList.isEmpty()) {
+                for (Map<String, Object> field : fieldList) {
+                    Field f = toField(field);
+                    convertedFields.add(f);
+                }
+            }
+            return new DataType(name, scopeNameRead, scopeNameWrite, "", convertedFields, isPolymerizedFlag,
+                isSelfDefined, packageName);
+        }
+    }
+
+    public static List<DataType> toDataTypeList(List<Map<String, Object>> mapList, String packageName) {
+        List<DataType> list = new ArrayList<>();
+
+        for (Map<String, Object> innerMap : mapList) {
+            DataType type = toDataType(innerMap, packageName);
+            list.add(type);
+        }
+        return list;
+    }
+
+    public static Field toField(Map<String, Object> objectMap) {
+        Field field;
+        String name = (String) objectMap.get(Constants.NAME_KEY);
+        int format = (int) objectMap.get(Constants.FORMAT_KEY);
+        if (format < 1 || format > 5) {
+            throw new InvalidParameterException("Field type format is wrong!");
+        }
+        field = Constants.toField(name);
+        if (field == null) {
+            // Constant conversion fails create a new Field.
+            field = new Field(name, format);
+        }
+        return field;
+    }
+
+    public static Field toField(final String name, final int format) {
+        Field field;
+        if (format < 1 || format > 5) {
+            throw new InvalidParameterException("Field type format is wrong!");
+        }
+        field = Constants.toField(name);
+        if (field == null) {
+            // Constant conversion fails create a new Field.
+            field = new Field(name, format);
+        }
+        return field;
+    }
+
+    public static String getErrorCode(Exception exception) {
+        String errorCode;
+        if (exception instanceof ApiException) {
+            errorCode = String.valueOf(((ApiException) exception).getStatusCode());
+        } else if (exception instanceof SecurityException) {
+            errorCode = String.valueOf((exception).getLocalizedMessage());
+        } else {
+            errorCode = Constants.UNKNOWN_ERROR_CODE;
+        }
+        return errorCode;
+    }
+
+    /**
+     * Class that represents SamplePoint from Flutter Platform
+     */
+    private static class FlutterSamplePoint {
+        boolean isSampling;
+
+        long startTime;
+
+        long endTime;
+
+        long samplingTime;
+
+        FieldValue fieldValue;
+
+        String timeUnit;
+
+        public FlutterSamplePoint(boolean isSampling, long startTime, long endTime, long samplingTime,
+            FieldValue fieldValue, String timeUnit) {
+            this.isSampling = isSampling;
+            this.startTime = startTime;
+            this.endTime = endTime;
+            this.samplingTime = samplingTime;
+            this.fieldValue = fieldValue;
+            this.timeUnit = timeUnit;
+        }
+    }
+
+    /**
+     * Class that contains Field and value from Flutter Platform
+     */
+    private static class FieldValue {
+        FieldData field;
+
+        Integer intValue;
+
+        Long longValue;
+
+        Float floatValue;
+
+        String stringValue;
+
+        Map<String, Float> mapValue;
+
+        public FieldValue(FieldData field, Integer intValue, Long longValue, Float floatValue, String stringValue,
+            Map<String, Float> mapValue) {
+            this.field = field;
+            this.intValue = intValue;
+            this.longValue = longValue;
+            this.floatValue = floatValue;
+            this.stringValue = stringValue;
+            this.mapValue = mapValue;
+        }
+
+        private static class FieldData {
+            String name;
+
+            int format;
+
+            public FieldData(String name, int format) {
+                this.name = name;
+                this.format = format;
+            }
+
+            public Field getField() {
+                return Utils.toField(name, format);
+            }
+        }
+    }
 
     /**
      * {@link HmsDataCollectorBuilder} is a helper inner class to convert HashMap<String, Object> instance into {@link
@@ -376,7 +515,9 @@ public final class Utils {
      */
     private static class HmsDataCollectorBuilder {
         private DataCollector.Builder builder;
+
         private Map<String, Object> dataCollectorMap;
+
         private String packageName;
 
         HmsDataCollectorBuilder(DataCollector.Builder builder, final Map<String, Object> dataCollectorMap,
@@ -433,9 +574,9 @@ public final class Utils {
         HmsDataCollectorBuilder setDataType() {
             if (Utils.hasKey(dataCollectorMap, DATA_TYPE_KEY)) {
                 try {
-                    DataType dataType = toDataType(
-                        (Map<String, Object>) Objects.requireNonNull(dataCollectorMap.get(DATA_TYPE_KEY)), packageName);
-                    this.builder.setDataType(Objects.requireNonNull(dataType));
+                    DataType dataType = toDataType(HealthRecordUtils.fromObject(dataCollectorMap.get(DATA_TYPE_KEY)),
+                        packageName);
+                    this.builder.setDataType(dataType);
                     return this;
 
                 } catch (Exception e) {
@@ -448,111 +589,5 @@ public final class Utils {
         DataCollector.Builder build() {
             return builder;
         }
-
-    }
-
-    public static boolean getBoolOrDefault(final Map<String, Object> callMap, final String key) {
-        if (callMap.get(key) != null) {
-            return (boolean) callMap.get(key);
-        } else {
-            return false;
-        }
-    }
-
-    public static long getLong(final MethodCall call, final String key) {
-        if (call.argument(key) != null) {
-            return (long) call.argument(key);
-        } else {
-            throw new InvalidParameterException("Long type parameter is null or empty");
-        }
-    }
-
-    public static long getLong(final Map<String, Object> callMap, final String key) {
-        if (callMap.containsKey(key)) {
-            return (long) callMap.get(key);
-        } else {
-            throw new InvalidParameterException("Long type parameter is null or empty");
-        }
-    }
-
-    public static int getInt(final MethodCall call, final String key) {
-        if (call.argument(key) != null) {
-            return (int) call.argument(key);
-        } else {
-            throw new InvalidParameterException("int type parameter is null or empty");
-        }
-    }
-
-    public static Map<String, Object> getMap(final MethodCall call, final String key) {
-        if (call.argument(key) instanceof HashMap) {
-            return (HashMap<String, Object>) call.argument(key);
-        } else {
-            throw new InvalidParameterException(key + " is null or empty");
-        }
-    }
-
-    public static DataType toDataType(final Map<String, Object> map, final String packageName) {
-        DataType dataType;
-        //Try to convert DataTypeConstant.
-        dataType = Constants.toDataType((String) map.get("name"));
-        if (dataType != null) {
-            return dataType;
-        } else {
-            //Create DataType from map.
-            String name = (String) map.get("name");
-            boolean isPolymerizedFlag = Utils.getBoolOrDefault(map, "isPolymerizedFlag");
-            boolean isSelfDefined = Utils.getBoolOrDefault(map, "isSelfDefined");
-            String scopeNameRead = (String) map.get("scopeNameRead");
-            String scopeNameWrite = (String) map.get("scopeNameWrite");
-            ArrayList<Map<String, Object>> fieldList = (ArrayList<Map<String, Object>>) map.get("fieldList");
-            List<Field> convertedFields = new ArrayList<>();
-            if (fieldList != null) {
-                for (Map<String, Object> field : fieldList) {
-                    convertedFields.add(Constants.toField((String) field.get("name")));
-                }
-            }
-            return new DataType(name, scopeNameRead, scopeNameWrite, "", convertedFields, isPolymerizedFlag,
-                isSelfDefined, packageName);
-        }
-    }
-
-    public static Field toField(Map<String, Object> objectMap) {
-        Field field;
-        String name = (String) objectMap.get(Constants.NAME_KEY);
-        int format = (int) objectMap.get(Constants.FORMAT_KEY);
-        if (format < 1 || format > 5) {
-            throw new InvalidParameterException("Field type format is wrong!");
-        }
-        field = Constants.toField(name);
-        if (field == null) {
-            // Constant conversion fails create a new Field.
-            field = new Field(name, format);
-        }
-        return field;
-    }
-
-    public static Field toField(final String name, final int format) {
-        Field field;
-        if (format < 1 || format > 5) {
-            throw new InvalidParameterException("Field type format is wrong!");
-        }
-        field = Constants.toField(name);
-        if (field == null) {
-            // Constant conversion fails create a new Field.
-            field = new Field(name, format);
-        }
-        return field;
-    }
-
-    public static String getErrorCode(Exception exception) {
-        String errorCode;
-        if (exception instanceof ApiException) {
-            errorCode = String.valueOf(((ApiException) exception).getStatusCode());
-        } else if (exception instanceof SecurityException) {
-            errorCode = String.valueOf((exception).getLocalizedMessage());
-        } else {
-            errorCode = Constants.UNKNOWN_ERROR_CODE;
-        }
-        return errorCode;
     }
 }

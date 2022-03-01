@@ -1,18 +1,18 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.health.modules.activityrecord;
 
@@ -29,27 +29,26 @@ import com.huawei.hms.flutter.health.foundation.utils.Utils;
 import com.huawei.hms.flutter.health.modules.activityrecord.service.DefaultActivityRecordService;
 import com.huawei.hms.flutter.health.modules.activityrecord.utils.ActivityRecordUtils;
 import com.huawei.hms.flutter.health.modules.activityrecord.utils.ActivityRecordsConstants.ActivityRecordMethods;
+import com.huawei.hms.flutter.health.modules.healthcontroller.HealthRecordUtils;
 import com.huawei.hms.hihealth.ActivityRecordsController;
-import com.huawei.hms.hihealth.HiHealthOptions;
 import com.huawei.hms.hihealth.HiHealthStatusCodes;
 import com.huawei.hms.hihealth.HuaweiHiHealth;
 import com.huawei.hms.hihealth.data.ActivityRecord;
 import com.huawei.hms.hihealth.data.DataCollector;
 import com.huawei.hms.hihealth.data.SampleSet;
+import com.huawei.hms.hihealth.options.ActivityRecordDeleteOptions;
 import com.huawei.hms.hihealth.options.ActivityRecordInsertOptions;
 import com.huawei.hms.hihealth.options.ActivityRecordReadOptions;
 import com.huawei.hms.hihealth.result.ActivityRecordReply;
-import com.huawei.hms.support.hwid.HuaweiIdAuthManager;
-import com.huawei.hms.support.hwid.result.AuthHuaweiId;
+
+import io.flutter.plugin.common.MethodCall;
+import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
+import io.flutter.plugin.common.MethodChannel.Result;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import io.flutter.plugin.common.MethodCall;
-import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
-import io.flutter.plugin.common.MethodChannel.Result;
 
 public class ActivityRecordsMethodHandler implements MethodCallHandler {
     private ActivityRecordsController activityRecordsController;
@@ -92,6 +91,9 @@ public class ActivityRecordsMethodHandler implements MethodCallHandler {
             case END_ALL_ACTIVITY_RECORDS:
                 endAllActivityRecords(call, result);
                 break;
+            case DELETE_ACTIVITY_RECORD:
+                deleteActivityRecord(call, result);
+                break;
             default:
                 result.notImplemented();
                 break;
@@ -110,11 +112,11 @@ public class ActivityRecordsMethodHandler implements MethodCallHandler {
      * associated data to the Health platform.
      * </p>
      *
-     * @param call   MethodCall instance that include the values for {@link ActivityRecord}, {@link DataCollector} and
-     *               {@link SampleSet} in Order the build the {@link ActivityRecordInsertOptions} which is used to add
-     *               an ActivityRecord.
+     * @param call MethodCall instance that include the values for {@link ActivityRecord}, {@link DataCollector} and
+     * {@link SampleSet} in Order the build the {@link ActivityRecordInsertOptions} which is used to add
+     * an ActivityRecord.
      * @param result In the success scenario, {@link Void} instance is returned with {@code isSuccess: true} params , or
-     *               Exception is returned in the failure scenario.
+     * Exception is returned in the failure scenario.
      */
     private void addActivityRecord(final MethodCall call, final Result result) {
         checkActivityRecordsController();
@@ -129,7 +131,6 @@ public class ActivityRecordsMethodHandler implements MethodCallHandler {
             for (Map<String, Object> sampleSetMap : sampleSetMaps) {
                 sampleSets.add(Utils.toSampleSet(sampleSetMap, result, activity.getPackageName()));
             }
-
             flutterActivityRecordsImpl.addActivityRecord(this.activityRecordsController, activityRecord, sampleSets,
                 new VoidResultHelper(result, context, call.method));
         } else {
@@ -149,9 +150,9 @@ public class ActivityRecordsMethodHandler implements MethodCallHandler {
      * start an ActivityRecord.
      * </p>
      *
-     * @param call   Flutter MethodCall instance that includes {@link ActivityRecord} values.
+     * @param call Flutter MethodCall instance that includes {@link ActivityRecord} values.
      * @param result In the success scenario, {@link Void} instance is returned with {@code isSuccess: true} params , or
-     *               Exception is returned in the failure scenario.
+     * Exception is returned in the failure scenario.
      */
     public void beginActivityRecord(final MethodCall call, final Result result) {
         checkActivityRecordsController();
@@ -179,9 +180,9 @@ public class ActivityRecordsMethodHandler implements MethodCallHandler {
      * method to stop an ActivityRecord.
      * </p>
      *
-     * @param call   Flutter MethodCall instance that includes {@link ActivityRecord} ID string.
+     * @param call Flutter MethodCall instance that includes {@link ActivityRecord} ID string.
      * @param result In the success scenario, {@link List<ActivityRecord>} instance is returned , or Exception is
-     *               returned in the failure scenario.
+     * returned in the failure scenario.
      */
     public void endActivityRecord(final MethodCall call, final Result result) {
         checkActivityRecordsController();
@@ -217,12 +218,27 @@ public class ActivityRecordsMethodHandler implements MethodCallHandler {
      * </p>
      *
      * @param result In the success scenario, {@link List<ActivityRecord>} instance is returned , or Exception is
-     *               returned in the failure scenario.
+     * returned in the failure scenario.
      */
     public void endAllActivityRecords(final MethodCall call, final Result result) {
         checkActivityRecordsController();
         flutterActivityRecordsImpl.endActivityRecord(this.activityRecordsController, null,
             new ResultHelper<>(List.class, result, context, call.method));
+    }
+
+    public void deleteActivityRecord(final MethodCall call, final Result result) {
+        checkActivityRecordsController();
+        Map<String, Object> reqMap = HealthRecordUtils.fromObject(call.arguments);
+        if (reqMap.isEmpty()) {
+            String errorCode = String.valueOf(HiHealthStatusCodes.INPUT_PARAM_MISSING);
+            HMSLogger.getInstance(activity).sendSingleEvent(call.method, errorCode);
+            result.error(errorCode, "Please provide valid parameters", null);
+            return;
+        }
+
+        ActivityRecordDeleteOptions opt = ActivityRecordUtils.buildDeleteOptions(reqMap);
+        flutterActivityRecordsImpl.deleteActivityRecord(this.activityRecordsController, opt,
+            new VoidResultHelper(result, activity, call.method));
     }
 
     /**
@@ -241,8 +257,6 @@ public class ActivityRecordsMethodHandler implements MethodCallHandler {
         if (activity == null) {
             return;
         }
-        HiHealthOptions hiHealthOptions = HiHealthOptions.builder().build();
-        AuthHuaweiId signInHuaweiId = HuaweiIdAuthManager.getExtendedAuthResult(hiHealthOptions);
-        activityRecordsController = HuaweiHiHealth.getActivityRecordsController(activity, signInHuaweiId);
+        activityRecordsController = HuaweiHiHealth.getActivityRecordsController(activity);
     }
 }

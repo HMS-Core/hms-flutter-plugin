@@ -1,18 +1,18 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.health;
 
@@ -22,12 +22,12 @@ import androidx.annotation.NonNull;
 
 import com.huawei.hms.flutter.health.foundation.constants.Channel;
 import com.huawei.hms.flutter.health.modules.activityrecord.ActivityRecordsMethodHandler;
+import com.huawei.hms.flutter.health.modules.appinfo.AppInfoMethodHandler;
 import com.huawei.hms.flutter.health.modules.auth.HealthAuthMethodHandler;
 import com.huawei.hms.flutter.health.modules.autorecorder.AutoRecorderMethodHandler;
 import com.huawei.hms.flutter.health.modules.autorecorder.service.AutoRecorderStreamHandler;
-import com.huawei.hms.flutter.health.modules.blecontroller.BleControllerMethodHandler;
-import com.huawei.hms.flutter.health.modules.blecontroller.service.BleScanStreamHandler;
 import com.huawei.hms.flutter.health.modules.datacontroller.DataControllerMethodHandler;
+import com.huawei.hms.flutter.health.modules.healthcontroller.HealthControllerMethodHandler;
 import com.huawei.hms.flutter.health.modules.settingcontroller.SettingControllerMethodHandler;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
@@ -36,7 +36,6 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 /**
  * HealthPlugin
@@ -45,20 +44,34 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
  */
 public class HealthPlugin implements FlutterPlugin, ActivityAware {
     private MethodChannel authMethodChannel;
+
     private MethodChannel activityRecordMethodChannel;
+
     private MethodChannel dataControllerMethodChannel;
+
     private MethodChannel settingControllerMethodChannel;
+
     private MethodChannel autoRecorderMethodChannel;
+
     private MethodChannel bleControllerMethodChannel;
+
     private EventChannel autoRecorderEventChannel;
-    private EventChannel bleControllerEventChannel;
 
     private HealthAuthMethodHandler authMethodHandler;
+
     private ActivityRecordsMethodHandler activityRecordsMethodHandler;
+
     private DataControllerMethodHandler dataControllerMethodHandler;
+
     private SettingControllerMethodHandler settingControllerMethodHandler;
+
     private AutoRecorderMethodHandler autoRecorderMethodHandler;
-    private BleControllerMethodHandler bleControllerMethodHandler;
+
+    private HealthControllerMethodHandler healthControllerMethodHandler;
+
+    private MethodChannel appInfoMethodChannel;
+
+    private MethodChannel healthControllerMethodChannel;
 
     private ActivityPluginBinding mActivityBinding;
 
@@ -71,7 +84,10 @@ public class HealthPlugin implements FlutterPlugin, ActivityAware {
         autoRecorderMethodChannel = new MethodChannel(messenger, Channel.HMS_HEALTH_AUTO_RECORDER_METHOD_CHANNEL);
         autoRecorderEventChannel = new EventChannel(messenger, Channel.HMS_HEALTH_AUTO_RECORDER_EVENT_CHANNEL);
         bleControllerMethodChannel = new MethodChannel(messenger, Channel.HMS_HEALTH_BLE_CONTROLLER_METHOD_CHANNEL);
-        bleControllerEventChannel = new EventChannel(messenger, Channel.HMS_HEALTH_BLE_CONTROLLER_EVENT_CHANNEL);
+
+        appInfoMethodChannel = new MethodChannel(messenger, Channel.HMS_HEALTH_APP_INFO_METHOD_CHANNEL);
+        healthControllerMethodChannel = new MethodChannel(messenger,
+            Channel.HMS_HEALTH_HEALTH_CONTROLLER_METHOD_CHANNEL);
         setHandlers();
     }
 
@@ -86,13 +102,16 @@ public class HealthPlugin implements FlutterPlugin, ActivityAware {
         dataControllerMethodChannel.setMethodCallHandler(dataControllerMethodHandler);
 
         settingControllerMethodHandler = new SettingControllerMethodHandler(null);
+
         settingControllerMethodChannel.setMethodCallHandler(settingControllerMethodHandler);
 
         autoRecorderMethodHandler = new AutoRecorderMethodHandler(null);
         autoRecorderMethodChannel.setMethodCallHandler(autoRecorderMethodHandler);
 
-        bleControllerMethodHandler = new BleControllerMethodHandler(null);
-        bleControllerMethodChannel.setMethodCallHandler(bleControllerMethodHandler);
+        appInfoMethodChannel.setMethodCallHandler(new AppInfoMethodHandler());
+
+        healthControllerMethodHandler = new HealthControllerMethodHandler(null);
+        healthControllerMethodChannel.setMethodCallHandler(healthControllerMethodHandler);
     }
 
     private void teardownChannels() {
@@ -102,6 +121,8 @@ public class HealthPlugin implements FlutterPlugin, ActivityAware {
         settingControllerMethodChannel.setMethodCallHandler(null);
         autoRecorderMethodChannel.setMethodCallHandler(null);
         bleControllerMethodChannel.setMethodCallHandler(null);
+        appInfoMethodChannel.setMethodCallHandler(null);
+        healthControllerMethodChannel.setMethodCallHandler(null);
         authMethodChannel = null;
         activityRecordMethodChannel = null;
         dataControllerMethodChannel = null;
@@ -109,6 +130,8 @@ public class HealthPlugin implements FlutterPlugin, ActivityAware {
         autoRecorderMethodChannel = null;
         autoRecorderEventChannel = null;
         bleControllerMethodChannel = null;
+        appInfoMethodChannel = null;
+        healthControllerMethodChannel = null;
     }
 
     private void setupActivity(Activity activity) {
@@ -117,9 +140,8 @@ public class HealthPlugin implements FlutterPlugin, ActivityAware {
         dataControllerMethodHandler.setActivity(activity);
         settingControllerMethodHandler.setActivity(activity);
         autoRecorderMethodHandler.setActivity(activity);
+        healthControllerMethodHandler.setActivity(activity);
         autoRecorderEventChannel.setStreamHandler(new AutoRecorderStreamHandler(activity.getApplicationContext()));
-        bleControllerMethodHandler.setActivity(activity);
-        bleControllerEventChannel.setStreamHandler(new BleScanStreamHandler(activity.getApplicationContext()));
     }
 
     private void teardownActivity() {
@@ -130,8 +152,6 @@ public class HealthPlugin implements FlutterPlugin, ActivityAware {
         autoRecorderMethodHandler.unregisterReceiver();
         autoRecorderMethodHandler.setActivity(null);
         autoRecorderEventChannel.setStreamHandler(null);
-        bleControllerMethodHandler.setActivity(null);
-        bleControllerEventChannel.setStreamHandler(null);
         if (mActivityBinding != null) {
             mActivityBinding.removeActivityResultListener(authMethodHandler);
             mActivityBinding = null;
@@ -141,13 +161,6 @@ public class HealthPlugin implements FlutterPlugin, ActivityAware {
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         initChannels(flutterPluginBinding.getBinaryMessenger());
-    }
-
-    public static void registerWith(Registrar registrar) {
-        HealthPlugin healthPlugin = new HealthPlugin();
-        healthPlugin.initChannels(registrar.messenger());
-        healthPlugin.setupActivity(registrar.activity());
-        registrar.addActivityResultListener(healthPlugin.authMethodHandler);
     }
 
     @Override
@@ -160,6 +173,7 @@ public class HealthPlugin implements FlutterPlugin, ActivityAware {
         mActivityBinding = binding;
         setupActivity(mActivityBinding.getActivity());
         mActivityBinding.addActivityResultListener(authMethodHandler);
+        mActivityBinding.addActivityResultListener(settingControllerMethodHandler);
     }
 
     @Override
@@ -176,5 +190,4 @@ public class HealthPlugin implements FlutterPlugin, ActivityAware {
     public void onDetachedFromActivity() {
         teardownActivity();
     }
-
 }
