@@ -1,3 +1,7 @@
+## 6.0.1+303
+- **FEAT**: build Android on SDK 31
+- **FIX**: use `FLAG_IMMUTABLE` for `PendingIntent` (Android)
+
 ## 6.0.0+302
 
 * Added the High-precision Location capability.

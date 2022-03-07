@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'huawei_location'
-  s.version          = '6.0.0+302'
+  s.version          = '6.0.1+303'
   s.summary          = 'HUAWEI Location Kit plugin for Flutter.'
   s.description      = <<-DESC
   HUAWEI Flutter Location Kit plugin combines the Global Navigation Satellite System (GNSS), Wi-Fi, and base station location functionalities into your app.

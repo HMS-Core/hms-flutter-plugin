@@ -1,6 +1,6 @@
 name: huawei_location_example
 description: Demonstrates how to use the Huawei Location plugin.
-version: 6.0.0+302
+version: 6.0.1+303
 publish_to: none
 
 environment:
