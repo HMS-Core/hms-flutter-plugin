@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,13 +14,13 @@
     limitations under the License.
 */
 
-import 'package:huawei_push/src/constants/channel.dart';
+part of huawei_push;
 
 /// A class for checking whether to display messages for the user based on the account.
 ///
 /// Supported devices: phones and tablets
 /// Supported operating systems: EMUI 9.1.0 or later and Android 9.0 or later
-class HmsProfile {
+abstract class HmsProfile {
   /// Account Type Constant.
   ///
   /// HUAWEI ID that you transfer by [addProfile] or [addMultiSenderProfile] in HmsProfile to verify the account.
@@ -34,36 +34,64 @@ class HmsProfile {
   /// Account Type Constant.
   ///
   /// Undefined account type.
-  static const UNDEFINED_PROFILE = -1;
+  static const int UNDEFINED_PROFILE = -1;
 
   /// Checks whether the device supports account verification.
   static Future<bool> isSupportProfile() async {
-    return await methodChannel.invokeMethod('isSupportProfile');
+    final bool? result = await _methodChannel.invokeMethod<bool?>(
+      'isSupportProfile',
+    );
+    return result!;
   }
 
   /// Adds the relationship between the user and app on the device.
   static Future<void> addProfile(int type, String profileId) async {
-    return await methodChannel
-        .invokeMethod('addProfile', {'type': type, 'profileId': profileId});
+    return await _methodChannel.invokeMethod<void>(
+      'addProfile',
+      <String, dynamic>{
+        'type': type,
+        'profileId': profileId,
+      },
+    );
   }
 
   /// Adds the relationships between the user and apps on the device in the multi-sender scenario.
   static Future<void> addMultiSenderProfile(
-      String subjectId, int type, String profileId) async {
-    return await methodChannel.invokeMethod('addMultiSenderProfile',
-        {'subjectId': subjectId, 'type': type, 'profileId': profileId});
+    String subjectId,
+    int type,
+    String profileId,
+  ) async {
+    return await _methodChannel.invokeMethod<void>(
+      'addMultiSenderProfile',
+      <String, dynamic>{
+        'subjectId': subjectId,
+        'type': type,
+        'profileId': profileId,
+      },
+    );
   }
 
   /// Deletes the relationship between the user and app on the device.
   static Future<void> deleteProfile(String profileId) async {
-    return await methodChannel
-        .invokeMethod('deleteProfile', {'profileId': profileId});
+    return await _methodChannel.invokeMethod<void>(
+      'deleteProfile',
+      <String, String>{
+        'profileId': profileId,
+      },
+    );
   }
 
   /// Deletes the relationships between the user and apps on the device in the multi-sender scenario.
   static Future<void> deleteMultiSenderProfile(
-      String subjectId, String profileId) async {
-    return await methodChannel.invokeMethod(
-        'deleteProfile', {'subjectId': subjectId, 'profileId': profileId});
+    String subjectId,
+    String profileId,
+  ) async {
+    return await _methodChannel.invokeMethod<void>(
+      'deleteProfile',
+      <String, String>{
+        'subjectId': subjectId,
+        'profileId': profileId,
+      },
+    );
   }
 }

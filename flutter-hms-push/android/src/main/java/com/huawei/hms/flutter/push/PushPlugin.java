@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ import androidx.annotation.NonNull;
 import com.huawei.hms.flutter.push.backgroundmessaging.BackgroundMessagingService;
 import com.huawei.hms.flutter.push.backgroundmessaging.FlutterBackgroundRunner;
 import com.huawei.hms.flutter.push.constants.Channel;
-import com.huawei.hms.flutter.push.constants.Code;
 import com.huawei.hms.flutter.push.constants.Core;
 import com.huawei.hms.flutter.push.constants.Method;
 import com.huawei.hms.flutter.push.constants.Param;
@@ -51,6 +50,12 @@ import com.huawei.hms.flutter.push.receiver.remote.RemoteMessageNotificationInte
 import com.huawei.hms.flutter.push.receiver.remote.RemoteMessageSentDeliveredReceiver;
 import com.huawei.hms.flutter.push.utils.Utils;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
@@ -60,79 +65,66 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-import io.flutter.plugin.common.PluginRegistry;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
-
-/**
- * class PushPlugin
- *
- * @since 4.0.4
- */
 public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAware {
     private static final String TAG = "HmsFlutterPush";
-
     private MethodChannel channel;
-
     private Context context;
-
     private HmsLocalNotification hmsLocalNotification;
-
     private NotificationIntentListener notificationIntentListener;
-
     private FlutterHmsInstanceId hmsInstanceId;
-
     private FlutterHmsMessaging hmsMessaging;
-
     private FlutterHmsProfile hmsProfile;
-
     private Activity activity;
+    private final List<EventChannel> eventChannels = new ArrayList<>();
 
-    private List<EventChannel> eventChannels = new ArrayList<>();
-
-    public void onAttachedToEngine(BinaryMessenger messenger, Context context) {
-        channel = new MethodChannel(messenger, Channel.METHOD_CHANNEL.id());
+    @Override
+    public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
+        channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), Channel.METHOD_CHANNEL.id());
         channel.setMethodCallHandler(this);
-        this.context = context;
+        this.context = flutterPluginBinding.getApplicationContext();
         hmsProfile = new FlutterHmsProfile(context);
         hmsInstanceId = new FlutterHmsInstanceId(context);
         notificationIntentListener = new NotificationIntentListener(context);
         hmsLocalNotification = new HmsLocalNotification(context);
         hmsMessaging = new FlutterHmsMessaging(context);
         PluginContext.initialize(context);
-        setStreamHandlers(messenger);
+        setStreamHandlers(flutterPluginBinding.getBinaryMessenger());
     }
 
-    @Override
-    public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-        onAttachedToEngine(flutterPluginBinding.getBinaryMessenger(), flutterPluginBinding.getApplicationContext());
-    }
+    private void setStreamHandlers(BinaryMessenger messenger) {
+        Map<String, EventChannel.StreamHandler> streams = new ConcurrentHashMap<>();
+        streams.put(Channel.TOKEN_CHANNEL.id(),
+                new DefaultStreamHandler(context, TokenReceiver::new, PushIntent.TOKEN_INTENT_ACTION));
 
-    public static void registerWith(PluginRegistry.Registrar registrar) {
-        PushPlugin instance = new PushPlugin();
-        instance.onAttachedToEngine(registrar.messenger(), registrar.context());
-        if (registrar.activity() != null) {
-            registrar.addNewIntentListener(instance.notificationIntentListener);
-            Log.e(TAG, "registerWith: " + registrar.activity().getIntent(), null);
-            Intent launcherIntent = registrar.activity().getIntent();
-            if (Utils.checkNotificationFlags(launcherIntent)) {
-                instance.notificationIntentListener.handleIntent(launcherIntent);
-            }
-        }
-    }
+        streams.put(Channel.MULTI_SENDER_TOKEN_CHANNEL.id(),
+                new DefaultStreamHandler(context, MultiSenderTokenReceiver::new,
+                        PushIntent.MULTI_SENDER_TOKEN_INTENT_ACTION));
 
-    @Override
-    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-        if (channel != null) {
-            channel.setMethodCallHandler(null);
-            for (EventChannel e : eventChannels) {
-                e.setStreamHandler(null);
-            }
-            eventChannels.clear();
+        streams.put(Channel.REMOTE_MESSAGE_RECEIVE_CHANNEL.id(),
+                new DefaultStreamHandler(context, RemoteDataMessageReceiver::new,
+                        PushIntent.REMOTE_DATA_MESSAGE_INTENT_ACTION));
+
+        streams.put(Channel.REMOTE_MESSAGE_SEND_STATUS_CHANNEL.id(),
+                new DefaultStreamHandler(context, RemoteMessageSentDeliveredReceiver::new,
+                        PushIntent.REMOTE_MESSAGE_SENT_DELIVERED_ACTION));
+
+        // For sending remote message notification's custom intent Uri events
+        streams.put(Channel.REMOTE_MESSAGE_NOTIFICATION_INTENT_CHANNEL.id(),
+                new DefaultStreamHandler(context, RemoteMessageNotificationIntentReceiver::new,
+                        PushIntent.REMOTE_MESSAGE_NOTIFICATION_INTENT_ACTION));
+
+        streams.put(Channel.NOTIFICATION_OPEN_CHANNEL.id(),
+                new DefaultStreamHandler(context, NotificationOpenEventReceiver::new, PushIntent.NOTIFICATION_OPEN_ACTION));
+
+        streams.put(Channel.LOCAL_NOTIFICATION_CLICK_CHANNEL.id(),
+                new DefaultStreamHandler(context, LocalNotificationClickEventReceiver::new,
+                        PushIntent.LOCAL_NOTIFICATION_CLICK_ACTION));
+
+        for (Map.Entry<String, EventChannel.StreamHandler> entry : streams.entrySet()) {
+            EventChannel eventChannel = new EventChannel(messenger, entry.getKey());
+            eventChannel.setStreamHandler(entry.getValue());
+            eventChannels.add(eventChannel);
         }
     }
 
@@ -147,20 +139,10 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
     }
 
     @Override
-    public void onDetachedFromActivityForConfigChanges() {
-        this.activity = null;
-    }
-
-    @Override
     public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
         this.activity = binding.getActivity();
         binding.addOnNewIntentListener(this.notificationIntentListener);
         this.notificationIntentListener.handleIntent(activity.getIntent());
-    }
-
-    @Override
-    public void onDetachedFromActivity() {
-        this.activity = null;
     }
 
     @Override
@@ -351,6 +333,27 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
         }
     }
 
+    @Override
+    public void onDetachedFromActivityForConfigChanges() {
+        this.activity = null;
+    }
+
+    @Override
+    public void onDetachedFromActivity() {
+        this.activity = null;
+    }
+
+    @Override
+    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+        if (channel != null) {
+            channel.setMethodCallHandler(null);
+            for (EventChannel e : eventChannels) {
+                e.setStreamHandler(null);
+            }
+            eventChannels.clear();
+        }
+    }
+
     private void registerBackgroundMessageHandler(final MethodCall call, final Result result) {
         try {
             long pluginCallbackHandle = Objects.requireNonNull(call.argument("rawHandle"));
@@ -383,45 +386,5 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
 
         Log.i(TAG, "BackgroundMessageHandler removed ✔");
         result.success(true);
-    }
-
-    public static void setPluginRegistrant(PluginRegistry.PluginRegistrantCallback callback) {
-        BackgroundMessagingService.setPluginRegistrantCallback(callback);
-    }
-
-    private void setStreamHandlers(BinaryMessenger messenger) {
-        Map<String, EventChannel.StreamHandler> streams = new ConcurrentHashMap<>();
-        streams.put(Channel.TOKEN_CHANNEL.id(),
-            new DefaultStreamHandler(context, TokenReceiver::new, PushIntent.TOKEN_INTENT_ACTION));
-
-        streams.put(Channel.MULTI_SENDER_TOKEN_CHANNEL.id(),
-            new DefaultStreamHandler(context, MultiSenderTokenReceiver::new,
-                PushIntent.MULTI_SENDER_TOKEN_INTENT_ACTION));
-
-        streams.put(Channel.REMOTE_MESSAGE_RECEIVE_CHANNEL.id(),
-            new DefaultStreamHandler(context, RemoteDataMessageReceiver::new,
-                PushIntent.REMOTE_DATA_MESSAGE_INTENT_ACTION));
-
-        streams.put(Channel.REMOTE_MESSAGE_SEND_STATUS_CHANNEL.id(),
-            new DefaultStreamHandler(context, RemoteMessageSentDeliveredReceiver::new,
-                PushIntent.REMOTE_MESSAGE_SENT_DELIVERED_ACTION));
-
-        // For sending remote message notification's custom intent Uri events
-        streams.put(Channel.REMOTE_MESSAGE_NOTIFICATION_INTENT_CHANNEL.id(),
-            new DefaultStreamHandler(context, RemoteMessageNotificationIntentReceiver::new,
-                PushIntent.REMOTE_MESSAGE_NOTIFICATION_INTENT_ACTION));
-
-        streams.put(Channel.NOTIFICATION_OPEN_CHANNEL.id(),
-            new DefaultStreamHandler(context, NotificationOpenEventReceiver::new, PushIntent.NOTIFICATION_OPEN_ACTION));
-
-        streams.put(Channel.LOCAL_NOTIFICATION_CLICK_CHANNEL.id(),
-            new DefaultStreamHandler(context, LocalNotificationClickEventReceiver::new,
-                PushIntent.LOCAL_NOTIFICATION_CLICK_ACTION));
-
-        for (Map.Entry<String, EventChannel.StreamHandler> entry : streams.entrySet()) {
-            EventChannel eventChannel = new EventChannel(messenger, entry.getKey());
-            eventChannel.setStreamHandler(entry.getValue());
-            eventChannels.add(eventChannel);
-        }
     }
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,11 +16,13 @@
 
 package com.huawei.hms.flutter.push.hms;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.huawei.hms.common.ResolvableApiException;
 import com.huawei.hms.flutter.push.constants.Param;
 import com.huawei.hms.flutter.push.constants.PushIntent;
 import com.huawei.hms.flutter.push.logger.HMSLogger;
@@ -102,6 +104,24 @@ public class FlutterHmsMessageService extends HmsMessageService {
     public void onTokenError(Exception e, Bundle bundle) {
         super.onTokenError(e, bundle);
         if (PluginContext.getContext() != null) {
+            if (e instanceof ResolvableApiException) {
+                HMSLogger.getInstance(PluginContext.getContext()).sendSingleEvent("onTokenError", String.valueOf(((ResolvableApiException) e).getStatusCode()));
+                PendingIntent resolution = ((ResolvableApiException) e).getResolution();
+                if (resolution != null) {
+                    try {
+                        HMSLogger.getInstance(PluginContext.getContext()).sendSingleEvent("onTokenError");
+                        resolution.send();
+                    } catch (PendingIntent.CanceledException ex1) {
+                        HMSLogger.getInstance(PluginContext.getContext()).sendSingleEvent("onTokenError", ex1.getMessage());
+                    }
+                }
+                Intent resolutionIntent = ((ResolvableApiException) e).getResolutionIntent();
+                if (resolutionIntent != null) {
+                    HMSLogger.getInstance(PluginContext.getContext()).sendSingleEvent("onTokenError");
+                    resolutionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    PluginContext.getContext().startActivity(resolutionIntent);
+                }
+            }
             HMSLogger.getInstance(PluginContext.getContext()).sendPeriodicEvent("onMultiSenderTokenError");
             Utils.sendIntent(PluginContext.getContext(), PushIntent.MULTI_SENDER_TOKEN_INTENT_ACTION,
                 PushIntent.MULTI_SENDER_TOKEN_ERROR,

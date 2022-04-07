@@ -2,13 +2,13 @@
   <h1 align="center">Huawei Push Kit Flutter Plugin</h1>
 </p>
 
-----
+---
 
-HUAWEI Push Kit is a messaging service provided by Huawei. It establishes a messaging channel from the cloud to devices. By integrating Push Kit, you can send messages to your apps on users' devices in real time. This helps you maintain closer ties with users and increases user awareness and engagement with your apps. 
+HUAWEI Push Kit is a messaging service provided by Huawei. It establishes a messaging channel from the cloud to devices. By integrating Push Kit, you can send messages to your apps on users' devices in real time. This helps you maintain closer ties with users and increases user awareness and engagement with your apps.
 
 This plugin enables communication between HUAWEI Push Kit SDK and Flutter platform. It exposes all functionality provided by HUAWEI Push Kit SDK.
 
-[> Learn More](https://developer.huawei.com/consumer/en/doc/development/HMSCore-Guides-V5/service-introduction-0000001050040060-V5?ha_source=hms1)
+[> Learn More](https://developer.huawei.com/consumer/en/doc/development/HMSCore-Guides/service-introduction-0000001050040060?ha_source=hms1)
 
 ## Installation
 
@@ -17,9 +17,10 @@ Please see [pub.dev](https://pub.dev/packages/huawei_push/install) and [AppGalle
 ## Documentation
 
 - [Quick Start](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/basiccapabilities-0000001050417999?ha_source=hms1)
-- [Reference](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-References/overview-0000001057463088?ha_source=hms1)
+- [Reference](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-References/push-overview-0000001057463088?ha_source=hms1)
 
 ### Additional Topics
+
 - [Basic Capabilities](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/basiccapabilities-0000001050417999?ha_source=hms1)
 - [Topic-based Message Sending](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/topicbased-message-0000001050190681?ha_source=hms1)
 - [Receiving Data Messages](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/receiving-data-messages-at-killed-state-0000001058199547?ha_source=hms1)
@@ -32,8 +33,9 @@ Please see [pub.dev](https://pub.dev/packages/huawei_push/install) and [AppGalle
 ## Questions or Issues
 
 If you have questions about how to use HMS samples, try the following options:
-- [Stack Overflow](https://stackoverflow.com/questions/tagged/huawei-mobile-services) is the best place for any programming questions. Be sure to tag your question with 
-**huawei-mobile-services**.
+
+- [Stack Overflow](https://stackoverflow.com/questions/tagged/huawei-mobile-services) is the best place for any programming questions. Be sure to tag your question with
+  **huawei-mobile-services**.
 - [Github](https://github.com/HMS-Core/hms-flutter-plugin) is the official repository for these plugins, You can open an issue or submit your ideas.
 - [Huawei Developer Forum](https://forums.developer.huawei.com/forumPortal/en/home?fid=0101187876626530001?ha_source=hms1) HMS Core Module is great for general questions, or seeking recommendations and opinions.
 - [Huawei Developer Docs](https://developer.huawei.com/consumer/en/doc/overview/HMS-Core-Plugin?ha_source=hms1) is place to official documentation for all HMS Core Kits, you can find detailed documentations in there.
@@ -42,4 +44,4 @@ If you run into a bug in our samples, please submit an issue to the [GitHub repo
 
 ## License
 
-Huawei React-Native Plugin is licensed under [Apache 2.0 license](LICENCE)
+Huawei Push Kit Flutter Plugin is licensed under [Apache 2.0 license](LICENSE)

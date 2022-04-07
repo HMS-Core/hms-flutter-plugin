@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,7 +16,9 @@
 
 package com.huawei.hms.flutter.push.hms;
 
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.huawei.agconnect.config.AGConnectServicesConfig;
@@ -24,6 +26,7 @@ import com.huawei.hmf.tasks.Task;
 import com.huawei.hms.aaid.HmsInstanceId;
 import com.huawei.hms.aaid.entity.AAIDResult;
 import com.huawei.hms.common.ApiException;
+import com.huawei.hms.common.ResolvableApiException;
 import com.huawei.hms.flutter.push.constants.Code;
 import com.huawei.hms.flutter.push.constants.Core;
 import com.huawei.hms.flutter.push.constants.PushIntent;
@@ -105,6 +108,23 @@ public class FlutterHmsInstanceId {
                 token = HmsInstanceId.getInstance(context).getToken(appId, defaultScope);
                 hmsLogger.sendSingleEvent("getToken");
                 Utils.sendIntent(context, PushIntent.TOKEN_INTENT_ACTION, PushIntent.TOKEN, token);
+            } catch (ResolvableApiException e) {
+                hmsLogger.sendSingleEvent("getToken", String.valueOf(e.getStatusCode()));
+                PendingIntent resolution = e.getResolution();
+                if (resolution != null) {
+                    try {
+                        hmsLogger.sendSingleEvent("getToken");
+                        resolution.send();
+                    } catch (PendingIntent.CanceledException ex) {
+                        HMSLogger.getInstance(PluginContext.getContext()).sendSingleEvent("onTokenError", ex.getMessage());
+                    }
+                }
+                Intent resolutionIntent = e.getResolutionIntent();
+                if (resolutionIntent != null) {
+                    hmsLogger.sendSingleEvent("getToken");
+                    resolutionIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    PluginContext.getContext().startActivity(resolutionIntent);
+                }
             } catch (ApiException e) {
                 hmsLogger.sendSingleEvent("getToken", String.valueOf(e.getStatusCode()));
                 Utils.sendIntent(context, PushIntent.TOKEN_INTENT_ACTION, PushIntent.TOKEN_ERROR,

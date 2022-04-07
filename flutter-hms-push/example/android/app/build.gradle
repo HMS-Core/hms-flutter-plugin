@@ -32,22 +32,22 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 apply plugin: 'com.huawei.agconnect'
 
 android {
-    compileSdkVersion 29
-
-    lintOptions {
-        disable 'InvalidPackage'
-    }
-
+    compileSdkVersion 31
     defaultConfig {
-        // Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        // The Application ID here should match with the Package Name on the AppGalleryConnect
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "<package_name>"
-        minSdkVersion 17
-        targetSdkVersion 29
+        minSdkVersion 19
+        targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
-
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     signingConfigs {
         config {
             keyAlias keystoreProperties['keyAlias']
@@ -56,22 +56,18 @@ android {
             storePassword keystoreProperties['storePassword']
         }
     }
-
     buildTypes {
         debug {
-            signingConfig signingConfigs.config
+           signingConfig signingConfigs.config
         }
         release {
-            signingConfig signingConfigs.config
-            // Enables code shrinking, obfuscation and optimization for release builds
+           signingConfig signingConfigs.config
             minifyEnabled true
-            // Unused resources will be removed, resources defined in the res/raw/keep.xml will be kept.
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
-
 flutter {
     source '../..'
 }

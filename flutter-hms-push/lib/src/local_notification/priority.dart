@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,10 +14,12 @@
     limitations under the License.
 */
 
+part of huawei_push;
+
 abstract class NotificationPriority {
-  static const String MAX = "max";
-  static const String HIGH = "high";
-  static const String DEFAULT = "default";
-  static const String LOW = "low";
-  static const String MIN = "min";
+  static const String MAX = 'max';
+  static const String HIGH = 'high';
+  static const String DEFAULT = 'default';
+  static const String LOW = 'low';
+  static const String MIN = 'min';
 }
