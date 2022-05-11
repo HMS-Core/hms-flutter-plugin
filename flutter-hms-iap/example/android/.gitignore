@@ -1,0 +1,13 @@
+/.gradle
+/captures/
+/local.properties
+GeneratedPluginRegistrant.java
+agconnect-services.json
+**/*.keystore
+**/*.jks
+.project
+.settings
+app/.classpath
+/gradlew
+/gradlew.bat
+gradle-wrapper.jar
