@@ -1,6 +1,10 @@
+## 6.3.0+304
+
+* Updated to newest sdk version.
+
 ## 6.1.0+301
 
-* [Breaking Change] Migrated to Null Safety.
+* Nullsafety migration.
 * Updated to newest sdk version.
 
 ## 5.0.5+305

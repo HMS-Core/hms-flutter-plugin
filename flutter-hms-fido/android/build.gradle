@@ -4,7 +4,7 @@ version '1.0'
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven { url 'https://developer.huawei.com/repo/' }
     }
 
@@ -16,7 +16,7 @@ buildscript {
 rootProject.allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven { url 'https://developer.huawei.com/repo/' }
     }
 }
@@ -41,6 +41,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.huawei.hms:fido-fido2:6.1.0.301'
-    implementation 'com.huawei.hms:fido-bioauthn-androidx:6.1.0.301'
+    implementation 'com.huawei.hms:fido-fido2:6.3.0.304'
+    implementation 'com.huawei.hms:fido-bioauthn-androidx:6.3.0.304'
 }
