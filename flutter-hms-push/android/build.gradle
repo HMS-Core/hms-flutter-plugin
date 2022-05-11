@@ -40,6 +40,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.huawei.hms:push:6.3.0.302'
+    implementation 'com.huawei.hms:push:6.3.0.304'
     implementation 'com.facebook.fresco:fresco:2.5.0'
 }

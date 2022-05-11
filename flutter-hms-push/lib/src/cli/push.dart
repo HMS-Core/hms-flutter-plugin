@@ -82,8 +82,8 @@ abstract class Push {
   ///
   /// The requested token will be emitted to the token stream. Listen for the stream
   /// from [getTokenStream] to obtain the token.
-  static Future<void> getToken(String scope) async {
-    await _methodChannel.invokeMethod<void>(
+  static void getToken(String scope) {
+    _methodChannel.invokeMethod(
       'getToken',
       <String, String>{
         'scope': scope,

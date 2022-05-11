@@ -1,12 +1,17 @@
+## 6.3.0+304
+
+- Updated Push SDK to the latest version 6.3.0.304.
+- Deleted the capability of prompting users to install HMS Core (APK).
+
 ## 6.3.0+302
 
-- Updated Push SDK to the latest version 6.3.0+302.
+- Updated Push SDK to the latest version 6.3.0.302.
 - Updated minSdkVersion to 19.
 - Fixed some issues for adapting to Android 12 (targetSdkVersion=31).
 
 ## 6.1.0+300
 
-- Updated Push SDK to the latest version 6.1.0+300. This SDK has preset configuration of the <queries> element so that
+- Updated Push SDK to the latest version 6.1.0.300. This SDK has preset configuration of the <queries> element so that
   your app can properly call HMS Core (APK) on Android 11.
 
   > Your Android Studio version must be 3.6.1 or later, and your Android Gradle plugin must be 3.5.4 or later.
@@ -27,7 +32,7 @@
 
 ## 5.1.1+301
 
-- Updated Push SDK to the latest version 5.1.1+301.
+- Updated Push SDK to the latest version 5.1.1.301.
 - Added Multi-Sender API.
 - Bug fixes and improvements.
 - **[Breaking Changes]**
