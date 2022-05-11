@@ -1,3 +1,7 @@
+## 6.3.0+302
+
+- If HMS Core (APK) 4.0.2.300 or later is not installed on the mobile phone that uses the Health Kit, an error will be thrown when an API is called.
+
 ## 6.3.0+301
 
 > **This release has BREAKING CHANGES.**
