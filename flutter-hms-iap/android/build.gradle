@@ -4,7 +4,7 @@ version '1.0'
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven { url 'https://developer.huawei.com/repo/' }
     }
 
@@ -16,7 +16,7 @@ buildscript {
 rootProject.allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven { url 'https://developer.huawei.com/repo/' }
     }
 }
@@ -40,6 +40,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.huawei.hms:iap:6.2.0.300'
+    implementation 'com.huawei.hms:iap:6.4.0.301'
     implementation 'com.google.code.gson:gson:2.8.5'
 }
