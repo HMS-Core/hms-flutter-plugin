@@ -146,7 +146,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
       currentMethodResult = "User verification succeeded, user token: $token";
     } on PlatformException catch (e) {
       currentMethodResult =
-          "Error occurred: " + e.code + ":" + SafetyDetectStatusCodes[e.code];
+          "Error occurred: " + e.code + ":${SafetyDetectStatusCodes[e.code]}";
     }
     animateResult();
   }

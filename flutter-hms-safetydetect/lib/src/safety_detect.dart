@@ -18,10 +18,8 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:huawei_safetydetect/huawei_safetydetect.dart';
-import 'package:huawei_safetydetect/src/url_check_threat.dart';
 
 import './constants/constants.dart' show methodChannel;
-import 'wifi_detect_response.dart';
 
 /// Safety Detect Plugin Class
 class SafetyDetect {

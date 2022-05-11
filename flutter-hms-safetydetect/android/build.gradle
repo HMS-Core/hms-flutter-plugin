@@ -3,9 +3,9 @@ version '1.0'
 
 buildscript {
     repositories {
-        maven { url 'https://developer.huawei.com/repo/' }
         google()
-        jcenter()
+        mavenCentral()
+        maven { url 'https://developer.huawei.com/repo/' }
     }
 
     dependencies {
@@ -15,9 +15,9 @@ buildscript {
 
 rootProject.allprojects {
     repositories {
-        maven { url 'https://developer.huawei.com/repo/' }
         google()
-        jcenter()
+        mavenCentral()
+        maven { url 'https://developer.huawei.com/repo/' }
     }
 }
 
@@ -42,5 +42,5 @@ android {
 }
 
 dependencies {
-    implementation 'com.huawei.hms:safetydetect:6.1.0.302'
+    implementation 'com.huawei.hms:safetydetect:6.4.0.301'
 }
