@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ class MLTextLensEngine {
   final MLTextLensController controller;
 
   TextTransactor? _transactor;
+  bool _isRunning = false;
 
   MLTextLensEngine({required this.controller}) {
     _channel = _initMethodChannel();
@@ -50,11 +51,19 @@ class MLTextLensEngine {
   }
 
   void run() {
+    if (_isRunning) {
+      return;
+    }
+    _isRunning = true;
     _channel.invokeMethod("lens#run");
   }
 
   Future<bool> release() async {
     final bool res = await _channel.invokeMethod("lens#release");
+    if (res) {
+      _isRunning = false;
+    }
+
     return res;
   }
 

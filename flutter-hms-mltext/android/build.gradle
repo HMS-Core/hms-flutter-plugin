@@ -4,7 +4,7 @@ version '1.0'
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven { url 'https://developer.huawei.com/repo/' }
     }
 
@@ -16,7 +16,7 @@ buildscript {
 rootProject.allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven { url 'https://developer.huawei.com/repo/' }
     }
 }
@@ -24,11 +24,11 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 29
+        targetSdkVersion 30
     }
     lintOptions {
         disable 'InvalidPackage'
@@ -41,21 +41,21 @@ android {
 
 dependencies{
     // text recognition
-    implementation 'com.huawei.hms:ml-computer-vision-ocr:3.2.0.300'
-    implementation 'com.huawei.hms:ml-computer-vision-ocr-latin-model:3.2.0.300'
-    implementation 'com.huawei.hms:ml-computer-vision-ocr-jk-model:3.2.0.300'
-    implementation 'com.huawei.hms:ml-computer-vision-ocr-cn-model:3.2.0.300'
+    implementation 'com.huawei.hms:ml-computer-vision-ocr:3.5.0.302'
+    implementation 'com.huawei.hms:ml-computer-vision-ocr-latin-model:3.5.0.302'
+    implementation 'com.huawei.hms:ml-computer-vision-ocr-jk-model:3.5.0.302'
+    implementation 'com.huawei.hms:ml-computer-vision-ocr-cn-model:3.5.0.302'
     // vision cloud
-    implementation 'com.huawei.hms:ml-computer-vision-cloud:3.2.0.300'
+    implementation 'com.huawei.hms:ml-computer-vision-cloud:3.5.0.300'
     // card recognition
-    implementation 'com.huawei.hms:ml-computer-card-icr-vn:3.2.0.301'
+    implementation 'com.huawei.hms:ml-computer-card-icr-vn:3.5.0.300'
     // bankcard recognition
-    implementation 'com.huawei.hms:ml-computer-card-bcr:3.2.0.300'
+    implementation 'com.huawei.hms:ml-computer-card-bcr:3.5.0.300'
     // general card recognition
-    implementation 'com.huawei.hms:ml-computer-card-gcr-plugin:3.2.0.300'
+    implementation 'com.huawei.hms:ml-computer-card-gcr-plugin:3.5.0.303'
     // form recognition
-    implementation 'com.huawei.hms:ml-computer-vision-formrecognition:3.2.0.300'
-    implementation 'com.huawei.hms:ml-computer-vision-formrecognition-model:3.2.0.300'
+    implementation 'com.huawei.hms:ml-computer-vision-formrecognition:3.5.0.300'
+    implementation 'com.huawei.hms:ml-computer-vision-formrecognition-model:3.5.0.300'
     // text embedding
-    implementation 'com.huawei.hms:ml-nlp-textembedding:3.2.0.300'
+    implementation 'com.huawei.hms:ml-nlp-textembedding:3.5.0.300'
 }

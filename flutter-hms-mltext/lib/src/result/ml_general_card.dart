@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -20,9 +20,11 @@ import 'ml_text.dart';
 
 class MLGeneralCard {
   static const int captureContinue = 0;
+
   static const int captureStop = -1;
 
   MLText? text;
+
   Uint8List? bytes;
 
   MLGeneralCard({this.text, this.bytes});

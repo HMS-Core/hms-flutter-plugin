@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -23,11 +23,17 @@ import 'package:huawei_ml_text/src/result/ml_vocabulary_version.dart';
 
 class MLTextEmbeddingAnalyzer {
   static const int errServiceIsUnavailable = 12199;
+
   static const int errNetUnavailable = 12198;
+
   static const int errInner = 12101;
+
   static const int errAuthFailed = 12102;
+
   static const int errParamIllegal = 12103;
+
   static const int errAnalyzeFailed = 12104;
+
   static const int errAuthTokenInvalid = 12105;
 
   late MethodChannel _channel;

@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import 'ml_text_language.dart';
 
 class MLDocument {
   String? stringValue;
+
   List<DocumentBlock?> blocks;
 
   MLDocument({this.stringValue, required this.blocks});
@@ -40,10 +41,15 @@ class MLDocument {
 
 class DocumentBlock {
   TextBorder? border;
+
   String? stringValue;
+
   Interval? interval;
+
   List<MLTextLanguage?> languageList;
+
   dynamic possibility;
+
   List<DocumentSection?> sections;
 
   DocumentBlock(
@@ -84,10 +90,15 @@ class DocumentBlock {
 
 class Interval {
   static const int other = 5;
+
   static const int space = 6;
+
   static const int wideSpace = 7;
+
   static const int newLineCharacter = 8;
+
   static const int endOfLineHyphen = 9;
+
   static const int sessionInterval = 10;
 
   bool? isTextFollowed;
@@ -102,11 +113,17 @@ class Interval {
 
 class DocumentSection {
   TextBorder? border;
+
   String? stringValue;
+
   List<DocumentWord?> wordList;
+
   List<DocumentLine?> lineList;
+
   Interval? interval;
+
   List<MLTextLanguage?> languageList;
+
   dynamic possibility;
 
   DocumentSection(
@@ -156,10 +173,15 @@ class DocumentSection {
 
 class DocumentWord {
   TextBorder? border;
+
   String? stringValue;
+
   Interval? interval;
+
   List<MLTextLanguage?> languageList;
+
   List<DocumentCharacter?> characterList;
+
   dynamic possibility;
 
   DocumentWord(
@@ -200,9 +222,13 @@ class DocumentWord {
 
 class DocumentCharacter {
   TextBorder? border;
+
   String? stringValue;
+
   List<MLTextLanguage?> languageList;
+
   dynamic possibility;
+
   Interval? interval;
 
   DocumentCharacter(
@@ -234,11 +260,17 @@ class DocumentCharacter {
 
 class DocumentLine {
   TextBorder? border;
+
   String? stringValue;
+
   List<DocumentWord?> wordList;
+
   Interval? interval;
+
   List<MLTextLanguage?> languageList;
+
   dynamic possibility;
+
   List<MLPoint?> points;
 
   DocumentLine({

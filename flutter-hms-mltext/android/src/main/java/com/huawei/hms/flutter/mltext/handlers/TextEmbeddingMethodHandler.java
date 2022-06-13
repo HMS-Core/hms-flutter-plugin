@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -32,7 +32,8 @@ import com.huawei.hms.mlsdk.textembedding.MLVocabularyVersion;
 
 import org.json.JSONObject;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,7 +104,7 @@ public class TextEmbeddingMethodHandler implements MethodChannel.MethodCallHandl
         String sentence = FromMap.toString(Param.SENTENCE, call.argument(Param.SENTENCE), false);
 
         analyzer.analyseSentenceVector(sentence)
-                .addOnSuccessListener(floats -> responseHandler.success(Collections.singletonList(floats)))
+                .addOnSuccessListener(floats -> responseHandler.success(new ArrayList<>(Arrays.asList(floats))))
                 .addOnFailureListener(responseHandler::exception);
     }
 
@@ -128,7 +129,7 @@ public class TextEmbeddingMethodHandler implements MethodChannel.MethodCallHandl
         String word = FromMap.toString(Param.WORD, call.argument(Param.WORD), false);
 
         analyzer.analyseWordVector(word)
-                .addOnSuccessListener(floats -> responseHandler.success(Collections.singletonList(floats)))
+                .addOnSuccessListener(floats -> responseHandler.success(new ArrayList<>(Arrays.asList(floats))))
                 .addOnFailureListener(responseHandler::exception);
     }
 

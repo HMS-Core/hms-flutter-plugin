@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -15,9 +15,6 @@
 */
 
 import 'package:flutter/services.dart';
-import 'package:huawei_ml_text/src/common/constants.dart';
-import 'package:huawei_ml_text/src/result/ml_text.dart';
-import '../request/ml_text_analyzer_setting.dart';
 import 'package:huawei_ml_text/huawei_ml_text.dart';
 
 class MLTextAnalyzer implements TextAnalyzer<dynamic, MLTextAnalyzerSetting> {

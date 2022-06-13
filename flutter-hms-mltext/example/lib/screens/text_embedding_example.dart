@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -64,8 +64,7 @@ class _TextEmbeddingExampleState extends State<TextEmbeddingExample> {
             context,
             ElevatedButton(
               style: buttonStyle,
-              onPressed: () =>
-                  pickerDialog(_key, context, _getWordsSimilarity()),
+              onPressed: _getWordsSimilarity,
               child: Text(embeddingGetWordsSimilarity),
             ),
           ),
@@ -78,7 +77,7 @@ class _TextEmbeddingExampleState extends State<TextEmbeddingExample> {
             context,
             ElevatedButton(
               style: buttonStyle,
-              onPressed: () => pickerDialog(_key, context, _getSimilarWords()),
+              onPressed: _getSimilarWords,
               child: Text(embeddingGetSimilarWords),
             ),
           ),

@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -36,10 +36,6 @@ import java.util.List;
 import io.flutter.plugin.common.MethodCall;
 
 public class SettingCreator {
-    /**
-     * @param path Local image path
-     * @return MLFrame instance
-     */
     public static MLFrame frameFromBitmap(String path) {
         Bitmap bt = Commons.bitmapFromPath(path);
         return MLFrame.fromBitmap(bt);
