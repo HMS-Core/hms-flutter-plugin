@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 
 import 'package:flutter/services.dart';
 import 'package:huawei_ml_language/huawei_ml_language.dart';
-import 'package:huawei_ml_language/src/aft/ml_remote_aft_listener.dart';
-import 'package:huawei_ml_language/src/aft/ml_remote_aft_result.dart';
 
 const String _ON_RESULT = "onResult";
 const String _ON_ERROR = "onError";

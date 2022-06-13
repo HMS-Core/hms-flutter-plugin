@@ -18,7 +18,7 @@ Flutter ML Kit Language Plugin provides APIs from Huawei ML Kit SDK. The plugin 
 - Audio File Transcription
 - Sound Detection
 
-[Learn More](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/introduction-0000001051432503?ha_source=hms1)
+[Learn More](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/voice-related-services-0000001074607316?ha_source=hms1)
 
 ## Installation
 
@@ -26,8 +26,8 @@ Please see [pub.dev](https://pub.dev/packages/huawei_ml_language/install) and [A
 
 ## Documentation
 
-- [Quick Start](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/introduction-0000001051432503?ha_source=hms1)
-- [Reference](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-References/overview-0000001052975193?ha_source=hms1)
+- [Quick Start](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/voice-related-services-0000001074607316?ha_source=hms1)
+- [Reference](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-References/overview-0000001194201510?ha_source=hms1)
 
 ## Questions or Issues
 
@@ -42,4 +42,4 @@ If you run into a bug in our samples, please submit an issue to the [GitHub repo
 
 ## License
 
-Huawei ML Language Flutter Plugin is licensed under [Apache 2.0 license](LICENCE)
+Huawei ML Language Flutter Plugin is licensed under [Apache 2.0 license](LICENSE)

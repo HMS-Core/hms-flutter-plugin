@@ -1,6 +1,5 @@
 name: huawei_ml_language_example
 description: Demonstrates how to use the Huawei ML Language Plugin.
-version: 3.2.0+300
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -8,7 +7,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   huawei_ml_language:
     path: ../
   flutter_audio_recorder2: 0.0.2
