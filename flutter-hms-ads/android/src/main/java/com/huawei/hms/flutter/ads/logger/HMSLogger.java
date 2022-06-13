@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ public final class HMSLogger {
 
     private static final String KIT = "Ads";
     private static final String PLATFORM = "Flutter";
-    private static final String VERSION = "13.4.45.308";
+    private static final String VERSION = "13.4.45.309";
 
     private static final String SERVICE = "Cross-Platform";
 

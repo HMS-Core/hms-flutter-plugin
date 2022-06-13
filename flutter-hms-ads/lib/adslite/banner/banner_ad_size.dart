@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -23,15 +23,25 @@ class BannerAdSize extends AdSize {
       : super(width: width, height: height);
 
   static const BannerAdSize s360x57 = BannerAdSize(width: 360, height: 57);
+
   static const BannerAdSize s360x144 = BannerAdSize(width: 360, height: 144);
+
   static const BannerAdSize s320x50 = BannerAdSize(width: 320, height: 50);
+
   static const BannerAdSize s468x60 = BannerAdSize(width: 468, height: 60);
+
   static const BannerAdSize s320x100 = BannerAdSize(width: 320, height: 100);
+
   static const BannerAdSize s728x90 = BannerAdSize(width: 728, height: 90);
+
   static const BannerAdSize s300x250 = BannerAdSize(width: 300, height: 250);
+
   static const BannerAdSize s160x600 = BannerAdSize(width: 160, height: 600);
+
   static const BannerAdSize sInvalid = BannerAdSize(width: 0, height: 0);
+
   static const BannerAdSize sDynamic = BannerAdSize(width: -3, height: -4);
+
   static const BannerAdSize sSmart = BannerAdSize(width: -1, height: -2);
 
   Future<int?> get getWidthPx async {

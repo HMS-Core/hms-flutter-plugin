@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -15,10 +15,16 @@
 */
 class DetailedCreativeType {
   static int bigImg = 901;
+
   static int video = 903;
+
   static int threeImg = 904;
+
   static int smallImg = 905;
+
   static int singleImg = 909;
+
   static int shortText = 913;
+
   static int longText = 914;
 }

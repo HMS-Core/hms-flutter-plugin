@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -17,9 +17,6 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:huawei_ads/adslite/ad_param.dart';
-import 'package:huawei_ads/hms_ads.dart';
-import 'package:huawei_ads/adslite/banner/banner_ad_size.dart';
 import 'package:huawei_ads/hms_ads_lib.dart';
 import 'package:huawei_ads/utils/channels.dart';
 

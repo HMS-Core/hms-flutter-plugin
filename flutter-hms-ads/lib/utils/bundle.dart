@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -15,11 +15,17 @@
 */
 class Bundle {
   late Map<String, Map<String, dynamic>> _bundle;
+
   static const String _int = "int";
+
   static const String _intList = "intList";
+
   static const String _string = "String";
+
   static const String _stringList = "StringList";
+
   static const String _bool = "bool";
+
   static const String _boolList = "boolList";
 
   Bundle() {

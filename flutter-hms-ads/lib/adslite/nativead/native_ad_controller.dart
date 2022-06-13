@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,11 +16,7 @@
 import 'dart:async';
 
 import 'package:huawei_ads/hms_ads_lib.dart';
-import 'package:huawei_ads/adslite/video_operator.dart';
-import 'package:huawei_ads/adslite/nativead/dislike_ad_reason.dart';
-import 'package:huawei_ads/utils/bundle.dart';
 import 'package:flutter/services.dart';
-import 'package:huawei_ads/hms_ads.dart';
 import 'package:huawei_ads/utils/channels.dart';
 
 class NativeAdController {
@@ -210,7 +206,13 @@ class NativeAdController {
   }
 }
 
-enum NativeAdLoadState { loading, loaded, failed }
+enum NativeAdLoadState {
+  loading,
+
+  loaded,
+
+  failed,
+}
 
 typedef void NativeAdStateListener(NativeAdLoadState state);
 
