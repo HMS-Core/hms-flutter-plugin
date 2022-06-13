@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ public class AccAuthService implements MethodChannel.MethodCallHandler, PluginRe
     private final Map<Integer, Pair<MethodChannel.Result, Object>> mResultsForRequests;
 
     private AccountAuthService service;
-    private int mRequestNumber = 0;
+    private int mRequestNumber = 1000;
 
     public AccAuthService(Activity activity1) {
         this.activity = activity1;

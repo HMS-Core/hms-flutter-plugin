@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,11 +14,12 @@
     limitations under the License.
 */
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 enum AuthButtonTheme { FULL_TITLE, NO_TITLE }
+
 enum AuthButtonBackground { BLACK, RED, WHITE }
+
 enum AuthButtonRadius { SMALL, MEDIUM, LARGE }
 
 const Color hwRed = Color(0xffCE0E2D);
