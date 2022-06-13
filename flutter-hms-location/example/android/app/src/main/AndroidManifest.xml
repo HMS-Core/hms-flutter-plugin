@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.huawei.hms.flutter.location_example">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -6,9 +7,12 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
     <uses-permission android:name="com.huawei.hms.permission.ACTIVITY_RECOGNITION" />
+    <!-- Allow ACCESS_MOCK_LOCATION permission to use Mock Location feature -->
+    <uses-permission
+        android:name="android.permission.ACCESS_MOCK_LOCATION"
+        tools:ignore="MockLocation,ProtectedPermissions" />
 
     <application
-        android:name="io.flutter.app.FlutterApplication"
         android:label="HMS Location Demo"
         android:icon="@mipmap/ic_launcher"
         android:allowBackup="false">
@@ -18,7 +22,8 @@
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true">
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues
