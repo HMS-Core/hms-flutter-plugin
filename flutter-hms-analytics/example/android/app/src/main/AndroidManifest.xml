@@ -6,18 +6,20 @@
          additional functionality it is fine to subclass or reimplement
          FlutterApplication and put your custom class here. -->
     <application
-        android:name="io.flutter.app.FlutterApplication"
-        android:label="HMS Analytics Demo">
+        android:label="HMS Analytics Demo"
+        android:icon="@mipmap/ic_launcher">
         <provider
             android:authorities="${applicationId}.HMSContentProvider"
-            android:name="com.huawei.hms.flutter.analytics.AnalyticsContentProvider"/>
+            android:name="com.huawei.hms.flutter.analytics.AnalyticsContentProvider"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true">
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues
