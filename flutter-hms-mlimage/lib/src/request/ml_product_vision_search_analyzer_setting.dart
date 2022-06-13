@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -30,7 +30,6 @@ class MLProductVisionSearchAnalyzerSetting {
   /// Europe
   static const int REGION_DR_EUROPE = 1004;
 
-  ///
   static const int REGION_DR_AFILA = 1003;
 
   /// Unknown

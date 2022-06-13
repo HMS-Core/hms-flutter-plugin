@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,8 +16,11 @@
 
 class MLModelInputOutputSettings {
   static const int FLOAT32 = 1;
+
   static const int INT32 = 2;
+
   static const int BYTE = 3;
+
   static const int LONG = 4;
 
   int? _modelDataType;

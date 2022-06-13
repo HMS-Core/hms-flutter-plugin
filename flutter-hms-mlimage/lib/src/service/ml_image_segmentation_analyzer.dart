@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -24,15 +24,25 @@ import 'package:huawei_ml_image/src/result/ml_image_segmentation.dart';
 class MLImageSegmentationAnalyzer
     implements BaseImageAnalyzer<dynamic, MLImageSegmentationAnalyzerSetting> {
   static const int TYPE_BACKGROUND = 0;
+
   static const int TYPE_HUMAN = 1;
+
   static const int TYPE_SKY = 2;
+
   static const int TYPE_GRASS = 3;
+
   static const int TYPE_FOOD = 4;
+
   static const int TYPE_CAT = 5;
+
   static const int TYPE_BUILD = 6;
+
   static const int TYPE_FLOWER = 7;
+
   static const int TYPE_WATER = 8;
+
   static const int TYPE_SAND = 9;
+
   static const int TYPE_MOUNTAIN = 10;
 
   late MethodChannel _methodChannel;

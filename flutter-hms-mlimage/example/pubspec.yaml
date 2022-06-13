@@ -1,6 +1,5 @@
 name: huawei_ml_image_example
 description: Demonstrates how to use the huawei_ml_image plugin.
-publish_to: 'none'
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -8,7 +7,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   huawei_ml_image:
     path: ../
   image_picker: 0.8.4  
@@ -37,3 +35,4 @@ flutter:
     - assets/textimg.png
     - assets/imgsuper.png
     - assets/banner.jpg
+    

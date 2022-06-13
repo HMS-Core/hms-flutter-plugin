@@ -3,10 +3,6 @@ import 'dart:ui';
 
 import 'package:flutter/services.dart';
 import 'package:huawei_ml_image/huawei_ml_image.dart';
-import 'package:huawei_ml_image/src/common/constants.dart';
-import 'package:huawei_ml_image/src/common/method.dart';
-import 'package:huawei_ml_image/src/request/ml_image_lens_controller.dart';
-import 'package:huawei_ml_image/src/result/ml_image_segmentation.dart';
 
 class MLImageLensEngine {
   late MethodChannel _channel;

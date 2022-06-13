@@ -20,7 +20,7 @@ Flutter ML Kit Image Plugin provides APIs from Huawei ML Kit SDK. The plugin con
 - Image Super Resolution
 - Text Image Super Resolution
 
-[Learn More](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/introduction-0000001051432503?ha_source=hms1)
+[Learn More](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/image-related-services-0000001073741421?ha_source=hms1)
 
 ## Installation
 
@@ -28,8 +28,8 @@ Please see [pub.dev](https://pub.dev/packages/huawei_ml_image/install) and [AppG
 
 ## Documentation
 
-- [Quick Start](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/introduction-0000001051432503?ha_source=hms1)
-- [Reference](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-References/overview-0000001052975193?ha_source=hms1)
+- [Quick Start](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/image-related-services-0000001073741421?ha_source=hms1)
+- [Reference](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-References/mlimg-overview-0000001237615881?ha_source=hms1)
 
 ## Questions or Issues
 
@@ -44,4 +44,4 @@ If you run into a bug in our samples, please submit an issue to the [GitHub repo
 
 ## License
 
-Huawei ML Image Flutter Plugin is licensed under [Apache 2.0 license](LICENCE)
+Huawei ML Image Flutter Plugin is licensed under [Apache 2.0 license](LICENSE)
