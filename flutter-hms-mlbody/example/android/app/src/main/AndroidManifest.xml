@@ -1,16 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.huawei.hms.flutter.mlbody_example">
+    
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!--Read permission-->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <!--Record permission-->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <!--Network status obtaining permission-->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!--Wi-Fi status obtaining permission-->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
    <application
         android:label="ML Body Example"
         android:icon="@mipmap/ic_launcher">
@@ -20,7 +18,8 @@
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true">
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues

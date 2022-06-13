@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -32,14 +32,15 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-            appBarTheme: const AppBarTheme(
-          elevation: 0,
-          centerTitle: false,
-          foregroundColor: Colors.black,
-          backgroundColor: Colors.white,
-        )),
-        home: const Home());
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+          appBarTheme: const AppBarTheme(
+        elevation: 0,
+        centerTitle: false,
+        foregroundColor: Colors.black,
+        backgroundColor: Colors.white,
+      )),
+      home: const Home(),
+    );
   }
 }

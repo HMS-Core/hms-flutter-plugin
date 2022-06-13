@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -20,11 +20,17 @@ import '../common/constants.dart';
 
 class MLBodyLensController {
   static const int backLens = 0;
+
   static const int frontLens = 1;
+
   static const String flashModeOff = "off";
+
   static const String flashModeAuto = "auto";
+
   static const String flashModeOn = "on";
+
   static const String focusModeContinuousVideo = "continuous-video";
+
   static const String focusModeContinuousPicture = "continuous-picture";
 
   BodyTransaction transaction;

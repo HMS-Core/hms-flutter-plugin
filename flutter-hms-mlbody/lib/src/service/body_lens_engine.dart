@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ class MLBodyLensEngine {
   final MLBodyLensController controller;
 
   BodyTransactor? _transactor;
+  bool _isRunning = false;
 
   MLBodyLensEngine({required this.controller}) {
     _c = _initMethodChannel();
@@ -54,11 +55,18 @@ class MLBodyLensEngine {
   }
 
   void run() {
+    if (_isRunning) {
+      return;
+    }
+    _isRunning = true;
     _c.invokeMethod("lens#run");
   }
 
   Future<bool> release() async {
     final bool res = await _c.invokeMethod("lens#release");
+    if (res) {
+      _isRunning = false;
+    }
     return res;
   }
 
