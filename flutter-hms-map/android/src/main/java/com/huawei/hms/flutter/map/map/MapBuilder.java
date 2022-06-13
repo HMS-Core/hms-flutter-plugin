@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;
 
 import com.huawei.hms.flutter.map.logger.HMSLogger;
@@ -90,7 +91,7 @@ class MapBuilder implements MapMethods {
         logger = HMSLogger.getInstance(application);
     }
 
-    MapController build(final int id, final Context context, final Activity mActivity, final AtomicInteger state,
+    MapController build(final int id, @NonNull final Context context, final Activity mActivity, final AtomicInteger state,
         final BinaryMessenger binaryMessenger, final Application application, final Lifecycle lifecycle,
         final PluginRegistry.Registrar registrar, final int activityHashCode) {
         final MapController controller = new MapController(id, context, mActivity, state, binaryMessenger, application,

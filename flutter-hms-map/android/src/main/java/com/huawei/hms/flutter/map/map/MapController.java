@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -922,11 +922,23 @@ final class MapController
     }
 
     private int getActivityHashCode() {
-        return registrar != null && registrar.activity() != null ? registrar.activity().hashCode() : activityHashCode;
+        if (registrar != null) {
+            Activity activity = registrar.activity();
+            if (activity != null) {
+                return activity.hashCode();
+            }
+        }
+        return activityHashCode;
     }
 
     private Application getApplication() {
-        return registrar != null && registrar.activity() != null ? registrar.activity().getApplication() : mApplication;
+        if (registrar != null) {
+            Activity activity = registrar.activity();
+            if (activity != null) {
+                return activity.getApplication();
+            }
+        }
+        return mApplication;
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -15,8 +15,6 @@
 */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show VoidCallback;
-import 'package:meta/meta.dart' show immutable;
 
 import 'package:huawei_map/components/components.dart';
 

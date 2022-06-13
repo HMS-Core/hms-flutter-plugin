@@ -20,8 +20,8 @@ Huawei Map Kit provides the following core capabilities:
 - **Polylines**: Adding polylines on the map with tons of modifications.
 - **Polygons**: Adding polygons on the map with tons of modifications.
 - **Circles**: Adding circles on the map with tons of modifications.
-- **Ground Overlays**: Adding ground overlays on the map with tons of modifications. 
-- **Tile Overlays**: Adding tile overlays on the map with tons of modifications. 
+- **Ground Overlays**: Adding ground overlays on the map with tons of modifications.
+- **Tile Overlays**: Adding tile overlays on the map with tons of modifications.
 
 This plugin enables communication between HUAWEI MAP Kit SDK and Flutter platform. It exposes all functionality provided by HUAWEI MAP Kit SDK.
 
@@ -40,7 +40,7 @@ Please see [pub.dev](https://pub.dev/packages/huawei_map/install) and [AppGaller
 
 If you have questions about how to use HMS samples, try the following options:
 
-- [Stack Overflow](https://stackoverflow.com/questions/tagged/huawei-mobile-services) is the best place for any programming questions. Be sure to tag your question with 
+- [Stack Overflow](https://stackoverflow.com/questions/tagged/huawei-mobile-services) is the best place for any programming questions. Be sure to tag your question with
   **huawei-mobile-services**.
 - [Github](https://github.com/HMS-Core/hms-flutter-plugin) is the official repository for these plugins, You can open an issue or submit your ideas.
 - [Huawei Developer Forum](https://forums.developer.huawei.com/forumPortal/en/home?fid=0101187876626530001?ha_source=hms1) HMS Core Module is great for general questions, or seeking recommendations and opinions.

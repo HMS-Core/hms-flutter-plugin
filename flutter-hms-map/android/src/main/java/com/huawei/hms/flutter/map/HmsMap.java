@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ import com.huawei.hms.maps.model.LatLng;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
-import io.flutter.embedding.engine.plugins.lifecycle.FlutterLifecycleAdapter;
+import io.flutter.embedding.engine.plugins.lifecycle.HiddenLifecycleReference;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -103,7 +103,7 @@ public class HmsMap
             return;
         }
         registrarActivityHashCode = binding.getActivity().hashCode();
-        lifecycle = FlutterLifecycleAdapter.getActivityLifecycle(binding);
+        lifecycle = ((HiddenLifecycleReference) binding.getLifecycle()).getLifecycle();
         lifecycle.addObserver(this);
         pluginBinding.getPlatformViewRegistry()
             .registerViewFactory(VIEW_TYPE,
@@ -127,7 +127,7 @@ public class HmsMap
 
     @Override
     public void onReattachedToActivityForConfigChanges(final ActivityPluginBinding binding) {
-        lifecycle = FlutterLifecycleAdapter.getActivityLifecycle(binding);
+        lifecycle = ((HiddenLifecycleReference) binding.getLifecycle()).getLifecycle();
         lifecycle.addObserver(this);
     }
 

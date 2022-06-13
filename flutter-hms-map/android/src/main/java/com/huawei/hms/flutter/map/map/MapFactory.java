@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -67,7 +67,7 @@ public class MapFactory extends PlatformViewFactory {
 
     @Override
     public PlatformView create(final Context context, final int id, final Object args) {
-        final Map<String, Object> params = (Map<String, Object>) args;
+        final Map<String, Object> params = args != null ? (Map<String, Object>) args : new HashMap<>();
         final MapBuilder builder = new MapBuilder(application);
 
         Convert.processHuaweiMapOptions(params.get(Param.OPTIONS), builder);
