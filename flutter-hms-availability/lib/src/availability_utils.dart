@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,15 +14,23 @@
     limitations under the License.
 */
 
+part of huawei_hmsavailability;
+
 typedef void AvailabilityResultListener(AvailabilityEvent? event);
 
-enum AvailabilityEvent { onDialogCanceled, resultOk, resultCanceled }
+enum AvailabilityEvent {
+  onDialogCanceled,
+  resultOk,
+  resultCanceled,
+}
 
-AvailabilityEvent? toAvailabilityEvent(String? event) =>
-    availabilityMap[event!];
+AvailabilityEvent? toAvailabilityEvent(String? event) {
+  return availabilityMap[event];
+}
 
-const Map<String, AvailabilityEvent> availabilityMap = {
+const Map<String, AvailabilityEvent> availabilityMap =
+    <String, AvailabilityEvent>{
   '-1': AvailabilityEvent.resultOk,
   '0': AvailabilityEvent.resultCanceled,
-  'onDialogCanceled': AvailabilityEvent.onDialogCanceled
+  'onDialogCanceled': AvailabilityEvent.onDialogCanceled,
 };

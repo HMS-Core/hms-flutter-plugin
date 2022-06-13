@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,5 +16,9 @@
 
 library huawei_hmsavailability;
 
-export './src/hms_api_availability.dart';
-export './src/availability_utils.dart';
+import 'dart:async';
+
+import 'package:flutter/services.dart';
+
+part 'src/hms_api_availability.dart';
+part 'src/availability_utils.dart';
