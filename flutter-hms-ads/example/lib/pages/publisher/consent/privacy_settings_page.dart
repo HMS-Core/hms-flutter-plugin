@@ -14,23 +14,26 @@
     limitations under the License.
 */
 import 'package:flutter/material.dart';
-import 'package:huawei_ads/hms_ads_lib.dart';
+import 'package:huawei_ads/huawei_ads.dart';
 import 'package:huawei_ads_example/utils/constants.dart';
 
 class PrivacySettingsPage extends StatefulWidget {
+  const PrivacySettingsPage({Key? key}) : super(key: key);
+
   @override
   _PrivacySettingsPage createState() => _PrivacySettingsPage();
 }
 
 class _PrivacySettingsPage extends State<PrivacySettingsPage> {
-  void setConsent(int privacyValue) async {
-    print('User agreed');
+  void setConsent(NonPersonalizedAd privacyValue) async {
+    debugPrint('User agreed');
     bool? isUpdated = await (Consent.updateSharedPreferences(
-        ConsentConstant.spConsentKey, privacyValue));
-    if (isUpdated ?? false)
-      print('SharedPreferences updated');
-    else
-      print('ERROR: Update shared preferences failed.');
+        ConsentConstant.spConsentKey, privacyValue.value));
+    if (isUpdated ?? false) {
+      debugPrint('SharedPreferences updated');
+    } else {
+      debugPrint('ERROR: Update shared preferences failed.');
+    }
     Navigator.pop(context);
   }
 
@@ -39,7 +42,7 @@ class _PrivacySettingsPage extends State<PrivacySettingsPage> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.redAccent,
-          title: Text(
+          title: const Text(
             'Privacy Settings',
             style: TextStyle(
               color: Colors.white,
@@ -53,25 +56,25 @@ class _PrivacySettingsPage extends State<PrivacySettingsPage> {
               child: SingleChildScrollView(
                 child: Center(
                   child: Container(
-                    child: Text(
+                    child: const Text(
                       privacyExample,
                       style: Styles.textContentStyle,
                     ),
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                   ),
                 ),
               ),
             ),
             Expanded(
               flex: 1,
-              child: Container(
+              child: SizedBox(
                 width: 400,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    RaisedButton(
-                        child: Container(
+                    ElevatedButton(
+                        child: const SizedBox(
                           child: Center(
                             child: Text(
                               'CANCEL',
@@ -82,11 +85,11 @@ class _PrivacySettingsPage extends State<PrivacySettingsPage> {
                           height: 40,
                         ),
                         onPressed: () {
-                          print('User did not agree.');
+                          debugPrint('User did not agree.');
                           Navigator.pop(context);
                         }),
-                    RaisedButton(
-                        child: Container(
+                    ElevatedButton(
+                        child: const SizedBox(
                           child: Center(
                             child: Text(
                               'AGREE',
@@ -97,7 +100,7 @@ class _PrivacySettingsPage extends State<PrivacySettingsPage> {
                           height: 40,
                         ),
                         onPressed: () {
-                          setConsent(NonPersonalizedAd.allowNonPersonalized);
+                          setConsent(NonPersonalizedAd.ALLOW_NON_PERSONALIZED);
                         }),
                   ],
                 ),

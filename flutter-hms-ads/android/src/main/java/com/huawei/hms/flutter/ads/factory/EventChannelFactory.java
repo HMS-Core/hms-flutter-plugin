@@ -24,33 +24,29 @@ import io.flutter.plugin.common.EventChannel;
 
 public class EventChannelFactory {
     private static final String TAG = "EventChannelFactory";
-
-    private static SparseArray<EventChannel> allEventChannels = new SparseArray<>();
-
-    private EventChannelFactory() {
-    }
+    private static final SparseArray<EventChannel> ALL_EVENT_CHANNELS = new SparseArray<>();
 
     public static void create(int id, String name, BinaryMessenger messenger) {
-        if (allEventChannels.get(id) == null) {
+        if (ALL_EVENT_CHANNELS.get(id) == null) {
             EventChannel channel = new EventChannel(messenger, name + "/" + id);
             Log.i(TAG, "EventChannel is created");
-            allEventChannels.put(id, channel);
+            ALL_EVENT_CHANNELS.put(id, channel);
         }
     }
 
     public static void setup(int id, EventChannel.StreamHandler streamHandler) {
-        if (allEventChannels.get(id) != null && streamHandler != null) {
-            allEventChannels.get(id).setStreamHandler(streamHandler);
+        if (ALL_EVENT_CHANNELS.get(id) != null && streamHandler != null) {
+            ALL_EVENT_CHANNELS.get(id).setStreamHandler(streamHandler);
         } else {
             Log.w(TAG, "Id or stream handler is null. Event listener functionality is off.");
         }
     }
 
     public static void dispose(int id) {
-        EventChannel channel = allEventChannels.get(id);
+        EventChannel channel = ALL_EVENT_CHANNELS.get(id);
         if (channel != null) {
             channel.setStreamHandler(null);
-            allEventChannels.remove(id);
+            ALL_EVENT_CHANNELS.remove(id);
             Log.i(TAG, "EventChannel is destroyed");
         } else {
             Log.w(TAG, "EventChannel is null for the given id and can't be disposed.");

@@ -23,7 +23,6 @@ import android.view.View;
 import com.huawei.hms.ads.AdParam;
 import com.huawei.hms.ads.BannerAdSize;
 import com.huawei.hms.ads.banner.BannerView;
-import com.huawei.hms.flutter.ads.HmsAdsPlugin;
 import com.huawei.hms.flutter.ads.factory.AdParamFactory;
 import com.huawei.hms.flutter.ads.logger.HMSLogger;
 import com.huawei.hms.flutter.ads.utils.FromMap;
@@ -91,6 +90,8 @@ public class FlutterBannerView implements PlatformView, MethodCallHandler  {
                 return BannerAdSize.BANNER_SIZE_360_144;
             case "size_728_90":
                 return BannerAdSize.BANNER_SIZE_728_90;
+            case "size_advanced":
+                return BannerAdSize.BANNER_SIZE_ADVANCED;
             case "size_smart":
                 return BannerAdSize.BANNER_SIZE_SMART;
             case "size_dynamic":

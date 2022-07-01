@@ -20,4 +20,5 @@ public interface ViewTypes {
     String NATIVE_VIEW = "com.huawei.hms.flutter.ads/native/view";
     String BANNER_VIEW = "com.huawei.hms.flutter.ads/banner/view";
     String INSTREAM_VIEW = "com.huawei.hms.flutter.ads/instream/view";
+    String VAST_VIEW = "com.huawei.hms.flutter.ads/vast/view";
 }

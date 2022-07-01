@@ -17,20 +17,22 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:huawei_ads/hms_ads_lib.dart';
+import 'package:huawei_ads/huawei_ads.dart';
 import 'package:huawei_ads_example/utils/constants.dart';
 
 class RewardAdPage extends StatefulWidget {
+  const RewardAdPage({Key? key}) : super(key: key);
+
   @override
   _RewardAdPageState createState() => _RewardAdPageState();
 }
 
 class _RewardAdPageState extends State<RewardAdPage> {
-  final String _testAdSlotId = "testx9dtjwj8hp";
+  final String _testAdSlotId = 'testx9dtjwj8hp';
   final AdParam _adParam = AdParam();
   RewardAd? _rewardAd;
   int _score = 0;
-  String logs = "Double tap to clear the logs.\n\n";
+  String logs = 'Double tap to clear the logs.\n\n';
 
   /* *
   * Alternatively, load status can be set when a RewardAdEvent.loaded
@@ -40,12 +42,12 @@ class _RewardAdPageState extends State<RewardAdPage> {
   * */
   RewardAd createAd() => RewardAd(
           listener: (RewardAdEvent? event, {Reward? reward, int? errorCode}) {
-        print("RewardAd event : $event");
+        debugPrint('RewardAd event : $event');
         setState(() {
-          logs = logs + "Reward Ad event : ${describeEnum(event!)}\n";
+          logs = logs + 'Reward Ad event : ${describeEnum(event!)}\n';
         });
         if (event == RewardAdEvent.rewarded) {
-          print('Received reward : ${jsonEncode(reward!.toJson())}');
+          debugPrint('Received reward : ${jsonEncode(reward!.toJson())}');
           setState(() {
             logs = logs + 'Received reward amount : ${reward.amount}\n';
             _score += reward.amount != 0 ? reward.amount! : 10;
@@ -63,7 +65,7 @@ class _RewardAdPageState extends State<RewardAdPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.redAccent,
-        title: Text(
+        title: const Text(
           'Huawei Ads - Reward',
           style: TextStyle(
             color: Colors.white,
@@ -79,24 +81,23 @@ class _RewardAdPageState extends State<RewardAdPage> {
                 Expanded(
                     child: Center(
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 30, horizontal: 50),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 30, horizontal: 50),
                     child: Text('Your score : $_score'),
                   ),
                 )),
-                Container(
-                  child: RaisedButton(
-                    child: Text(
-                      'Load Ad',
-                      style: Styles.adControlButtonStyle,
-                    ),
-                    onPressed: () {
-                      _rewardAd?.destroy();
-                      _rewardAd = createAd();
-                      _rewardAd!
-                        ..loadAd(adSlotId: _testAdSlotId, adParam: _adParam)
-                        ..show();
-                    },
+                ElevatedButton(
+                  child: const Text(
+                    'Load Ad',
+                    style: Styles.adControlButtonStyle,
                   ),
+                  onPressed: () {
+                    _rewardAd?.destroy();
+                    _rewardAd = createAd();
+                    _rewardAd!
+                      ..loadAd(adSlotId: _testAdSlotId, adParam: _adParam)
+                      ..show();
+                  },
                 )
               ],
             ),
@@ -105,11 +106,11 @@ class _RewardAdPageState extends State<RewardAdPage> {
             flex: 3,
             child: Center(
               child: Container(
-                padding: EdgeInsets.only(top: 10),
+                padding: const EdgeInsets.only(top: 10),
                 height: 250,
                 child: GestureDetector(
                   onDoubleTap: () => setState(() {
-                    logs = "";
+                    logs = '';
                   }),
                   child: SingleChildScrollView(
                     child: Text(logs),
@@ -117,7 +118,7 @@ class _RewardAdPageState extends State<RewardAdPage> {
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

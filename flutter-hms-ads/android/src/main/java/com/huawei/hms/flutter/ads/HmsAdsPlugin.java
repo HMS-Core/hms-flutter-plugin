@@ -44,6 +44,8 @@ import com.huawei.hms.flutter.ads.adslite.splash.Splash;
 import com.huawei.hms.flutter.ads.adslite.nativead.NativeAdControllerFactory;
 import com.huawei.hms.flutter.ads.adslite.nativead.NativeAdPlatformViewFactory;
 import com.huawei.hms.flutter.ads.adslite.splash.SplashMethodHandler;
+import com.huawei.hms.flutter.ads.adslite.vast.VastMethodHandler;
+import com.huawei.hms.flutter.ads.adslite.vast.VastViewFactory;
 import com.huawei.hms.flutter.ads.consent.ConsentMethodHandler;
 import com.huawei.hms.flutter.ads.consent.ConsentStreamHandler;
 import com.huawei.hms.flutter.ads.factory.EventChannelFactory;
@@ -54,6 +56,7 @@ import com.huawei.hms.flutter.ads.utils.FromMap;
 import com.huawei.hms.flutter.ads.utils.ToMap;
 import com.huawei.hms.flutter.ads.utils.constants.Channels;
 import com.huawei.hms.flutter.ads.utils.constants.ErrorCodes;
+import com.huawei.hms.flutter.ads.utils.constants.ViewTypes;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -68,19 +71,8 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.plugin.platform.PlatformViewRegistry;
 
-import static com.huawei.hms.flutter.ads.utils.constants.ViewTypes.BANNER_VIEW;
-import static com.huawei.hms.flutter.ads.utils.constants.ViewTypes.INSTREAM_VIEW;
-import static com.huawei.hms.flutter.ads.utils.constants.ViewTypes.NATIVE_VIEW;
-
-/**
- * Hms Ads Plugin
- *
- * @author Huawei Technologies
- * @since (13.4.32)
- */
 public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHandler {
     private static final String TAG = "HUAWEI_ADS_PLUGIN";
     private Activity activity;
@@ -96,6 +88,7 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
     private MethodChannel rewardMethodChannel;
     private MethodChannel interstitialMethodChannel;
     private MethodChannel instreamMethodChannel;
+    private MethodChannel vastMethodChannel;
     private MethodChannel referrerMethodChannel;
     private MethodChannel consentMethodChannel;
 
@@ -104,35 +97,89 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
     private RewardMethodHandler rewardMethodHandler;
     private InterstitialMethodHandler interstitialMethodHandler;
     private InstreamMethodHandler instreamMethodHandler;
+    private VastMethodHandler vastMethodHandler;
     private InstallReferrerMethodHandler installReferrerMethodHandler;
     private ConsentMethodHandler consentMethodHandler;
     private EventChannel.StreamHandler consentStreamHandler;
-
-    public static void registerWith(Registrar registrar) {
-        final HmsAdsPlugin instance = new HmsAdsPlugin();
-        final MethodChannel channel = new MethodChannel(registrar.messenger(), Channels.LIBRARY_METHOD_CHANNEL);
-        registrar.publish(instance);
-        instance.onAttachedToEngine(registrar.platformViewRegistry(), channel, registrar.context(), registrar.messenger(), registrar.activity());
-    }
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         this.flutterPluginBinding = flutterPluginBinding;
     }
 
-    private void onAttachedToEngine(PlatformViewRegistry registry, MethodChannel channel, Context applicationContext, BinaryMessenger messenger, Activity activity) {
-        registry.registerViewFactory(NATIVE_VIEW, new NativeAdPlatformViewFactory(activity));
-        registry.registerViewFactory(BANNER_VIEW, new BannerViewFactory(messenger));
-        registry.registerViewFactory(INSTREAM_VIEW, new InstreamViewFactory(messenger));
-        this.activity = activity;
-        this.context = applicationContext;
-        this.methodChannel = channel;
-        this.messenger = messenger;
-        this.methodChannel.setMethodCallHandler(this);
-        this.consentInfo = Consent.getInstance(activity);
-        initAdChannels(messenger);
-        initAdHandlers();
-        setAdHandlers();
+    @Override
+    public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
+        attachedToActivity(binding);
+    }
+
+    @Override
+    public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
+        attachedToActivity(binding);
+    }
+
+    private void attachedToActivity(@NonNull ActivityPluginBinding binding) {
+        if (flutterPluginBinding != null) {
+            PlatformViewRegistry registry = flutterPluginBinding.getPlatformViewRegistry();
+            registry.registerViewFactory(ViewTypes.NATIVE_VIEW, new NativeAdPlatformViewFactory(binding.getActivity()));
+            registry.registerViewFactory(ViewTypes.BANNER_VIEW, new BannerViewFactory(flutterPluginBinding.getBinaryMessenger()));
+            registry.registerViewFactory(ViewTypes.INSTREAM_VIEW, new InstreamViewFactory(flutterPluginBinding.getBinaryMessenger()));
+            registry.registerViewFactory(ViewTypes.VAST_VIEW, new VastViewFactory(binding.getActivity(), flutterPluginBinding.getBinaryMessenger()));
+
+            this.activity = binding.getActivity();
+            this.context = flutterPluginBinding.getApplicationContext();
+            this.methodChannel = new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), Channels.LIBRARY_METHOD_CHANNEL);
+            this.messenger = flutterPluginBinding.getBinaryMessenger();
+            this.methodChannel.setMethodCallHandler(this);
+            this.consentInfo = Consent.getInstance(binding.getActivity());
+            initAdChannels(flutterPluginBinding.getBinaryMessenger());
+            initAdHandlers();
+            setAdHandlers();
+        }
+    }
+
+    @Override
+    public void onDetachedFromActivityForConfigChanges() {
+        Splash.destroyAll();
+        Banner.destroyAll();
+        Interstitial.destroyAll();
+        HmsRewardAd.destroyAll();
+        HmsInstallReferrer.disposeAll();
+        activity = null;
+        consentInfo = null;
+        resetAdHandlers();
+        removeAdHandlers();
+        removeAdChannels();
+    }
+
+    @Override
+    public void onDetachedFromActivity() {
+        Splash.destroyAll();
+        Interstitial.destroyAll();
+        Banner.destroyAll();
+        HmsRewardAd.destroyAll();
+        HmsInstallReferrer.disposeAll();
+        consentInfo = null;
+        activity = null;
+        resetAdHandlers();
+        removeAdHandlers();
+        removeAdChannels();
+    }
+
+    @Override
+    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+        Splash.destroyAll();
+        Banner.destroyAll();
+        Interstitial.destroyAll();
+        HmsRewardAd.destroyAll();
+        HmsInstallReferrer.disposeAll();
+        this.flutterPluginBinding = null;
+        methodChannel = null;
+        messenger = null;
+        activity = null;
+        consentInfo = null;
+        resetAdHandlers();
+        removeAdHandlers();
+        removeAdChannels();
     }
 
     private void initAdChannels(final BinaryMessenger messenger) {
@@ -141,6 +188,7 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
         rewardMethodChannel = new MethodChannel(messenger, Channels.REWARD_METHOD_CHANNEL);
         interstitialMethodChannel = new MethodChannel(messenger, Channels.INTERSTITIAL_METHOD_CHANNEL);
         instreamMethodChannel = new MethodChannel(messenger, Channels.INSTREAM_METHOD_CHANNEL);
+        vastMethodChannel = new MethodChannel(messenger, Channels.VAST_METHOD_CHANNEL);
         referrerMethodChannel = new MethodChannel(messenger, Channels.REFERRER_METHOD_CHANNEL);
         consentMethodChannel = new MethodChannel(messenger, Channels.CONSENT_METHOD_CHANNEL);
         consentEventChannel = new EventChannel(messenger, Channels.CONSENT_EVENT_CHANNEL);
@@ -152,6 +200,7 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
         rewardMethodHandler = new RewardMethodHandler(messenger, activity, context);
         interstitialMethodHandler = new InterstitialMethodHandler(messenger, activity, context);
         instreamMethodHandler = new InstreamMethodHandler(messenger, context);
+        vastMethodHandler = new VastMethodHandler(context);
         installReferrerMethodHandler = new InstallReferrerMethodHandler(activity, referrerMethodChannel);
         consentMethodHandler = new ConsentMethodHandler(context, consentInfo);
         consentStreamHandler = new ConsentStreamHandler(consentInfo, context);
@@ -163,6 +212,9 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
         if (rewardMethodChannel != null) rewardMethodChannel.setMethodCallHandler(rewardMethodHandler);
         if (interstitialMethodChannel != null) interstitialMethodChannel.setMethodCallHandler(interstitialMethodHandler);
         if (instreamMethodChannel != null) instreamMethodChannel.setMethodCallHandler(instreamMethodHandler);
+        if (vastMethodChannel != null) {
+            vastMethodChannel.setMethodCallHandler(vastMethodHandler);
+        }
         if (referrerMethodChannel != null) referrerMethodChannel.setMethodCallHandler(installReferrerMethodHandler);
         if (consentMethodChannel != null) consentMethodChannel.setMethodCallHandler(consentMethodHandler);
         if (consentEventChannel != null) consentEventChannel.setStreamHandler(consentStreamHandler);
@@ -174,6 +226,9 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
         if (rewardMethodChannel != null) rewardMethodChannel.setMethodCallHandler(null);
         if (interstitialMethodChannel != null) interstitialMethodChannel.setMethodCallHandler(null);
         if (instreamMethodChannel != null) instreamMethodChannel.setMethodCallHandler(null);
+        if (vastMethodChannel != null) {
+            vastMethodChannel.setMethodCallHandler(null);
+        }
         if (referrerMethodChannel != null) referrerMethodChannel.setMethodCallHandler(null);
         if (consentMethodChannel != null) consentMethodChannel.setMethodCallHandler(null);
         if (consentEventChannel != null) consentEventChannel.setStreamHandler(null);
@@ -185,6 +240,7 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
         rewardMethodHandler = null;
         interstitialMethodHandler = null;
         instreamMethodHandler = null;
+        vastMethodHandler = null;
         installReferrerMethodHandler = null;
         consentMethodHandler = null;
         consentStreamHandler = null;
@@ -196,6 +252,7 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
         rewardMethodChannel = null;
         interstitialMethodChannel = null;
         instreamMethodChannel = null;
+        vastMethodChannel = null;
         referrerMethodChannel = null;
         consentMethodChannel = null;
         consentEventChannel = null;
@@ -237,6 +294,18 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
                 break;
             case "HwAds-setConsent":
                 setConsent(call, result);
+                break;
+            case "HwAds-isAppInstalledNotify":
+                isAppInstalledNotify(result);
+                break;
+            case "HwAds-setAppInstalledNotify":
+                setAppInstalledNotify(call, result);
+                break;
+            case "HwAds-getAppActivateStyle":
+                getAppActivateStyle(result);
+                break;
+            case "HwAds-setAppActivateStyle":
+                setAppActivateStyle(call, result);
                 break;
             // AdvertisingId METHODS
             case "getAdvertisingIdInfo":
@@ -398,11 +467,47 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
 
     private void setConsent(MethodCall call, Result result) {
         HMSLogger.getInstance(context).startMethodExecutionTimer("setConsent");
-        String consent = FromMap.toString("consent", call.argument("consent"));
+        final String consent = FromMap.toString("consent", call.argument("consent"));
         HwAds.setConsent(consent);
         Log.i(TAG, "Consent set");
         result.success(true);
         HMSLogger.getInstance(context).sendSingleEvent("setConsent");
+    }
+
+    private void isAppInstalledNotify(Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("isAppInstalledNotify");
+        final boolean status = HwAds.isAppInstalledNotify();
+        result.success(status);
+        HMSLogger.getInstance(context).sendSingleEvent("isAppInstalledNotify");
+    }
+
+    private void setAppInstalledNotify(MethodCall call, Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("setAppInstalledNotify");
+        final Boolean status = FromMap.toBoolean("status", call.argument("status"));
+        HwAds.setAppInstalledNotify(status);
+        Log.i(TAG, "AppInstalledNotify set");
+        result.success(true);
+        HMSLogger.getInstance(context).sendSingleEvent("setAppInstalledNotify");
+    }
+
+    private void getAppActivateStyle(Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("getAppActivateStyle");
+        final int style = HwAds.getAppActivateStyle();
+        result.success(style);
+        HMSLogger.getInstance(context).sendSingleEvent("getAppActivateStyle");
+    }
+
+    private void setAppActivateStyle(MethodCall call, Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("setAppActivateStyle");
+        final Integer style = FromMap.toInteger("style", call.argument("style"));
+        if (style == null) {
+            result.error(ErrorCodes.NULL_PARAM, "Activate style value is null.", null);
+            return;
+        }
+        HwAds.setAppActivateStyle(style);
+        Log.i(TAG, "AppActivateStyle set");
+        result.success(true);
+        HMSLogger.getInstance(context).sendSingleEvent("setAppActivateStyle");
     }
 
     private void getRequestOptions(Result result) {
@@ -472,72 +577,6 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
             result.error(ErrorCodes.NOT_FOUND, "No controller for provided id. Destroy controller failed. | Controller id : " + id, "");
             HMSLogger.getInstance(context).sendSingleEvent("destroyNativeAdController", ErrorCodes.NOT_FOUND);
         }
-    }
-
-    @Override
-    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-        Splash.destroyAll();
-        Banner.destroyAll();
-        Interstitial.destroyAll();
-        HmsRewardAd.destroyAll();
-        HmsInstallReferrer.disposeAll();
-        this.flutterPluginBinding = null;
-        methodChannel = null;
-        messenger = null;
-        activity = null;
-        consentInfo = null;
-        resetAdHandlers();
-        removeAdHandlers();
-        removeAdChannels();
-    }
-
-    @Override
-    public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
-        attachedToActivity(binding);
-    }
-
-    @Override
-    public void onDetachedFromActivityForConfigChanges() {
-        Splash.destroyAll();
-        Banner.destroyAll();
-        Interstitial.destroyAll();
-        HmsRewardAd.destroyAll();
-        HmsInstallReferrer.disposeAll();
-        activity = null;
-        consentInfo = null;
-        resetAdHandlers();
-        removeAdHandlers();
-        removeAdChannels();
-    }
-
-    @Override
-    public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
-        attachedToActivity(binding);
-    }
-
-    private void attachedToActivity(@NonNull ActivityPluginBinding binding) {
-        if (flutterPluginBinding != null) {
-            onAttachedToEngine(
-                    flutterPluginBinding.getPlatformViewRegistry(),
-                    new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), Channels.LIBRARY_METHOD_CHANNEL),
-                    flutterPluginBinding.getApplicationContext(),
-                    flutterPluginBinding.getBinaryMessenger(),
-                    binding.getActivity());
-        }
-    }
-
-    @Override
-    public void onDetachedFromActivity() {
-        Splash.destroyAll();
-        Interstitial.destroyAll();
-        Banner.destroyAll();
-        HmsRewardAd.destroyAll();
-        HmsInstallReferrer.disposeAll();
-        consentInfo = null;
-        activity = null;
-        resetAdHandlers();
-        removeAdHandlers();
-        removeAdChannels();
     }
 
     class VerifyAdIdThread extends Thread {

@@ -39,9 +39,7 @@ import static androidx.core.content.ContextCompat.startActivity;
 public class HmsInstreamAd implements MethodChannel.MethodCallHandler {
     private static SparseArray<HmsInstreamAd> allInstreamAds = new SparseArray<>();
     private static final String TAG = "Instream";
-
     private InstreamAd instreamAd;
-
     private Context context;
     private MethodChannel methodChannel;
 

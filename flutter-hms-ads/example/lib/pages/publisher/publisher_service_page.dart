@@ -13,16 +13,27 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+
 import 'package:flutter/material.dart';
+import 'package:huawei_ads_example/pages/publisher/banner_ad_page.dart';
+import 'package:huawei_ads_example/pages/publisher/banner_ad_platform_view_page.dart';
+import 'package:huawei_ads_example/pages/publisher/consent_page.dart';
+import 'package:huawei_ads_example/pages/publisher/instream_ad_page.dart';
+import 'package:huawei_ads_example/pages/publisher/interstitial_ad_page.dart';
+import 'package:huawei_ads_example/pages/publisher/native_ad_page.dart';
+import 'package:huawei_ads_example/pages/publisher/reward_ad_page.dart';
+import 'package:huawei_ads_example/pages/publisher/splash_ad_page.dart';
 import 'package:huawei_ads_example/utils/constants.dart';
 
 class PublisherPage extends StatelessWidget {
+  const PublisherPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.redAccent,
-        title: Text(
+        title: const Text(
           'Huawei Ads - Publisher',
           style: TextStyle(
             color: Colors.white,
@@ -33,76 +44,108 @@ class PublisherPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            RaisedButton(
-              child: Text(
+            ElevatedButton(
+              child: const Text(
                 'Consent',
                 style: Styles.menuButtonStyle,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, Routes.consent);
+                Navigator.push(context, MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) {
+                    return const ConsentPage();
+                  },
+                ));
               },
             ),
-            RaisedButton(
-              child: Text(
+            ElevatedButton(
+              child: const Text(
                 'Banner Ads',
                 style: Styles.menuButtonStyle,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, Routes.bannerAd);
+                Navigator.push(context, MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) {
+                    return const BannerAdPage();
+                  },
+                ));
               },
             ),
-            RaisedButton(
-              child: Text(
+            ElevatedButton(
+              child: const Text(
                 'Banner Ads - Platform View',
                 style: Styles.menuButtonStyle,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, Routes.bannerAdPlatformView);
+                Navigator.push(context, MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) {
+                    return const BannerAdPlatformViewPage();
+                  },
+                ));
               },
             ),
-            RaisedButton(
-              child: Text(
+            ElevatedButton(
+              child: const Text(
                 'Interstitial Ads',
                 style: Styles.menuButtonStyle,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, Routes.interstitialAd);
+                Navigator.push(context, MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) {
+                    return const InterstitialAdPage();
+                  },
+                ));
               },
             ),
-            RaisedButton(
-              child: Text(
+            ElevatedButton(
+              child: const Text(
                 'Reward Ads',
                 style: Styles.menuButtonStyle,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, Routes.rewardAd);
+                Navigator.push(context, MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) {
+                    return const RewardAdPage();
+                  },
+                ));
               },
             ),
-            RaisedButton(
-              child: Text(
+            ElevatedButton(
+              child: const Text(
                 'Native Ads',
                 style: Styles.menuButtonStyle,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, Routes.nativeAd);
+                Navigator.push(context, MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) {
+                    return const NativeAdPage();
+                  },
+                ));
               },
             ),
-            RaisedButton(
-              child: Text(
+            ElevatedButton(
+              child: const Text(
                 'Splash Ads',
                 style: Styles.menuButtonStyle,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, Routes.splashAd);
+                Navigator.push(context, MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) {
+                    return const SplashAdPage();
+                  },
+                ));
               },
             ),
-            RaisedButton(
-              child: Text(
+            ElevatedButton(
+              child: const Text(
                 'Instream Ads',
                 style: Styles.menuButtonStyle,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, Routes.instreamAd);
+                Navigator.push(context, MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) {
+                    return const InstreamAdPage();
+                  },
+                ));
               },
             ),
           ],

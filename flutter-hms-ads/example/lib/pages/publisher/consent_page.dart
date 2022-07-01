@@ -19,6 +19,8 @@ import 'package:huawei_ads_example/pages/publisher/consent/privacy_settings_page
 import 'package:huawei_ads_example/utils/constants.dart';
 
 class ConsentPage extends StatefulWidget {
+  const ConsentPage({Key? key}) : super(key: key);
+
   @override
   _ConsentPageState createState() => _ConsentPageState();
 }
@@ -29,7 +31,7 @@ class _ConsentPageState extends State<ConsentPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.redAccent,
-        title: Text(
+        title: const Text(
           'Huawei Ads - Consent',
           style: TextStyle(
             color: Colors.white,
@@ -39,28 +41,30 @@ class _ConsentPageState extends State<ConsentPage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          RaisedButton(
-            child: Text(
+          ElevatedButton(
+            child: const Text(
               'Consent Settings',
               style: Styles.menuButtonStyle,
             ),
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ConsentSettingsPage()));
+              Navigator.push(context, MaterialPageRoute<dynamic>(
+                builder: (BuildContext context) {
+                  return const ConsentSettingsPage();
+                },
+              ));
             },
           ),
-          RaisedButton(
-              child: Text(
+          ElevatedButton(
+              child: const Text(
                 'Privacy Settings',
                 style: Styles.menuButtonStyle,
               ),
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PrivacySettingsPage()));
+                Navigator.push(context, MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) {
+                    return const PrivacySettingsPage();
+                  },
+                ));
               }),
         ],
       ),

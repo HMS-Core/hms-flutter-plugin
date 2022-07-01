@@ -15,28 +15,32 @@
 */
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:huawei_ads/hms_ads_lib.dart';
+import 'package:huawei_ads/huawei_ads.dart';
 import 'package:huawei_ads_example/utils/constants.dart';
 
 class InstallReferrerPage extends StatelessWidget {
+  const InstallReferrerPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.redAccent,
-        title: Text(
+        title: const Text(
           'Huawei Ads - Referrer',
           style: TextStyle(
             color: Colors.white,
           ),
         ),
       ),
-      body: InstallReferrerPageContent(),
+      body: const InstallReferrerPageContent(),
     );
   }
 }
 
 class InstallReferrerPageContent extends StatefulWidget {
+  const InstallReferrerPageContent({Key? key}) : super(key: key);
+
   @override
   _InstallReferrerPageContentState createState() =>
       _InstallReferrerPageContentState();
@@ -44,7 +48,7 @@ class InstallReferrerPageContent extends StatefulWidget {
 
 class _InstallReferrerPageContentState
     extends State<InstallReferrerPageContent> {
-  InstallReferrerClient? sdkReferrer = new InstallReferrerClient();
+  InstallReferrerClient? sdkReferrer = InstallReferrerClient();
   bool _referrerConnected = false;
 
   ReferrerDetails? _referrerDetails;
@@ -61,7 +65,7 @@ class _InstallReferrerPageContentState
   SnackBar createSnack(String message, [bool isWarning = false]) {
     if (!isWarning) {
       return SnackBar(
-        duration: Duration(seconds: 1),
+        duration: const Duration(seconds: 1),
         content: Text(
           message,
         ),
@@ -69,7 +73,7 @@ class _InstallReferrerPageContentState
     } else {
       return SnackBar(
         backgroundColor: Colors.redAccent,
-        duration: Duration(milliseconds: 1500),
+        duration: const Duration(milliseconds: 1500),
         content: Text(
           message,
           style: Styles.warningTextStyle,
@@ -83,12 +87,13 @@ class _InstallReferrerPageContentState
     if (sdkReferrer!.stateListener == null) {
       sdkReferrer!.stateListener =
           (InstallReferrerStateEvent? event, {ReferrerResponse? responseCode}) {
-        print("Referrer State event : $event | Code : $responseCode");
+        debugPrint('Referrer State event : $event | Code : $responseCode');
         SnackBar snackBar;
         if (event == InstallReferrerStateEvent.setupFinished) {
           _referrerConnected = true;
           snackBar = createSnack(
-              'Connection setup finished. \n Referrer Response : ${describeEnum(responseCode!)}');
+            'Connection setup finished. \n Referrer Response : ${describeEnum(responseCode!)}',
+          );
         } else if (event == InstallReferrerStateEvent.connectionClosed) {
           _referrerConnected = false;
           snackBar = createSnack('Connection closed successfully.');
@@ -96,7 +101,7 @@ class _InstallReferrerPageContentState
           _referrerConnected = false;
           snackBar = createSnack('Referrer disconnected.');
         }
-        Scaffold.of(context).showSnackBar(snackBar);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       };
     }
 
@@ -106,14 +111,14 @@ class _InstallReferrerPageContentState
           Column(
             children: <Widget>[
               Container(
-                padding: EdgeInsets.only(top: 50),
+                padding: const EdgeInsets.only(top: 50),
                 width: 400,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    RaisedButton(
-                      child: Container(
+                    ElevatedButton(
+                      child: const SizedBox(
                         child: Center(
                           child: Text(
                             'Connect',
@@ -125,16 +130,17 @@ class _InstallReferrerPageContentState
                       ),
                       onPressed: () {
                         if (_referrerConnected) {
-                          SnackBar snackBar =
-                              createSnack('Referrer already connected.');
-                          Scaffold.of(context).showSnackBar(snackBar);
+                          SnackBar snackBar = createSnack(
+                            'Referrer already connected.',
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         } else {
                           sdkReferrer!.startConnection(true); // Test mode
                         }
                       },
                     ),
-                    RaisedButton(
-                      child: Container(
+                    ElevatedButton(
+                      child: const SizedBox(
                         child: Center(
                           child: Text(
                             'Disconnect',
@@ -146,9 +152,10 @@ class _InstallReferrerPageContentState
                       ),
                       onPressed: () {
                         if (!_referrerConnected) {
-                          SnackBar snackBar =
-                              createSnack('Referrer already disconnected.');
-                          Scaffold.of(context).showSnackBar(snackBar);
+                          SnackBar snackBar = createSnack(
+                            'Referrer already disconnected.',
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         } else {
                           sdkReferrer!.endConnection();
                         }
@@ -157,11 +164,11 @@ class _InstallReferrerPageContentState
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              RaisedButton(
-                child: Container(
+              ElevatedButton(
+                child: const SizedBox(
                   child: Center(
                     child: Text(
                       'Get Referrer Details',
@@ -174,8 +181,10 @@ class _InstallReferrerPageContentState
                 onPressed: () {
                   if (!_referrerConnected) {
                     SnackBar snackBar = createSnack(
-                        'Referrer connection must be established first!', true);
-                    Scaffold.of(context).showSnackBar(snackBar);
+                      'Referrer connection must be established first!',
+                      true,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   } else {
                     getReferrerDetails();
                   }
@@ -189,32 +198,32 @@ class _InstallReferrerPageContentState
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Text('Install Referrer', style: Styles.headerTextStyle),
-                  SizedBox(
+                  const Text('Install Referrer', style: Styles.headerTextStyle),
+                  const SizedBox(
                     height: 10,
                   ),
                   Text(
-                    '${_referrerDetails?.getInstallReferrer ?? " "}',
+                    _referrerDetails?.getInstallReferrer ?? ' ',
                     style: Styles.textContentStyle,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
-                  Text('Referrer Click Timestamp Millisec',
+                  const Text('Referrer Click Timestamp Millisec',
                       style: Styles.headerTextStyle),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Text(
                     '${_referrerDetails?.getReferrerClickTimestampMillisecond ?? " "}',
                     style: Styles.textContentStyle,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
-                  Text('Install Begin Timestamp Millisec',
+                  const Text('Install Begin Timestamp Millisec',
                       style: Styles.headerTextStyle),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Text(

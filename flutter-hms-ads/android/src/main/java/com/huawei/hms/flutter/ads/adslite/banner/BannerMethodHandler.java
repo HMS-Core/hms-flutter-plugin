@@ -100,12 +100,12 @@ public class BannerMethodHandler implements MethodChannel.MethodCallHandler {
         EventChannelFactory.setup(id, new BannerStreamHandler(context));
 
         BannerAdSize adSize;
-        if (width == BannerAdSize.BANNER_SIZE_SMART.getWidth() &&
-            height == BannerAdSize.BANNER_SIZE_SMART.getHeight()) {
+        if (width == BannerAdSize.BANNER_SIZE_SMART.getWidth() && height == BannerAdSize.BANNER_SIZE_SMART.getHeight()) {
             adSize = BannerAdSize.BANNER_SIZE_SMART;
-        } else if (width == BannerAdSize.BANNER_SIZE_DYNAMIC.getWidth() &&
-            height == BannerAdSize.BANNER_SIZE_DYNAMIC.getHeight()) {
+        } else if (width == BannerAdSize.BANNER_SIZE_DYNAMIC.getWidth() && height == BannerAdSize.BANNER_SIZE_DYNAMIC.getHeight()) {
             adSize = BannerAdSize.BANNER_SIZE_DYNAMIC;
+        } else if (width == BannerAdSize.BANNER_SIZE_ADVANCED.getWidth() && height == BannerAdSize.BANNER_SIZE_ADVANCED.getHeight()) {
+            adSize = BannerAdSize.BANNER_SIZE_ADVANCED;
         } else {
             adSize = new BannerAdSize(width, height);
         }

@@ -17,28 +17,20 @@
 package com.huawei.hms.flutter.ads.utils.constants;
 
 public interface Channels {
-    // Ads general
     String LIBRARY_METHOD_CHANNEL = "com.huawei.hms.flutter.ads/method";
-    // Splash Ads
     String SPLASH_EVENT_CHANNEL = "com.huawei.hms.flutter.ads/splash/event";
     String SPLASH_METHOD_CHANNEL = "com.huawei.hms.flutter.ads/splash/method";
-    // Banner Ads
     String BANNER_EVENT_CHANNEL = "com.huawei.hms.flutter.ads/banner/event";
     String BANNER_METHOD_CHANNEL = "com.huawei.hms.flutter.ads/banner/method";
-    // Reward Ads
     String REWARD_EVENT_CHANNEL = "com.huawei.hms.flutter.ads/reward/event";
     String REWARD_METHOD_CHANNEL = "com.huawei.hms.flutter.ads/reward/method";
-    // Interstitial Ads
     String INTERSTITIAL_EVENT_CHANNEL = "com.huawei.hms.flutter.ads/interstitial/event";
     String INTERSTITIAL_METHOD_CHANNEL = "com.huawei.hms.flutter.ads/interstitial/method";
-    // Native Ads
     String NATIVE_EVENT_CHANNEL = "com.huawei.hms.flutter.ads/native/event";
     String NATIVE_METHOD_CHANNEL = "com.huawei.hms.flutter.ads/native/method";
-    // Instream Ads
     String INSTREAM_METHOD_CHANNEL = "com.huawei.hms.flutter.ads/instream/method";
-    // Consent
+    String VAST_METHOD_CHANNEL = "com.huawei.hms.flutter.ads/vast/method";
     String CONSENT_EVENT_CHANNEL = "com.huawei.hms.flutter.ads/consent/event";
     String CONSENT_METHOD_CHANNEL = "com.huawei.hms.flutter.ads/consent/method";
-    // Install Referrer
     String REFERRER_METHOD_CHANNEL = "com.huawei.hms.flutter.ads/install_referrer/method";
 }

@@ -13,11 +13,14 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+
 import 'package:flutter/material.dart';
-import 'package:huawei_ads/hms_ads_lib.dart';
+import 'package:huawei_ads/huawei_ads.dart';
 import 'package:huawei_ads_example/utils/constants.dart';
 
 class OaidPage extends StatefulWidget {
+  const OaidPage({Key? key}) : super(key: key);
+
   @override
   _OaidPageState createState() => _OaidPageState();
 }
@@ -53,7 +56,7 @@ class _OaidPageState extends State<OaidPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.redAccent,
-        title: Text(
+        title: const Text(
           'Huawei Ads - Identifier OAID',
           style: TextStyle(
             color: Colors.white,
@@ -66,30 +69,31 @@ class _OaidPageState extends State<OaidPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text('OAID', style: Styles.headerTextStyle),
-              SizedBox(
+              const Text('OAID', style: Styles.headerTextStyle),
+              const SizedBox(
                 height: 10,
               ),
               Text(
                 '$_oaid',
                 style: Styles.textContentStyle,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
-              Text('Limit Ad Tracking Enabled', style: Styles.headerTextStyle),
-              SizedBox(
+              const Text('Limit Ad Tracking Enabled',
+                  style: Styles.headerTextStyle),
+              const SizedBox(
                 height: 10,
               ),
               Text(
                 '${_limitAdTracking ?? ''}',
                 style: Styles.textContentStyle,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
-              Text('Verify Ad Id', style: Styles.headerTextStyle),
-              SizedBox(
+              const Text('Verify Ad Id', style: Styles.headerTextStyle),
+              const SizedBox(
                 height: 10,
               ),
               Text(

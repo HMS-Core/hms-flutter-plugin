@@ -14,20 +14,23 @@
     limitations under the License.
 */
 import 'package:flutter/material.dart';
-import 'package:huawei_ads/hms_ads_lib.dart';
-import 'package:huawei_ads_example/utils/constants.dart';
+import 'package:huawei_ads/huawei_ads.dart';
+import 'package:huawei_ads_example/pages/ads_menu_page.dart';
 
 class SplashAdPage extends StatefulWidget {
   final bool? fromIndexPage;
 
-  SplashAdPage({this.fromIndexPage});
+  const SplashAdPage({
+    Key? key,
+    this.fromIndexPage,
+  }) : super(key: key);
 
   @override
   _SplashAdPageState createState() => _SplashAdPageState();
 }
 
 class _SplashAdPageState extends State<SplashAdPage> {
-  final String _testAdSlotId = "testq6zq98hecj";
+  final String _testAdSlotId = 'testq6zq98hecj';
   final AdParam _adParam = AdParam();
   late bool _fromIndexPage;
   static SplashAd? _splashAd;
@@ -39,20 +42,25 @@ class _SplashAdPageState extends State<SplashAdPage> {
       logoBgResId: 'ic_background_launcher',
       logoResId: 'ic_launcher',
       loadListener: (SplashAdLoadEvent event, {int? errorCode}) {
-        print("Splash Ad Load event : $event");
+        debugPrint('Splash Ad Load event : $event');
         if (event == SplashAdLoadEvent.dismissed) {
-          if (_fromIndexPage)
-            // Empty the stack completely since the ad is displayed
-            // when the app initially launched
-            Navigator.pushNamedAndRemoveUntil(
-                context, Routes.menuPage, (_) => false);
-          else
-            // For when you navigate from the menu
+          if (_fromIndexPage) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute<dynamic>(
+                builder: (BuildContext context) {
+                  return const AdsMenuPage();
+                },
+              ),
+              (_) => false,
+            );
+          } else {
             Navigator.pop(context);
+          }
         }
       },
       displayListener: (SplashAdDisplayEvent event) {
-        print("Splash Ad Display Event : $event");
+        debugPrint('Splash Ad Display Event : $event');
       });
 
   @override
@@ -63,13 +71,12 @@ class _SplashAdPageState extends State<SplashAdPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_splashAd == null) {
-      _splashAd = createAd()
-        ..loadAd(
-            adSlotId: _testAdSlotId,
-            orientation: SplashAdOrientation.portrait,
-            adParam: _adParam);
-    }
+    _splashAd ??= createAd()
+      ..loadAd(
+          adSlotId: _testAdSlotId,
+          orientation: SplashAdOrientation.portrait,
+          adParam: _adParam);
+
     return Container(
       color: Colors.white,
     );

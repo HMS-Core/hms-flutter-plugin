@@ -42,7 +42,6 @@ import io.flutter.plugin.common.MethodChannel;
 
 public class InstreamAdLoader implements MethodChannel.MethodCallHandler {
     final com.huawei.hms.ads.instreamad.InstreamAdLoader adLoader;
-
     private final BinaryMessenger messenger;
     private final Context context;
     private final MethodChannel methodChannel;
@@ -102,6 +101,7 @@ public class InstreamAdLoader implements MethodChannel.MethodCallHandler {
                 result.notImplemented();
         }
     }
+
     private void loadInstreamAd(MethodCall call, MethodChannel.Result result){
         HMSLogger.getInstance(context).startMethodExecutionTimer("loadInstreamAd");
         if(adLoader == null) {

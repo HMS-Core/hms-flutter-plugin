@@ -15,21 +15,23 @@
 */
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:huawei_ads/hms_ads_lib.dart';
+import 'package:huawei_ads/huawei_ads.dart';
 import 'package:huawei_ads_example/utils/constants.dart';
 
 class InterstitialAdPage extends StatefulWidget {
+  const InterstitialAdPage({Key? key}) : super(key: key);
+
   @override
   _InterstitialAdPageState createState() => _InterstitialAdPageState();
 }
 
 class _InterstitialAdPageState extends State<InterstitialAdPage> {
-  static final String _imageTestAdSlotId = "teste9ih9j0rc3"; // Image ad
-  static final String _videoTestAdSlotId = "testb4znbuh3n2"; // Video ad
+  static const String _imageTestAdSlotId = 'teste9ih9j0rc3'; // Image ad
+  static const String _videoTestAdSlotId = 'testb4znbuh3n2'; // Video ad
   final AdParam _adParam = AdParam();
   String? adSlotId = _imageTestAdSlotId;
   InterstitialAd? _interstitialAd;
-  String logs = "Double tap to clear the logs.\n\n";
+  String logs = 'Double tap to clear the logs.\n\n';
 
   void changeSlotId(String? slotId) {
     setState(() {
@@ -43,9 +45,9 @@ class _InterstitialAdPageState extends State<InterstitialAdPage> {
       adSlotId: adSlotId!,
       adParam: _adParam,
       listener: (AdEvent event, {int? errorCode}) {
-        print("Interstitial Ad event : $event");
+        debugPrint('Interstitial Ad event : $event');
         setState(() {
-          logs = logs + "Interstitial Ad event : ${describeEnum(event)}\n";
+          logs = logs + 'Interstitial Ad event : ${describeEnum(event)}\n';
         });
       },
     );
@@ -56,7 +58,7 @@ class _InterstitialAdPageState extends State<InterstitialAdPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.redAccent,
-        title: Text(
+        title: const Text(
           'Huawei Ads - Interstitial',
           style: TextStyle(
             color: Colors.white,
@@ -70,20 +72,20 @@ class _InterstitialAdPageState extends State<InterstitialAdPage> {
               children: <Widget>[
                 SingleChildScrollView(
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 50),
+                    padding: const EdgeInsets.symmetric(horizontal: 50),
                     child: Column(
                       children: <Widget>[
                         ListTile(
-                          title: Text('Interstitial Image'),
-                          trailing: Radio(
+                          title: const Text('Interstitial Image'),
+                          trailing: Radio<String>(
                             groupValue: adSlotId,
                             value: _imageTestAdSlotId,
                             onChanged: changeSlotId,
                           ),
                         ),
                         ListTile(
-                          title: Text('Interstitial Video'),
-                          trailing: Radio(
+                          title: const Text('Interstitial Video'),
+                          trailing: Radio<String>(
                             groupValue: adSlotId,
                             value: _videoTestAdSlotId,
                             onChanged: changeSlotId,
@@ -93,30 +95,28 @@ class _InterstitialAdPageState extends State<InterstitialAdPage> {
                     ),
                   ),
                 ),
-                Container(
-                  child: RaisedButton(
-                    child: Text(
-                      'Load Ad',
-                      style: Styles.adControlButtonStyle,
-                    ),
-                    onPressed: () {
-                      _interstitialAd?.destroy();
-                      _interstitialAd = createAd()
-                        ..loadAd()
-                        ..show();
-                    },
+                ElevatedButton(
+                  child: const Text(
+                    'Load Ad',
+                    style: Styles.adControlButtonStyle,
                   ),
+                  onPressed: () {
+                    _interstitialAd?.destroy();
+                    _interstitialAd = createAd()
+                      ..loadAd()
+                      ..show();
+                  },
                 )
               ],
             ),
           ),
           Expanded(
             child: Center(
-              child: Container(
+              child: SizedBox(
                 height: 250,
                 child: GestureDetector(
                   onDoubleTap: () => setState(() {
-                    logs = "";
+                    logs = '';
                   }),
                   child: SingleChildScrollView(
                     child: Text(logs),

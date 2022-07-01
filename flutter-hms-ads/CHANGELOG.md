@@ -1,3 +1,20 @@
+## 13.4.55+300
+
+- Optimized tablet UX experience.
+- Optimized the interactive landing page experience of rewarded ads.
+- Optimized the interaction experience when requesting a splash ad for the first time.
+- Added the advanced banner ad and its dimensions.
+- Added the getAppActivateStyle, setAppActivateStyle, setAppInstalledNotify, and isAppInstalledNotify methods to the HwAds class.
+- Added the pop-up for reminding users of app activation.
+- Added the location to the AdParam class for setting the location information passed by your app.
+- Added the contentBundle to the AdParam class for setting the content bundle.
+- Added VAST ads.
+- Supported on devices running Android 12.
+- Supported app download while video watching in rewarded ads.
+- Fixed adaption issues with the app download button in ads.
+- Allowed users to swipe up on a splash ad screen to access the app details page or directly launch the advertised app.
+- Notified apps of the request status of an express splash ad when necessary.
+
 ## 13.4.45+309
 
 - Deleted the capability of prompting users to install HMS Core (APK).

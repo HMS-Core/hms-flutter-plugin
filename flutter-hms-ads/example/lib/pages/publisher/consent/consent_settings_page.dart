@@ -17,16 +17,18 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:huawei_ads/hms_ads_lib.dart';
+import 'package:huawei_ads/huawei_ads.dart';
 import 'package:huawei_ads_example/utils/constants.dart';
 
 class ConsentSettingsPage extends StatefulWidget {
+  const ConsentSettingsPage({Key? key}) : super(key: key);
+
   @override
   _ConsentSettingsPageState createState() => _ConsentSettingsPageState();
 }
 
 class _ConsentSettingsPageState extends State<ConsentSettingsPage> {
-  static final String _testAdSlotId = "testw6vs28auh3";
+  static const String _testAdSlotId = 'testw6vs28auh3';
   final Consent consentInfo = Consent.instance;
   ConsentStatus _consentStatus = ConsentStatus.UNKNOWN;
   bool? _needConsent = false;
@@ -53,10 +55,10 @@ class _ConsentSettingsPageState extends State<ConsentSettingsPage> {
           if (isNeedConsent!) {
             if (isUnknown) {
               List<Map<String, dynamic>> adMapList = <Map<String, dynamic>>[];
-              adProviders!.forEach((AdProvider provider) {
+              for (AdProvider provider in adProviders ?? <AdProvider>[]) {
                 adMapList.add(provider.toJson());
-              });
-              print('AdProviders : ' + jsonEncode(adMapList));
+              }
+              debugPrint('AdProviders : ' + jsonEncode(adMapList));
               setState(() {
                 _buttonEnabled = _needConsent! && isUnknown;
               });
@@ -64,27 +66,27 @@ class _ConsentSettingsPageState extends State<ConsentSettingsPage> {
               loadBannerAd(consentStatus!);
             }
           } else {
-            print('User consent is not neeeded');
+            debugPrint('User consent is not neeeded');
             loadBannerAd(ConsentStatus.PERSONALIZED);
           }
           // Consent update failed
         } else {
-          print('Consent status failed to update: ' + description!);
+          debugPrint('Consent status failed to update: ' + description!);
           loadBannerAd(ConsentStatus.NON_PERSONALIZED);
         }
       });
     } catch (e) {
-      print('EXCEPTION | $e');
+      debugPrint('EXCEPTION | $e');
     }
     if (!mounted) return;
   }
 
   void loadBannerAd(ConsentStatus status) async {
-    print('Consent Status: $status');
-    RequestOptions? options = await HwAds.getRequestOptions;
-    if (options == null) options = RequestOptions();
+    debugPrint('Consent Status: $status');
+    RequestOptions? options = await HwAds.getRequestOptions();
+    options ??= RequestOptions();
 
-    options.tagForUnderAgeOfPromise = UnderAge.promiseTrue;
+    options.tagForUnderAgeOfPromise = UnderAge.PROMISE_TRUE;
     options.nonPersonalizedAd = status.index;
 
     await HwAds.setRequestOptions(options);
@@ -106,14 +108,14 @@ class _ConsentSettingsPageState extends State<ConsentSettingsPage> {
     bool? isUpdated = await (Consent.updateSharedPreferences(
         ConsentConstant.spConsentKey, status.index));
     if (isUpdated ?? false) {
-      print('SharedPreferences updated');
+      debugPrint('SharedPreferences updated');
       loadBannerAd(status);
       setState(() {
         _buttonEnabled = false;
         _consentStatus = status;
       });
     } else {
-      print("ERROR: Update shared preferences failed.");
+      debugPrint('ERROR: Update shared preferences failed.');
     }
   }
 
@@ -128,7 +130,7 @@ class _ConsentSettingsPageState extends State<ConsentSettingsPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.redAccent,
-        title: Text(
+        title: const Text(
           'Consent Settings',
           style: TextStyle(
             color: Colors.white,
@@ -154,17 +156,17 @@ class _ConsentSettingsPageState extends State<ConsentSettingsPage> {
                                     : 'User did not agree.',
                         style: Styles.textContentStyle,
                       ),
-                      padding: EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(20),
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     width: 400,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        RaisedButton(
-                          child: Container(
+                        ElevatedButton(
+                          child: const SizedBox(
                             child: Center(
                               child: Text(
                                 'SKIP',
@@ -178,8 +180,8 @@ class _ConsentSettingsPageState extends State<ConsentSettingsPage> {
                               ? () => setConsent(ConsentStatus.NON_PERSONALIZED)
                               : null,
                         ),
-                        RaisedButton(
-                          child: Container(
+                        ElevatedButton(
+                          child: const SizedBox(
                             child: Center(
                               child: Text(
                                 'AGREE',
@@ -204,11 +206,11 @@ class _ConsentSettingsPageState extends State<ConsentSettingsPage> {
             flex: 1,
             child: Column(
               children: <Widget>[
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
-                Text('Consent Status', style: Styles.headerTextStyle),
-                SizedBox(
+                const Text('Consent Status', style: Styles.headerTextStyle),
+                const SizedBox(
                   height: 10,
                 ),
                 Text(

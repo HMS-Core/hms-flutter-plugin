@@ -14,27 +14,31 @@
     limitations under the License.
 */
 import 'package:flutter/material.dart';
-import 'package:huawei_ads/hms_ads_lib.dart';
+import 'package:huawei_ads/huawei_ads.dart';
 
 class InstreamAdPage extends StatelessWidget {
+  const InstreamAdPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.redAccent,
-        title: Text(
+        title: const Text(
           'Huawei Ads - Instream',
           style: TextStyle(
             color: Colors.white,
           ),
         ),
       ),
-      body: InstreamAdPageBody(),
+      body: const InstreamAdPageBody(),
     );
   }
 }
 
 class InstreamAdPageBody extends StatefulWidget {
+  const InstreamAdPageBody({Key? key}) : super(key: key);
+
   @override
   _InstreamAdPageBodyState createState() => _InstreamAdPageBodyState();
 }
@@ -45,7 +49,7 @@ class _InstreamAdPageBodyState extends State<InstreamAdPageBody>
   InstreamAdView? adView;
   InstreamAdViewController? adViewController;
   late InstreamAdLoader adLoader;
-  List<InstreamAd> instreamAds = [];
+  List<InstreamAd> instreamAds = <InstreamAd>[];
   bool paused = false;
   bool muted = false;
   bool loaded = false;
@@ -57,12 +61,12 @@ class _InstreamAdPageBodyState extends State<InstreamAdPageBody>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance?.addObserver(this);
     adLoader = InstreamAdLoader(
       adId: 'testy3cglm3pj0',
-      totalDuration: Duration(minutes: 1),
+      totalDuration: const Duration(minutes: 1),
       maxCount: 8,
-      onAdLoaded: (ads) async {
+      onAdLoaded: (List<InstreamAd> ads) async {
         instreamAds = ads;
         loaded = true;
         setState(() {});
@@ -72,6 +76,7 @@ class _InstreamAdPageBodyState extends State<InstreamAdPageBody>
         showSnackbar('onAdFailed: errorCode:$errorCode');
       },
     );
+
     adViewController = InstreamAdViewController(
       onInstreamAdViewCreated: (int adId) {
         resume();
@@ -79,30 +84,30 @@ class _InstreamAdPageBodyState extends State<InstreamAdPageBody>
       onClick: () {
         showSnackbar('onClick');
       },
-      onSegmentMediaChange: (instreamAd) {
-        print('onSegmentMediaChange: ${instreamAd?.id}');
+      onSegmentMediaChange: (InstreamAd? instreamAd) {
+        debugPrint('onSegmentMediaChange: ${instreamAd?.id}');
         currentAd = instreamAd;
         updateCallToAction(instreamAd);
         restartCountdown(instreamAd);
       },
-      onMediaProgress: (per, playTime) {
+      onMediaProgress: (int? per, int? playTime) {
         updateCountdown(playTime!, per: per);
       },
-      onMediaStart: (playTime) {
+      onMediaStart: (int? playTime) {
         showSnackbar('onMediaStart: $playTime');
       },
-      onMediaPause: (playTime) {
+      onMediaPause: (int? playTime) {
         showSnackbar('onMediaPause: $playTime');
       },
-      onMediaStop: (playTime) {
+      onMediaStop: (int? playTime) {
         showSnackbar('onMediaStop: $playTime');
       },
-      onMediaCompletion: (playTime) {
+      onMediaCompletion: (int? playTime) {
         showSnackbar('onMediaCompletion: $playTime');
         adView = null;
         setState(() {});
       },
-      onMediaError: (playTime, errorCode, extra) {
+      onMediaError: (int? playTime, int? errorCode, int? extra) {
         showSnackbar(
           'onMediaError: playTimte: $playTime errorCode: $errorCode extra: $extra',
         );
@@ -119,7 +124,7 @@ class _InstreamAdPageBodyState extends State<InstreamAdPageBody>
   @override
   void dispose() {
     super.dispose();
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance?.removeObserver(this);
   }
 
   @override
@@ -157,44 +162,44 @@ class _InstreamAdPageBodyState extends State<InstreamAdPageBody>
 
   void updateCountdown(int playTime, {int? per}) {
     int oldCountdownInSeconds = countdownInSeconds;
-    this.countdownInSeconds = (currentTotalTime! - playTime) ~/ 1000;
+    countdownInSeconds = (currentTotalTime! - playTime) ~/ 1000;
     if (oldCountdownInSeconds != countdownInSeconds) {
-      print('onMediaProgress: per: $per playTime $playTime');
+      debugPrint('onMediaProgress: per: $per playTime $playTime');
       setState(() {});
     }
   }
 
   void showSnackbar(String text) {
-    final snackBar = SnackBar(
+    final SnackBar snackBar = SnackBar(
       content: Text(text),
     );
-    Scaffold.of(context).hideCurrentSnackBar();
-    Scaffold.of(context).showSnackBar(snackBar);
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override
   Widget build(BuildContext context) {
     this.context = context;
     return Column(
-      children: [
+      children: <Widget>[
         Container(
           color: Colors.black,
           // InstreamAdView needs to be bounded by specific height
           child: AspectRatio(
             aspectRatio: 16 / 9,
             child: adView == null
-                ? Center(
+                ? const Center(
                     child: Text(
                       'Your video content',
                       style: TextStyle(color: Colors.white),
                     ),
                   )
                 : Stack(
-                    children: [
+                    children: <Widget>[
                       adView!,
                       InstreamAdViewElements(
                         countdown: '${countdownInSeconds}s',
-                        callToActionText: '${callToActionText ?? ''}',
+                        callToActionText: callToActionText ?? '',
                         onSkip: () async {
                           await adViewController?.stop();
                           adView = null;
@@ -210,23 +215,23 @@ class _InstreamAdPageBodyState extends State<InstreamAdPageBody>
           ),
         ),
         Column(
-          children: [
+          children: <Widget>[
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                RaisedButton(
+              children: <Widget>[
+                ElevatedButton(
                   child: Text(loaded ? 'LOADED' : 'LOAD AD'),
                   onPressed: () async {
                     bool? loadAd = await adLoader.loadAd();
-                    print('loadAd: $loadAd');
+                    debugPrint('loadAd: $loadAd');
                   },
                 ),
-                RaisedButton(
-                  child: Text('REGISTER'),
+                ElevatedButton(
+                  child: const Text('REGISTER'),
                   onPressed: () async {
                     if (instreamAds.isEmpty) {
-                      print('empty loaded ads');
+                      debugPrint('empty loaded ads');
                       return;
                     }
                     adView = InstreamAdView(
@@ -241,8 +246,8 @@ class _InstreamAdPageBodyState extends State<InstreamAdPageBody>
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                RaisedButton(
+              children: <Widget>[
+                ElevatedButton(
                   child: Text(muted ? 'UNMUTE' : 'MUTE'),
                   onPressed: () async {
                     if (muted) {
@@ -255,7 +260,7 @@ class _InstreamAdPageBodyState extends State<InstreamAdPageBody>
                     setState(() {});
                   },
                 ),
-                RaisedButton(
+                ElevatedButton(
                   child: Text(paused ? 'PLAY' : 'PAUSE'),
                   onPressed: () async {
                     if (paused) {

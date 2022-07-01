@@ -13,16 +13,23 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+
 import 'package:flutter/material.dart';
+import 'package:huawei_ads_example/pages/identifier/oaid_page.dart';
+import 'package:huawei_ads_example/pages/installreferrer/install_referrer_page.dart';
+import 'package:huawei_ads_example/pages/publisher/publisher_service_page.dart';
+import 'package:huawei_ads_example/pages/vast_ad_page.dart';
 import 'package:huawei_ads_example/utils/constants.dart';
 
 class AdsMenuPage extends StatelessWidget {
+  const AdsMenuPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.redAccent,
-        title: Text(
+        title: const Text(
           'Huawei Ads Plugin Demo',
           style: TextStyle(
             color: Colors.white,
@@ -32,31 +39,56 @@ class AdsMenuPage extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          RaisedButton(
-            child: Text(
+          ElevatedButton(
+            child: const Text(
               'Publisher Service',
               style: Styles.menuButtonStyle,
             ),
             onPressed: () {
-              Navigator.pushNamed(context, Routes.publisherService);
+              Navigator.push(context, MaterialPageRoute<dynamic>(
+                builder: (BuildContext context) {
+                  return const PublisherPage();
+                },
+              ));
             },
           ),
-          RaisedButton(
-            child: Text(
+          ElevatedButton(
+            child: const Text(
               'Identifier Service',
               style: Styles.menuButtonStyle,
             ),
             onPressed: () {
-              Navigator.pushNamed(context, Routes.identifierOaid);
+              Navigator.push(context, MaterialPageRoute<dynamic>(
+                builder: (BuildContext context) {
+                  return const OaidPage();
+                },
+              ));
             },
           ),
-          RaisedButton(
-            child: Text(
+          ElevatedButton(
+            child: const Text(
               'Install Referrer Service',
               style: Styles.menuButtonStyle,
             ),
             onPressed: () {
-              Navigator.pushNamed(context, Routes.installReferrerService);
+              Navigator.push(context, MaterialPageRoute<dynamic>(
+                builder: (BuildContext context) {
+                  return const InstallReferrerPage();
+                },
+              ));
+            },
+          ),
+          ElevatedButton(
+            child: const Text(
+              'VAST Ads',
+              style: Styles.menuButtonStyle,
+            ),
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute<dynamic>(
+                builder: (BuildContext context) {
+                  return const VastAdPage();
+                },
+              ));
             },
           ),
         ],
