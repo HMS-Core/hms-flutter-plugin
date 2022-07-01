@@ -14,24 +14,22 @@
     limitations under the License.
 */
 
-class MinMaxZoomPreference {
-  final double minZoom;
-  final double maxZoom;
+import 'package:flutter/material.dart' show immutable;
 
-  const MinMaxZoomPreference(this.minZoom, this.maxZoom);
+@immutable
+class HeatMapId {
+  final String id;
 
-  static const MinMaxZoomPreference unbounded = MinMaxZoomPreference(3, 20);
+  HeatMapId(this.id);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (this.runtimeType != other.runtimeType) return false;
 
-    return other is MinMaxZoomPreference &&
-        this.minZoom == other.minZoom &&
-        this.maxZoom == other.maxZoom;
+    return other is HeatMapId && this.id == other.id;
   }
 
   @override
-  int get hashCode => Object.hash(minZoom, maxZoom);
+  int get hashCode => id.hashCode;
 }

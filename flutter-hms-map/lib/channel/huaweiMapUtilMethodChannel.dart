@@ -38,4 +38,20 @@ class HuaweiMapUtils {
     return _mapUtilsChannel.invokeMethod<double>(
         Method.MapDistanceCalculator, latLngStartEndToJson(start, end));
   }
+
+  static Future<LatLng> convertCoordinate(LatLng latLng) async {
+    return LatLng.fromJson(await _mapUtilsChannel.invokeMethod(
+        Method.MapConvertCoordinate, latLngToJson(latLng)));
+  }
+
+  static Future<List<LatLng>> convertCoordinates(List<LatLng> latLngs) async {
+    List<List<double>> args = [];
+    latLngs.forEach((element) {
+      args.add(latLngToJson(element));
+    });
+
+    return List<LatLng>.from((await _mapUtilsChannel.invokeMethod(
+            Method.MapConvertCoordinates, args))
+        .map((latLng) => LatLng.fromJson(latLng)));
+  }
 }

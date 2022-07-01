@@ -14,24 +14,16 @@
     limitations under the License.
 */
 
-class MinMaxZoomPreference {
-  final double minZoom;
-  final double maxZoom;
+import 'package:huawei_map/components/components.dart';
+import 'package:huawei_map/utils/toJson.dart';
 
-  const MinMaxZoomPreference(this.minZoom, this.maxZoom);
+Map<HeatMapId, HeatMap> heatMapToMap(Iterable<HeatMap> heatMaps) {
+  return Map<HeatMapId, HeatMap>.fromEntries(heatMaps.map((HeatMap heatMap) =>
+      MapEntry<HeatMapId, HeatMap>(heatMap.heatMapId, heatMap.clone())));
+}
 
-  static const MinMaxZoomPreference unbounded = MinMaxZoomPreference(3, 20);
-
-  @override
-  bool operator ==(dynamic other) {
-    if (identical(this, other)) return true;
-    if (this.runtimeType != other.runtimeType) return false;
-
-    return other is MinMaxZoomPreference &&
-        this.minZoom == other.minZoom &&
-        this.maxZoom == other.maxZoom;
-  }
-
-  @override
-  int get hashCode => Object.hash(minZoom, maxZoom);
+List<Map<String, dynamic>> heatMapToList(Set<HeatMap> heatMaps) {
+  return heatMaps
+      .map<Map<String, dynamic>>((HeatMap hm) => heatMapToJson(hm))
+      .toList();
 }

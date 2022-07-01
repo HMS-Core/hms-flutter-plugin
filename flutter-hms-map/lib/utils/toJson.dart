@@ -249,6 +249,31 @@ Map<String, dynamic> tileOverlayToJson(TileOverlay tileOverlay) {
   return json;
 }
 
+Map<String, dynamic> heatMapToJson(HeatMap heatMap) {
+  final Map<String, dynamic> json = <String, dynamic>{};
+
+  final Map<double, String> colorMap = {};
+
+  heatMap.color
+      ?.forEach((key, value) => colorMap[key] = value.value.toString());
+
+  addToJson(json, Param.heatMapId, heatMap.heatMapId.id);
+  addToJson(json, Param.color, colorMap);
+  addToJson(json, Param.resourceId, heatMap.resourceId);
+  addToJson(json, Param.jsonData, heatMap.dataSet);
+  addToJson(json, Param.intensity, heatMap.intensity);
+  addToJson(json, Param.intensityMap, heatMap.intensityMap);
+  addToJson(json, Param.opacity, heatMap.opacity);
+  addToJson(json, Param.opacityMap, heatMap.opacityMap);
+  addToJson(json, Param.radius, heatMap.radius);
+  addToJson(json, Param.radiusMap, heatMap.radiusMap);
+  addToJson(
+      json, Param.radiusUnit, heatMap.radiusUnit == RadiusUnit.pixel ? 0 : 1);
+  addToJson(json, Param.visible, heatMap.visible);
+
+  return json;
+}
+
 Map<String, dynamic> polylineUpdatesToJson(PolylineUpdates polylineUpdates) {
   final Map<String, dynamic> updateMap = <String, dynamic>{};
 
@@ -378,6 +403,19 @@ Map<String, dynamic> tileOverlayUpdatesToJson(
       tileOverlayUpdates.deleteSet
           .map<dynamic>((TileOverlayId t) => t.id)
           .toList());
+
+  return updateMap;
+}
+
+Map<String, dynamic> heatMapUpdatesToJson(HeatMapUpdates heatMapUpdates) {
+  final Map<String, dynamic> updateMap = <String, dynamic>{};
+
+  addToMap(updateMap, Param.heatMapsToInsert,
+      heatMapToList(heatMapUpdates.insertSet));
+  addToMap(updateMap, Param.heatMapsToUpdate,
+      heatMapToList(heatMapUpdates.updateSet));
+  addToMap(updateMap, Param.heatMapsToDelete,
+      heatMapUpdates.deleteSet.map<dynamic>((HeatMapId h) => h.id).toList());
 
   return updateMap;
 }

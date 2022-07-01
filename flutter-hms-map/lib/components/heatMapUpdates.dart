@@ -18,36 +18,32 @@ import 'package:flutter/foundation.dart' show setEquals;
 
 import 'package:huawei_map/components/components.dart';
 
-class TileOverlayUpdates {
-  late Set<TileOverlay> insertSet;
-  late Set<TileOverlayId> deleteSet;
-  late Set<TileOverlay> updateSet;
+class HeatMapUpdates {
+  late Set<HeatMap> insertSet;
+  late Set<HeatMapId> deleteSet;
+  late Set<HeatMap> updateSet;
 
-  bool isChanged(
-      TileOverlay curr, Map<TileOverlayId, TileOverlay> oldTileOverlays) {
-    final TileOverlay old = oldTileOverlays[curr.tileOverlayId]!;
+  bool isChanged(HeatMap curr, Map<HeatMapId, HeatMap> oldHeatMaps) {
+    final HeatMap old = oldHeatMaps[curr.heatMapId]!;
     return curr != old;
   }
 
-  TileOverlayUpdates.update(
-      Set<TileOverlay> previous, Set<TileOverlay> current) {
-    final Map<TileOverlayId, TileOverlay> oldTileOverlays =
-        tileOverlayToMap(previous);
-    final Map<TileOverlayId, TileOverlay> currTileOverlays =
-        tileOverlayToMap(current);
+  HeatMapUpdates.update(Set<HeatMap> previous, Set<HeatMap> current) {
+    final Map<HeatMapId, HeatMap> oldHeatMaps = heatMapToMap(previous);
+    final Map<HeatMapId, HeatMap> currHeatMaps = heatMapToMap(current);
 
-    final Set<TileOverlayId> oldIds = oldTileOverlays.keys.toSet();
-    final Set<TileOverlayId> currIds = currTileOverlays.keys.toSet();
+    final Set<HeatMapId> oldIds = oldHeatMaps.keys.toSet();
+    final Set<HeatMapId> currIds = currHeatMaps.keys.toSet();
 
-    final Set<TileOverlayId> _toDelete = oldIds.difference(currIds);
+    final Set<HeatMapId> _toDelete = oldIds.difference(currIds);
 
-    final Set<TileOverlay> _toInsert = Set<TileOverlay>.from(
-        currIds.difference(oldIds).map((id) => currTileOverlays[id]).toSet());
+    final Set<HeatMap> _toInsert = Set<HeatMap>.from(
+        currIds.difference(oldIds).map((id) => currHeatMaps[id]).toSet());
 
-    final Set<TileOverlay> _toUpdate = Set<TileOverlay>.from(currIds
+    final Set<HeatMap> _toUpdate = Set<HeatMap>.from(currIds
         .intersection(oldIds)
-        .map((id) => currTileOverlays[id])
-        .where((x) => isChanged(x!, oldTileOverlays))
+        .map((id) => currHeatMaps[id])
+        .where((x) => isChanged(x!, oldHeatMaps))
         .toSet());
 
     insertSet = _toInsert;
@@ -60,7 +56,7 @@ class TileOverlayUpdates {
     if (identical(this, other)) return true;
     if (this.runtimeType != other.runtimeType) return false;
 
-    return other is TileOverlayUpdates &&
+    return other is MarkerUpdates &&
         setEquals(this.insertSet, other.insertSet) &&
         setEquals(this.deleteSet, other.deleteSet) &&
         setEquals(this.updateSet, other.updateSet);

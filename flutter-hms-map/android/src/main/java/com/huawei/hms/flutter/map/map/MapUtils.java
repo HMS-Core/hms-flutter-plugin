@@ -22,6 +22,7 @@ import com.huawei.hms.flutter.map.circle.CircleUtils;
 import com.huawei.hms.flutter.map.constants.Method;
 import com.huawei.hms.flutter.map.constants.Param;
 import com.huawei.hms.flutter.map.groundoverlay.GroundOverlayUtils;
+import com.huawei.hms.flutter.map.heatmap.HeatMapUtils;
 import com.huawei.hms.flutter.map.logger.HMSLogger;
 import com.huawei.hms.flutter.map.marker.MarkersUtils;
 import com.huawei.hms.flutter.map.polygon.PolygonUtils;
@@ -59,6 +60,8 @@ class MapUtils {
 
     private final TileOverlayUtils tileOverlayUtils;
 
+    private final HeatMapUtils heatMapUtils;
+
     private BinaryMessenger messenger;
 
     private final HMSLogger logger;
@@ -73,13 +76,14 @@ class MapUtils {
         circleUtils = new CircleUtils(mChannel, compactness, application);
         groundOverlayUtils = new GroundOverlayUtils(mChannel, application);
         tileOverlayUtils = new TileOverlayUtils(application);
+        heatMapUtils = new HeatMapUtils(mChannel, application);
     }
 
     void init(final HuaweiMap huaweiMap, final List<HashMap<String, Object>> initMarkers,
         final List<HashMap<String, Object>> initPolylines, final List<HashMap<String, Object>> initPolygons,
         final List<HashMap<String, Object>> initCircles, final List<HashMap<String, Object>> initGroundOverlays,
-        final List<HashMap<String, Object>> initTileOverlays, final boolean markersClustering,
-        final BinaryMessenger messenger) {
+        final List<HashMap<String, Object>> initTileOverlays, final List<HashMap<String, Object>> initHeatMaps,
+        final boolean markersClustering, final BinaryMessenger messenger) {
         this.huaweiMap = huaweiMap;
         markersUtils.setMap(huaweiMap);
         polylineUtils.setMap(huaweiMap);
@@ -87,15 +91,17 @@ class MapUtils {
         circleUtils.setMap(huaweiMap);
         groundOverlayUtils.setMap(huaweiMap);
         tileOverlayUtils.setMap(huaweiMap);
+        heatMapUtils.setMap(huaweiMap);
         huaweiMap.setMarkersClustering(markersClustering);
         initComponents(initMarkers, initPolylines, initPolygons, initCircles, initGroundOverlays, initTileOverlays,
-            messenger);
+            initHeatMaps, messenger);
     }
 
     void initComponents(final List<HashMap<String, Object>> initMarkers,
         final List<HashMap<String, Object>> initPolylines, final List<HashMap<String, Object>> initPolygons,
         final List<HashMap<String, Object>> initCircles, final List<HashMap<String, Object>> initGroundOverlays,
-        final List<HashMap<String, Object>> initTileOverlays, final BinaryMessenger messenger) {
+        final List<HashMap<String, Object>> initTileOverlays, final List<HashMap<String, Object>> initHeatMaps,
+        final BinaryMessenger messenger) {
         this.messenger = messenger;
         initMarkers(initMarkers);
         initPolylines(initPolylines);
@@ -103,6 +109,7 @@ class MapUtils {
         initCircles(initCircles);
         initGroundOverlays(initGroundOverlays);
         initTileOverlays(initTileOverlays);
+        initHeatMaps(initHeatMaps);
     }
 
     void initMarkers(final List<HashMap<String, Object>> initMarkers) {
@@ -127,6 +134,10 @@ class MapUtils {
 
     void initTileOverlays(final List<HashMap<String, Object>> initTileOverlays) {
         tileOverlayUtils.insertMulti(initTileOverlays);
+    }
+
+    void initHeatMaps(final List<HashMap<String, Object>> initHeatMaps) {
+        heatMapUtils.insertMulti(initHeatMaps);
     }
 
     void moveCamera(final CameraUpdate cameraUpdate) {
@@ -215,6 +226,13 @@ class MapUtils {
                 tileOverlayUtils.insertMulti(call.argument(Param.TILE_OVERLAYS_TO_INSERT));
                 tileOverlayUtils.updateMulti(call.argument(Param.TILE_OVERLAYS_TO_UPDATE));
                 tileOverlayUtils.deleteMulti(call.argument(Param.TILE_OVERLAYS_TO_DELETE));
+                result.success(true);
+                break;
+            }
+            case Method.HEAT_MAPS_UPDATE: {
+                heatMapUtils.insertMulti(call.argument(Param.HEAT_MAPS_TO_INSERT));
+                heatMapUtils.updateMulti(call.argument(Param.HEAT_MAPS_TO_UPDATE));
+                heatMapUtils.deleteMulti(call.argument(Param.HEAT_MAPS_TO_DELETE));
                 result.success(true);
                 break;
             }

@@ -47,7 +47,9 @@ export '../utils/circle.dart';
 export '../utils/marker.dart';
 export '../utils/polygon.dart';
 export '../utils/polyline.dart';
+export '../utils/heatMap.dart';
 export '../constants/mapType.dart';
+export '../constants/radiusUnit.dart';
 
 //Ground Overlay
 export 'groundOverlay.dart';
@@ -57,6 +59,7 @@ export '../utils/groundOverlay.dart';
 
 //Plugin methods
 export '../channel/huaweiMapUtilMethodChannel.dart';
+export '../channel/huaweiMapInitializer.dart';
 
 //Tile Overlay
 export 'tileOverlay.dart';
@@ -76,3 +79,9 @@ export 'animations/translateAnimation.dart';
 
 //Huawei Map Utils
 export '../channel/huaweiMapUtilMethodChannel.dart';
+
+//Heat Maps
+export 'heatMap.dart';
+export 'heatMapId.dart';
+export 'heatMapUpdates.dart';
+export '../utils/heatMap.dart';

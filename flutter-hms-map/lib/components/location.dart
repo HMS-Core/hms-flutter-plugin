@@ -14,8 +14,6 @@
     limitations under the License.
 */
 
-import 'dart:ui' show hashValues;
-
 import 'package:huawei_map/constants/param.dart';
 
 class Location {
@@ -97,7 +95,7 @@ class Location {
   }
 
   @override
-  int get hashCode => hashValues(
+  int get hashCode => Object.hash(
       latitude,
       longitude,
       altitude,

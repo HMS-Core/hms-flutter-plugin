@@ -14,8 +14,6 @@
     limitations under the License.
 */
 
-import 'dart:ui' show hashValues;
-
 import 'package:huawei_map/components/components.dart';
 
 class LatLngBounds {
@@ -58,5 +56,5 @@ class LatLngBounds {
   }
 
   @override
-  int get hashCode => hashValues(southwest, northeast);
+  int get hashCode => Object.hash(southwest, northeast);
 }

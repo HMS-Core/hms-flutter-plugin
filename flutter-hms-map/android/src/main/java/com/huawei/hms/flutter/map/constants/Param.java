@@ -33,6 +33,9 @@ public interface Param {
     String CIRCLES_TO_INSERT = "circlesToAdd";
     String CIRCLES_TO_UPDATE = "circlesToChange";
     String CIRCLES_TO_DELETE = "circleIdsToRemove";
+    String HEAT_MAPS_TO_INSERT = "heatMapsToAdd";
+    String HEAT_MAPS_TO_UPDATE = "heatMapsToChange";
+    String HEAT_MAPS_TO_DELETE = "heatMapIdsToRemove";
     String NEW_CAMERA_POSITION = "newCameraPosition";
     String NEW_LAT_LNG = "newLatLng";
     String NEW_LAT_LNG_BOUNDS = "newLatLngBounds";
@@ -173,4 +176,13 @@ public interface Param {
     String STYLE_ID = "styleId";
     String PREVIEW_ID = "previewId";
     String LITE_MODE = "liteMode";
+    String HEAT_MAP_ID = "heatMapId";
+    String RESOURCE_ID = "resourceId";
+    String JSON_DATA = "jsonData";
+    String INTENSITY = "intensity";
+    String INTENSITY_MAP = "intensityMap";
+    String OPACITY = "opacity";
+    String OPACITY_MAP = "opacityMap";
+    String RADIUS_MAP = "radiusMap";
+    String RADIUS_UNIT = "radiusUnit";
 }

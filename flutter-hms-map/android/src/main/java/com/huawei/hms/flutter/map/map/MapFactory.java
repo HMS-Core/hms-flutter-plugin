@@ -93,6 +93,9 @@ public class MapFactory extends PlatformViewFactory {
         if (params.containsKey(Param.TILE_OVERLAYS_TO_INSERT)) {
             builder.setTileOverlays((List<HashMap<String, Object>>) params.get(Param.TILE_OVERLAYS_TO_INSERT));
         }
+        if (params.containsKey(Param.HEAT_MAPS_TO_INSERT)) {
+            builder.setHeatMaps((List<HashMap<String, Object>>) params.get(Param.HEAT_MAPS_TO_INSERT));
+        }
         return builder.build(id, context, mActivity, mActivityState, binaryMessenger, application, lifecycle, registrar,
             activityHashCode);
     }

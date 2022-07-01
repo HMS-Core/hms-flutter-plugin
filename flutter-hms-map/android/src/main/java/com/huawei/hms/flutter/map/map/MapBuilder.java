@@ -53,6 +53,8 @@ class MapBuilder implements MapMethods {
 
     private List<HashMap<String, Object>> tileOverlays;
 
+    private List<HashMap<String, Object>> heatMaps;
+
     private boolean trackCameraPosition = false;
 
     private boolean myLocationEnabled = false;
@@ -109,6 +111,7 @@ class MapBuilder implements MapMethods {
         controller.setPolygons(polygons);
         controller.setPolylines(polylines);
         controller.setCircles(circles);
+        controller.setHeatMaps(heatMaps);
         controller.setPadding(padding.top, padding.left, padding.bottom, padding.right);
         controller.setPointToCenter(pointToCenter);
         controller.setGroundOverlays(groundOverlays);
@@ -335,5 +338,10 @@ class MapBuilder implements MapMethods {
     @Override
     public void setTileOverlays(final List<HashMap<String, Object>> tileOverlays) {
         this.tileOverlays = tileOverlays;
+    }
+
+    @Override
+    public void setHeatMaps(final List<HashMap<String, Object>> heatMaps){
+        this.heatMaps = heatMaps;
     }
 }

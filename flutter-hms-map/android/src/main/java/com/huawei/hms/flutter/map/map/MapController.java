@@ -138,6 +138,8 @@ final class MapController
 
     private List<HashMap<String, Object>> initTileOverlays;
 
+    private List<HashMap<String, Object>> initHeatMaps;
+
     private final MapUtils mapUtils;
 
     private final MapListenerHandler mapListenerHandler;
@@ -403,7 +405,7 @@ final class MapController
         }
         mapListenerHandler.init(huaweiMap);
         mapUtils.init(huaweiMap, initMarkers, initPolylines, initPolygons, initCircles, initGroundOverlays,
-            initTileOverlays, markersClustering, messenger);
+            initTileOverlays, initHeatMaps, markersClustering, messenger);
         updateMyLocationSettings();
     }
 
@@ -596,6 +598,14 @@ final class MapController
         this.initTileOverlays = initTileOverlays;
         if (huaweiMap != null) {
             mapUtils.initTileOverlays(initTileOverlays);
+        }
+    }
+
+    @Override
+    public void setHeatMaps(final List<HashMap<String, Object>> initHeatMaps){
+        this.initHeatMaps = initHeatMaps;
+        if(huaweiMap != null){
+            mapUtils.initHeatMaps(initHeatMaps);
         }
     }
 

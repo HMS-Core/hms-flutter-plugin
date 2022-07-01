@@ -74,6 +74,13 @@ public interface MapMethods {
     void setTileOverlays(List<HashMap<String, Object>> initTileOverlays);
 
     /**
+     * Sets heat maps.
+     *
+     * @param initHeatMaps the initial heat maps
+     */
+    void setHeatMaps(List<HashMap<String, Object>> initHeatMaps);
+
+    /**
      * Sets camera target bounds.
      *
      * @param bounds the bounds

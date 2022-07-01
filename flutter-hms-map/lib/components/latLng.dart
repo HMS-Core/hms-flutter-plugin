@@ -14,8 +14,6 @@
     limitations under the License.
 */
 
-import 'dart:ui' show hashValues;
-
 class LatLng {
   final double lat;
   final double lng;
@@ -37,5 +35,5 @@ class LatLng {
   }
 
   @override
-  int get hashCode => hashValues(lat, lng);
+  int get hashCode => Object.hash(lat, lng);
 }

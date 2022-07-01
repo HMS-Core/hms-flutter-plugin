@@ -14,7 +14,6 @@
     limitations under the License.
 */
 
-import 'dart:ui' show hashValues;
 import 'package:flutter/foundation.dart' show setEquals;
 
 import 'package:huawei_map/components/components.dart';
@@ -65,5 +64,5 @@ class PolylineUpdates {
   }
 
   @override
-  int get hashCode => hashValues(insertSet, deleteSet, updateSet);
+  int get hashCode => Object.hash(insertSet, deleteSet, updateSet);
 }

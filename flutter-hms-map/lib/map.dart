@@ -147,6 +147,10 @@ class HuaweiMapController {
     return mChannel.updateTileOverlays(tileOverlayUpdates, mapId: mapId);
   }
 
+  Future<void> _updateHeatMaps(HeatMapUpdates heatMapUpdates) {
+    return mChannel.updateHeatMaps(heatMapUpdates, mapId: mapId);
+  }
+
   Future<void> clearTileCache(TileOverlay tileOverlay) {
     return mChannel.clearTileCache(tileOverlay.tileOverlayId, mapId: mapId);
   }
@@ -248,6 +252,7 @@ class HuaweiMap extends StatefulWidget {
   final Set<Circle> circles;
   final Set<GroundOverlay> groundOverlays;
   final Set<TileOverlay> tileOverlays;
+  final Set<HeatMap> heatMaps;
   final bool myLocationEnabled;
   final bool myLocationButtonEnabled;
   final bool trafficEnabled;
@@ -307,6 +312,7 @@ class HuaweiMap extends StatefulWidget {
     this.circles = const <Circle>{},
     this.groundOverlays = const <GroundOverlay>{},
     this.tileOverlays = const <TileOverlay>{},
+    this.heatMaps = const <HeatMap>{},
     this.onMapCreated,
     this.onCameraMoveStarted,
     this.onCameraMove,
@@ -345,6 +351,8 @@ class _HuaweiMapState extends State<HuaweiMap> {
   Map<TileOverlayId, TileOverlay> _tileOverlays =
       <TileOverlayId, TileOverlay>{};
 
+  Map<HeatMapId, HeatMap> _heatMaps = <HeatMapId, HeatMap>{};
+
   late HuaweiMapOptions _huaweiMapOptions;
 
   final Completer<HuaweiMapController> _controller =
@@ -361,6 +369,7 @@ class _HuaweiMapState extends State<HuaweiMap> {
       Param.circlesToInsert: circleToList(widget.circles),
       Param.groundOverlaysToInsert: groundOverlayToList(widget.groundOverlays),
       Param.tileOverlaysToInsert: tileOverlayToList(widget.tileOverlays),
+      Param.heatMapsToInsert: heatMapToList(widget.heatMaps)
     };
     return mChannel.buildView(
       creationParams,
@@ -379,6 +388,7 @@ class _HuaweiMapState extends State<HuaweiMap> {
     _circles = circleToMap(widget.circles);
     _groundOverlays = groundOverlayToMap(widget.groundOverlays);
     _tileOverlays = tileOverlayToMap(widget.tileOverlays);
+    _heatMaps = heatMapToMap(widget.heatMaps);
   }
 
   Future<void> onPlatformViewCreated(int id) async {
@@ -415,6 +425,7 @@ class _HuaweiMapState extends State<HuaweiMap> {
     _updateCircles();
     _updateGroundOverlays();
     _updateTileOverlays();
+    _updateHeatMaps();
   }
 
   void _updateMarkers() async {
@@ -457,6 +468,13 @@ class _HuaweiMapState extends State<HuaweiMap> {
     controller._updateTileOverlays(TileOverlayUpdates.update(
         _tileOverlays.values.toSet(), widget.tileOverlays));
     _tileOverlays = tileOverlayToMap(widget.tileOverlays);
+  }
+
+  void _updateHeatMaps() async {
+    final HuaweiMapController controller = await _controller.future;
+    controller._updateHeatMaps(
+        HeatMapUpdates.update(_heatMaps.values.toSet(), widget.heatMaps));
+    _heatMaps = heatMapToMap(widget.heatMaps);
   }
 
   void onClick(LatLng position) {

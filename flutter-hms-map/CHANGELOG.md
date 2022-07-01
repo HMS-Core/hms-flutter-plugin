@@ -1,3 +1,10 @@
+## 6.5.0+301
+
+- Updated Huawei Map SDK version to 6.5.0.301.
+- [Breaking Change]  Added the requirement of calling the HuaweiMapInitializer.initializeMap API before using the latest SDK.
+- Added the Heatmap function, allowing you to add, modify, delete, and customize a heatmap layer.
+- Added the convertCoordinate and convertCoordinates API, which converts WGS84 coordinates into GCJ02 coordinates.
+
 ## 6.0.1+305
 
 - Deleted the capability of prompting users to install HMS Core (APK).

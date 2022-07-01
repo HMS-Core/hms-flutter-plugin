@@ -25,6 +25,7 @@ import 'components/markerDemo.dart';
 import 'components/polygonDemo.dart';
 import 'components/polylineDemo.dart';
 import 'components/tileOverlayDemo.dart';
+import 'components/heatMapDemo.dart';
 import 'components/liteModeDemo.dart';
 import 'huaweiMapDemo.dart';
 
@@ -39,7 +40,14 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   double top = 0.0;
   double distance = 0.0;
+  LatLng? convertedLatLng;
   bool hmsLoggerStatus = true;
+
+  @override
+  void initState() {
+    HuaweiMapInitializer.initializeMap();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -176,6 +184,17 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
               CustomCard(
+                imagePath: "assets/heatMap.png",
+                text: "Heat Maps",
+                subText:
+                    "Display the density and distribution of crowd or cars",
+                textColor: Colors.white,
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HeatMapDemo()));
+                },
+              ),
+              CustomCard(
                 text: "Lite Mode",
                 imagePath: "assets/liteMode.jpg",
                 textColor: Colors.white,
@@ -228,6 +247,55 @@ class _HomePageState extends State<HomePage> {
                   : Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(distance.toString()),
+                    ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                child: Divider(
+                  color: Colors.black,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Coordinate Converter",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
+                child: Text(
+                  "It converts only WGS84 coordinates in China territory to GCJ02 coordinates.",
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: MaterialButton(
+                  onPressed: () async {
+                    LatLng result = await HuaweiMapUtils.convertCoordinate(
+                      LatLng(39.902722, 116.391441),
+                    );
+                    setState(() {
+                      convertedLatLng = result;
+                    });
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(30.0))),
+                  color: Color.fromRGBO(18, 26, 55, 1),
+                  textColor: Colors.white,
+                  splashColor: Colors.redAccent,
+                  padding: EdgeInsets.all(12.0),
+                  child: Text("Convert"),
+                ),
+              ),
+              convertedLatLng == null
+                  ? SizedBox.shrink()
+                  : Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(convertedLatLng!.lat.toString() +
+                          " : " +
+                          convertedLatLng!.lng.toString()),
                     ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),

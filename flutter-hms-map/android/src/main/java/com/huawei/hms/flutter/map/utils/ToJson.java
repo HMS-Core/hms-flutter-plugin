@@ -26,6 +26,7 @@ import com.huawei.hms.maps.model.LatLng;
 import com.huawei.hms.maps.model.LatLngBounds;
 import com.huawei.hms.maps.model.PointOfInterest;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +35,14 @@ public class ToJson {
 
     public static List<Double> latLng(final LatLng latLng) {
         return Arrays.asList(latLng.latitude, latLng.longitude);
+    }
+
+    public static List<List<Double>> latLngList(final LatLng[] latLngs){
+        List<List<Double>> result = new ArrayList<>();
+        for (LatLng latLng : latLngs) {
+            result.add(latLng(latLng));
+        }
+        return result;
     }
 
     public static HashMap<String, Object> cameraPosition(final CameraPosition position) {

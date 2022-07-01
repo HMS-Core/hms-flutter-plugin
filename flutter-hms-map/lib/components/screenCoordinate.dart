@@ -14,7 +14,6 @@
     limitations under the License.
 */
 
-import 'dart:ui' show hashValues;
 import 'package:flutter/material.dart' show immutable;
 
 @immutable
@@ -36,5 +35,5 @@ class ScreenCoordinate {
   }
 
   @override
-  int get hashCode => hashValues(x, y);
+  int get hashCode => Object.hash(x, y);
 }

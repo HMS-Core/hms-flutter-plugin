@@ -77,4 +77,9 @@ public interface Method {
     String SET_LOCATION_SOURCE = "[Map]setLocationSource";
     String SET_LOCATION = "[Map]setLocation";
     String DEACTIVATE_LOC_SOURCE = "[Map]deactivateLocationSource";
+    String INITIALIZE_MAP = "[MapUtil]initializeMap";
+    String SET_API_KEY = "[MapUtil]setApiKey";
+    String HEAT_MAPS_UPDATE = "[HeatMap]update";
+    String CONVERT_COORDINATE = "[MapUtil]convertCoordinate";
+    String CONVERT_COORDINATES = "[MapUtil]convertCoordinates";
 }

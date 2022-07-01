@@ -330,4 +330,30 @@ class Param {
   static const String time = "time";
 
   static const String fromMockProvider = "fromMockProvider";
+
+  //HeatMap
+
+  static const String heatMapsToInsert = "heatMapsToAdd";
+
+  static const String heatMapsToUpdate = "heatMapsToChange";
+
+  static const String heatMapsToDelete = "heatMapIdsToRemove";
+
+  static const String heatMapId = "heatMapId";
+
+  static const String resourceId = "resourceId";
+
+  static const String jsonData = "jsonData";
+
+  static const String intensity = "intensity";
+
+  static const String intensityMap = "intensityMap";
+
+  static const String opacity = "opacity";
+
+  static const String opacityMap = "opacityMap";
+
+  static const String radiusMap = "radiusMap";
+
+  static const String radiusUnit = "radiusUnit";
 }

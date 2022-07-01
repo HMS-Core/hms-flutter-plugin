@@ -14,24 +14,22 @@
     limitations under the License.
 */
 
-class MinMaxZoomPreference {
-  final double minZoom;
-  final double maxZoom;
+import 'package:flutter/services.dart' show MethodChannel;
+import 'package:huawei_map/constants/channel.dart' as Channel;
+import 'package:huawei_map/constants/method.dart';
 
-  const MinMaxZoomPreference(this.minZoom, this.maxZoom);
+class HuaweiMapInitializer {
+  static const MethodChannel _mapUtilsChannel =
+      MethodChannel(Channel.mapUtilChannel);
 
-  static const MinMaxZoomPreference unbounded = MinMaxZoomPreference(3, 20);
-
-  @override
-  bool operator ==(dynamic other) {
-    if (identical(this, other)) return true;
-    if (this.runtimeType != other.runtimeType) return false;
-
-    return other is MinMaxZoomPreference &&
-        this.minZoom == other.minZoom &&
-        this.maxZoom == other.maxZoom;
+  static void initializeMap() {
+    _mapUtilsChannel.invokeMethod(Method.InitializeMap);
   }
 
-  @override
-  int get hashCode => Object.hash(minZoom, maxZoom);
+  static void setApiKey({required String apiKey}) {
+    _mapUtilsChannel.invokeMethod(
+      Method.SetApiKey,
+      apiKey,
+    );
+  }
 }

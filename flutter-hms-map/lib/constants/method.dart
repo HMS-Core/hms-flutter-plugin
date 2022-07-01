@@ -115,6 +115,10 @@ class Method {
 
   static const String MapSetStyle = "[Map]setStyle";
 
+  static const String InitializeMap = "[MapUtil]initializeMap";
+
+  static const String SetApiKey = "[MapUtil]setApiKey";
+
   //Location Source
   static const String SetLocationSource = "[Map]setLocationSource";
 
@@ -128,8 +132,12 @@ class Method {
 
   static const String GroundOverlaysUpdate = "[GroundOverlays]update";
 
-  //Distance Calculator
+  //Map Utils
   static const String MapDistanceCalculator = "[MapUtil]distanceCalculator";
+
+  static const String MapConvertCoordinate = "[MapUtil]convertCoordinate";
+
+  static const String MapConvertCoordinates = "[MapUtil]convertCoordinates";
 
   //HMS Logger
   static const String EnableLogger = "[MapUtil]enableLogger";
@@ -145,4 +153,7 @@ class Method {
   static const String MarkerStartAnimation = "MarkerStartAnimation";
 
   static const String MarkerIsClusterable = "[Markers]isMarkerClusterable";
+
+  //Heat Map
+  static const String HeatMapUpdate = "[HeatMap]update";
 }

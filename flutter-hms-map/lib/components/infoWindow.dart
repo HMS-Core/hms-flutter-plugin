@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:ui' show Offset, VoidCallback, hashValues;
+import 'dart:ui' show Offset, VoidCallback;
 
 class InfoWindow {
   final String? title;
@@ -65,5 +65,5 @@ class InfoWindow {
   }
 
   @override
-  int get hashCode => hashValues(title.hashCode, snippet, anchor);
+  int get hashCode => Object.hash(title.hashCode, snippet, anchor);
 }

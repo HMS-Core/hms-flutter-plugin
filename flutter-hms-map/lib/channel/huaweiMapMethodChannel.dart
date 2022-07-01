@@ -19,6 +19,7 @@ import 'dart:typed_data' show Uint8List;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show Factory;
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/gestures.dart' show OneSequenceGestureRecognizer;
 
@@ -290,6 +291,14 @@ class HuaweiMapMethodChannel {
         tileOverlayUpdatesToJson(tileOverlayUpdates));
   }
 
+  Future<void> updateHeatMaps(
+    HeatMapUpdates heatMapUpdates, {
+    required int mapId,
+  }) {
+    return setChannel(mapId).invokeMethod<void>(
+        Method.HeatMapUpdate, heatMapUpdatesToJson(heatMapUpdates));
+  }
+
   Future<void> clearTileCache(TileOverlayId tileOverlayId,
       {required int mapId}) {
     return setChannel(mapId).invokeMethod<void>(Method.ClearTileCache,
@@ -461,12 +470,37 @@ class HuaweiMapMethodChannel {
       Map<String, dynamic> creationParams,
       Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
       PlatformViewCreatedCallback onPlatformViewCreated) {
-    return AndroidView(
+    return PlatformViewLink(
       viewType: Channel.channel,
-      onPlatformViewCreated: onPlatformViewCreated,
-      gestureRecognizers: gestureRecognizers,
-      creationParams: creationParams,
-      creationParamsCodec: const StandardMessageCodec(),
+      surfaceFactory: (
+        BuildContext context,
+        PlatformViewController controller,
+      ) {
+        return AndroidViewSurface(
+          controller: controller as AndroidViewController,
+          gestureRecognizers: gestureRecognizers ??
+              const <Factory<OneSequenceGestureRecognizer>>{},
+          hitTestBehavior: PlatformViewHitTestBehavior.opaque,
+        );
+      },
+      onCreatePlatformView: (PlatformViewCreationParams params) {
+        final AndroidViewController controller =
+            PlatformViewsService.initExpensiveAndroidView(
+          id: params.id,
+          viewType: Channel.channel,
+          layoutDirection: TextDirection.ltr,
+          creationParams: creationParams,
+          creationParamsCodec: const StandardMessageCodec(),
+          onFocus: () => params.onFocusChanged(true),
+        );
+        controller.addOnPlatformViewCreatedListener(
+          params.onPlatformViewCreated,
+        );
+        controller.addOnPlatformViewCreatedListener(
+          onPlatformViewCreated,
+        );
+        return controller;
+      },
     );
   }
 }

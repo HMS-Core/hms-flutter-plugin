@@ -14,8 +14,6 @@
     limitations under the License.
 */
 
-import 'dart:ui' show hashValues;
-
 import 'package:huawei_map/constants/param.dart';
 import 'package:huawei_map/utils/toJson.dart';
 import 'package:huawei_map/components/components.dart';
@@ -59,5 +57,5 @@ class PointOfInterest {
   }
 
   @override
-  int get hashCode => hashValues(latLng, name, placeId);
+  int get hashCode => Object.hash(latLng, name, placeId);
 }

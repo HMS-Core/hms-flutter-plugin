@@ -37,6 +37,7 @@ import com.huawei.hms.flutter.map.circle.CircleMethods;
 import com.huawei.hms.flutter.map.constants.Channel;
 import com.huawei.hms.flutter.map.constants.Param;
 import com.huawei.hms.flutter.map.groundoverlay.GroundOverlayMethods;
+import com.huawei.hms.flutter.map.heatmap.HeatMapMethods;
 import com.huawei.hms.flutter.map.map.MapMethods;
 import com.huawei.hms.flutter.map.marker.MarkerMethods;
 import com.huawei.hms.flutter.map.polygon.PolygonMethods;
@@ -53,6 +54,7 @@ import com.huawei.hms.maps.model.CustomCap;
 import com.huawei.hms.maps.model.Dash;
 import com.huawei.hms.maps.model.Dot;
 import com.huawei.hms.maps.model.Gap;
+import com.huawei.hms.maps.model.HeatMapOptions;
 import com.huawei.hms.maps.model.LatLng;
 import com.huawei.hms.maps.model.LatLngBounds;
 import com.huawei.hms.maps.model.PatternItem;
@@ -94,7 +96,30 @@ public class Convert {
         return (Map<?, ?>) o;
     }
 
-    private static String toString(final Object o) {
+    private static Map<Float, Integer> toColorMap(final Object o) {
+        final Map<?, ?> args = Convert.toMap(o);
+        final Map<Float, Integer> result = new HashMap<>();
+
+        for (Map.Entry<?, ?> entry : args.entrySet()) {
+            result.put(Convert.toFloatWrapper(entry.getKey()),
+                    toIntegerWrapper(Long.parseLong((String) entry.getValue())));
+        }
+        return result;
+    }
+
+    private static Map<Float, Float> toFloatMap(final Object o){
+        final Map<?, ?> args = Convert.toMap(o);
+        final Map<Float, Float> result = new HashMap<>();
+
+        for (Map.Entry<?, ?> entry : args.entrySet()) {
+            result.put(Convert.toFloatWrapper(entry.getKey()),
+                    Convert.toFloatWrapper(entry.getValue()));
+        }
+        return result;
+
+    }
+
+    public static String toString(final Object o) {
         return (String) o;
     }
 
@@ -125,6 +150,15 @@ public class Convert {
     public static LatLng toLatLng(final Object o) {
         final List<?> data = Convert.toList(o);
         return new LatLng(Convert.toDouble(data.get(0)), Convert.toDouble(data.get(1)));
+    }
+
+    public static LatLng[] toLatLngList(final Object o) {
+        final List<?> data = Convert.toList(o);
+        LatLng[] result = new LatLng[data.size()];
+        for(int i = 0; i<data.size(); i++){
+            result[i] = Convert.toLatLng(data.get(i));
+        }
+        return result;
     }
 
     public static Point toPoint(final Object o) {
@@ -985,6 +1019,77 @@ public class Convert {
             throw new IllegalArgumentException(Param.ERROR);
         } else {
             return tileOverlayId;
+        }
+    }
+
+    public static String processHeatMapOptions(final Object o, final HeatMapMethods call){
+        final Map<?, ?> data = Convert.toMap(o);
+
+        final Object color = data.get(Param.COLOR);
+        if (color != null ){
+            call.setColor(Convert.toColorMap(color));
+        }
+
+        final Object resourceId = data.get(Param.RESOURCE_ID);
+        if (resourceId != null){
+            call.setDataSet(Convert.toInt(resourceId));
+            call.setResourceId(Convert.toInt(resourceId));
+        }
+
+        final Object jsonData = data.get(Param.JSON_DATA);
+        if (jsonData != null){
+            call.setDataSet(Convert.toString(jsonData));
+        }
+
+        final Object intensity = data.get(Param.INTENSITY);
+        if (intensity != null) {
+            call.setIntensity(Convert.toFloat(intensity));
+        }
+
+        final Object intensityMap = data.get(Param.INTENSITY_MAP);
+        if(intensityMap != null){
+            call.setIntensity(Convert.toFloatMap(intensityMap));
+        }
+
+        final Object opacity = data.get(Param.OPACITY);
+        if(opacity != null){
+            call.setOpacity(Convert.toFloat(opacity));
+        }
+
+        final Object opacityMap = data.get(Param.OPACITY_MAP);
+        if (opacityMap != null){
+            call.setOpacity(Convert.toFloatMap(opacityMap));
+        }
+
+        final Object radius = data.get(Param.RADIUS);
+        if (radius != null) {
+            call.setRadius(Convert.toFloat(radius));
+        }
+
+        final Object radiusMap = data.get(Param.RADIUS_MAP);
+        if (radiusMap != null){
+            call.setRadius(Convert.toFloatMap(radiusMap));
+        }
+
+        final Object radiusUnitInt = data.get(Param.RADIUS_UNIT);
+        if (radiusUnitInt != null){
+            switch (Convert.toInt(radiusUnitInt)){
+                case 0:
+                    call.setRadiusUnit(HeatMapOptions.RadiusUnit.PIXEL);
+                    break;
+                case 1:
+                    call.setRadiusUnit(HeatMapOptions.RadiusUnit.METER);
+                    break;
+                default:
+                    Log.e("processHeatMapOptions", "Invalid RadiusUnit", null);
+            }
+        }
+
+        final String heatMapId = (String) data.get(Param.HEAT_MAP_ID);
+        if (heatMapId == null) {
+            throw new IllegalArgumentException(Param.ERROR);
+        } else {
+            return heatMapId;
         }
     }
 

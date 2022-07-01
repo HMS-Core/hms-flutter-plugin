@@ -30,6 +30,9 @@ import com.huawei.hms.flutter.map.constants.Method;
 import com.huawei.hms.flutter.map.logger.HMSLogger;
 import com.huawei.hms.flutter.map.map.MapFactory;
 import com.huawei.hms.flutter.map.utils.Convert;
+import com.huawei.hms.flutter.map.utils.ToJson;
+import com.huawei.hms.maps.MapsInitializer;
+import com.huawei.hms.maps.common.util.CoordinateConverter;
 import com.huawei.hms.maps.common.util.DistanceCalculator;
 import com.huawei.hms.maps.model.LatLng;
 
@@ -107,8 +110,9 @@ public class HmsMap
         lifecycle.addObserver(this);
         pluginBinding.getPlatformViewRegistry()
             .registerViewFactory(VIEW_TYPE,
-                new MapFactory(state, pluginBinding.getBinaryMessenger(), binding.getActivity(), lifecycle, null,
-                    binding.getActivity().hashCode()));
+                new MapFactory(state, pluginBinding.getBinaryMessenger(), binding.
+                        getActivity(), lifecycle, null,
+                        binding.getActivity().hashCode()));
     }
 
     @Override
@@ -240,6 +244,45 @@ public class HmsMap
                     HMSLogger.getInstance(pluginBinding.getApplicationContext())
                         .sendSingleEvent(Method.DISTANCE_CALCULATOR);
                 }
+                break;
+            }
+            case Method.INITIALIZE_MAP: {
+                if (pluginBinding != null) {
+                    HMSLogger.getInstance(pluginBinding.getApplicationContext())
+                            .startMethodExecutionTimer(Method.INITIALIZE_MAP);
+                    MapsInitializer.initialize(pluginBinding.getApplicationContext());
+                    HMSLogger.getInstance(pluginBinding.getApplicationContext())
+                            .sendSingleEvent(Method.INITIALIZE_MAP);
+                }
+                break;
+            }
+            case Method.SET_API_KEY: {
+                final String apiKey = Convert.toString(call.arguments);
+                HMSLogger.getInstance(pluginBinding.getApplicationContext())
+                        .startMethodExecutionTimer(Method.SET_API_KEY);
+                MapsInitializer.setApiKey(apiKey);
+                HMSLogger.getInstance(pluginBinding.getApplicationContext())
+                        .sendSingleEvent(Method.SET_API_KEY);
+                break;
+            }
+            case Method.CONVERT_COORDINATE: {
+                final LatLng latLng = Convert.toLatLng(call.arguments);
+                HMSLogger.getInstance(pluginBinding.getApplicationContext())
+                        .startMethodExecutionTimer(Method.CONVERT_COORDINATE);
+                CoordinateConverter converter = new CoordinateConverter();
+                result.success(ToJson.latLng(converter.convert(latLng)));
+                HMSLogger.getInstance(pluginBinding.getApplicationContext())
+                        .sendSingleEvent(Method.CONVERT_COORDINATE);
+                break;
+            }
+            case Method.CONVERT_COORDINATES: {
+                LatLng[] latLngs = Convert.toLatLngList(call.arguments);
+                HMSLogger.getInstance(pluginBinding.getApplicationContext())
+                        .startMethodExecutionTimer(Method.CONVERT_COORDINATES);
+                CoordinateConverter converter = new CoordinateConverter();
+                result.success(ToJson.latLngList(converter.convert(latLngs)));
+                HMSLogger.getInstance(pluginBinding.getApplicationContext())
+                        .sendSingleEvent(Method.CONVERT_COORDINATES);
                 break;
             }
             default:
