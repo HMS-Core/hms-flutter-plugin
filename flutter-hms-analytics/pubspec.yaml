@@ -1,0 +1,27 @@
+name: huawei_analytics
+description: HUAWEI Analytics Kit plugin for Flutter.  Analytics Kit offers you a range of preset analytics models so you can gain a deeper insight into your users, products, and content.
+homepage: https://www.huawei.com
+repository: https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-analytics
+
+version: 6.5.0+300
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+  flutter: ">=1.20.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.huawei.hms.flutter.analytics
+        pluginClass: AnalyticsPlugin
+      ios:
+        pluginClass: AnalyticsPlugin
