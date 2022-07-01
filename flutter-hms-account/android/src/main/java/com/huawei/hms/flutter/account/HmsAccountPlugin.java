@@ -39,46 +39,8 @@ public class HmsAccountPlugin implements FlutterPlugin, ActivityAware {
     private MethodChannel hwAuthTool;
     private MethodChannel hwNetworkTool;
     private MethodChannel hwSmsManager;
-
     private MethodChannel accAuthService;
     private MethodChannel accAuthManager;
-
-    private void onAttachedToEngine(final BinaryMessenger messenger, final Activity activity) {
-        initializeChannels(messenger);
-        setHandlers(activity);
-    }
-
-    private void initializeChannels(final BinaryMessenger messenger) {
-        hwAuthTool = new MethodChannel(messenger, "com.huawei.hms.flutter.account/hwid/auth");
-        hwNetworkTool = new MethodChannel(messenger, "com.huawei.hms.flutter.account/hwid/network");
-        hwSmsManager = new MethodChannel(messenger, "com.huawei.hms.flutter.account/hwid/sms");
-
-        accAuthService = new MethodChannel(messenger, "com.huawei.hms.flutter.account/acc");
-        accAuthManager = new MethodChannel(messenger, "com.huawei.hms.flutter.account/acc/manager");
-    }
-
-    private void setHandlers(Activity activity) {
-        AccAuthService accService = new AccAuthService(activity);
-        if (mActivityPluginBinding != null) {
-            mActivityPluginBinding.addActivityResultListener(accService);
-        }
-        accAuthService.setMethodCallHandler(accService);
-
-        accAuthManager.setMethodCallHandler(new AccAuthManager(activity));
-        
-        hwAuthTool.setMethodCallHandler(new HwAuthTool(activity));
-        hwNetworkTool.setMethodCallHandler(new HwNetworkTool(activity));
-        hwSmsManager.setMethodCallHandler(new HwSmsManager(activity, hwSmsManager));
-    }
-
-    private void removeChannels() {
-        hwAuthTool = null;
-        hwNetworkTool = null;
-        hwSmsManager = null;
-
-        accAuthService = null;
-        accAuthManager = null;
-    }
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
@@ -86,13 +48,15 @@ public class HmsAccountPlugin implements FlutterPlugin, ActivityAware {
     }
 
     @Override
-    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-        this.mFlutterPluginBinding = null;
-        removeChannels();
+    public void onAttachedToActivity(@NonNull ActivityPluginBinding activityPluginBinding) {
+        mActivityPluginBinding = activityPluginBinding;
+        if (mFlutterPluginBinding != null) {
+            onAttachedToEngine(mFlutterPluginBinding.getBinaryMessenger(), activityPluginBinding.getActivity());
+        }
     }
 
     @Override
-    public void onAttachedToActivity(@NonNull ActivityPluginBinding activityPluginBinding) {
+    public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding activityPluginBinding) {
         mActivityPluginBinding = activityPluginBinding;
         if (mFlutterPluginBinding != null) {
             onAttachedToEngine(mFlutterPluginBinding.getBinaryMessenger(), activityPluginBinding.getActivity());
@@ -105,22 +69,40 @@ public class HmsAccountPlugin implements FlutterPlugin, ActivityAware {
     }
 
     @Override
-    public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding activityPluginBinding) {
-        mActivityPluginBinding = activityPluginBinding;
-        if (mFlutterPluginBinding != null) {
-            onAttachedToEngine(mFlutterPluginBinding.getBinaryMessenger(), activityPluginBinding.getActivity());
-        }
-    }
-
-    @Override
     public void onDetachedFromActivity() {
         hwAuthTool.setMethodCallHandler(null);
         hwNetworkTool.setMethodCallHandler(null);
         hwSmsManager.setMethodCallHandler(null);
-
         accAuthService.setMethodCallHandler(null);
         accAuthManager.setMethodCallHandler(null);
-        
         mActivityPluginBinding = null;
+    }
+
+    @Override
+    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+        this.mFlutterPluginBinding = null;
+        this.hwAuthTool = null;
+        this.hwNetworkTool = null;
+        this.hwSmsManager = null;
+        this.accAuthService = null;
+        this.accAuthManager = null;
+    }
+
+    private void onAttachedToEngine(final BinaryMessenger messenger, final Activity activity) {
+        hwAuthTool = new MethodChannel(messenger, "com.huawei.hms.flutter.account/hwid/auth");
+        hwNetworkTool = new MethodChannel(messenger, "com.huawei.hms.flutter.account/hwid/network");
+        hwSmsManager = new MethodChannel(messenger, "com.huawei.hms.flutter.account/hwid/sms");
+        accAuthService = new MethodChannel(messenger, "com.huawei.hms.flutter.account/acc");
+        accAuthManager = new MethodChannel(messenger, "com.huawei.hms.flutter.account/acc/manager");
+
+        AccAuthService accService = new AccAuthService(activity);
+        if (mActivityPluginBinding != null) {
+            mActivityPluginBinding.addActivityResultListener(accService);
+        }
+        accAuthService.setMethodCallHandler(accService);
+        accAuthManager.setMethodCallHandler(new AccAuthManager(activity));
+        hwAuthTool.setMethodCallHandler(new HwAuthTool(activity));
+        hwNetworkTool.setMethodCallHandler(new HwNetworkTool(activity));
+        hwSmsManager.setMethodCallHandler(new HwSmsManager(activity, hwSmsManager));
     }
 }

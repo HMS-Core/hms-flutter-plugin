@@ -1,15 +1,23 @@
+## 6.4.0+301
+
+- **BREAKING CHANGES**
+
+  - **AccountAuthService** structure slightly changed. Now you have to create AccountAuthService object with **AccountAuthManager.getService** method.
+
+- Added the **setIdTokenSignAlg** method for specifying the signature algorithm type for the ID token to the AccountAuthParamsHelper class.
+
 ## 6.1.0+304
 
 - Deleted the capability of prompting users to install HMS Core (APK).
 
 ## 6.1.0+302
 
-Added **carrierId** to signed id.
-Added **independentSignIn** method to AccountAuthService.
+- Added **carrierId** to signed id.
+- Added **independentSignIn** method to AccountAuthService.
 
 ## 5.2.0+301
 
-Migrated to **null safety**.
+- Migrated to **Null Safety**.
 
 ## 5.2.0+300
 

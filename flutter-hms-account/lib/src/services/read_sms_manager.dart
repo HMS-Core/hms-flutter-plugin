@@ -14,17 +14,19 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
-import '../utils/constants.dart';
+part of huawei_account;
 
-typedef SmsListener({String? message, String? errorCode});
+typedef SmsListener = Function({
+  String? message,
+  String? errorCode,
+});
 
 class ReadSmsManager {
-  static MethodChannel _c = init();
+  static final MethodChannel _c = init();
   static SmsListener? _listener;
 
   static MethodChannel init() {
-    MethodChannel channel = MethodChannel(SMS_MANAGER);
+    MethodChannel channel = const MethodChannel(_SMS_MANAGER);
     channel.setMethodCallHandler(_handleSms);
     return channel;
   }
@@ -32,16 +34,22 @@ class ReadSmsManager {
   static Future<dynamic> _handleSms(MethodCall call) {
     if (_listener != null) {
       switch (call.method) {
-        case "timeOut":
-          _listener!(errorCode: call.arguments["errorCode"]);
+        case 'timeOut':
+          _listener!(
+            errorCode: call.arguments['errorCode'],
+          );
           _listener = null;
           break;
-        case "failed":
-          _listener!(errorCode: call.arguments["errorCode"]);
+        case 'failed':
+          _listener!(
+            errorCode: call.arguments['errorCode'],
+          );
           _listener = null;
           break;
-        case "readSms":
-          _listener!(message: call.arguments["message"] ?? "empty");
+        case 'readSms':
+          _listener!(
+            message: call.arguments['message'] ?? 'empty',
+          );
           _listener = null;
           break;
         default:
@@ -53,20 +61,34 @@ class ReadSmsManager {
 
   /// Enables the service of reading SMS messages until the SMS messages that
   /// meet the rules are obtained or the service times out (the timeout duration is 5 minutes).
-  static void start(SmsListener listener) {
+  static void start(
+    SmsListener listener,
+  ) {
     _listener = listener;
-    _c.invokeMethod('smsVerification');
+    _c.invokeMethod(
+      'smsVerification',
+    );
   }
 
   /// Enables the service of reading SMS messages until the SMS messages that
   /// meet the rules are obtained or the service times out (the timeout duration is 5 minutes).
-  static void startConsent(SmsListener listener, [String? phoneNumber]) {
+  static void startConsent(
+    SmsListener listener, [
+    String? phoneNumber,
+  ]) {
     _listener = listener;
-    _c.invokeMethod("smsWithPhoneNumber", {'phoneNumber': phoneNumber});
+    _c.invokeMethod(
+      'smsWithPhoneNumber',
+      <String, dynamic>{
+        'phoneNumber': phoneNumber,
+      },
+    );
   }
 
   /// Gets the application's unique code for sms verification.
   static Future<String> obtainHashcode() async {
-    return await _c.invokeMethod("obtainHashcode");
+    return await _c.invokeMethod(
+      'obtainHashcode',
+    );
   }
 }

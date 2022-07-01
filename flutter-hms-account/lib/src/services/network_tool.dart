@@ -14,36 +14,47 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
-import '../utils/constants.dart';
+part of huawei_account;
 
 /// Constructs a cookie based on specified parameters.
 class NetworkTool {
-  static const MethodChannel _c = const MethodChannel(NETWORK_TOOL);
+  static const MethodChannel _c = MethodChannel(_NETWORK_TOOL);
 
   /// Constructs a cookie by combining entered values.
   static Future<String> buildNetworkCookie(
-      String cookieName,
-      String? cookieValue,
-      String? domain,
-      String? path,
-      bool? isHttpOnly,
-      bool? isSecure,
-      double? maxAge) async {
-    return await _c.invokeMethod("buildNetworkCookie", {
-      'cookieName': cookieName,
-      'cookieValue': cookieValue,
-      'domain': domain,
-      'path': path,
-      'isHttpOnly': isHttpOnly,
-      'isSecure': isSecure,
-      'maxAge': maxAge
-    });
+    String cookieName,
+    String? cookieValue,
+    String? domain,
+    String? path,
+    bool? isHttpOnly,
+    bool? isSecure,
+    double? maxAge,
+  ) async {
+    return await _c.invokeMethod(
+      'buildNetworkCookie',
+      <String, dynamic>{
+        'cookieName': cookieName,
+        'cookieValue': cookieValue,
+        'domain': domain,
+        'path': path,
+        'isHttpOnly': isHttpOnly,
+        'isSecure': isSecure,
+        'maxAge': maxAge,
+      },
+    );
   }
 
   /// Obtains a cookie URL based on the domain name and [isUseHttps].
-  static Future<String> buildNetworkUrl(String domain, bool? isUseHttps) async {
+  static Future<String> buildNetworkUrl(
+    String domain,
+    bool? isUseHttps,
+  ) async {
     return await _c.invokeMethod(
-        "buildNetworkUrl", {'domainName': domain, 'isHttps': isUseHttps});
+      'buildNetworkUrl',
+      <String, dynamic>{
+        'domainName': domain,
+        'isHttps': isUseHttps,
+      },
+    );
   }
 }

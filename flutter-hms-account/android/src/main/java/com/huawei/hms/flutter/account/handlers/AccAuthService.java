@@ -18,8 +18,6 @@ package com.huawei.hms.flutter.account.handlers;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
-import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
@@ -41,16 +39,11 @@ import io.flutter.plugin.common.PluginRegistry;
 
 public class AccAuthService implements MethodChannel.MethodCallHandler, PluginRegistry.ActivityResultListener {
     private static final String TAG = "AccAuthService";
-
     private final Activity activity;
-    private final Map<Integer, Pair<MethodChannel.Result, Object>> mResultsForRequests;
+    private final Map<Integer, MethodChannel.Result> resultChannels = new HashMap<>();
 
-    private AccountAuthService service;
-    private int mRequestNumber = 1000;
-
-    public AccAuthService(Activity activity1) {
-        this.activity = activity1;
-        mResultsForRequests = new HashMap<>();
+    public AccAuthService(Activity activity) {
+        this.activity = activity;
     }
 
     @Override
@@ -82,10 +75,72 @@ public class AccAuthService implements MethodChannel.MethodCallHandler, PluginRe
     }
 
     private synchronized void signIn(@NonNull MethodCall call, MethodChannel.Result result) {
-        mRequestNumber++;
-        mResultsForRequests.put(mRequestNumber, Pair.create(result, null));
+        AccountAuthService service = getAccountAuthService(call);
+        int requestCode = getAvailableActivityRequestCode(result);
+        activity.startActivityForResult(service.getSignInIntent(), requestCode);
+    }
 
-        Integer defaultChoice = FromMap.toInteger("defaultParam", call.argument("defaultParam"));
+    private void independent(@NonNull MethodCall call, MethodChannel.Result result) {
+        String accessToken = FromMap.toString("accessToken", call.argument("accessToken"), false);
+        if (accessToken == null) {
+            ResultSender.illegal(activity, TAG, call.method, result);
+            return;
+        }
+        AccountAuthService service = getAccountAuthService(call);
+        int requestCode = getAvailableActivityRequestCode(result);
+        activity.startActivityForResult(service.getIndependentSignInIntent(accessToken), requestCode);
+    }
+
+    private void silent(@NonNull MethodCall call, MethodChannel.Result result) {
+        getAccountAuthService(call).silentSignIn()
+                .addOnSuccessListener(authAccount -> ResultSender.success(activity, call.method, result, AccountBuilder.authAccountToMap(authAccount, activity.getApplicationContext())))
+                .addOnFailureListener(e -> ResultSender.exception(activity, TAG, e, call.method, result));
+    }
+
+    private void signOut(@NonNull MethodCall call, MethodChannel.Result result) {
+        getAccountAuthService(call).signOut()
+                .addOnSuccessListener(aVoid -> ResultSender.success(activity, call.method, result, true))
+                .addOnFailureListener(e -> ResultSender.exception(activity, TAG, e, call.method, result));
+    }
+
+    private void cancelAuth(@NonNull MethodCall call, MethodChannel.Result result) {
+        getAccountAuthService(call).cancelAuthorization()
+                .addOnSuccessListener(aVoid -> ResultSender.success(activity, call.method, result, true))
+                .addOnFailureListener(e -> ResultSender.exception(activity, TAG, e, call.method, result));
+    }
+
+    private void getChannel(@NonNull MethodCall call, MethodChannel.Result result) {
+        getAccountAuthService(call).getChannel()
+                .addOnSuccessListener(accountIcon -> ResultSender.success(activity, call.method, result, AccountBuilder.accountIconToMap(accountIcon)))
+                .addOnFailureListener(e -> ResultSender.exception(activity, TAG, e, call.method, result));
+    }
+
+    @Override
+    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+        final MethodChannel.Result resultChannel = resultChannels.get(requestCode);
+        if (resultChannel != null) {
+            resultChannels.remove(requestCode);
+            AccountAuthManager.parseAuthResultFromIntent(data)
+                    .addOnSuccessListener(authAccount -> ResultSender.success(activity, "signIn", resultChannel, AccountBuilder.authAccountToMap(authAccount, activity.getApplicationContext())))
+                    .addOnFailureListener(e -> ResultSender.exception(activity, TAG, e, "signIn", resultChannel));
+            return true;
+        }
+        return false;
+    }
+
+    private int getAvailableActivityRequestCode(MethodChannel.Result result) {
+        int requestCode = 8888;
+        while (true) {
+            if (!resultChannels.containsKey(requestCode)) {
+                resultChannels.put(requestCode, result);
+                return requestCode;
+            }
+            requestCode++;
+        }
+    }
+
+    private AccountAuthService getAccountAuthService(@NonNull MethodCall call) {
+        final Integer defaultChoice = FromMap.toInteger("defaultParam", call.argument("defaultParam"));
 
         AccountAuthParamsHelper helper;
         if (defaultChoice != null && defaultChoice.equals(0)) {
@@ -97,85 +152,6 @@ public class AccAuthService implements MethodChannel.MethodCallHandler, PluginRe
         }
 
         AccountAuthParams params = AccountBuilder.buildAccountAuthParams(helper, call);
-        service = AccountAuthManager.getService(activity, params);
-
-        activity.startActivityForResult(service.getSignInIntent(), mRequestNumber);
-    }
-
-    private void independent(@NonNull MethodCall call, MethodChannel.Result result) {
-        AccountAuthParams authParams = new AccountAuthParamsHelper().setProfile().createParams();
-        service = AccountAuthManager.getService(activity, authParams);
-
-        String accessToken = FromMap.toString("accessToken", call.argument("accessToken"), false);
-
-        if (accessToken == null) {
-            ResultSender.illegal(activity, TAG, call.method, result);
-            return;
-        }
-
-        mRequestNumber++;
-        mResultsForRequests.put(mRequestNumber, Pair.create(result, null));
-
-        activity.startActivityForResult(service.getIndependentSignInIntent(accessToken), mRequestNumber);
-    }
-
-    private void silent(@NonNull MethodCall call, MethodChannel.Result result) {
-        if (service == null) {
-            ResultSender.noService(activity, TAG, call.method, result);
-            return;
-        }
-
-        service.silentSignIn()
-                .addOnSuccessListener(authAccount -> ResultSender.success(activity, call.method, result, AccountBuilder.authAccountToMap(authAccount, activity.getApplicationContext())))
-                .addOnFailureListener(e -> ResultSender.exception(activity, TAG, e, call.method, result));
-    }
-
-    private void signOut(@NonNull MethodCall call, MethodChannel.Result result) {
-        if (service == null) {
-            ResultSender.noService(activity, TAG, call.method, result);
-            return;
-        }
-
-        service.signOut()
-                .addOnSuccessListener(aVoid -> ResultSender.success(activity, call.method, result, true))
-                .addOnFailureListener(e -> ResultSender.exception(activity, TAG, e, call.method, result));
-    }
-
-    private void cancelAuth(@NonNull MethodCall call, MethodChannel.Result result) {
-        if (service == null) {
-            ResultSender.noService(activity, TAG, call.method, result);
-            return;
-        }
-
-        service.cancelAuthorization()
-                .addOnSuccessListener(aVoid -> ResultSender.success(activity, call.method, result, true))
-                .addOnFailureListener(e -> ResultSender.exception(activity, TAG, e, call.method, result));
-    }
-
-    private void getChannel(@NonNull MethodCall call, MethodChannel.Result result) {
-        AccountAuthParams authParams = new AccountAuthParamsHelper(AccountAuthParams.DEFAULT_AUTH_REQUEST_PARAM).createParams();
-        AccountAuthService service1 = AccountAuthManager.getService(activity, authParams);
-
-        service1.getChannel()
-                .addOnSuccessListener(accountIcon -> ResultSender.success(activity, call.method, result, AccountBuilder.accountIconToMap(accountIcon)))
-                .addOnFailureListener(e -> ResultSender.exception(activity, TAG, e, call.method, result));
-    }
-
-    @Override
-    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-        final Pair<MethodChannel.Result, Object> pair = mResultsForRequests.get(requestCode);
-
-        if (pair == null) {
-            return false;
-        }
-
-        final MethodChannel.Result result = pair.first;
-
-        if (result != null) {
-            AccountAuthManager.parseAuthResultFromIntent(data)
-                    .addOnSuccessListener(authAccount -> ResultSender.success(activity, "signIn", result, AccountBuilder.authAccountToMap(authAccount, activity.getApplicationContext())))
-                    .addOnFailureListener(e -> ResultSender.exception(activity, TAG, e, "signIn", result));
-        }
-        return true;
+        return AccountAuthManager.getService(activity, params);
     }
 }

@@ -16,16 +16,23 @@
 
 library huawei_account;
 
-export './src/common/account.dart';
-export './src/common/scope.dart';
-export './src/request/account_auth_extended_params.dart';
-export './src/request/account_auth_params.dart';
-export './src/request/account_auth_params_helper.dart';
-export './src/results/account_icon.dart';
-export './src/results/auth_account.dart';
-export './src/services/account_auth_manager.dart';
-export './src/services/account_auth_service.dart';
-export './src/services/huawei_id_auth_tool.dart';
-export './src/services/network_tool.dart';
-export './src/services/read_sms_manager.dart';
-export './src/ui/huawei_id_auth_button.dart';
+import 'dart:typed_data';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+part 'src/common/account.dart';
+part 'src/common/scope.dart';
+part 'src/request/account_auth_extended_params.dart';
+part 'src/request/account_auth_params_helper.dart';
+part 'src/request/account_auth_params.dart';
+part 'src/results/account_icon.dart';
+part 'src/results/auth_account.dart';
+part 'src/services/account_auth_manager.dart';
+part 'src/services/account_auth_service.dart';
+part 'src/services/huawei_id_auth_tool.dart';
+part 'src/services/network_tool.dart';
+part 'src/services/read_sms_manager.dart';
+part 'src/ui/huawei_id_auth_button.dart';
+part 'src/utils/account_utils.dart';
+part 'src/utils/constants.dart';

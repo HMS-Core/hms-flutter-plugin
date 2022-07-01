@@ -14,32 +14,52 @@
     limitations under the License.
 */
 
-import 'package:flutter/material.dart';
+part of huawei_account;
 
 /// Account object obtained from android.accounts.Account
 class Account {
-  String? type;
   String? name;
+  String? type;
 
-  Account({this.name, this.type});
+  Account({
+    this.name,
+    this.type,
+  });
 
   factory Account.fromMap(Map<dynamic, dynamic> map) {
-    return Account(type: map['type'] ?? null, name: map['name'] ?? null);
+    return Account(
+      name: map['name'],
+      type: map['type'],
+    );
   }
 
-  Map<String, dynamic> toMap() => {'type': type, 'name': name};
-
-  String toString() => 'Account(name: $name, type: $type)';
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'name': name,
+      'type': type,
+    };
+  }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  String toString() {
+    return '$Account(name: $name, type: $type)';
+  }
 
-    return o is Account && o.name == name && o.type == type;
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    return other is Account && name == other.name && type == other.type;
   }
 
   @override
   int get hashCode {
-    return hashList([name, type]);
+    return hashList(
+      <dynamic>[
+        name,
+        type,
+      ],
+    );
   }
 }

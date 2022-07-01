@@ -14,28 +14,22 @@
     limitations under the License.
 */
 
-import 'package:flutter/material.dart';
+part of huawei_account;
 
 /// An ID sign-in authorization option.
 class AccountAuthParams {
-  int _id;
-
-  AccountAuthParams._(this._id);
-
   static final AccountAuthParams defaultAuthRequestParam =
       AccountAuthParams._(0);
   static final AccountAuthParams defaultAuthRequestParamGame =
       AccountAuthParams._(1);
 
-  int get create => _id;
+  final Map<String, dynamic> _params = <String, dynamic>{};
 
-  @override
-  bool operator ==(o) {
-    if (identical(this, o)) return true;
-
-    return o is AccountAuthParams && o._id == _id;
+  AccountAuthParams._(int id) {
+    _params['defaultParam'] = id;
   }
 
-  @override
-  int get hashCode => hashList([_id]);
+  AccountAuthParams._fromParams(Map<String, dynamic> params) {
+    _params.addAll(params);
+  }
 }

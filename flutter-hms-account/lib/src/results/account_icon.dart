@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:typed_data';
+part of huawei_account;
 
 /// Icon resource information.
 class AccountIcon {
@@ -22,12 +22,17 @@ class AccountIcon {
   String? description;
   int? describeContents;
 
-  AccountIcon({this.description, this.bytes, this.describeContents});
+  AccountIcon({
+    this.description,
+    this.bytes,
+    this.describeContents,
+  });
 
   factory AccountIcon.fromMap(Map<dynamic, dynamic> map) {
     return AccountIcon(
-        bytes: map['bytes'] ?? null,
-        description: map['description'] ?? null,
-        describeContents: map['describeContents'] ?? null);
+      bytes: map['bytes'],
+      description: map['description'],
+      describeContents: map['describeContents'],
+    );
   }
 }

@@ -14,8 +14,10 @@
     limitations under the License.
 */
 
-const String AUTH_SERVICE = "com.huawei.hms.flutter.account/acc";
-const String AUTH_MANAGER = "com.huawei.hms.flutter.account/acc/manager";
-const String AUTH_TOOL = "com.huawei.hms.flutter.account/hwid/auth";
-const String NETWORK_TOOL = "com.huawei.hms.flutter.account/hwid/network";
-const String SMS_MANAGER = "com.huawei.hms.flutter.account/hwid/sms";
+part of huawei_account;
+
+const String _AUTH_SERVICE = 'com.huawei.hms.flutter.account/acc';
+const String _AUTH_MANAGER = 'com.huawei.hms.flutter.account/acc/manager';
+const String _AUTH_TOOL = 'com.huawei.hms.flutter.account/hwid/auth';
+const String _NETWORK_TOOL = 'com.huawei.hms.flutter.account/hwid/network';
+const String _SMS_MANAGER = 'com.huawei.hms.flutter.account/hwid/sms';

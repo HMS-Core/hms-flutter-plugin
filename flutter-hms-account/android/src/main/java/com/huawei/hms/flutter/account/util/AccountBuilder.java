@@ -44,47 +44,54 @@ public class AccountBuilder {
         if (uidSet) {
             helper.setUid();
         }
-
         Boolean authCodeSet = FromMap.toBoolean("setAuthorizationCode", call.argument("setAuthorizationCode"));
         if (authCodeSet) {
             helper.setAuthorizationCode();
         }
-
         Boolean accTokenSet = FromMap.toBoolean("setAccessToken", call.argument("setAccessToken"));
         if (accTokenSet) {
             helper.setAccessToken();
         }
-
         Boolean emailSet = FromMap.toBoolean("setEmail", call.argument("setEmail"));
         if (emailSet) {
             helper.setEmail();
         }
-
         Boolean idSet = FromMap.toBoolean("setId", call.argument("setId"));
         if (idSet) {
             helper.setId();
         }
-
         Boolean idTokenSet = FromMap.toBoolean("setIdToken", call.argument("setIdToken"));
         if (idTokenSet) {
             helper.setIdToken();
         }
-
         Boolean profileSet = FromMap.toBoolean("setProfile", call.argument("setProfile"));
         if (profileSet) {
             helper.setProfile();
         }
-
-        Boolean authDialogSet = FromMap.toBoolean("setAuthDialog", call.argument("setAuthDialog"));
-        if (authDialogSet) {
+        Boolean mobileNumberSet = FromMap.toBoolean("setMobileNumber", call.argument("setMobileNumber"));
+        if (mobileNumberSet) {
+            helper.setMobileNumber();
+        }
+        Boolean forceLogoutSet = FromMap.toBoolean("setForceLogout", call.argument("setForceLogout"));
+        if (forceLogoutSet) {
+            helper.setForceLogout();
+        }
+        Boolean assistTokenSet = FromMap.toBoolean("setAssistToken", call.argument("setAssistToken"));
+        if (assistTokenSet) {
+            helper.setAssistToken();
+        }
+        Boolean dialogAuthSet = FromMap.toBoolean("setDialogAuth", call.argument("setDialogAuth"));
+        if (dialogAuthSet) {
             helper.setDialogAuth();
         }
-        
         Boolean carrierIdSet = FromMap.toBoolean("setCarrierId", call.argument("setCarrierId"));
         if (carrierIdSet) {
             helper.setCarrierId();
         }
-
+        Integer idTokenSignAlg = FromMap.toInteger("setIdTokenSignAlg", call.argument("setIdTokenSignAlg"));
+        if (idTokenSignAlg != null) {
+            helper.setIdTokenSignAlg(idTokenSignAlg + 1);
+        }
         List<String> scopeList = FromMap.toStringArrayList("scopeList", call.argument("scopeList"));
         if (!scopeList.isEmpty()) {
             List<Scope> scopes = new ArrayList<>();
@@ -97,7 +104,6 @@ public class AccountBuilder {
             helper.setScopeList(scopes);
             Log.i(TAG, "Scope list is set");
         }
-
         return helper.createParams();
     }
 

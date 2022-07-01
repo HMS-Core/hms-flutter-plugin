@@ -14,84 +14,124 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
-import '../results/auth_account.dart';
-import '../common/scope.dart';
-import '../utils/account_utils.dart';
-import '../utils/constants.dart';
-import '../request/account_auth_extended_params.dart';
+part of huawei_account;
 
 /// Entry for the ID sign-in service.
 class AccountAuthManager {
-  static final MethodChannel _c = const MethodChannel(AUTH_MANAGER);
+  static const MethodChannel _c = MethodChannel(_AUTH_MANAGER);
+
+  /// Obtain the AccountAuthService instance that initiates
+  /// the ID authorization and sign-in process.
+  static AccountAuthService getService(AccountAuthParams authParams) {
+    return AccountAuthService(authParams._params);
+  }
 
   /// Enables HMS Plugin Method Analytics which is used for sending usage
   /// analytics of Account Kit SDK's methods to improve the service quality.
   static void enableLogger() {
-    _c.invokeMethod("enableLogger");
+    _c.invokeMethod(
+      'enableLogger',
+    );
   }
 
   /// Disables HMS Plugin Method Analytics which is used for sending usage
   /// analytics of Account Kit SDK's methods to improve the service quality.
   static void disableLogger() {
-    _c.invokeMethod("disableLogger");
+    _c.invokeMethod(
+      'disableLogger',
+    );
   }
 
   /// Obtains information about the current sign-in ID.
   static Future<AuthAccount> getAuthResult() async {
-    return AuthAccount.fromMap(await _c.invokeMethod("getAuthResult"));
+    return AuthAccount.fromMap(
+      await _c.invokeMethod(
+        'getAuthResult',
+      ),
+    );
   }
 
   /// Obtains the [AuthAccount] instance with all permissions specified in scopeList.
   static Future<AuthAccount> getAuthResultWithScopes(
-      List<Scope> scopeList) async {
-    List<String> scopes = getScopeList(scopeList);
-
+    List<Scope> scopeList,
+  ) async {
     return AuthAccount.fromMap(
-        await _c.invokeMethod("getAuthResultWithScopes", {'scopes': scopes}));
+      await _c.invokeMethod(
+        'getAuthResultWithScopes',
+        <String, dynamic>{
+          'scopes': _getScopeList(scopeList),
+        },
+      ),
+    );
   }
 
   /// Obtains the [AuthAccount] instance with all permissions specified in [extendedParams].
   static Future<AuthAccount> getExtendedAuthResult(
-      AccountAuthExtendedParams extendedParams) async {
-    final Map<String, dynamic> extMap = getExtendedParamsMap(extendedParams);
-
+    AccountAuthExtendedParams extendedParams,
+  ) async {
     return AuthAccount.fromMap(
-        await _c.invokeMethod("getExtendedAuthResult", extMap));
+      await _c.invokeMethod(
+        'getExtendedAuthResult',
+        <String, dynamic>{
+          ..._getExtendedParamsMap(extendedParams),
+        },
+      ),
+    );
   }
 
   /// Checks whether an ID has been assigned all permissions specified by [scopeList].
   static Future<bool> containScopes(
-      AuthAccount? account, List<Scope> scopeList) async {
-    final List<String> scopes = getScopeList(scopeList);
-
+    AuthAccount? account,
+    List<Scope> scopeList,
+  ) async {
     return await _c.invokeMethod(
-        "containScopes", {'account': account?.toMap(), 'scopes': scopes});
+      'containScopes',
+      <String, dynamic>{
+        'account': account?.toMap(),
+        'scopes': _getScopeList(scopeList),
+      },
+    );
   }
 
   /// Checks whether an ID has been assigned all permissions specified by [extendedParams].
   static Future<bool> containScopesWithExtendedParams(
-      AuthAccount? account, AccountAuthExtendedParams extendedParams) async {
-    final Map<String, dynamic> extMap = getExtendedParamsMap(extendedParams);
-
+    AuthAccount? account,
+    AccountAuthExtendedParams extendedParams,
+  ) async {
     return await _c.invokeMethod(
-        "containScopesExt", {'account': account?.toMap(), 'ext': extMap});
+      'containScopesExt',
+      <String, dynamic>{
+        'account': account?.toMap(),
+        'ext': _getExtendedParamsMap(extendedParams),
+      },
+    );
   }
 
   /// Requests permissions specified by [scopeList] from an ID.
-  static void addAuthScopes(int requestCode, List<Scope> scopeList) {
-    final List<String> scopes = getScopeList(scopeList);
-
+  static void addAuthScopes(
+    int requestCode,
+    List<Scope> scopeList,
+  ) {
     _c.invokeMethod(
-        "addAuthScopes", {'reqCode': requestCode, 'scopes': scopes});
+      'addAuthScopes',
+      <String, dynamic>{
+        'reqCode': requestCode,
+        'scopes': _getScopeList(scopeList),
+      },
+    );
   }
 
   /// Requests permissions specified by [extendedParams] from an ID.
   static void addAuthScopesWithExtendedParams(
-      int requestCode, AccountAuthExtendedParams extendedParams) {
-    Map<String, dynamic> extMap = getExtendedParamsMap(extendedParams);
-
+    int requestCode,
+    AccountAuthExtendedParams extendedParams,
+  ) {
     _c.invokeMethod(
-        "addAuthScopesExt", {'reqCode': requestCode, 'ext': extMap});
+      'addAuthScopesExt',
+      <String, dynamic>{
+        'reqCode': requestCode,
+        'ext': _getExtendedParamsMap(extendedParams),
+      },
+    );
   }
 }

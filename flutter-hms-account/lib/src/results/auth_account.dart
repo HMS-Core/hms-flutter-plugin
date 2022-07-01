@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import '../common/account.dart';
+part of huawei_account;
 
 /// Signed-in ID information, including the ID, nickname, profile picture URI,
 /// permission, and access token.
@@ -36,67 +36,70 @@ class AuthAccount {
   int? accountFlag;
   int? carrierId;
 
-  AuthAccount(
-      {this.accessToken,
-      this.account,
-      this.accountFlag,
-      this.authorizationCode,
-      this.authorizedScopes,
-      this.avatarUri,
-      this.displayName,
-      this.email,
-      this.familyName,
-      this.gender,
-      this.givenName,
-      this.idToken,
-      this.openId,
-      this.serviceCountryCode,
-      this.unionId,
-      this.carrierId});
+  AuthAccount({
+    this.accessToken,
+    this.account,
+    this.accountFlag,
+    this.authorizationCode,
+    this.authorizedScopes,
+    this.avatarUri,
+    this.displayName,
+    this.email,
+    this.familyName,
+    this.gender,
+    this.givenName,
+    this.idToken,
+    this.openId,
+    this.serviceCountryCode,
+    this.unionId,
+    this.carrierId,
+  });
 
   factory AuthAccount.fromMap(Map<dynamic, dynamic> map) {
     return AuthAccount(
-        accessToken: map['accessToken'] ?? null,
-        account:
-            map['account'] != null ? Account.fromMap(map['account']) : null,
-        accountFlag: map['accountFlag'] ?? null,
-        authorizationCode: map['authorizationCode'] ?? null,
-        authorizedScopes: map['authorizedScopes'] ?? null,
-        avatarUri: map['avatarUri'] ?? null,
-        displayName: map['displayName'] ?? null,
-        email: map['email'] ?? null,
-        familyName: map['familyName'] ?? null,
-        gender: map['gender'] ?? null,
-        givenName: map['givenName'] ?? null,
-        idToken: map['idToken'] ?? null,
-        openId: map['openId'] ?? null,
-        serviceCountryCode: map['serviceCountryCode'] ?? null,
-        unionId: map['unionId'] ?? null,
-        carrierId: map['carrierId'] ?? null);
+      accessToken: map['accessToken'],
+      account: map['account'] != null ? Account.fromMap(map['account']) : null,
+      accountFlag: map['accountFlag'],
+      authorizationCode: map['authorizationCode'],
+      authorizedScopes: map['authorizedScopes'],
+      avatarUri: map['avatarUri'],
+      displayName: map['displayName'],
+      email: map['email'],
+      familyName: map['familyName'],
+      gender: map['gender'],
+      givenName: map['givenName'],
+      idToken: map['idToken'],
+      openId: map['openId'],
+      serviceCountryCode: map['serviceCountryCode'],
+      unionId: map['unionId'],
+      carrierId: map['carrierId'],
+    );
   }
 
   /// Creates a map object from attributes.
   Map<String, dynamic> toMap() {
-    return {
-      "accessToken": accessToken,
-      "account": account?.toMap() ?? null,
-      "accountFlag": accountFlag,
-      "authorizationCode": authorizationCode,
-      "authorizedScopes": authorizedScopes,
-      "avatarUri": avatarUri,
-      "displayName": displayName,
-      "email": email,
-      "familyName": familyName,
-      "gender": gender,
-      "givenName": givenName,
-      "idToken": idToken,
-      "openId": openId,
-      "serviceCountryCode": serviceCountryCode,
-      "unionId": unionId,
-      "carrierId": carrierId
+    return <String, dynamic>{
+      'accessToken': accessToken,
+      'account': account?.toMap(),
+      'accountFlag': accountFlag,
+      'authorizationCode': authorizationCode,
+      'authorizedScopes': authorizedScopes,
+      'avatarUri': avatarUri,
+      'displayName': displayName,
+      'email': email,
+      'familyName': familyName,
+      'gender': gender,
+      'givenName': givenName,
+      'idToken': idToken,
+      'openId': openId,
+      'serviceCountryCode': serviceCountryCode,
+      'unionId': unionId,
+      'carrierId': carrierId,
     };
   }
 
   /// Constructs an [AuthAccount] object whose attributes are left empty.
-  AuthAccount createDefault() => AuthAccount();
+  AuthAccount createDefault() {
+    return AuthAccount();
+  }
 }

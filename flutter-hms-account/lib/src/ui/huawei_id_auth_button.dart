@@ -14,13 +14,24 @@
     limitations under the License.
 */
 
-import 'package:flutter/material.dart';
+part of huawei_account;
 
-enum AuthButtonTheme { FULL_TITLE, NO_TITLE }
+enum AuthButtonTheme {
+  FULL_TITLE,
+  NO_TITLE,
+}
 
-enum AuthButtonBackground { BLACK, RED, WHITE }
+enum AuthButtonBackground {
+  BLACK,
+  RED,
+  WHITE,
+}
 
-enum AuthButtonRadius { SMALL, MEDIUM, LARGE }
+enum AuthButtonRadius {
+  SMALL,
+  MEDIUM,
+  LARGE,
+}
 
 const Color hwRed = Color(0xffCE0E2D);
 
@@ -40,68 +51,75 @@ class HuaweiIdAuthButton extends StatelessWidget {
   final double? fontSize;
   final FontWeight? fontWeight;
 
-  const HuaweiIdAuthButton(
-      {Key? key,
-      required this.onPressed,
-      this.width,
-      this.height,
-      this.elevation,
-      this.borderRadius,
-      this.buttonColor,
-      this.fontWeight,
-      this.fontSize,
-      this.textColor,
-      this.theme,
-      this.padding})
-      : super(key: key);
+  const HuaweiIdAuthButton({
+    Key? key,
+    required this.onPressed,
+    this.width,
+    this.height,
+    this.elevation,
+    this.borderRadius,
+    this.buttonColor,
+    this.fontWeight,
+    this.fontSize,
+    this.textColor,
+    this.theme,
+    this.padding,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: width ?? MediaQuery.of(context).size.width / 1.1,
       height: height ?? 50,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-            elevation: elevation ?? 2,
-            padding: EdgeInsets.symmetric(vertical: padding ?? 1),
-            primary: buttonColor == AuthButtonBackground.BLACK
-                ? Colors.black
-                : buttonColor == AuthButtonBackground.WHITE
-                    ? Colors.white
-                    : hwRed,
-            shape: RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.circular(borderRadius == AuthButtonRadius.SMALL
-                      ? 8
-                      : borderRadius == AuthButtonRadius.MEDIUM
-                          ? 14
-                          : borderRadius == AuthButtonRadius.LARGE
-                              ? 25
-                              : 0),
-            )),
+          elevation: elevation ?? 2,
+          padding: EdgeInsets.symmetric(vertical: padding ?? 1),
+          primary: buttonColor == AuthButtonBackground.BLACK
+              ? Colors.black
+              : buttonColor == AuthButtonBackground.WHITE
+                  ? Colors.white
+                  : hwRed,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+              borderRadius == AuthButtonRadius.SMALL
+                  ? 8
+                  : borderRadius == AuthButtonRadius.MEDIUM
+                      ? 14
+                      : borderRadius == AuthButtonRadius.LARGE
+                          ? 25
+                          : 0,
+            ),
+          ),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             buttonColor == AuthButtonBackground.WHITE
-                ? Image.asset("packages/huawei_account/src/ui/logored.png",
-                    height: height != null ? height! * .9 : 50)
-                : Image.asset("packages/huawei_account/src/ui/logo.png",
-                    height: height != null ? height! * .9 : 50),
-            SizedBox(width: 8),
+                ? Image.asset(
+                    'packages/huawei_account/src/ui/logored.png',
+                    height: height != null ? height! * .9 : 50,
+                  )
+                : Image.asset(
+                    'packages/huawei_account/src/ui/logo.png',
+                    height: height != null ? height! * .9 : 50,
+                  ),
+            const SizedBox(width: 8),
             theme == AuthButtonTheme.NO_TITLE
-                ? SizedBox()
-                : Text("Sign in with HUAWEI ID",
+                ? const SizedBox()
+                : Text(
+                    'Sign in with HUAWEI ID',
                     style: TextStyle(
-                      color: textColor == null
-                          ? buttonColor == AuthButtonBackground.WHITE
+                      color: textColor ??
+                          (buttonColor == AuthButtonBackground.WHITE
                               ? Colors.black
-                              : Colors.white
-                          : textColor,
+                              : Colors.white),
                       fontSize: fontSize ?? 17,
                       letterSpacing: .5,
                       fontWeight: fontWeight ?? FontWeight.bold,
-                    )),
+                    ),
+                  ),
           ],
         ),
       ),

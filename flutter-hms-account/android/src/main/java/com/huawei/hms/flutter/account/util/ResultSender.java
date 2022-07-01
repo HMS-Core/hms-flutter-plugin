@@ -42,11 +42,6 @@ public class ResultSender {
         result.success(o);
     }
 
-    public static void noService(@NonNull Activity activity, String tag, String methodName, @NonNull MethodChannel.Result result) {
-        HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(methodName, Constants.NULL_AUTH_SERVICE);
-        result.error(tag, "You have to be signed in before you use this api", Constants.NULL_AUTH_SERVICE);
-    }
-
     public static void illegal(@NonNull Activity activity, String tag, String methodName, @NonNull MethodChannel.Result result) {
         HMSLogger.getInstance(activity.getApplicationContext()).sendSingleEvent(methodName, Constants.ILLEGAL_PARAMETER);
         result.error(tag, "Required parameters must not be null or empty!", Constants.ILLEGAL_PARAMETER);

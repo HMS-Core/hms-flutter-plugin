@@ -14,118 +14,124 @@
     limitations under the License.
 */
 
-import '../common/scope.dart';
-import 'account_auth_params.dart';
+part of huawei_account;
+
+enum IdTokenSignAlgorithm {
+  PS256,
+  RS256,
+}
 
 class AccountAuthParamsHelper {
-  int? _param;
-  bool? _needUid;
-  bool? _needAuthorizationCode;
-  bool? _needAccessToken;
-  bool? _needEmail;
-  bool? _needId;
-  bool? _needIdToken;
-  bool? _needProfile;
-  bool? _needAuthDialog;
+  final List<String> _scopeList = <String>[];
+  final Map<String, dynamic> _params = <String, dynamic>{};
 
-  /// test et
-  bool? _needCarrierId;
-  late List<String> _scopeList;
+  AccountAuthParamsHelper([
+    AccountAuthParams? accountAuthParams,
+  ]) {
+    if (accountAuthParams != null) {
+      _params.addAll(accountAuthParams._params);
 
-  AccountAuthParamsHelper() {
-    _needUid = false;
-    _needAuthorizationCode = false;
-    _needAccessToken = false;
-    _needEmail = false;
-    _needId = false;
-    _needIdToken = false;
-    _needProfile = false;
-    _needAuthDialog = false;
-    _needCarrierId = false;
-    _scopeList = [];
-    _param = AccountAuthParams.defaultAuthRequestParam.create;
+      dynamic scopeList = _params['scopeList'];
+      if (scopeList != null && scopeList is List) {
+        for (dynamic scope in scopeList) {
+          _scopeList.add(scope);
+        }
+      }
+      _params.remove('scopeList');
+    }
   }
 
-  /// Creates a map object from attributes.
-  Map<String, dynamic> toMap() {
-    return {
-      "setUid": _needUid,
-      "setAuthorizationCode": _needAuthorizationCode,
-      "setAccessToken": _needAccessToken,
-      "setEmail": _needEmail,
-      "setId": _needId,
-      "setIdToken": _needIdToken,
-      "setProfile": _needProfile,
-      "setAuthDialog": _needAuthDialog,
-      "scopeList": _scopeList,
-      "setCarrierId": _needCarrierId,
-      "defaultParam": _param
-    }..removeWhere((k, v) => v == null);
-  }
-
-  /// Sets the default auth parameter for signing in.
-  void setDefaultParam(int p) {
-    _param = p;
+  /// Constructs AccountAuthParams.
+  AccountAuthParams createParams() {
+    return AccountAuthParams._fromParams(
+      <String, dynamic>{
+        ..._params,
+        'scopeList': _scopeList,
+      },
+    );
   }
 
   /// Requests an ID user to authorize an app to obtain the user ID.
   void setUid() {
-    _needUid = true;
+    _params['setUid'] = true;
   }
 
   /// Requests an ID user to authorize an app to obtain the authorization code.
   void setAuthorizationCode() {
-    _needAuthorizationCode = true;
+    _params['setAuthorizationCode'] = true;
   }
 
   /// Requests an ID user to authorize an app to obtain the access token.
   void setAccessToken() {
-    _needAccessToken = true;
+    _params['setAccessToken'] = true;
   }
 
   /// Requests an ID user to authorize an app to obtain the email address.
   void setEmail() {
-    _needEmail = true;
+    _params['setEmail'] = true;
   }
 
   /// Requests an ID user to authorize an app to obtain the UnionID and OpenID.
   void setId() {
-    _needId = true;
+    _params['setId'] = true;
   }
 
   /// Requests an ID user to authorize an app to obtain the ID token.
   void setIdToken() {
-    _needIdToken = true;
+    _params['setIdToken'] = true;
   }
 
   /// Requests an ID user to authorize an app to obtain the account information,
   /// such as the nickname and profile picture.
   void setProfile() {
-    _needProfile = true;
+    _params['setProfile'] = true;
   }
 
   /// Sets the ID sign-in authorization screen to be displayed in a dialog box.
   void setDialogAuth() {
-    _needAuthDialog = true;
+    _params['setDialogAuth'] = true;
   }
 
   /// Requests an ID user to authorize an app to obtain the carrier ID.
   void setCarrierId() {
-    _needCarrierId = true;
+    _params['setCarrierId'] = true;
+  }
+
+  void setIdTokenSignAlg(IdTokenSignAlgorithm idTokenSignAlg) {
+    _params['setIdTokenSignAlg'] = idTokenSignAlg.index;
+  }
+
+  void setMobileNumber() {
+    _params['setMobileNumber'] = true;
+  }
+
+  void setForceLogout() {
+    _params['setForceLogout'] = true;
+  }
+
+  void setAssistToken() {
+    _params['setAssistToken'] = true;
+  }
+
+  void setScope(Scope scope) {
+    if (!_scopeList.contains(scope._uri)) {
+      _scopeList.add(scope._uri);
+    }
   }
 
   /// Adds specified scopes to authorization configurations to request an ID user to
   /// authorize an app to obtain the permissions specified by the scopes.
-  void setScopeList(List<Scope> scopes, {List<String>? extraScopeURIs}) {
+  void setScopeList(
+    List<Scope> scopes, {
+    List<String>? extraScopeURIs,
+  }) {
     _scopeList.clear();
     if (scopes.isNotEmpty) {
-      scopes.forEach((scope) {
+      for (Scope scope in scopes) {
         _scopeList.add(scope.getScopeUri());
-      });
-      if (extraScopeURIs != null) {
-        extraScopeURIs.forEach((elem) {
-          _scopeList.add(elem);
-        });
+      }
+      for (String elem in (extraScopeURIs ?? <String>[])) {
+        _scopeList.add(elem);
       }
     }
   }

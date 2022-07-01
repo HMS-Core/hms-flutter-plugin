@@ -14,41 +14,54 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
-import '../common/account.dart';
-import '../common/scope.dart';
-import '../utils/account_utils.dart';
-import '../utils/constants.dart';
+part of huawei_account;
 
 /// Provides a static and practical method to obtain and delete authorization information.
 class HuaweiIdAuthTool {
-  static const MethodChannel _c = const MethodChannel(AUTH_TOOL);
+  static const MethodChannel _c = MethodChannel(_AUTH_TOOL);
 
   /// Deletes authentication information cached locally.
-  static Future<bool> deleteAuthInfo(String accessToken) async {
-    return await _c
-        .invokeMethod("deleteAuthInfo", {'accessToken': accessToken});
+  static Future<bool> deleteAuthInfo(
+    String accessToken,
+  ) async {
+    return await _c.invokeMethod(
+      'deleteAuthInfo',
+      <String, dynamic>{
+        'accessToken': accessToken,
+      },
+    );
   }
 
   /// Obtains a UnionID.
-  static Future<String> requestUnionId(Account account) async {
+  static Future<String> requestUnionId(
+    Account account,
+  ) async {
     if (account.name == null) {
-      throw Exception("Account name must not be null!");
+      throw Exception('Account name must not be null!');
     }
-    return await _c
-        .invokeMethod("requestUnionId", {'accountName': account.name});
+    return await _c.invokeMethod(
+      'requestUnionId',
+      <String, dynamic>{
+        'accountName': account.name,
+      },
+    );
   }
 
   /// Obtains a token.
   static Future<String> requestAccessToken(
-      Account account, List<Scope> scopeList) async {
+    Account account,
+    List<Scope> scopeList,
+  ) async {
     if (account.name == null || account.type == null) {
-      throw Exception("Account name and type must not be null!");
+      throw Exception('Account name and type must not be null!');
     }
-
-    final List<String> scopes = getScopeList(scopeList);
-
-    return await _c.invokeMethod("requestAccessToken",
-        {'type': account.type, 'name': account.name, 'scopeList': scopes});
+    return await _c.invokeMethod(
+      'requestAccessToken',
+      <String, dynamic>{
+        'type': account.type,
+        'name': account.name,
+        'scopeList': _getScopeList(scopeList),
+      },
+    );
   }
 }

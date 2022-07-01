@@ -14,24 +14,25 @@
     limitations under the License.
 */
 
-import '../request/account_auth_extended_params.dart';
-import '../common/scope.dart';
+part of huawei_account;
 
 /// Creates a list of [Scope] from [list].
-List<String> getScopeList(List<Scope> list) {
-  List<String> res = [];
-  if (list.isNotEmpty) {
-    list.forEach((scope) {
-      res.add(scope.getScopeUri());
-    });
+List<String> _getScopeList(
+  List<Scope> list,
+) {
+  List<String> res = <String>[];
+  for (Scope scope in list) {
+    res.add(scope.getScopeUri());
   }
   return res;
 }
 
 /// Creates a map object from [params].
-Map<String, dynamic> getExtendedParamsMap(AccountAuthExtendedParams params) {
-  return {
-    "extendedParamType": params.getExtendedParamType(),
-    "extendedScopes": getScopeList(params.getExtendedScopes())
+Map<String, dynamic> _getExtendedParamsMap(
+  AccountAuthExtendedParams params,
+) {
+  return <String, dynamic>{
+    'extendedParamType': params.getExtendedParamType(),
+    'extendedScopes': _getScopeList(params.getExtendedScopes()),
   };
 }

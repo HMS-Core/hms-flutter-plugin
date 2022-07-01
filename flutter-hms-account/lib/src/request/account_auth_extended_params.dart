@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import '../common/scope.dart';
+part of huawei_account;
 
 /// Reserved API for extending parameters.
 abstract class AccountAuthExtendedParams {
