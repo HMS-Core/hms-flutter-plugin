@@ -23,6 +23,9 @@ import com.huawei.hms.analytics.type.ReportPolicy;
 import java.util.Map;
 import java.util.Set;
 
+import io.flutter.plugin.common.MethodCall;
+import io.flutter.plugin.common.MethodChannel;
+
 /**
  * HMSAnalyticsContract defines a blueprint of {@link HMSAnalyticsModule} methods that will be exposed to Flutter Side.
  *
@@ -126,8 +129,7 @@ public interface HMSAnalyticsContract {
          *                        custom user attributes.
          * @param preDefined:     Indicates whether to obtain the automatically collected or custom user attributes.
          */
-        void getUserProfiles(final HMSAnalyticsContract.ResultListener<Map<String, String>> resultListener,
-            final boolean preDefined);
+        void getUserProfiles(final HMSAnalyticsContract.ResultListener<Map<String, String>> resultListener, final boolean preDefined);
 
         /**
          * Customizes a page entry event. This method applies only to non-activity pages because automatic collection is
@@ -169,8 +171,7 @@ public interface HMSAnalyticsContract {
          *                          reporting.
          * @param reportPolicyType: Event reporting policy name.
          */
-        void getReportPolicyThreshold(final HMSAnalyticsContract.ResultListener<Long> resultListener,
-            ReportPolicy reportPolicyType);
+        void getReportPolicyThreshold(final HMSAnalyticsContract.ResultListener<Long> resultListener, ReportPolicy reportPolicyType);
 
         /**
          * Specifies whether to enable restriction of HUAWEI Analytics.
@@ -190,6 +191,61 @@ public interface HMSAnalyticsContract {
          */
         void isRestrictionEnabled(final HMSAnalyticsContract.ResultListener<Boolean> resultListener);
 
+
+        /**
+         * Sets whether to collect advertising IDs.
+         *
+         * @param value : Indicates whether to collect advertising IDs. The default value is true.
+         */
+        void setCollectAdsIdEnabled(boolean value);
+
+
+        /**
+         * Adds default event parameters.
+         * These parameters will be added to all events except the automatically collected events.
+         * If the name of a default event parameter is the same as that of an event parameter,
+         * the event parameter will be used.
+         *
+         * @param params : Default event parameters.
+         *               A maximum of 100 key-value pairs are supported.
+         *               The key in each key-value pair can contain a maximum of 256 characters and
+         *               can consist of only digits, letters, and underscores (_),
+         *               but cannot start with a digit. The value in each key-value pair can contain
+         *               a maximum of 256 characters, and can only be of the string, int, long,
+         *               double, boolean, float, char, byte, or short type.
+         */
+        void addDefaultEventParams(Bundle params);
+
+        /**
+         * Sets the app installation source.
+         * <p>
+         * The setting takes effect only when the method is called for the first time.
+         *
+         * @param channel : App installation source, a string containing a maximum of 128 characters.
+         *                The value cannot be empty. The value can consist of only letters, digits,
+         *                underscores (_), hyphens (-), and spaces. It cannot start or end with a space.
+         */
+        void setChannel(String channel);
+
+        /**
+         * Sets whether to collect system attributes.
+         * <p>
+         * Currently, this method applies only to the userAgent attribute.
+         *
+         * @param property : System attribute. Only userAgent is supported now.
+         * @param enabled  : Indicates whether to collect system attributes. The default value is true.
+         */
+        void setPropertyCollection(final String property, final boolean enabled);
+
+        /**
+         * Sets a custom referrer.
+         * <p>
+         * This method takes effect only when it is called for the first time.
+         *
+         * @param customReferrer : A string containing a maximum of 256 characters. The value cannot be empty.
+         */
+        void setCustomReferrer(final String customReferrer);
+
         //------------------------------------------------------------------------------------------
         // HiAnalyticsTools
         //------------------------------------------------------------------------------------------
@@ -205,6 +261,7 @@ public interface HMSAnalyticsContract {
          * Enables the debug log function and sets the minimum log level. Default log level DEBUG.
          */
         void enableLog();
+
     }
 
     /**

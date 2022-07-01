@@ -38,7 +38,7 @@ public final class HMSLogger {
 
     private static final String KIT = "Analytics";
     private static final String PLATFORM = "Flutter";
-    private static final String VERSION = "6.2.0.302";
+    private static final String VERSION = "6.5.0.300";
 
     private static final String SERVICE = "Cross-Platform";
 
@@ -77,8 +77,7 @@ public final class HMSLogger {
     private HMSLogger(final Context context) {
         weakContext = new WeakReference<>(context);
         hiAnalyticsUtils = HiAnalyticsUtils.getInstance();
-        connectivityManager = objectCast(context.getSystemService(Context.CONNECTIVITY_SERVICE),
-            ConnectivityManager.class);
+        connectivityManager = objectCast(context.getSystemService(Context.CONNECTIVITY_SERVICE), ConnectivityManager.class);
 
         hiAnalyticsUtils.enableLog();
         HMSBIInitializer.getInstance(context).initBI();
@@ -279,8 +278,7 @@ public final class HMSLogger {
      * @param resultCode  Code of the method's result. "0" for success, others for error
      * @param currentTime Current timestamp in millisecond
      */
-    private synchronized void putToSingleEventMap(final String methodName, final String resultCode,
-        final long currentTime) {
+    private synchronized void putToSingleEventMap(final String methodName, final String resultCode, final long currentTime) {
         final long startTime = getOrDefault(startTimeMap, methodName, currentTime);
         final int costTime = (int) (currentTime - startTime);
         singleEventMap.put("apiName", methodName);
@@ -297,8 +295,7 @@ public final class HMSLogger {
      * @param resultCode  Code of the method's result. "0" for success, others for error
      * @param currentTime Current timestamp in millisecond
      */
-    private synchronized void putToPeriodicEventMap(final String methodName, final String resultCode,
-        final long currentTime) {
+    private synchronized void putToPeriodicEventMap(final String methodName, final String resultCode, final long currentTime) {
         increaseResultCodeCount(methodName, resultCode);
         increaseMapValue(methodName, allCountMap);
 

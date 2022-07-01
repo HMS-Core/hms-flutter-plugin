@@ -30,8 +30,6 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.PluginRegistry;
 
 public class AnalyticsPlugin implements FlutterPlugin {
-
-    private HMSAnalyticsModule analyticsModule;
     private HMSAnalyticsMethodCallHandler analyticsMethodCallHandler;
     private MethodChannel channel;
 
@@ -48,8 +46,7 @@ public class AnalyticsPlugin implements FlutterPlugin {
     private void onAttachedToEngine(Context applicationContext, BinaryMessenger messenger) {
         WeakReference<Context> weakContext = new WeakReference<>(applicationContext);
         channel = new MethodChannel(messenger, "com.huawei.hms.flutter.analytics");
-        analyticsModule = new HMSAnalyticsModule(weakContext);
-        analyticsMethodCallHandler = new HMSAnalyticsMethodCallHandler(analyticsModule, weakContext);
+        analyticsMethodCallHandler = new HMSAnalyticsMethodCallHandler(weakContext);
         channel.setMethodCallHandler(analyticsMethodCallHandler);
     }
 
@@ -59,7 +56,6 @@ public class AnalyticsPlugin implements FlutterPlugin {
             channel.setMethodCallHandler(null);
             channel = null;
         }
-        analyticsModule = null;
         analyticsMethodCallHandler = null;
     }
 }

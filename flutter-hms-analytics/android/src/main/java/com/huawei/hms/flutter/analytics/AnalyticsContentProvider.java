@@ -18,6 +18,8 @@ package com.huawei.hms.flutter.analytics;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
@@ -25,19 +27,36 @@ import android.util.Log;
 import com.huawei.hms.analytics.HiAnalytics;
 import com.huawei.hms.analytics.HiAnalyticsInstance;
 
+import java.util.Arrays;
+
 public class AnalyticsContentProvider extends ContentProvider {
     private static final String TAG = AnalyticsContentProvider.class.getSimpleName();
+    private final String[] routePolicyList = new String[]{"CN", "DE", "SG", "RU"};
 
     @Override
     public boolean onCreate() {
         Log.i(TAG, "AnalyticsContentProvider -> onCreate");
-        if (this.getContext() != null) {
-            HiAnalyticsInstance instance = HiAnalytics.getInstance(this.getContext().getApplicationContext());
-            instance.setAnalyticsEnabled(true);
-        } else {
-            Log.e(TAG, "Context was null. Couldn't enable analytics.");
+        try {
+            ApplicationInfo appInfo = this.getContext().getApplicationContext().getPackageManager().getApplicationInfo(this.getContext().getApplicationContext().getPackageName(), PackageManager.GET_META_DATA);
+            boolean isEnabled = appInfo.metaData.getBoolean("hms_is_analytics_enabled", true);
+
+            if (!isEnabled) {
+                return true;
+            }
+
+            String routePolicy = appInfo.metaData.getString("hms_is_analytics_enabled");
+
+            if (Arrays.asList(routePolicyList).contains(routePolicy)) {
+                HiAnalytics.getInstance(this.getContext(), routePolicy);
+                return true;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "HiAnalytics -> Invalid routePolicy! Initialization failed. Message: " + e.getMessage());
         }
-        return false;
+
+        HiAnalyticsInstance instance = HiAnalytics.getInstance(this.getContext().getApplicationContext());
+        instance.setAnalyticsEnabled(true);
+        return true;
     }
 
     @Override

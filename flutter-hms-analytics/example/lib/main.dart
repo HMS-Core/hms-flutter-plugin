@@ -17,15 +17,13 @@
 import 'package:flutter/material.dart';
 import 'package:huawei_analytics/huawei_analytics.dart';
 
-import 'keys.dart';
-
 void main() => runApp(MaterialApp(home: MyHomePage()));
 
 class MyBtn extends StatelessWidget {
   final String title;
   final Function _onPress;
 
-  MyBtn(this.title, this._onPress, Key key) : super(key: key);
+  MyBtn(this.title, this._onPress);
 
   @override
   Widget build(BuildContext context) {
@@ -45,21 +43,36 @@ class MyBtn extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
   final String _appTitle = 'HUAWEI HMS Analytics Flutter  Demo';
-  final HMSAnalytics hmsAnalytics = new HMSAnalytics();
+
+  late HMSAnalytics hmsAnalytics;
+
+  @override
+  void initState() {
+    _init();
+    super.initState();
+  }
+
+  void _init() async {
+    hmsAnalytics = await HMSAnalytics.getInstance();
+  }
 
   void _showDialog(BuildContext context, String content) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            key: Key(Keys.DIALOG),
             title: Text("Result"),
-            content: Text(content, key: Key(Keys.DIALOG_CONTENT)),
+            content: Text(content),
             actions: <Widget>[
               TextButton(
-                child: new Text("Close", key: Key(Keys.DIALOG_CLOSE)),
+                child: new Text("Close"),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -76,7 +89,7 @@ class MyHomePage extends StatelessWidget {
 
   Future<void> _onEnableLogWithLevel(BuildContext context) async {
     //Possible options DEBUG, INFO, WARN, ERROR
-    await hmsAnalytics.enableLogWithLevel("DEBUG");
+    await hmsAnalytics.enableLogWithLevel("INFO");
     _showDialog(context, "enableLogWithLevel success");
   }
 
@@ -207,6 +220,21 @@ class MyHomePage extends StatelessWidget {
     _showDialog(context, "addDefaultEventParams success");
   }
 
+  Future<void> setChannel(BuildContext context) async {
+    await hmsAnalytics.setChannel('AppGallery');
+    _showDialog(context, "setChannel success");
+  }
+
+  Future<void> setPropertyCollection(BuildContext context) async {
+    await hmsAnalytics.setPropertyCollection('userAgent', true);
+    _showDialog(context, "setPropertyCollection success");
+  }
+
+  Future<void> setCustomReferrer(BuildContext context) async {
+    await hmsAnalytics.setCustomReferrer('CustomReferrer');
+    _showDialog(context, "setCustomReferrer success");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -218,44 +246,32 @@ class MyHomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            MyBtn("Enable Log", _onEnableLog, Key(Keys.ENABLE_LOG)),
-            MyBtn("Enable Log With Level", _onEnableLogWithLevel,
-                Key(Keys.ENABLE_LOG_WITH_LEVEL)),
-            MyBtn("Set User Id", _setUserId, Key(Keys.SET_USER_ID)),
-            MyBtn("Set User Profile", _setUserProfile,
-                Key(Keys.SET_USER_PROFILE)),
-            MyBtn("Set Push Token", _setPushToken, Key(Keys.SET_PUSH_TOKEN)),
-            MyBtn("Set Min Activity Sessions", _setMinActivitySessions,
-                Key(Keys.SET_MIN_ACTIVITY_SESSIONS)),
-            MyBtn("Set Sessions Duration", _setSessionDuration,
-                Key(Keys.SET_SESSIONS_DURATION)),
-            MyBtn("Send Custom Event", _onCustomEvent, Key(Keys.CUSTOM_EVENT)),
-            MyBtn("Send Predefined Event", _onPredefinedEvent,
-                Key(Keys.PREDEFINED_EVENT)),
-            MyBtn("Clear Cached Data", _clearCachedData,
-                Key(Keys.CLEAR_CACHED_DATA)),
-            MyBtn("Delete User Profile", _deleteUserProfile,
-                Key(Keys.DELETE_USER_PROFILE)),
-            MyBtn("Delete UserId", _deleteUserId, Key(Keys.DELETE_USER_ID)),
-            MyBtn("SetAnalyticsEnabled", _setAnalyticsEnabled,
-                Key(Keys.SET_ANALYTICS_ENABLED)),
-            MyBtn("Get AAID", _getAAID, Key(Keys.GET_AAID)),
-            MyBtn("Get User Profiles", _getUserProfiles,
-                Key(Keys.GET_USER_PROFILES)),
-            MyBtn("Page Start", _pageStart, Key(Keys.PAGE_START)),
-            MyBtn("Page End", _pageEnd, Key(Keys.PAGE_END)),
-            MyBtn("setReportPolicies", _setReportPolicies,
-                Key(Keys.SET_REPORT_POLICIES)),
-            MyBtn("getReportPolicyThreshold", _getReportPolicyThreshold,
-                Key(Keys.GET_REPORT_POLICY_THRESHOLD)),
-            MyBtn("setRestrictionEnabled", _setRestrictionEnabled,
-                Key(Keys.SET_RESTRICTION_ENABLED)),
-            MyBtn("isRestrictionEnabled", _isRestrictionEnabled,
-                Key(Keys.IS_RESTRICTION_ENABLED)),
-            MyBtn("setCollectAdsIdEnabled", setCollectAdsIdEnabled,
-                Key(Keys.SET_COLLECT_ADS_ID_ENABLED)),
-            MyBtn("addDefaultEventParams", addDefaultEventParams,
-                Key(Keys.ADD_DEFAULT_EVENT_PARAMS)),
+            MyBtn("Enable Log", _onEnableLog),
+            MyBtn("Enable Log With Level", _onEnableLogWithLevel),
+            MyBtn("Set User Id", _setUserId),
+            MyBtn("Set User Profile", _setUserProfile),
+            MyBtn("Set Push Token", _setPushToken),
+            MyBtn("Set Min Activity Sessions", _setMinActivitySessions),
+            MyBtn("Set Sessions Duration", _setSessionDuration),
+            MyBtn("Send Custom Event", _onCustomEvent),
+            MyBtn("Send Predefined Event", _onPredefinedEvent),
+            MyBtn("Clear Cached Data", _clearCachedData),
+            MyBtn("Delete User Profile", _deleteUserProfile),
+            MyBtn("Delete UserId", _deleteUserId),
+            MyBtn("SetAnalyticsEnabled", _setAnalyticsEnabled),
+            MyBtn("Get AAID", _getAAID),
+            MyBtn("Get User Profiles", _getUserProfiles),
+            MyBtn("Page Start", _pageStart),
+            MyBtn("Page End", _pageEnd),
+            MyBtn("setReportPolicies", _setReportPolicies),
+            MyBtn("getReportPolicyThreshold", _getReportPolicyThreshold),
+            MyBtn("setRestrictionEnabled", _setRestrictionEnabled),
+            MyBtn("isRestrictionEnabled", _isRestrictionEnabled),
+            MyBtn("setCollectAdsIdEnabled", setCollectAdsIdEnabled),
+            MyBtn("addDefaultEventParams", addDefaultEventParams),
+            MyBtn("setChannel", setChannel),
+            MyBtn("setPropertyCollection", setPropertyCollection),
+            MyBtn("setCustomReferrer", setCustomReferrer),
           ],
         ),
       ),

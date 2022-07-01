@@ -32,8 +32,8 @@ import io.flutter.plugin.common.MethodChannel.Result;
 
 public class HMSAnalyticsMethodCallHandler implements MethodCallHandler {
     private static final String TAG = HMSAnalyticsMethodCallHandler.class.getSimpleName();
-    private final HMSAnalyticsModule analyticsModule;
-    
+    private HMSAnalyticsModule analyticsModule;
+
     // Weak Context Instance
     private final WeakReference<Context> weakContext;
 
@@ -42,10 +42,18 @@ public class HMSAnalyticsMethodCallHandler implements MethodCallHandler {
         this.weakContext = weakContext;
     }
 
+    public HMSAnalyticsMethodCallHandler(WeakReference<Context> weakContext) {
+        this.weakContext = weakContext;
+    }
+
     @Override
     public void onMethodCall(@NonNull MethodCall methodCall, @NonNull Result result) {
         Log.i(TAG, " Running method : " + methodCall.method);
         HMSLogger.getInstance(weakContext.get()).startMethodExecutionTimer(methodCall.method);
+
+        if (analyticsModule == null) {
+            analyticsModule = new HMSAnalyticsModule(weakContext);
+        }
         switch (Methods.valueOf(methodCall.method)) {
             case clearCachedData:
                 analyticsModule.clearCachedData(result);
@@ -71,7 +79,6 @@ public class HMSAnalyticsMethodCallHandler implements MethodCallHandler {
                 break;
             case setMinActivitySessions:
                 analyticsModule.setMinActivitySessions(methodCall, result);
-                HMSLogger.getInstance(weakContext.get()).sendSingleEvent(methodCall.method);
                 break;
             case setPushToken:
                 analyticsModule.setPushToken(methodCall, result);
@@ -79,7 +86,6 @@ public class HMSAnalyticsMethodCallHandler implements MethodCallHandler {
                 break;
             case setSessionDuration:
                 analyticsModule.setSessionDuration(methodCall, result);
-                HMSLogger.getInstance(weakContext.get()).sendSingleEvent(methodCall.method);
                 break;
             case setUserId:
                 analyticsModule.setUserId(methodCall, result);
@@ -99,6 +105,7 @@ public class HMSAnalyticsMethodCallHandler implements MethodCallHandler {
                 break;
             case enableLogWithLevel:
                 analyticsModule.enableLogWithLevel(methodCall, result);
+                HMSLogger.getInstance(weakContext.get()).sendSingleEvent(methodCall.method);
                 break;
             case enableLogger:
                 analyticsModule.enableLogger(result);
@@ -111,24 +118,46 @@ public class HMSAnalyticsMethodCallHandler implements MethodCallHandler {
                 break;
             case setReportPolicies:
                 analyticsModule.setReportPolicies(methodCall, result);
+                HMSLogger.getInstance(weakContext.get()).sendSingleEvent(methodCall.method);
                 break;
             case setRestrictionEnabled:
                 analyticsModule.setRestrictionEnabled(methodCall, result);
+                HMSLogger.getInstance(weakContext.get()).sendSingleEvent(methodCall.method);
                 break;
             case isRestrictionEnabled:
                 analyticsModule.isRestrictionEnabled(result);
                 break;
             case setCollectAdsIdEnabled:
                 analyticsModule.setCollectAdsIdEnabled(methodCall, result);
+                HMSLogger.getInstance(weakContext.get()).sendSingleEvent(methodCall.method);
                 break;
             case addDefaultEventParams:
                 analyticsModule.addDefaultEventParams(methodCall, result);
+                HMSLogger.getInstance(weakContext.get()).sendSingleEvent(methodCall.method);
                 break;
             case deleteUserProfile:
                 analyticsModule.deleteUserProfile(methodCall, result);
+                HMSLogger.getInstance(weakContext.get()).sendSingleEvent(methodCall.method);
                 break;
             case deleteUserId:
                 analyticsModule.deleteUserId(result);
+                HMSLogger.getInstance(weakContext.get()).sendSingleEvent(methodCall.method);
+                break;
+            case setChannel:
+                analyticsModule.setChannel(methodCall, result);
+                HMSLogger.getInstance(weakContext.get()).sendSingleEvent(methodCall.method);
+                break;
+            case setPropertyCollection:
+                analyticsModule.setPropertyCollection(methodCall, result);
+                HMSLogger.getInstance(weakContext.get()).sendSingleEvent(methodCall.method);
+                break;
+            case setCustomReferrer:
+                analyticsModule.setCustomReferrer(methodCall, result);
+                HMSLogger.getInstance(weakContext.get()).sendSingleEvent(methodCall.method);
+                break;
+            case getInstance:
+                analyticsModule.getInstance(methodCall, result);
+                HMSLogger.getInstance(weakContext.get()).sendSingleEvent(methodCall.method);
                 break;
             default:
                 result.error("platformError", "Not supported on Android platform", "");
@@ -159,6 +188,10 @@ public class HMSAnalyticsMethodCallHandler implements MethodCallHandler {
         setCollectAdsIdEnabled,
         addDefaultEventParams,
         deleteUserProfile,
-        deleteUserId
+        deleteUserId,
+        setChannel,
+        setPropertyCollection,
+        setCustomReferrer,
+        getInstance
     }
 }

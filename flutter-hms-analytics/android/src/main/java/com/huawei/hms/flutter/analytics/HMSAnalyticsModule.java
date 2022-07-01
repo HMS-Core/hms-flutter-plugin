@@ -21,8 +21,6 @@ import android.os.Bundle;
 
 import com.huawei.hms.analytics.HiAnalytics;
 import com.huawei.hms.analytics.HiAnalyticsInstance;
-import com.huawei.hms.analytics.type.HAEventType;
-import com.huawei.hms.analytics.type.HAParamType;
 import com.huawei.hms.analytics.type.ReportPolicy;
 import com.huawei.hms.flutter.analytics.logger.HMSLogger;
 import com.huawei.hms.flutter.analytics.presenter.HMSAnalyticsContract;
@@ -43,15 +41,10 @@ public class HMSAnalyticsModule {
     private final WeakReference<Context> weakContext;
 
     // ViewModel instance
-    private final HMSAnalyticsContract.Presenter viewModel;
-    
-    // HiAnalytics instance
-    private final HiAnalyticsInstance analyticsInstance;
+    private HMSAnalyticsContract.Presenter viewModel;
 
     public HMSAnalyticsModule(WeakReference<Context> context) {
         this.weakContext = context;
-        this.viewModel = new HMSAnalyticsViewModel(getContext());
-        this.analyticsInstance = HiAnalytics.getInstance((getContext()));
     }
 
     private Context getContext() {
@@ -138,7 +131,7 @@ public class HMSAnalyticsModule {
     public void getUserProfiles(MethodCall methodCall, Result result) {
         boolean predefined = MapUtils.toBoolean("predefined", methodCall.argument("predefined"));
         viewModel.getUserProfiles(new HMSAnalyticsModule.HMSAnalyticsResultHandler<>(result, "predefined", weakContext),
-            predefined);
+                predefined);
     }
 
     public void pageStart(MethodCall methodCall, Result result) {
@@ -162,8 +155,8 @@ public class HMSAnalyticsModule {
 
     public void getReportPolicyThreshold(MethodCall methodCall, Result result) {
         viewModel.getReportPolicyThreshold(
-            new HMSAnalyticsModule.HMSAnalyticsResultHandler<>(result, "getReportPolicyThreshold", weakContext),
-            getReportPolicyType(MapUtils.getString("reportPolicyType", methodCall.argument("reportPolicyType"))));
+                new HMSAnalyticsModule.HMSAnalyticsResultHandler<>(result, "getReportPolicyThreshold", weakContext),
+                getReportPolicyType(MapUtils.getString("reportPolicyType", methodCall.argument("reportPolicyType"))));
     }
 
     public void setRestrictionEnabled(MethodCall methodCall, Result result) {
@@ -174,22 +167,22 @@ public class HMSAnalyticsModule {
 
     public void isRestrictionEnabled(Result result) {
         viewModel.isRestrictionEnabled(
-            new HMSAnalyticsModule.HMSAnalyticsResultHandler<>(result, "isRestrictionEnabled", weakContext));
+                new HMSAnalyticsModule.HMSAnalyticsResultHandler<>(result, "isRestrictionEnabled", weakContext));
     }
 
     public void setCollectAdsIdEnabled(MethodCall methodCall, Result result) {
         boolean value = MapUtils.toBoolean("enabled", methodCall.argument("enabled"));
-        analyticsInstance.setCollectAdsIdEnabled(value);
+        viewModel.setCollectAdsIdEnabled(value);
         result.success(null);
     }
 
     public void addDefaultEventParams(MethodCall methodCall, Result result) {
         Map<String, Object> val = MapUtils.objectToMap(methodCall.argument("params"));
         Bundle params = MapUtils.mapToBundle(val, false);
-        if(params.isEmpty()){
+        if (params.isEmpty()) {
             params = null;
         }
-        analyticsInstance.addDefaultEventParams(params);
+        viewModel.addDefaultEventParams(params);
         result.success(null);
     }
 
@@ -206,7 +199,7 @@ public class HMSAnalyticsModule {
             intValueOfLevel = LogLevel.valueOf(level).intValue;
         } catch (IllegalArgumentException ex) {
             HMSLogger.getInstance(weakContext.get())
-                .sendSingleEvent("enableLogWithLevel", "Invalid log level. level = " + level);
+                    .sendSingleEvent("enableLogWithLevel", "Invalid log level. level = " + level);
 
             result.error("INVALID_PARAM", "Invalid log level. level = " + level, null);
             return;
@@ -225,6 +218,41 @@ public class HMSAnalyticsModule {
         HMSLogger.getInstance(weakContext.get()).disableLogger();
         result.success(null);
     }
+
+    public void setChannel(MethodCall methodCall, Result result) {
+        String channel = MapUtils.getString("channel", methodCall.argument("channel"));
+        viewModel.setChannel(channel);
+        result.success(null);
+    }
+
+    public void setPropertyCollection(MethodCall methodCall, Result result) {
+        String property = MapUtils.getString("property", methodCall.argument("property"));
+        boolean enabled = MapUtils.toBoolean("enabled", methodCall.argument("enabled"));
+        viewModel.setPropertyCollection(property, enabled);
+        result.success(null);
+    }
+
+    public void setCustomReferrer(MethodCall methodCall, Result result) {
+        String customReferrer = MapUtils.getString("customReferrer", methodCall.argument("customReferrer"));
+        viewModel.setCustomReferrer(customReferrer);
+        result.success(null);
+    }
+
+    public void getInstance(MethodCall methodCall, Result result) {
+        // HiAnalytics instance
+        HiAnalyticsInstance analyticsInstance;
+
+        String routePolicy = MapUtils.getString("routePolicy", methodCall.argument("routePolicy"));
+
+        if (!routePolicy.equals("")) {
+            analyticsInstance = HiAnalytics.getInstance((getContext()), routePolicy);
+        } else {
+            analyticsInstance = HiAnalytics.getInstance(getContext());
+        }
+        viewModel = new HMSAnalyticsViewModel(getContext(), analyticsInstance);
+        result.success(null);
+    }
+
     /* Private Inner Class */
 
     private Set<ReportPolicy> mapToSetReportPolicy(Map<String, Object> reportPolicies) {
@@ -288,7 +316,7 @@ public class HMSAnalyticsModule {
      * HMSAnalyticsContract.ResultListener}.
      */
     private static final class HMSAnalyticsResultHandler<Object>
-        implements HMSAnalyticsContract.ResultListener<Object> {
+            implements HMSAnalyticsContract.ResultListener<Object> {
         private Result mResult;
         private String mMethodName;
         private WeakReference<Context> mWeakContext;

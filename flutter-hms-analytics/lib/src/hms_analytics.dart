@@ -19,16 +19,30 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 
 class HMSAnalytics {
-  static const MethodChannel _channel =
-      const MethodChannel('com.huawei.hms.flutter.analytics');
+  final MethodChannel _channel;
+
+  //static const MethodChannel _channel =
+  //    const MethodChannel('com.huawei.hms.flutter.analytics');
+
+  HMSAnalytics._getInstance(this._channel);
+
+  static Future<HMSAnalytics> getInstance({String routePolicy = ""}) async {
+    final MethodChannel _channel =
+        const MethodChannel('com.huawei.hms.flutter.analytics');
+    final _instance = HMSAnalytics._getInstance(_channel);
+    await _channel.invokeMethod('getInstance', {'routePolicy': routePolicy});
+    return _instance;
+  }
 
   /// Enables the log function.
+  ///
   ///  [note] This function is specifically used by Android Platforms.
   Future<void> enableLog() async {
     await _channel.invokeMethod('enableLog', {});
   }
 
   /// Enables the debug log function and sets the minimum log level.
+  ///
   /// [note] This function is specifically used by Android Platforms.
   Future<void> enableLogWithLevel(String logLevel) async {
     if (!(logLevel == "DEBUG" ||
@@ -43,6 +57,7 @@ class HMSAnalytics {
   }
 
   /// Set a user ID.
+  ///
   ///  [important] : When the setUserId API is called, if the old userId is not
   /// empty and is different from the new userId, a new session is generated.
   /// If you do not want to use setUserId to identify a user
@@ -60,7 +75,9 @@ class HMSAnalytics {
     await _channel.invokeMethod('setUserProfile', params);
   }
 
-  /// Sets the push token. After obtaining a push token through Push Kit,
+  /// Sets the push token.
+  ///
+  /// After obtaining a push token through Push Kit,
   /// call this method to save the push token so that you can use the audience
   /// defined by Analytics Kit to create HCM notification tasks.
   /// [note] This function is specifically used by Android Platforms.
@@ -70,6 +87,7 @@ class HMSAnalytics {
   }
 
   /// Sets the minimum interval for starting a new session.
+  ///
   /// [note] This function is specifically used by Android Platforms.
   Future<void> setMinActivitySessions(int interval) async {
     await _channel
@@ -90,6 +108,7 @@ class HMSAnalytics {
   }
 
   /// Delete all collected data in the local cache, including the cached data that fails to be sent.
+  ///
   /// [note] Calling this method will reset the AAID. In Analytics Kit 6.0.0 and
   /// later versions, alling this method will also reset the user ID.
   Future<void> clearCachedData() async {
@@ -114,6 +133,7 @@ class HMSAnalytics {
   }
 
   /// Defines a custom page entry event.
+  ///
   ///  [note] This function is specifically used by Android Platforms.
   Future<void> pageStart(String pageName, String pageClassOverride) async {
     dynamic params = {
@@ -161,8 +181,9 @@ class HMSAnalytics {
     await _channel.invokeMethod('setReportPolicies', {'policyType': policyMap});
   }
 
-  ///Obtains the threshold for event reporting.
-  ///@param reportPolicyType : Event reporting policy name.
+  /// Obtains the threshold for event reporting.
+  ///
+  /// @param reportPolicyType : Event reporting policy name.
   /// [note] This function is specifically used by Android Platforms.
   Future<int?> getReportPolicyThreshold(String policyType) async {
     return await _channel.invokeMethod(
@@ -170,7 +191,8 @@ class HMSAnalytics {
   }
 
   /// Specifies whether to enable restriction of HUAWEI Analytics.
-  /// The default value is false, which indicates that HUAWEI Analytics is
+  ///
+  /// The default value is ```false```, which indicates that HUAWEI Analytics is
   /// enabled by default.
   Future<void> setRestrictionEnabled(bool enabled) async {
     await _channel.invokeMethod('setRestrictionEnabled', {'enabled': enabled});
@@ -187,6 +209,7 @@ class HMSAnalytics {
   }
 
   /// Adds default event parameters.
+  ///
   /// These parameters will be added to all events except the automatically collected events.
   /// If the name of a default event parameter is the same as that of an event parameter, the event parameter will be used.
   Future<void> addDefaultEventParams(Map<String, Object>? params) async {
@@ -206,14 +229,41 @@ class HMSAnalytics {
     await _channel.invokeMethod('disableLogger', {});
   }
 
-  /// Delete created user profile
+  /// Deletes the created user profile
   Future<void> deleteUserProfile(String key) async {
     dynamic params = {'key': key};
     await _channel.invokeMethod('deleteUserProfile', params);
   }
 
-  /// Delete created user ID.
+  /// Deletes the created user ID.
   Future<void> deleteUserId() async {
     await _channel.invokeMethod('deleteUserId', {});
+  }
+
+  /// Sets the app installation source.
+  ///
+  /// The setting takes effect only when the method is called for the first time.
+  Future<void> setChannel(String channel) async {
+    dynamic params = {'channel': channel};
+    await _channel.invokeMethod('setChannel', params);
+  }
+
+  /// Sets whether to collect system attributes.
+  ///
+  /// Currently, this method applies only to the **```userAgent```** attribute.
+  Future<void> setPropertyCollection(String property, bool enabled) async {
+    dynamic params = {
+      'property': property,
+      'enabled': enabled,
+    };
+    await _channel.invokeMethod('setPropertyCollection', params);
+  }
+
+  /// Sets a custom referrer.
+  ///
+  /// This method takes effect only when it is called for the first time.
+  Future<void> setCustomReferrer(String customReferrer) async {
+    dynamic params = {'customReferrer': customReferrer};
+    await _channel.invokeMethod('setCustomReferrer', params);
   }
 }

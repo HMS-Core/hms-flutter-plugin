@@ -26,6 +26,10 @@ class ReportPolicyType {
 
 class HAUserProfileType {
   static const USERLEVEL = "user_level";
+
+  static const ISFULLLEVEL = "is_full_level";
+
+  static const ISMEMBER = "is_member";
 }
 
 // Huawei Analytics Event Types
@@ -247,6 +251,92 @@ class HAEventType {
   static const String RESERVEMAINTENANCE = "\$ReserveMaintenance";
 
   static const String DEVICEMISSINGREPORT = "\$DeviceMissingReport";
+
+  static const String MODULARCLICK = "\$ModularClick";
+
+  static const String PAGEVIEW = "\$PageView";
+
+  static const String STARTBOOKING = "\$StartBooking";
+
+  static const String LEARNTARGET = "\$LearnTarget";
+
+  static const String LANGUAGETEST = "\$LanguageTest";
+
+  static const String STARTTRAINING = "\$StartTraining";
+
+  static const String ENDTRAINING = "\$EndTraining";
+
+  static const String REGISTERACTIVITY = "\$RegisterActivity";
+
+  static const String EXITACTIVITY = "\$ExitActivity";
+
+  static const String COMPLETEACTIVITY = "\$CompleteActivity";
+
+  static const String ENTERACCOUNTOPENING = "\$EnterAccountOpening";
+
+  static const String SUBMITACCOUNTOPENING = "\$SubmitAccountOpening";
+
+  static const String BANDCARD = "\$BandCard";
+
+  static const String BANKTRANSFERIN = "\$BankTransferIn";
+
+  static const String BANKTRANSFEROUT = "\$BankTransferOut";
+
+  static const String VIEWSTOCKDETAIL = "\$ViewStockDetail";
+
+  static const String TRADESTOCKS = "\$TradeStocks";
+
+  static const String VIEWFINANCEPAGE = "\$ViewFinancePage";
+
+  static const String PURCHASEFINANCE = "\$PurchaseFinance";
+
+  static const String REDEMPTIONFINANCE = "\$RedemptionFinance";
+
+  static const String FUNDTRADING = "\$FundTrading";
+
+  static const String FIXEDINVESTMENT = "\$FixedInvestment";
+
+  static const String APPLYNEW = "\$ApplyNew";
+
+  static const String VIEWINFORMATIONSECTION = "\$ViewInformationSection";
+
+  static const String VIEWINFORMATION = "\$ViewInformation";
+
+  static const String DISPLAYVOUCHER = "\$DisplayVoucher";
+
+  static const String BOOKCOURSE = "\$BookCourse";
+
+  static const String LEARNCOURSES = "\$LearnCourses";
+
+  static const String TRYOUT = "\$TryOut";
+
+  static const String ANSWER = "\$Answer";
+
+  static const String VIEWFUNDPAGE = "\$ViewFundPage";
+
+  static const String CLICKPURCHASE = "\$ClickPurchase";
+
+  static const String ENABLEMEMBER = "\$EnableMember";
+
+  static const String CANCELMEMBER = "\$CancelMember";
+
+  static const String COMMENTCONTENT = "\$CommentContent";
+
+  static const String LIKECONTENT = "\$LikeContent";
+
+  static const String DELETEPRODUCT2WISHLIST = "\$DeleteProduct2Wishlist";
+
+  static const String ADCLICK = "\$AdClick";
+
+  static const String ADDISPLAY = "\$AdDisplay";
+
+  static const String REGISTERFAILED = "\$RegisterFailed";
+
+  static const String VIPCLICK = "\$VIPClick";
+
+  static const String VIPFAILED = "\$VIPFailed";
+
+  static const String VIPSUC = "\$VIPSuc";
 }
 
 // Huawei Analytics Parameter Types
@@ -349,7 +439,7 @@ class HAParamType {
 
   static const String SOURCE = "\$Source";
 
-  static const String ACOUNTTYPE = "\$AcountType";
+  static const String ACOUNTTYPE = "\$AccountType";
 
   static const String REGISTMETHOD = "\$RegistMeth";
 
@@ -406,7 +496,7 @@ class HAParamType {
   static const String FIRSTPAY = "\$FirstPay";
 
   static const String TASKID = "\$TaskId";
-
+  
   static const String FRIENDNUMBER = "\$FriendNumber";
 
   static const String USERGROUPNAME = "\$UserGroupName";
@@ -614,4 +704,236 @@ class HAParamType {
   static const String LOANCHANNEL = "\$LoanChannel";
 
   static const String REPAYMENTMETHOD = "\$RepaymentMethod";
+
+  static const String OCCURREDDATE = "\$OccurredDate";
+
+  static const String ACTION = "\$Action";
+
+  static const String PAGE = "\$Page";
+
+  static const String INDEX = "\$Index";
+
+  static const String MODULE = "\$Module";
+
+  static const String SOURCEPAGENAME = "\$SourcePageName";
+
+  static const String CITY = "\$City";
+
+  static const String FROMCITY = "\$FromCity";
+
+  static const String TOCITY = "\$ToCity";
+
+  static const String DEPARTUREDATE = "\$DepartureDate";
+
+  static const String RETURNDATE = "\$ReturnDate";
+
+  static const String TRIPTYPE = "\$TripType";
+
+  static const String SEARCHHOTEL = "\$SearchHotel";
+
+  static const String SPECIALTICKET = "\$SpecialTicket";
+
+  static const String COUNTRY = "\$Country";
+
+  static const String STAR = "\$Star";
+
+  static const String CHECKINDATE = "\$CheckInDate";
+
+  static const String CHECKOUTDATE = "\$CheckOutDate";
+
+  static const String ALDULTCOUNT = "\$AdultCount";
+
+  static const String BABYCOUNT = "\$BabyCount";
+
+  static const String CHILDRENCOUNT = "\$ChildrenCount";
+
+  static const String FROM = "\$From";
+
+  static const String CARMODE = "\$CarMode";
+
+  static const String CARTIME = "\$CarTime";
+
+  static const String DEPARTURETIME = "\$DepartureTime";
+
+  static const String ARRIVETIME = "\$ArriveTime";
+
+  static const String AIRLINE = "\$Airline";
+
+  static const String FLIGHTTYPE = "\$FlightType";
+
+  static const String DIRECTFLIGHT = "\$DirectFlight";
+
+  static const String TRAINTYPE = "\$TrainType";
+
+  static const String BEDTYPE = "\$BedType";
+
+  static const String BREAKFAST = "\$Breakfast";
+
+  static const String ARRIVEDATE = "\$ArriveDate";
+
+  static const String HOTELNAME = "\$HotelName";
+
+  static const String TRIPTAG = "\$TripTag";
+
+  static const String HOTELTYPE = "\$HotelType";
+
+  static const String ROOMTYPE = "\$RoomType";
+
+  static const String CARTYPE = "\$CarType";
+
+  static const String SUPPLIER = "\$Supplier";
+
+  static const String VOUCHERID = "\$VoucherID";
+
+  static const String VOUCHERNAME = "\$VoucherName";
+
+  static const String VOUCHERPRICE = "\$VoucherPrice";
+
+  static const String USERTYPE = "\$UserType";
+
+  static const String TARGET = "\$Target";
+
+  static const String ISCOMPELETED = "\$IsCompleted";
+
+  static const String USERLEVEL = "\$UserLevel";
+
+  static const String TIME = "\$Time";
+
+  static const String DISTANCE = "\$Distance";
+
+  static const String CALORIECONSUMED = "\$CalorieConsumed";
+
+  static const String PROGRESS = "\$Progress";
+
+  static const String SOURCEPAGE = "\$SourcePage";
+
+  static const String MULTIPLEACCOUNTS = "\$MultipleAccounts";
+
+  static const String ACCOUNTTYPE = "\$AccountType";
+
+  static const String FAILUREREASON = "\$FailureReason";
+
+  static const String AUTHORITY = "\$Authority";
+
+  static const String CARDTYPE = "\$CardType";
+
+  static const String ISSUEBANK = "\$IssueBank";
+
+  static const String TRANSFORMAMOUNT = "\$TransformAmount";
+
+  static const String BANKNAME = "\$BankName";
+
+  static const String SOURCEMODULE = "\$SourceModule";
+
+  static const String STOCKCODE = "\$StockCode";
+
+  static const String STOCKNAME = "\$StockName";
+
+  static const String MARKETCODE = "\$MarketCode";
+
+  static const String MARKETNAME = "\$MarketName";
+
+  static const String VIEWTYPE = "\$ViewType";
+
+  static const String TRENDCYCLE = "\$TrendCycle";
+
+  static const String TRANSACTIONTYPE = "\$TransactionType";
+
+  static const String CURRENCY = "\$Currency";
+
+  static const String MONEY = "\$Money";
+
+  static const String FINANCEID = "\$FinanceID";
+
+  static const String FINANCENAME = "\$FinanceName";
+
+  static const String FINANCETYPE = "\$FinanceType";
+
+  static const String FINANCERATE = "\$FinanceRate";
+
+  static const String FINANCETIMELIMIT = "\$FinanceTimeLimit";
+
+  static const String FINANCEAMOUNTMIN = "\$FinanceAmountMin";
+
+  static const String FINANCERISKLEV = "\$FinanceRiskLev";
+
+  static const String PURCHASEAMOUNT = "\$PurchaseAmount";
+
+  static const String HANDLINGFEES = "\$HandlingFees";
+
+  static const String REDEMPTIONAMOUNT = "\$RedemptionAmount";
+
+  static const String RETURNAMOUNT = "\$ReturnAmount";
+
+  static const String FUNDCODE = "\$FundCode";
+
+  static const String FUNDTYPE = "\$FundType";
+
+  static const String FUNDNAME = "\$FundName";
+
+  static const String FUNDRISKLEV = "\$FundRiskLev";
+
+  static const String CHARGERATE = "\$ChargeRate";
+
+  static const String PAYMENTMETHOD = "\$PaymentMethod";
+
+  static const String FIXEDCYCLE = "\$FixedCycle";
+
+  static const String ENTRANCE = "\$Entrance";
+
+  static const String CODE = "\$Code";
+
+  static const String NEWSTOPIC = "\$NewsTopic";
+
+  static const String INFORMATIONSOURCE = "\$InformationSource";
+
+  static const String COMMENTSNUMBER = "\$CommentsNumber";
+
+  static const String FORWARDINGNUMBER = "\$ForwardingNumber";
+
+  static const String LIKES = "\$Likes";
+
+  static const String TITLE = "\$Title";
+
+  static const String SEARCHTYPE = "\$SearchType";
+
+  static const String SOURCELOCATION = "\$SourceLocation";
+
+  static const String LOCATION = "\$Location";
+
+  static const String ID = "\$ID";
+
+  static const String PLAYMODE = "\$PlayMode";
+
+  static const String LISTS = "\$Lists";
+
+  static const String ADLOCATION = "\$AdLocation";
+
+  static const String ADCATEGORY = "\$AdCategory";
+
+  static const String ADTHEME = "\$AdTheme";
+
+  static const String BUTTONNAME = "\$ButtonName";
+
+  static const String USERID = "\$UserID";
+
+  static const String PAGECATEGORY = "\$PageCategory";
+
+  static const String RATING = "\$Rating";
+
+  static const String PERFORMANCE = "\$Performance";
+
+  static const String TRADINGRULES = "\$TradingRules";
+
+  static const String PORTFOLIO = "\$Portfolio";
+
+  static const String INVESTMENTMANAGER = "\$InvestmentManager";
+
+  static const String FUNDSIZE = "\$FundSize";
+
+  static const String VIPMONEY = "\$VIPMoney";
+
+  static const String VIPLOCATION = "\$VIPLocation";
+
+  static const String VIPFAILED = "\$VIPFailed";
 }
