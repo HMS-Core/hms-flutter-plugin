@@ -523,6 +523,7 @@ abstract class Push {
 }
 
 /// Callback function for handling received [RemoteMessage] objects in the background.
+@pragma('vm:entry-point')
 void callbackDispatcher() {
   WidgetsFlutterBinding.ensureInitialized();
 
