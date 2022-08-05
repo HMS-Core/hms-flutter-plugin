@@ -3,7 +3,7 @@ description: HUAWEI Availability Plugin for Flutter. It allows you to detect whe
 homepage: https://www.huawei.com
 repository: https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-availability
 
-version: 6.4.0+303
+version: 6.6.0+300
 
 environment:
   sdk: '>=2.12.0 <3.0.0'

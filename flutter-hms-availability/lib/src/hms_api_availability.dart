@@ -94,7 +94,7 @@ class HmsApiAvailability {
   static const int HMS_SDK_VERSION_CODE = 60400303;
 
   /// Version name of the HMS Core SDK.
-  static const String HMS_SDK_VERSION_NAME = '6.4.0.303';
+  static const String HMS_SDK_VERSION_NAME = '6.6.0.300';
 
   /// Specified parameter is null.
   static const String NULL_PARAMETER = '0011';

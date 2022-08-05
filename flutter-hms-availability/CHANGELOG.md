@@ -1,3 +1,7 @@
+## 6.6.0+300
+
+- Updated Base SDK to the latest version 6.6.0.300.
+
 ## 6.4.0+303
 
 - Deleted the capability of prompting users to install HMS Core (APK).
