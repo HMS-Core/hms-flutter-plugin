@@ -136,6 +136,9 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> initPlatformState() async {
     if (!mounted) return;
+    // If you want auto init enabled, after getting user agreement call this method.
+    await Push.setAutoInitEnabled(true);
+
     Push.getTokenStream.listen(_onTokenEvent, onError: _onTokenError);
     Push.getIntentStream.listen(_onNewIntent, onError: _onIntentError);
     Push.onNotificationOpenedApp.listen(_onNotificationOpenedApp);
@@ -276,6 +279,16 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       logTextController.text = '';
     });
+  }
+
+  void consentOn() async {
+    String? result = await Push.consentOn();
+    showResult('consentOn', result);
+  }
+
+  void consentOff() async {
+    String? result = await Push.consentOff();
+    showResult('consentOff', result);
   }
 
   void showResult(
@@ -529,6 +542,22 @@ class _HomePageState extends State<HomePage> {
                   () => getInitialIntent(),
                   'getInitialIntent',
                   fontSize: 16,
+                ),
+              ],
+            ),
+            Row(
+              children: <Widget>[
+                expandedButton(
+                  5,
+                  () => consentOn(),
+                  'consentOn',
+                  fontSize: 20,
+                ),
+                expandedButton(
+                  5,
+                  () => consentOff(),
+                  'consentOff',
+                  fontSize: 20,
                 ),
               ],
             ),

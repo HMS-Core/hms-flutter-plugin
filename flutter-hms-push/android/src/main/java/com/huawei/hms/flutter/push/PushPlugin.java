@@ -33,6 +33,7 @@ import com.huawei.hms.flutter.push.constants.Method;
 import com.huawei.hms.flutter.push.constants.Param;
 import com.huawei.hms.flutter.push.constants.PushIntent;
 import com.huawei.hms.flutter.push.event.DefaultStreamHandler;
+import com.huawei.hms.flutter.push.hms.FlutterHmsConsent;
 import com.huawei.hms.flutter.push.hms.FlutterHmsInstanceId;
 import com.huawei.hms.flutter.push.hms.FlutterHmsMessaging;
 import com.huawei.hms.flutter.push.hms.FlutterHmsOpenDevice;
@@ -75,6 +76,7 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
     private FlutterHmsInstanceId hmsInstanceId;
     private FlutterHmsMessaging hmsMessaging;
     private FlutterHmsProfile hmsProfile;
+    private FlutterHmsConsent hmsConsent;
     private Activity activity;
     private final List<EventChannel> eventChannels = new ArrayList<>();
 
@@ -88,6 +90,7 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
         notificationIntentListener = new NotificationIntentListener(context);
         hmsLocalNotification = new HmsLocalNotification(context);
         hmsMessaging = new FlutterHmsMessaging(context);
+        hmsConsent = new FlutterHmsConsent(context);
         PluginContext.initialize(context);
         setStreamHandlers(flutterPluginBinding.getBinaryMessenger());
     }
@@ -169,6 +172,12 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
             case removeBackgroundMessageHandler:
                 removeBackgroundMessageHandler(result);
                 break;
+            case consentOn:
+                hmsConsent.consentOn(result);
+                break;
+            case consentOff:
+                hmsConsent.consentOff(result);
+                break;        
             default:
                 onMethodCallToken(call, result);
         }

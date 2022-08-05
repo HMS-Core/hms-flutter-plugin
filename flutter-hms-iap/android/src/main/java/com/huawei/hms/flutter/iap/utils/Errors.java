@@ -30,6 +30,7 @@ public enum Errors {
     NO_RESOLUTION("NO_RESOLUTION", "There is no resolution for error.");
 
     private final String errorCode;
+
     private final String errorMessage;
 
     Errors(String errorCode, String errorMessage) {

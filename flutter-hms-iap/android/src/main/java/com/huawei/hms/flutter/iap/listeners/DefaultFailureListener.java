@@ -24,8 +24,11 @@ import io.flutter.plugin.common.MethodChannel.Result;
 
 public class DefaultFailureListener implements OnFailureListener {
     private final Result mResult;
+
     private final String mErrorCode;
+
     private final HMSLogger hmsLogger;
+
     private final String methodName;
 
     public DefaultFailureListener(Result result, String errorCode, HMSLogger logger, String method) {

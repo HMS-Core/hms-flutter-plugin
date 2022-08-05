@@ -36,10 +36,8 @@ import io.flutter.plugin.common.MethodChannel.Result;
  * @since 4.0.4
  */
 public class FlutterHmsMessaging {
-
-    private HMSLogger hmsLogger;
-
-    private Context context;
+    private final HMSLogger hmsLogger;
+    private final Context context;
 
     public FlutterHmsMessaging(@NonNull Context context) {
         this.context = context;
@@ -170,5 +168,4 @@ public class FlutterHmsMessaging {
             result.error(Code.RESULT_UNKNOWN.code(), e.getMessage(), e.getCause());
         }
     }
-
 }

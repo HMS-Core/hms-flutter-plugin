@@ -26,8 +26,11 @@ import io.flutter.plugin.common.MethodChannel.Result;
 
 public class PurchaseIntentSuccessListener implements OnSuccessListener<PurchaseIntentResult> {
     private final MethodCallHandlerImpl mMethodCallHandler;
+
     private final Result mResult;
+
     private final int mRequestCode;
+
     private final HMSLogger hmsLogger;
 
     public PurchaseIntentSuccessListener(MethodCallHandlerImpl methodCallHandler, Result result, int requestCode,

@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
 import com.huawei.hms.flutter.iap.listeners.DefaultFailureListener;
 import com.huawei.hms.flutter.iap.listeners.DefaultSuccessListener;
 import com.huawei.hms.flutter.iap.listeners.IapActivitySuccessListener;
@@ -56,13 +57,20 @@ import io.flutter.plugin.common.PluginRegistry.ActivityResultListener;
 
 public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultListener {
     private static final int REQUEST_CREATE_PURCHASE_INTENT = 111;
+
     private static final int REQUEST_IS_ENVIRONMENT_READY = 222;
+
     private final Activity mActivity;
+
     private final IapClient mIapClient;
+
     private final Gson mGson;
-    private int mRequestNumber = 0;
+
     private final Map<Integer, Pair<Result, Integer>> mResultsForRequests;
+
     private final HMSLogger hmsLogger;
+
+    private int mRequestNumber = 0;
 
     MethodCallHandlerImpl(final Activity activity) {
         mActivity = activity;
@@ -78,14 +86,16 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
             ? null
             : ValueGetter.getBoolean("isSupportAppTouch", call);
         hmsLogger.startMethodExecutionTimer(isEnvReadyMethodName);
-        if(isSupportAppTouch == null) {
+        if (isSupportAppTouch == null) {
             mIapClient.isEnvReady()
                 .addOnSuccessListener(new DefaultSuccessListener<>(result, mGson, hmsLogger, isEnvReadyMethodName))
-                .addOnFailureListener(new IsEnvReadyFailureListener(this, result, REQUEST_IS_ENVIRONMENT_READY, hmsLogger));
-        } else{
+                .addOnFailureListener(
+                    new IsEnvReadyFailureListener(this, result, REQUEST_IS_ENVIRONMENT_READY, hmsLogger));
+        } else {
             mIapClient.isEnvReady(isSupportAppTouch)
                 .addOnSuccessListener(new DefaultSuccessListener<>(result, mGson, hmsLogger, isEnvReadyMethodName))
-                .addOnFailureListener(new IsEnvReadyFailureListener(this, result, REQUEST_IS_ENVIRONMENT_READY, hmsLogger));
+                .addOnFailureListener(
+                    new IsEnvReadyFailureListener(this, result, REQUEST_IS_ENVIRONMENT_READY, hmsLogger));
         }
     }
 
@@ -166,7 +176,6 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
         request.setDeveloperChallenge(developerChallenge);
         request.setPurchaseToken(purchaseToken);
         request.setSignatureAlgorithm(signatureAlgorithm);
-
         // Call service from IAP service
         final String consumeOwnedPurchaseMethodName = "consumeOwnedPurchase";
         hmsLogger.startMethodExecutionTimer(consumeOwnedPurchaseMethodName);
@@ -232,6 +241,12 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
                     obtainOwnedPurchasesMethodName));
     }
 
+    private void enablePendingPurchase(@NonNull final Result result) {
+        hmsLogger.startMethodExecutionTimer("enablePendingPurchase");
+        mIapClient.enablePendingPurchase();
+        result.success("RESULT_SUCCESS");
+    }
+
     private void startIapActivity(@NonNull final MethodCall call, final Result result) {
         //Arguments
         final int type = ValueGetter.getInt("type", call);
@@ -284,6 +299,9 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
                 break;
             case "enableLogger":
                 hmsLogger.enableLogger();
+                break;
+            case "enablePendingPurchase":
+                enablePendingPurchase(result);
                 break;
             default:
                 result.notImplemented();

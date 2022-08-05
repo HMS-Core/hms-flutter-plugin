@@ -47,10 +47,8 @@ import java.util.Map;
  */
 public class FlutterHmsInstanceId {
     private static final String TAG = FlutterHmsInstanceId.class.getSimpleName();
-
-    private HMSLogger hmsLogger;
-
-    private Context context;
+    private final HMSLogger hmsLogger;
+    private final Context context;
 
     public FlutterHmsInstanceId(Context context) {
         this.context = context;
@@ -236,5 +234,4 @@ public class FlutterHmsInstanceId {
         }
         result.success(sb.toString());
     }
-
 }

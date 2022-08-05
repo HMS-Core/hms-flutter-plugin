@@ -1,3 +1,8 @@
+## 6.5.0+300
+
+- Updated Push SDK to the latest version 6.5.0.300.
+- Added HmsConsent API.
+
 ## 6.3.0+304
 
 - Updated Push SDK to the latest version 6.3.0.304.
