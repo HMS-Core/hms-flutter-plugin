@@ -24,11 +24,11 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 29
+        targetSdkVersion 30
     }
     lintOptions {
         disable 'InvalidPackage'
@@ -41,5 +41,5 @@ android {
 
 dependencies {
     implementation 'com.huawei.hms:iap:6.4.0.301'
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.code.gson:gson:2.9.0'
 }

@@ -19,6 +19,7 @@ package com.huawei.hms.flutter.iap.listeners;
 import static com.huawei.hms.flutter.iap.utils.JSONUtils.getJSONFromProductInfoResult;
 
 import com.google.gson.Gson;
+
 import com.huawei.hmf.tasks.OnSuccessListener;
 import com.huawei.hms.flutter.iap.logger.HMSLogger;
 import com.huawei.hms.iap.entity.ProductInfoResult;
@@ -27,8 +28,11 @@ import io.flutter.plugin.common.MethodChannel.Result;
 
 public class DefaultSuccessListener<T> implements OnSuccessListener<T> {
     private final Result mResult;
+
     private final Gson mGson;
+
     private final HMSLogger hmsLogger;
+
     private final String methodName;
 
     public DefaultSuccessListener(final Result result, final Gson gson, final HMSLogger logger, final String method) {

@@ -107,4 +107,10 @@ class IapClient {
   static Future<void> enableLogger() async {
     await _channel.invokeMethod("enableLogger");
   }
+
+  /// Enables pending purchase.
+  static Future<String> enablePendingPurchase() async {
+    String? result = await _channel.invokeMethod("enablePendingPurchase");
+    return result!;
+  }
 }

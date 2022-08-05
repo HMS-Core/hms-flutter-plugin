@@ -35,6 +35,17 @@ class _MyAppState extends State<MyApp> {
   String? sandboxReadyStatus;
   bool hmsLoggerStatus = true;
 
+  @override
+  void initState() {
+    super.initState();
+    enablePendingPurchase();
+  }
+
+  enablePendingPurchase() async {
+    String result = await IapClient.enablePendingPurchase();
+    log(result);
+  }
+
   environmentCheck() async {
     isEnvReadyStatus = null;
     try {

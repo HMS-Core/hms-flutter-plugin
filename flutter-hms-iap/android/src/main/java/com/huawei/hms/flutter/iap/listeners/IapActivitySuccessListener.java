@@ -24,6 +24,7 @@ import com.huawei.hms.iap.entity.StartIapActivityResult;
 
 public class IapActivitySuccessListener implements OnSuccessListener<StartIapActivityResult> {
     private final Activity mActivity;
+
     private final HMSLogger hmsLogger;
 
     public IapActivitySuccessListener(Activity activity, HMSLogger logger) {

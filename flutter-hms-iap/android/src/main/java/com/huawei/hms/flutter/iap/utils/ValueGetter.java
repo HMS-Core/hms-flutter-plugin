@@ -42,7 +42,7 @@ public class ValueGetter {
         }
     }
 
-    public static Boolean getBoolean(final String key, final MethodCall call){
+    public static Boolean getBoolean(final String key, final MethodCall call) {
         final Object value = call.argument(key);
         if (value instanceof Boolean) {
             return (Boolean) value;

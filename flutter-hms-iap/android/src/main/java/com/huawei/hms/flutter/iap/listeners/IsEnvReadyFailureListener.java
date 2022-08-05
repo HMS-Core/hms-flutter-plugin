@@ -28,8 +28,11 @@ import io.flutter.plugin.common.MethodChannel.Result;
 
 public class IsEnvReadyFailureListener implements OnFailureListener {
     private final Result mResult;
+
     private final int mRequestCode;
+
     private final MethodCallHandlerImpl mMethodCallHandler;
+
     private final HMSLogger hmsLogger;
 
     public IsEnvReadyFailureListener(MethodCallHandlerImpl methodCallHandler, Result result, int requestCode,
@@ -56,6 +59,9 @@ public class IsEnvReadyFailureListener implements OnFailureListener {
                 hmsLogger.sendSingleEvent("isEnvReady", Integer.toString(status.getStatusCode()));
                 mResult.error(Integer.toString(status.getStatusCode()), status.getStatusMessage(), null);
             }
+        } else {
+            mResult.error(Errors.UNKNOWN_REQUEST_CODE.getErrorCode(), e.getMessage(), null);
         }
+
     }
 }

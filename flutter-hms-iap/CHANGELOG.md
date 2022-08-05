@@ -1,3 +1,9 @@
+## 6.4.0+301
+* Updated to support latest Huawei In-App Purchases SDK.
+* Added enablePendingPurchase API.
+* Added result code 60057 in HmsIapResult.
+* Added a new constant PENDING in InAppPurchaseData.
+
 ## 6.2.0+301
 
 * Updated to support latest Huawei In-App Purchases SDK.

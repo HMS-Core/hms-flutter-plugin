@@ -28,6 +28,7 @@ import io.flutter.plugin.common.MethodChannel;
 
 public class IapPlugin implements FlutterPlugin, ActivityAware {
     private MethodChannel mMethodChannel;
+
     private MethodCallHandlerImpl mMethodCallHandler;
 
     private void onAttachedToEngine(@NonNull BinaryMessenger messenger) {

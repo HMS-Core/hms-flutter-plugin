@@ -26,6 +26,7 @@ class InAppPurchaseData {
   static const int PURCHASED = 0;
   static const int CANCELED = 1;
   static const int REFUNDED = 2;
+  static const int PENDING = 3;
 
   int? applicationId;
   bool? autoRenewing;
