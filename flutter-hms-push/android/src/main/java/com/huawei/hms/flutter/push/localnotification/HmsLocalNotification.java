@@ -33,9 +33,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class HmsLocalNotification {
-    private static String TAG = HmsLocalNotification.class.getSimpleName();
-
-    private HmsLocalNotificationController hmsLocalNotificationController;
+    private static final String TAG = HmsLocalNotification.class.getSimpleName();
+    private final HmsLocalNotificationController hmsLocalNotificationController;
 
     public HmsLocalNotification(Context context) {
         this.hmsLocalNotificationController = new HmsLocalNotificationController(context);
@@ -132,11 +131,19 @@ public class HmsLocalNotification {
 
     public void cancelNotificationsWithId(MethodCall call) {
         ArrayList<Integer> ids = call.arguments();
-        hmsLocalNotificationController.cancelNotificationsWithId(ids);
+        if (ids != null) {
+            hmsLocalNotificationController.cancelNotificationsWithId(ids);
+        } else {
+            Log.e(TAG, "ids null");
+        }
     }
 
     public void cancelNotificationsWithIdTag(MethodCall call) {
         HashMap<Integer, String> idTags = call.arguments();
-        hmsLocalNotificationController.cancelNotificationsWithIdTag(idTags);
+        if (idTags != null) {
+            hmsLocalNotificationController.cancelNotificationsWithIdTag(idTags);
+        } else {
+            Log.e(TAG, "idTags null");
+        }
     }
 }

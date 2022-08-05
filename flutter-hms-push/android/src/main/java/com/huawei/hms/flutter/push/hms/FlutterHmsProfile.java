@@ -28,18 +28,16 @@ import io.flutter.plugin.common.MethodChannel.Result;
 import java.util.Objects;
 
 public class FlutterHmsProfile {
-
-    private HmsProfile hmsProfile;
-
-    private HMSLogger hmsLogger;
+    private final Context context;
+    private final HMSLogger hmsLogger;
 
     public FlutterHmsProfile(Context context) {
-        hmsProfile = HmsProfile.getInstance(context);
+        this.context = context;
         hmsLogger = HMSLogger.getInstance(context);
     }
 
     public void isSupportProfile(final Result result) {
-        result.success(hmsProfile.isSupportProfile());
+        result.success(HmsProfile.getInstance(context).isSupportProfile());
     }
 
     public void addProfile(final MethodCall call, final Result result) {
@@ -47,7 +45,7 @@ public class FlutterHmsProfile {
         hmsLogger.startMethodExecutionTimer(methodName);
         int type = Objects.requireNonNull(call.argument("type"));
         String profileId = call.argument("profileId");
-        hmsProfile.addProfile(type, profileId).addOnSuccessListener(aVoid -> {
+        HmsProfile.getInstance(context).addProfile(type, profileId).addOnSuccessListener(aVoid -> {
             result.success(true);
             hmsLogger.sendSingleEvent(methodName);
         }).addOnFailureListener(e -> {
@@ -62,7 +60,7 @@ public class FlutterHmsProfile {
         String subjectId = call.argument("subjectId");
         int type = Objects.requireNonNull(call.argument("type"));
         String profileId = call.argument("profileId");
-        hmsProfile.addProfile(subjectId, type, profileId).addOnSuccessListener(aVoid -> {
+        HmsProfile.getInstance(context).addProfile(subjectId, type, profileId).addOnSuccessListener(aVoid -> {
             result.success(true);
             hmsLogger.sendSingleEvent(methodName);
         }).addOnFailureListener(e -> {
@@ -75,7 +73,7 @@ public class FlutterHmsProfile {
         final String methodName = "deleteProfile";
         hmsLogger.startMethodExecutionTimer(methodName);
         String profileId = call.argument("profileId");
-        hmsProfile.deleteProfile(profileId).addOnSuccessListener(aVoid -> {
+        HmsProfile.getInstance(context).deleteProfile(profileId).addOnSuccessListener(aVoid -> {
             result.success(true);
             hmsLogger.sendSingleEvent(methodName);
         }).addOnFailureListener(e -> {
@@ -89,7 +87,7 @@ public class FlutterHmsProfile {
         hmsLogger.startMethodExecutionTimer(methodName);
         String subjectId = call.argument("subjectId");
         String profileId = call.argument("profileId");
-        hmsProfile.deleteProfile(subjectId, profileId).addOnSuccessListener(aVoid -> {
+        HmsProfile.getInstance(context).deleteProfile(subjectId, profileId).addOnSuccessListener(aVoid -> {
             result.success(true);
             hmsLogger.sendSingleEvent(methodName);
         }).addOnFailureListener(e -> {

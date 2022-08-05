@@ -520,9 +520,26 @@ abstract class Push {
     );
     return result!;
   }
+
+  /// Enables the function of receiving messages from the User Engagement by Push service.
+  static Future<String> consentOn() async {
+    final String? result = await _methodChannel.invokeMethod<String?>(
+      'consentOn',
+    );
+    return resultCodes[result]!;
+  }
+
+  /// Disables the function of receiving messages from the User Engagement by Push service.
+  static Future<String> consentOff() async {
+    final String? result = await _methodChannel.invokeMethod<String?>(
+      'consentOff',
+    );
+    return resultCodes[result]!;
+  }
 }
 
 /// Callback function for handling received [RemoteMessage] objects in the background.
+@pragma('vm:entry-point')
 void callbackDispatcher() {
   WidgetsFlutterBinding.ensureInitialized();
 

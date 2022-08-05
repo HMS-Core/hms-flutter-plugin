@@ -45,9 +45,7 @@ import java.util.Map;
  */
 public class NotificationIntentListener implements NewIntentListener {
     private static Map<String, Object> initialNotification;
-
     private String initialIntent;
-
     private final Context context;
 
     public NotificationIntentListener(Context context) {
@@ -109,5 +107,4 @@ public class NotificationIntentListener implements NewIntentListener {
         Utils.sendIntent(context, PushIntent.NOTIFICATION_OPEN_ACTION, PushIntent.NOTIFICATION_OPEN,
             jsonObject.toString());
     }
-
 }

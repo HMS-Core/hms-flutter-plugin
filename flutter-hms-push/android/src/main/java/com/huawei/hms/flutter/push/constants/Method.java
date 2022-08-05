@@ -72,6 +72,9 @@ public enum Method {
     showToast,
 
     registerBackgroundMessageHandler,
-    removeBackgroundMessageHandler;
+    removeBackgroundMessageHandler,
+
+    consentOn,
+    consentOff;
 
 }

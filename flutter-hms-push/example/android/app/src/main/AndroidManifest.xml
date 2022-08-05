@@ -44,7 +44,7 @@
         <!-- Set push kit auto enable to true (for obtaining the token on initialize)-->
         <meta-data
             android:name="push_kit_auto_init_enabled"
-            android:value="true" />
+            android:value="false" />
 
         <!-- These receivers are for sending scheduled local notifications -->
         <receiver
