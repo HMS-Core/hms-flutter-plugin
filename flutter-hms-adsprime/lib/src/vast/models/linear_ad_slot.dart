@@ -20,9 +20,9 @@ class LinearAdSlot extends BaseAdSlot {
   LinearAdSlot({
     required String slotId,
     required int totalDuration,
+    required VastRequestOptions requestOptions,
     int? width,
     int? height,
-    required VastRequestOptions requestOptions,
     Orientation orientation = Orientation.PORTRAIT,
     int? maxAdPods,
     CreativeMatchStrategy? creativeMatchStrategy,

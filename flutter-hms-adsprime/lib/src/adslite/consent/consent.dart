@@ -30,8 +30,8 @@ class Consent {
     return deviceId;
   }
 
-  Future<bool?> addTestDeviceId(String deviceId) {
-    return Ads.instance.channelConsent.invokeMethod(
+  Future<bool?> addTestDeviceId(String deviceId) async {
+    return await Ads.instance.channelConsent.invokeMethod(
       'addTestDeviceId',
       <String, dynamic>{
         'deviceId': deviceId,
@@ -40,8 +40,8 @@ class Consent {
   }
 
   // DebugNeedConsent constants
-  Future<bool?> setDebugNeedConsent(DebugNeedConsent needConsent) {
-    return Ads.instance.channelConsent.invokeMethod(
+  Future<bool?> setDebugNeedConsent(DebugNeedConsent needConsent) async {
+    return await Ads.instance.channelConsent.invokeMethod(
       'setDebugNeedConsent',
       <String, dynamic>{
         'needConsent': describeEnum(needConsent),
@@ -49,8 +49,8 @@ class Consent {
     );
   }
 
-  Future<bool?> setUnderAgeOfPromise(bool ageOfPromise) {
-    return Ads.instance.channelConsent.invokeMethod(
+  Future<bool?> setUnderAgeOfPromise(bool ageOfPromise) async {
+    return await Ads.instance.channelConsent.invokeMethod(
       'setUnderAgeOfPromise',
       <String, dynamic>{
         'ageOfPromise': ageOfPromise,
@@ -58,8 +58,8 @@ class Consent {
     );
   }
 
-  Future<bool?> setConsentStatus(ConsentStatus status) {
-    return Ads.instance.channelConsent.invokeMethod(
+  Future<bool?> setConsentStatus(ConsentStatus status) async {
+    return await Ads.instance.channelConsent.invokeMethod(
       'setConsentStatus',
       <String, dynamic>{
         'status': describeEnum(status),
@@ -72,8 +72,8 @@ class Consent {
     _startListening();
   }
 
-  static Future<bool?> updateSharedPreferences(String key, int value) {
-    return Ads.instance.channelConsent.invokeMethod(
+  static Future<bool?> updateSharedPreferences(String key, int value) async {
+    return await Ads.instance.channelConsent.invokeMethod(
       'updateConsentSharedPreferences',
       <String, dynamic>{
         'key': key,
@@ -83,7 +83,7 @@ class Consent {
   }
 
   static Future<int?> getSharedPreferences(String key) async {
-    int? pref = await Ads.instance.channelConsent.invokeMethod(
+    final int? pref = await Ads.instance.channelConsent.invokeMethod(
       'getConsentSharedPreferences',
       <String, dynamic>{
         'key': key,

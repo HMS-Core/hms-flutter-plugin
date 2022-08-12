@@ -13,6 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:huawei_adsprime/huawei_adsprime.dart';
@@ -22,7 +23,7 @@ class NativeAdPage extends StatefulWidget {
   const NativeAdPage({Key? key}) : super(key: key);
 
   @override
-  _NativeAdPageState createState() => _NativeAdPageState();
+  State<NativeAdPage> createState() => _NativeAdPageState();
 }
 
 class _NativeAdPageState extends State<NativeAdPage> {
@@ -47,7 +48,7 @@ class _NativeAdPageState extends State<NativeAdPage> {
         (VideoLifecycleEvent event, {bool? isMuted}) {
       debugPrint('VideoLifeCycle event : $event');
       setState(() {
-        logs = logs + 'VideoLifeCycle event : ${describeEnum(event)}\n';
+        logs = '${logs}VideoLifeCycle event : ${describeEnum(event)}\n';
       });
     };
     bool? hasVideo = await operator?.hasVideo();
@@ -117,8 +118,8 @@ class _NativeAdPageState extends State<NativeAdPage> {
                           listener: (AdEvent event, {int? errorCode}) {
                             debugPrint('Native Ad event : $event');
                             setState(() {
-                              logs = logs +
-                                  'Native Ad event : ${describeEnum(event)}\n';
+                              logs =
+                                  '${logs}Native Ad event : ${describeEnum(event)}\n';
                             });
                           },
                         ),

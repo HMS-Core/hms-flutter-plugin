@@ -13,6 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:huawei_adsprime/huawei_adsprime.dart';
@@ -22,7 +23,7 @@ class BannerAdPage extends StatefulWidget {
   const BannerAdPage({Key? key}) : super(key: key);
 
   @override
-  _BannerAdPageState createState() => _BannerAdPageState();
+  State<BannerAdPage> createState() => _BannerAdPageState();
 }
 
 class _BannerAdPageState extends State<BannerAdPage> {
@@ -35,7 +36,8 @@ class _BannerAdPageState extends State<BannerAdPage> {
   void changeSize(BannerAdSize? size) {
     if (_bannerAd != null) {
       debugPrint(
-          'Previous Banner size - width ${_bannerAd!.size.width} : height ${_bannerAd!.size.height}');
+        'Previous Banner size - width ${_bannerAd!.size.width} : height ${_bannerAd!.size.height}',
+      );
     }
 
     setState(() {
@@ -52,7 +54,7 @@ class _BannerAdPageState extends State<BannerAdPage> {
       listener: (AdEvent event, {int? errorCode}) {
         debugPrint('Banner Ad event : $event');
         setState(() {
-          logs = logs + 'Banner Ad event : ${describeEnum(event)}\n';
+          logs = '${logs}Banner Ad event : ${describeEnum(event)}\n';
         });
       },
     );
@@ -72,15 +74,18 @@ class _BannerAdPageState extends State<BannerAdPage> {
     BannerAdSize currentDir =
         await BannerAdSize.getCurrentDirectionBannerSize(150);
     debugPrint(
-        'getCurrentDirectionBannerSize - width ${currentDir.width} : height ${currentDir.height}');
+      'getCurrentDirectionBannerSize - width ${currentDir.width} : height ${currentDir.height}',
+    );
 
     BannerAdSize landscape = await BannerAdSize.getLandscapeBannerSize(150);
     debugPrint(
-        'getLandscapeBannerSize - width ${landscape.width} : height ${landscape.height}');
+      'getLandscapeBannerSize - width ${landscape.width} : height ${landscape.height}',
+    );
 
     BannerAdSize portrait = await BannerAdSize.getPortraitBannerSize(150);
     debugPrint(
-        'getPortraitBannerSize - width ${portrait.width} : height ${portrait.height}');
+      'getPortraitBannerSize - width ${portrait.width} : height ${portrait.height}',
+    );
   }
 
   @override
@@ -92,116 +97,117 @@ class _BannerAdPageState extends State<BannerAdPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.redAccent,
-          title: const Text(
-            'Huawei Ads - Banner',
-            style: TextStyle(
-              color: Colors.white,
-            ),
+      appBar: AppBar(
+        backgroundColor: Colors.redAccent,
+        title: const Text(
+          'Huawei Ads - Banner',
+          style: TextStyle(
+            color: Colors.white,
           ),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Container(
-                height: 200,
-                margin: const EdgeInsets.symmetric(horizontal: 60),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Container(
+              height: 200,
+              margin: const EdgeInsets.symmetric(horizontal: 60),
+              child: SingleChildScrollView(
+                child: Container(
+                  color: const Color.fromRGBO(242, 242, 242, 1),
+                  child: Column(
+                    children: <Widget>[
+                      ListTile(
+                        title: const Text('Size 320 x 50'),
+                        trailing: Radio<BannerAdSize>(
+                          groupValue: bannerAdSize,
+                          value: BannerAdSize.s320x50,
+                          onChanged: changeSize,
+                        ),
+                      ),
+                      ListTile(
+                        title: const Text('Size 320 x 100'),
+                        trailing: Radio<BannerAdSize>(
+                          groupValue: bannerAdSize,
+                          value: BannerAdSize.s320x100,
+                          onChanged: changeSize,
+                        ),
+                      ),
+                      ListTile(
+                        title: const Text('Size 300 x 250'),
+                        trailing: Radio<BannerAdSize>(
+                          groupValue: bannerAdSize,
+                          value: BannerAdSize.s300x250,
+                          onChanged: changeSize,
+                        ),
+                      ),
+                      ListTile(
+                        title: const Text('Size SMART'),
+                        trailing: Radio<BannerAdSize>(
+                          groupValue: bannerAdSize,
+                          value: BannerAdSize.sSmart,
+                          onChanged: changeSize,
+                        ),
+                      ),
+                      ListTile(
+                        title: const Text('Size ADVANCED'),
+                        trailing: Radio<BannerAdSize>(
+                          groupValue: bannerAdSize,
+                          value: BannerAdSize.sAdvanced,
+                          onChanged: changeSize,
+                        ),
+                      ),
+                      ListTile(
+                        title: const Text('Size 360 x 57'),
+                        trailing: Radio<BannerAdSize>(
+                          groupValue: bannerAdSize,
+                          value: BannerAdSize.s360x57,
+                          onChanged: changeSize,
+                        ),
+                      ),
+                      ListTile(
+                        title: const Text('Size 360 x 144'),
+                        trailing: Radio<BannerAdSize>(
+                          groupValue: bannerAdSize,
+                          value: BannerAdSize.s360x144,
+                          onChanged: changeSize,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 20),
+              child: ElevatedButton(
+                child: const Text(
+                  'Load Ad',
+                  style: Styles.adControlButtonStyle,
+                ),
+                onPressed: () {
+                  _bannerAd?.destroy();
+                  _bannerAd = createAd()
+                    ..loadAd()
+                    ..show();
+                },
+              ),
+            ),
+            SizedBox(
+              height: 250,
+              child: GestureDetector(
+                onDoubleTap: () => setState(() {
+                  logs = '';
+                }),
                 child: SingleChildScrollView(
-                  child: Container(
-                    color: const Color.fromRGBO(242, 242, 242, 1),
-                    child: Column(
-                      children: <Widget>[
-                        ListTile(
-                          title: const Text('Size 320 x 50'),
-                          trailing: Radio<BannerAdSize>(
-                            groupValue: bannerAdSize,
-                            value: BannerAdSize.s320x50,
-                            onChanged: changeSize,
-                          ),
-                        ),
-                        ListTile(
-                          title: const Text('Size 320 x 100'),
-                          trailing: Radio<BannerAdSize>(
-                            groupValue: bannerAdSize,
-                            value: BannerAdSize.s320x100,
-                            onChanged: changeSize,
-                          ),
-                        ),
-                        ListTile(
-                          title: const Text('Size 300 x 250'),
-                          trailing: Radio<BannerAdSize>(
-                            groupValue: bannerAdSize,
-                            value: BannerAdSize.s300x250,
-                            onChanged: changeSize,
-                          ),
-                        ),
-                        ListTile(
-                          title: const Text('Size SMART'),
-                          trailing: Radio<BannerAdSize>(
-                            groupValue: bannerAdSize,
-                            value: BannerAdSize.sSmart,
-                            onChanged: changeSize,
-                          ),
-                        ),
-                        ListTile(
-                          title: const Text('Size ADVANCED'),
-                          trailing: Radio<BannerAdSize>(
-                            groupValue: bannerAdSize,
-                            value: BannerAdSize.sAdvanced,
-                            onChanged: changeSize,
-                          ),
-                        ),
-                        ListTile(
-                          title: const Text('Size 360 x 57'),
-                          trailing: Radio<BannerAdSize>(
-                            groupValue: bannerAdSize,
-                            value: BannerAdSize.s360x57,
-                            onChanged: changeSize,
-                          ),
-                        ),
-                        ListTile(
-                          title: const Text('Size 360 x 144'),
-                          trailing: Radio<BannerAdSize>(
-                            groupValue: bannerAdSize,
-                            value: BannerAdSize.s360x144,
-                            onChanged: changeSize,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  child: Text(logs),
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 20),
-                child: ElevatedButton(
-                  child: const Text(
-                    'Load Ad',
-                    style: Styles.adControlButtonStyle,
-                  ),
-                  onPressed: () {
-                    _bannerAd?.destroy();
-                    _bannerAd = createAd()
-                      ..loadAd()
-                      ..show();
-                  },
-                ),
-              ),
-              SizedBox(
-                height: 250,
-                child: GestureDetector(
-                  onDoubleTap: () => setState(() {
-                    logs = '';
-                  }),
-                  child: SingleChildScrollView(
-                    child: Text(logs),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ));
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override

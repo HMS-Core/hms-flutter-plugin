@@ -13,6 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+
 import 'package:flutter/material.dart';
 import 'package:huawei_adsprime/huawei_adsprime.dart';
 import 'package:huawei_adsprime_example/pages/ads_menu_page.dart';
@@ -26,7 +27,7 @@ class SplashAdPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _SplashAdPageState createState() => _SplashAdPageState();
+  State<SplashAdPage> createState() => _SplashAdPageState();
 }
 
 class _SplashAdPageState extends State<SplashAdPage> {
@@ -35,7 +36,8 @@ class _SplashAdPageState extends State<SplashAdPage> {
   late bool _fromIndexPage;
   static SplashAd? _splashAd;
 
-  SplashAd createAd() => SplashAd(
+  SplashAd createAd() {
+    return SplashAd(
       adType: SplashAdType.above,
       ownerText: 'CUSTOM OWNER',
       footerText: 'CUSTOM FOOTER',
@@ -61,7 +63,9 @@ class _SplashAdPageState extends State<SplashAdPage> {
       },
       displayListener: (SplashAdDisplayEvent event) {
         debugPrint('Splash Ad Display Event : $event');
-      });
+      },
+    );
+  }
 
   @override
   void initState() {
@@ -73,9 +77,10 @@ class _SplashAdPageState extends State<SplashAdPage> {
   Widget build(BuildContext context) {
     _splashAd ??= createAd()
       ..loadAd(
-          adSlotId: _testAdSlotId,
-          orientation: SplashAdOrientation.portrait,
-          adParam: _adParam);
+        adSlotId: _testAdSlotId,
+        orientation: SplashAdOrientation.portrait,
+        adParam: _adParam,
+      );
 
     return Container(
       color: Colors.white,

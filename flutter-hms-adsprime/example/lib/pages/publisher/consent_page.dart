@@ -13,6 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+
 import 'package:flutter/material.dart';
 import 'package:huawei_adsprime_example/pages/publisher/consent/consent_settings_page.dart';
 import 'package:huawei_adsprime_example/pages/publisher/consent/privacy_settings_page.dart';
@@ -22,7 +23,7 @@ class ConsentPage extends StatefulWidget {
   const ConsentPage({Key? key}) : super(key: key);
 
   @override
-  _ConsentPageState createState() => _ConsentPageState();
+  State<ConsentPage> createState() => _ConsentPageState();
 }
 
 class _ConsentPageState extends State<ConsentPage> {
@@ -47,25 +48,32 @@ class _ConsentPageState extends State<ConsentPage> {
               style: Styles.menuButtonStyle,
             ),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute<dynamic>(
-                builder: (BuildContext context) {
-                  return const ConsentSettingsPage();
-                },
-              ));
+              Navigator.push(
+                context,
+                MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) {
+                    return const ConsentSettingsPage();
+                  },
+                ),
+              );
             },
           ),
           ElevatedButton(
-              child: const Text(
-                'Privacy Settings',
-                style: Styles.menuButtonStyle,
-              ),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute<dynamic>(
+            child: const Text(
+              'Privacy Settings',
+              style: Styles.menuButtonStyle,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute<dynamic>(
                   builder: (BuildContext context) {
                     return const PrivacySettingsPage();
                   },
-                ));
-              }),
+                ),
+              );
+            },
+          ),
         ],
       ),
     );

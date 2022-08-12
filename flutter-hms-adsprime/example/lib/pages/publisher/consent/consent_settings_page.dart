@@ -13,6 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -24,7 +25,7 @@ class ConsentSettingsPage extends StatefulWidget {
   const ConsentSettingsPage({Key? key}) : super(key: key);
 
   @override
-  _ConsentSettingsPageState createState() => _ConsentSettingsPageState();
+  State<ConsentSettingsPage> createState() => _ConsentSettingsPageState();
 }
 
 class _ConsentSettingsPageState extends State<ConsentSettingsPage> {
@@ -35,13 +36,22 @@ class _ConsentSettingsPageState extends State<ConsentSettingsPage> {
   bool _buttonEnabled = false;
   BannerAd? _bannerAd;
 
+  @override
+  void initState() {
+    super.initState();
+    initPlatformState();
+  }
+
   Future<void> initPlatformState() async {
     try {
       await consentInfo.setConsentStatus(ConsentStatus.UNKNOWN);
-      String? testDeviceId = await (consentInfo.getTestDeviceId());
-      if (testDeviceId != null) await consentInfo.addTestDeviceId(testDeviceId);
-      await consentInfo
-          .setDebugNeedConsent(DebugNeedConsent.DEBUG_NEED_CONSENT);
+      final String? testDeviceId = await consentInfo.getTestDeviceId();
+      if (testDeviceId != null) {
+        await consentInfo.addTestDeviceId(testDeviceId);
+      }
+      await consentInfo.setDebugNeedConsent(
+        DebugNeedConsent.DEBUG_NEED_CONSENT,
+      );
       consentInfo.requestConsentUpdate((
         ConsentUpdateEvent? event, {
         ConsentStatus? consentStatus,
@@ -51,14 +61,14 @@ class _ConsentSettingsPageState extends State<ConsentSettingsPage> {
       }) {
         if (event == ConsentUpdateEvent.success) {
           _needConsent = isNeedConsent;
-          bool isUnknown = consentStatus == ConsentStatus.UNKNOWN;
+          final bool isUnknown = consentStatus == ConsentStatus.UNKNOWN;
           if (isNeedConsent!) {
             if (isUnknown) {
               List<Map<String, dynamic>> adMapList = <Map<String, dynamic>>[];
               for (AdProvider provider in adProviders ?? <AdProvider>[]) {
                 adMapList.add(provider.toJson());
               }
-              debugPrint('AdProviders : ' + jsonEncode(adMapList));
+              debugPrint('AdProviders: ${jsonEncode(adMapList)}');
               setState(() {
                 _buttonEnabled = _needConsent! && isUnknown;
               });
@@ -71,14 +81,16 @@ class _ConsentSettingsPageState extends State<ConsentSettingsPage> {
           }
           // Consent update failed
         } else {
-          debugPrint('Consent status failed to update: ' + description!);
+          debugPrint('Consent status failed to update: ${description!}');
           loadBannerAd(ConsentStatus.NON_PERSONALIZED);
         }
       });
     } catch (e) {
       debugPrint('EXCEPTION | $e');
     }
-    if (!mounted) return;
+    if (!mounted) {
+      return;
+    }
   }
 
   void loadBannerAd(ConsentStatus status) async {
@@ -106,7 +118,9 @@ class _ConsentSettingsPageState extends State<ConsentSettingsPage> {
 
   void setConsent(ConsentStatus status) async {
     bool? isUpdated = await (Consent.updateSharedPreferences(
-        ConsentConstant.spConsentKey, status.index));
+      ConsentConstant.spConsentKey,
+      status.index,
+    ));
     if (isUpdated ?? false) {
       debugPrint('SharedPreferences updated');
       loadBannerAd(status);
@@ -117,12 +131,6 @@ class _ConsentSettingsPageState extends State<ConsentSettingsPage> {
     } else {
       debugPrint('ERROR: Update shared preferences failed.');
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
   }
 
   @override
@@ -146,6 +154,7 @@ class _ConsentSettingsPageState extends State<ConsentSettingsPage> {
                 children: <Widget>[
                   Center(
                     child: Container(
+                      padding: const EdgeInsets.all(20),
                       child: Text(
                         _needConsent! && _consentStatus == ConsentStatus.UNKNOWN
                             ? consentExample
@@ -156,7 +165,6 @@ class _ConsentSettingsPageState extends State<ConsentSettingsPage> {
                                     : 'User did not agree.',
                         style: Styles.textContentStyle,
                       ),
-                      padding: const EdgeInsets.all(20),
                     ),
                   ),
                   SizedBox(
@@ -166,34 +174,34 @@ class _ConsentSettingsPageState extends State<ConsentSettingsPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         ElevatedButton(
+                          onPressed: _buttonEnabled
+                              ? () => setConsent(ConsentStatus.NON_PERSONALIZED)
+                              : null,
                           child: const SizedBox(
+                            width: 90,
+                            height: 40,
                             child: Center(
                               child: Text(
                                 'SKIP',
                                 style: Styles.adControlButtonStyle,
                               ),
                             ),
-                            width: 90,
-                            height: 40,
                           ),
-                          onPressed: _buttonEnabled
-                              ? () => setConsent(ConsentStatus.NON_PERSONALIZED)
-                              : null,
                         ),
                         ElevatedButton(
+                          onPressed: _buttonEnabled
+                              ? () => setConsent(ConsentStatus.PERSONALIZED)
+                              : null,
                           child: const SizedBox(
+                            width: 90,
+                            height: 40,
                             child: Center(
                               child: Text(
                                 'AGREE',
                                 style: Styles.adControlButtonStyle,
                               ),
                             ),
-                            width: 90,
-                            height: 40,
                           ),
-                          onPressed: _buttonEnabled
-                              ? () => setConsent(ConsentStatus.PERSONALIZED)
-                              : null,
                         ),
                       ],
                     ),
@@ -206,13 +214,12 @@ class _ConsentSettingsPageState extends State<ConsentSettingsPage> {
             flex: 1,
             child: Column(
               children: <Widget>[
-                const SizedBox(
-                  height: 20,
+                const SizedBox(height: 20),
+                const Text(
+                  'Consent Status',
+                  style: Styles.headerTextStyle,
                 ),
-                const Text('Consent Status', style: Styles.headerTextStyle),
-                const SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10),
                 Text(
                   _consentStatus == ConsentStatus.UNKNOWN
                       ? 'Consent unknown'
@@ -223,7 +230,7 @@ class _ConsentSettingsPageState extends State<ConsentSettingsPage> {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
@@ -231,8 +238,8 @@ class _ConsentSettingsPageState extends State<ConsentSettingsPage> {
 
   @override
   void dispose() {
-    super.dispose();
     _bannerAd?.destroy();
     _bannerAd = null;
+    super.dispose();
   }
 }

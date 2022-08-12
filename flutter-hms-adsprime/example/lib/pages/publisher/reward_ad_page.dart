@@ -13,6 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -24,7 +25,7 @@ class RewardAdPage extends StatefulWidget {
   const RewardAdPage({Key? key}) : super(key: key);
 
   @override
-  _RewardAdPageState createState() => _RewardAdPageState();
+  State<RewardAdPage> createState() => _RewardAdPageState();
 }
 
 class _RewardAdPageState extends State<RewardAdPage> {
@@ -40,24 +41,22 @@ class _RewardAdPageState extends State<RewardAdPage> {
   * *
   * NOTE: A reward is not issued every time
   * */
-  RewardAd createAd() => RewardAd(
-          listener: (RewardAdEvent? event, {Reward? reward, int? errorCode}) {
+  RewardAd createAd() {
+    return RewardAd(
+      listener: (RewardAdEvent? event, {Reward? reward, int? errorCode}) {
         debugPrint('RewardAd event : $event');
         setState(() {
-          logs = logs + 'Reward Ad event : ${describeEnum(event!)}\n';
+          logs = '${logs}Reward Ad event : ${describeEnum(event!)}\n';
         });
         if (event == RewardAdEvent.rewarded) {
           debugPrint('Received reward : ${jsonEncode(reward!.toJson())}');
           setState(() {
-            logs = logs + 'Received reward amount : ${reward.amount}\n';
+            logs = '${logs}Received reward amount : ${reward.amount}\n';
             _score += reward.amount != 0 ? reward.amount! : 10;
           });
         }
-      });
-
-  @override
-  void initState() {
-    super.initState();
+      },
+    );
   }
 
   @override
@@ -79,26 +78,31 @@ class _RewardAdPageState extends State<RewardAdPage> {
             child: Column(
               children: <Widget>[
                 Expanded(
-                    child: Center(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 30, horizontal: 50),
-                    child: Text('Your score : $_score'),
+                  child: Center(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 30,
+                        horizontal: 50,
+                      ),
+                      child: Text('Your score : $_score'),
+                    ),
                   ),
-                )),
+                ),
                 ElevatedButton(
                   child: const Text(
                     'Load Ad',
                     style: Styles.adControlButtonStyle,
                   ),
-                  onPressed: () {
-                    _rewardAd?.destroy();
+                  onPressed: () async {
+                    await _rewardAd?.destroy();
                     _rewardAd = createAd();
-                    _rewardAd!
-                      ..loadAd(adSlotId: _testAdSlotId, adParam: _adParam)
-                      ..show();
+                    await _rewardAd!.loadAd(
+                      adSlotId: _testAdSlotId,
+                      adParam: _adParam,
+                    );
+                    await _rewardAd!.show();
                   },
-                )
+                ),
               ],
             ),
           ),
@@ -109,9 +113,7 @@ class _RewardAdPageState extends State<RewardAdPage> {
                 padding: const EdgeInsets.only(top: 10),
                 height: 250,
                 child: GestureDetector(
-                  onDoubleTap: () => setState(() {
-                    logs = '';
-                  }),
+                  onDoubleTap: () => setState(() => logs = ''),
                   child: SingleChildScrollView(
                     child: Text(logs),
                   ),

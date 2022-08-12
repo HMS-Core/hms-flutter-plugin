@@ -38,11 +38,9 @@ import io.flutter.plugin.common.MethodChannel.Result;
 public class ConsentMethodHandler implements MethodChannel.MethodCallHandler {
     private static final String TAG = "ConsentMethodHandler";
     private final Context context;
-    private Consent consentInfo;
 
-    public ConsentMethodHandler(final Context context, final Consent consentInfo) {
+    public ConsentMethodHandler(final Context context) {
         this.context = context;
-        this.consentInfo = consentInfo;
     }
 
     @Override
@@ -77,28 +75,21 @@ public class ConsentMethodHandler implements MethodChannel.MethodCallHandler {
 
     private void getTestDeviceId(Result result) {
         HMSLogger.getInstance(context).startMethodExecutionTimer("getTestDeviceId");
-        if (consentInfo != null) {
-            result.success(consentInfo.getTestDeviceId());
-            HMSLogger.getInstance(context).sendSingleEvent("getTestDeviceId");
-        } else {
-            result.error(ErrorCodes.INNER, "Consent instance is null. getTestDeviceId failed.", "");
-            HMSLogger.getInstance(context).sendSingleEvent("getTestDeviceId", ErrorCodes.INNER);
-        }
+        result.success(Consent.getInstance(context).getTestDeviceId());
+        HMSLogger.getInstance(context).sendSingleEvent("getTestDeviceId");
     }
 
     private void addTestDeviceId(MethodCall call, MethodChannel.Result result) {
         HMSLogger.getInstance(context).startMethodExecutionTimer("addTestDeviceId");
         String deviceId = FromMap.toString("deviceId", call.argument("deviceId"));
-        if (deviceId != null && consentInfo != null) {
+        if (deviceId != null) {
             Log.i(TAG, "SDK addTestDeviceId begin");
-            consentInfo.addTestDeviceId(deviceId);
+            Consent.getInstance(context).addTestDeviceId(deviceId);
             Log.i(TAG, "SDK addTestDeviceId end");
             result.success(true);
             HMSLogger.getInstance(context).sendSingleEvent("addTestDeviceId");
         } else {
-            result.error(ErrorCodes.NULL_PARAM,
-                "Test deviceId is null? : " + (deviceId == null) + ". | Consent initialized? : " + (consentInfo != null) + ". addTestDevice failed.",
-                "");
+            result.error(ErrorCodes.NULL_PARAM, "Test deviceId is null? : true. addTestDevice failed.", "");
             HMSLogger.getInstance(context).sendSingleEvent("addTestDeviceId", ErrorCodes.NULL_PARAM);
         }
     }
@@ -109,7 +100,7 @@ public class ConsentMethodHandler implements MethodChannel.MethodCallHandler {
         if (consentStr != null) {
             DebugNeedConsent needConsent = DebugNeedConsent.valueOf(consentStr);
             Log.i(TAG, "SDK setDebugNeedConsent begin");
-            consentInfo.setDebugNeedConsent(needConsent);
+            Consent.getInstance(context).setDebugNeedConsent(needConsent);
             Log.i(TAG, "SDK setDebugNeedConsent end");
             result.success(true);
             HMSLogger.getInstance(context).sendSingleEvent("setDebugNeedConsent");
@@ -124,7 +115,7 @@ public class ConsentMethodHandler implements MethodChannel.MethodCallHandler {
     private void setUnderAgeOfPromise(MethodCall call, MethodChannel.Result result) {
         HMSLogger.getInstance(context).startMethodExecutionTimer("setUnderAgeOfPromise");
         Boolean ageOfPromise = FromMap.toBoolean("ageOfPromise", call.argument("ageOfPromise"));
-        consentInfo.setUnderAgeOfPromise(ageOfPromise);
+        Consent.getInstance(context).setUnderAgeOfPromise(ageOfPromise);
         result.success(true);
         HMSLogger.getInstance(context).sendSingleEvent("setUnderAgeOfPromise");
     }
@@ -135,7 +126,7 @@ public class ConsentMethodHandler implements MethodChannel.MethodCallHandler {
         if (status != null) {
             ConsentStatus consentStatus = ConsentStatus.valueOf(status);
             Log.i(TAG, "setConsentStatus begin");
-            consentInfo.setConsentStatus(consentStatus);
+            Consent.getInstance(context).setConsentStatus(consentStatus);
             Log.i(TAG, "setConsentStatus end");
             result.success(true);
             HMSLogger.getInstance(context).sendSingleEvent("setConsentStatus");

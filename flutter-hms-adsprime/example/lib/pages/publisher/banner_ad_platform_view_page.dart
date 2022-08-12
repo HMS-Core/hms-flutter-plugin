@@ -13,6 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:huawei_adsprime/huawei_adsprime.dart';
@@ -21,7 +22,7 @@ class BannerAdPlatformViewPage extends StatefulWidget {
   const BannerAdPlatformViewPage({Key? key}) : super(key: key);
 
   @override
-  _BannerAdPlatformViewPageState createState() =>
+  State<BannerAdPlatformViewPage> createState() =>
       _BannerAdPlatformViewPageState();
 }
 
@@ -52,15 +53,18 @@ class _BannerAdPlatformViewPageState extends State<BannerAdPlatformViewPage> {
     BannerAdSize currentDir =
         await BannerAdSize.getCurrentDirectionBannerSize(150);
     debugPrint(
-        'getCurrentDirectionBannerSize - width ${currentDir.width} : height ${currentDir.height}');
+      'getCurrentDirectionBannerSize - width ${currentDir.width} : height ${currentDir.height}',
+    );
 
     BannerAdSize landscape = await BannerAdSize.getLandscapeBannerSize(150);
     debugPrint(
-        'getLandscapeBannerSize - width ${landscape.width} : height ${landscape.height}');
+      'getLandscapeBannerSize - width ${landscape.width} : height ${landscape.height}',
+    );
 
     BannerAdSize portrait = await BannerAdSize.getPortraitBannerSize(150);
     debugPrint(
-        'getPortraitBannerSize - width ${portrait.width} : height ${portrait.height}');
+      'getPortraitBannerSize - width ${portrait.width} : height ${portrait.height}',
+    );
   }
 
   @override
@@ -71,7 +75,7 @@ class _BannerAdPlatformViewPageState extends State<BannerAdPlatformViewPage> {
       listener: (AdEvent event, {int? errorCode}) {
         debugPrint('Banner Ad event : $event');
         setState(() {
-          logs = logs + 'Banner Ad event : ${describeEnum(event)}\n';
+          logs = '${logs}Banner Ad event : ${describeEnum(event)}\n';
         });
       },
     );
@@ -80,109 +84,110 @@ class _BannerAdPlatformViewPageState extends State<BannerAdPlatformViewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.redAccent,
-          title: const Text(
-            'Huawei Ads - Banner',
-            style: TextStyle(
-              color: Colors.white,
-            ),
+      appBar: AppBar(
+        backgroundColor: Colors.redAccent,
+        title: const Text(
+          'Huawei Ads - Banner',
+          style: TextStyle(
+            color: Colors.white,
           ),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Container(
-                height: 200,
-                margin: const EdgeInsets.symmetric(horizontal: 60),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Container(
+              height: 200,
+              margin: const EdgeInsets.symmetric(horizontal: 60),
+              child: SingleChildScrollView(
+                child: Container(
+                  color: const Color.fromRGBO(242, 242, 242, 1),
+                  child: Column(
+                    children: <Widget>[
+                      ListTile(
+                        title: const Text('Size 320 x 50'),
+                        trailing: Radio<BannerAdSize>(
+                          groupValue: bannerAdSize,
+                          value: BannerAdSize.s320x50,
+                          onChanged: changeSize,
+                        ),
+                      ),
+                      ListTile(
+                        title: const Text('Size 320 x 100'),
+                        trailing: Radio<BannerAdSize>(
+                          groupValue: bannerAdSize,
+                          value: BannerAdSize.s320x100,
+                          onChanged: changeSize,
+                        ),
+                      ),
+                      ListTile(
+                        title: const Text('Size 300 x 250'),
+                        trailing: Radio<BannerAdSize>(
+                          groupValue: bannerAdSize,
+                          value: BannerAdSize.s300x250,
+                          onChanged: changeSize,
+                        ),
+                      ),
+                      ListTile(
+                        title: const Text('Size SMART'),
+                        trailing: Radio<BannerAdSize>(
+                          groupValue: bannerAdSize,
+                          value: BannerAdSize.sSmart,
+                          onChanged: changeSize,
+                        ),
+                      ),
+                      ListTile(
+                        title: const Text('Size ADVANCED'),
+                        trailing: Radio<BannerAdSize>(
+                          groupValue: bannerAdSize,
+                          value: BannerAdSize.sAdvanced,
+                          onChanged: changeSize,
+                        ),
+                      ),
+                      ListTile(
+                        title: const Text('Size 360 x 57'),
+                        trailing: Radio<BannerAdSize>(
+                          groupValue: bannerAdSize,
+                          value: BannerAdSize.s360x57,
+                          onChanged: changeSize,
+                        ),
+                      ),
+                      ListTile(
+                        title: const Text('Size 360 x 144'),
+                        trailing: Radio<BannerAdSize>(
+                          groupValue: bannerAdSize,
+                          value: BannerAdSize.s360x144,
+                          onChanged: changeSize,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 200,
+              child: GestureDetector(
+                onDoubleTap: () => setState(() {
+                  logs = '';
+                }),
                 child: SingleChildScrollView(
-                  child: Container(
-                    color: const Color.fromRGBO(242, 242, 242, 1),
-                    child: Column(
-                      children: <Widget>[
-                        ListTile(
-                          title: const Text('Size 320 x 50'),
-                          trailing: Radio<BannerAdSize>(
-                            groupValue: bannerAdSize,
-                            value: BannerAdSize.s320x50,
-                            onChanged: changeSize,
-                          ),
-                        ),
-                        ListTile(
-                          title: const Text('Size 320 x 100'),
-                          trailing: Radio<BannerAdSize>(
-                            groupValue: bannerAdSize,
-                            value: BannerAdSize.s320x100,
-                            onChanged: changeSize,
-                          ),
-                        ),
-                        ListTile(
-                          title: const Text('Size 300 x 250'),
-                          trailing: Radio<BannerAdSize>(
-                            groupValue: bannerAdSize,
-                            value: BannerAdSize.s300x250,
-                            onChanged: changeSize,
-                          ),
-                        ),
-                        ListTile(
-                          title: const Text('Size SMART'),
-                          trailing: Radio<BannerAdSize>(
-                            groupValue: bannerAdSize,
-                            value: BannerAdSize.sSmart,
-                            onChanged: changeSize,
-                          ),
-                        ),
-                        ListTile(
-                          title: const Text('Size ADVANCED'),
-                          trailing: Radio<BannerAdSize>(
-                            groupValue: bannerAdSize,
-                            value: BannerAdSize.sAdvanced,
-                            onChanged: changeSize,
-                          ),
-                        ),
-                        ListTile(
-                          title: const Text('Size 360 x 57'),
-                          trailing: Radio<BannerAdSize>(
-                            groupValue: bannerAdSize,
-                            value: BannerAdSize.s360x57,
-                            onChanged: changeSize,
-                          ),
-                        ),
-                        ListTile(
-                          title: const Text('Size 360 x 144'),
-                          trailing: Radio<BannerAdSize>(
-                            groupValue: bannerAdSize,
-                            value: BannerAdSize.s360x144,
-                            onChanged: changeSize,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  child: Text(logs),
                 ),
               ),
-              SizedBox(
-                height: 200,
-                child: GestureDetector(
-                  onDoubleTap: () => setState(() {
-                    logs = '';
-                  }),
-                  child: SingleChildScrollView(
-                    child: Text(logs),
-                  ),
-                ),
-              ),
-              BannerView(
-                adSlotId: _testAdSlotId,
-                size: bannerAdSize!,
-                adParam: _adParam,
-                backgroundColor: Colors.blueGrey,
-                refreshDuration: const Duration(seconds: 30),
-                controller: _bannerViewController,
-              ),
-            ],
-          ),
-        ));
+            ),
+            BannerView(
+              adSlotId: _testAdSlotId,
+              size: bannerAdSize!,
+              adParam: _adParam,
+              backgroundColor: Colors.blueGrey,
+              refreshDuration: const Duration(seconds: 30),
+              controller: _bannerViewController,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override

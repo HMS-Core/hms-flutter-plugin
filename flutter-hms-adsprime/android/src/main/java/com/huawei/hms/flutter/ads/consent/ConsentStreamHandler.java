@@ -32,17 +32,15 @@ import io.flutter.plugin.common.EventChannel;
 
 public class ConsentStreamHandler implements EventChannel.StreamHandler {
     private static final String TAG = "ConsentStreamHandler";
-    private final Consent consentInfo;
     private final Context context;
 
-    public ConsentStreamHandler(final Consent consentInfo, Context context) {
-        this.consentInfo = consentInfo;
+    public ConsentStreamHandler(Context context) {
         this.context = context;
     }
 
     @Override
     public void onListen(Object args, final EventChannel.EventSink event) {
-        consentInfo.requestConsentUpdate(new ConsentUpdateListenerImpl(context, event));
+        Consent.getInstance(context).requestConsentUpdate(new ConsentUpdateListenerImpl(context, event));
     }
 
     @Override

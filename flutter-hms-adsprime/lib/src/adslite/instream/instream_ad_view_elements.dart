@@ -45,12 +45,12 @@ class InstreamAdViewElements extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               MaterialButton(
+                shape: Border.all(color: Colors.white30),
+                onPressed: onSkip as void Function()?,
                 child: Text(
                   skipText ?? 'Skip',
                   style: const TextStyle(color: Colors.white),
                 ),
-                shape: Border.all(color: Colors.white30),
-                onPressed: onSkip as void Function()?,
               ),
               Text(
                 countdown ?? '',

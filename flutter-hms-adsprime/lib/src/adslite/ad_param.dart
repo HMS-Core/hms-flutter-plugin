@@ -55,8 +55,8 @@ class Location {
   final double longitude;
 
   const Location({
-    this.provider = '',
     required this.latitude,
     required this.longitude,
+    this.provider = '',
   });
 }

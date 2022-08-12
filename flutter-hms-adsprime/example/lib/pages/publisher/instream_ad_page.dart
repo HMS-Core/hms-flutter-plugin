@@ -13,6 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+
 import 'package:flutter/material.dart';
 import 'package:huawei_adsprime/huawei_adsprime.dart';
 
@@ -40,7 +41,7 @@ class InstreamAdPageBody extends StatefulWidget {
   const InstreamAdPageBody({Key? key}) : super(key: key);
 
   @override
-  _InstreamAdPageBodyState createState() => _InstreamAdPageBodyState();
+  State<InstreamAdPageBody> createState() => _InstreamAdPageBodyState();
 }
 
 class _InstreamAdPageBodyState extends State<InstreamAdPageBody>

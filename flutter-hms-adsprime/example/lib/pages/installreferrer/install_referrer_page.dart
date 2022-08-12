@@ -13,6 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:huawei_adsprime/huawei_adsprime.dart';
@@ -42,7 +43,7 @@ class InstallReferrerPageContent extends StatefulWidget {
   const InstallReferrerPageContent({Key? key}) : super(key: key);
 
   @override
-  _InstallReferrerPageContentState createState() =>
+  State<InstallReferrerPageContent> createState() =>
       _InstallReferrerPageContentState();
 }
 
@@ -119,14 +120,14 @@ class _InstallReferrerPageContentState
                   children: <Widget>[
                     ElevatedButton(
                       child: const SizedBox(
+                        width: 90,
+                        height: 40,
                         child: Center(
                           child: Text(
                             'Connect',
                             style: Styles.adControlButtonStyle,
                           ),
                         ),
-                        width: 90,
-                        height: 40,
                       ),
                       onPressed: () {
                         if (_referrerConnected) {
@@ -141,14 +142,14 @@ class _InstallReferrerPageContentState
                     ),
                     ElevatedButton(
                       child: const SizedBox(
+                        width: 90,
+                        height: 40,
                         child: Center(
                           child: Text(
                             'Disconnect',
                             style: Styles.adControlButtonStyle,
                           ),
                         ),
-                        width: 90,
-                        height: 40,
                       ),
                       onPressed: () {
                         if (!_referrerConnected) {
@@ -164,19 +165,17 @@ class _InstallReferrerPageContentState
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               ElevatedButton(
                 child: const SizedBox(
+                  width: 150,
+                  height: 40,
                   child: Center(
                     child: Text(
                       'Get Referrer Details',
                       style: Styles.adControlButtonStyle,
                     ),
                   ),
-                  width: 150,
-                  height: 40,
                 ),
                 onPressed: () {
                   if (!_referrerConnected) {
@@ -199,33 +198,27 @@ class _InstallReferrerPageContentState
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   const Text('Install Referrer', style: Styles.headerTextStyle),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 10),
                   Text(
                     _referrerDetails?.getInstallReferrer ?? ' ',
                     style: Styles.textContentStyle,
                   ),
-                  const SizedBox(
-                    height: 30,
+                  const SizedBox(height: 30),
+                  const Text(
+                    'Referrer Click Timestamp Millisec',
+                    style: Styles.headerTextStyle,
                   ),
-                  const Text('Referrer Click Timestamp Millisec',
-                      style: Styles.headerTextStyle),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 10),
                   Text(
                     '${_referrerDetails?.getReferrerClickTimestampMillisecond ?? " "}',
                     style: Styles.textContentStyle,
                   ),
-                  const SizedBox(
-                    height: 30,
+                  const SizedBox(height: 30),
+                  const Text(
+                    'Install Begin Timestamp Millisec',
+                    style: Styles.headerTextStyle,
                   ),
-                  const Text('Install Begin Timestamp Millisec',
-                      style: Styles.headerTextStyle),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 10),
                   Text(
                     '${_referrerDetails?.getReferrerBeginTimeStampMillisecond ?? " "}',
                     style: Styles.textContentStyle,

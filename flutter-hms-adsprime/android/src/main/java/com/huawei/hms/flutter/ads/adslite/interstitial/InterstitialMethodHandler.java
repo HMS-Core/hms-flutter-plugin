@@ -90,9 +90,9 @@ public class InterstitialMethodHandler implements MethodChannel.MethodCallHandle
 
         EventChannelFactory.create(rId, Channels.REWARD_EVENT_CHANNEL, messenger);
         EventChannelFactory.setup(rId, new RewardStreamHandler(context));
-
-        new Interstitial(id, openInHmsCore, activity, context);
         result.success(true);
+        
+        new Interstitial(id, openInHmsCore, activity, context);
         HMSLogger.getInstance(context).sendSingleEvent("initInterstitialAd");
     }
 

@@ -206,9 +206,9 @@ class NativeStyles {
   }
 
   static Map<String, dynamic> _createNativeStyle({
+    required Color color,
     double? fontSize,
     NativeFontWeight? fontWeight,
-    required Color color,
     Color? bgColor,
   }) {
     return <String, dynamic>{

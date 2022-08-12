@@ -27,7 +27,6 @@ import androidx.annotation.NonNull;
 import com.huawei.hms.ads.BannerAdSize;
 import com.huawei.hms.ads.HwAds;
 import com.huawei.hms.ads.RequestOptions;
-import com.huawei.hms.ads.consent.inter.Consent;
 import com.huawei.hms.ads.identifier.AdIdVerifyException;
 import com.huawei.hms.ads.identifier.AdvertisingIdClient;
 import com.huawei.hms.flutter.ads.adslite.banner.Banner;
@@ -80,7 +79,6 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
     private MethodChannel methodChannel;
     private BinaryMessenger messenger;
     private FlutterPluginBinding flutterPluginBinding;
-    private Consent consentInfo;
 
     private EventChannel consentEventChannel;
     private MethodChannel splashMethodChannel;
@@ -127,10 +125,10 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
 
             this.activity = binding.getActivity();
             this.context = flutterPluginBinding.getApplicationContext();
-            this.methodChannel = new MethodChannel(flutterPluginBinding.getFlutterEngine().getDartExecutor(), Channels.LIBRARY_METHOD_CHANNEL);
             this.messenger = flutterPluginBinding.getBinaryMessenger();
+            this.methodChannel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), Channels.LIBRARY_METHOD_CHANNEL);
             this.methodChannel.setMethodCallHandler(this);
-            this.consentInfo = Consent.getInstance(binding.getActivity());
+
             initAdChannels(flutterPluginBinding.getBinaryMessenger());
             initAdHandlers();
             setAdHandlers();
@@ -145,7 +143,6 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
         HmsRewardAd.destroyAll();
         HmsInstallReferrer.disposeAll();
         activity = null;
-        consentInfo = null;
         resetAdHandlers();
         removeAdHandlers();
         removeAdChannels();
@@ -158,7 +155,6 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
         Banner.destroyAll();
         HmsRewardAd.destroyAll();
         HmsInstallReferrer.disposeAll();
-        consentInfo = null;
         activity = null;
         resetAdHandlers();
         removeAdHandlers();
@@ -176,7 +172,6 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
         methodChannel = null;
         messenger = null;
         activity = null;
-        consentInfo = null;
         resetAdHandlers();
         removeAdHandlers();
         removeAdChannels();
@@ -202,8 +197,8 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
         instreamMethodHandler = new InstreamMethodHandler(messenger, context);
         vastMethodHandler = new VastMethodHandler(context);
         installReferrerMethodHandler = new InstallReferrerMethodHandler(activity, referrerMethodChannel);
-        consentMethodHandler = new ConsentMethodHandler(context, consentInfo);
-        consentStreamHandler = new ConsentStreamHandler(consentInfo, context);
+        consentMethodHandler = new ConsentMethodHandler(context);
+        consentStreamHandler = new ConsentStreamHandler(context);
     }
 
     private void setAdHandlers() {

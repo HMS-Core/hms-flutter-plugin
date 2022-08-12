@@ -47,9 +47,9 @@ class BaseAdSlot {
   BaseAdSlot({
     required this.slotId,
     required this.totalDuration,
+    required this.requestOptions,
     this.width,
     this.height,
-    required this.requestOptions,
     this.orientation = Orientation.PORTRAIT,
     this.maxAdPods,
     this.creativeMatchStrategy,
