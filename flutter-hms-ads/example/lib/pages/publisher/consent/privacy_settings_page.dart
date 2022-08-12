@@ -13,6 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+
 import 'package:flutter/material.dart';
 import 'package:huawei_ads/huawei_ads.dart';
 import 'package:huawei_ads_example/utils/constants.dart';
@@ -21,97 +22,98 @@ class PrivacySettingsPage extends StatefulWidget {
   const PrivacySettingsPage({Key? key}) : super(key: key);
 
   @override
-  _PrivacySettingsPage createState() => _PrivacySettingsPage();
+  State<PrivacySettingsPage> createState() => _PrivacySettingsPage();
 }
 
 class _PrivacySettingsPage extends State<PrivacySettingsPage> {
-  void setConsent(NonPersonalizedAd privacyValue) async {
+  Future<void> setConsent(NonPersonalizedAd privacyValue) async {
     debugPrint('User agreed');
-    bool? isUpdated = await (Consent.updateSharedPreferences(
-        ConsentConstant.spConsentKey, privacyValue.value));
+    final bool? isUpdated = await Consent.updateSharedPreferences(
+      ConsentConstant.spConsentKey,
+      privacyValue.value,
+    );
     if (isUpdated ?? false) {
       debugPrint('SharedPreferences updated');
     } else {
       debugPrint('ERROR: Update shared preferences failed.');
     }
-    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.redAccent,
-          title: const Text(
-            'Privacy Settings',
-            style: TextStyle(
-              color: Colors.white,
-            ),
+      appBar: AppBar(
+        backgroundColor: Colors.redAccent,
+        title: const Text(
+          'Privacy Settings',
+          style: TextStyle(
+            color: Colors.white,
           ),
         ),
-        body: Column(
-          children: <Widget>[
-            Expanded(
-              flex: 5,
-              child: SingleChildScrollView(
-                child: Center(
-                  child: Container(
-                    child: const Text(
-                      privacyExample,
-                      style: Styles.textContentStyle,
-                    ),
-                    padding: const EdgeInsets.all(20),
+      ),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            flex: 5,
+            child: SingleChildScrollView(
+              child: Center(
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  child: const Text(
+                    privacyExample,
+                    style: Styles.textContentStyle,
                   ),
                 ),
               ),
             ),
-            Expanded(
-              flex: 1,
-              child: SizedBox(
-                width: 400,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    ElevatedButton(
-                        child: const SizedBox(
-                          child: Center(
-                            child: Text(
-                              'CANCEL',
-                              style: Styles.adControlButtonStyle,
-                            ),
-                          ),
-                          width: 90,
-                          height: 40,
+          ),
+          Expanded(
+            flex: 1,
+            child: SizedBox(
+              width: 400,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  ElevatedButton(
+                    child: const SizedBox(
+                      width: 90,
+                      height: 40,
+                      child: Center(
+                        child: Text(
+                          'CANCEL',
+                          style: Styles.adControlButtonStyle,
                         ),
-                        onPressed: () {
-                          debugPrint('User did not agree.');
-                          Navigator.pop(context);
-                        }),
-                    ElevatedButton(
-                        child: const SizedBox(
-                          child: Center(
-                            child: Text(
-                              'AGREE',
-                              style: Styles.adControlButtonStyle,
-                            ),
-                          ),
-                          width: 90,
-                          height: 40,
+                      ),
+                    ),
+                    onPressed: () {
+                      debugPrint('User did not agree.');
+                      Navigator.pop(context);
+                    },
+                  ),
+                  ElevatedButton(
+                    child: const SizedBox(
+                      width: 90,
+                      height: 40,
+                      child: Center(
+                        child: Text(
+                          'AGREE',
+                          style: Styles.adControlButtonStyle,
                         ),
-                        onPressed: () {
-                          setConsent(NonPersonalizedAd.ALLOW_NON_PERSONALIZED);
-                        }),
-                  ],
-                ),
+                      ),
+                    ),
+                    onPressed: () {
+                      setConsent(NonPersonalizedAd.ALLOW_NON_PERSONALIZED).then(
+                        (_) => Navigator.pop(context),
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
-          ],
-        ));
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
+          ),
+        ],
+      ),
+    );
   }
 }

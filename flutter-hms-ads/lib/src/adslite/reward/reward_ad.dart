@@ -81,7 +81,7 @@ class RewardAd {
   }
 
   Future<bool?> _initAd() async {
-    return Ads.instance.channelReward.invokeMethod(
+    return await Ads.instance.channelReward.invokeMethod(
       'initRewardAd',
       <String, dynamic>{
         'id': id,
@@ -93,10 +93,10 @@ class RewardAd {
   Future<bool?> loadAd({
     required String adSlotId,
     required AdParam adParam,
-  }) {
-    _initAd();
+  }) async {
+    await _initAd();
     _startListening();
-    return Ads.instance.channelReward.invokeMethod(
+    return await Ads.instance.channelReward.invokeMethod(
       'loadRewardAd',
       <String, dynamic>{
         'id': id,
@@ -110,8 +110,8 @@ class RewardAd {
     );
   }
 
-  Future<bool?> isLoaded() {
-    return Ads.instance.channelReward.invokeMethod(
+  Future<bool?> isLoaded() async {
+    return await Ads.instance.channelReward.invokeMethod(
       'isAdLoaded',
       <String, dynamic>{
         'id': id,
@@ -120,8 +120,8 @@ class RewardAd {
     );
   }
 
-  Future<bool?> show() {
-    return Ads.instance.channelReward.invokeMethod(
+  Future<bool?> show() async {
+    return await Ads.instance.channelReward.invokeMethod(
       'showRewardAd',
       <String, dynamic>{
         'id': id,
@@ -129,8 +129,8 @@ class RewardAd {
     );
   }
 
-  Future<bool?> pause() {
-    return Ads.instance.channelReward.invokeMethod(
+  Future<bool?> pause() async {
+    return await Ads.instance.channelReward.invokeMethod(
       'pauseAd',
       <String, dynamic>{
         'id': id,
@@ -139,8 +139,8 @@ class RewardAd {
     );
   }
 
-  Future<bool?> resume() {
-    return Ads.instance.channelReward.invokeMethod(
+  Future<bool?> resume() async {
+    return await Ads.instance.channelReward.invokeMethod(
       'resumeAd',
       <String, dynamic>{
         'id': id,
@@ -149,8 +149,8 @@ class RewardAd {
     );
   }
 
-  Future<bool?> destroy() {
-    return Ads.instance.channelReward.invokeMethod(
+  Future<bool?> destroy() async {
+    return await Ads.instance.channelReward.invokeMethod(
       'destroyAd',
       <String, dynamic>{
         'id': id,

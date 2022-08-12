@@ -45,11 +45,14 @@ class AdsMenuPage extends StatelessWidget {
               style: Styles.menuButtonStyle,
             ),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute<dynamic>(
-                builder: (BuildContext context) {
-                  return const PublisherPage();
-                },
-              ));
+              Navigator.push(
+                context,
+                MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) {
+                    return const PublisherPage();
+                  },
+                ),
+              );
             },
           ),
           ElevatedButton(
@@ -58,11 +61,14 @@ class AdsMenuPage extends StatelessWidget {
               style: Styles.menuButtonStyle,
             ),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute<dynamic>(
-                builder: (BuildContext context) {
-                  return const OaidPage();
-                },
-              ));
+              Navigator.push(
+                context,
+                MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) {
+                    return const OaidPage();
+                  },
+                ),
+              );
             },
           ),
           ElevatedButton(
@@ -71,11 +77,14 @@ class AdsMenuPage extends StatelessWidget {
               style: Styles.menuButtonStyle,
             ),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute<dynamic>(
-                builder: (BuildContext context) {
-                  return const InstallReferrerPage();
-                },
-              ));
+              Navigator.push(
+                context,
+                MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) {
+                    return const InstallReferrerPage();
+                  },
+                ),
+              );
             },
           ),
           ElevatedButton(
@@ -84,11 +93,14 @@ class AdsMenuPage extends StatelessWidget {
               style: Styles.menuButtonStyle,
             ),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute<dynamic>(
-                builder: (BuildContext context) {
-                  return const VastAdPage();
-                },
-              ));
+              Navigator.push(
+                context,
+                MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) {
+                    return const VastAdPage();
+                  },
+                ),
+              );
             },
           ),
         ],

@@ -13,6 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:huawei_ads/huawei_ads.dart';
@@ -22,7 +23,7 @@ class InterstitialAdPage extends StatefulWidget {
   const InterstitialAdPage({Key? key}) : super(key: key);
 
   @override
-  _InterstitialAdPageState createState() => _InterstitialAdPageState();
+  State<InterstitialAdPage> createState() => _InterstitialAdPageState();
 }
 
 class _InterstitialAdPageState extends State<InterstitialAdPage> {
@@ -47,7 +48,7 @@ class _InterstitialAdPageState extends State<InterstitialAdPage> {
       listener: (AdEvent event, {int? errorCode}) {
         debugPrint('Interstitial Ad event : $event');
         setState(() {
-          logs = logs + 'Interstitial Ad event : ${describeEnum(event)}\n';
+          logs = '${logs}Interstitial Ad event : ${describeEnum(event)}\n';
         });
       },
     );
@@ -100,11 +101,11 @@ class _InterstitialAdPageState extends State<InterstitialAdPage> {
                     'Load Ad',
                     style: Styles.adControlButtonStyle,
                   ),
-                  onPressed: () {
-                    _interstitialAd?.destroy();
-                    _interstitialAd = createAd()
-                      ..loadAd()
-                      ..show();
+                  onPressed: () async {
+                    await _interstitialAd?.destroy();
+                    _interstitialAd = createAd();
+                    await _interstitialAd!.loadAd();
+                    await _interstitialAd!.show();
                   },
                 )
               ],
@@ -115,16 +116,14 @@ class _InterstitialAdPageState extends State<InterstitialAdPage> {
               child: SizedBox(
                 height: 250,
                 child: GestureDetector(
-                  onDoubleTap: () => setState(() {
-                    logs = '';
-                  }),
+                  onDoubleTap: () => setState(() => logs = ''),
                   child: SingleChildScrollView(
                     child: Text(logs),
                   ),
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -132,7 +131,7 @@ class _InterstitialAdPageState extends State<InterstitialAdPage> {
 
   @override
   void dispose() {
-    super.dispose();
     _interstitialAd?.destroy();
+    super.dispose();
   }
 }

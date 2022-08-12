@@ -22,7 +22,7 @@ class OaidPage extends StatefulWidget {
   const OaidPage({Key? key}) : super(key: key);
 
   @override
-  _OaidPageState createState() => _OaidPageState();
+  State<OaidPage> createState() => _OaidPageState();
 }
 
 class _OaidPageState extends State<OaidPage> {
@@ -44,7 +44,9 @@ class _OaidPageState extends State<OaidPage> {
 
   void testVerifyAdId() async {
     bool? isVerified = await AdvertisingIdClient.verifyAdId(
-        _oaid!, _client!.isLimitAdTrackingEnabled!);
+      _oaid!,
+      _client!.isLimitAdTrackingEnabled!,
+    );
     setState(() {
       _verified = isVerified;
     });
@@ -70,32 +72,24 @@ class _OaidPageState extends State<OaidPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               const Text('OAID', style: Styles.headerTextStyle),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               Text(
                 '$_oaid',
                 style: Styles.textContentStyle,
               ),
-              const SizedBox(
-                height: 30,
+              const SizedBox(height: 30),
+              const Text(
+                'Limit Ad Tracking Enabled',
+                style: Styles.headerTextStyle,
               ),
-              const Text('Limit Ad Tracking Enabled',
-                  style: Styles.headerTextStyle),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               Text(
                 '${_limitAdTracking ?? ''}',
                 style: Styles.textContentStyle,
               ),
-              const SizedBox(
-                height: 30,
-              ),
+              const SizedBox(height: 30),
               const Text('Verify Ad Id', style: Styles.headerTextStyle),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               Text(
                 '${_verified ?? 'This method takes a long time. You may need to wait a while to see the verification result.'}',
                 style: _verified != null

@@ -31,7 +31,7 @@ class NativeAd extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _NativeAdState createState() => _NativeAdState();
+  State<NativeAd> createState() => _NativeAdState();
 }
 
 class _NativeAdState extends State<NativeAd> {

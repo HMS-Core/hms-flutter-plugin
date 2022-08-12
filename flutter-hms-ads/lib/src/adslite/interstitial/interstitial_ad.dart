@@ -49,7 +49,7 @@ class InterstitialAd {
   }
 
   Future<bool?> _initAd() async {
-    return Ads.instance.channelInterstitial.invokeMethod(
+    return await Ads.instance.channelInterstitial.invokeMethod(
       'initInterstitialAd',
       <String, dynamic>{
         'id': id,
@@ -59,11 +59,11 @@ class InterstitialAd {
     );
   }
 
-  Future<bool?> loadAd() {
-    _initAd();
+  Future<bool?> loadAd() async {
+    await _initAd();
     _startListening();
     _startListeningReward();
-    return Ads.instance.channelInterstitial.invokeMethod(
+    return await Ads.instance.channelInterstitial.invokeMethod(
       'loadInterstitialAd',
       <String, dynamic>{
         'id': id,
@@ -85,8 +85,8 @@ class InterstitialAd {
 
   RewardAdListener? get getRewardAdListener => _rewardAdListener;
 
-  Future<bool?> isLoading() {
-    return Ads.instance.channelInterstitial.invokeMethod(
+  Future<bool?> isLoading() async {
+    return await Ads.instance.channelInterstitial.invokeMethod(
       'isAdLoading',
       <String, dynamic>{
         'id': id,
@@ -96,8 +96,8 @@ class InterstitialAd {
     );
   }
 
-  Future<bool?> isLoaded() {
-    return Ads.instance.channelInterstitial.invokeMethod(
+  Future<bool?> isLoaded() async {
+    return await Ads.instance.channelInterstitial.invokeMethod(
       'isAdLoaded',
       <String, dynamic>{
         'id': id,

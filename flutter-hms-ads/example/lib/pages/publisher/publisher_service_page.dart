@@ -50,11 +50,14 @@ class PublisherPage extends StatelessWidget {
                 style: Styles.menuButtonStyle,
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute<dynamic>(
-                  builder: (BuildContext context) {
-                    return const ConsentPage();
-                  },
-                ));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) {
+                      return const ConsentPage();
+                    },
+                  ),
+                );
               },
             ),
             ElevatedButton(
@@ -63,11 +66,14 @@ class PublisherPage extends StatelessWidget {
                 style: Styles.menuButtonStyle,
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute<dynamic>(
-                  builder: (BuildContext context) {
-                    return const BannerAdPage();
-                  },
-                ));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) {
+                      return const BannerAdPage();
+                    },
+                  ),
+                );
               },
             ),
             ElevatedButton(
@@ -76,11 +82,14 @@ class PublisherPage extends StatelessWidget {
                 style: Styles.menuButtonStyle,
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute<dynamic>(
-                  builder: (BuildContext context) {
-                    return const BannerAdPlatformViewPage();
-                  },
-                ));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) {
+                      return const BannerAdPlatformViewPage();
+                    },
+                  ),
+                );
               },
             ),
             ElevatedButton(
@@ -89,11 +98,14 @@ class PublisherPage extends StatelessWidget {
                 style: Styles.menuButtonStyle,
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute<dynamic>(
-                  builder: (BuildContext context) {
-                    return const InterstitialAdPage();
-                  },
-                ));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) {
+                      return const InterstitialAdPage();
+                    },
+                  ),
+                );
               },
             ),
             ElevatedButton(
@@ -102,11 +114,14 @@ class PublisherPage extends StatelessWidget {
                 style: Styles.menuButtonStyle,
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute<dynamic>(
-                  builder: (BuildContext context) {
-                    return const RewardAdPage();
-                  },
-                ));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) {
+                      return const RewardAdPage();
+                    },
+                  ),
+                );
               },
             ),
             ElevatedButton(
@@ -115,11 +130,14 @@ class PublisherPage extends StatelessWidget {
                 style: Styles.menuButtonStyle,
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute<dynamic>(
-                  builder: (BuildContext context) {
-                    return const NativeAdPage();
-                  },
-                ));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) {
+                      return const NativeAdPage();
+                    },
+                  ),
+                );
               },
             ),
             ElevatedButton(
@@ -128,11 +146,14 @@ class PublisherPage extends StatelessWidget {
                 style: Styles.menuButtonStyle,
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute<dynamic>(
-                  builder: (BuildContext context) {
-                    return const SplashAdPage();
-                  },
-                ));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) {
+                      return const SplashAdPage();
+                    },
+                  ),
+                );
               },
             ),
             ElevatedButton(
@@ -141,11 +162,14 @@ class PublisherPage extends StatelessWidget {
                 style: Styles.menuButtonStyle,
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute<dynamic>(
-                  builder: (BuildContext context) {
-                    return const InstreamAdPage();
-                  },
-                ));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) {
+                      return const InstreamAdPage();
+                    },
+                  ),
+                );
               },
             ),
           ],

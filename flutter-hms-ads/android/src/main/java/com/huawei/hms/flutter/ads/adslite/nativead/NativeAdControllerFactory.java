@@ -20,6 +20,7 @@ import android.content.Context;
 import android.util.Log;
 import android.util.SparseArray;
 
+import com.huawei.hms.ads.nativead.NativeAd;
 import com.huawei.hms.flutter.ads.utils.constants.Channels;
 
 import io.flutter.plugin.common.BinaryMessenger;
@@ -49,9 +50,12 @@ public class NativeAdControllerFactory {
     }
 
     public static boolean dispose(int id) {
-        NativeAdController controller = allControllers.get(id);
+        final NativeAdController controller = allControllers.get(id);
         if (controller != null) {
-            controller.getNativeAd().destroy();
+            final NativeAd nativeAd = controller.getNativeAd();
+            if (nativeAd != null) {
+                nativeAd.destroy();
+            }
             allControllers.remove(id);
             return true;
         }

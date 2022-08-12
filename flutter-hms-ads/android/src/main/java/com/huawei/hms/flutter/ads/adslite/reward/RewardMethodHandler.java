@@ -93,6 +93,7 @@ public class RewardMethodHandler implements MethodChannel.MethodCallHandler {
 
         EventChannelFactory.create(id, Channels.REWARD_EVENT_CHANNEL, messenger);
         EventChannelFactory.setup(id, new RewardStreamHandler(context));
+        result.success(true);
 
         new HmsRewardAd(id, openInHmsCore, activity, context);
         HMSLogger.getInstance(context).sendSingleEvent("initRewardAd");

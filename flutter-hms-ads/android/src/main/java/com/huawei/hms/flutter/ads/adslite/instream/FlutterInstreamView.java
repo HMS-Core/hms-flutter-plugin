@@ -239,7 +239,9 @@ public class FlutterInstreamView implements PlatformView, MethodCallHandler  {
 
     @Override
     public void dispose() {
-        if(instreamView == null) return;
+        if(instreamView == null) {
+            return;
+        }
         instreamView.removeInstreamMediaStateListener();
         instreamView.removeInstreamMediaChangeListener();
         instreamView.removeMediaMuteListener();

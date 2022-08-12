@@ -10,8 +10,8 @@
 ----
 
 This plugin enables communication between Huawei Ads SDK and Flutter platform. Huawei Ads Kit Plugin for Flutter provides the following 2 services:
-- **Publisher Service**: HUAWEI Ads Publisher Service utilizes Huawei's vast user base and extensive data capabilities to deliver targeted, high quality ad content to users. With this service, your app will be able to generate revenues while bringing your users content which is relevant to them.
-- **Identifier Service**: HUAWEI Ads Kit provides the open advertising identifier (OAID) for advertisers to deliver personalized ads and attribute conversions.
+- **Publisher Service**: Huawei Ads Publisher Service utilizes Huawei's vast user base and extensive data capabilities to deliver targeted, high quality ad content to users. With this service, your app will be able to generate revenues while bringing your users content which is relevant to them.
+- **Identifier Service**: Huawei Ads Kit provides the open advertising identifier (OAID) for advertisers to deliver personalized ads and attribute conversions.
 
 [Learn More](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/publisher-service-0000001050196431?ha_source=hms1)
 

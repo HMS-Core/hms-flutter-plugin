@@ -66,9 +66,12 @@ public class FlutterBannerView implements PlatformView, MethodCallHandler  {
         bannerView.setVisibility(View.VISIBLE);
         bannerView.setAdId(adId);
         bannerView.setBannerAdSize(bannerAdSize);
-        if(refreshTime != null) bannerView.setBannerRefresh(refreshTime);
-        if(color != null) bannerView.setBackgroundColor(Color.parseColor(color));
-
+        if(refreshTime != null) {
+            bannerView.setBannerRefresh(refreshTime);
+        }
+        if(color != null) {
+            bannerView.setBackgroundColor(Color.parseColor(color));
+        }
         if(loadOnStart){
             loadAd();
         }
@@ -104,7 +107,9 @@ public class FlutterBannerView implements PlatformView, MethodCallHandler  {
     }
 
     private void loadAd(){
-        if(bannerView == null) return;
+        if(bannerView == null) {
+            return;
+        }
         AdParamFactory factory = new AdParamFactory(adParamMap);
         AdParam adParam = factory.createAdParam();
         bannerView.loadAd(adParam);
@@ -147,7 +152,9 @@ public class FlutterBannerView implements PlatformView, MethodCallHandler  {
 
     @Override
     public void dispose() {
-        if(bannerView == null) return;
+        if(bannerView == null) {
+            return;
+        }
         bannerView.destroy();
     }
 }
