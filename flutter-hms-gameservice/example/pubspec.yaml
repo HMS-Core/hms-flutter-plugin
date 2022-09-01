@@ -1,0 +1,19 @@
+name: huawei_gameservice_example
+description: Demonstrates how to use the Flutter Huawei Game Service plugin.
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  huawei_gameservice:
+    path: ../
+  huawei_account: 6.4.0+301
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
