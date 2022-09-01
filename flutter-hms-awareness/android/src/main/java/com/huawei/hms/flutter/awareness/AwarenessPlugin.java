@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -53,13 +53,6 @@ public class AwarenessPlugin implements FlutterPlugin, ActivityAware {
 
     private MethodChannel permissionChannel;
     private PermissionMethodCallHandler permissionHandler;
-
-    public static void registerWith(final Registrar registrar) {
-        final AwarenessPlugin instance = new AwarenessPlugin();
-        instance.onAttachedToEngine(registrar.messenger(), registrar.context());
-        instance.permissionHandler = new PermissionMethodCallHandler(registrar.activity());
-        instance.permissionChannel.setMethodCallHandler(instance.permissionHandler);
-    }
 
     private void initChannels(final BinaryMessenger messenger) {
         captureChannel = new MethodChannel(messenger, Channel.CAPTURE_CHANNEL);

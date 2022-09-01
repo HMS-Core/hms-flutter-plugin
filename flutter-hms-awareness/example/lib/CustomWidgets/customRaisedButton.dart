@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -20,33 +20,36 @@ class CustomRaisedButton extends StatelessWidget {
   final String buttonText;
   final List<int> capabilityList;
   final int capabilityCode;
-  final Function onPressed;
+  final VoidCallback onPressed;
 
-  CustomRaisedButton({
-    this.buttonText,
-    this.capabilityList,
-    this.capabilityCode,
-    this.onPressed,
-  });
+  const CustomRaisedButton({
+    Key? key,
+    required this.buttonText,
+    required this.capabilityList,
+    required this.capabilityCode,
+    required this.onPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
-        child: RaisedButton(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(30.0))),
+        child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(30.0))),
+            ),
+            onPressed:
+                capabilityList.contains(capabilityCode) ? onPressed : null,
             child: Padding(
               padding: const EdgeInsets.all(6.0),
               child: Text(
                 buttonText,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 12),
               ),
-            ),
-            onPressed:
-                capabilityList.contains(capabilityCode) ? onPressed : null),
+            )),
       ),
     );
   }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -85,7 +85,11 @@ public class BarrierMethodCallHandler implements MethodCallHandler {
         final String queryType = ValueGetter.getString(Param.QUERY_TYPE, call);
         if (queryType.equals(Param.QUERY_TYPE_KEY)) {
             final List<String> barrierKeys = call.argument(Param.BARRIER_KEYS);
-            request = BarrierQueryRequest.forBarriers(Objects.requireNonNull(barrierKeys));
+            if(barrierKeys!= null) {
+                request = BarrierQueryRequest.forBarriers(Objects.requireNonNull(barrierKeys));
+            } else {
+                request = null;
+            }
         } else if (queryType.equals(Param.QUERY_TYPE_ALL)) {
             request = BarrierQueryRequest.all();
         } else {

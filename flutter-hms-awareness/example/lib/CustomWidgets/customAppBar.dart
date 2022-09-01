@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -15,9 +15,10 @@
 */
 
 import 'package:flutter/material.dart';
+
 import 'customClipper.dart';
 
-class CustomAppBar extends PreferredSize {
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final String title2;
   final double size;
@@ -25,14 +26,15 @@ class CustomAppBar extends PreferredSize {
   final double fontSize;
   final bool backButton;
 
-  CustomAppBar({
-    this.title,
-    this.size,
-    this.title2 = "",
-    this.icon,
+  const CustomAppBar({
+    Key? key,
+    required this.title,
+    required this.size,
+    this.title2 = '',
+    required this.icon,
     this.fontSize = 30,
     this.backButton = false,
-  });
+  }) : super(key: key);
 
   @override
   Size get preferredSize => Size.fromHeight(size);
@@ -45,67 +47,66 @@ class CustomAppBar extends PreferredSize {
           child: ClipPath(
             clipper: AwarenessCustomClipper(),
             child: Container(
-              color: Color.fromRGBO(30, 61, 89, 1),
+              color: const Color.fromRGBO(30, 61, 89, 1),
             ),
           ),
         ),
         icon
-            ? Align(
+            ? const Align(
                 alignment: Alignment.bottomLeft,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 12.0),
+                  padding: EdgeInsets.only(left: 12.0),
                   child: CircleAvatar(
                     radius: 50,
                     backgroundColor: Colors.transparent,
-                    backgroundImage: AssetImage("assets/AwarenessLogo.png"),
+                    backgroundImage: AssetImage('assets/AwarenessLogo.png'),
                   ),
                 ),
               )
-            : SizedBox.shrink(),
+            : const SizedBox.shrink(),
         Align(
-            alignment: Alignment.center,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                      color: Color.fromRGBO(245, 240, 225, 1),
-                      fontSize: fontSize,
-                      fontWeight: FontWeight.bold),
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                title,
+                style: TextStyle(
+                  color: const Color.fromRGBO(245, 240, 225, 1),
+                  fontSize: fontSize,
+                  fontWeight: FontWeight.bold,
                 ),
-                Text(
-                  title2,
-                  style: TextStyle(color: Color.fromRGBO(245, 240, 225, 1)),
+              ),
+              Text(
+                title2,
+                style: const TextStyle(
+                  color: Color.fromRGBO(245, 240, 225, 1),
                 ),
-                icon
-                    ? SizedBox(
-                        height: 10,
-                      )
-                    : SizedBox.shrink()
-              ],
-            )),
+              ),
+              icon ? const SizedBox(height: 10) : const SizedBox.shrink(),
+            ],
+          ),
+        ),
         backButton
             ? Align(
                 alignment: Alignment.bottomLeft,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 12.0),
                   child: CircleAvatar(
-                    child: IconButton(
-                        icon: Icon(
-                          Icons.keyboard_arrow_left,
-                          color: Color.fromRGBO(245, 240, 225, 1),
-                          size: 30,
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        }),
                     radius: 25,
-                    backgroundColor: Color.fromRGBO(255, 110, 64, 1),
+                    backgroundColor: const Color.fromRGBO(255, 110, 64, 1),
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.keyboard_arrow_left,
+                        size: 30,
+                        color: Color.fromRGBO(245, 240, 225, 1),
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                    ),
                   ),
                 ),
               )
-            : SizedBox.shrink(),
+            : const SizedBox.shrink(),
       ],
     );
   }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,46 +14,49 @@
     limitations under the License.
 */
 
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:typed_data';
-import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:huawei_awareness/hmsAwarenessLibrary.dart';
 
-import 'CustomWidgets/customAppBar.dart';
-import 'CustomWidgets/customButton.dart';
-import 'CustomWidgets/customConsole.dart';
-import 'CustomWidgets/customRaisedButton.dart';
+import 'package:flutter/material.dart';
+import 'package:huawei_awareness/huawei_awareness.dart';
+
+import 'customWidgets/customAppBar.dart';
+import 'customWidgets/customButton.dart';
+import 'customWidgets/customConsole.dart';
+import 'customWidgets/customRaisedButton.dart';
 
 class CaptureClientDemo extends StatefulWidget {
+  const CaptureClientDemo({Key? key}) : super(key: key);
+
   @override
-  _CaptureClientDemoState createState() => _CaptureClientDemoState();
+  State<CaptureClientDemo> createState() => _CaptureClientDemoState();
 }
 
 class _CaptureClientDemoState extends State<CaptureClientDemo> {
   bool isQueried = false;
   bool permissions = false;
 
-  List<String> responses = [];
-  List<int> capabilityList = [];
+  List<String> responses = <String>[];
+  List<int> capabilityList = <int>[];
 
-  bool locationPermission;
-  bool backgroundLocationPermission;
-  bool activityRecognitionPermission;
+  bool? locationPermission;
+  bool? backgroundLocationPermission;
+  bool? activityRecognitionPermission;
 
   @override
   void initState() {
-    checkPermissions();
     super.initState();
+    checkPermissions();
   }
 
   void queryCapabilities() async {
     CapabilityResponse capabilities =
         await AwarenessCaptureClient.querySupportingCapabilities();
     setState(() {
-      capabilityList = capabilities.deviceSupportCapabilities;
+      capabilityList = capabilities.deviceSupportCapabilities!;
       isQueried = true;
-      log(capabilityList.toString(), name: "Supported Capability Codes");
+      log(capabilityList.toString(), name: 'Supported Capability Codes');
     });
   }
 
@@ -63,9 +66,9 @@ class _CaptureClientDemoState extends State<CaptureClientDemo> {
         await AwarenessUtilsClient.hasBackgroundLocationPermission();
     activityRecognitionPermission =
         await AwarenessUtilsClient.hasActivityRecognitionPermission();
-    if (locationPermission &&
-        backgroundLocationPermission &&
-        activityRecognitionPermission) {
+    if (locationPermission! &&
+        backgroundLocationPermission! &&
+        activityRecognitionPermission!) {
       setState(() {
         permissions = true;
       });
@@ -101,84 +104,82 @@ class _CaptureClientDemoState extends State<CaptureClientDemo> {
 
   void captureBeacon() async {
     BeaconFilter filter = BeaconFilter.matchByBeaconContent(
-      beaconNamespace: "namespace1",
-      beaconType: "type2",
-      beaconContent: Uint8List.fromList(utf8.encode("content")),
+      beaconNamespace: 'namespace1',
+      beaconType: 'type2',
+      beaconContent: Uint8List.fromList(utf8.encode('content')),
     );
 
     BeaconFilter filter2 = BeaconFilter.matchByNameType(
-      beaconNamespace: "namespace2",
-      beaconType: "type2",
+      beaconNamespace: 'namespace2',
+      beaconType: 'type2',
     );
 
     BeaconFilter filter3 = BeaconFilter.matchByBeaconId(
-      beaconId: "beacon-id",
+      beaconId: 'beacon-id',
     );
 
     BeaconResponse response = await AwarenessCaptureClient.getBeaconStatus(
-        filters: [filter, filter2, filter3]);
+        filters: <BeaconFilter>[filter, filter2, filter3]);
     setState(() {
-      responses.add("Beacons Found: " + response.beacons.length.toString());
-      log(response.toJson(), name: "beaconData");
+      responses.add('Beacons Found: ${response.beacons!.length}');
+      log(
+        response.toJson(),
+        name: 'beaconData',
+      );
     });
   }
 
   void captureBehavior() async {
     BehaviorResponse response = await AwarenessCaptureClient.getBehavior();
     setState(() {
-      responses.add("Behavior: " + response.mostLikelyBehavior.type.toString());
+      responses.add('Behavior: ${response.mostLikelyBehavior!.type}');
     });
-    log(response.toJson(), name: "captureBehavior");
+    log(response.toJson(), name: 'captureBehavior');
   }
 
   void captureHeadset() async {
     HeadsetResponse response = await AwarenessCaptureClient.getHeadsetStatus();
     setState(() {
       switch (response.headsetStatus) {
-        case HeadsetStatus.Connected:
-          responses.add("Headset Status: Connected");
+        case HeadsetStatus.connected:
+          responses.add('Headset Status: Connected');
           break;
-        case HeadsetStatus.Disconnected:
-          responses.add("Headset Status: Disconnected");
+        case HeadsetStatus.disconnected:
+          responses.add('Headset Status: Disconnected');
           break;
-        case HeadsetStatus.Unknown:
-          responses.add("Headset Status: Unknown");
+        case HeadsetStatus.unknown:
+          responses.add('Headset Status: Unknown');
           break;
       }
     });
-    log(response.toJson(), name: "captureHeadset");
+    log(response.toJson(), name: 'captureHeadset');
   }
 
   void captureLocation() async {
     LocationResponse response = await AwarenessCaptureClient.getLocation();
     setState(() {
-      responses.add("Location: " +
-          response.latitude.toString() +
-          " - " +
-          response.longitude.toString());
+      responses.add('Location: ${response.latitude} - ${response.longitude}');
     });
-    log(response.toJson(), name: "captureLocation");
+    log(response.toJson(), name: 'captureLocation');
   }
 
   void captureCurrentLocation() async {
     LocationResponse response =
         await AwarenessCaptureClient.getCurrentLocation();
     setState(() {
-      responses.add("Current Location: " +
-          response.latitude.toString() +
-          " - " +
-          response.longitude.toString());
+      responses.add(
+          'Current Location: ${response.latitude} - ${response.longitude}');
     });
-    log(response.toJson(), name: "captureCurrentLocation");
+    log(response.toJson(), name: 'captureCurrentLocation');
   }
 
   void captureTimeCategories() async {
     TimeCategoriesResponse response =
         await AwarenessCaptureClient.getTimeCategories();
     setState(() {
-      responses.add("Time Categories: " + response.timeCategories.toString());
+      responses.add('Time Categories: ${response.timeCategories}');
     });
-    log(response.toJson(), name: "captureTimeCategories");
+    log(response.toJson(), name: 'captureTimeCategories');
   }
 
   void captureTimeByUser() async {
@@ -186,142 +187,143 @@ class _CaptureClientDemoState extends State<CaptureClientDemo> {
         await AwarenessCaptureClient.getTimeCategoriesByUser(
             latitude: 22.4943, longitude: 113.7436);
     setState(() {
-      responses.add("Time Categories: " + response.timeCategories.toString());
+      responses.add('Time Categories: ${response.timeCategories}');
     });
-    log(response.toJson(), name: "captureTimeByUser");
+    log(response.toJson(), name: 'captureTimeByUser');
   }
 
   void captureTimeByCountry() async {
     TimeCategoriesResponse response =
         await AwarenessCaptureClient.getTimeCategoriesByCountryCode(
-            countryCode: "CN");
+            countryCode: 'CN');
     setState(() {
-      responses.add("Time Categories: " + response.timeCategories.toString());
+      responses.add('Time Categories: ${response.timeCategories}');
     });
-    log(response.toJson(), name: "captureTimeByCountry");
+    log(response.toJson(), name: 'captureTimeByCountry');
   }
 
   void captureTimeByIp() async {
     TimeCategoriesResponse response =
         await AwarenessCaptureClient.getTimeCategoriesByIP();
     setState(() {
-      responses.add("Time Categories: " + response.timeCategories.toString());
+      responses.add('Time Categories: ${response.timeCategories}');
     });
-    log(response.toJson(), name: "captureTimeByIp");
+    log(response.toJson(), name: 'captureTimeByIp');
   }
 
   void captureTimeForFuture() async {
     TimeCategoriesResponse response =
         await AwarenessCaptureClient.getTimeCategoriesForFuture(
-            futureTimestamp: 1577867600000);
+            futureTimestamp: DateTime.now()
+                .add(const Duration(days: 1))
+                .millisecondsSinceEpoch);
     setState(() {
-      responses.add("Time Categories: " + response.timeCategories.toString());
+      responses.add('Time Categories: ${response.timeCategories}');
     });
-    log(response.toJson(), name: "captureTimeForFuture");
+    log(response.toJson(), name: 'captureTimeForFuture');
   }
 
   void captureLightIntensity() async {
     LightIntensityResponse response =
         await AwarenessCaptureClient.getLightIntensity();
     setState(() {
-      responses.add("Light Intensity: " + response.lightIntensity.toString());
+      responses.add('Light Intensity: ${response.lightIntensity}');
     });
-    log(response.toJson(), name: "captureLightIntensity");
+    log(response.toJson(), name: 'captureLightIntensity');
   }
 
   void captureWeatherByDevice() async {
     WeatherResponse response =
         await AwarenessCaptureClient.getWeatherByDevice();
     setState(() {
-      responses.add("Temperature: " +
-          response.weatherSituation.situation.temperatureC.toString());
+      responses.add(
+          'Temperature: ${response.weatherSituation!.situation!.temperatureC}');
     });
-    log(response.toJson(), name: "captureWeatherByDevice");
+    log(response.toJson(), name: 'captureWeatherByDevice');
   }
 
   void captureWeatherByPosition() async {
     WeatherResponse response =
         await AwarenessCaptureClient.getWeatherByPosition(
             weatherPosition: WeatherPosition(
-                city: "London", locale: "en_GB", country: "United Kingdom"));
+                city: 'London', locale: 'en_GB', country: 'United Kingdom'));
     setState(() {
-      responses.add("Temperature: " +
-          response.weatherSituation.situation.temperatureC.toString());
+      responses.add(
+          'Temperature: ${response.weatherSituation!.situation!.temperatureC}');
     });
-    log(response.toJson(), name: "captureWeatherByPosition");
+    log(response.toJson(), name: 'captureWeatherByPosition');
   }
 
   void captureBluetooth() async {
     BluetoothResponse response =
         await AwarenessCaptureClient.getBluetoothStatus(
-            deviceType: BluetoothStatus.DeviceCar);
+            deviceType: BluetoothStatus.deviceCar);
     setState(() {
-      responses.add("Bluetooth Status: " + response.bluetoothStatus.toString());
+      responses.add('Bluetooth Status: ${response.bluetoothStatus}');
     });
-    log(response.toJson(), name: "captureBluetooth");
+    log(response.toJson(), name: 'captureBluetooth');
   }
 
   void captureScreen() async {
     ScreenStatusResponse response =
         await AwarenessCaptureClient.getScreenStatus();
     setState(() {
-      responses.add("Screen Status: " + response.screenStatus.toString());
+      responses.add('Screen Status: ${response.screenStatus}');
     });
-    log(response.toJson(), name: "captureScreen");
+    log(response.toJson(), name: 'captureScreen');
   }
 
   void captureWiFi() async {
     WiFiResponse response = await AwarenessCaptureClient.getWifiStatus();
     setState(() {
-      responses.add("WiFi Status: " + response.status.toString());
+      responses.add('WiFi Status: ${response.status}');
     });
-    log(response.toJson(), name: "captureWiFi");
+    log(response.toJson(), name: 'captureWiFi');
   }
 
   void captureApplication() async {
     ApplicationResponse response =
         await AwarenessCaptureClient.getApplicationStatus(
-            packageName: "package_name");
+            packageName: 'package_name');
     setState(() {
-      responses
-          .add("Application Status: " + response.applicationStatus.toString());
+      responses.add('Application Status: ${response.applicationStatus}');
     });
-    log(response.toJson(), name: "captureApplication");
+    log(response.toJson(), name: 'captureApplication');
   }
 
   void captureDarkMode() async {
     DarkModeResponse response =
         await AwarenessCaptureClient.getDarkModeStatus();
     setState(() {
-      responses.add("Dark Mode Status: " + response.isDarkModeOn.toString());
+      responses.add('Dark Mode Status: ${response.isDarkModeOn}');
     });
-    log(response.toJson(), name: "captureDarkMode");
+    log(response.toJson(), name: 'captureDarkMode');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         icon: false,
         size: 100,
-        title: "Capture Client Demo",
+        title: 'Capture Client Demo',
         fontSize: 20,
         backButton: true,
       ),
       body: Column(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
+        children: <Widget>[
           isQueried && permissions
-              ? SizedBox.shrink()
+              ? const SizedBox.shrink()
               : Column(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
+                  children: <Widget>[
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
                       child: Text(
-                        "Before starting...",
+                        'Before starting...',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -330,10 +332,10 @@ class _CaptureClientDemoState extends State<CaptureClientDemo> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(25.0),
+                    const Padding(
+                      padding: EdgeInsets.all(25.0),
                       child: Text(
-                        "Obtaining capabilities supported by Awareness Kit on the current device is a good practice before starting.",
+                        'Obtaining capabilities supported by Awareness Kit on the current device is a good practice before starting.',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Color.fromRGBO(30, 61, 89, 1),
@@ -341,18 +343,19 @@ class _CaptureClientDemoState extends State<CaptureClientDemo> {
                       ),
                     ),
                     CustomButton(
-                        onPressed: queryCapabilities,
-                        text: "Query Capabilities"),
+                      onPressed: queryCapabilities,
+                      text: 'Query Capabilities',
+                    ),
                     permissions
-                        ? SizedBox.shrink()
+                        ? const SizedBox.shrink()
                         : Column(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(25.0),
+                            children: <Widget>[
+                              const Padding(
+                                padding: EdgeInsets.all(25.0),
                                 child: Text(
-                                  "Also, users should grant Location, Background Location and Activity Recognition permissions to fully benefit from Huawei Awareness Kit.",
+                                  'Also, users should grant Location, Background Location and Activity Recognition permissions to fully benefit from Huawei Awareness Kit.',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Color.fromRGBO(30, 61, 89, 1),
@@ -360,8 +363,9 @@ class _CaptureClientDemoState extends State<CaptureClientDemo> {
                                 ),
                               ),
                               CustomButton(
-                                  onPressed: requestPermissions,
-                                  text: "Request Permissions"),
+                                onPressed: requestPermissions,
+                                text: 'Request Permissions',
+                              ),
                             ],
                           ),
                   ],
@@ -373,34 +377,35 @@ class _CaptureClientDemoState extends State<CaptureClientDemo> {
                         left: 10.0, right: 10.0, top: 10.0),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: [
+                      children: <Widget>[
                         Expanded(
+                          flex: 2,
                           child: SingleChildScrollView(
                             child: Column(
-                              children: [
+                              children: <Widget>[
                                 Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
-                                  children: [
+                                  children: <Widget>[
                                     CustomRaisedButton(
-                                      buttonText: "Beacon",
+                                      buttonText: 'Beacon',
                                       capabilityCode:
-                                          CapabilityStatus.BeaconCapabilityCode,
+                                          CapabilityStatus.beaconCapabilityCode,
                                       capabilityList: capabilityList,
                                       onPressed: captureBeacon,
                                     ),
                                     CustomRaisedButton(
-                                      buttonText: "Behavior",
+                                      buttonText: 'Behavior',
                                       capabilityCode: CapabilityStatus
-                                          .BehaviorCapabilityCode,
+                                          .behaviorCapabilityCode,
                                       capabilityList: capabilityList,
                                       onPressed: captureBehavior,
                                     ),
                                     CustomRaisedButton(
-                                      buttonText: "Headset",
+                                      buttonText: 'Headset',
                                       capabilityCode: CapabilityStatus
-                                          .HeadsetCapabilityCode,
+                                          .headsetCapabilityCode,
                                       capabilityList: capabilityList,
                                       onPressed: captureHeadset,
                                     ),
@@ -410,25 +415,25 @@ class _CaptureClientDemoState extends State<CaptureClientDemo> {
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
-                                  children: [
+                                  children: <Widget>[
                                     CustomRaisedButton(
-                                      buttonText: "Location",
+                                      buttonText: 'Location',
                                       capabilityCode: CapabilityStatus
-                                          .LocationCaptureCapabilityCode,
+                                          .locationCaptureCapabilityCode,
                                       capabilityList: capabilityList,
                                       onPressed: captureLocation,
                                     ),
                                     CustomRaisedButton(
-                                      buttonText: "Current Location",
+                                      buttonText: 'Current Location',
                                       capabilityCode: CapabilityStatus
-                                          .LocationCaptureCapabilityCode,
+                                          .locationCaptureCapabilityCode,
                                       capabilityList: capabilityList,
                                       onPressed: captureCurrentLocation,
                                     ),
                                     CustomRaisedButton(
-                                      buttonText: "Time Categories",
+                                      buttonText: 'Time Categories',
                                       capabilityCode:
-                                          CapabilityStatus.TimeCapabilityCode,
+                                          CapabilityStatus.timeCapabilityCode,
                                       capabilityList: capabilityList,
                                       onPressed: captureTimeCategories,
                                     ),
@@ -438,25 +443,25 @@ class _CaptureClientDemoState extends State<CaptureClientDemo> {
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
-                                  children: [
+                                  children: <Widget>[
                                     CustomRaisedButton(
-                                      buttonText: "Time Categories By User",
+                                      buttonText: 'Time Categories By User',
                                       capabilityCode:
-                                          CapabilityStatus.TimeCapabilityCode,
+                                          CapabilityStatus.timeCapabilityCode,
                                       capabilityList: capabilityList,
                                       onPressed: captureTimeByUser,
                                     ),
                                     CustomRaisedButton(
-                                      buttonText: "Time Categories By Country",
+                                      buttonText: 'Time Categories By Country',
                                       capabilityCode:
-                                          CapabilityStatus.TimeCapabilityCode,
+                                          CapabilityStatus.timeCapabilityCode,
                                       capabilityList: capabilityList,
                                       onPressed: captureTimeByCountry,
                                     ),
                                     CustomRaisedButton(
-                                      buttonText: "Time Categories By IP",
+                                      buttonText: 'Time Categories By IP',
                                       capabilityCode:
-                                          CapabilityStatus.TimeCapabilityCode,
+                                          CapabilityStatus.timeCapabilityCode,
                                       capabilityList: capabilityList,
                                       onPressed: captureTimeByIp,
                                     ),
@@ -466,25 +471,25 @@ class _CaptureClientDemoState extends State<CaptureClientDemo> {
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
-                                  children: [
+                                  children: <Widget>[
                                     CustomRaisedButton(
-                                      buttonText: "Time Categories For Future",
+                                      buttonText: 'Time Categories For Future',
                                       capabilityCode:
-                                          CapabilityStatus.TimeCapabilityCode,
+                                          CapabilityStatus.timeCapabilityCode,
                                       capabilityList: capabilityList,
                                       onPressed: captureTimeForFuture,
                                     ),
                                     CustomRaisedButton(
-                                      buttonText: "Light Intensity",
+                                      buttonText: 'Light Intensity',
                                       capabilityCode: CapabilityStatus
-                                          .AmbientLightCapabilityCode,
+                                          .ambientLightCapabilityCode,
                                       capabilityList: capabilityList,
                                       onPressed: captureLightIntensity,
                                     ),
                                     CustomRaisedButton(
-                                      buttonText: "Weather By Device",
+                                      buttonText: 'Weather By Device',
                                       capabilityCode: CapabilityStatus
-                                          .WeatherCapabilityCode,
+                                          .weatherCapabilityCode,
                                       capabilityList: capabilityList,
                                       onPressed: captureWeatherByDevice,
                                     ),
@@ -494,25 +499,25 @@ class _CaptureClientDemoState extends State<CaptureClientDemo> {
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
-                                  children: [
+                                  children: <Widget>[
                                     CustomRaisedButton(
-                                      buttonText: "Weather By Position",
+                                      buttonText: 'Weather By Position',
                                       capabilityCode: CapabilityStatus
-                                          .WeatherCapabilityCode,
+                                          .weatherCapabilityCode,
                                       capabilityList: capabilityList,
                                       onPressed: captureWeatherByPosition,
                                     ),
                                     CustomRaisedButton(
-                                      buttonText: "Bluetooth",
+                                      buttonText: 'Bluetooth',
                                       capabilityCode: CapabilityStatus
-                                          .InCarBluetoothCapabilityCode,
+                                          .inCarBluetoothCapabilityCode,
                                       capabilityList: capabilityList,
                                       onPressed: captureBluetooth,
                                     ),
                                     CustomRaisedButton(
-                                      buttonText: "Screen",
+                                      buttonText: 'Screen',
                                       capabilityCode:
-                                          CapabilityStatus.ScreenCapabilityCode,
+                                          CapabilityStatus.screenCapabilityCode,
                                       capabilityList: capabilityList,
                                       onPressed: captureScreen,
                                     ),
@@ -522,35 +527,39 @@ class _CaptureClientDemoState extends State<CaptureClientDemo> {
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
-                                  children: [
+                                  children: <Widget>[
                                     CustomRaisedButton(
-                                      buttonText: "WiFi",
+                                      buttonText: 'WiFi',
                                       capabilityCode:
-                                          CapabilityStatus.WiFiCapabilityCode,
+                                          CapabilityStatus.wiFiCapabilityCode,
                                       capabilityList: capabilityList,
                                       onPressed: captureWiFi,
                                     ),
                                     CustomRaisedButton(
-                                      buttonText: "Application",
+                                      buttonText: 'Application',
                                       capabilityCode: CapabilityStatus
-                                          .ApplicationCapabilityCode,
+                                          .applicationCapabilityCode,
                                       capabilityList: capabilityList,
                                       onPressed: captureApplication,
                                     ),
                                     CustomRaisedButton(
-                                      buttonText: "Dark Mode",
+                                      buttonText: 'Dark Mode',
                                       capabilityCode: CapabilityStatus
-                                          .DarkModeCapabilityCode,
+                                          .darkModeCapabilityCode,
                                       capabilityList: capabilityList,
                                       onPressed: captureDarkMode,
                                     ),
                                   ],
                                 ),
-                                RaisedButton(
-                                    shape: RoundedRectangleBorder(
+                                ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      shape: const RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(
-                                            Radius.circular(30.0))),
-                                    child: Text("Clear Console"),
+                                          Radius.circular(30.0),
+                                        ),
+                                      ),
+                                    ),
+                                    child: const Text('Clear Console'),
                                     onPressed: () {
                                       setState(() {
                                         responses.clear();
@@ -559,19 +568,18 @@ class _CaptureClientDemoState extends State<CaptureClientDemo> {
                               ],
                             ),
                           ),
-                          flex: 2,
                         ),
                         Expanded(
+                          flex: 1,
                           child: CustomConsole(
                             responses: responses,
                           ),
-                          flex: 1,
-                        )
+                        ),
                       ],
                     ),
                   ),
                 )
-              : SizedBox.shrink()
+              : const SizedBox.shrink(),
         ],
       ),
     );

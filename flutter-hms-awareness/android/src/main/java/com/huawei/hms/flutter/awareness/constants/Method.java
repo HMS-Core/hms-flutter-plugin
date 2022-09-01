@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -17,10 +17,10 @@
 package com.huawei.hms.flutter.awareness.constants;
 
 public interface Method {
-    //Common Client Methods
+    // Common Client Methods
     String ENABLE_UPDATE_WINDOW = "enableUpdateWindow";
 
-    //Awareness Capture Client Methods
+    // Awareness Capture Client Methods
     String GET_BEACON_STATUS = "getBeaconStatus";
     String GET_BEHAVIOR = "getBehavior";
     String GET_HEADSET_STATUS = "getHeadsetStatus";
@@ -41,12 +41,12 @@ public interface Method {
     String GET_APPLICATION_STATUS = "getApplicationStatus";
     String GET_DARK_MODE_STATUS = "getDarkModeStatus";
 
-    //Awareness Barrier Client Methods
+    // Awareness Barrier Client Methods
     String QUERY_BARRIERS = "queryBarriers";
     String DELETE_BARRIER = "deleteBarrier";
     String UPDATE_BARRIER = "updateBarriers";
 
-    //Awareness Utils Client Methods
+    // Awareness Utils Client Methods
     String ENABLE_LOGGER = "enableLogger";
     String DISABLE_LOGGER = "disableLogger";
     String HAS_LOCATION_PERMISSION = "hasLocationPermission";

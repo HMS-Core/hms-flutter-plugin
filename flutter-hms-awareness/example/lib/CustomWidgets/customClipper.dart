@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -19,12 +19,20 @@ import 'package:flutter/material.dart';
 class AwarenessCustomClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
-    final path = Path();
+    final Path path = Path();
     path.lineTo(0, size.height);
     path.quadraticBezierTo(
-        size.width / 4, size.height - 60, size.width / 2, size.height - 30);
+      size.width / 4,
+      size.height - 60,
+      size.width / 2,
+      size.height - 30,
+    );
     path.quadraticBezierTo(
-        3 / 4 * size.width, size.height, size.width, size.height - 40);
+      3 / 4 * size.width,
+      size.height,
+      size.width,
+      size.height - 40,
+    );
     path.lineTo(size.width, 0);
     return path;
   }

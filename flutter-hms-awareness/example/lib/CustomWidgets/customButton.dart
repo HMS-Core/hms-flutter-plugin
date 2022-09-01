@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -21,23 +21,38 @@ class CustomButton extends StatelessWidget {
   final VoidCallback onPressed;
 
   const CustomButton({
-    @required this.text,
-    @required this.onPressed,
-  });
+    Key? key,
+    required this.text,
+    required this.onPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(30.0))),
+    return ElevatedButton(
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all(
+          const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(30.0),
+            ),
+          ),
+        ),
+        backgroundColor: MaterialStateProperty.all(Colors.red),
+        textStyle: MaterialStateProperty.all(
+          const TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        padding: MaterialStateProperty.all(
+          const EdgeInsets.all(12.0),
+        ),
+      ),
       onPressed: onPressed,
-      color: Color.fromRGBO(255, 110, 64, 1),
-      textColor: Colors.white,
-      splashColor: Colors.redAccent,
-      padding: EdgeInsets.all(12.0),
       child: Text(
         text,
-        style: TextStyle(color: Color.fromRGBO(245, 240, 225, 1)),
+        style: const TextStyle(
+          color: Color.fromRGBO(245, 240, 225, 1),
+        ),
       ),
     );
   }
