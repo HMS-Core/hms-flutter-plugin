@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -150,7 +150,7 @@ public class ArchiveClientController {
 
     private void loadArchiveDetails(final MethodCall call, final Result result) {
         DefaultResultListener<OperationResult> listener = new DefaultResultListener<>(result, activity, call.method);
-        /// Set diff strategy to a default value.
+        // Set diff strategy to a default value.
         int diffStrategy = 999;
         String archiveId = "";
         // If an archive summary is specified as the argument, parse the archive id.

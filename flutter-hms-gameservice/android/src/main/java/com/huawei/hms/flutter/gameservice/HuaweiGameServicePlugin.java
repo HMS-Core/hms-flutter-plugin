@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -29,53 +29,26 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 public class HuaweiGameServicePlugin implements FlutterPlugin, ActivityAware {
-
     private Activity activity;
-
     private MethodChannel gameServiceChannel;
-
     private MethodChannel josAppsChannel;
-
-    public static void registerWith(Registrar registrar) {
-        HuaweiMobileServicesUtil.setApplication(registrar.activity().getApplication());
-        final MethodChannel gameServiceChannel = new MethodChannel(registrar.messenger(),
-            Constants.Channel.GAME_SERVICE_METHOD_CHANNEL);
-        gameServiceChannel.setMethodCallHandler(new GameServiceController(registrar.activity(), gameServiceChannel));
-        final MethodChannel josAppsChannel = new MethodChannel(registrar.messenger(),
-            Constants.Channel.JOS_APPS_METHOD_CHANNEL);
-        josAppsChannel.setMethodCallHandler(new JosAppsClientController(registrar.activity(), josAppsChannel));
-    }
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-        gameServiceChannel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(),
-            Constants.Channel.GAME_SERVICE_METHOD_CHANNEL);
-        josAppsChannel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(),
-            Constants.Channel.JOS_APPS_METHOD_CHANNEL);
-    }
-
-    @Override
-    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-        if (gameServiceChannel != null) {
-            teardownMethodChannel(gameServiceChannel);
-        }
-
-        if (josAppsChannel != null) {
-            teardownMethodChannel(josAppsChannel);
-        }
+        gameServiceChannel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), Constants.Channel.GAME_SERVICE_METHOD_CHANNEL);
+        josAppsChannel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), Constants.Channel.JOS_APPS_METHOD_CHANNEL);
     }
 
     @Override
     public void onAttachedToActivity(ActivityPluginBinding binding) {
         this.activity = binding.getActivity();
         HuaweiMobileServicesUtil.setApplication(activity.getApplication());
+
         if (gameServiceChannel != null) {
             gameServiceChannel.setMethodCallHandler(new GameServiceController(activity, gameServiceChannel));
         }
-
         if (josAppsChannel != null) {
             josAppsChannel.setMethodCallHandler(new JosAppsClientController(activity, josAppsChannel));
         }
@@ -93,14 +66,16 @@ public class HuaweiGameServicePlugin implements FlutterPlugin, ActivityAware {
 
     @Override
     public void onDetachedFromActivity() {
-        if (activity != null) {
-            activity = null;
-        }
+        activity = null;
     }
 
-    private void teardownMethodChannel(final MethodChannel channel) {
-        if (channel != null) {
-            channel.setMethodCallHandler(null);
+    @Override
+    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+        if (gameServiceChannel != null) {
+            gameServiceChannel.setMethodCallHandler(null);
+        }
+        if (josAppsChannel != null) {
+            josAppsChannel.setMethodCallHandler(null);
         }
     }
 }

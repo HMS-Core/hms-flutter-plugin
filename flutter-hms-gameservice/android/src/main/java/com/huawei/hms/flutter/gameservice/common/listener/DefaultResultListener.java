@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@ import io.flutter.plugin.common.MethodChannel.Result;
 import java.io.ByteArrayOutputStream;
 
 public class DefaultResultListener<T> implements OnSuccessListener<T>, OnFailureListener {
-    //Internal Flutter Result instance that will be initialized during construction.
+    // Internal Flutter Result instance that will be initialized during construction.
     private Result mResult;
 
     // Application Context.

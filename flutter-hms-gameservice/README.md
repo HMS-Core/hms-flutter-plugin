@@ -2,18 +2,15 @@
   <h1 align="center">Huawei Game Service Flutter Plugin</h1>
 </p>
 
-
-
 <p align="center">
   <a href="https://pub.dev/packages/huawei_gameservice"><img src="https://img.shields.io/pub/v/huawei_gameservice?style=for-the-badge" alt="pub.dev version"></a>
 </p>
 
-
 ----
 
-With HUAWEI Game Service, you will have access to a range of development capabilities. You can promote your game quickly and efficiently to Huawei's vast user base by having users sign in using their HUAWEI IDs. You can also use the service to quickly implement achievements, game events, and game addiction prevention functions, build basic game capabilities at a low cost, and perform in-depth game operations based on user and content localization.
+With Huawei Game Service, you will have access to a range of development capabilities. You can promote your game quickly and efficiently to Huawei's vast user base by having users sign in using their Huawei IDs. You can also use the service to quickly implement achievements, game events, and game addiction prevention functions, build basic game capabilities at a low cost, and perform in-depth game operations based on user and content localization.
 
-HUAWEI Game Service provides the following basic functions for your game apps:
+Huawei Game Service provides the following basic functions for your game apps:
 - Game addiction prevention
 - Floating window
 - Achievements
@@ -23,7 +20,7 @@ HUAWEI Game Service provides the following basic functions for your game apps:
 - Player statistics
 - Access to basic game information
 
-The HUAWEI Game Service Flutter Plugin enables communication between HUAWEI Game Service SDK and the Flutter Platform and it exposes all capabilities provided by the HUAWEI Game Service.
+The Huawei Game Service Flutter Plugin enables communication between Huawei Game Service SDK and the Flutter Platform and it exposes all capabilities provided by the Huawei Game Service.
 
 [Learn More](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/introduction-0000001080980430?ha_source=hms1)
 
@@ -40,7 +37,7 @@ Please see [pub.dev](https://pub.dev/packages/huawei_gameservice/install) and [A
 
 #### Game Sign-in Requirements
 
-- To implement the Game Sign-in function  for players to sign in to your game using HUAWEI IDs please use the [HUAWEI Account Flutter Plugin](https://pub.dev/packages/huawei_account) plugin. After the user successfully signs in, HUAWEI Account Kit sends the verification result to your game and you can obtain the player information by calling the related APIs from Players Client.
+- To implement the Game Sign-in function  for players to sign in to your game using Huawei IDs please use the [Huawei Account Flutter Plugin](https://pub.dev/packages/huawei_account) plugin. After the user successfully signs in, Huawei Account Kit sends the verification result to your game and you can obtain the player information by calling the related APIs from Players Client.
 
 #### Testing Game Features
 
@@ -48,7 +45,7 @@ You need to have a tester account to perform the testing of some Game Features. 
 
 Before a game is released, you can use a tester account to sign in to the game and test the game achievements, leaderboards, and saved games. Avoid releasing achievements or leaderboards when the corresponding game is still undergoing tests. This is because achievement or leaderboard data changes along with game operations performed by the tester account, and it cannot be reset once they have been released.
 
-Note that HUAWEI AppAssistant can display achievements, leaderboards, and saved games only after your game is released and only on devices running EMUI 10.0 or later and HUAWEI AppAssistant 10.3 or later is installed. (HUAWEI AppAssistant 10.1 or later for achievements).
+Note that Huawei AppAssistant can display achievements, leaderboards, and saved games only after your game is released and only on devices running EMUI 10.0 or later and Huawei AppAssistant 10.3 or later is installed. (Huawei AppAssistant 10.1 or later for achievements).
 
 ## Sample Project
 
