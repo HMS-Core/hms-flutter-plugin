@@ -14,11 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
-
-import 'site.dart';
+part of huawei_site;
 
 class QuerySuggestionResponse {
   List<Site?>? sites;
@@ -28,34 +24,42 @@ class QuerySuggestionResponse {
   });
 
   Map<String, dynamic> toMap() {
-    return {
-      'sites': sites?.map((x) => x?.toMap()).toList(),
+    return <String, dynamic>{
+      'sites': sites?.map((Site? x) => x?.toMap()).toList(),
     };
   }
 
-  factory QuerySuggestionResponse.fromMap(Map<String, dynamic> map) {
+  factory QuerySuggestionResponse.fromMap(Map<dynamic, dynamic> map) {
     return QuerySuggestionResponse(
-      sites: map['sites'] == null
-          ? null
-          : List<Site>.from(map['sites']?.map((x) => Site.fromMap(x))),
+      sites: map['sites'] != null
+          ? List<Site>.from(map['sites']?.map((dynamic x) => Site.fromMap(x)))
+          : null,
     );
   }
 
-  String toJson() => json.encode(toMap());
+  String toJson() {
+    return json.encode(toMap());
+  }
 
-  factory QuerySuggestionResponse.fromJson(String source) =>
-      QuerySuggestionResponse.fromMap(json.decode(source));
-
-  @override
-  String toString() => 'QuerySuggestionResponse(sites: $sites)';
-
-  @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-
-    return o is QuerySuggestionResponse && listEquals(o.sites, sites);
+  factory QuerySuggestionResponse.fromJson(String source) {
+    return QuerySuggestionResponse.fromMap(json.decode(source));
   }
 
   @override
-  int get hashCode => sites.hashCode;
+  String toString() {
+    return '$QuerySuggestionResponse('
+        'sites: $sites)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is QuerySuggestionResponse && listEquals(other.sites, sites);
+  }
+
+  @override
+  int get hashCode {
+    return sites.hashCode;
+  }
 }

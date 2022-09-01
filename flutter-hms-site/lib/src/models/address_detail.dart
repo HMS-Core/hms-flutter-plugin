@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:convert';
+part of huawei_site;
 
 class AddressDetail {
   String? countryCode;
@@ -41,8 +41,23 @@ class AddressDetail {
     this.tertiaryAdminArea,
   });
 
+  factory AddressDetail.fromMap(Map<dynamic, dynamic> map) {
+    return AddressDetail(
+      adminArea: map['adminArea'],
+      country: map['country'],
+      countryCode: map['countryCode'],
+      locality: map['locality'],
+      subAdminArea: map['subAdminArea'],
+      subLocality: map['subLocality'],
+      thoroughfare: map['thoroughfare'],
+      postalCode: map['postalCode'],
+      streetNumber: map['streetNumber'],
+      tertiaryAdminArea: map['tertiaryAdminArea'],
+    );
+  }
+
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'countryCode': countryCode,
       'country': country,
       'adminArea': adminArea,
@@ -56,47 +71,44 @@ class AddressDetail {
     };
   }
 
-  factory AddressDetail.fromMap(Map<String, dynamic> map) {
-    return AddressDetail(
-      adminArea: map["adminArea"] == null ? null : map["adminArea"],
-      country: map["country"] == null ? null : map["country"],
-      countryCode: map["countryCode"] == null ? null : map["countryCode"],
-      locality: map["locality"] == null ? null : map["locality"],
-      subAdminArea: map["subAdminArea"] == null ? null : map["subAdminArea"],
-      subLocality: map["subLocality"] == null ? null : map["subLocality"],
-      thoroughfare: map["thoroughfare"] == null ? null : map["thoroughfare"],
-      postalCode: map["postalCode"] == null ? null : map["postalCode"],
-      streetNumber: map["streetNumber"] == null ? null : map["streetNumber"],
-      tertiaryAdminArea:
-          map["tertiaryAdminArea"] == null ? null : map["tertiaryAdminArea"],
-    );
+  String toJson() {
+    return json.encode(toMap());
   }
 
-  String toJson() => json.encode(toMap());
-
-  factory AddressDetail.fromJson(String source) =>
-      AddressDetail.fromMap(json.decode(source));
+  factory AddressDetail.fromJson(String source) {
+    return AddressDetail.fromMap(json.decode(source));
+  }
 
   @override
   String toString() {
-    return 'AddressDetail(countryCode: $countryCode, country: $country, adminArea: $adminArea, subAdminArea: $subAdminArea, locality: $locality, subLocality: $subLocality, thoroughfare: $thoroughfare, postalCode: $postalCode, streetNumber: $streetNumber, tertiaryAdminArea: $tertiaryAdminArea)';
+    return '$AddressDetail('
+        'countryCode: $countryCode, '
+        'country: $country, '
+        'adminArea: $adminArea, '
+        'subAdminArea: $subAdminArea, '
+        'locality: $locality, '
+        'subLocality: $subLocality, '
+        'thoroughfare: $thoroughfare, '
+        'postalCode: $postalCode, '
+        'streetNumber: $streetNumber, '
+        'tertiaryAdminArea: $tertiaryAdminArea)';
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
 
-    return o is AddressDetail &&
-        o.countryCode == countryCode &&
-        o.country == country &&
-        o.adminArea == adminArea &&
-        o.subAdminArea == subAdminArea &&
-        o.locality == locality &&
-        o.subLocality == subLocality &&
-        o.thoroughfare == thoroughfare &&
-        o.postalCode == postalCode &&
-        o.streetNumber == streetNumber &&
-        o.tertiaryAdminArea == tertiaryAdminArea;
+    return other is AddressDetail &&
+        other.countryCode == countryCode &&
+        other.country == country &&
+        other.adminArea == adminArea &&
+        other.subAdminArea == subAdminArea &&
+        other.locality == locality &&
+        other.subLocality == subLocality &&
+        other.thoroughfare == thoroughfare &&
+        other.postalCode == postalCode &&
+        other.streetNumber == streetNumber &&
+        other.tertiaryAdminArea == tertiaryAdminArea;
   }
 
   @override

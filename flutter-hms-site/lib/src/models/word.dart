@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:convert';
+part of huawei_site;
 
 class Word {
   int offset;
@@ -27,33 +27,43 @@ class Word {
         value = value ?? '';
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'offset': offset,
       'value': value,
     };
   }
 
-  factory Word.fromMap(Map<String, dynamic> map) {
+  factory Word.fromMap(Map<dynamic, dynamic> map) {
     return Word(
-      offset: map['offset'] == null ? 0 : map['offset'],
-      value: map['value'] == null ? '' : map['value'],
+      offset: map['offset'] ?? 0,
+      value: map['value'] ?? '',
     );
   }
 
-  String toJson() => json.encode(toMap());
+  String toJson() {
+    return json.encode(toMap());
+  }
 
-  factory Word.fromJson(String source) => Word.fromMap(json.decode(source));
-
-  @override
-  String toString() => 'Word(offset: $offset, value: $value)';
-
-  @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-
-    return o is Word && o.offset == offset && o.value == value;
+  factory Word.fromJson(String source) {
+    return Word.fromMap(json.decode(source));
   }
 
   @override
-  int get hashCode => offset.hashCode ^ value.hashCode;
+  String toString() {
+    return '$Word('
+        'offset: $offset, '
+        'value: $value)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Word && other.offset == offset && other.value == value;
+  }
+
+  @override
+  int get hashCode {
+    return offset.hashCode ^ value.hashCode;
+  }
 }

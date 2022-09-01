@@ -14,9 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:convert';
-
-import 'search_filter.dart';
+part of huawei_site;
 
 class SearchIntent {
   String? hint;
@@ -30,41 +28,47 @@ class SearchIntent {
   });
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'hint': hint,
       'searchFilter': searchFilter?.toMap(),
       'apiKey': apiKey,
     };
   }
 
-  factory SearchIntent.fromMap(Map<String, dynamic> map) {
+  factory SearchIntent.fromMap(Map<dynamic, dynamic> map) {
     return SearchIntent(
-      map['apiKey'] == null ? null : map['apiKey'],
-      hint: map['hint'] == null ? null : map['hint'],
-      searchFilter: map['searchFilter'] == null
-          ? null
-          : SearchFilter.fromMap(map['searchFilter']),
+      map['apiKey'],
+      hint: map['hint'],
+      searchFilter: map['searchFilter'] != null
+          ? SearchFilter.fromMap(map['searchFilter'])
+          : null,
     );
   }
 
-  String toJson() => json.encode(toMap());
+  String toJson() {
+    return json.encode(toMap());
+  }
 
-  factory SearchIntent.fromJson(String source) =>
-      SearchIntent.fromMap(json.decode(source));
-
-  @override
-  String toString() {
-    return 'SearchIntent(hint: $hint, searchFilter: $searchFilter, apiKey: ***)';
+  factory SearchIntent.fromJson(String source) {
+    return SearchIntent.fromMap(json.decode(source));
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  String toString() {
+    return '$SearchIntent('
+        'hint: $hint, '
+        'searchFilter: $searchFilter, '
+        'apiKey: ***)';
+  }
 
-    return o is SearchIntent &&
-        o.hint == hint &&
-        o.searchFilter == searchFilter &&
-        o.apiKey == apiKey;
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is SearchIntent &&
+        other.hint == hint &&
+        other.searchFilter == searchFilter &&
+        other.apiKey == apiKey;
   }
 
   @override

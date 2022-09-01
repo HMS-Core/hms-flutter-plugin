@@ -17,46 +17,49 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:huawei_site/model/coordinate.dart';
-import 'package:huawei_site/model/hwlocation_type.dart';
-import 'package:huawei_site/model/location_type.dart';
-import 'package:huawei_site/model/text_search_request.dart';
-import 'package:huawei_site/model/text_search_response.dart';
-import 'package:huawei_site/search_service.dart';
+import 'package:huawei_site/huawei_site.dart';
 import 'package:huawei_site_example/screens/home_screen.dart';
 import 'package:huawei_site_example/widgets/custom_checkbox.dart';
 
-import '../keys.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text_form_field.dart';
 
 class TextSearchScreen extends StatefulWidget {
   static const String id = 'text_search_screen';
 
+  const TextSearchScreen({Key? key}) : super(key: key);
+
   @override
-  _TextSearchScreenState createState() => _TextSearchScreenState();
+  State<TextSearchScreen> createState() => _TextSearchScreenState();
 }
 
 class _TextSearchScreenState extends State<TextSearchScreen> {
-  final TextEditingController _queryTextController =
-      TextEditingController(text: "Eiffel Tower");
-  final TextEditingController _languageTextController =
-      TextEditingController(text: "en");
-  final TextEditingController _countryTextController =
-      TextEditingController(text: "FR");
-  final TextEditingController _latTextController =
-      TextEditingController(text: "48.893478");
-  final TextEditingController _lngTextController =
-      TextEditingController(text: "2.334595");
-  final TextEditingController _radiusTextController =
-      TextEditingController(text: "1000");
-  final TextEditingController _pageIndexTextController =
-      TextEditingController(text: "1");
-  final TextEditingController _pageSizeTextController =
-      TextEditingController(text: "20");
+  final TextEditingController _queryTextController = TextEditingController(
+    text: 'Eiffel Tower',
+  );
+  final TextEditingController _languageTextController = TextEditingController(
+    text: 'en',
+  );
+  final TextEditingController _countryTextController = TextEditingController(
+    text: 'FR',
+  );
+  final TextEditingController _latTextController = TextEditingController(
+    text: '48.893478',
+  );
+  final TextEditingController _lngTextController = TextEditingController(
+    text: '2.334595',
+  );
+  final TextEditingController _radiusTextController = TextEditingController(
+    text: '1000',
+  );
+  final TextEditingController _pageIndexTextController = TextEditingController(
+    text: '1',
+  );
+  final TextEditingController _pageSizeTextController = TextEditingController(
+    text: '20',
+  );
 
-  late List<String> _selectedCheckbox =
-      List.from(['en', 'fr', 'cn', 'de', 'ko'], growable: false);
+  List<String> _selectedCheckbox = <String>['en', 'fr', 'cn', 'de', 'ko'];
   late TextSearchRequest _request;
   late String _results;
   late SearchService _searchService;
@@ -65,11 +68,11 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
   void initState() {
     super.initState();
     initService();
-    _results = "";
+    _results = '';
   }
 
   void initService() async {
-    _searchService = await SearchService.create(HomeScreen.API_KEY);
+    _searchService = await SearchService.create(HomeScreen.apiKey);
   }
 
   void runSearch() async {
@@ -100,7 +103,9 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _request = TextSearchRequest(query: _queryTextController.text);
+    _request = TextSearchRequest(
+      query: _queryTextController.text,
+    );
     return Scaffold(
       appBar: AppBar(
         title: const Text('Text Search'),
@@ -108,48 +113,48 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Container(
+            SizedBox(
               child: Padding(
                 padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     CustomTextFormField(
-                      labelText: "Query Text",
+                      labelText: 'Query Text',
                       controller: _queryTextController,
                     ),
                     CustomTextFormField(
-                      labelText: "Language",
+                      labelText: 'Language',
                       controller: _languageTextController,
                     ),
                     CustomTextFormField(
-                      labelText: "Country Code",
+                      labelText: 'Country Code',
                       controller: _countryTextController,
                     ),
                     CustomTextFormField(
-                      labelText: "Latitude",
+                      labelText: 'Latitude',
                       controller: _latTextController,
                     ),
                     CustomTextFormField(
-                      labelText: "Longitude",
+                      labelText: 'Longitude',
                       controller: _lngTextController,
                     ),
                     CustomTextFormField(
-                      labelText: "Radius",
+                      labelText: 'Radius',
                       controller: _radiusTextController,
                     ),
                     CustomTextFormField(
-                      labelText: "PageIndex",
+                      labelText: 'PageIndex',
                       controller: _pageIndexTextController,
                     ),
                     CustomTextFormField(
-                      labelText: "PageSize",
+                      labelText: 'PageSize',
                       controller: _pageSizeTextController,
                     ),
                     CustomCheckboxWithFormField(
                       context: context,
                       buttonText: 'Countries',
-                      onSaved: (countries) {
+                      onSaved: (List<String>? countries) {
                         setState(() {
                           _selectedCheckbox = countries!;
                           _request.countries = _selectedCheckbox;
@@ -160,18 +165,17 @@ class _TextSearchScreenState extends State<TextSearchScreen> {
                       initialValue: _selectedCheckbox,
                     ),
                     CustomButton(
-                        key: Key(Keys.SEARCH_TEXT),
-                        text: "Search",
-                        onPressed: runSearch),
+                      text: 'Search',
+                      onPressed: runSearch,
+                    ),
                   ],
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               child: Text(
                 _results,
-                key: Key(Keys.RESULT_TEXT),
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 12.0,
                   color: Colors.black,
                 ),

@@ -15,6 +15,7 @@
 */
 
 import 'package:flutter/material.dart';
+
 import 'custom_multi_select_checkbox.dart';
 
 class CustomCheckboxWithFormField extends FormField<List<String>> {
@@ -23,6 +24,7 @@ class CustomCheckboxWithFormField extends FormField<List<String>> {
   final String dialogTitleText;
 
   CustomCheckboxWithFormField({
+    Key? key,
     required this.buttonText,
     required this.dialogTitleText,
     required this.dialogItemList,
@@ -31,6 +33,7 @@ class CustomCheckboxWithFormField extends FormField<List<String>> {
     FormFieldValidator<List<String>>? validator,
     required List<String> initialValue,
   }) : super(
+          key: key,
           onSaved: onSaved,
           validator: validator,
           initialValue: initialValue,
@@ -40,48 +43,66 @@ class CustomCheckboxWithFormField extends FormField<List<String>> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 InkWell(
-                    child: Container(
-                      height: 50,
-                      child: Card(
-                          elevation: 4,
-                          child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Expanded(
-                                    flex: 1,
-                                    child: Icon(Icons.location_city_outlined,
-                                        size: 20.0)),
-                                Expanded(
-                                  flex: 4,
-                                  child: (state.value!.length <= 0)
-                                      ? Text(buttonText,
-                                          style: TextStyle(fontSize: 16.0))
-                                      : Text('${state.value!}',
-                                          style: TextStyle(fontSize: 16.0)),
-                                ),
-                                Expanded(
-                                    flex: 1,
-                                    child: Icon(
-                                        Icons.keyboard_arrow_right_outlined,
-                                        size: 20.0)),
-                              ])),
+                  child: SizedBox(
+                    height: 50,
+                    child: Card(
+                      elevation: 4,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          const Expanded(
+                            flex: 1,
+                            child: Icon(
+                              Icons.location_city_outlined,
+                              size: 20.0,
+                            ),
+                          ),
+                          Expanded(
+                            flex: 4,
+                            child: Text(
+                              state.value!.isNotEmpty
+                                  ? '${state.value!}'
+                                  : buttonText,
+                              style: const TextStyle(fontSize: 16.0),
+                            ),
+                          ),
+                          const Expanded(
+                            flex: 1,
+                            child: Icon(
+                              Icons.keyboard_arrow_right_outlined,
+                              size: 20.0,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    onTap: () async => state.didChange(await showDialog(
+                  ),
+                  onTap: () async {
+                    state.didChange(
+                      await showDialog(
                             context: context,
-                            builder: (_) => CustomMultiSelectDialogCheckbox(
-                                  dialogTextQuestion: Text(dialogTitleText),
-                                  selectedFromList: dialogItemList,
-                                )) ??
-                        [])),
+                            builder: (_) {
+                              return CustomMultiSelectDialogCheckbox(
+                                dialogTextQuestion: Text(dialogTitleText),
+                                selectedFromList: dialogItemList,
+                              );
+                            },
+                          ) ??
+                          <String>[],
+                    );
+                  },
+                ),
                 state.hasError
                     ? Center(
                         child: Text(
                           state.errorText!,
-                          style: TextStyle(color: Colors.red),
+                          style: const TextStyle(
+                            color: Colors.red,
+                          ),
                         ),
                       )
-                    : Container()
+                    : Container(),
               ],
             );
           },

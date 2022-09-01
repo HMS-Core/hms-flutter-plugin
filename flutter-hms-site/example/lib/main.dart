@@ -22,20 +22,33 @@ import 'screens/nearby_search_screen.dart';
 import 'screens/querysuggestion_search_screen.dart';
 import 'screens/text_search_screen.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomeScreen(),
-      routes: {
-        HomeScreen.id: (context) => HomeScreen(),
-        TextSearchScreen.id: (context) => TextSearchScreen(),
-        NearbySearchScreen.id: (context) => NearbySearchScreen(),
-        DetailSearchScreen.id: (context) => DetailSearchScreen(),
-        QuerySuggestionSearchScreen.id: (context) =>
-            QuerySuggestionSearchScreen(),
+      home: const HomeScreen(),
+      routes: <String, Widget Function(BuildContext)>{
+        HomeScreen.id: (BuildContext context) {
+          return const HomeScreen();
+        },
+        TextSearchScreen.id: (BuildContext context) {
+          return const TextSearchScreen();
+        },
+        NearbySearchScreen.id: (BuildContext context) {
+          return const NearbySearchScreen();
+        },
+        DetailSearchScreen.id: (BuildContext context) {
+          return const DetailSearchScreen();
+        },
+        QuerySuggestionSearchScreen.id: (BuildContext context) {
+          return const QuerySuggestionSearchScreen();
+        },
       },
     );
   }

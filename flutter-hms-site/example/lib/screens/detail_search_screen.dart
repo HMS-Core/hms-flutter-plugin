@@ -17,47 +17,50 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:huawei_site/model/detail_search_request.dart';
-import 'package:huawei_site/model/detail_search_response.dart';
-import 'package:huawei_site/search_service.dart';
-import 'package:huawei_site_example/screens/home_screen.dart';
+import 'package:huawei_site/huawei_site.dart';
 
-import '../keys.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text_form_field.dart';
+import 'home_screen.dart';
 
 class DetailSearchScreen extends StatefulWidget {
   static const String id = 'detail_search_screen';
 
+  const DetailSearchScreen({Key? key}) : super(key: key);
+
   @override
-  _DetailSearchScreenState createState() => _DetailSearchScreenState();
+  State<DetailSearchScreen> createState() => _DetailSearchScreenState();
 }
 
 class _DetailSearchScreenState extends State<DetailSearchScreen> {
-  final TextEditingController _siteIdTextController =
-      TextEditingController(text: "977B75943A9F01D561FF2073AE1D9353");
-  final TextEditingController _languageTextController =
-      TextEditingController(text: "en");
+  final TextEditingController _siteIdTextController = TextEditingController(
+    text: '977B75943A9F01D561FF2073AE1D9353',
+  );
+  final TextEditingController _languageTextController = TextEditingController(
+    text: 'en',
+  );
 
   late DetailSearchRequest _request;
   late String _results;
   late SearchService _searchService;
 
-  final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
     initService();
-    _results = "";
+    _results = '';
   }
 
   void initService() async {
-    _searchService = await SearchService.create(HomeScreen.API_KEY);
+    _searchService = await SearchService.create(HomeScreen.apiKey);
   }
 
   void runSearch() async {
-    _request = DetailSearchRequest(siteId: _siteIdTextController.text);
+    _request = DetailSearchRequest(
+      siteId: _siteIdTextController.text,
+    );
     _request.language = _languageTextController.text;
     try {
       DetailSearchResponse response =
@@ -82,7 +85,7 @@ class _DetailSearchScreenState extends State<DetailSearchScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Container(
+            SizedBox(
               child: Padding(
                 padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
                 child: Form(
@@ -91,16 +94,15 @@ class _DetailSearchScreenState extends State<DetailSearchScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       CustomTextFormField(
-                        labelText: "Site ID",
+                        labelText: 'Site ID',
                         controller: _siteIdTextController,
                       ),
                       CustomTextFormField(
-                        labelText: "Language",
+                        labelText: 'Language',
                         controller: _languageTextController,
                       ),
                       CustomButton(
-                        key: Key(Keys.SEARCH_DETAIL),
-                        text: "Search",
+                        text: 'Search',
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             runSearch();
@@ -112,11 +114,10 @@ class _DetailSearchScreenState extends State<DetailSearchScreen> {
                 ),
               ),
             ),
-            Container(
-              child: new Text(
+            SizedBox(
+              child: Text(
                 _results,
-                key: Key(Keys.RESULT_DETAIL),
-                style: new TextStyle(
+                style: const TextStyle(
                   fontSize: 12.0,
                   color: Colors.black,
                 ),

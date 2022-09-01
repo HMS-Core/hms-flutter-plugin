@@ -14,9 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:convert';
-
-import 'time_of_week.dart';
+part of huawei_site;
 
 class Period {
   TimeOfWeek? open;
@@ -28,33 +26,43 @@ class Period {
   });
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'open': open?.toMap(),
       'close': close?.toMap(),
     };
   }
 
-  factory Period.fromMap(Map<String, dynamic> map) {
+  factory Period.fromMap(Map<dynamic, dynamic> map) {
     return Period(
-      open: map["open"] == null ? null : TimeOfWeek.fromMap(map["open"]),
-      close: map["close"] == null ? null : TimeOfWeek.fromMap(map["close"]),
+      open: map['open'] != null ? TimeOfWeek.fromMap(map['open']) : null,
+      close: map['close'] != null ? TimeOfWeek.fromMap(map['close']) : null,
     );
   }
 
-  String toJson() => json.encode(toMap());
+  String toJson() {
+    return json.encode(toMap());
+  }
 
-  factory Period.fromJson(String source) => Period.fromMap(json.decode(source));
-
-  @override
-  String toString() => 'Period(open: $open, close: $close)';
-
-  @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-
-    return o is Period && o.open == open && o.close == close;
+  factory Period.fromJson(String source) {
+    return Period.fromMap(json.decode(source));
   }
 
   @override
-  int get hashCode => open.hashCode ^ close.hashCode;
+  String toString() {
+    return '$Period('
+        'open: $open, '
+        'close: $close)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Period && other.open == open && other.close == close;
+  }
+
+  @override
+  int get hashCode {
+    return open.hashCode ^ close.hashCode;
+  }
 }

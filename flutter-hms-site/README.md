@@ -1,5 +1,5 @@
 <p align="center">
-  <h1 align="center">Huawei Site Flutter Plugin</h1>
+  <h1 align="center">Huawei Site Kit Flutter Plugin</h1>
 </p>
 
 
@@ -7,13 +7,13 @@
   <a href="https://pub.dev/packages/huawei_site"><img src="https://img.shields.io/pub/v/huawei_site?style=for-the-badge" alt="pub.dev version"></a>
 </p>
 
-Huawei Site Flutter Plugin provides adaptation code for HUAWEI Site Kit to use the Flutter platform. With HUAWEI Site Kit, your app can provide users with convenient and secure access to diverse, place-related services.
+Huawei Site Kit Flutter Plugin provides adaptation code for Huawei Site Kit to use the Flutter platform. With Huawei Site Kit, your app can provide users with convenient and secure access to diverse, place-related services.
 
 [Learn More](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/introduction-0000001050181259?ha_source=hms1)
 
 ## Installation
 
-Please see [pub.dev](https://pub.dev/packages/huawei_site/install) and [AppGallery Connect Configuration](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/config-agc-0000001050179166).
+Please see [pub.dev](https://pub.dev/packages/huawei_site/install) and [AppGallery Connect Configuration](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/config-agc-0000001050179166?ha_source=hms1).
 
 ## Documentation
 
@@ -33,4 +33,4 @@ If you run into a bug in our samples, please submit an issue to the [GitHub repo
 
 ## License
 
-Huawei Site Flutter Plugin is licensed under [Apache 2.0 license](LICENCE)
+Huawei Site Kit Flutter Plugin is licensed under [Apache 2.0 license](LICENSE)

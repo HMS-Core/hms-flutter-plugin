@@ -17,13 +17,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:huawei_site/model/coordinate.dart';
-import 'package:huawei_site/model/query_suggestion_request.dart';
-import 'package:huawei_site/model/query_suggestion_response.dart';
-import 'package:huawei_site/search_service.dart';
+import 'package:huawei_site/huawei_site.dart';
 import 'package:huawei_site_example/screens/home_screen.dart';
 
-import '../keys.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_checkbox.dart';
 import '../widgets/custom_text_form_field.dart';
@@ -31,28 +27,35 @@ import '../widgets/custom_text_form_field.dart';
 class QuerySuggestionSearchScreen extends StatefulWidget {
   static const String id = 'query_suggestion_search_screen';
 
+  const QuerySuggestionSearchScreen({Key? key}) : super(key: key);
+
   @override
-  _QuerySuggestionSearchScreenState createState() =>
+  State<QuerySuggestionSearchScreen> createState() =>
       _QuerySuggestionSearchScreenState();
 }
 
 class _QuerySuggestionSearchScreenState
     extends State<QuerySuggestionSearchScreen> {
-  final TextEditingController _queryTextController =
-      TextEditingController(text: "Paris");
-  final TextEditingController _languageTextController =
-      TextEditingController(text: "en");
-  final TextEditingController _countryTextController =
-      TextEditingController(text: "FR");
-  final TextEditingController _latTextController =
-      TextEditingController(text: "48.893478");
-  final TextEditingController _lngTextController =
-      TextEditingController(text: "2.334595");
-  final TextEditingController _radiusTextController =
-      TextEditingController(text: "5000");
+  final TextEditingController _queryTextController = TextEditingController(
+    text: 'Paris',
+  );
+  final TextEditingController _languageTextController = TextEditingController(
+    text: 'en',
+  );
+  final TextEditingController _countryTextController = TextEditingController(
+    text: 'FR',
+  );
+  final TextEditingController _latTextController = TextEditingController(
+    text: '48.893478',
+  );
+  final TextEditingController _lngTextController = TextEditingController(
+    text: '2.334595',
+  );
+  final TextEditingController _radiusTextController = TextEditingController(
+    text: '5000',
+  );
 
-  late List<String> _selectedCheckbox =
-      List.from(['en', 'fr', 'cn', 'de', 'ko'], growable: false);
+  List<String> _selectedCheckbox = <String>['en', 'fr', 'cn', 'de', 'ko'];
   late QuerySuggestionRequest _request;
   late String _results;
   late SearchService _searchService;
@@ -61,11 +64,11 @@ class _QuerySuggestionSearchScreenState
   void initState() {
     super.initState();
     initService();
-    _results = "";
+    _results = '';
   }
 
   void initService() async {
-    _searchService = await SearchService.create(HomeScreen.API_KEY);
+    _searchService = await SearchService.create(HomeScreen.apiKey);
   }
 
   void runSearch() async {
@@ -94,7 +97,9 @@ class _QuerySuggestionSearchScreenState
 
   @override
   Widget build(BuildContext context) {
-    _request = QuerySuggestionRequest(query: _queryTextController.text);
+    _request = QuerySuggestionRequest(
+      query: _queryTextController.text,
+    );
     return Scaffold(
       appBar: AppBar(
         title: const Text('Query Suggestion Search'),
@@ -102,40 +107,40 @@ class _QuerySuggestionSearchScreenState
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Container(
+            SizedBox(
               child: Padding(
                 padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     CustomTextFormField(
-                      labelText: "Query Text",
+                      labelText: 'Query Text',
                       controller: _queryTextController,
                     ),
                     CustomTextFormField(
-                      labelText: "Language",
+                      labelText: 'Language',
                       controller: _languageTextController,
                     ),
                     CustomTextFormField(
-                      labelText: "Country Code",
+                      labelText: 'Country Code',
                       controller: _countryTextController,
                     ),
                     CustomTextFormField(
-                      labelText: "Latitude",
+                      labelText: 'Latitude',
                       controller: _latTextController,
                     ),
                     CustomTextFormField(
-                      labelText: "Longitude",
+                      labelText: 'Longitude',
                       controller: _lngTextController,
                     ),
                     CustomTextFormField(
-                      labelText: "Radius",
+                      labelText: 'Radius',
                       controller: _radiusTextController,
                     ),
                     CustomCheckboxWithFormField(
                       context: context,
                       buttonText: 'Countries',
-                      onSaved: (countries) {
+                      onSaved: (List<String>? countries) {
                         setState(() {
                           _selectedCheckbox = countries!;
                           _request.countries = _selectedCheckbox;
@@ -146,18 +151,17 @@ class _QuerySuggestionSearchScreenState
                       initialValue: _selectedCheckbox,
                     ),
                     CustomButton(
-                        key: Key(Keys.SEARCH_QUERY),
-                        text: "Search",
-                        onPressed: runSearch),
+                      text: 'Search',
+                      onPressed: runSearch,
+                    ),
                   ],
                 ),
               ),
             ),
-            Container(
+            SizedBox(
               child: Text(
                 _results,
-                key: Key(Keys.RESULT_QUERY),
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 12.0,
                   color: Colors.black,
                 ),

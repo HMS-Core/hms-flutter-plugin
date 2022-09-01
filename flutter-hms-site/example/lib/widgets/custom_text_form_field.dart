@@ -20,13 +20,14 @@ class CustomTextFormField extends StatefulWidget {
   final String labelText;
   final TextEditingController controller;
 
-  CustomTextFormField({
+  const CustomTextFormField({
+    Key? key,
     required this.labelText,
     required this.controller,
-  });
+  }) : super(key: key);
 
   @override
-  _CustomTextFormFieldState createState() => _CustomTextFormFieldState();
+  State<CustomTextFormField> createState() => _CustomTextFormFieldState();
 }
 
 class _CustomTextFormFieldState extends State<CustomTextFormField> {
@@ -35,9 +36,9 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(bottom: 5),
+      padding: const EdgeInsets.only(bottom: 5),
       child: TextFormField(
-        validator: (value) {
+        validator: (String? value) {
           if (value == null || value.isEmpty) {
             setState(() {
               errorText = 'A value must be provided.';
@@ -49,8 +50,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         controller: widget.controller,
         decoration: InputDecoration(
           labelText: widget.labelText,
-          errorText: errorText ?? null,
-          border: OutlineInputBorder(
+          errorText: errorText,
+          border: const OutlineInputBorder(
             borderSide: BorderSide(),
           ),
         ),

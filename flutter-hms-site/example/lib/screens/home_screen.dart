@@ -16,15 +16,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:huawei_site/model/location_type.dart';
-import 'package:huawei_site/model/query_autocomplete_request.dart';
-import 'package:huawei_site/model/query_autocomplete_response.dart';
-import 'package:huawei_site/model/search_filter.dart';
-import 'package:huawei_site/model/search_intent.dart';
-import 'package:huawei_site/model/site.dart';
-import 'package:huawei_site/search_service.dart';
+import 'package:huawei_site/huawei_site.dart';
 
-import '../keys.dart';
 import '../widgets/custom_button.dart';
 import 'detail_search_screen.dart';
 import 'nearby_search_screen.dart';
@@ -33,18 +26,15 @@ import 'text_search_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String id = 'home_screen';
-  static const String API_KEY = '<api_key>';
+  static const String apiKey = '<api_key>';
+
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   void _showAlertDialog({String? title, String? message}) {
     showDialog(
       context: context,
@@ -52,9 +42,9 @@ class _HomeScreenState extends State<HomeScreen> {
         return AlertDialog(
           title: Text(title!),
           content: Text(message!),
-          actions: [
+          actions: <Widget>[
             TextButton(
-              child: Text("Close"),
+              child: const Text('Close'),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -66,50 +56,54 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _siteSearch() async {
-    final SearchFilter _searchFilter =
-        SearchFilter(poiType: <LocationType>[LocationType.TOURIST_ATTRACTION]);
-
-    final SearchIntent _searchIntent =
-        SearchIntent(HomeScreen.API_KEY, searchFilter: _searchFilter);
-
-    final SearchService _searchService =
-        await SearchService.create(HomeScreen.API_KEY);
+    final SearchFilter searchFilter = SearchFilter(
+      poiType: <LocationType>[LocationType.TOURIST_ATTRACTION],
+    );
+    final SearchIntent searchIntent = SearchIntent(
+      HomeScreen.apiKey,
+      searchFilter: searchFilter,
+    );
+    final SearchService searchService = await SearchService.create(
+      HomeScreen.apiKey,
+    );
 
     try {
-      final Site _site =
-          await _searchService.startSiteSearchActivity(_searchIntent);
+      final Site site = await searchService.startSiteSearchActivity(
+        searchIntent,
+      );
 
       _showAlertDialog(
-        title: _site.name,
-        message: _site.toString(),
+        title: site.name,
+        message: site.toString(),
       );
     } on PlatformException catch (e) {
       _showAlertDialog(
-        title: "ERROR",
-        message: e.message! +
-            ", result code returned to SearchStatus object. " +
-            e.toString(),
+        title: 'ERROR',
+        message:
+            '${e.message!}, result code returned to SearchStatus object. $e',
       );
     }
   }
 
   void _queryAutocomplete() async {
-    final SearchService _searchService =
-        await SearchService.create(HomeScreen.API_KEY);
-    final QueryAutocompleteRequest request =
-        QueryAutocompleteRequest(query: "Istanbul");
+    final SearchService searchService = await SearchService.create(
+      HomeScreen.apiKey,
+    );
+    final QueryAutocompleteRequest request = QueryAutocompleteRequest(
+      query: 'Istanbul',
+    );
 
     try {
       final QueryAutocompleteResponse response =
-          await _searchService.queryAutocomplete(request);
+          await searchService.queryAutocomplete(request);
 
       _showAlertDialog(
-        title: "QueryAutocompleteRequest",
+        title: 'QueryAutocompleteRequest',
         message: response.toString(),
       );
     } on PlatformException catch (e) {
       _showAlertDialog(
-        title: "Error",
+        title: 'Error',
         message: e.toString(),
       );
     }
@@ -127,53 +121,35 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               CustomButton(
-                key: Key(Keys.SCREEN_TEXT),
-                text: "Text Search",
+                text: 'Text Search',
                 onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    TextSearchScreen.id,
-                  );
+                  Navigator.pushNamed(context, TextSearchScreen.id);
                 },
               ),
               CustomButton(
-                key: Key(Keys.SCREEN_NEARBY),
-                text: "Nearby Search",
+                text: 'Nearby Search',
                 onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    NearbySearchScreen.id,
-                  );
+                  Navigator.pushNamed(context, NearbySearchScreen.id);
                 },
               ),
               CustomButton(
-                key: Key(Keys.SCREEN_DETAIL),
-                text: "Place Detail Search",
+                text: 'Place Detail Search',
                 onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    DetailSearchScreen.id,
-                  );
+                  Navigator.pushNamed(context, DetailSearchScreen.id);
                 },
               ),
               CustomButton(
-                key: Key(Keys.SCREEN_QUERY),
-                text: "Query Suggestion Search",
+                text: 'Query Suggestion Search',
                 onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    QuerySuggestionSearchScreen.id,
-                  );
+                  Navigator.pushNamed(context, QuerySuggestionSearchScreen.id);
                 },
               ),
               CustomButton(
-                key: Key(Keys.QUERY_COMPLETE),
-                text: "Query Autocomplete",
+                text: 'Query Autocomplete',
                 onPressed: _queryAutocomplete,
               ),
               CustomButton(
-                key: Key(Keys.SITE_SEARCH),
-                text: "Site Search",
+                text: 'Site Search',
                 onPressed: _siteSearch,
               ),
             ],

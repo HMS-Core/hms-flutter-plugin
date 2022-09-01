@@ -20,24 +20,29 @@ class CustomMultiSelectDialogCheckbox extends StatefulWidget {
   final List<String> selectedFromList;
   final Widget dialogTextQuestion;
 
-  CustomMultiSelectDialogCheckbox(
-      {required this.selectedFromList, required this.dialogTextQuestion});
+  const CustomMultiSelectDialogCheckbox({
+    Key? key,
+    required this.selectedFromList,
+    required this.dialogTextQuestion,
+  }) : super(key: key);
 
   @override
-  _CustomMultiSelectDialogCheckboxState createState() =>
+  State<CustomMultiSelectDialogCheckbox> createState() =>
       _CustomMultiSelectDialogCheckboxState();
 }
 
 class _CustomMultiSelectDialogCheckboxState
     extends State<CustomMultiSelectDialogCheckbox> {
-  final List<String> selectedItems = [];
-  final _newListItem = TextEditingController();
+  final List<String> selectedItems = <String>[];
+  final TextEditingController _newListItem = TextEditingController();
   Map<String, bool>? mappedItem;
   String? errorMessage;
 
   /// The method that converts the selected List response to a map.
   Map<String, bool> initMap() {
-    return mappedItem = {for (var item in widget.selectedFromList) item: false};
+    return mappedItem = <String, bool>{
+      for (String item in widget.selectedFromList) item: false
+    };
   }
 
   /// Add new country/region code
@@ -53,7 +58,7 @@ class _CustomMultiSelectDialogCheckboxState
         _newListItem.clear();
       } else {
         setState(() {
-          errorMessage = "This country code already exists in the list";
+          errorMessage = 'This country code already exists in the list';
         });
       }
     }
@@ -66,16 +71,18 @@ class _CustomMultiSelectDialogCheckboxState
     }
     return SimpleDialog(
       title: widget.dialogTextQuestion,
-      children: [
+      children: <Widget>[
         ...mappedItem!.keys.map((String data) {
           return StatefulBuilder(
             builder: (_, StateSetter setState) => CheckboxListTile(
-                title: Text(data),
-                activeColor: Colors.green,
-                value: mappedItem![data],
-                controlAffinity: ListTileControlAffinity.leading,
-                onChanged: (value) =>
-                    setState(() => mappedItem![data] = value!)),
+              title: Text(data),
+              activeColor: Colors.green,
+              value: mappedItem![data],
+              controlAffinity: ListTileControlAffinity.leading,
+              onChanged: (bool? value) => setState(
+                () => mappedItem![data] = value!,
+              ),
+            ),
           );
         }).toList(),
         Padding(
@@ -87,27 +94,29 @@ class _CustomMultiSelectDialogCheckboxState
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
+          children: <Widget>[
             ElevatedButton(
-                onPressed: _addNewCountryListItem, child: Text('Add Item')),
+              onPressed: _addNewCountryListItem,
+              child: const Text('Add Item'),
+            ),
             ElevatedButton(
-                style: ButtonStyle(
-                  visualDensity: VisualDensity.comfortable,
-                  backgroundColor: MaterialStateProperty.all(Colors.green),
-                ),
-                child: Text('Submit List'),
-                onPressed: () {
-                  selectedItems.clear();
-
-                  mappedItem!.forEach((key, value) {
-                    if (value == true) {
-                      selectedItems.add(key);
-                    }
-                  });
-                  Navigator.pop(context, selectedItems);
-                }),
+              style: ButtonStyle(
+                visualDensity: VisualDensity.comfortable,
+                backgroundColor: MaterialStateProperty.all(Colors.green),
+              ),
+              child: const Text('Submit List'),
+              onPressed: () {
+                selectedItems.clear();
+                mappedItem!.forEach((String key, bool value) {
+                  if (value == true) {
+                    selectedItems.add(key);
+                  }
+                });
+                Navigator.pop(context, selectedItems);
+              },
+            ),
           ],
-        )
+        ),
       ],
     );
   }

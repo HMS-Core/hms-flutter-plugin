@@ -14,13 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:convert';
-
-import 'address_detail.dart';
-import 'auto_complete_prediction.dart';
-import 'coordinate.dart';
-import 'coordinate_bounds.dart';
-import 'poi.dart';
+part of huawei_site;
 
 class Site {
   String? siteId;
@@ -48,7 +42,7 @@ class Site {
   }) : utcOffset = utcOffset ?? 0;
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'siteId': siteId,
       'name': name,
       'formatAddress': formatAddress,
@@ -62,51 +56,65 @@ class Site {
     };
   }
 
-  factory Site.fromMap(Map<String, dynamic> map) {
+  factory Site.fromMap(Map<dynamic, dynamic> map) {
     return Site(
       address:
-          map["address"] == null ? null : AddressDetail.fromMap(map["address"]),
-      distance: map["distance"] == null ? null : map["distance"].toDouble(),
-      formatAddress: map["formatAddress"] == null ? null : map["formatAddress"],
+          map['address'] == null ? null : AddressDetail.fromMap(map['address']),
+      distance: map['distance']?.toDouble(),
+      formatAddress: map['formatAddress'],
       location:
-          map["location"] == null ? null : Coordinate.fromMap(map["location"]),
-      name: map["name"] == null ? null : map["name"],
-      poi: map["poi"] == null ? null : Poi.fromMap(map["poi"]),
-      siteId: map["siteId"] == null ? null : map["siteId"],
-      viewport: map["viewport"] == null
-          ? null
-          : CoordinateBounds.fromMap(map["viewport"]),
-      prediction: map["prediction"] == null
-          ? null
-          : AutoCompletePrediction.fromMap(map["prediction"]),
-      utcOffset: map["utcOffset"] == null ? null : map["utcOffset"],
+          map['location'] != null ? Coordinate.fromMap(map['location']) : null,
+      name: map['name'],
+      poi: map['poi'] != null ? Poi.fromMap(map['poi']) : null,
+      siteId: map['siteId'],
+      viewport: map['viewport'] != null
+          ? CoordinateBounds.fromMap(map['viewport'])
+          : null,
+      prediction: map['prediction'] != null
+          ? AutoCompletePrediction.fromMap(map['prediction'])
+          : null,
+      utcOffset: map['utcOffset'],
     );
   }
 
-  String toJson() => json.encode(toMap());
+  String toJson() {
+    return json.encode(toMap());
+  }
 
-  factory Site.fromJson(String source) => Site.fromMap(json.decode(source));
-
-  @override
-  String toString() {
-    return 'Site(siteId: $siteId, name: $name, formatAddress: $formatAddress, address: $address, location: $location, viewport: $viewport, distance: $distance, poi: $poi, prediction: $prediction, utcOffset: $utcOffset)';
+  factory Site.fromJson(String source) {
+    return Site.fromMap(json.decode(source));
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  String toString() {
+    return '$Site('
+        'siteId: $siteId, '
+        'name: $name, '
+        'formatAddress: $formatAddress, '
+        'address: $address, '
+        'location: $location, '
+        'viewport: $viewport, '
+        'distance: $distance, '
+        'poi: $poi, '
+        'prediction: $prediction, '
+        'utcOffset: $utcOffset)';
+  }
 
-    return o is Site &&
-        o.siteId == siteId &&
-        o.name == name &&
-        o.formatAddress == formatAddress &&
-        o.address == address &&
-        o.location == location &&
-        o.viewport == viewport &&
-        o.distance == distance &&
-        o.poi == poi &&
-        o.prediction == prediction &&
-        o.utcOffset == utcOffset;
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Site &&
+        other.siteId == siteId &&
+        other.name == name &&
+        other.formatAddress == formatAddress &&
+        other.address == address &&
+        other.location == location &&
+        other.viewport == viewport &&
+        other.distance == distance &&
+        other.poi == poi &&
+        other.prediction == prediction &&
+        other.utcOffset == utcOffset;
   }
 
   @override

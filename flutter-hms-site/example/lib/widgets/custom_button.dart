@@ -20,7 +20,7 @@ class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
 
-  CustomButton({
+  const CustomButton({
     Key? key,
     required this.text,
     required this.onPressed,
@@ -32,11 +32,14 @@ class CustomButton extends StatelessWidget {
       padding: const EdgeInsets.only(top: 16.0, left: 16, right: 16),
       child: ElevatedButton(
         onPressed: onPressed,
-        child: Text(text, style: TextStyle(fontSize: 16.0)),
         style: ElevatedButton.styleFrom(
           primary: Colors.blue,
           onPrimary: Colors.white,
-          padding: EdgeInsets.all(12.0),
+          padding: const EdgeInsets.all(12.0),
+        ),
+        child: Text(
+          text,
+          style: const TextStyle(fontSize: 16.0),
         ),
       ),
     );

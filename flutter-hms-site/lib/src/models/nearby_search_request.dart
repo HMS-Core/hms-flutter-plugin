@@ -14,11 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:convert';
-
-import 'coordinate.dart';
-import 'hwlocation_type.dart';
-import 'location_type.dart';
+part of huawei_site;
 
 class NearbySearchRequest {
   int? pageSize;
@@ -44,7 +40,7 @@ class NearbySearchRequest {
   });
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'pageSize': pageSize,
       'pageIndex': pageIndex,
       'query': query,
@@ -57,50 +53,61 @@ class NearbySearchRequest {
     };
   }
 
-  factory NearbySearchRequest.fromMap(Map<String, dynamic> map) {
+  factory NearbySearchRequest.fromMap(Map<dynamic, dynamic> map) {
     return NearbySearchRequest(
-      pageSize: map['pageSize'] == null ? null : map['pageSize'],
-      pageIndex: map['pageIndex'] == null ? null : map['pageIndex'],
-      query: map['query'] == null ? null : map['query'],
-      location: map['location'] == null
-          ? throw ("A location object must be provided.")
-          : Coordinate.fromMap(map['location']),
-      radius: map['radius'] == null ? null : map['radius'],
-      poiType: map['poiType'] == null
-          ? null
-          : LocationType.fromString(map['poiType']),
-      language: map['language'] == null ? null : map['language'],
-      hwPoiType: map['hwPoiType'] == null
-          ? null
-          : HwLocationType.fromString(map['hwPoiType']),
-      strictBounds: map['strictBounds'] == null ? null : map['strictBounds'],
+      pageSize: map['pageSize'],
+      pageIndex: map['pageIndex'],
+      query: map['query'],
+      location: map['location'] != null
+          ? Coordinate.fromMap(map['location'])
+          : throw ('A location object must be provided.'),
+      radius: map['radius'],
+      poiType: map['poiType'] != null
+          ? LocationType.fromString(map['poiType'])
+          : null,
+      language: map['language'],
+      hwPoiType: map['hwPoiType'] != null
+          ? HwLocationType.fromString(map['hwPoiType'])
+          : null,
+      strictBounds: map['strictBounds'],
     );
   }
 
-  String toJson() => json.encode(toMap());
+  String toJson() {
+    return json.encode(toMap());
+  }
 
-  factory NearbySearchRequest.fromJson(String source) =>
-      NearbySearchRequest.fromMap(json.decode(source));
-
-  @override
-  String toString() {
-    return 'NearbySearchRequest(pageSize: $pageSize, pageIndex: $pageIndex, query: $query, location: $location, radius: $radius, poiType: $poiType, language: $language, hwPoiType: $hwPoiType, strictBounds: $strictBounds)';
+  factory NearbySearchRequest.fromJson(String source) {
+    return NearbySearchRequest.fromMap(json.decode(source));
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  String toString() {
+    return '$NearbySearchRequest('
+        'pageSize: $pageSize, '
+        'pageIndex: $pageIndex, '
+        'query: $query, location: $location, '
+        'radius: $radius, '
+        'poiType: $poiType, '
+        'language: $language, '
+        'hwPoiType: $hwPoiType, '
+        'strictBounds: $strictBounds)';
+  }
 
-    return o is NearbySearchRequest &&
-        o.pageSize == pageSize &&
-        o.pageIndex == pageIndex &&
-        o.query == query &&
-        o.location == location &&
-        o.radius == radius &&
-        o.poiType == poiType &&
-        o.language == language &&
-        o.hwPoiType == hwPoiType &&
-        o.strictBounds == strictBounds;
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is NearbySearchRequest &&
+        other.pageSize == pageSize &&
+        other.pageIndex == pageIndex &&
+        other.query == query &&
+        other.location == location &&
+        other.radius == radius &&
+        other.poiType == poiType &&
+        other.language == language &&
+        other.hwPoiType == hwPoiType &&
+        other.strictBounds == strictBounds;
   }
 
   @override

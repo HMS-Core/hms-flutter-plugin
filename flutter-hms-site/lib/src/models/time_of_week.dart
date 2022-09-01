@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:convert';
+part of huawei_site;
 
 class TimeOfWeek {
   static const int _DAY_MIN = 0;
@@ -35,7 +35,7 @@ class TimeOfWeek {
 
   set day(int day) {
     if (day < _DAY_MIN || day > _DAY_MAX) {
-      throw FormatException("TimeOfWeek day param exceeded the range");
+      throw const FormatException('TimeOfWeek day param exceeded the range');
     }
     _day = day;
   }
@@ -46,41 +46,49 @@ class TimeOfWeek {
     final int intValue = int.parse(time);
 
     if (intValue < _TIME_MIN || intValue > _TIME_MAX) {
-      throw FormatException("TimeOfWeek time param exceeded the range");
+      throw const FormatException('TimeOfWeek time param exceeded the range');
     }
-
     _time = time;
   }
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'day': _day,
       'time': _time,
     };
   }
 
-  factory TimeOfWeek.fromMap(Map<String, dynamic> map) {
+  factory TimeOfWeek.fromMap(Map<dynamic, dynamic> map) {
     return TimeOfWeek(
-      day: map["day"] == null ? null : map["day"],
-      time: map["time"] == null ? null : map["time"],
+      day: map['day'],
+      time: map['time'],
     );
   }
 
-  String toJson() => json.encode(toMap());
+  String toJson() {
+    return json.encode(toMap());
+  }
 
-  factory TimeOfWeek.fromJson(String source) =>
-      TimeOfWeek.fromMap(json.decode(source));
-
-  @override
-  String toString() => 'TimeOfWeek(day: $_day, time: $_time)';
-
-  @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-
-    return o is TimeOfWeek && o._day == _day && o._time == _time;
+  factory TimeOfWeek.fromJson(String source) {
+    return TimeOfWeek.fromMap(json.decode(source));
   }
 
   @override
-  int get hashCode => _day.hashCode ^ _time.hashCode;
+  String toString() {
+    return '$TimeOfWeek('
+        'day: $_day, '
+        'time: $_time)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is TimeOfWeek && other._day == _day && other._time == _time;
+  }
+
+  @override
+  int get hashCode {
+    return _day.hashCode ^ _time.hashCode;
+  }
 }

@@ -14,9 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:convert';
-
-import 'coordinate.dart';
+part of huawei_site;
 
 class QueryAutocompleteRequest {
   String query;
@@ -34,7 +32,7 @@ class QueryAutocompleteRequest {
   }) : children = children ?? false;
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'query': query,
       'location': location?.toMap(),
       'radius': radius,
@@ -43,39 +41,45 @@ class QueryAutocompleteRequest {
     };
   }
 
-  factory QueryAutocompleteRequest.fromMap(Map<String, dynamic> map) {
+  factory QueryAutocompleteRequest.fromMap(Map<dynamic, dynamic> map) {
     return QueryAutocompleteRequest(
-      query: map['query'] == null
-          ? throw ("A query must be provided.")
-          : map['query'],
+      query: map['query'] ?? (throw ('A query must be provided.')),
       location:
-          map['location'] == null ? null : Coordinate.fromMap(map['location']),
-      radius: map['radius'] == null ? null : map['radius'],
-      language: map['language'] == null ? null : map['language'],
-      children: map['children'] == null ? null : map['children'],
+          map['location'] != null ? Coordinate.fromMap(map['location']) : null,
+      radius: map['radius'],
+      language: map['language'],
+      children: map['children'],
     );
   }
 
-  String toJson() => json.encode(toMap());
+  String toJson() {
+    return json.encode(toMap());
+  }
 
-  factory QueryAutocompleteRequest.fromJson(String source) =>
-      QueryAutocompleteRequest.fromMap(json.decode(source));
-
-  @override
-  String toString() {
-    return 'QueryAutocompleteRequest(query: $query, location: $location, radius: $radius, language: $language, children: $children)';
+  factory QueryAutocompleteRequest.fromJson(String source) {
+    return QueryAutocompleteRequest.fromMap(json.decode(source));
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  String toString() {
+    return '$QueryAutocompleteRequest('
+        'query: $query, '
+        'location: $location, '
+        'radius: $radius, '
+        'language: $language, '
+        'children: $children)';
+  }
 
-    return o is QueryAutocompleteRequest &&
-        o.query == query &&
-        o.location == location &&
-        o.radius == radius &&
-        o.language == language &&
-        o.children == children;
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is QueryAutocompleteRequest &&
+        other.query == query &&
+        other.location == location &&
+        other.radius == radius &&
+        other.language == language &&
+        other.children == children;
   }
 
   @override

@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:convert';
+part of huawei_site;
 
 class DetailSearchRequest {
   String siteId;
@@ -28,42 +28,53 @@ class DetailSearchRequest {
   });
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'siteId': siteId,
       'language': language,
       'children': children,
     };
   }
 
-  factory DetailSearchRequest.fromMap(Map<String, dynamic> map) {
+  factory DetailSearchRequest.fromMap(Map<dynamic, dynamic> map) {
+    final String? siteId = map['siteId'];
+    if (siteId == null) {
+      throw ('A siteId must be provided.');
+    }
     return DetailSearchRequest(
-      siteId: map['siteId'] == null
-          ? throw ("A siteId must be provided.")
-          : map['siteId'],
-      language: map['language'] == null ? null : map['language'],
-      children: map['children'] == null ? null : map['children'],
+      siteId: siteId,
+      language: map['language'],
+      children: map['children'],
     );
   }
 
-  String toJson() => json.encode(toMap());
+  String toJson() {
+    return json.encode(toMap());
+  }
 
-  factory DetailSearchRequest.fromJson(String source) =>
-      DetailSearchRequest.fromMap(json.decode(source));
-
-  @override
-  String toString() =>
-      'DetailSearchRequest(siteId: $siteId, language: $language, children: $children)';
-
-  @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-
-    return o is DetailSearchRequest &&
-        o.siteId == siteId &&
-        o.language == language &&
-        o.children == children;
+  factory DetailSearchRequest.fromJson(String source) {
+    return DetailSearchRequest.fromMap(json.decode(source));
   }
 
   @override
-  int get hashCode => siteId.hashCode ^ language.hashCode ^ children.hashCode;
+  String toString() {
+    return '$DetailSearchRequest('
+        'siteId: $siteId, '
+        'language: $language, '
+        'children: $children)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is DetailSearchRequest &&
+        other.siteId == siteId &&
+        other.language == language &&
+        other.children == children;
+  }
+
+  @override
+  int get hashCode {
+    return siteId.hashCode ^ language.hashCode ^ children.hashCode;
+  }
 }

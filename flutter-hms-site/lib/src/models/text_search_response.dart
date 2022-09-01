@@ -14,11 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
-
-import 'site.dart';
+part of huawei_site;
 
 class TextSearchResponse {
   int? totalCount;
@@ -30,39 +26,47 @@ class TextSearchResponse {
   });
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'totalCount': totalCount,
-      'sites': sites?.map((x) => x?.toMap()).toList(),
+      'sites': sites?.map((Site? x) => x?.toMap()).toList(),
     };
   }
 
-  factory TextSearchResponse.fromMap(Map<String, dynamic> map) {
+  factory TextSearchResponse.fromMap(Map<dynamic, dynamic> map) {
     return TextSearchResponse(
-      totalCount: map["totalCount"] == null ? null : map["totalCount"],
-      sites: map["sites"] == null
-          ? null
-          : List<Site>.from(map["sites"].map((x) => Site.fromMap(x))),
+      totalCount: map['totalCount'],
+      sites: map['sites'] != null
+          ? List<Site>.from(map['sites'].map((dynamic x) => Site.fromMap(x)))
+          : null,
     );
   }
 
-  String toJson() => json.encode(toMap());
+  String toJson() {
+    return json.encode(toMap());
+  }
 
-  factory TextSearchResponse.fromJson(String source) =>
-      TextSearchResponse.fromMap(json.decode(source));
-
-  @override
-  String toString() =>
-      'TextSearchResponse(totalCount: $totalCount, sites: $sites)';
-
-  @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-
-    return o is TextSearchResponse &&
-        o.totalCount == totalCount &&
-        listEquals(o.sites, sites);
+  factory TextSearchResponse.fromJson(String source) {
+    return TextSearchResponse.fromMap(json.decode(source));
   }
 
   @override
-  int get hashCode => totalCount.hashCode ^ sites.hashCode;
+  String toString() {
+    return '$TextSearchResponse('
+        'totalCount: $totalCount, '
+        'sites: $sites)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is TextSearchResponse &&
+        other.totalCount == totalCount &&
+        listEquals(other.sites, sites);
+  }
+
+  @override
+  int get hashCode {
+    return totalCount.hashCode ^ sites.hashCode;
+  }
 }

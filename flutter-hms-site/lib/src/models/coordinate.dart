@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:convert';
+part of huawei_site;
 
 class Coordinate {
   double? lat;
@@ -26,34 +26,43 @@ class Coordinate {
   });
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'lat': lat,
       'lng': lng,
     };
   }
 
-  factory Coordinate.fromMap(Map<String, dynamic> map) {
+  factory Coordinate.fromMap(Map<dynamic, dynamic> map) {
     return Coordinate(
-      lat: map["lat"] == null ? null : map["lat"].toDouble(),
-      lng: map["lng"] == null ? null : map["lng"].toDouble(),
+      lat: map['lat']?.toDouble(),
+      lng: map['lng']?.toDouble(),
     );
   }
 
-  String toJson() => json.encode(toMap());
+  String toJson() {
+    return json.encode(toMap());
+  }
 
-  factory Coordinate.fromJson(String source) =>
-      Coordinate.fromMap(json.decode(source));
-
-  @override
-  String toString() => 'Coordinate(lat: $lat, lng: $lng)';
-
-  @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-
-    return o is Coordinate && o.lat == lat && o.lng == lng;
+  factory Coordinate.fromJson(String source) {
+    return Coordinate.fromMap(json.decode(source));
   }
 
   @override
-  int get hashCode => lat.hashCode ^ lng.hashCode;
+  String toString() {
+    return '$Coordinate('
+        'lat: $lat, '
+        'lng: $lng)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Coordinate && other.lat == lat && other.lng == lng;
+  }
+
+  @override
+  int get hashCode {
+    return lat.hashCode ^ lng.hashCode;
+  }
 }

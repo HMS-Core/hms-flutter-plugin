@@ -14,11 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
-
-import 'coordinate.dart';
+part of huawei_site;
 
 class ChildrenNode {
   String? siteId;
@@ -39,6 +35,26 @@ class ChildrenNode {
     this.depAndArr,
   });
 
+  factory ChildrenNode.fromMap(Map<dynamic, dynamic> map) {
+    return ChildrenNode(
+      siteId: map['siteId'],
+      name: map['name'],
+      formatAddress: map['formatAddress'],
+      location: map['location'] != null
+          ? Coordinate.fromMap(
+              map['location'],
+            )
+          : null,
+      hwPoiTypes: List<String>.from(
+        map['hwPoiTypes']?.map(
+          (dynamic x) => x?.toString,
+        ),
+      ),
+      domeAndInt: map['domeAndInt'],
+      depAndArr: map['depAndArr'],
+    );
+  }
+
   void resetChildrenInfo() {
     name = null;
     formatAddress = null;
@@ -49,52 +65,49 @@ class ChildrenNode {
   }
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'siteId': siteId,
       'name': name,
       'formatAddress': formatAddress,
       'location': location?.toMap(),
-      'hwPoiTypes': hwPoiTypes?.map((t) => t.toString()).toList(),
+      'hwPoiTypes': hwPoiTypes?.map((String t) => t.toString()).toList(),
       'domeAndInt': domeAndInt,
       'depAndArr': depAndArr,
     };
   }
 
-  factory ChildrenNode.fromMap(Map<String, dynamic> map) {
-    return ChildrenNode(
-      siteId: map["siteId"] == null ? null : map["siteId"],
-      name: map["name"] == null ? null : map["name"],
-      formatAddress: map["formatAddress"] == null ? null : map["formatAddress"],
-      location:
-          map["location"] == null ? null : Coordinate.fromMap(map["location"]),
-      hwPoiTypes: List<String>.from(map['hwPoiTypes']?.map((x) => x?.toString)),
-      domeAndInt: map["domeAndInt"] == null ? null : map["domeAndInt"],
-      depAndArr: map["depAndArr"] == null ? null : map["depAndArr"],
-    );
+  String toJson() {
+    return json.encode(toMap());
   }
 
-  String toJson() => json.encode(toMap());
-
-  factory ChildrenNode.fromJson(String source) =>
-      ChildrenNode.fromMap(json.decode(source));
+  factory ChildrenNode.fromJson(String source) {
+    return ChildrenNode.fromMap(json.decode(source));
+  }
 
   @override
   String toString() {
-    return 'ChildrenNode(siteId: $siteId, name: $name, formatAddress: $formatAddress, location: $location, hwPoiTypes: $hwPoiTypes, domeAndInt: $domeAndInt, depAndArr: $depAndArr)';
+    return '$ChildrenNode('
+        'siteId: $siteId, '
+        'name: $name, '
+        'formatAddress: $formatAddress, '
+        'location: $location, '
+        'hwPoiTypes: $hwPoiTypes, '
+        'domeAndInt: $domeAndInt, '
+        'depAndArr: $depAndArr)';
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
 
-    return o is ChildrenNode &&
-        o.siteId == siteId &&
-        o.name == name &&
-        o.formatAddress == formatAddress &&
-        o.location == location &&
-        listEquals(o.hwPoiTypes, hwPoiTypes) &&
-        o.domeAndInt == domeAndInt &&
-        o.depAndArr == depAndArr;
+    return other is ChildrenNode &&
+        other.siteId == siteId &&
+        other.name == name &&
+        other.formatAddress == formatAddress &&
+        other.location == location &&
+        listEquals(other.hwPoiTypes, hwPoiTypes) &&
+        other.domeAndInt == domeAndInt &&
+        other.depAndArr == depAndArr;
   }
 
   @override

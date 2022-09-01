@@ -1,3 +1,8 @@
+## 6.4.0+304
+
+- Optimized the internal memory.
+- Modified the internal structure of the plugin. Please use import 'package:huawei_site/huawei_site.dart'; not to get any errors.
+
 ## 6.0.1+304
 
 - Deleted the capability of prompting users to install HMS Core (APK).

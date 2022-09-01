@@ -14,9 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:convert';
-
-import 'site.dart';
+part of huawei_site;
 
 class DetailSearchResponse {
   Site? site;
@@ -26,32 +24,44 @@ class DetailSearchResponse {
   });
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'site': site?.toMap(),
     };
   }
 
-  factory DetailSearchResponse.fromMap(Map<String, dynamic> map) {
+  factory DetailSearchResponse.fromMap(Map<dynamic, dynamic> map) {
     return DetailSearchResponse(
-      site: map["site"] == null ? null : Site.fromMap(map["site"]),
+      site: map['site'] != null
+          ? Site.fromMap(
+              map['site'],
+            )
+          : null,
     );
   }
 
-  String toJson() => json.encode(toMap());
+  String toJson() {
+    return json.encode(toMap());
+  }
 
-  factory DetailSearchResponse.fromJson(String source) =>
-      DetailSearchResponse.fromMap(json.decode(source));
-
-  @override
-  String toString() => 'DetailSearchResponse(site: $site)';
-
-  @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-
-    return o is DetailSearchResponse && o.site == site;
+  factory DetailSearchResponse.fromJson(String source) {
+    return DetailSearchResponse.fromMap(json.decode(source));
   }
 
   @override
-  int get hashCode => site.hashCode;
+  String toString() {
+    return '$DetailSearchResponse('
+        'site: $site)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is DetailSearchResponse && other.site == site;
+  }
+
+  @override
+  int get hashCode {
+    return site.hashCode;
+  }
 }

@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:convert';
+part of huawei_site;
 
 class SearchStatus {
   String? errorCode;
@@ -26,37 +26,45 @@ class SearchStatus {
   });
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'errorCode': errorCode,
       'errorMessage': errorMessage,
     };
   }
 
-  factory SearchStatus.fromMap(Map<String, dynamic> map) {
+  factory SearchStatus.fromMap(Map<dynamic, dynamic> map) {
     return SearchStatus(
-      errorCode: map['errorCode'] == null ? null : map['errorCode'],
-      errorMessage: map['errorMessage'] == null ? null : map['errorMessage'],
+      errorCode: map['errorCode'],
+      errorMessage: map['errorMessage'],
     );
   }
 
-  String toJson() => json.encode(toMap());
+  String toJson() {
+    return json.encode(toMap());
+  }
 
-  factory SearchStatus.fromJson(String source) =>
-      SearchStatus.fromMap(json.decode(source));
-
-  @override
-  String toString() =>
-      'SearchStatus(errorCode: $errorCode, errorMessage: $errorMessage)';
-
-  @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-
-    return o is SearchStatus &&
-        o.errorCode == errorCode &&
-        o.errorMessage == errorMessage;
+  factory SearchStatus.fromJson(String source) {
+    return SearchStatus.fromMap(json.decode(source));
   }
 
   @override
-  int get hashCode => errorCode.hashCode ^ errorMessage.hashCode;
+  String toString() {
+    return '$SearchStatus('
+        'errorCode: $errorCode, '
+        'errorMessage: $errorMessage)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is SearchStatus &&
+        other.errorCode == errorCode &&
+        other.errorMessage == errorMessage;
+  }
+
+  @override
+  int get hashCode {
+    return errorCode.hashCode ^ errorMessage.hashCode;
+  }
 }
