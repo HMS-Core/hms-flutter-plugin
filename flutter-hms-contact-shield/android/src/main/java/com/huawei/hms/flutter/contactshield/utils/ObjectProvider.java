@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -62,8 +62,12 @@ public final class ObjectProvider {
     }
 
     public static ContactShieldSetting getContactShieldSetting(final MethodCall call) {
-        final int incubationPeriod = call.arguments();
-        return new ContactShieldSetting.Builder().setIncubationPeriod(incubationPeriod).build();
+        final ContactShieldSetting.Builder builder = new ContactShieldSetting.Builder();
+        final Integer incubationPeriod = call.argument("incubationPeriod");
+        if (incubationPeriod != null) {
+            builder.setIncubationPeriod(incubationPeriod);
+        }
+        return builder.build();
     }
 
     public static SharedKeysDataMapping getSharedKeysDataMapping(final MethodCall call) {

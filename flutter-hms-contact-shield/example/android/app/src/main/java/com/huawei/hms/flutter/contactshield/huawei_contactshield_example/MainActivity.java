@@ -14,15 +14,9 @@
     limitations under the License.
 */
 
-package com.huawei.hms.flutter.contactshield.constants;
+package com.huawei.hms.flutter.contactshield.huawei_contactshield_example;
 
-public final class RequestCode {
-    public static final int START_CONTACT_SHIELD_CB = 1;
-    public static final int PUT_SHARED_KEY_FILES_CB = 2;
-    public static final int PUT_SHARED_KEY_FILES_CB_WITH_PROVIDER = 3;
-    public static final int PUT_SHARED_KEY_FILES_CB_WITH_KEYS = 4;
-    public static final int PUT_SHARED_KEY_FILES_CB_PROVIDER_KEYS = 5;
+import io.flutter.embedding.android.FlutterActivity;
 
-    private RequestCode() {
-    }
+public class MainActivity extends FlutterActivity {
 }

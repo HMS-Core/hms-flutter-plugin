@@ -1,9 +1,9 @@
-gradle-wrapper.jar
 *.iml
 .gradle
 /local.properties
-/.idea
-/.idea
+/.idea/workspace.xml
+/.idea/libraries
 .DS_Store
 /build
 /captures
+.cxx

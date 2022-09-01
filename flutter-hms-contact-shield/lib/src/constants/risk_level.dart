@@ -14,15 +14,17 @@
     limitations under the License.
 */
 
-package com.huawei.hms.flutter.contactshield.constants;
+part of huawei_contactshield;
 
-public final class RequestCode {
-    public static final int START_CONTACT_SHIELD_CB = 1;
-    public static final int PUT_SHARED_KEY_FILES_CB = 2;
-    public static final int PUT_SHARED_KEY_FILES_CB_WITH_PROVIDER = 3;
-    public static final int PUT_SHARED_KEY_FILES_CB_WITH_KEYS = 4;
-    public static final int PUT_SHARED_KEY_FILES_CB_PROVIDER_KEYS = 5;
-
-    private RequestCode() {
-    }
+@immutable
+abstract class RiskLevel {
+  static const int RISK_LEVEL_INVALID = 0;
+  static const int RISK_LEVEL_LOWEST = 1;
+  static const int RISK_LEVEL_LOW = 2;
+  static const int RISK_LEVEL_MEDIUM_LOW = 3;
+  static const int RISK_LEVEL_MEDIUM = 4;
+  static const int RISK_LEVEL_MEDIUM_HIGH = 5;
+  static const int RISK_LEVEL_HIGH = 6;
+  static const int RISK_LEVEL_EXT_HIGH = 7;
+  static const int RISK_LEVEL_HIGHEST = 8;
 }

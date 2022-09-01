@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,21 +16,27 @@
 
 library huawei_contactshield;
 
-export 'constants/calibration_confidence.dart';
-export 'constants/contactshield_status.dart';
-export 'constants/contagiousness.dart';
-export 'constants/risk_level.dart';
-export 'constants/status_code.dart';
-export 'contactshield_callback.dart';
-export 'contactshield_engine.dart';
-export 'models/contact_detail.dart';
-export 'models/contact_sketch.dart';
-export 'models/contact_window.dart';
-export 'models/cs_api_exception.dart';
-export 'models/daily_sketch.dart';
-export 'models/daily_sketch_configuration.dart';
-export 'models/diagnosis_configuration.dart';
-export 'models/periodic_key.dart';
-export 'models/scan_info.dart';
-export 'models/shared_keys_data_mapping.dart';
-export 'models/sketch_data.dart';
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+
+part 'src/constants/calibration_confidence.dart';
+part 'src/constants/contactshield_status.dart';
+part 'src/constants/contagiousness.dart';
+part 'src/constants/risk_level.dart';
+part 'src/constants/status_code.dart';
+part 'src/contactshield_callback.dart';
+part 'src/contactshield_engine.dart';
+part 'src/models/contact_detail.dart';
+part 'src/models/contact_sketch.dart';
+part 'src/models/contact_window.dart';
+part 'src/models/cs_api_exception.dart';
+part 'src/models/daily_sketch.dart';
+part 'src/models/daily_sketch_configuration.dart';
+part 'src/models/diagnosis_configuration.dart';
+part 'src/models/periodic_key.dart';
+part 'src/models/scan_info.dart';
+part 'src/models/shared_keys_data_mapping.dart';
+part 'src/models/sketch_data.dart';
