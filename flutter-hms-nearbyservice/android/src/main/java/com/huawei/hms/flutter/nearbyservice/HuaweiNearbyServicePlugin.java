@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -18,14 +18,12 @@ package com.huawei.hms.flutter.nearbyservice;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.huawei.hms.flutter.nearbyservice.discovery.DiscoveryMethodHandler;
 import com.huawei.hms.flutter.nearbyservice.logger.HMSLogger;
 import com.huawei.hms.flutter.nearbyservice.message.MessageMethodHandler;
-import com.huawei.hms.flutter.nearbyservice.permission.PermissionMethodHandler;
 import com.huawei.hms.flutter.nearbyservice.transfer.TransferMethodHandler;
 import com.huawei.hms.flutter.nearbyservice.utils.FromMap;
 import com.huawei.hms.flutter.nearbyservice.utils.HmsHelper;
@@ -46,63 +44,66 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 import java.util.Map;
 
-/**
- * HMS Nearby Plugin
- *
- * @author Huawei Technologies
- * @since (6.1.0 + 300)
- */
 public class HuaweiNearbyServicePlugin implements FlutterPlugin, MethodCallHandler, ActivityAware {
-    private static final String TAG = "HMSNearbyServicePlugin";
-
     private Context context;
-
     private FlutterPluginBinding flutterPluginBinding;
 
     private MethodChannel channel;
-
     private MethodChannel discoveryMethodChannel;
-
     private EventChannel discoveryEventChannelConnect;
-
     private EventChannel discoveryEventChannelScan;
-
     private MethodChannel transferMethodChannel;
-
     private EventChannel transferEventChannel;
-
     private MethodChannel wifiMethodChannel;
-
     private EventChannel wifiEventChannel;
-
     private MethodChannel messageMethodChannel;
-
     private EventChannel messageEventChannel;
-
-    private MethodChannel permissionMethodChannel;
-
     private DiscoveryMethodHandler discoveryMethodHandler;
-
     private TransferMethodHandler transferMethodHandler;
-
     private WifiShareMethodHandler wifiMethodHandler;
-
     private MessageMethodHandler messageMethodHandler;
 
-    private PermissionMethodHandler permissionMethodHandler;
+    @Override
+    public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
+        this.flutterPluginBinding = flutterPluginBinding;
+    }
 
-    public static void registerWith(Registrar registrar) {
-        final HuaweiNearbyServicePlugin instance = new HuaweiNearbyServicePlugin();
-        instance.onAttachedToEngine(registrar.messenger(), registrar.activity());
+    @Override
+    public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
+        context = binding.getActivity().getApplicationContext();
+        if (flutterPluginBinding != null) {
+            initChannels(flutterPluginBinding.getBinaryMessenger());
+            initHandlers(binding.getActivity());
+            setHandlers();
+        }
+    }
+
+    @Override
+    public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
+        onAttachedToActivity(binding);
+    }
+
+    @Override
+    public void onDetachedFromActivityForConfigChanges() {
+        onDetachedFromActivity();
+    }
+
+    @Override
+    public void onDetachedFromActivity() {
+        resetHandlers();
+        removeHandlers();
+    }
+
+    @Override
+    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+        removeChannels();
     }
 
     private void initChannels(final BinaryMessenger messenger) {
         channel = new MethodChannel(messenger, Channels.NEARBY_METHOD_CHANNEL);
-        permissionMethodChannel = new MethodChannel(messenger, Channels.PERMISSION_METHOD_CHANNEL);
         discoveryMethodChannel = new MethodChannel(messenger, Channels.DISCOVERY_METHOD_CHANNEL);
         discoveryEventChannelConnect = new EventChannel(messenger, Channels.DISCOVERY_EVENT_CHANNEL_CONNECT);
         discoveryEventChannelScan = new EventChannel(messenger, Channels.DISCOVERY_EVENT_CHANNEL_SCAN);
@@ -115,9 +116,7 @@ public class HuaweiNearbyServicePlugin implements FlutterPlugin, MethodCallHandl
     }
 
     private void initHandlers(Activity activity) {
-        permissionMethodHandler = new PermissionMethodHandler(activity);
-        discoveryMethodHandler = new DiscoveryMethodHandler(discoveryEventChannelConnect, discoveryEventChannelScan,
-            transferEventChannel, activity);
+        discoveryMethodHandler = new DiscoveryMethodHandler(discoveryEventChannelConnect, discoveryEventChannelScan, transferEventChannel, activity);
         transferMethodHandler = new TransferMethodHandler(activity);
         wifiMethodHandler = new WifiShareMethodHandler(wifiEventChannel, activity);
         messageMethodHandler = new MessageMethodHandler(messageMethodChannel, messageEventChannel, activity);
@@ -125,7 +124,6 @@ public class HuaweiNearbyServicePlugin implements FlutterPlugin, MethodCallHandl
 
     private void setHandlers() {
         channel.setMethodCallHandler(this);
-        permissionMethodChannel.setMethodCallHandler(permissionMethodHandler);
         discoveryMethodChannel.setMethodCallHandler(discoveryMethodHandler);
         transferMethodChannel.setMethodCallHandler(transferMethodHandler);
         wifiMethodChannel.setMethodCallHandler(wifiMethodHandler);
@@ -134,14 +132,12 @@ public class HuaweiNearbyServicePlugin implements FlutterPlugin, MethodCallHandl
 
     private void resetHandlers() {
         channel.setMethodCallHandler(null);
-        permissionMethodChannel.setMethodCallHandler(null);
         discoveryMethodChannel.setMethodCallHandler(null);
         transferMethodChannel.setMethodCallHandler(null);
         messageMethodChannel.setMethodCallHandler(null);
     }
 
     private void removeHandlers() {
-        permissionMethodHandler = null;
         discoveryMethodHandler = null;
         transferMethodHandler = null;
         wifiMethodHandler = null;
@@ -150,7 +146,6 @@ public class HuaweiNearbyServicePlugin implements FlutterPlugin, MethodCallHandl
 
     private void removeChannels() {
         channel = null;
-        permissionMethodChannel = null;
         discoveryMethodChannel = null;
         discoveryEventChannelConnect = null;
         discoveryEventChannelScan = null;
@@ -163,37 +158,36 @@ public class HuaweiNearbyServicePlugin implements FlutterPlugin, MethodCallHandl
     }
 
     @Override
-    public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-        this.flutterPluginBinding = flutterPluginBinding;
-    }
-
-    private void onAttachedToEngine(BinaryMessenger messenger, Activity activity) {
-        initChannels(messenger);
-        initHandlers(activity);
-        setHandlers();
-    }
-
-    @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
         HMSLogger.getInstance(context).startMethodExecutionTimer(call.method);
         switch (call.method) {
             case "getVersion":
-                getVersion(result);
+                final String version = Nearby.getVersion();
+                result.success(version);
                 break;
             case "setApiKey":
-                setApiKey(call, result);
+                final String key = FromMap.toString("apiKey", call.argument("apiKey"), false);
+                NearbyApiContext.getInstance().setApiKey(key);
+                result.success(true);
                 break;
             case "getApiKey":
-                getApiKey(result);
+                final String apiKey = NearbyApiContext.getInstance().getApiKey();
+                result.success(apiKey);
                 break;
             case "equalsMessage":
-                equalsMessage(call, result);
+                final Map<String, Object> objectMap = ToMap.fromObject(call.argument("object"));
+                final Map<String, Object> otherMap = ToMap.fromObject(call.argument("other"));
+                final Message object = HmsHelper.createMessage(ToMap.fromObject(objectMap));
+                final Message other = HmsHelper.createMessage(ToMap.fromObject(otherMap));
+                result.success(object != null && object.equals(other));
                 break;
             case "enableLogger":
-                enableLogger(result);
+                HMSLogger.getInstance(context).enableLogger();
+                result.success(true);
                 break;
             case "disableLogger":
-                disableLogger(result);
+                HMSLogger.getInstance(context).disableLogger();
+                result.success(true);
                 break;
             default:
                 HMSLogger.getInstance(context).sendSingleEvent(call.method, ErrorCodes.NOT_FOUND);
@@ -201,71 +195,5 @@ public class HuaweiNearbyServicePlugin implements FlutterPlugin, MethodCallHandl
                 return;
         }
         HMSLogger.getInstance(context).sendSingleEvent(call.method);
-    }
-
-    void getVersion(Result result) {
-        result.success(Nearby.getVersion());
-    }
-
-    void setApiKey(MethodCall call, Result result) {
-        Log.i(TAG, "setApiKey");
-        String key = FromMap.toString("apiKey", call.argument("apiKey"), false);
-        NearbyApiContext.getInstance().setApiKey(key);
-        result.success(null);
-        Log.i(TAG, "setApiKey call success");
-    }
-
-    void getApiKey(Result result) {
-        Log.i(TAG, "getApiKey");
-        result.success(NearbyApiContext.getInstance().getApiKey());
-        Log.i(TAG, "getApiKey call success");
-    }
-
-    void equalsMessage(MethodCall call, Result result) {
-        Map<String, Object> objectMap = ToMap.fromObject(call.argument("object"));
-        Map<String, Object> otherMap = ToMap.fromObject(call.argument("other"));
-        Message object = HmsHelper.createMessage(ToMap.fromObject(objectMap));
-        Message other = HmsHelper.createMessage(ToMap.fromObject(otherMap));
-        result.success(object != null && object.equals(other));
-    }
-
-    void enableLogger(Result result) {
-        HMSLogger.getInstance(context).enableLogger();
-        result.success(null);
-    }
-
-    void disableLogger(Result result) {
-        HMSLogger.getInstance(context).disableLogger();
-        result.success(null);
-    }
-
-    @Override
-    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-        removeChannels();
-    }
-
-    @Override
-    public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
-        context = binding.getActivity().getApplicationContext();
-        if (flutterPluginBinding != null) {
-            onAttachedToEngine(flutterPluginBinding.getBinaryMessenger(), binding.getActivity());
-        }
-        binding.addRequestPermissionsResultListener(permissionMethodHandler);
-    }
-
-    @Override
-    public void onDetachedFromActivityForConfigChanges() {
-        onDetachedFromActivity();
-    }
-
-    @Override
-    public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
-        onAttachedToActivity(binding);
-    }
-
-    @Override
-    public void onDetachedFromActivity() {
-        resetHandlers();
-        removeHandlers();
     }
 }

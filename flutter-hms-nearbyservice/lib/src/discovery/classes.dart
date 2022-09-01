@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,37 +14,56 @@
     limitations under the License.
 */
 
+part of huawei_nearbyservice;
+
 class BleSignal {
-  static final int bleUnknownTxPower = 0x80;
+  static const int bleUnknownTxPower = 0x80;
   final int? rssi;
   final int? txPower;
 
-  BleSignal({this.rssi, this.txPower});
+  const BleSignal({
+    this.rssi,
+    this.txPower,
+  });
 
-  factory BleSignal.fromMap(Map<dynamic, dynamic> map) =>
-      BleSignal(rssi: map['rssi'], txPower: map['txPower']);
+  factory BleSignal.fromMap(Map<dynamic, dynamic> map) {
+    return BleSignal(
+      rssi: map['rssi'],
+      txPower: map['txPower'],
+    );
+  }
 
-  Map<String, dynamic> toMap() => {
-        'rssi': rssi ?? null,
-        'txPower': txPower,
-      };
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'rssi': rssi,
+      'txPower': txPower,
+    };
+  }
 }
 
 class BroadcastOption {
   final DiscoveryPolicy? policy;
 
-  BroadcastOption(this.policy);
+  const BroadcastOption(
+    this.policy,
+  );
 
-  bool equals(object) =>
-      identical(this, object) ||
-      (object is BroadcastOption && policy == object.policy);
+  bool equals(dynamic object) {
+    return identical(this, object) ||
+        (object is BroadcastOption && policy == object.policy);
+  }
 
-  factory BroadcastOption.fromMap(Map<dynamic, dynamic> map) =>
-      BroadcastOption(map['policy']);
+  factory BroadcastOption.fromMap(Map<dynamic, dynamic> map) {
+    return BroadcastOption(
+      map['policy'],
+    );
+  }
 
-  Map<String, dynamic> toMap() => {
-        'policy': policy?.toMap(),
-      };
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'policy': policy?.toMap(),
+    };
+  }
 }
 
 class ConnectInfo {
@@ -52,35 +71,57 @@ class ConnectInfo {
   final String? authCode;
   final bool? isRemoteConnect;
 
-  ConnectInfo({this.endpointName, this.authCode, this.isRemoteConnect});
+  ConnectInfo({
+    this.endpointName,
+    this.authCode,
+    this.isRemoteConnect,
+  });
 
-  factory ConnectInfo.fromMap(Map<dynamic, dynamic> map) => ConnectInfo(
-        authCode: map['authCode'],
-        endpointName: map['endpointName'],
-        isRemoteConnect: map['isRemoteConnect'],
-      );
+  factory ConnectInfo.fromMap(Map<dynamic, dynamic> map) {
+    return ConnectInfo(
+      authCode: map['authCode'],
+      endpointName: map['endpointName'],
+      isRemoteConnect: map['isRemoteConnect'],
+    );
+  }
 
-  Map<String, dynamic> toMap() => {
-        'authCode': authCode,
-        'endpointName': endpointName,
-        'isRemoteConnect': isRemoteConnect,
-      };
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'authCode': authCode,
+      'endpointName': endpointName,
+      'isRemoteConnect': isRemoteConnect,
+    };
+  }
 }
 
 class ConnectResult {
   final int? statusCode;
   ChannelPolicy _channelPolicy;
-  ConnectResult(this.statusCode, this._channelPolicy);
 
-  factory ConnectResult.fromMap(Map<dynamic, dynamic> map) =>
-      ConnectResult(map['statusCode'], ChannelPolicy(map['getPolicy']));
+  ConnectResult(
+    this.statusCode,
+    this._channelPolicy,
+  );
+
+  factory ConnectResult.fromMap(Map<dynamic, dynamic> map) {
+    return ConnectResult(
+      map['statusCode'],
+      ChannelPolicy(
+        map['getPolicy'],
+      ),
+    );
+  }
+
   ChannelPolicy getPolicy() {
     return _channelPolicy;
   }
-  Map<String, dynamic> toMap() => {
-        'statusCode': statusCode,
-        'getPolicy': _channelPolicy.toMap()
-      };
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'statusCode': statusCode,
+      'getPolicy': _channelPolicy.toMap(),
+    };
+  }
 }
 
 class DiscoveryPolicy {
@@ -92,35 +133,36 @@ class DiscoveryPolicy {
   static const DiscoveryPolicy p2p = DiscoveryPolicy(2);
   static const DiscoveryPolicy star = DiscoveryPolicy(3);
 
-  bool equals(object) =>
-      identical(this, object) ||
-      (object is DiscoveryPolicy && _topology == object._topology);
+  bool equals(dynamic object) {
+    return identical(this, object) ||
+        (object is DiscoveryPolicy && _topology == object._topology);
+  }
 
   @override
   String toString() {
     String desc;
     switch (_topology) {
       case 1:
-        desc = "POLICY_MESH";
+        desc = 'POLICY_MESH';
         break;
       case 2:
-        desc = "POLICY_P2P";
+        desc = 'POLICY_P2P';
         break;
       case 3:
-        desc = "POLICY_STAR";
+        desc = 'POLICY_STAR';
         break;
       default:
-        desc = "POLICY_UNKNOWN";
+        desc = 'POLICY_UNKNOWN';
         break;
     }
     return desc;
   }
 
-  Map<String, dynamic> toMap() => {'topology': _topology};
+  Map<String, dynamic> toMap() => <String, dynamic>{'topology': _topology};
 }
 
 class Distance {
-  static final int precisionLow = 1;
+  static const int precisionLow = 1;
   final int? precision;
   final double? meters;
 
@@ -130,7 +172,7 @@ class Distance {
   factory Distance.fromMap(Map<dynamic, dynamic> map) =>
       Distance(precision: map['precision'], meters: map['meters']);
 
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toMap() => <String, dynamic>{
         'precision': precision,
         'meters': meters,
       };
@@ -145,21 +187,24 @@ class ScanEndpointInfo {
   factory ScanEndpointInfo.fromMap(Map<dynamic, dynamic> map) =>
       ScanEndpointInfo(serviceId: map['serviceId'], name: map['name']);
 
-  Map<String, dynamic> toMap() => {'serviceId': serviceId, 'name': name};
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'serviceId': serviceId,
+        'name': name,
+      };
 }
 
 class ScanOption {
   final DiscoveryPolicy? policy;
   ScanOption(this.policy);
 
-  bool equals(object) =>
+  bool equals(dynamic object) =>
       identical(this, object) ||
       (object is ScanOption && policy!.equals(object.policy));
 
   factory ScanOption.fromMap(Map<dynamic, dynamic> map) =>
       ScanOption(map['policy']);
 
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toMap() => <String, dynamic>{
         'policy': policy?.toMap(),
       };
 }
@@ -173,45 +218,56 @@ class ChannelPolicy {
   static const ChannelPolicy highThroughput = ChannelPolicy(2);
   static const ChannelPolicy instance = ChannelPolicy(3);
 
-  bool equals(object) =>
-      identical(this, object) ||
-          (object is ChannelPolicy && _policy == object._policy);
+  bool equals(dynamic object) {
+    return identical(this, object) ||
+        (object is ChannelPolicy && _policy == object._policy);
+  }
 
   @override
   String toString() {
     String desc;
     switch (_policy) {
       case 1:
-        desc = "CHANNEL_AUTO";
+        desc = 'CHANNEL_AUTO';
         break;
       case 2:
-        desc = "CHANNEL_HIGH_THROUGHPUT";
+        desc = 'CHANNEL_HIGH_THROUGHPUT';
         break;
       case 3:
-        desc = "CHANNEL_INSTANCE";
+        desc = 'CHANNEL_INSTANCE';
         break;
       default:
-        desc = "POLICY_UNKNOWN";
+        desc = 'POLICY_UNKNOWN';
         break;
     }
     return desc;
   }
 
-  Map<String, dynamic> toMap() => {'policy': _policy};
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'policy': _policy,
+    };
+  }
 }
 
 class ConnectOption {
   final ChannelPolicy? policy;
   ConnectOption(this.policy);
 
-  bool equals(object) =>
-      identical(this, object) ||
-          (object is ConnectOption && policy!.equals(object.policy));
+  bool equals(dynamic object) {
+    return identical(this, object) ||
+        (object is ConnectOption && policy!.equals(object.policy));
+  }
 
-  factory ConnectOption.fromMap(Map<dynamic, dynamic> map) =>
-      ConnectOption(map['policyMap']);
+  factory ConnectOption.fromMap(Map<dynamic, dynamic> map) {
+    return ConnectOption(
+      map['policyMap'],
+    );
+  }
 
-  Map<String, dynamic> toMap() => {
-    'policyMap': policy?.toMap(),
-  };
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'policyMap': policy?.toMap(),
+    };
+  }
 }

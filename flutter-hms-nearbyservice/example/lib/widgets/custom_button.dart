@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+
 import 'package:flutter/material.dart';
 import 'package:huawei_nearbyservice_example/utils/constants.dart';
 
@@ -22,26 +23,28 @@ class CustomButton extends StatelessWidget {
   final double width;
   final double height;
 
-  CustomButton(
-      {required this.text,
-      required this.onPressed,
-      this.width = 90,
-      this.height = 40});
+  const CustomButton({
+    required this.text,
+    required this.onPressed,
+    Key? key,
+    this.width = 90,
+    this.height = 40,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      child: Container(
+      onPressed: onPressed,
+      child: SizedBox(
+        width: width,
+        height: height,
         child: Center(
           child: Text(
             text,
             style: Styles.controlButtonStyle,
           ),
         ),
-        width: width,
-        height: height,
       ),
-      onPressed: onPressed,
     );
   }
 }

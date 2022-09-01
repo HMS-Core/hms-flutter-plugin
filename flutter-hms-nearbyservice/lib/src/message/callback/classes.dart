@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,12 +14,11 @@
     limitations under the License.
 */
 
-import 'package:huawei_nearbyservice/huawei_nearbyservice.dart';
-import 'package:huawei_nearbyservice/src/message/classes/message.dart';
+part of huawei_nearbyservice;
 
 class MessageGetCallback {
   static final Map<int, MessageGetCallback> getCbs =
-      Map<int, MessageGetCallback>();
+      <int, MessageGetCallback>{};
   int get id => hashCode;
 
   OnTimeout? onTimeout;
@@ -31,7 +30,7 @@ class MessageGetCallback {
 
 class MessagePutCallback {
   static final Map<int, MessagePutCallback> putCbs =
-      Map<int, MessagePutCallback>();
+      <int, MessagePutCallback>{};
   int get id => hashCode;
 
   OnTimeout? onTimeout;
@@ -43,7 +42,7 @@ class MessagePutCallback {
 
 class MessageStatusCallback {
   static final Map<int, MessageStatusCallback> statusCbs =
-      Map<int, MessageStatusCallback>();
+      <int, MessageStatusCallback>{};
   int get id => hashCode;
 
   OnPermissionChanged? onPermissionChanged;
@@ -55,7 +54,7 @@ class MessageStatusCallback {
 
 class NearbyMessageHandler {
   static final Map<int, NearbyMessageHandler> msgHandlerCbs =
-      Map<int, NearbyMessageHandler>();
+      <int, NearbyMessageHandler>{};
   int get id => hashCode;
 
   OnBleSignalChanged? onBleSignalChanged;
@@ -63,23 +62,24 @@ class NearbyMessageHandler {
   OnFound? onFound;
   OnLost? onLost;
 
-  NearbyMessageHandler(
-      {this.onBleSignalChanged,
-      this.onDistanceChanged,
-      this.onFound,
-      this.onLost}) {
+  NearbyMessageHandler({
+    this.onBleSignalChanged,
+    this.onDistanceChanged,
+    this.onFound,
+    this.onLost,
+  }) {
     msgHandlerCbs[id] = this;
   }
 }
 
 /// GetCallback & PutCallback
-typedef void OnTimeout();
+typedef OnTimeout = void Function();
 
 /// StatusCallback
-typedef void OnPermissionChanged(bool? granted);
+typedef OnPermissionChanged = void Function(bool? granted);
 
 /// MessageHandler
-typedef void OnBleSignalChanged(Message message, BleSignal signal);
-typedef void OnDistanceChanged(Message message, Distance distance);
-typedef void OnFound(Message message);
-typedef void OnLost(Message message);
+typedef OnBleSignalChanged = void Function(Message message, BleSignal signal);
+typedef OnDistanceChanged = void Function(Message message, Distance distance);
+typedef OnFound = void Function(Message message);
+typedef OnLost = void Function(Message message);

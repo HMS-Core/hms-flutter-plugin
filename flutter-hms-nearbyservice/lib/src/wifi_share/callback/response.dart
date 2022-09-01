@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,60 +14,78 @@
     limitations under the License.
 */
 
-import 'package:huawei_nearbyservice/src/discovery/classes.dart';
+part of huawei_nearbyservice;
 
 class WifiOnFoundResponse {
   final String? endpointId;
   final ScanEndpointInfo? scanEndpointInfo;
 
-  WifiOnFoundResponse({this.endpointId, this.scanEndpointInfo});
+  WifiOnFoundResponse({
+    this.endpointId,
+    this.scanEndpointInfo,
+  });
 
-  factory WifiOnFoundResponse.fromMap(Map<dynamic, dynamic> map) =>
-      WifiOnFoundResponse(
-        endpointId: map['endpointId'],
-        scanEndpointInfo: map['scanEndpointInfo'] != null
-            ? ScanEndpointInfo.fromMap(map['scanEndpointInfo'])
-            : null,
-      );
+  factory WifiOnFoundResponse.fromMap(Map<dynamic, dynamic> map) {
+    return WifiOnFoundResponse(
+      endpointId: map['endpointId'],
+      scanEndpointInfo: map['scanEndpointInfo'] != null
+          ? ScanEndpointInfo.fromMap(map['scanEndpointInfo'])
+          : null,
+    );
+  }
 
-  Map<String, dynamic> toMap() => {
-        'endpointId': endpointId,
-        'scanEndpointInfo': scanEndpointInfo?.toMap(),
-      };
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'endpointId': endpointId,
+      'scanEndpointInfo': scanEndpointInfo?.toMap(),
+    };
+  }
 }
 
 class WifiOnFetchAuthCodeResponse {
   final String? endpointId;
   final String? authCode;
 
-  WifiOnFetchAuthCodeResponse({this.endpointId, this.authCode});
+  WifiOnFetchAuthCodeResponse({
+    this.endpointId,
+    this.authCode,
+  });
 
-  factory WifiOnFetchAuthCodeResponse.fromMap(Map<dynamic, dynamic> map) =>
-      WifiOnFetchAuthCodeResponse(
-        endpointId: map['endpointId'],
-        authCode: map['authCode'],
-      );
+  factory WifiOnFetchAuthCodeResponse.fromMap(Map<dynamic, dynamic> map) {
+    return WifiOnFetchAuthCodeResponse(
+      endpointId: map['endpointId'],
+      authCode: map['authCode'],
+    );
+  }
 
-  Map<String, dynamic> toMap() => {
-        'endpointId': endpointId,
-        'authCode': authCode,
-      };
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'endpointId': endpointId,
+      'authCode': authCode,
+    };
+  }
 }
 
 class WifiShareResultResponse {
   final String? endpointId;
   final int? statusCode;
 
-  WifiShareResultResponse({this.endpointId, this.statusCode});
+  WifiShareResultResponse({
+    this.endpointId,
+    this.statusCode,
+  });
 
-  factory WifiShareResultResponse.fromMap(Map<dynamic, dynamic> map) =>
-      WifiShareResultResponse(
-        endpointId: map['endpointId'],
-        statusCode: map['statusCode'],
-      );
+  factory WifiShareResultResponse.fromMap(Map<dynamic, dynamic> map) {
+    return WifiShareResultResponse(
+      endpointId: map['endpointId'],
+      statusCode: map['statusCode'],
+    );
+  }
 
-  Map<String, dynamic> toMap() => {
-        'endpointId': endpointId,
-        'statusCode': statusCode,
-      };
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'endpointId': endpointId,
+      'statusCode': statusCode,
+    };
+  }
 }

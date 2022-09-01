@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,56 +14,67 @@
     limitations under the License.
 */
 
-import 'dart:async';
-
-import 'package:flutter/services.dart';
-import 'package:huawei_nearbyservice/huawei_nearbyservice.dart';
-import 'package:huawei_nearbyservice/src/utils/channels.dart';
+part of huawei_nearbyservice;
 
 class HMSNearby {
   final MethodChannel _channel;
 
-  HMSNearby._(
-    this._channel,
-  );
+  HMSNearby._(this._channel);
 
   static final HMSNearby _instance = HMSNearby._(
-    const MethodChannel(NEARBY_METHOD_CHANNEL),
+    const MethodChannel(_nearbyMethodChannel),
   );
 
-  static Future<String?> getVersion() {
-    return _instance._channel.invokeMethod("getVersion");
+  static Future<String?> getVersion() async {
+    return await _instance._channel.invokeMethod(
+      'getVersion',
+    );
   }
 
-  static Future<bool?> equalsMessage(Message object, Message other) {
+  static Future<bool?> equalsMessage(Message object, Message other) async {
     ArgumentError.checkNotNull(object);
     ArgumentError.checkNotNull(other);
-    return _instance._channel.invokeMethod("equalsMessage",
-        <String, dynamic>{'object': object.toMap(), 'other': other.toMap()});
+    return await _instance._channel.invokeMethod(
+      'equalsMessage',
+      <String, dynamic>{
+        'object': object.toMap(),
+        'other': other.toMap(),
+      },
+    );
   }
 
-  static Future<void> enableLogger() {
-    return _instance._channel.invokeMethod("enableLogger");
+  static Future<void> enableLogger() async {
+    return await _instance._channel.invokeMethod(
+      'enableLogger',
+    );
   }
 
-  static Future<void> disableLogger() {
-    return _instance._channel.invokeMethod("disableLogger");
+  static Future<void> disableLogger() async {
+    return await _instance._channel.invokeMethod(
+      'disableLogger',
+    );
   }
 }
 
 class HMSNearbyApiContext {
-  HMSNearbyApiContext._();
   static final HMSNearbyApiContext _instance = HMSNearbyApiContext._();
   static HMSNearbyApiContext get instance => _instance;
 
+  HMSNearbyApiContext._();
+
   Future<void> setApiKey(String apiKey) async {
-    return HMSNearby._instance._channel
-        .invokeMethod("setApiKey", {"apiKey": apiKey});
+    return await HMSNearby._instance._channel.invokeMethod(
+      'setApiKey',
+      <String, dynamic>{
+        'apiKey': apiKey,
+      },
+    );
   }
 
   Future<String?> getApiKey() async {
-    String? apiKey =
-        await HMSNearby._instance._channel.invokeMethod("getApiKey");
+    final String? apiKey = await HMSNearby._instance._channel.invokeMethod(
+      'getApiKey',
+    );
     return apiKey;
   }
 }

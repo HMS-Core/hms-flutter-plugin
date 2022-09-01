@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,46 +14,51 @@
     limitations under the License.
 */
 
-import 'package:huawei_nearbyservice/src/message/callback/classes.dart';
-import 'package:huawei_nearbyservice/src/message/classes/message_picker.dart';
-import 'package:huawei_nearbyservice/src/message/classes/message_policy.dart';
+part of huawei_nearbyservice;
 
 class MessageGetOption {
   MessagePolicy? policy;
   MessagePicker? messagePicker;
   MessageGetCallback? getCallback;
 
-  MessageGetOption(
-      {MessagePolicy? policy, MessagePicker? messagePicker, this.getCallback}) {
+  MessageGetOption({
+    MessagePolicy? policy,
+    MessagePicker? messagePicker,
+    this.getCallback,
+  }) {
     this.policy = policy ?? MessagePolicyBuilder().build();
     this.messagePicker = messagePicker ?? MessagePicker.includeAll;
   }
 
-  Map<String, dynamic> toMap() => {
-        'policy': policy?.toMap(),
-        'messagePicker': messagePicker?.toMap(),
-        'getCallback': getCallback?.id
-      };
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'policy': policy?.toMap(),
+      'messagePicker': messagePicker?.toMap(),
+      'getCallback': getCallback?.id,
+    };
+  }
 
   @override
-  String toString() =>
-      'GetOption{policy=' +
-      messagePicker.toString() +
-      ', filter=' +
-      policy.toString() +
-      '}';
+  String toString() {
+    return 'GetOption{policy=$messagePicker, filter=$policy}';
+  }
 }
 
 class MessagePutOption {
   MessagePolicy? policy;
   MessagePutCallback? putCallback;
 
-  MessagePutOption({MessagePolicy? policy, this.putCallback}) {
+  MessagePutOption({
+    MessagePolicy? policy,
+    this.putCallback,
+  }) {
     this.policy = policy ?? MessagePolicyBuilder().build();
   }
 
-  Map<String, dynamic> toMap() => {
-        'policy': policy?.toMap(),
-        'putCallback': putCallback?.id,
-      };
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'policy': policy?.toMap(),
+      'putCallback': putCallback?.id,
+    };
+  }
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -13,37 +13,41 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:async';
 
 import 'package:huawei_nearbyservice/huawei_nearbyservice.dart';
 import 'package:huawei_nearbyservice_example/utils/constants.dart';
 import 'package:huawei_nearbyservice_example/widgets/custom_button.dart';
 
 class WifiSharePage extends StatelessWidget {
+  const WifiSharePage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.redAccent,
-        title: Text(
+        title: const Text(
           'Wifi Sharing',
           style: TextStyle(
             color: Colors.white,
           ),
         ),
       ),
-      body: WifiSharePageContent(),
+      body: const WifiSharePageContent(),
     );
   }
 }
 
 class WifiSharePageContent extends StatefulWidget {
+  const WifiSharePageContent({Key? key}) : super(key: key);
+
   @override
-  _WifiSharePageContentState createState() => _WifiSharePageContentState();
+  State<WifiSharePageContent> createState() => _WifiSharePageContentState();
 }
 
 class _WifiSharePageContentState extends State<WifiSharePageContent> {
@@ -86,57 +90,51 @@ class _WifiSharePageContentState extends State<WifiSharePageContent> {
     });
   }
 
-  void _startWifiBroadcast(context) async {
+  void _startWifiBroadcast(BuildContext context) async {
     try {
       await HMSWifiShareEngine.instance.startWifiShare(WifiSharePolicy.set);
-      ScaffoldMessenger.of(context)
-          .showSnackBar(createSnack("Wifi broadcast started."));
+      showSnackBar('Wifi broadcast started.');
     } on PlatformException catch (e) {
       _handleException(e, context);
     }
   }
 
-  void _startWifiScan(context) async {
+  void _startWifiScan(BuildContext context) async {
     try {
       await HMSWifiShareEngine.instance.startWifiShare(WifiSharePolicy.share);
-      ScaffoldMessenger.of(context)
-          .showSnackBar(createSnack("Wifi scan started."));
+      showSnackBar('Wifi scan started.');
     } on PlatformException catch (e) {
       _handleException(e, context);
     }
   }
 
-  void _shareWifiConfig(context) async {
+  void _shareWifiConfig(BuildContext context) async {
     if (_endpointId == null) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(createSnack("No endpoint found!", true));
+      showSnackBar('No endpoint found!', true);
       return;
     }
     try {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(createSnack("Attempting to share wifi config..."));
+      showSnackBar('Attempting to share wifi config...');
       await HMSWifiShareEngine.instance.shareWifiConfig(_endpointId!);
     } on PlatformException catch (e) {
       _handleException(e, context);
     }
   }
 
-  void _stopWifiSharing(context) async {
+  void _stopWifiSharing(BuildContext context) async {
     try {
       await HMSWifiShareEngine.instance.stopWifiShare();
-      ScaffoldMessenger.of(context)
-          .showSnackBar(createSnack("Wifi share stopped."));
+      showSnackBar('Wifi share stopped.');
     } on PlatformException catch (e) {
       _handleException(e, context);
     }
   }
 
-  void _handleException(e, context) async {
-    SnackBar snackBar = createSnack(e.message, true);
+  void _handleException(dynamic e, BuildContext context) async {
     setState(() {
       _logs += e.message + '\n';
     });
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    showSnackBar(e.message, true);
   }
 
   @override
@@ -155,39 +153,39 @@ class _WifiSharePageContentState extends State<WifiSharePageContent> {
   Widget build(BuildContext context) {
     return Center(
       child: Column(
-        children: [
+        children: <Widget>[
           Container(
-            padding: EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             child: Text(
               'Running with: Nearby Service $_sdkVersion\n',
               style: Styles.textContentStyle,
             ),
           ),
           Container(
-            padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
+              children: <Widget>[
                 Text('Endpoint id : $_endpointId'),
                 Text('Auth code : $_authCode'),
               ],
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             child: Text(
-              'Share Result: ' + NearbyStatus.getStatus(_statusCode).message,
+              'Share Result: ${NearbyStatus.getStatus(_statusCode).message}',
               style: Styles.textContentStyle,
             ),
           ),
           Expanded(
             flex: 1,
             child: Container(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               color: Colors.white,
               child: Center(
                 child: GestureDetector(
-                  onDoubleTap: () => setState(() => _logs = ""),
+                  onDoubleTap: () => setState(() => _logs = ''),
                   child: SingleChildScrollView(
                     child: Text(_logs),
                   ),
@@ -198,7 +196,7 @@ class _WifiSharePageContentState extends State<WifiSharePageContent> {
           Expanded(
             flex: 1,
             child: Container(
-              padding: EdgeInsets.symmetric(vertical: 20),
+              padding: const EdgeInsets.symmetric(vertical: 20),
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
@@ -220,7 +218,7 @@ class _WifiSharePageContentState extends State<WifiSharePageContent> {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Row(
@@ -241,7 +239,7 @@ class _WifiSharePageContentState extends State<WifiSharePageContent> {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                   ],
@@ -270,23 +268,23 @@ class _WifiSharePageContentState extends State<WifiSharePageContent> {
     });
   }
 
-  SnackBar createSnack(String message, [bool isWarning = false]) {
-    if (!isWarning) {
-      return SnackBar(
-        duration: Duration(seconds: 1),
-        content: Text(
-          message,
-        ),
-      );
-    } else {
-      return SnackBar(
-        backgroundColor: Colors.redAccent,
-        duration: Duration(milliseconds: 1500),
-        content: Text(
-          message,
-          style: Styles.warningTextStyle,
-        ),
-      );
-    }
+  void showSnackBar(String message, [bool isWarning = false]) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      isWarning
+          ? SnackBar(
+              backgroundColor: Colors.redAccent,
+              duration: const Duration(milliseconds: 1500),
+              content: Text(
+                message,
+                style: Styles.warningTextStyle,
+              ),
+            )
+          : SnackBar(
+              duration: const Duration(seconds: 1),
+              content: Text(
+                message,
+              ),
+            ),
+    );
   }
 }

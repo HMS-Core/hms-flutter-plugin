@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -13,6 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+
+part of huawei_nearbyservice;
 
 class BeaconId {
   static const int typeIBeacon = 1;
@@ -32,31 +34,31 @@ class BeaconId {
   final int? type;
 
   BeaconId._builder(BeaconIdBuilder builder)
-      : this.iBeaconUuid = builder._uuid,
-        this.hexId = builder._hexId,
-        this.instance = builder._instance,
-        this.namespace = builder._namespace,
-        this.major = builder._major,
-        this.minor = builder._minor,
-        this.length = builder._length,
-        this.type = builder._type;
+      : iBeaconUuid = builder._uuid,
+        hexId = builder._hexId,
+        instance = builder._instance,
+        namespace = builder._namespace,
+        major = builder._major,
+        minor = builder._minor,
+        length = builder._length,
+        type = builder._type;
 
   @override
   String toString() => type == typeEddystoneUid
       ? 'EddystoneUid{id="$hexId"}'
       : '"IBeaconId{iBeaconUuid="$iBeaconUuid", major="$major", minor="$minor"}';
 
-  bool equals(object) =>
+  bool equals(dynamic object) =>
       identical(this, object) ||
       (object is BeaconId &&
-          this.type == object.type &&
-          this.length == object.length &&
-          this.major == object.major &&
-          this.minor == object.minor &&
-          this.iBeaconUuid == object.iBeaconUuid &&
-          this.hexId == object.hexId &&
-          this.instance == object.instance &&
-          this.namespace == object.namespace);
+          type == object.type &&
+          length == object.length &&
+          major == object.major &&
+          minor == object.minor &&
+          iBeaconUuid == object.iBeaconUuid &&
+          hexId == object.hexId &&
+          instance == object.instance &&
+          namespace == object.namespace);
 }
 
 /// Builder class for [BeaconId]
@@ -85,46 +87,47 @@ class BeaconIdBuilder {
 
   /// For [BeaconId.typeIBeacon]
   BeaconIdBuilder setIBeaconUuid(String iBeaconUuid) {
-    this._uuid = _uuid;
-    this._type = BeaconId.typeIBeacon;
+    _uuid = _uuid;
+    _type = BeaconId.typeIBeacon;
     return this;
   }
 
   /// For [BeaconId.typeIBeacon]
   BeaconIdBuilder setMajor(int major) {
-    this._major = major;
+    _major = major;
     return this;
   }
 
   /// For [BeaconId.typeIBeacon]
   BeaconIdBuilder setMinor(int minor) {
-    this._minor = minor;
+    _minor = minor;
     return this;
   }
 
   /// For [BeaconId.typeEddystoneUid]
   BeaconIdBuilder setHexId(String hexId) {
-    this._hexId = hexId;
-    this._type = BeaconId.typeEddystoneUid;
+    _hexId = hexId;
+    _type = BeaconId.typeEddystoneUid;
     return this;
   }
 
   /// For [BeaconId.typeEddystoneUid]
   BeaconIdBuilder setHexNamespace(String hexNamespace) {
-    this._namespace = hexNamespace;
+    _namespace = hexNamespace;
     return this;
   }
 
   /// For [BeaconId.typeEddystoneUid]
   BeaconIdBuilder setHexInstance(String hexInstance) {
-    this._instance = hexInstance;
-    this._type = BeaconId.typeEddystoneUid;
+    _instance = hexInstance;
+    _type = BeaconId.typeEddystoneUid;
     return this;
   }
 
   BeaconId build() {
-    if (_type != BeaconId.typeEddystoneUid && _type != BeaconId.typeIBeacon)
+    if (_type != BeaconId.typeEddystoneUid && _type != BeaconId.typeIBeacon) {
       throw ArgumentError('$_type is not a valid beacon type.');
+    }
 
     if (_type == BeaconId.typeEddystoneUid) {
       _uuid = null;

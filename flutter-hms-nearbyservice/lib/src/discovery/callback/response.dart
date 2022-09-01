@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,64 +14,82 @@
     limitations under the License.
 */
 
-import 'package:huawei_nearbyservice/src/discovery/classes.dart';
+part of huawei_nearbyservice;
 
 class ConnectOnEstablishResponse {
   final String? endpointId;
   final ConnectInfo? connectInfo;
 
-  ConnectOnEstablishResponse({this.endpointId, this.connectInfo});
+  const ConnectOnEstablishResponse({
+    this.endpointId,
+    this.connectInfo,
+  });
 
-  factory ConnectOnEstablishResponse.fromMap(Map<dynamic, dynamic> map) =>
-      ConnectOnEstablishResponse(
-        endpointId: map['endpointId'],
-        connectInfo: map['connectInfo'] != null
-            ? ConnectInfo.fromMap(map['connectInfo'])
-            : null,
-      );
+  factory ConnectOnEstablishResponse.fromMap(Map<dynamic, dynamic> map) {
+    return ConnectOnEstablishResponse(
+      endpointId: map['endpointId'],
+      connectInfo: map['connectInfo'] != null
+          ? ConnectInfo.fromMap(map['connectInfo'])
+          : null,
+    );
+  }
 
-  Map<String, dynamic> toMap() => {
-        'endpointId': endpointId,
-        'connectInfo': connectInfo?.toMap(),
-      };
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'endpointId': endpointId,
+      'connectInfo': connectInfo?.toMap(),
+    };
+  }
 }
 
 class ConnectOnResultResponse {
   final String? endpointId;
   final ConnectResult? connectResult;
 
-  ConnectOnResultResponse({this.endpointId, this.connectResult});
+  const ConnectOnResultResponse({
+    this.endpointId,
+    this.connectResult,
+  });
 
-  factory ConnectOnResultResponse.fromMap(Map<dynamic, dynamic> map) =>
-      ConnectOnResultResponse(
-        endpointId: map['endpointId'],
-        connectResult: map['connectResult'] != null
-            ? ConnectResult.fromMap(map['connectResult'])
-            : null,
-      );
+  factory ConnectOnResultResponse.fromMap(Map<dynamic, dynamic> map) {
+    return ConnectOnResultResponse(
+      endpointId: map['endpointId'],
+      connectResult: map['connectResult'] != null
+          ? ConnectResult.fromMap(map['connectResult'])
+          : null,
+    );
+  }
 
-  Map<String, dynamic> toMap() => {
-        'endpointId': endpointId,
-        'connectResult': connectResult?.toMap(),
-      };
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'endpointId': endpointId,
+      'connectResult': connectResult?.toMap(),
+    };
+  }
 }
 
 class ScanOnFoundResponse {
   final String? endpointId;
   final ScanEndpointInfo? scanEndpointInfo;
 
-  ScanOnFoundResponse({this.endpointId, this.scanEndpointInfo});
+  const ScanOnFoundResponse({
+    this.endpointId,
+    this.scanEndpointInfo,
+  });
 
-  factory ScanOnFoundResponse.fromMap(Map<dynamic, dynamic> map) =>
-      ScanOnFoundResponse(
-        endpointId: map['endpointId'],
-        scanEndpointInfo: map['scanEndpointInfo'] != null
-            ? ScanEndpointInfo.fromMap(map['scanEndpointInfo'])
-            : null,
-      );
+  factory ScanOnFoundResponse.fromMap(Map<dynamic, dynamic> map) {
+    return ScanOnFoundResponse(
+      endpointId: map['endpointId'],
+      scanEndpointInfo: map['scanEndpointInfo'] != null
+          ? ScanEndpointInfo.fromMap(map['scanEndpointInfo'])
+          : null,
+    );
+  }
 
-  Map<String, dynamic> toMap() => {
-        'endpointId': endpointId,
-        'scanEndpointInfo': scanEndpointInfo?.toMap(),
-      };
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'endpointId': endpointId,
+      'scanEndpointInfo': scanEndpointInfo?.toMap(),
+    };
+  }
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -27,5 +27,4 @@ public interface Channels {
     String WIFI_EVENT_CHANNEL = "com.huawei.hms.flutter.nearby.wifi/event";
     String MESSAGE_METHOD_CHANNEL = "com.huawei.hms.flutter.nearby.message/method";
     String MESSAGE_EVENT_CHANNEL = "com.huawei.hms.flutter.nearby.message/event";
-    String PERMISSION_METHOD_CHANNEL = "com.huawei.hms.flutter.nearby.permission/method";
 }

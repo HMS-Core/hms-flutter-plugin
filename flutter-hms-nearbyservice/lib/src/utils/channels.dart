@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,22 +14,26 @@
     limitations under the License.
 */
 
-const String NEARBY_METHOD_CHANNEL = "com.huawei.hms.flutter.nearby/method";
-const String DISCOVERY_METHOD_CHANNEL =
-    "com.huawei.hms.flutter.nearby.discovery/method";
-const String DISCOVERY_EVENT_CHANNEL_CONNECT =
-    "com.huawei.hms.flutter.nearby.discovery/event/connect_callback";
-const String DISCOVERY_EVENT_CHANNEL_SCAN =
-    "com.huawei.hms.flutter.nearby.discovery/event/scan_callback";
-const String TRANSFER_METHOD_CHANNEL =
-    "com.huawei.hms.flutter.nearby.transfer/method";
-const String TRANSFER_EVENT_CHANNEL =
-    "com.huawei.hms.flutter.nearby.transfer/event";
-const String WIFI_METHOD_CHANNEL = "com.huawei.hms.flutter.nearby.wifi/method";
-const String WIFI_EVENT_CHANNEL = "com.huawei.hms.flutter.nearby.wifi/event";
-const String MESSAGE_METHOD_CHANNEL =
-    "com.huawei.hms.flutter.nearby.message/method";
-const String MESSAGE_EVENT_CHANNEL =
-    "com.huawei.hms.flutter.nearby.message/event";
-const String PERMISSION_METHOD_CHANNEL =
-    "com.huawei.hms.flutter.nearby.permission/method";
+part of huawei_nearbyservice;
+
+const String _nearbyMethodChannel = 'com.huawei.hms.flutter.nearby/method';
+
+const String _discoveryMethodChannel =
+    'com.huawei.hms.flutter.nearby.discovery/method';
+const String _discoveryConnectEventChannel =
+    'com.huawei.hms.flutter.nearby.discovery/event/connect_callback';
+const String _discoveryScanEventChannel =
+    'com.huawei.hms.flutter.nearby.discovery/event/scan_callback';
+
+const String _transferMethodChannel =
+    'com.huawei.hms.flutter.nearby.transfer/method';
+const String _transferEventChannel =
+    'com.huawei.hms.flutter.nearby.transfer/event';
+
+const String _wifiMethodChannel = 'com.huawei.hms.flutter.nearby.wifi/method';
+const String _wifiEventChannel = 'com.huawei.hms.flutter.nearby.wifi/event';
+
+const String _messageMethodChannel =
+    'com.huawei.hms.flutter.nearby.message/method';
+const String _messageEventChannel =
+    'com.huawei.hms.flutter.nearby.message/event';

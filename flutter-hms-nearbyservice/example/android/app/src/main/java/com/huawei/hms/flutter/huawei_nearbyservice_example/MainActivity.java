@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,8 +14,9 @@
     limitations under the License.
 */
 
-package com.huawei.hms.flutter.nearbyservice_example;
+package com.huawei.hms.flutter.huawei_nearbyservice_example;
 
 import io.flutter.embedding.android.FlutterActivity;
 
-public class MainActivity extends FlutterActivity { }
+public class MainActivity extends FlutterActivity {
+}

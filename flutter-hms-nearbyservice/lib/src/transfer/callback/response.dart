@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,40 +14,58 @@
     limitations under the License.
 */
 
-import 'package:huawei_nearbyservice/src/transfer/classes.dart';
+part of huawei_nearbyservice;
 
 class DataOnReceivedResponse {
   final String? endpointId;
   final TransferData? data;
   final String? errorCode;
 
-  DataOnReceivedResponse({this.endpointId, this.data, this.errorCode});
+  DataOnReceivedResponse({
+    this.endpointId,
+    this.data,
+    this.errorCode,
+  });
 
-  factory DataOnReceivedResponse.fromMap(Map<dynamic, dynamic> map) =>
-      DataOnReceivedResponse(
-          endpointId: map['endpointId'],
-          data: map['data'] != null ? TransferData.fromMap(map['data']) : null,
-          errorCode: map['errorCode']);
+  factory DataOnReceivedResponse.fromMap(Map<dynamic, dynamic> map) {
+    return DataOnReceivedResponse(
+      endpointId: map['endpointId'],
+      data: map['data'] != null ? TransferData.fromMap(map['data']) : null,
+      errorCode: map['errorCode'],
+    );
+  }
 
-  Map<dynamic, dynamic> toMap() =>
-      {'endpointId': endpointId, 'data': data?.toMap(), 'errorCode': errorCode};
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'endpointId': endpointId,
+      'data': data?.toMap(),
+      'errorCode': errorCode,
+    };
+  }
 }
 
 class DataOnTransferUpdateResponse {
   final String? endpointId;
   final TransferStateUpdate? transferStateUpdate;
 
-  DataOnTransferUpdateResponse({this.endpointId, this.transferStateUpdate});
+  DataOnTransferUpdateResponse({
+    this.endpointId,
+    this.transferStateUpdate,
+  });
 
-  factory DataOnTransferUpdateResponse.fromMap(Map<dynamic, dynamic> map) =>
-      DataOnTransferUpdateResponse(
-          endpointId: map['endpointId'],
-          transferStateUpdate: map['transferStateUpdate'] != null
-              ? TransferStateUpdate.fromMap(map['transferStateUpdate'])
-              : map['transferStateUpdate']);
+  factory DataOnTransferUpdateResponse.fromMap(Map<dynamic, dynamic> map) {
+    return DataOnTransferUpdateResponse(
+      endpointId: map['endpointId'],
+      transferStateUpdate: map['transferStateUpdate'] != null
+          ? TransferStateUpdate.fromMap(map['transferStateUpdate'])
+          : map['transferStateUpdate'],
+    );
+  }
 
-  Map<dynamic, dynamic> toMap() => {
-        'endpointId': endpointId,
-        'transferStateUpdate': transferStateUpdate?.toMap()
-      };
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'endpointId': endpointId,
+      'transferStateUpdate': transferStateUpdate?.toMap(),
+    };
+  }
 }

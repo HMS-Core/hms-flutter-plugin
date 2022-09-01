@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,39 +14,33 @@
     limitations under the License.
 */
 
-library huawei_nearby_lib;
+library huawei_nearbyservice;
 
-/// Nearby Service
-export 'src/hms_nearby.dart';
+import 'dart:async';
+import 'dart:typed_data';
 
-/// Nearby Service Discovery Engine
-export 'src/discovery/hms_discovery_engine.dart';
-export 'src/discovery/classes.dart';
-export 'src/discovery/callback/response.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 
-/// Nearby Service Transfer Engine
-export 'src/transfer/hms_transfer_engine.dart';
-export 'src/transfer/classes.dart';
-export 'src/transfer/callback/response.dart';
-
-/// Nearby Wifi Share Engine
-export 'src/wifi_share/hms_wifi_share_engine.dart';
-export 'src/wifi_share/wifi_share_policy.dart';
-export 'src/wifi_share/callback/response.dart';
-
-/// Nearby Message Engine
-export 'src/message/hms_message_engine.dart';
-export 'src/message/classes/ibeacon_info.dart';
-export 'src/message/classes/message.dart';
-export 'src/message/classes/message_option.dart';
-export 'src/message/classes/message_picker.dart';
-export 'src/message/classes/message_policy.dart';
-export 'src/message/classes/namespace_type.dart';
-export 'src/message/classes/uid_instance.dart';
-export 'src/message/callback/classes.dart';
-
-/// Nearby Service permission handler';
-export 'src/permission/nearby_permission_handler.dart';
-
-/// Utility classes
-export 'src/utils/constants.dart';
+part 'src/discovery/callback/response.dart';
+part 'src/discovery/classes.dart';
+part 'src/discovery/hms_discovery_engine.dart';
+part 'src/hms_nearby.dart';
+part 'src/message/callback/classes.dart';
+part 'src/message/classes/beacon_id.dart';
+part 'src/message/classes/ibeacon_info.dart';
+part 'src/message/classes/message.dart';
+part 'src/message/classes/message_option.dart';
+part 'src/message/classes/message_picker.dart';
+part 'src/message/classes/message_policy.dart';
+part 'src/message/classes/namespace_type.dart';
+part 'src/message/classes/uid_instance.dart';
+part 'src/message/hms_message_engine.dart';
+part 'src/transfer/callback/response.dart';
+part 'src/transfer/classes.dart';
+part 'src/transfer/hms_transfer_engine.dart';
+part 'src/utils/channels.dart';
+part 'src/utils/constants.dart';
+part 'src/wifi_share/callback/response.dart';
+part 'src/wifi_share/hms_wifi_share_engine.dart';
+part 'src/wifi_share/wifi_share_policy.dart';

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -19,33 +19,36 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:async';
 
 import 'package:huawei_nearbyservice/huawei_nearbyservice.dart';
 import 'package:huawei_nearbyservice_example/utils/constants.dart';
 import 'package:huawei_nearbyservice_example/widgets/custom_button.dart';
 
 class DiscoveryTransferPage extends StatelessWidget {
+  const DiscoveryTransferPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.redAccent,
-        title: Text(
+        title: const Text(
           'Discover & Transfer',
           style: TextStyle(
             color: Colors.white,
           ),
         ),
       ),
-      body: DiscoveryTransferPageContent(),
+      body: const DiscoveryTransferPageContent(),
     );
   }
 }
 
 class DiscoveryTransferPageContent extends StatefulWidget {
+  const DiscoveryTransferPageContent({Key? key}) : super(key: key);
+
   @override
-  _DiscoveryTransferPageContentState createState() =>
+  State<DiscoveryTransferPageContent> createState() =>
       _DiscoveryTransferPageContentState();
 }
 
@@ -91,9 +94,10 @@ class _DiscoveryTransferPageContentState
         .listen((ConnectOnResultResponse response) {
       String res = jsonEncode(response.toMap());
       setState(() {
-        _logs += 'connectOnResult\n' + res + '\n';
-        if (response.connectResult!.statusCode == NearbyStatus.success.code)
+        _logs += 'connectOnResult\n$res\n';
+        if (response.connectResult!.statusCode == NearbyStatus.success.code) {
           _isConnected = true;
+        }
       });
     });
 
@@ -101,7 +105,7 @@ class _DiscoveryTransferPageContentState
         .listen((DataOnTransferUpdateResponse response) {
       String res = jsonEncode(response.toMap());
       setState(() {
-        _logs += 'dataOnTransferUpdate\n' + res + '\n';
+        _logs += 'dataOnTransferUpdate\n$res\n';
       });
     });
 
@@ -123,59 +127,60 @@ class _DiscoveryTransferPageContentState
     });
   }
 
-  void _startBroadcast(context) async {
+  void _startBroadcast(BuildContext context) async {
     try {
       await HMSDiscoveryEngine.instance.startBroadcasting(
-        name: "SERVICE-1",
-        serviceId: "SERVICE-1",
-        broadcastOption: BroadcastOption(DiscoveryPolicy.p2p),
+        name: 'SERVICE-1',
+        serviceId: 'SERVICE-1',
+        broadcastOption: const BroadcastOption(DiscoveryPolicy.p2p),
       );
-      ScaffoldMessenger.of(context)
-          .showSnackBar(createSnack("Broadcast started."));
+      showSnackBar('Broadcast started.');
     } on PlatformException catch (e) {
       _handleException(e, context);
     }
   }
 
-  void _stopBroadcast(context) async {
+  void _stopBroadcast(BuildContext context) async {
     HMSDiscoveryEngine.instance.stopBroadcasting();
-    ScaffoldMessenger.of(context)
-        .showSnackBar(createSnack("Broadcast stopped."));
+    showSnackBar('Broadcast stopped.');
   }
 
-  void _startScan(context) async {
+  void _startScan(BuildContext context) async {
     try {
       await HMSDiscoveryEngine.instance.startScan(
-          serviceId: "SERVICE-1", scanOption: ScanOption(DiscoveryPolicy.p2p));
-      ScaffoldMessenger.of(context).showSnackBar(createSnack("Scan started."));
+        serviceId: 'SERVICE-1',
+        scanOption: ScanOption(DiscoveryPolicy.p2p),
+      );
+      showSnackBar('Scan started.');
     } on PlatformException catch (e) {
       _handleException(e, context);
     }
   }
 
-  void _stopScan(context) async {
+  void _stopScan(BuildContext context) async {
     HMSDiscoveryEngine.instance.stopScan();
-    ScaffoldMessenger.of(context).showSnackBar(createSnack("Scan stopped."));
+    showSnackBar('Scan stopped.');
   }
 
-  void _requestConnectEx(context) async {
+  void _requestConnectEx(BuildContext context) async {
     if (_endpointName == 'Unknown') {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(createSnack("No endpoint found!", true));
+      showSnackBar('No endpoint found!', true);
       return;
     }
     try {
-      await HMSDiscoveryEngine.instance
-          .requestConnectEx(name: _endpointName, endpointId: _endpointId, channelPolicy: ConnectOption(ChannelPolicy.highThroughput));
+      await HMSDiscoveryEngine.instance.requestConnectEx(
+        name: _endpointName,
+        endpointId: _endpointId,
+        channelPolicy: ConnectOption(ChannelPolicy.highThroughput),
+      );
     } on PlatformException catch (e) {
       _handleException(e, context);
     }
   }
 
-  void _acceptConnect(context) async {
+  void _acceptConnect(BuildContext context) async {
     if (_endpointId == 'Unknown') {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(createSnack("No endpoint found!", true));
+      showSnackBar('No endpoint found!', true);
       return;
     }
     try {
@@ -185,10 +190,9 @@ class _DiscoveryTransferPageContentState
     }
   }
 
-  void _rejectConnect(context) async {
+  void _rejectConnect(BuildContext context) async {
     if (!_isEstablished) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(createSnack('There no established connection!', true));
+      showSnackBar('There is no established connection!', true);
       return;
     }
     try {
@@ -201,10 +205,9 @@ class _DiscoveryTransferPageContentState
     }
   }
 
-  void _disconnect(context) async {
+  void _disconnect(BuildContext context) async {
     if (!_isConnected) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          createSnack('You are not connected to an endpoint!', true));
+      showSnackBar('You are not connected to an endpoint!', true);
       return;
     }
     await HMSDiscoveryEngine.instance.disconnect(_endpointId);
@@ -213,14 +216,13 @@ class _DiscoveryTransferPageContentState
     });
   }
 
-  void _sendByteData(context) async {
+  void _sendByteData(BuildContext context) async {
     if (!_isConnected) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          createSnack('You are not connected to an endpoint!', true));
+      showSnackBar('You are not connected to an endpoint!', true);
       return;
     }
     try {
-      String msg = "Hello there  $_endpointId!";
+      String msg = 'Hello there  $_endpointId!';
       TransferData data =
           TransferData.fromBytes((Uint8List.fromList(utf8.encode(msg))));
       await HMSTransferEngine.instance.sendData(_endpointId, data);
@@ -229,28 +231,27 @@ class _DiscoveryTransferPageContentState
     }
   }
 
-  void _sendStreamData(context) async {
+  void _sendStreamData(BuildContext context) async {
     if (!_isConnected) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          createSnack('You are not connected to an endpoint!', true));
+      showSnackBar('You are not connected to an endpoint!', true);
       return;
     }
     try {
-      String msg = "Hello there  $_endpointId, with streams!";
+      String msg = 'Hello there  $_endpointId, with streams!';
       TransferData data = TransferData.fromStream(
-          content: (Uint8List.fromList(utf8.encode(msg))));
+        content: (Uint8List.fromList(utf8.encode(msg))),
+      );
       await HMSTransferEngine.instance.sendData(_endpointId, data);
     } on PlatformException catch (e) {
       _handleException(e, context);
     }
   }
 
-  void _handleException(e, context) async {
-    SnackBar snackBar = createSnack(e.message, true);
+  void _handleException(PlatformException e, BuildContext context) async {
     setState(() {
-      _logs += e.message + '\n';
+      _logs += '${e.message}\n';
     });
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    showSnackBar('${e.message}', true);
   }
 
   @override
@@ -263,45 +264,43 @@ class _DiscoveryTransferPageContentState
   Widget build(BuildContext context) {
     return Center(
       child: Column(
-        children: [
+        children: <Widget>[
           Container(
-            padding: EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             child: Text(
               'Running with: Nearby Service $_sdkVersion\n',
               style: Styles.textContentStyle,
             ),
           ),
           Container(
-            padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
+              children: <Widget>[
                 Text('Endpoint id : $_endpointId'),
                 Text('Endpoint name : $_endpointName'),
               ],
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             child: Text(
               'Connected: $_isConnected\n',
               style: Styles.textContentStyle,
             ),
           ),
-          Container(
-            child: Text(
-              'Message: $_msg\n',
-              style: Styles.textContentStyle,
-            ),
+          Text(
+            'Message: $_msg\n',
+            style: Styles.textContentStyle,
           ),
           Expanded(
             flex: 1,
             child: Container(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               color: Colors.white,
               child: Center(
                 child: GestureDetector(
-                  onDoubleTap: () => setState(() => _logs = ""),
+                  onDoubleTap: () => setState(() => _logs = ''),
                   child: SingleChildScrollView(
                     child: Text(_logs),
                   ),
@@ -312,7 +311,7 @@ class _DiscoveryTransferPageContentState
           Expanded(
             flex: 1,
             child: Container(
-              padding: EdgeInsets.symmetric(vertical: 20),
+              padding: const EdgeInsets.symmetric(vertical: 20),
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
@@ -334,7 +333,7 @@ class _DiscoveryTransferPageContentState
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Row(
@@ -355,7 +354,7 @@ class _DiscoveryTransferPageContentState
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Row(
@@ -376,7 +375,7 @@ class _DiscoveryTransferPageContentState
                         )
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Row(
@@ -397,7 +396,7 @@ class _DiscoveryTransferPageContentState
                         )
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Row(
@@ -420,7 +419,7 @@ class _DiscoveryTransferPageContentState
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                   ],
@@ -459,23 +458,23 @@ class _DiscoveryTransferPageContentState
     });
   }
 
-  SnackBar createSnack(String message, [bool isWarning = false]) {
-    if (!isWarning) {
-      return SnackBar(
-        duration: Duration(seconds: 1),
-        content: Text(
-          message,
-        ),
-      );
-    } else {
-      return SnackBar(
-        backgroundColor: Colors.redAccent,
-        duration: Duration(milliseconds: 1500),
-        content: Text(
-          message,
-          style: Styles.warningTextStyle,
-        ),
-      );
-    }
+  void showSnackBar(String message, [bool isWarning = false]) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      isWarning
+          ? SnackBar(
+              backgroundColor: Colors.redAccent,
+              duration: const Duration(milliseconds: 1500),
+              content: Text(
+                message,
+                style: Styles.warningTextStyle,
+              ),
+            )
+          : SnackBar(
+              duration: const Duration(seconds: 1),
+              content: Text(
+                message,
+              ),
+            ),
+    );
   }
 }

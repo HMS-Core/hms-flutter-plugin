@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_nearbyservice;
+
 class IBeaconInfo {
   final String? uuid;
   final int? major;
@@ -21,32 +23,43 @@ class IBeaconInfo {
   final bool _isIncludeMajor;
   final bool _isIncludeMinor;
 
-  IBeaconInfo({required this.uuid, int? major, int? minor})
-      : this.major = major,
-        this.minor = minor,
-        this._isIncludeMajor = major != null ? true : false,
-        this._isIncludeMinor = minor != null ? true : false;
+  IBeaconInfo({
+    required this.uuid,
+    this.major,
+    this.minor,
+  })  : _isIncludeMajor = major != null ? true : false,
+        _isIncludeMinor = minor != null ? true : false;
 
-  bool equals(object) =>
-      identical(this, object) ||
-      object is IBeaconInfo &&
-          this.uuid == object.uuid &&
-          this.minor == object.minor &&
-          this.major == object.major &&
-          this._isIncludeMinor == object._isIncludeMinor &&
-          this._isIncludeMajor == object._isIncludeMajor;
+  bool equals(dynamic object) {
+    return identical(this, object) ||
+        object is IBeaconInfo &&
+            uuid == object.uuid &&
+            minor == object.minor &&
+            major == object.major &&
+            _isIncludeMinor == object._isIncludeMinor &&
+            _isIncludeMajor == object._isIncludeMajor;
+  }
 
-  factory IBeaconInfo.fromMap(Map<String, dynamic> map) =>
-      IBeaconInfo(uuid: map['uuid'], major: map['major'], minor: map['minor']);
+  factory IBeaconInfo.fromMap(Map<String, dynamic> map) {
+    return IBeaconInfo(
+      uuid: map['uuid'],
+      major: map['major'],
+      minor: map['minor'],
+    );
+  }
 
-  Map<String, dynamic> toMap() => {
-        'uuid': uuid,
-        'major': major,
-        'minor': minor,
-        'isIncludeMajor': _isIncludeMajor,
-        'isIncludeMinor': _isIncludeMinor,
-      };
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'uuid': uuid,
+      'major': major,
+      'minor': minor,
+      'isIncludeMajor': _isIncludeMajor,
+      'isIncludeMinor': _isIncludeMinor,
+    };
+  }
 
   @override
-  String toString() => 'uuid=$uuid, major=$major, minor=$minor';
+  String toString() {
+    return 'uuid=$uuid, major=$major, minor=$minor';
+  }
 }

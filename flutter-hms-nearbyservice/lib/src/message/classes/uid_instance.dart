@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,32 +14,44 @@
     limitations under the License.
 */
 
+part of huawei_nearbyservice;
+
 class UidInstance {
   /// Hex namespace
   final String? uid;
   final String? instance;
   final bool _isIncludeInstance;
 
-  UidInstance({required this.uid, String? instance})
-      : this.instance = instance,
-        this._isIncludeInstance = instance != null ? true : false;
+  UidInstance({
+    required this.uid,
+    this.instance,
+  }) : _isIncludeInstance = instance != null ? true : false;
 
-  bool equals(object) =>
-      identical(this, object) ||
-      object is UidInstance &&
-          this.uid == object.uid &&
-          this.instance == object.instance &&
-          this._isIncludeInstance == object._isIncludeInstance;
+  bool equals(dynamic object) {
+    return identical(this, object) ||
+        object is UidInstance &&
+            uid == object.uid &&
+            instance == object.instance &&
+            _isIncludeInstance == object._isIncludeInstance;
+  }
 
-  factory UidInstance.fromMap(Map<dynamic, dynamic> map) =>
-      UidInstance(uid: map['uid'], instance: map['instance']);
+  factory UidInstance.fromMap(Map<dynamic, dynamic> map) {
+    return UidInstance(
+      uid: map['uid'],
+      instance: map['instance'],
+    );
+  }
 
-  Map<String, dynamic> toMap() => {
-        'uid': uid,
-        'instance': instance,
-        'isIncludeInstance': _isIncludeInstance,
-      };
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'uid': uid,
+      'instance': instance,
+      'isIncludeInstance': _isIncludeInstance,
+    };
+  }
 
   @override
-  String toString() => 'uid=$uid, instance=$instance';
+  String toString() {
+    return 'uid=$uid, instance=$instance';
+  }
 }

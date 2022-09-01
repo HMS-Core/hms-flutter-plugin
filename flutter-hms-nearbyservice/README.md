@@ -1,4 +1,12 @@
-# Huawei Nearby Service Flutter Plugin
+<p align="center">
+  <h1 align="center">Huawei Nearby Service Flutter Plugin</h1>
+</p>
+
+<p align="center">
+  <a href="https://pub.dev/packages/huawei_nearbyservice"><img src="https://img.shields.io/pub/v/huawei_nearbyservice?style=for-the-badge" alt="pub.dev version"></a>
+</p>
+
+---
 
 ## Introduction
 
@@ -15,20 +23,20 @@ Nearby Data Communication allows devices to easily discover nearby devices and s
 - Nearby Wi-Fi Sharing
 
     Provides the Wi-Fi configuration sharing function to help users connect their own or friends' smart devices to the Wi-Fi network in one-click mode.
-[Learn More](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides-V1/introduction-0000001074107546-V1)
+[Learn More](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides-V1/introduction-0000001074107546-V1?ha_source=hms1)
 
 ## Installing the Plugin
 
 Add dependencies to the pubspec.yaml file of the Flutter project.
-huawei_nearbyservice: ^6.1.0+300
+huawei_nearbyservice:
 Run the following command on the Terminal page or click Pub get in Android Studio to add dependencies.
 flutter pub get
-For more details, please refer to [Getting Started with Flutter](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides-V1/prepare-dev-env-0000001074265856-V1)
+For more details, please refer to [Getting Started with Flutter](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides-V1/prepare-dev-env-0000001074265856-V1?ha_source=hms1)
 
 ## Development Guide
 
-- [Guides](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/dev-process-0000001073825475)
-- [Reference](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-References/overview-0000001074428872)
+- [Guides](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/dev-process-0000001073825475?ha_source=hms1)
+- [Reference](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-References/overview-0000001074428872?ha_source=hms1)
 
 ## License
 

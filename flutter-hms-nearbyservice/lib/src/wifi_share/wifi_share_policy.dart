@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_nearbyservice;
+
 class WifiSharePolicy {
   final int _mode;
 
@@ -22,26 +24,26 @@ class WifiSharePolicy {
   static const WifiSharePolicy share = WifiSharePolicy(1);
   static const WifiSharePolicy set = WifiSharePolicy(2);
 
-  bool equals(object) =>
-      identical(this, object) ||
-      (object is WifiSharePolicy && this._mode == object._mode);
+  bool equals(dynamic object) {
+    return identical(this, object) ||
+        (object is WifiSharePolicy && _mode == object._mode);
+  }
 
   @override
   String toString() {
-    String desc;
     switch (_mode) {
       case 1:
-        desc = "POLICY_SHARE";
-        break;
+        return 'POLICY_SHARE';
       case 2:
-        desc = "POLICY_SET";
-        break;
+        return 'POLICY_SET';
       default:
-        desc = "POLICY_UNKNOWN";
-        break;
+        return 'POLICY_UNKNOWN';
     }
-    return desc;
   }
 
-  Map<String, dynamic> toMap() => {'mode': _mode};
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'mode': _mode,
+    };
+  }
 }

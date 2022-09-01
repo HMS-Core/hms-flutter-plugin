@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,9 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:typed_data';
-import 'package:huawei_nearbyservice/huawei_nearbyservice.dart';
-import 'package:huawei_nearbyservice/src/utils/constants.dart';
+part of huawei_nearbyservice;
 
 class TransferData {
   int? id;
@@ -42,83 +40,129 @@ class TransferData {
   /// of the Data objects generated on the platform side.
   int? hash;
 
-  TransferData(
-      {this.id, this.type, this.bytes, this.stream, this.file, this.hash});
+  TransferData({
+    this.id,
+    this.type,
+    this.bytes,
+    this.stream,
+    this.file,
+    this.hash,
+  });
 
-  factory TransferData.fromMap(Map<dynamic, dynamic> map) => TransferData(
-        id: map['id'],
-        type: map['type'],
-        hash: map['hash'],
-        bytes: map['bytes'],
-        file:
-            map['file'] != null ? TransferDataFile.fromMap(map['file']) : null,
-        stream: map['stream'] != null
-            ? TransferDataStream.fromMap(map['stream'])
-            : null,
-      );
+  factory TransferData.fromMap(Map<dynamic, dynamic> map) {
+    return TransferData(
+      id: map['id'],
+      type: map['type'],
+      hash: map['hash'],
+      bytes: map['bytes'],
+      file: map['file'] != null ? TransferDataFile.fromMap(map['file']) : null,
+      stream: map['stream'] != null
+          ? TransferDataStream.fromMap(map['stream'])
+          : null,
+    );
+  }
 
-  factory TransferData.dataBytesFactory(Uint8List bytes, int? id) =>
-      TransferData(
-          id: id,
-          type: DataTypes.bytes,
-          bytes: bytes,
-          file: null,
-          stream: null);
+  factory TransferData.dataBytesFactory(Uint8List bytes, int? id) {
+    return TransferData(
+      id: id,
+      type: DataTypes.bytes,
+      bytes: bytes,
+      file: null,
+      stream: null,
+    );
+  }
 
-  factory TransferData.dataFileFactory(TransferDataFile file, int? id) =>
-      TransferData(
-          id: id, type: DataTypes.file, bytes: null, file: file, stream: null);
+  factory TransferData.dataFileFactory(TransferDataFile file, int? id) {
+    return TransferData(
+      id: id,
+      type: DataTypes.file,
+      bytes: null,
+      file: file,
+      stream: null,
+    );
+  }
 
-  factory TransferData.dataStreamFactory(TransferDataStream stream, int? id) =>
-      TransferData(
-          id: id,
-          type: DataTypes.stream,
-          bytes: null,
-          file: null,
-          stream: stream);
+  factory TransferData.dataStreamFactory(TransferDataStream stream, int? id) {
+    return TransferData(
+      id: id,
+      type: DataTypes.stream,
+      bytes: null,
+      file: null,
+      stream: stream,
+    );
+  }
 
   factory TransferData.fromBytes(Uint8List bytes) {
     return TransferData.dataBytesFactory(bytes, null);
   }
 
-  factory TransferData.fromStream({String? url, Uint8List? content}) {
-    if (url == null && content == null)
-      throw ArgumentError.notNull("url & content");
-
+  factory TransferData.fromStream({
+    String? url,
+    Uint8List? content,
+  }) {
+    if (url == null && content == null) {
+      throw ArgumentError.notNull('url & content');
+    }
     return TransferData.dataStreamFactory(
-        TransferDataStream(url: url, content: content), null);
+      TransferDataStream(
+        url: url,
+        content: content,
+      ),
+      null,
+    );
   }
 
-  factory TransferData.fromFile(String? filePath, [int? size]) {
-    if (filePath == null) throw ArgumentError.notNull("filePath");
-
+  factory TransferData.fromFile(
+    String? filePath, [
+    int? size,
+  ]) {
+    if (filePath == null) {
+      throw ArgumentError.notNull('filePath');
+    }
     return TransferData.dataFileFactory(
-        TransferDataFile(filePath: filePath, size: size), null);
+      TransferDataFile(
+        filePath: filePath,
+        size: size,
+      ),
+      null,
+    );
   }
 
-  Map<String, dynamic> toMap() => {
-        'id': id,
-        'type': type,
-        'hash': hash,
-        'bytes': bytes,
-        'stream': stream?.toMap(),
-        'file': file?.toMap(),
-      };
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'type': type,
+      'hash': hash,
+      'bytes': bytes,
+      'stream': stream?.toMap(),
+      'file': file?.toMap(),
+    };
+  }
 }
 
 class TransferDataFile extends TransferData {
   String? filePath;
   int? size;
 
-  TransferDataFile({required this.filePath, this.size});
+  TransferDataFile({
+    required this.filePath,
+    this.size,
+  });
 
-  factory TransferDataFile.fromMap(Map<dynamic, dynamic> map) =>
-      TransferDataFile(filePath: map['filePath'], size: map['size']);
+  factory TransferDataFile.fromMap(Map<dynamic, dynamic> map) {
+    return TransferDataFile(
+      filePath: map['filePath'],
+      size: map['size'],
+    );
+  }
 
-  Map<String, dynamic> toMap() => {
-        'filePath': filePath,
-        'size': size,
-      };
+  @override
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'filePath': filePath,
+      'size': size,
+    };
+  }
 }
 
 class TransferDataStream extends TransferData {
@@ -134,15 +178,25 @@ class TransferDataStream extends TransferData {
   /// [HMSTransferEngine.sendData] is called, if [url] is null.
   Uint8List? content;
 
-  TransferDataStream({this.url, this.content});
+  TransferDataStream({
+    this.url,
+    this.content,
+  });
 
-  factory TransferDataStream.fromMap(Map<dynamic, dynamic> map) =>
-      TransferDataStream(url: map['url'], content: map['content']);
+  factory TransferDataStream.fromMap(Map<dynamic, dynamic> map) {
+    return TransferDataStream(
+      url: map['url'],
+      content: map['content'],
+    );
+  }
 
-  Map<String, dynamic> toMap() => {
-        'url': url,
-        'content': content,
-      };
+  @override
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'url': url,
+      'content': content,
+    };
+  }
 }
 
 class TransferStateUpdate {
@@ -162,35 +216,41 @@ class TransferStateUpdate {
   /// of the Data objects generated on the platform side.
   final int? hash;
 
-  TransferStateUpdate(
-      {this.status,
-      this.dataId,
-      this.totalBytes,
-      this.bytesTransferred,
-      this.hash});
+  TransferStateUpdate({
+    this.status,
+    this.dataId,
+    this.totalBytes,
+    this.bytesTransferred,
+    this.hash,
+  });
 
-  factory TransferStateUpdate.fromMap(Map<dynamic, dynamic> map) =>
-      TransferStateUpdate(
-          status: map['status'],
-          dataId: map['dataId'],
-          bytesTransferred: map['bytesTransferred'],
-          totalBytes: map['totalBytes'],
-          hash: map['hash']);
+  factory TransferStateUpdate.fromMap(Map<dynamic, dynamic> map) {
+    return TransferStateUpdate(
+      status: map['status'],
+      dataId: map['dataId'],
+      bytesTransferred: map['bytesTransferred'],
+      totalBytes: map['totalBytes'],
+      hash: map['hash'],
+    );
+  }
 
-  Map<String, dynamic> toMap() => {
-        'status': status,
-        'dataId': dataId,
-        'bytesTransferred': bytesTransferred,
-        'totalBytes': totalBytes,
-        'hash': hash,
-      };
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'status': status,
+      'dataId': dataId,
+      'bytesTransferred': bytesTransferred,
+      'totalBytes': totalBytes,
+      'hash': hash,
+    };
+  }
 
-  bool equals(object) =>
-      identical(this, object) ||
-      (object is TransferStateUpdate &&
-          status == object.status &&
-          bytesTransferred == object.bytesTransferred &&
-          totalBytes == object.totalBytes &&
-          dataId == object.dataId &&
-          hash == object.hash);
+  bool equals(dynamic object) {
+    return identical(this, object) ||
+        (object is TransferStateUpdate &&
+            status == object.status &&
+            bytesTransferred == object.bytesTransferred &&
+            totalBytes == object.totalBytes &&
+            dataId == object.dataId &&
+            hash == object.hash);
+  }
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,26 +14,40 @@
     limitations under the License.
 */
 
+part of huawei_nearbyservice;
+
 class NamespaceType {
   final String? namespace;
   final String? type;
 
-  NamespaceType(this.namespace, this.type);
+  NamespaceType(
+    this.namespace,
+    this.type,
+  );
 
-  bool equals(object) =>
-      identical(this, object) ||
-      object is NamespaceType &&
-          this.namespace == object.namespace &&
-          this.type == object.type;
+  bool equals(dynamic object) {
+    return identical(this, object) ||
+        object is NamespaceType &&
+            namespace == object.namespace &&
+            type == object.type;
+  }
 
-  factory NamespaceType.fromMap(Map<dynamic, dynamic> map) =>
-      NamespaceType(map['namespace'], map['type']);
+  factory NamespaceType.fromMap(Map<dynamic, dynamic> map) {
+    return NamespaceType(
+      map['namespace'],
+      map['type'],
+    );
+  }
 
-  Map<String, dynamic> toMap() => {
-        'namespace': namespace,
-        'type': type,
-      };
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'namespace': namespace,
+      'type': type,
+    };
+  }
 
   @override
-  String toString() => 'namespace=$namespace, type=$type';
+  String toString() {
+    return 'namespace=$namespace, type=$type';
+  }
 }

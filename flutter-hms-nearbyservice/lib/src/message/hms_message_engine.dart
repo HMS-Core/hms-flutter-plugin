@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,14 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:async';
-
-import 'package:flutter/services.dart';
-import 'package:huawei_nearbyservice/huawei_nearbyservice.dart';
-import 'package:huawei_nearbyservice/src/message/callback/classes.dart';
-import 'package:huawei_nearbyservice/src/message/classes/message.dart';
-import 'package:huawei_nearbyservice/src/message/classes/message_option.dart';
-import 'package:huawei_nearbyservice/src/utils/channels.dart';
+part of huawei_nearbyservice;
 
 class HMSMessageEngine {
   final MethodChannel _methodChannel;
@@ -38,56 +31,82 @@ class HMSMessageEngine {
   static MessageGetOption? _pendingGetOption;
 
   static final HMSMessageEngine _instance = HMSMessageEngine._(
-      const MethodChannel(MESSAGE_METHOD_CHANNEL),
-      const EventChannel(MESSAGE_EVENT_CHANNEL));
+    const MethodChannel(_messageMethodChannel),
+    const EventChannel(_messageEventChannel),
+  );
 
   static HMSMessageEngine get instance {
     return _instance;
   }
 
   Stream<dynamic>? get _getMessageBroadcastStream {
-    if (_messageBroadcastStream == null) {
-      _messageBroadcastStream = _eventChannel.receiveBroadcastStream();
-    }
-
+    _messageBroadcastStream ??= _eventChannel.receiveBroadcastStream();
     return _messageBroadcastStream;
   }
 
   Future<void> put(Message message) {
-    ArgumentError.checkNotNull(message, "message");
-    return _methodChannel.invokeMethod('put', {'message': message.toMap()});
+    ArgumentError.checkNotNull(message, 'message');
+    return _methodChannel.invokeMethod(
+      'put',
+      <String, dynamic>{
+        'message': message.toMap(),
+      },
+    );
   }
 
   Future<void> putWithOption(Message message, MessagePutOption putOption) {
-    ArgumentError.checkNotNull(message, "message");
+    ArgumentError.checkNotNull(message, 'message');
     _listen();
-    return _methodChannel.invokeMethod('putWithOption',
-        {'message': message.toMap(), 'putOption': putOption.toMap()});
+    return _methodChannel.invokeMethod(
+      'putWithOption',
+      <String, dynamic>{
+        'message': message.toMap(),
+        'putOption': putOption.toMap(),
+      },
+    );
   }
 
   Future<void> registerStatusCallback(MessageStatusCallback statusCallback) {
-    ArgumentError.checkNotNull(statusCallback, "statusCallback");
+    ArgumentError.checkNotNull(statusCallback, 'statusCallback');
     _listen();
     return _methodChannel.invokeMethod(
-        'registerStatusCallback', {'statusCallback': statusCallback.id});
+      'registerStatusCallback',
+      <String, dynamic>{
+        'statusCallback': statusCallback.id,
+      },
+    );
   }
 
   Future<void> get(NearbyMessageHandler handler) {
-    ArgumentError.checkNotNull(handler, "handler");
+    ArgumentError.checkNotNull(handler, 'handler');
     _listen();
-    return _methodChannel.invokeMethod('get', {'handler': handler.id});
+    return _methodChannel.invokeMethod(
+      'get',
+      <String, dynamic>{
+        'handler': handler.id,
+      },
+    );
   }
 
   Future<void> getWithOption(
-      NearbyMessageHandler handler, MessageGetOption getOption) {
-    ArgumentError.checkNotNull(handler, "handler");
+    NearbyMessageHandler handler,
+    MessageGetOption getOption,
+  ) {
+    ArgumentError.checkNotNull(handler, 'handler');
     _listen();
-    return _methodChannel.invokeMethod('getWithOption',
-        {'handler': handler.id, 'getOption': getOption.toMap()});
+    return _methodChannel.invokeMethod(
+      'getWithOption',
+      <String, dynamic>{
+        'handler': handler.id,
+        'getOption': getOption.toMap(),
+      },
+    );
   }
 
-  Future<void> getPending(NearbyMessageHandler handler,
-      [MessageGetOption? option]) {
+  Future<void> getPending(
+    NearbyMessageHandler handler, [
+    MessageGetOption? option,
+  ]) {
     _listen();
     ArgumentError.checkNotNull(handler);
     ArgumentError.checkNotNull(handler.onFound);
@@ -95,44 +114,73 @@ class HMSMessageEngine {
     _pendingHandler = handler;
     _pendingGetOption = option;
 
-    return _methodChannel.invokeMethod('getPending',
-        <String, dynamic>{'getOption': _pendingGetOption?.toMap()});
+    return _methodChannel.invokeMethod(
+      'getPending',
+      <String, dynamic>{
+        'getOption': _pendingGetOption?.toMap(),
+      },
+    );
   }
 
   Future<void> unput(Message message, [MessagePutOption? putOption]) async {
-    ArgumentError.checkNotNull(message, "message");
+    ArgumentError.checkNotNull(message, 'message');
     await _methodChannel.invokeMethod(
-        'unput', {'message': message.toMap(), 'putOption': putOption?.toMap()});
-    if (putOption?.putCallback?.id != null)
+      'unput',
+      <String, dynamic>{
+        'message': message.toMap(),
+        'putOption': putOption?.toMap(),
+      },
+    );
+    if (putOption?.putCallback?.id != null) {
       MessagePutCallback.putCbs.remove(putOption!.putCallback!.id);
+    }
   }
 
   Future<void> unregisterStatusCallback(
-      MessageStatusCallback statusCallback) async {
-    ArgumentError.checkNotNull(statusCallback, "statusCallback");
+    MessageStatusCallback statusCallback,
+  ) async {
+    ArgumentError.checkNotNull(statusCallback, 'statusCallback');
     await _methodChannel.invokeMethod(
-        'unregisterStatusCallback', {'statusCallback': statusCallback.id});
+      'unregisterStatusCallback',
+      <String, dynamic>{
+        'statusCallback': statusCallback.id,
+      },
+    );
     MessageStatusCallback.statusCbs.remove(statusCallback.id);
   }
 
-  Future<void> unget(NearbyMessageHandler handler,
-      [MessageGetOption? getOption]) async {
-    ArgumentError.checkNotNull(handler, "handler");
+  Future<void> unget(
+    NearbyMessageHandler handler, [
+    MessageGetOption? getOption,
+  ]) async {
+    ArgumentError.checkNotNull(handler, 'handler');
     await _methodChannel.invokeMethod(
-        'unget', {'handler': handler.id, 'getOption': getOption?.toMap()});
+      'unget',
+      <String, dynamic>{
+        'handler': handler.id,
+        'getOption': getOption?.toMap(),
+      },
+    );
     NearbyMessageHandler.msgHandlerCbs.remove(handler.id);
-    if (getOption?.getCallback?.id != null)
+    if (getOption?.getCallback?.id != null) {
       MessageGetCallback.getCbs.remove(getOption!.getCallback!.id);
+    }
   }
 
   Future<void> ungetPending() async {
-    await _methodChannel.invokeMethod("ungetPending",
-        <String, dynamic>{'getOption': _pendingGetOption?.toMap()});
+    await _methodChannel.invokeMethod(
+      'ungetPending',
+      <String, dynamic>{
+        'getOption': _pendingGetOption?.toMap(),
+      },
+    );
     _pendingHandler = null;
   }
 
   Future<void> dispose() async {
-    await _methodChannel.invokeMethod("dispose");
+    await _methodChannel.invokeMethod(
+      'dispose',
+    );
     _messageSub?.cancel();
     MessageGetCallback.getCbs.clear();
     MessagePutCallback.putCbs.clear();
@@ -143,53 +191,50 @@ class HMSMessageEngine {
   }
 
   void _listen() {
-    if (_messageSub == null) {
-      _messageSub = _getMessageBroadcastStream!.listen((channelEvent) {
-        Map<dynamic, dynamic> argsMap = channelEvent;
-        String? event = argsMap['event'];
-        int? id = argsMap['id'];
-        if (id == null) {
-          print('HMSMessageEngine | id is null.');
-          return;
-        }
+    _messageSub ??= _getMessageBroadcastStream!.listen((dynamic channelEvent) {
+      Map<dynamic, dynamic> argsMap = channelEvent;
+      String? event = argsMap['event'];
+      int? id = argsMap['id'];
+      if (id == null) {
+        debugPrint('HMSMessageEngine | id is null.');
+        return;
+      }
 
-        _MessageEvent? msgEvent = _toMessageEvent(event);
-        if (msgEvent != null) {
-          NearbyMessageHandler? handler = NearbyMessageHandler.msgHandlerCbs[id];
-          switch (msgEvent) {
-            case _MessageEvent.onBleSignalChanged:
-              handler?.onBleSignalChanged?.call(
-                  Message.fromMap(argsMap['message']),
-                  BleSignal.fromMap(argsMap['bleSignal']));
-              break;
-            case _MessageEvent.onDistanceChanged:
-              handler?.onDistanceChanged?.call(
-                  Message.fromMap(argsMap['message']),
-                  Distance.fromMap(argsMap['distance']));
-              break;
-            case _MessageEvent.onFound:
-              handler?.onFound?.call(Message.fromMap(argsMap['message']));
-              break;
-            case _MessageEvent.onLost:
-              handler?.onLost?.call(Message.fromMap(argsMap['message']));
-              break;
-          }
+      _MessageEvent? msgEvent = _toMessageEvent(event);
+      if (msgEvent != null) {
+        NearbyMessageHandler? handler = NearbyMessageHandler.msgHandlerCbs[id];
+        switch (msgEvent) {
+          case _MessageEvent.onBleSignalChanged:
+            handler?.onBleSignalChanged?.call(
+              Message.fromMap(argsMap['message']),
+              BleSignal.fromMap(argsMap['bleSignal']),
+            );
+            break;
+          case _MessageEvent.onDistanceChanged:
+            handler?.onDistanceChanged?.call(
+              Message.fromMap(argsMap['message']),
+              Distance.fromMap(argsMap['distance']),
+            );
+            break;
+          case _MessageEvent.onFound:
+            handler?.onFound?.call(Message.fromMap(argsMap['message']));
+            break;
+          case _MessageEvent.onLost:
+            handler?.onLost?.call(Message.fromMap(argsMap['message']));
+            break;
         }
-
-        if (event == 'onPermissionChanged') {
-          MessageStatusCallback.statusCbs[id]?.onPermissionChanged
-              ?.call(argsMap['granted']);
-        }
-
-        if (event == 'onGetTimeout') {
-          MessageGetCallback.getCbs[id]?.onTimeout?.call();
-        }
-
-        if (event == 'onPutTimeout') {
-          MessagePutCallback.putCbs[id]?.onTimeout?.call();
-        }
-      });
-    }
+      }
+      if (event == 'onPermissionChanged') {
+        MessageStatusCallback.statusCbs[id]?.onPermissionChanged
+            ?.call(argsMap['granted']);
+      }
+      if (event == 'onGetTimeout') {
+        MessageGetCallback.getCbs[id]?.onTimeout?.call();
+      }
+      if (event == 'onPutTimeout') {
+        MessagePutCallback.putCbs[id]?.onTimeout?.call();
+      }
+    });
   }
 
   static Future<dynamic> onMethodCall(MethodCall call) {
@@ -205,23 +250,28 @@ class HMSMessageEngine {
         _pendingGetOption?.getCallback?.onTimeout?.call();
         break;
       default:
-        print('ERROR | Unknown method');
+        debugPrint('ERROR | Unknown method');
         break;
     }
-
     return Future<dynamic>.value(null);
   }
 
-  static _MessageEvent? _toMessageEvent(String? event) =>
-      _messageHandlerEventMap[event!];
+  static _MessageEvent? _toMessageEvent(String? event) {
+    return _messageHandlerEventMap[event!];
+  }
 
   static const Map<String, _MessageEvent> _messageHandlerEventMap =
       <String, _MessageEvent>{
     'onBleSignalChanged': _MessageEvent.onBleSignalChanged,
     'onDistanceChanged': _MessageEvent.onDistanceChanged,
     'onFound': _MessageEvent.onFound,
-    'onLost': _MessageEvent.onLost
+    'onLost': _MessageEvent.onLost,
   };
 }
 
-enum _MessageEvent { onBleSignalChanged, onDistanceChanged, onFound, onLost }
+enum _MessageEvent {
+  onBleSignalChanged,
+  onDistanceChanged,
+  onFound,
+  onLost,
+}
