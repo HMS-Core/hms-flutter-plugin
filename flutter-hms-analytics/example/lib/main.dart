@@ -88,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _onEnableLogWithLevel(BuildContext context) async {
-    //Possible options DEBUG, INFO, WARN, ERROR
+    // Possible options DEBUG, INFO, WARN, ERROR
     await hmsAnalytics.enableLogWithLevel("INFO");
     _showDialog(context, "enableLogWithLevel success");
   }

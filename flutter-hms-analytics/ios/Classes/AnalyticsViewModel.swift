@@ -23,7 +23,6 @@ enum ReportPolicyType: String {
 
 /// All the Analytics API's can be reached via AnalyticsViewModel class instance.
 public class AnalyticsViewModel {
-
     /// **CompletionHandler** is a typealias that provides result and error when the request is completed.
     /// - Parameters:
     ///   - result: Any Object that will be returned when the result comes.
@@ -31,7 +30,15 @@ public class AnalyticsViewModel {
     public typealias CompletionHandler = (_ result: Any?, _ error: NSError?) -> Void
 
     private var completionHandler: CompletionHandler?
-
+    
+    func getInstance(_ routePolicy: String) {
+        if (routePolicy.isEmpty) {
+            HiAnalytics.config()
+        } else {
+            HiAnalytics.config(withRoutePolicy: routePolicy)
+        }
+    }
+ 
     ///   - reportPolicyType: HAReportPolicy type.
     /// - Important:
     /// - **onScheduledTimePolicy**  -> Event reporting at scheduled time.
@@ -163,6 +170,18 @@ public class AnalyticsViewModel {
     /// Obtains the restriction status of HUAWEI Analytics.
     func isRestrictionEnabled() -> Bool {
         return HiAnalytics.isRestrictionEnabled()
+    }
+    
+    func setMinActivitySession(_ interval: Int64) {
+        HiAnalytics.setMinActivitySession(TimeInterval(interval))
+    }
+    
+    func setCollectAdsIdEnabled(_ enabled: Bool) {
+        HiAnalytics.setCollectAdsIdEnabled(enabled)
+    }
+    
+    func addDefaultEventParams(_ params: [String: Any]?) {
+        HiAnalytics.addDefaultEventParams(params)
     }
 }
 

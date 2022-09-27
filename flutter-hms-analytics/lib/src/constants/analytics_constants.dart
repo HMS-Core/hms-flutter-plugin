@@ -496,7 +496,7 @@ class HAParamType {
   static const String FIRSTPAY = "\$FirstPay";
 
   static const String TASKID = "\$TaskId";
-  
+
   static const String FRIENDNUMBER = "\$FriendNumber";
 
   static const String USERGROUPNAME = "\$UserGroupName";

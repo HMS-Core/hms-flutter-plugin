@@ -35,7 +35,7 @@ Set an unique **Application ID** on the app level build gradle file located on *
       // Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html). You may need to change the package name on AndroidManifest.xml and MainActivity.java respectively.
       // The Application ID here should match with the Package Name on the AppGalleryConnect
       applicationId "<Enter_Your_Package_Here>" // For ex: "com.example.myanalyticsproject"
-      minSdkVersion 17
+      minSdkVersion 19
       <!-- Other configurations ... -->
   }
   ```

@@ -21,9 +21,15 @@ import HiAnalytics
 
 /// Provides methods to initialize Analytics Kit and implement analysis functions.
 class Analytics: NSObject, Handling {
-
     /// All the Analytics API's can be reached via AnalyticsViewModel class instance.
     private lazy var viewModel: AnalyticsViewModel = AnalyticsViewModel()
+
+    func getInstance(_ routePolicy: String, resolve: @escaping FlutterResult) {
+        Log.debug(#function) {
+            viewModel.getInstance(routePolicy)
+            handle(resolve: resolve)
+        }
+    }
 
     /// Sets data reporting policies.
     /// - Parameters:
@@ -117,7 +123,7 @@ class Analytics: NSObject, Handling {
     /// - Parameters:
     ///   - resolve: Refers to result value, in the success scenarario, {"isSuccess": true} is returned. in the failure scenarario, exception is returned.
     /// - Returns: Void
-    func aaid(_ resolve: FlutterResult) {
+    func aaid(_ resolve: @escaping FlutterResult) {
         Log.debug(#function) {
             handle(resolve: resolve, viewModel.aaid())
         }
@@ -191,5 +197,25 @@ class Analytics: NSObject, Handling {
             handle(resolve: resolve, viewModel.isRestrictionEnabled())
         }
     }
-
+    
+    func setMinActivitySession(_ interval: Int64, resolve: @escaping FlutterResult) {
+        Log.debug(#function) {
+            viewModel.setMinActivitySession(interval)
+            handle(resolve: resolve)
+        }
+    }
+    
+    func setCollectAdsIdEnabled(_ enabled: Bool, resolve: @escaping FlutterResult) {
+        Log.debug(#function) {
+            viewModel.setCollectAdsIdEnabled(enabled)
+            handle(resolve: resolve)
+        }
+    }
+    
+    func addDefaultEventParams(_ params: [String: Any]?, resolve: @escaping FlutterResult) {
+        Log.debug(#function) {
+            viewModel.addDefaultEventParams(params)
+            handle(resolve: resolve)
+        }
+    }
 }

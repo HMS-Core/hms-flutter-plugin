@@ -15,7 +15,6 @@
 */
 
 #import "AnalyticsPlugin.h"
-#import <huawei_analytics/huawei_analytics-Swift.h>
 #if __has_include(<huawei_analytics/huawei_analytics-Swift.h>)
 #import <huawei_analytics/huawei_analytics-Swift.h>
 #else

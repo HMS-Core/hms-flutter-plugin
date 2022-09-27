@@ -20,17 +20,15 @@ import Foundation
 import HiAnalytics
 
 public class HMSAnalyticsMethodCallHandler: NSObject, FlutterPlugin {
-    let analytics: Analytics = Analytics.init()
+    private lazy var analytics: Analytics = {
+        Analytics.init()
+    }()
+    
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "com.huawei.hms.flutter.analytics", binaryMessenger: registrar.messenger())
         let instance = HMSAnalyticsMethodCallHandler()
         registrar.addMethodCallDelegate(instance, channel: channel)
         registrar.addApplicationDelegate(instance)
-    }
-
-    public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [AnyHashable: Any] = [:]) -> Bool {
-        HiAnalytics.config()
-        return true
     }
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -40,6 +38,9 @@ public class HMSAnalyticsMethodCallHandler: NSObject, FlutterPlugin {
         let method = Methods.init()
 
         switch call.method {
+        case method.GET_INSTANCE:
+            guard let routePolicy = args["routePolicy"] as? String else { return }
+            analytics.getInstance(routePolicy, resolve: result)
         case method.CLEAR_CACHED_DATA:
             analytics.clearCachedData(result)
         case method.SET_ANALYTICS_ENABLED:
@@ -77,12 +78,22 @@ public class HMSAnalyticsMethodCallHandler: NSObject, FlutterPlugin {
             analytics.deleteUserProfile(name, resolve: result)
         case method.DELETE_USER_ID:
             analytics.deleteUserId(resolve: result)
+        case method.SET_MIN_ACTIVITY_SESSIONS:
+            guard let interval = args["interval"] as? Int64 else { return }
+            analytics.setMinActivitySession(interval, resolve: result)
+        case method.SET_COLLECT_ADS_ID_ENABLED:
+            guard let enabled = args["enabled"] as? Bool else { return }
+            analytics.setCollectAdsIdEnabled(enabled, resolve: result)
+        case method.ADD_DEFAULT_EVENT_PARAMS:
+            let params = args["params"] as? [String: Any]
+            analytics.addDefaultEventParams(params, resolve: result)
         default:
             result(FlutterError(code: "platformError", message: "Not supported on iOS platform", details: ""))
         }
     }
 
     struct Methods {
+        let GET_INSTANCE = "getInstance"
         let CLEAR_CACHED_DATA = "clearCachedData"
         let SET_ANALYTICS_ENABLED = "setAnalyticsEnabled"
         let GET_AAID = "getAAID"
@@ -95,6 +106,9 @@ public class HMSAnalyticsMethodCallHandler: NSObject, FlutterPlugin {
         let SET_RESTRICTION_ENABLED = "setRestrictionEnabled"
         let IS_RESTRICTION_ENABLED = "isRestrictionEnabled"
         let DELETE_USER_PROFILE = "deleteUserProfile"
-         let DELETE_USER_ID = "deleteUserId"
+        let DELETE_USER_ID = "deleteUserId"
+        let SET_MIN_ACTIVITY_SESSIONS = "setMinActivitySessions"
+        let SET_COLLECT_ADS_ID_ENABLED = "setCollectAdsIdEnabled"
+        let ADD_DEFAULT_EVENT_PARAMS = "addDefaultEventParams"
     }
 }

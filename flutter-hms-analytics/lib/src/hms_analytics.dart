@@ -26,6 +26,10 @@ class HMSAnalytics {
 
   HMSAnalytics._getInstance(this._channel);
 
+  /// The options are CN (China), DE (Germany), SG (Singapore), and RU (Russia).
+  ///
+  /// The data processing location you set must have the data storage permission.
+  /// Otherwise, data cannot be reported to it.
   static Future<HMSAnalytics> getInstance({String routePolicy = ""}) async {
     final MethodChannel _channel =
         const MethodChannel('com.huawei.hms.flutter.analytics');
