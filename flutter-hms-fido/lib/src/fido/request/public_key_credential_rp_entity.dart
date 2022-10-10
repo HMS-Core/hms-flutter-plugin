@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_fido;
+
 class PublicKeyCredentialRpEntity {
   String? id;
   String? name;
@@ -22,7 +24,11 @@ class PublicKeyCredentialRpEntity {
   PublicKeyCredentialRpEntity({this.name, this.id, this.icon});
 
   Map<String, dynamic> toMap() {
-    return {"id": id, "name": name, "icon": icon};
+    return <String, dynamic>{
+      'id': id,
+      'name': name,
+      'icon': icon,
+    };
   }
 
   String? get getId => id;

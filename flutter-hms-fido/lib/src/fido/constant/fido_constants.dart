@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_fido;
+
 enum PublicKeyCredentialType { PUBLIC_KEY }
 
 enum Algorithm {

@@ -14,10 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:typed_data';
-
-import 'package:flutter/foundation.dart';
-import '../constant/fido_constants.dart';
+part of huawei_fido;
 
 class PublicKeyCredentialDescriptor {
   PublicKeyCredentialType? type;
@@ -26,19 +23,19 @@ class PublicKeyCredentialDescriptor {
   Uint8List? id;
 
   PublicKeyCredentialDescriptor({this.type, this.id, this.transports}) {
-    _transportValues = [];
+    _transportValues = <String>[];
     if (transports != null && transports!.isNotEmpty) {
-      transports!.forEach((element) {
+      for (AuthenticatorTransport element in transports!) {
         _transportValues!.add(describeEnum(element));
-      });
+      }
     }
   }
 
   Map<String, dynamic> toMap() {
-    return {
-      "type": describeEnum(PublicKeyCredentialType.PUBLIC_KEY),
-      "id": id,
-      "transports": _transportValues
+    return <String, dynamic>{
+      'type': describeEnum(PublicKeyCredentialType.PUBLIC_KEY),
+      'id': id,
+      'transports': _transportValues
     };
   }
 

@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:typed_data';
+part of huawei_fido;
 
 class PublicKeyCredentialUserEntity {
   String? displayName;
@@ -23,7 +23,10 @@ class PublicKeyCredentialUserEntity {
   PublicKeyCredentialUserEntity({this.id, this.displayName});
 
   Map<String, dynamic> toMap() {
-    return {"displayName": displayName, "id": id};
+    return <String, dynamic>{
+      'displayName': displayName,
+      'id': id,
+    };
   }
 
   String? get getDisplayName => displayName;

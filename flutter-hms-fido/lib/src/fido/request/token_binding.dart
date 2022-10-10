@@ -14,9 +14,7 @@
     limitations under the License.
 */
 
-import 'package:flutter/foundation.dart';
-
-import '../constant/fido_constants.dart';
+part of huawei_fido;
 
 class TokenBinding {
   String? id;
@@ -25,9 +23,9 @@ class TokenBinding {
   TokenBinding({this.id, this.status});
 
   Map<String, dynamic> toMap() {
-    return {
-      "id": id,
-      "status": status != null ? describeEnum(status!) : null,
+    return <String, dynamic>{
+      'id': id,
+      'status': status != null ? describeEnum(status!) : null,
     };
   }
 

@@ -14,8 +14,7 @@
     limitations under the License.
 */
 
-import 'package:flutter/foundation.dart';
-import '../constant/fido_constants.dart';
+part of huawei_fido;
 
 class AuthenticatorSelectionCriteria {
   Attachment? attachment;
@@ -26,10 +25,10 @@ class AuthenticatorSelectionCriteria {
       {this.attachment, this.requirement, this.resident});
 
   Map<String, dynamic> toMap() {
-    return {
-      "attachment": attachment != null ? describeEnum(attachment!) : null,
-      "resident": resident != null ? resident : null,
-      "requirement": requirement != null ? describeEnum(requirement!) : null
+    return <String, dynamic>{
+      'attachment': attachment != null ? describeEnum(attachment!) : null,
+      'resident': resident,
+      'requirement': requirement != null ? describeEnum(requirement!) : null
     };
   }
 

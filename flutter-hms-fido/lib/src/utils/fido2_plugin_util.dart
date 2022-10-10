@@ -14,9 +14,7 @@
     limitations under the License.
 */
 
-import 'package:flutter/foundation.dart';
-
-import '../../huawei_fido.dart';
+part of huawei_fido;
 
 class Fido2PluginUtil {
   static bool isEccAlgorithm(Algorithm a) {
@@ -37,15 +35,15 @@ class Fido2PluginUtil {
 
   static Algorithm getAlgorithmFromName(String s) {
     Algorithm? a;
-    Algorithm.values.forEach((element) {
+    for (Algorithm element in Algorithm.values) {
       if (s == describeEnum(element)) {
         a = element;
       }
-    });
+    }
     if (a == null) {
-      throw new IllegalParameterException("No enum constant Algorithm: $s");
+      throw IllegalParameterException('No enum constant Algorithm: $s');
     } else {
-      return a!;
+      return a;
     }
   }
 
@@ -76,8 +74,8 @@ class Fido2PluginUtil {
               case -35:
                 return Algorithm.ES384;
               default:
-                throw new IllegalParameterException(
-                    "No enum constant algorithm. code: $i");
+                throw IllegalParameterException(
+                    'No enum constant algorithm. code: $i');
             }
         }
       } else {
@@ -117,15 +115,15 @@ class Fido2PluginUtil {
 
   static Attachment attachmentFromValue(String s) {
     Attachment? attachment;
-    Attachment.values.forEach((element) {
+    for (Attachment element in Attachment.values) {
       if (s == describeEnum(element)) {
         attachment = element;
       }
-    });
+    }
     if (attachment == null) {
-      throw new IllegalParameterException("No enum Attachment $s");
+      throw IllegalParameterException('No enum Attachment $s');
     } else {
-      return attachment!;
+      return attachment;
     }
   }
 
@@ -135,16 +133,17 @@ class Fido2PluginUtil {
 
   static AttestationConveyancePreference preferenceFromValue(String s) {
     AttestationConveyancePreference? p;
-    AttestationConveyancePreference.values.forEach((element) {
+    for (AttestationConveyancePreference element
+        in AttestationConveyancePreference.values) {
       if (s == describeEnum(element)) {
         p = element;
       }
-    });
+    }
     if (p == null) {
-      throw new IllegalParameterException(
-          "No enum AttestationConveyancePreference $s");
+      throw IllegalParameterException(
+          'No enum AttestationConveyancePreference $s');
     } else {
-      return p!;
+      return p;
     }
   }
 
@@ -159,15 +158,15 @@ class Fido2PluginUtil {
 
   static TokenBindingStatus tokenBindingStatusFromValue(String s) {
     TokenBindingStatus? t;
-    TokenBindingStatus.values.forEach((element) {
+    for (TokenBindingStatus element in TokenBindingStatus.values) {
       if (s == describeEnum(element)) {
         t = element;
       }
-    });
+    }
     if (t == null) {
-      throw new IllegalParameterException("No enum TokenBindingStatus $s");
+      throw IllegalParameterException('No enum TokenBindingStatus $s');
     } else {
-      return t!;
+      return t;
     }
   }
 
@@ -178,16 +177,16 @@ class Fido2PluginUtil {
   static UserVerificationRequirement userVerificationRequirementFromValue(
       String s) {
     UserVerificationRequirement? u;
-    UserVerificationRequirement.values.forEach((element) {
+    for (UserVerificationRequirement element
+        in UserVerificationRequirement.values) {
       if (s == describeEnum(element)) {
         u = element;
       }
-    });
+    }
     if (u == null) {
-      throw new IllegalParameterException(
-          "No enum UserVerificationRequirement $s");
+      throw IllegalParameterException('No enum UserVerificationRequirement $s');
     } else {
-      return u!;
+      return u;
     }
   }
 
@@ -198,13 +197,13 @@ class Fido2PluginUtil {
 
   static AuthenticatorTransport? authenticatorTransportFromValue(String s) {
     AuthenticatorTransport? a;
-    AuthenticatorTransport.values.forEach((element) {
+    for (AuthenticatorTransport element in AuthenticatorTransport.values) {
       if (s == describeEnum(element)) {
         a = element;
       }
-    });
+    }
     if (a == null) {
-      throw new IllegalParameterException("No enum AuthenticatorTransport $s");
+      throw IllegalParameterException('No enum AuthenticatorTransport $s');
     } else {
       return a;
     }
@@ -216,7 +215,7 @@ class Fido2PluginUtil {
 
   static BioAuthnEvent? toBioEvent(String? event) =>
       _eventMap.containsKey(event) ? _eventMap[event] : null;
-  static const Map<String, BioAuthnEvent> _eventMap = {
+  static const Map<String, BioAuthnEvent> _eventMap = <String, BioAuthnEvent>{
     'onAuthError': BioAuthnEvent.onAuthError,
     'onAuthSucceeded': BioAuthnEvent.onAuthSucceeded,
     'onAuthFailed': BioAuthnEvent.onAuthFailed,
@@ -224,7 +223,7 @@ class Fido2PluginUtil {
   };
 }
 
-typedef void BioAuthnCallback(BioAuthnEvent? event,
+typedef BioAuthnCallback = void Function(BioAuthnEvent? event,
     {HmsBioAuthnResult? result, int? errCode});
 
 enum BioAuthnEvent { onAuthError, onAuthSucceeded, onAuthFailed, onAuthHelp }

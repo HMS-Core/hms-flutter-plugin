@@ -14,26 +14,20 @@
     limitations under the License.
 */
 
-import 'dart:async';
-
-import 'package:flutter/services.dart';
-import 'cipher_factory.dart';
-import 'bio_authn_prompt_info.dart';
-import 'bio_authn_result.dart';
-import '../utils/fido2_plugin_util.dart';
+part of huawei_fido;
 
 class HmsBioAuthnPrompt {
-  MethodChannel _channel =
-      const MethodChannel("com.huawei.hms.flutter.fido/bio_authn_prompt");
+  final MethodChannel _channel =
+      const MethodChannel('com.huawei.hms.flutter.fido/bio_authn_prompt');
 
   int get id => hashCode;
   late EventChannel _eventChannel;
   BioAuthnCallback? _callback;
-  StreamSubscription? _subscription;
+  StreamSubscription<dynamic>? _subscription;
 
   HmsBioAuthnPrompt() {
     _eventChannel =
-        EventChannel("com.huawei.hms.flutter.fido/bio_authn_prompt/$id");
+        EventChannel('com.huawei.hms.flutter.fido/bio_authn_prompt/$id');
   }
 
   /// No authentication hardware is available.
@@ -42,7 +36,8 @@ class HmsBioAuthnPrompt {
   /// The sensor cannot process the current fingerprint image.
   static const int ERROR_UNABLE_TO_PROCESS = 2;
 
-  /// The current request timed out. The timeout mechanism prevents infinite waiting for the fingerprint sensor's response.
+  /// The current request timed out. The timeout mechanism prevents infinite
+  /// waiting for the fingerprint sensor's response.
   /// The timeout interval varies depending on the user device and sensor.
   /// Generally, the timeout interval is 30 seconds.
   static const int ERROR_TIMEOUT = 3;
@@ -50,23 +45,30 @@ class HmsBioAuthnPrompt {
   /// The storage space is insufficient for the operation such as registration.
   static const int ERROR_NO_SPACE = 4;
 
-  /// The operation is canceled because the fingerprint authentication sensor is unavailable.
+  /// The operation is canceled because the fingerprint authentication sensor
+  /// is unavailable.
   static const int ERROR_CANCELED = 5;
 
-  /// The operation is canceled because the API is locked when the number of attempts reaches the maximum.
-  /// The API will be locked for 30 seconds after five consecutive attempt failures.
+  /// The operation is canceled because the API is locked when the number of
+  /// attempts reaches the maximum.
+  /// The API will be locked for 30 seconds after five consecutive
+  /// attempt failures.
   static const int ERROR_LOCKOUT = 7;
 
   /// Vendor-defined errors.
   static const int ERROR_VENDOR = 8;
 
-  /// The operation is canceled because the number of fingerprint authentication locking times reaches the maximum.
-  /// Then, fingerprint authentication is disabled until the user is authenticated in a stronger authentication mode,
+  /// The operation is canceled because the number of
+  /// fingerprint authentication locking times reaches the maximum.
+  /// Then, fingerprint authentication is disabled until the user is
+  /// authenticated in a stronger authentication mode,
   /// including PIN, pattern, and password authentication.
   static const int ERROR_LOCKOUT_PERMANENT = 9;
 
-  /// The operation is canceled. After receiving this error code, your app should use the standby authentication mode,
-  /// for example, password authentication. Your app also needs to provide a way,
+  /// The operation is canceled. After receiving this error code, your app
+  /// should use the standby authentication mode,
+  /// for example, password authentication. Your app also needs
+  /// to provide a way,
   /// such as a button, for using fingerprint authentication again.
   static const int ERROR_USER_CANCELED = 10;
 
@@ -82,18 +84,21 @@ class HmsBioAuthnPrompt {
   /// No PIN, pattern, and password are set for unlocking the device.
   static const int ERROR_NO_DEVICE_CREDENTIAL = 14;
 
-  /// The device failed the system integrity check, for example, the device has been rooted,
+  /// The device failed the system integrity check, for example,
+  /// the device has been rooted,
   /// the device ROM has been flashed, or the system has been damaged.
   static const int ERROR_SYS_INTEGRITY_FAILED = 1001;
 
-  /// The fingerprint authentication result failed the key-based encryption verification.
+  /// The fingerprint authentication result failed the key-based encryption
+  /// verification.
   static const int ERROR_CRYPTO_VERIFY_FAILED = 1002;
 
   /// An HMS Core framework error occurred.
   static const int ERROR_HMS_FRAMEWORK_ERROR = 1003;
 
   /// Fingerprint authentication is not supported in this OS version.
-  /// Fingerprint authentication of FIDO BioAuthn can only be used on devices running EMUI 5.0.0 or later.
+  /// Fingerprint authentication of FIDO BioAuthn can only be used on
+  /// devices running EMUI 5.0.0 or later.
   static const int ERROR_UNSUPPORTED_OS_VER = 1004;
 
   void setCallback(BioAuthnCallback callback) {
@@ -102,28 +107,29 @@ class HmsBioAuthnPrompt {
 
   Future<bool?> configurePrompt(HmsBioAuthnPromptInfo info) async {
     info.setId(id);
-    return await _channel.invokeMethod("initPrompt", info.toMap());
+    return await _channel.invokeMethod('initPrompt', info.toMap());
   }
 
   Future<void> authenticateWithoutCryptoObject() async {
     _startCallback();
-    await _channel.invokeMethod("authenticateWithoutCryptoObject");
+    await _channel.invokeMethod('authenticateWithoutCryptoObject');
   }
 
   Future<void> authenticateWithCryptoObject(HmsCipherFactory factory) async {
     _startCallback();
     await _channel.invokeMethod(
-        "authenticateWithCryptoObject", factory.toMap());
+        'authenticateWithCryptoObject', factory.toMap());
   }
 
   Future<bool?> cancelAuth() async {
     _subscription?.cancel();
-    return await _channel.invokeMethod("cancel");
+    return await _channel.invokeMethod('cancel');
   }
 
   void _startCallback() {
     _subscription?.cancel();
-    _subscription = _eventChannel.receiveBroadcastStream(id).listen((event) {
+    _subscription =
+        _eventChannel.receiveBroadcastStream(id).listen((dynamic event) {
       Map<dynamic, dynamic> map = event;
       BioAuthnEvent? bioAuthnEvent = Fido2PluginUtil.toBioEvent(map['event']);
       if (bioAuthnEvent == BioAuthnEvent.onAuthError) {

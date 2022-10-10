@@ -19,33 +19,35 @@ import 'package:huawei_fido/huawei_fido.dart';
 import 'package:huawei_fido_example/widgets/custom_button.dart';
 
 class BioAuthnManagerExample extends StatefulWidget {
+  const BioAuthnManagerExample({Key? key}) : super(key: key);
+
   @override
-  _BioAuthnManagerExampleState createState() => _BioAuthnManagerExampleState();
+  State<BioAuthnManagerExample> createState() => _BioAuthnManagerExampleState();
 }
 
 class _BioAuthnManagerExampleState extends State<BioAuthnManagerExample> {
   late HmsBioAuthnManager manager;
-  String _result = "Result will be here";
+  String _result = 'Result will be here';
 
   @override
   void initState() {
-    manager = new HmsBioAuthnManager();
+    manager = HmsBioAuthnManager();
     super.initState();
   }
 
-  _canAuth() async {
+  void _canAuth() async {
     final int? res = await manager.canAuth();
-    setState(() => _result = res.toString());
+    setState(() => _result = 'Result Code:$res');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("BioAuthn Manager Example")),
+      appBar: AppBar(title: const Text('BioAuthn Manager Example')),
       body: Column(
-        children: [
-          customButton("CHECK FINGERPRINT AUTH", _canAuth),
-          SizedBox(height: 15),
+        children: <Widget>[
+          customButton('CHECK FINGERPRINT AUTH', _canAuth),
+          const SizedBox(height: 15),
           Text(_result)
         ],
       ),

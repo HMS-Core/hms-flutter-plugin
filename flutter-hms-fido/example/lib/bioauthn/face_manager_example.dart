@@ -20,57 +20,63 @@ import 'package:huawei_fido/huawei_fido.dart';
 import '../widgets/custom_button.dart';
 
 class FaceManagerExample extends StatefulWidget {
+  const FaceManagerExample({Key? key}) : super(key: key);
+
   @override
-  _FaceManagerExampleState createState() => _FaceManagerExampleState();
+  State<FaceManagerExample> createState() => _FaceManagerExampleState();
 }
 
 class _FaceManagerExampleState extends State<FaceManagerExample> {
   late HmsFaceManager faceManager;
-  List<String> _results = ["Results will be here"];
+  final List<String> _results = <String>['Results will be here'];
 
   @override
   void initState() {
-    faceManager = new HmsFaceManager();
-    faceManager.setCallback((event, {errCode, result}) {
-      _updateList(describeEnum(event!));
+    faceManager = HmsFaceManager();
+    faceManager.setCallback((
+      BioAuthnEvent? event, {
+      int? errCode,
+      HmsBioAuthnResult? result,
+    }) {
+      _updateList('Auth event: ${describeEnum(event!)}');
     });
     _init();
     super.initState();
   }
 
   // This method is only necessary for authentication methods.
-  _init() async {
+  void _init() async {
     await faceManager.init();
   }
 
-  _canAuth() async {
+  void _canAuth() async {
     final int? result = await faceManager.canAuth();
-    _updateList(result.toString());
+    _updateList('Can auth:$result');
   }
 
-  _isHardwareDetected() async {
+  void _isHardwareDetected() async {
     final bool? result = await faceManager.isHardwareDetected();
-    _updateList(result.toString());
+    _updateList('Hardware detected:$result');
   }
 
-  _hasEnrolledTemplates() async {
+  void _hasEnrolledTemplates() async {
     final bool? result = await faceManager.hasEnrolledTemplates();
-    _updateList(result.toString());
+    _updateList('Has enrolled templates:$result');
   }
 
-  _authWithoutCryptoObject() async {
+  void _authWithoutCryptoObject() async {
     await faceManager.authWithoutCryptoObject();
   }
 
-  _authWithCryptoObject() async {
-    HmsCipherFactory factory = new HmsCipherFactory();
-    factory.storeKey = "hw_test_fingerprint";
-    factory.password = "12psw456.";
+  void _authWithCryptoObject() async {
+    HmsCipherFactory factory = HmsCipherFactory();
+    factory.storeKey = '<store_key>';
+    factory.password = '<store_password>';
 
     await faceManager.authWithCryptoObject(factory);
   }
 
-  _getFaceModality() async {
+  void _getFaceModality() async {
     final int? result = await faceManager.getFaceModality();
     _updateList(result.toString());
   }
@@ -78,16 +84,16 @@ class _FaceManagerExampleState extends State<FaceManagerExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Face Manager Example")),
+      appBar: AppBar(title: const Text('Face Manager Example')),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          customButton("CAN AUTH", _canAuth),
-          customButton("IS HARDWARE DETECTED", _isHardwareDetected),
-          customButton("HAS ENROLLED TEMPLATES", _hasEnrolledTemplates),
-          customButton("AUTH WITHOUT CRYPTO OBJECT", _authWithoutCryptoObject),
-          customButton("AUTH WITH CRYPTO OBJECT", _authWithCryptoObject),
-          customButton("GET FACE MODALITY", _getFaceModality),
+        children: <Widget>[
+          customButton('CAN AUTH', _canAuth),
+          customButton('IS HARDWARE DETECTED', _isHardwareDetected),
+          customButton('HAS ENROLLED TEMPLATES', _hasEnrolledTemplates),
+          customButton('AUTH WITHOUT CRYPTO OBJECT', _authWithoutCryptoObject),
+          customButton('AUTH WITH CRYPTO OBJECT', _authWithCryptoObject),
+          customButton('GET FACE MODALITY', _getFaceModality),
           Expanded(
               child: GestureDetector(
             onDoubleTap: () {
@@ -95,13 +101,13 @@ class _FaceManagerExampleState extends State<FaceManagerExample> {
             },
             child: Container(
               width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.symmetric(horizontal: 10),
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              margin: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               decoration: BoxDecoration(
                   border: Border.all(width: 1, color: Colors.grey)),
               child: ListView.builder(
                 itemCount: _results.length,
-                itemBuilder: (ctx, index) {
+                itemBuilder: (BuildContext ctx, int index) {
                   return Text(_results[index]);
                 },
               ),
@@ -112,7 +118,7 @@ class _FaceManagerExampleState extends State<FaceManagerExample> {
     );
   }
 
-  _updateList(String obj) {
+  void _updateList(String obj) {
     setState(() => _results.add(obj));
   }
 }

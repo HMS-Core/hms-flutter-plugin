@@ -22,38 +22,56 @@ import './fidoclient/fido_example.dart';
 import './widgets/custom_button.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: Home());
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Home(),
+    );
   }
 }
 
 class Home extends StatelessWidget {
+  const Home({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("HUAWEI FIDO EXAMPLE")),
+        appBar: AppBar(title: const Text('HUAWEI FIDO EXAMPLE')),
         body: Column(
-          children: [
-            customButton("BIOAUTHN MANAGER EXAMPLE", () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => BioAuthnManagerExample()));
+          children: <Widget>[
+            customButton('BIOAUTHN MANAGER EXAMPLE', () {
+              Navigator.of(context).push(
+                MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) =>
+                        const BioAuthnManagerExample()),
+              );
             }),
-            customButton("BIOAUTHN PROMPT EXAMPLE", () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => BioAuthnPromptExample()));
+            customButton('BIOAUTHN PROMPT EXAMPLE', () {
+              Navigator.of(context).push(
+                MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) =>
+                        const BioAuthnPromptExample()),
+              );
             }),
-            customButton("FACE MANAGER EXAMPLE", () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => FaceManagerExample()));
+            customButton('FACE MANAGER EXAMPLE', () {
+              Navigator.of(context).push(
+                MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) =>
+                        const FaceManagerExample()),
+              );
             }),
-            customButton("FIDO2CLIENT EXAMPLE", () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => FidoExample()));
+            customButton('FIDO2CLIENT EXAMPLE', () {
+              Navigator.of(context).push(
+                MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) => const FidoExample()),
+              );
             }),
           ],
         ));

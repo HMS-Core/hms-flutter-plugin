@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_fido;
+
 class HmsCipherFactory {
   String? storeKey;
   String? password;
@@ -26,10 +28,10 @@ class HmsCipherFactory {
   }
 
   Map<String, dynamic> toMap() {
-    return {
-      "storeKey": storeKey,
-      "password": password,
-      "userAuthenticationRequired": userAuthenticationRequired
+    return <String, dynamic>{
+      'storeKey': storeKey,
+      'password': password,
+      'userAuthenticationRequired': userAuthenticationRequired
     };
   }
 }

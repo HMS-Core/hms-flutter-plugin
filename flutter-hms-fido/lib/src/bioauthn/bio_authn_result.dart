@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:typed_data';
+part of huawei_fido;
 
 class HmsBioAuthnResult {
   HmsCryptoObject? cryptoObject;
@@ -24,7 +24,7 @@ class HmsBioAuthnResult {
   factory HmsBioAuthnResult.fromMap(Map<dynamic, dynamic> map) {
     return HmsBioAuthnResult(
         cryptoObject: map['cryptoObject'] != null
-            ? new HmsCryptoObject.fromMap(map['cryptoObject'])
+            ? HmsCryptoObject.fromMap(map['cryptoObject'])
             : null);
   }
 }
@@ -57,9 +57,9 @@ class HmsCipher {
 
   factory HmsCipher.fromMap(Map<dynamic, dynamic> map) {
     return HmsCipher(
-        algorithm: map['algorithm'] ?? null,
-        blockSize: map['blockSize'] ?? null,
-        iv: map['iv'] ?? null,
+        algorithm: map['algorithm'],
+        blockSize: map['blockSize'],
+        iv: map['iv'],
         algorithmParameters: map['algorithmParameters'] != null
             ? HmsAlgorithmParameters.fromMap(map['algorithmParameters'])
             : null);
@@ -75,8 +75,8 @@ class HmsAlgorithmParameters {
 
   factory HmsAlgorithmParameters.fromMap(Map<dynamic, dynamic> map) {
     return HmsAlgorithmParameters(
-        algorithm: map['algorithm'] ?? null,
-        encoded: map['encoded'] ?? null,
+        algorithm: map['algorithm'],
+        encoded: map['encoded'],
         provider: map['provider'] != null
             ? HmsBioAuthnProvider.fromMap(map['provider'])
             : null);
@@ -92,9 +92,10 @@ class HmsBioAuthnProvider {
 
   factory HmsBioAuthnProvider.fromMap(Map<dynamic, dynamic> map) {
     return HmsBioAuthnProvider(
-        info: map['info'] ?? null,
-        name: map['name'] ?? null,
-        version: map['version'] ?? null);
+      info: map['info'],
+      name: map['name'],
+      version: map['version'],
+    );
   }
 }
 
@@ -107,7 +108,7 @@ class HmsSignature {
 
   factory HmsSignature.fromMap(Map<dynamic, dynamic> map) {
     return HmsSignature(
-        algorithm: map['algorithm'] ?? null,
+        algorithm: map['algorithm'],
         algorithmParameters: map['algorithmParameters'] != null
             ? HmsAlgorithmParameters.fromMap(map['algorithmParameters'])
             : null,
@@ -126,10 +127,10 @@ class HmsMac {
 
   factory HmsMac.fromMap(Map<dynamic, dynamic> map) {
     return HmsMac(
-        algorithm: map['algorithm'] ?? null,
+        algorithm: map['algorithm'],
         provider: map['provider'] != null
             ? HmsBioAuthnProvider.fromMap(map['provider'])
             : null,
-        length: map['length'] ?? null);
+        length: map['length']);
   }
 }

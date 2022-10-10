@@ -14,8 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:convert';
-import 'dart:typed_data';
+part of huawei_fido;
 
 class Fido2RegistrationResponse {
   bool? isSuccess;
@@ -35,11 +34,11 @@ class Fido2RegistrationResponse {
 
   factory Fido2RegistrationResponse.fromMap(Map<dynamic, dynamic> map) {
     return Fido2RegistrationResponse(
-        isSuccess: map['isSuccess'] ?? null,
-        fido2Status: map['fido2Status'] ?? null,
-        ctapStatus: map['ctapStatus'] ?? null,
-        ctapStatusMessage: map['ctapStatusMessage'] ?? null,
-        fido2StatusMessage: map['fido2StatusMessage'] ?? null,
+        isSuccess: map['isSuccess'],
+        fido2Status: map['fido2Status'],
+        ctapStatus: map['ctapStatus'],
+        ctapStatusMessage: map['ctapStatusMessage'],
+        fido2StatusMessage: map['fido2StatusMessage'],
         authenticatorAttestationResponse:
             map['authenticatorAttestationResponse'] != null
                 ? AuthenticatorAttestationResponse.fromMap(
@@ -58,9 +57,9 @@ class AuthenticatorAttestationResponse {
 
   factory AuthenticatorAttestationResponse.fromMap(Map<dynamic, dynamic> map) {
     return AuthenticatorAttestationResponse(
-        attestationObject: map['attestationObject'] ?? null,
-        clientDataJson: map['clientDataJson'] ?? null,
-        credentialId: map['credentialId'] ?? null);
+        attestationObject: map['attestationObject'],
+        clientDataJson: map['clientDataJson'],
+        credentialId: map['credentialId']);
   }
 
   String toJson() => json.encode(this);

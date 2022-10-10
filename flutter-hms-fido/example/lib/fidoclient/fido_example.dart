@@ -14,6 +14,7 @@
     limitations under the License.
 */
 
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -21,8 +22,10 @@ import 'package:huawei_fido/huawei_fido.dart';
 import 'package:huawei_fido_example/widgets/custom_button.dart';
 
 class FidoExample extends StatefulWidget {
+  const FidoExample({Key? key}) : super(key: key);
+
   @override
-  _FidoExampleState createState() => _FidoExampleState();
+  State<FidoExample> createState() => _FidoExampleState();
 }
 
 class _FidoExampleState extends State<FidoExample> {
@@ -30,17 +33,17 @@ class _FidoExampleState extends State<FidoExample> {
   late PublicKeyCredentialCreationOptions options;
   late PublicKeyCredentialRequestOptions requestOptions;
 
-  Map<String, dynamic> extensionMap = {};
+  Map<String, dynamic> extensionMap = <String, dynamic>{};
   late Uint8List _challenge;
   Uint8List? _credentialId;
-  List<String> _results = ["Results will be listed here\n"];
+  final List<String> _results = <String>['Results will be listed here\n'];
 
   @override
   void initState() {
-    _challenge = new Uint8List(16);
-    fido2client = new HmsFido2Client();
-    options = new PublicKeyCredentialCreationOptions();
-    requestOptions = new PublicKeyCredentialRequestOptions();
+    _challenge = Uint8List(16);
+    fido2client = HmsFido2Client();
+    options = PublicKeyCredentialCreationOptions();
+    requestOptions = PublicKeyCredentialRequestOptions();
     prepareExtensions();
     super.initState();
   }
@@ -48,7 +51,7 @@ class _FidoExampleState extends State<FidoExample> {
   void prepareExtensions() async {
     bool? hasAuthenticators = await fido2client.hasPlatformAuthenticators();
     if (hasAuthenticators ?? false) {
-      List<String?> list = [];
+      List<String?> list = <String>[];
       List<AuthenticatorMetadata?>? metaList =
           await fido2client.getPlatformAuthenticators();
       if (metaList == null) {
@@ -69,7 +72,7 @@ class _FidoExampleState extends State<FidoExample> {
             extensionMap[Fido2Extension.cIBBe.getIdentifier()] = true;
           }
         } else if (data.isSupportedUvm(AuthenticatorMetadata.UVM_FACEPRINT)) {
-          print("Lock screen 3D face authenticator");
+          log('Lock screen 3D face authenticator');
         }
       }
       extensionMap[Fido2Extension.pAcl.getIdentifier()] = list;
@@ -78,48 +81,49 @@ class _FidoExampleState extends State<FidoExample> {
 
   void setRegistrationOptions() {
     options.challenge = _challenge;
-    options.nativeFido2Options = new NativeFido2Options(
-        info: new BiometricPromptInfo(
-            title: "Registration title",
-            description: "Registration description"));
-    options.rp =
-        new PublicKeyCredentialRpEntity(name: "example_name", id: "rp_id");
-    options.user = new PublicKeyCredentialUserEntity(
-        displayName: "display_name", id: new Uint8List(10));
-    options.pubKeyCredParams = [
-      new PublicKeyCredentialParameters(algorithm: Algorithm.ES256)
+    options.nativeFido2Options = NativeFido2Options(
+        info: BiometricPromptInfo(
+            title: 'Registration title',
+            description: 'Registration description'));
+    options.rp = PublicKeyCredentialRpEntity(name: 'example_name', id: 'rp_id');
+    options.user = PublicKeyCredentialUserEntity(
+        displayName: 'display_name', id: Uint8List(10));
+    options.pubKeyCredParams = <PublicKeyCredentialParameters>[
+      PublicKeyCredentialParameters(algorithm: Algorithm.ES256)
     ];
-    options.excludeList = [new PublicKeyCredentialDescriptor(id: _challenge)];
-    options.extensions = Map.from(extensionMap);
-    options.authenticatorSelection = new AuthenticatorSelectionCriteria(
+    options.excludeList = <PublicKeyCredentialDescriptor>[
+      PublicKeyCredentialDescriptor(id: _challenge)
+    ];
+    options.extensions = Map<String, dynamic>.from(extensionMap);
+    options.authenticatorSelection = AuthenticatorSelectionCriteria(
         attachment: null, requirement: null, resident: null);
     options.timeoutSeconds = 15874587;
     options.attestation = null;
   }
 
   void setAuthenticationOptions() {
-    requestOptions.nativeFido2Options = new NativeFido2Options(
-        info: new BiometricPromptInfo(
-            title: "Authentication title",
-            description: "Authentication description"));
-    requestOptions.rpId = "rp_id";
+    requestOptions.nativeFido2Options = NativeFido2Options(
+        info: BiometricPromptInfo(
+            title: 'Authentication title',
+            description: 'Authentication description'));
+    requestOptions.rpId = 'rp_id';
     requestOptions.challenge = _challenge;
     requestOptions.timeoutSeconds = 15874587;
-    requestOptions.extensions = Map.from(extensionMap);
-    requestOptions.allowList = [
-      new PublicKeyCredentialDescriptor(id: _credentialId)
+    requestOptions.extensions = Map<String, dynamic>.from(extensionMap);
+    requestOptions.allowList = <PublicKeyCredentialDescriptor>[
+      PublicKeyCredentialDescriptor(id: _credentialId)
     ];
   }
 
   void _isSupported() async {
-    var result = await fido2client.isSupported();
-    _updateList("\n\nIS SUPPORTED result: $result");
+    bool? result = await fido2client.isSupported();
+    _updateList('\n\nIS SUPPORTED result: $result');
   }
 
   void _isSupportedCb() async {
     await fido2client
         .isSupportedExAsync(({int? resultCode, String? errString}) {
-      _updateList("\n\nIS SUPPORTED CB result: $resultCode");
+      _updateList('\n\nIS SUPPORTED CB result: $resultCode');
     });
   }
 
@@ -127,8 +131,9 @@ class _FidoExampleState extends State<FidoExample> {
     setRegistrationOptions();
     Fido2RegistrationResponse? response =
         await fido2client.getRegistrationIntent(options);
-    _updateList(
-        "REGISTRATION SUCCESS: ${response?.isSuccess} \n\n CREDENTIAL ID: ${response?.authenticatorAttestationResponse?.credentialId}");
+    _updateList('REGISTRATION SUCCESS: ${response?.isSuccess} \n\n '
+        'CREDENTIAL ID: '
+        '${response?.authenticatorAttestationResponse?.credentialId}');
     setState(() => _credentialId =
         response?.authenticatorAttestationResponse?.credentialId);
   }
@@ -137,15 +142,15 @@ class _FidoExampleState extends State<FidoExample> {
     setAuthenticationOptions();
     Fido2AuthenticationResponse? response =
         await fido2client.getAuthenticationIntent(requestOptions);
-    _updateList("\n\nAUTHENTICATION SUCCESS: ${response?.isSuccess}");
+    _updateList('\n\nAUTHENTICATION SUCCESS: ${response?.isSuccess}');
   }
 
   void _hasPlatformAuthenticatorsCb() async {
-    await fido2client.hasPlatformAuthenticatorsWithCb(({result}) {
-      _updateList("\n\nHAS PLATFORM AUTHENTICATORS CB: $result");
-    }, ({errString, errorCode}) {
+    await fido2client.hasPlatformAuthenticatorsWithCb(({bool? result}) {
+      _updateList('\n\nHAS PLATFORM AUTHENTICATORS CB: $result');
+    }, ({String? errString, int? errorCode}) {
       _updateList(
-          "\n\nHAS PLATFORM AUTHENTICATORS CB: $errorCode - $errString");
+          '\n\nHAS PLATFORM AUTHENTICATORS CB: $errorCode - $errString');
     });
   }
 
@@ -158,35 +163,36 @@ class _FidoExampleState extends State<FidoExample> {
     for (AuthenticatorMetadata? meta in list) {
       _updateList(meta?.aaGuid ?? '');
     }
-    print(list.length);
+    log(list.length.toString());
   }
 
   void _getPlatformAuthenticatorsCb() async {
-    await fido2client.getPlatformAuthenticatorsWithCb(({result}) {
+    await fido2client.getPlatformAuthenticatorsWithCb((
+        {List<AuthenticatorMetadata?>? result}) {
       if (result == null) return;
       for (AuthenticatorMetadata? meta in result) {
         _updateList(meta?.aaGuid ?? '');
       }
-      print(result.length);
-    }, ({errString, errorCode}) {
+      log(result.length.toString());
+    }, ({String? errString, int? errorCode}) {
       _updateList(
-          "\n\nGET PLATFORM AUTHENTICATORS CB: $errorCode - $errString");
+          '\n\nGET PLATFORM AUTHENTICATORS CB: $errorCode - $errString');
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("FIDO EXAMPLE")),
+      appBar: AppBar(title: const Text('FIDO EXAMPLE')),
       body: Column(
-        children: [
-          customButton("IS SUPPORTED", _isSupported),
-          customButton("IS SUPPORTED CB", _isSupportedCb),
-          customButton("REGISTER", _register),
-          customButton("AUTHENTICATE", _authenticate),
-          customButton("HAS AUTHENTICATORS CB", _hasPlatformAuthenticatorsCb),
-          customButton("GET AUTHENTICATORS", _getPlatformAuthenticators),
-          customButton("GET AUTHENTICATORS CB", _getPlatformAuthenticatorsCb),
+        children: <Widget>[
+          customButton('IS SUPPORTED', _isSupported),
+          customButton('IS SUPPORTED CB', _isSupportedCb),
+          customButton('REGISTER', _register),
+          customButton('AUTHENTICATE', _authenticate),
+          customButton('HAS AUTHENTICATORS CB', _hasPlatformAuthenticatorsCb),
+          customButton('GET AUTHENTICATORS', _getPlatformAuthenticators),
+          customButton('GET AUTHENTICATORS CB', _getPlatformAuthenticatorsCb),
           Expanded(
               child: GestureDetector(
             onDoubleTap: () {
@@ -194,13 +200,13 @@ class _FidoExampleState extends State<FidoExample> {
             },
             child: Container(
               width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.symmetric(horizontal: 10),
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              margin: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               decoration: BoxDecoration(
                   border: Border.all(width: 1, color: Colors.grey)),
               child: ListView.builder(
                 itemCount: _results.length,
-                itemBuilder: (ctx, index) {
+                itemBuilder: (BuildContext ctx, int index) {
                   return Text(_results[index]);
                 },
               ),

@@ -20,39 +20,45 @@ import 'package:huawei_fido/huawei_fido.dart';
 import 'package:huawei_fido_example/widgets/custom_button.dart';
 
 class BioAuthnPromptExample extends StatefulWidget {
+  const BioAuthnPromptExample({Key? key}) : super(key: key);
+
   @override
-  _BioAuthnPromptExampleState createState() => _BioAuthnPromptExampleState();
+  State<BioAuthnPromptExample> createState() => _BioAuthnPromptExampleState();
 }
 
 class _BioAuthnPromptExampleState extends State<BioAuthnPromptExample> {
   late HmsBioAuthnPrompt prompt;
-  List<String> _results = ["Results will be listed here"];
+  final List<String> _results = <String>['Results will be listed here'];
 
   @override
   void initState() {
-    prompt = new HmsBioAuthnPrompt();
-    prompt.setCallback((event, {errCode, result}) {
-      _updateList("Auth event: " + describeEnum(event!));
+    prompt = HmsBioAuthnPrompt();
+    prompt.setCallback((
+      BioAuthnEvent? event, {
+      int? errCode,
+      HmsBioAuthnResult? result,
+    }) {
+      _updateList('Auth event: ${describeEnum(event!)}');
     });
     super.initState();
   }
 
-  _init() async {
-    HmsBioAuthnPromptInfo info = new HmsBioAuthnPromptInfo(
-        title: "Authentication",
-        subtitle: "Verify your id",
-        description: "Confirm this is you",
+  void _init() async {
+    HmsBioAuthnPromptInfo info = HmsBioAuthnPromptInfo(
+        title: 'Authentication',
+        subtitle: 'Verify your id',
+        description: 'Confirm this is you',
         deviceCredentialAllowed: false);
 
     try {
       bool? result = await prompt.configurePrompt(info);
-      _updateList("Configured: $result");
+      _updateList('Configured: $result');
     } on Exception catch (e) {
       _updateList(e.toString());
     }
   }
 
-  _authWithoutCryptoObject() async {
+  void _authWithoutCryptoObject() async {
     try {
       await prompt.authenticateWithoutCryptoObject();
     } on Exception catch (e) {
@@ -60,10 +66,10 @@ class _BioAuthnPromptExampleState extends State<BioAuthnPromptExample> {
     }
   }
 
-  _authWithCryptoObject() async {
-    HmsCipherFactory factory = new HmsCipherFactory();
-    factory.storeKey = "hw_test_fingerprint";
-    factory.password = "12psw456.";
+  void _authWithCryptoObject() async {
+    HmsCipherFactory factory = HmsCipherFactory();
+    factory.storeKey = '<store_key>';
+    factory.password = '<store_password>';
     factory.userAuthenticationRequired = true;
 
     try {
@@ -73,10 +79,10 @@ class _BioAuthnPromptExampleState extends State<BioAuthnPromptExample> {
     }
   }
 
-  _cancelAuth() async {
+  void _cancelAuth() async {
     try {
       bool? res = await prompt.cancelAuth();
-      _updateList("Auth canceled: $res");
+      _updateList('Auth canceled: $res');
     } on Exception catch (e) {
       _updateList(e.toString());
     }
@@ -85,14 +91,14 @@ class _BioAuthnPromptExampleState extends State<BioAuthnPromptExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Authn Prompt Example")),
+      appBar: AppBar(title: const Text('Authn Prompt Example')),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          customButton("Configure", _init),
-          customButton("Auth Without Crypto Object", _authWithoutCryptoObject),
-          customButton("Auth With Crypto Object", _authWithCryptoObject),
-          customButton("Cancel Auth", _cancelAuth),
+        children: <Widget>[
+          customButton('Configure', _init),
+          customButton('Auth Without Crypto Object', _authWithoutCryptoObject),
+          customButton('Auth With Crypto Object', _authWithCryptoObject),
+          customButton('Cancel Auth', _cancelAuth),
           Expanded(
               child: GestureDetector(
             onDoubleTap: () {
@@ -100,13 +106,13 @@ class _BioAuthnPromptExampleState extends State<BioAuthnPromptExample> {
             },
             child: Container(
               width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.symmetric(horizontal: 10),
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              margin: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               decoration: BoxDecoration(
                   border: Border.all(width: 1, color: Colors.grey)),
               child: ListView.builder(
                 itemCount: _results.length,
-                itemBuilder: (ctx, index) {
+                itemBuilder: (BuildContext ctx, int index) {
                   return Text(_results[index]);
                 },
               ),
@@ -117,7 +123,7 @@ class _BioAuthnPromptExampleState extends State<BioAuthnPromptExample> {
     );
   }
 
-  _updateList(String obj) {
+  void _updateList(String obj) {
     setState(() => _results.add(obj));
   }
 }

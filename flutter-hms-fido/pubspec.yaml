@@ -3,7 +3,7 @@ description: HUAWEI FIDO Kit plugin for Flutter. It provides your app with FIDO2
 homepage: https://www.huawei.com
 repository: https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-fido
 
-version: 6.3.0+304
+version: 6.3.0+305
 
 environment:
   sdk: '>=2.12.0 <3.0.0'

@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_fido;
+
 class BiometricPromptInfo {
   String? title;
   String? description;
@@ -21,7 +23,10 @@ class BiometricPromptInfo {
   BiometricPromptInfo({this.title, this.description});
 
   Map<String, dynamic> toMap() {
-    return {"title": title, "description": description};
+    return <String, dynamic>{
+      'title': title,
+      'description': description,
+    };
   }
 
   String? get getTitle => title;

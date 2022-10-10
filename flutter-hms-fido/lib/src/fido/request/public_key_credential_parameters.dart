@@ -14,8 +14,7 @@
     limitations under the License.
 */
 
-import 'package:flutter/foundation.dart';
-import '../constant/fido_constants.dart';
+part of huawei_fido;
 
 class PublicKeyCredentialParameters {
   PublicKeyCredentialType? type;
@@ -24,9 +23,9 @@ class PublicKeyCredentialParameters {
   PublicKeyCredentialParameters({this.type, this.algorithm});
 
   Map<String, dynamic> toMap() {
-    return {
-      "type": describeEnum(PublicKeyCredentialType.PUBLIC_KEY),
-      "algorithm": algorithm != null ? describeEnum(algorithm!) : null
+    return <String, dynamic>{
+      'type': describeEnum(PublicKeyCredentialType.PUBLIC_KEY),
+      'algorithm': algorithm != null ? describeEnum(algorithm!) : null
     };
   }
 

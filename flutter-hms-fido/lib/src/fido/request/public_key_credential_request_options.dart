@@ -14,10 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:typed_data';
-
-import 'native_fido2_options.dart';
-import 'public_key_credential_descriptor.dart';
+part of huawei_fido;
 
 class PublicKeyCredentialRequestOptions {
   String? rpId;
@@ -36,15 +33,18 @@ class PublicKeyCredentialRequestOptions {
       this.rpId});
 
   Map<String, dynamic> toMap() {
-    return {
-      "rpId": rpId,
-      "challenge": challenge,
-      "options":
+    return <String, dynamic>{
+      'rpId': rpId,
+      'challenge': challenge,
+      'options':
           nativeFido2Options != null ? nativeFido2Options!.toMap() : null,
-      "allowList":
-          allowList != null ? allowList!.map((e) => e.toMap()).toList() : null,
-      "extensions": extensions,
-      "timeoutSeconds": timeoutSeconds
+      'allowList': allowList != null
+          ? allowList!
+              .map((PublicKeyCredentialDescriptor e) => e.toMap())
+              .toList()
+          : null,
+      'extensions': extensions,
+      'timeoutSeconds': timeoutSeconds
     };
   }
 

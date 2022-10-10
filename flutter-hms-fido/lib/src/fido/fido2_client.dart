@@ -14,56 +14,57 @@
     limitations under the License.
 */
 
-import 'dart:convert';
-
-import 'package:flutter/services.dart';
-import './response/fido2_authentication_response.dart';
-import './response/fido2_registration_response.dart';
-import './request/public_key_credential_creation_options.dart';
-import './request/public_key_credential_request_options.dart';
-import './response/authenticator_metadata.dart';
+part of huawei_fido;
 
 class HmsFido2Client {
-  MethodChannel _channel =
-      const MethodChannel("com.huawei.hms.flutter.fido/fido_client");
+  final MethodChannel _channel =
+      const MethodChannel('com.huawei.hms.flutter.fido/fido_client');
 
   Future<bool?> isSupported() async {
-    return await _channel.invokeMethod("isSupported");
+    return await _channel.invokeMethod('isSupported');
   }
 
   Future<bool?> hasPlatformAuthenticators() async {
-    return await _channel.invokeMethod("hasPlatformAuthenticators");
+    return await _channel.invokeMethod('hasPlatformAuthenticators');
   }
 
   Future<List<AuthenticatorMetadata?>?> getPlatformAuthenticators() async {
-    var res = await _channel.invokeMethod("getPlatformAuthenticators");
-    if (res == null) return null;
-    var list = json.decode(res as String);
-    return (list as List).map((e) {
+    dynamic res = await _channel.invokeMethod('getPlatformAuthenticators');
+    if (res == null) {
+      return null;
+    }
+    dynamic list = json.decode(res as String);
+    return (list as List<dynamic>).map((dynamic e) {
       return e != null ? AuthenticatorMetadata.fromMap(e) : null;
     }).toList();
   }
 
   Future<Fido2RegistrationResponse?> getRegistrationIntent(
       PublicKeyCredentialCreationOptions options) async {
-    var res =
-        await _channel.invokeMethod("getRegistrationIntent", options.toMap());
-    return res != null ? new Fido2RegistrationResponse.fromMap(res) : null;
+    dynamic res = await _channel.invokeMethod(
+      'getRegistrationIntent',
+      options.toMap(),
+    );
+    return res != null ? Fido2RegistrationResponse.fromMap(res) : null;
   }
 
   Future<Fido2AuthenticationResponse?> getAuthenticationIntent(
       PublicKeyCredentialRequestOptions options) async {
-    var res =
-        await _channel.invokeMethod("getAuthenticationIntent", options.toMap());
-    return res != null ? new Fido2AuthenticationResponse.fromMap(res) : null;
+    dynamic res = await _channel.invokeMethod(
+      'getAuthenticationIntent',
+      options.toMap(),
+    );
+    return res != null ? Fido2AuthenticationResponse.fromMap(res) : null;
   }
 
   Future<void> isSupportedExAsync(
     Function({int? resultCode, String? errString}) callback,
   ) async {
-    var res = await _channel.invokeMethod("isSupportedExAsync");
-    if (res == null) return null;
-    Map result = Map.from(res);
+    dynamic res = await _channel.invokeMethod('isSupportedExAsync');
+    if (res == null) {
+      return;
+    }
+    Map<dynamic, dynamic> result = Map<dynamic, dynamic>.from(res);
     callback(resultCode: result['resultCode'], errString: result['errString']);
   }
 
@@ -71,12 +72,14 @@ class HmsFido2Client {
     Function({bool? result}) onSuccess,
     Function({int? errorCode, String? errString}) onFailure,
   ) async {
-    var res = await _channel.invokeMethod("hasPlatformAuthenticatorsCb");
-    if (res == null) return null;
+    dynamic res = await _channel.invokeMethod('hasPlatformAuthenticatorsCb');
+    if (res == null) {
+      return;
+    }
     if (res.runtimeType == bool) {
       onSuccess(result: res);
     } else {
-      Map result = Map.from(res);
+      Map<dynamic, dynamic> result = Map<dynamic, dynamic>.from(res);
       onFailure(
         errorCode: result['errorCode'],
         errString: result['errString'],
@@ -88,17 +91,19 @@ class HmsFido2Client {
     Function({List<AuthenticatorMetadata?>? result}) onSuccess,
     Function({int? errorCode, String? errString}) onFailure,
   ) async {
-    var res = await _channel.invokeMethod("getPlatformAuthenticatorsCb");
-    if (res == null) return null;
+    dynamic res = await _channel.invokeMethod('getPlatformAuthenticatorsCb');
+    if (res == null) {
+      return;
+    }
     if (res.runtimeType == String) {
-      var list = json.decode(res as String);
+      dynamic list = json.decode(res as String);
       onSuccess(
-        result: (list as List).map((e) {
+        result: (list as List<dynamic>).map((dynamic e) {
           return e != null ? AuthenticatorMetadata.fromMap(e) : null;
         }).toList(),
       );
     } else {
-      Map result = Map.from(res);
+      Map<dynamic, dynamic> result = Map<dynamic, dynamic>.from(res);
       onFailure(
         errorCode: result['errorCode'],
         errString: result['errString'],

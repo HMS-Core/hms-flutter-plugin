@@ -14,10 +14,7 @@
     limitations under the License.
 */
 
-import 'package:flutter/foundation.dart';
-
-import '../constant/fido_constants.dart';
-import 'biometric_prompt_info.dart';
+part of huawei_fido;
 
 class NativeFido2Options {
   OriginFormat? originFormat;
@@ -26,9 +23,9 @@ class NativeFido2Options {
   NativeFido2Options({this.info, this.originFormat});
 
   Map<String, dynamic> toMap() {
-    return {
-      "originFormat": originFormat != null ? describeEnum(originFormat!) : null,
-      "info": info != null ? info!.toMap() : null
+    return <String, dynamic>{
+      'originFormat': originFormat != null ? describeEnum(originFormat!) : null,
+      'info': info != null ? info!.toMap() : null
     };
   }
 

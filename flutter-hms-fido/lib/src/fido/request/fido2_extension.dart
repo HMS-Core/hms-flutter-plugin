@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_fido;
+
 class Fido2Extension {
   static const int SPEC_W3C_WEBAUTHN = 0;
   static const int SPEC_HMS = 1;
@@ -32,99 +34,99 @@ class Fido2Extension {
 
   Fido2Extension(
       this.name, this.specification, this.apis, this.components, this.version) {
-    this._identifier = _initIdentifier();
+    _identifier = _initIdentifier();
   }
 
-  static Fido2Extension pAcl = Fido2Extension("pacl", 1, 3, 1, 1);
+  static Fido2Extension pAcl = Fido2Extension('pacl', 1, 3, 1, 1);
 
-  static Fido2Extension cIBBe = Fido2Extension("cibbe", 1, 1, 2, 1);
+  static Fido2Extension cIBBe = Fido2Extension('cibbe', 1, 1, 2, 1);
 
-  static Fido2Extension webAuthN = Fido2Extension("uvi", 0, 3, 6, 0);
+  static Fido2Extension webAuthN = Fido2Extension('uvi', 0, 3, 6, 0);
 
   String _specName() {
-    return this.specification != 1 ? "undefined" : "hms";
+    return specification != 1 ? 'undefined' : 'hms';
   }
 
   String _apiName() {
-    StringBuffer var1 = new StringBuffer();
+    StringBuffer var1 = StringBuffer();
     String var2;
-    if (this.isApplicableApi(1)) {
-      var2 = "r";
+    if (isApplicableApi(1)) {
+      var2 = 'r';
     } else {
-      var2 = "";
+      var2 = '';
     }
 
     Fido2Extension var10000 = this;
     var1.write(var2);
     String var3;
     if (var10000.isApplicableApi(2)) {
-      var3 = "a";
+      var3 = 'a';
     } else {
-      var3 = "";
+      var3 = '';
     }
     var1.write(var3);
     return var1.toString();
   }
 
   String _compName() {
-    StringBuffer var1 = new StringBuffer();
-    if (this.isApplicableComponent(1)) {
-      var1.write("c");
+    StringBuffer var1 = StringBuffer();
+    if (isApplicableComponent(1)) {
+      var1.write('c');
     }
 
-    bool var10000 = this.isApplicableComponent(2);
-    bool var2 = this.isApplicableComponent(4);
+    bool var10000 = isApplicableComponent(2);
+    bool var2 = isApplicableComponent(4);
     if (var10000) {
-      var var3;
+      dynamic var3;
       if (var2) {
-        var3 = "a";
+        var3 = 'a';
       } else {
-        var3 = "pa";
+        var3 = 'pa';
       }
 
       var1.write(var3);
     } else if (var2) {
-      var1.write("pa");
+      var1.write('pa');
     }
     return var1.toString();
   }
 
   String _initIdentifier() {
-    if (this.specification == 0) {
-      return this.name;
+    if (specification == 0) {
+      return name;
     } else {
-      var v1 = this._specName();
-      var v2 = this._apiName();
-      var v3 = this._compName();
-      var v4 = this.name;
-      var v5 = this.version;
+      String v1 = _specName();
+      String v2 = _apiName();
+      String v3 = _compName();
+      String v4 = name;
+      int v5 = version;
       String s = v5.toString();
 
       if (v5.toString().length == 1) {
         s = v5.toString().padLeft(2, '0');
       }
 
-      return "$v1" + "_" + "$v2" + "_" + "$v3" + "_" + "$v4" + "_" + "$s";
+      return '${v1}_${v2}_${v3}_${v4}_$s';
     }
   }
 
-  String getName() => this.name;
+  String getName() => name;
 
-  String getIdentifier() => this._identifier;
+  String getIdentifier() => _identifier;
 
-  int getVersion() => this.version;
+  int getVersion() => version;
 
-  int getSpecification() => this.specification;
+  int getSpecification() => specification;
 
-  int getApis() => this.apis;
+  int getApis() => apis;
 
-  int getComponents() => this.components;
+  int getComponents() => components;
 
   bool isApplicableComponent(int i) {
-    return (this.components & i) != 0;
+    return (components & i) != 0;
   }
 
   bool isApplicableApi(int api) {
-    return (this.apis & api) != 0;
+    return (apis & api) != 0;
   }
 }

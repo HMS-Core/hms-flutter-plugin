@@ -13,6 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+part of huawei_fido;
 
 class HmsBioAuthnPromptInfo {
   int? _id;
@@ -27,20 +28,20 @@ class HmsBioAuthnPromptInfo {
     this.title,
     this.subtitle,
     this.description,
-    this.navigateButtonText = "Cancel",
+    this.navigateButtonText = 'Cancel',
     this.confirmationRequired = true,
     this.deviceCredentialAllowed = true,
   });
 
   Map<String, dynamic> toMap() {
-    return {
-      "id": _id,
-      "title": title,
-      "subtitle": subtitle,
-      "description": description,
-      "navigateButtonText": navigateButtonText,
-      "isConfirmationRequired": confirmationRequired,
-      "isDeviceCredentialAllowed": deviceCredentialAllowed
+    return <String, dynamic>{
+      'id': _id,
+      'title': title,
+      'subtitle': subtitle,
+      'description': description,
+      'navigateButtonText': navigateButtonText,
+      'isConfirmationRequired': confirmationRequired,
+      'isDeviceCredentialAllowed': deviceCredentialAllowed
     };
   }
 

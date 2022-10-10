@@ -14,28 +14,36 @@
     limitations under the License.
 */
 
-export './src/bioauthn/bio_authn_manager.dart';
-export './src/bioauthn/bio_authn_prompt.dart';
-export './src/bioauthn/bio_authn_prompt_info.dart';
-export './src/bioauthn/bio_authn_result.dart';
-export './src/bioauthn/cipher_factory.dart';
-export './src/bioauthn/face_manager.dart';
-export './src/fido/fido2_client.dart';
-export './src/fido/request/authenticator_selection_criteria.dart';
-export './src/fido/request/public_key_credential_creation_options.dart';
-export './src/fido/request/public_key_credential_request_options.dart';
-export './src/fido/request/public_key_credential_descriptor.dart';
-export './src/fido/request/public_key_credential_parameters.dart';
-export './src/fido/request/public_key_credential_rp_entity.dart';
-export './src/fido/request/public_key_credential_user_entity.dart';
-export './src/fido/request/native_fido2_options.dart';
-export './src/fido/request/fido2_extension.dart';
-export './src/fido/request/biometric_prompt_info.dart';
-export './src/fido/request/token_binding.dart';
-export './src/fido/constant/fido_constants.dart';
-export './src/fido/response/authenticator_metadata.dart';
-export './src/fido/response/fido2_registration_response.dart';
-export './src/fido/response/fido2_authentication_response.dart';
-export './src/fido/response/ctap_status.dart';
-export './src/fido/response/fido2_status.dart';
-export './src/utils/fido2_plugin_util.dart';
+library huawei_fido;
+
+import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+
+part './src/bioauthn/bio_authn_manager.dart';
+part './src/bioauthn/bio_authn_prompt.dart';
+part './src/bioauthn/bio_authn_prompt_info.dart';
+part './src/bioauthn/bio_authn_result.dart';
+part './src/bioauthn/cipher_factory.dart';
+part './src/bioauthn/face_manager.dart';
+part './src/fido/fido2_client.dart';
+part './src/fido/request/authenticator_selection_criteria.dart';
+part './src/fido/request/public_key_credential_creation_options.dart';
+part './src/fido/request/public_key_credential_request_options.dart';
+part './src/fido/request/public_key_credential_descriptor.dart';
+part './src/fido/request/public_key_credential_parameters.dart';
+part './src/fido/request/public_key_credential_rp_entity.dart';
+part './src/fido/request/public_key_credential_user_entity.dart';
+part './src/fido/request/native_fido2_options.dart';
+part './src/fido/request/fido2_extension.dart';
+part './src/fido/request/biometric_prompt_info.dart';
+part './src/fido/request/token_binding.dart';
+part './src/fido/constant/fido_constants.dart';
+part './src/fido/response/authenticator_metadata.dart';
+part './src/fido/response/fido2_registration_response.dart';
+part './src/fido/response/fido2_authentication_response.dart';
+part './src/fido/response/ctap_status.dart';
+part './src/fido/response/fido2_status.dart';
+part './src/utils/fido2_plugin_util.dart';

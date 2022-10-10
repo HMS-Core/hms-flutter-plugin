@@ -14,14 +14,15 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
+part of huawei_fido;
 
 class HmsBioAuthnManager {
-  MethodChannel _channel =
-      new MethodChannel("com.huawei.hms.flutter.fido/bio_authn_manager");
+  final MethodChannel _channel =
+      const MethodChannel('com.huawei.hms.flutter.fido/bio_authn_manager');
 
   /// Fingerprint authentication is available.
-  /// (A valid fingerprint has been enrolled and the authentication hardware is available.)
+  /// (A valid fingerprint has been enrolled and
+  /// the authentication hardware is available.)
   static const int BIO_AUTHN_SUCCESS = 0;
 
   /// No authentication hardware is available.
@@ -38,14 +39,15 @@ class HmsBioAuthnManager {
 
   /// Checks whether fingerprint authentication is available.
   Future<int?> canAuth() async {
-    return await _channel.invokeMethod("canAuth");
+    return await _channel.invokeMethod('canAuth');
   }
 
   Future<void> enableLogger() async {
-    await _channel.invokeMethod("enableLogger");
+    await _channel.invokeMethod('enableLogger');
   }
 
   Future<void> disableLogger() async {
-    await _channel.invokeMethod("disableLogger");
+    await _channel.invokeMethod('disableLogger');
   }
+  
 }

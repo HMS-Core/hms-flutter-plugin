@@ -14,25 +14,20 @@
     limitations under the License.
 */
 
-import 'dart:async';
-
-import 'package:flutter/services.dart';
-import '../utils/fido2_plugin_util.dart';
-import 'bio_authn_result.dart';
-import 'cipher_factory.dart';
+part of huawei_fido;
 
 class HmsFaceManager {
-  MethodChannel _channel =
-      const MethodChannel("com.huawei.hms.flutter.fido/face_manager");
+  final MethodChannel _channel =
+      const MethodChannel('com.huawei.hms.flutter.fido/face_manager');
 
   int get id => hashCode;
   late EventChannel _eventChannel;
   BioAuthnCallback? _callback;
-  StreamSubscription? _subscription;
+  StreamSubscription<dynamic>? _subscription;
 
   HmsFaceManager() {
     _eventChannel =
-        EventChannel("com.huawei.hms.flutter.fido/face_manager/$id");
+        EventChannel('com.huawei.hms.flutter.fido/face_manager/$id');
   }
 
   /// 3D facial authentication is available.
@@ -50,7 +45,8 @@ class HmsFaceManager {
   /// The storage space is insufficient for registration.
   static const int FACE_ERROR_NO_SPACE = 4;
 
-  /// The operation is canceled because the 3D facial authentication sensor is unavailable.
+  /// The operation is canceled because the 3D facial authentication sensor is
+  /// unavailable.
   static const int FACE_ERROR_CANCELED = 5;
 
   /// Failed to delete 3D face data.
@@ -82,7 +78,8 @@ class HmsFaceManager {
   static const int FACE_ERROR_SYS_INTEGRITY_FAILED = 1001;
 
   /// 3D facial authentication is not supported in this OS version.
-  /// 3D facial authentication of FIDO BioAuthn can only be used on devices running EMUI 10.0.0 or later.
+  /// 3D facial authentication of FIDO BioAuthn can only be used on devices
+  /// running EMUI 10.0.0 or later.
   static const int FACE_ERROR_UNSUPPORTED_OS_VER = 1002;
 
   /// An HMS Core framework error occurred.
@@ -106,22 +103,27 @@ class HmsFaceManager {
   /// The face position is too far away from the user device.
   static const int FACE_ACQUIRED_TOO_FAR = 5;
 
-  /// The user device position is too high, and only the top part of the face is obtained.
+  /// The user device position is too high, and only the top part of the
+  /// face is obtained.
   static const int FACE_ACQUIRED_TOO_HIGH = 6;
 
-  /// The user device position is too low, and only the bottom part of the face is obtained.
+  /// The user device position is too low, and only the bottom part of the
+  /// face is obtained.
   static const int FACE_ACQUIRED_TOO_LOW = 7;
 
-  /// The user device position is to the right, and only the right part of the face is obtained.
+  /// The user device position is to the right, and only the right part of the
+  /// face is obtained.
   static const int FACE_ACQUIRED_TOO_RIGHT = 8;
 
-  /// The user device position is to the left, and only the left part of the face is obtained.
+  /// The user device position is to the left, and only the left part of the
+  /// face is obtained.
   static const int FACE_ACQUIRED_TOO_LEFT = 9;
 
   /// The face moves too frequently during image collection.
   static const int FACE_ACQUIRED_TOO_MUCH_MOTION = 10;
 
-  /// The user's focus is too far away from the sensor, and an important part of the user's face is not detected.
+  /// The user's focus is too far away from the sensor, and an important part
+  /// of the user's face is not detected.
   static const int FACE_ACQUIRED_POOR_GAZE = 11;
 
   /// The sensor detects no face.
@@ -141,39 +143,40 @@ class HmsFaceManager {
   }
 
   Future<bool?> init() async {
-    return await _channel.invokeMethod("init", <String, dynamic>{'id': id});
+    return await _channel.invokeMethod('init', <String, dynamic>{'id': id});
   }
 
   Future<int?> canAuth() async {
-    return await _channel.invokeMethod("canAuth");
+    return await _channel.invokeMethod('canAuth');
   }
 
   Future<bool?> isHardwareDetected() async {
-    return await _channel.invokeMethod("isHardwareDetected");
+    return await _channel.invokeMethod('isHardwareDetected');
   }
 
   Future<bool?> hasEnrolledTemplates() async {
-    return await _channel.invokeMethod("hasEnrolledTemplates");
+    return await _channel.invokeMethod('hasEnrolledTemplates');
   }
 
   Future<void> authWithoutCryptoObject() async {
     _startCallback();
-    await _channel.invokeMethod("authenticateWithoutCryptoObject");
+    await _channel.invokeMethod('authenticateWithoutCryptoObject');
   }
 
   Future<void> authWithCryptoObject(HmsCipherFactory factory) async {
     _startCallback();
     await _channel.invokeMethod(
-        "authenticateWithCryptoObject", factory.toMap());
+        'authenticateWithCryptoObject', factory.toMap());
   }
 
   Future<int?> getFaceModality() async {
-    return await _channel.invokeMethod("getFaceModality");
+    return await _channel.invokeMethod('getFaceModality');
   }
 
   void _startCallback() {
     _subscription?.cancel();
-    _subscription = _eventChannel.receiveBroadcastStream(id).listen((event) {
+    _subscription =
+        _eventChannel.receiveBroadcastStream(id).listen((dynamic event) {
       Map<dynamic, dynamic> map = event;
       BioAuthnEvent? bioAuthnEvent = Fido2PluginUtil.toBioEvent(map['event']);
       if (bioAuthnEvent == BioAuthnEvent.onAuthError) {

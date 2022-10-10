@@ -14,17 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:typed_data';
-
-import 'package:flutter/foundation.dart';
-import 'token_binding.dart';
-import '../constant/fido_constants.dart';
-import 'authenticator_selection_criteria.dart';
-import 'public_key_credential_descriptor.dart';
-import 'public_key_credential_parameters.dart';
-import 'native_fido2_options.dart';
-import 'public_key_credential_user_entity.dart';
-import 'public_key_credential_rp_entity.dart';
+part of huawei_fido;
 
 class PublicKeyCredentialCreationOptions {
   Uint8List? challenge;
@@ -53,25 +43,29 @@ class PublicKeyCredentialCreationOptions {
       this.user});
 
   Map<String, dynamic> toMap() {
-    return {
-      "challenge": challenge,
-      "extensions": extensions,
-      "timeoutSeconds": timeoutSeconds,
-      "rp": rp != null ? rp!.toMap() : null,
-      "user": user != null ? user!.toMap() : null,
-      "tokenBinding": tokenBinding != null ? tokenBinding!.toMap() : null,
-      "options":
+    return <String, dynamic>{
+      'challenge': challenge,
+      'extensions': extensions,
+      'timeoutSeconds': timeoutSeconds,
+      'rp': rp != null ? rp!.toMap() : null,
+      'user': user != null ? user!.toMap() : null,
+      'tokenBinding': tokenBinding != null ? tokenBinding!.toMap() : null,
+      'options':
           nativeFido2Options != null ? nativeFido2Options!.toMap() : null,
-      "excludeList": excludeList != null
-          ? excludeList!.map((e) => e.toMap()).toList()
+      'excludeList': excludeList != null
+          ? excludeList!
+              .map((PublicKeyCredentialDescriptor e) => e.toMap())
+              .toList()
           : null,
-      "authenticatorSelection": authenticatorSelection != null
+      'authenticatorSelection': authenticatorSelection != null
           ? authenticatorSelection!.toMap()
           : null,
-      "pubKeyCredParams": pubKeyCredParams != null
-          ? pubKeyCredParams!.map((e) => e.toMap()).toList()
+      'pubKeyCredParams': pubKeyCredParams != null
+          ? pubKeyCredParams!
+              .map((PublicKeyCredentialParameters e) => e.toMap())
+              .toList()
           : null,
-      "attestation": attestation != null ? describeEnum(attestation!) : null
+      'attestation': attestation != null ? describeEnum(attestation!) : null
     };
   }
 

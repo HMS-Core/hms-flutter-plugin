@@ -18,11 +18,14 @@ import 'package:flutter/material.dart';
 
 Widget customButton(String title, VoidCallback callback) => Container(
       width: double.infinity,
-      margin: EdgeInsets.symmetric(vertical: 2, horizontal: 10),
-      child: RaisedButton(
-          child: Text(title),
-          padding: EdgeInsets.symmetric(vertical: 10),
-          color: Colors.blueAccent,
-          textColor: Colors.white,
-          onPressed: callback),
+      margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+      child: ElevatedButton(
+        onPressed: callback,
+        style: ElevatedButton.styleFrom(
+          primary: Colors.blueGrey,
+          onPrimary: Colors.white,
+          padding: const EdgeInsets.symmetric(vertical: 10),
+        ),
+        child: Text(title),
+      ),
     );

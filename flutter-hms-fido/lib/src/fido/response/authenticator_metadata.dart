@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_fido;
+
 class AuthenticatorMetadata {
   static const int UVM_FINGERPRINT = 2;
   static const int UVM_FACEPRINT = 16;
@@ -23,19 +25,23 @@ class AuthenticatorMetadata {
   List<dynamic>? extensions;
   bool? isAvailable;
 
-  AuthenticatorMetadata(
-      {this.extensions, this.aaGuid, this.isAvailable, this.uVms});
+  AuthenticatorMetadata({
+    this.extensions,
+    this.aaGuid,
+    this.isAvailable,
+    this.uVms,
+  });
 
   factory AuthenticatorMetadata.fromMap(Map<String, dynamic> map) {
     return AuthenticatorMetadata(
-        aaGuid: map['aaGuid'] ?? null,
-        uVms: map['uVms'] ?? null,
-        extensions: map['extensions'] ?? null,
-        isAvailable: map['isAvailable'] ?? null);
+        aaGuid: map['aaGuid'],
+        uVms: map['uVms'],
+        extensions: map['extensions'],
+        isAvailable: map['isAvailable']);
   }
 
   bool isSupportedUvm(int var1) {
-    if (this.uVms == null) return false;
-    return (this.uVms! & var1) != 0;
+    if (uVms == null) return false;
+    return (uVms! & var1) != 0;
   }
 }
