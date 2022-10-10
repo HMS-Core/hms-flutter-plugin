@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -30,18 +30,20 @@ public class CustomVariable implements ICustomVariable {
 
     @Override
     public String getValue(final Map<String, Object> map) {
-        Context context = DTMPlugin.getContext();
-        String returnValue = "";
-        String name = "";
+        final Context context = DTMPlugin.getContext();
         if (context != null) {
             HMSLogger.getInstance(context).startMethodExecutionTimer(TAG);
         }
+
+        String name = "";
         final Object value = map.get("varName");
         if (!(value instanceof String) || ((String) value).isEmpty()) {
             Log.w(TAG, "toString | Non-empty String expected for varName");
         } else {
             name = value.toString();
         }
+
+        String returnValue = "";
         if (DTMPlugin.getMap().containsKey(name)) {
             returnValue = DTMPlugin.getMap().get(name);
         }

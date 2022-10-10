@@ -1,14 +1,12 @@
 name: huawei_dtm_example
 description: Demonstrates how to use the Huawei DTM plugin.
-version: 6.1.0+301
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-
   huawei_dtm:
     path: ../
 
@@ -18,6 +16,4 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
-  assets:
-    - assets/hw_icon.png
+    

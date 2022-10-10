@@ -19,7 +19,7 @@ This demo project is an example to demonstrate the features of the **Huawei Flut
 
 ## 2. Installation
 
-Before you get started, you must register as a HUAWEI developer and complete identity verification on the [HUAWEI Developer](https://developer.huawei.com/consumer/en/) website. For details, please refer to [Register a HUAWEI ID](https://developer.huawei.com/consumer/en/doc/10104).
+Before you get started, you must register as a Huawei developer and complete identity verification on the [Huawei Developer](https://developer.huawei.com/consumer/en?ha_source=hms1) website. For details, please refer to [Register a Huawei ID](https://developer.huawei.com/consumer/en/doc/10104?ha_source=hms1).
 
 ### Creating a Project in AppGallery Connect
 
@@ -31,13 +31,13 @@ Creating an app in AppGallery Connect is required in order to communicate with H
     defaultConfig {
       // Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html). You may need to change the package name on AndroidManifest.xml and MainActivity.java respectively.
       // The Application ID here should match with the Package Name on the AppGalleryConnect.
-        applicationId "<package_name>" //For ex: "com.example.mydtmproject"
+        applicationId "<package_name>"
         minSdkVersion 19
       <!-- Other configurations ... -->
   }
   ```
 
-**Step 2.** Sign in to [AppGallery Connect](https://developer.huawei.com/consumer/en/service/josp/agc/index.html)  and select **My projects**.
+**Step 2.** Sign in to [AppGallery Connect](https://developer.huawei.com/consumer/en/service/josp/agc/index.html?ha_source=hms1)  and select **My projects**.
 
 **Step 3.** Select your project from the project list or create a new one by clicking the **Add Project** button.
 
@@ -50,9 +50,9 @@ If an app exists in the project and you need to add a new one, expand the app se
 
 - A signing certificate fingerprint is used to verify the authenticity of an app when it attempts to access an HMS Core service through the HMS Core SDK. Before using HMS Core (APK), you must locally generate a signing certificate fingerprint and configure it in AppGallery Connect. Ensure that the JDK has been installed on your computer. 
 
-- You can refer to 3rd and 4th steps of [Generating a Signing Certificate](https://developer.huawei.com/consumer/en/codelab/HMSPreparation/index.html#2) codelab tutorial for the certificate generation. Perform the following steps after you have generated the certificate.
+- You can refer to 3rd and 4th steps of [Generating a Signing Certificate](https://developer.huawei.com/consumer/en/codelab/HMSPreparation/index.html#2?ha_source=hms1) codelab tutorial for the certificate generation. Perform the following steps after you have generated the certificate.
 
-**Step 1.** Sign in to [AppGallery Connect](https://developer.huawei.com/consumer/en/service/josp/agc/index.html) and select your project from **My Projects**. Then go to **Project Setting** > **General information**. In the **App information** field, click the  icon next to SHA-256 certificate fingerprint, and enter the obtained **SHA-256 certificate fingerprint**.
+**Step 1.** Sign in to [AppGallery Connect](https://developer.huawei.com/consumer/en/service/josp/agc/index.html?ha_source=hms1) and select your project from **My Projects**. Then go to **Project Setting** > **General information**. In the **App information** field, click the  icon next to SHA-256 certificate fingerprint, and enter the obtained **SHA-256 certificate fingerprint**.
 
 **Step 2.**  After completing the configuration, click **OK** to save the changes. (Check mark icon)
 
@@ -68,7 +68,7 @@ If an app exists in the project and you need to add a new one, expand the app se
 
           signingConfigs {
               config {
-                  storeFile file('<keystore_file>.jks')
+                  storeFile file('<keystore_file>')
                   storePassword '<keystore_password>'
                   keyAlias '<key_alias>'
                   keyPassword '<key_password>'
@@ -81,7 +81,7 @@ If an app exists in the project and you need to add a new one, expand the app se
 
 To use Huawei DTM, you need to enable **Huawei Analytics** in the following steps:
 
-**Step 1.** Sign in to [AppGallery Connect](https://developer.huawei.com/consumer/en/service/josp/agc/index.html) and select your project from **My Projects**. Then go to **HUAWEI Analytics** and click **Enable Analytics service**. You can also check **Manage APIs** tab on the **Project Settings** page for the enabled HMS services on your app.
+**Step 1.** Sign in to [AppGallery Connect](https://developer.huawei.com/consumer/en/service/josp/agc/index.html?ha_source=hms1) and select your project from **My Projects**. Then go to **Huawei Analytics** and click **Enable Analytics service**. You can also check **Manage APIs** tab on the **Project Settings** page for the enabled HMS services on your app.
 
 **Step 2.** Go to **Project Setting > General information** page, under the **App information** field, click **agconnect-services.json** to download the configuration file.
 
@@ -110,7 +110,7 @@ To use Huawei DTM, you need to enable **Huawei Analytics** in the following step
 
 To access the DTM portal, perform the following steps:
 
-**Step 1.** Sign in to [AppGallery Connect](https://developer.huawei.com/consumer/en/service/josp/agc/index.html) and click **My Projects**.
+**Step 1.** Sign in to [AppGallery Connect](https://developer.huawei.com/consumer/en/service/josp/agc/index.html?ha_source=hms1) and click **My Projects**.
 
 **Step 2.** Find your app project, and click the desired app name.
 
@@ -134,7 +134,7 @@ Go to **Variable** section in **Dynamic Tag Manager** page.
 
    - **Key:** varName , **Value:**  PantsPrice
 
-     ![PantsPriceVariable](https://raw.githubusercontent.com/HMS-Core/hms-flutter-plugin/master/flutter-hms-dtm/example/.docs/PantsPriceVariable.PNG)
+     ![PantsPriceVariable](https://raw.githubusercontent.com/HMS-Core/hms-flutter-plugin/master/flutter-hms-dtm/example/.docs/PantsPriceVariable.png)
 
 
 
@@ -146,7 +146,7 @@ Go to **Variable** section in **Dynamic Tag Manager** page.
 
    - **Event parameter key** : platformName
 
-     ![PlatformNameVariable](https://raw.githubusercontent.com/HMS-Core/hms-flutter-plugin/master/flutter-hms-dtm/example/.docs/PlatformNameVariable.PNG)
+     ![PlatformNameVariable](https://raw.githubusercontent.com/HMS-Core/hms-flutter-plugin/master/flutter-hms-dtm/example/.docs/PlatformNameVariable.png)
 
 
 
@@ -154,7 +154,7 @@ Go to **Variable** section in **Dynamic Tag Manager** page.
 
    - Press **Configure** button in **Variable** page. Then click **Event Name** and press **OK**.  
 
-     ![EventNameVariable](https://raw.githubusercontent.com/HMS-Core/hms-flutter-plugin/master/flutter-hms-dtm/example/.docs/EventNameVariable.PNG)
+     ![EventNameVariable](https://raw.githubusercontent.com/HMS-Core/hms-flutter-plugin/master/flutter-hms-dtm/example/.docs/EventNameVariable.png)
 
 #### Create Condition
 
@@ -174,7 +174,7 @@ Go to **Condition** section in **Dynamic Tag Manager** page.
         - **Operator** : Equals
         - **Value** : PurchasePants
 
-     ![PurchasePantsCondition](https://raw.githubusercontent.com/HMS-Core/hms-flutter-plugin/master/flutter-hms-dtm/example/.docs/PurchasePantsCondition.PNG)
+     ![PurchasePantsCondition](https://raw.githubusercontent.com/HMS-Core/hms-flutter-plugin/master/flutter-hms-dtm/example/.docs/PurchasePantsCondition.png)
 
 **Step 2.** Create a condition for SetPantsPrice tag.
 
@@ -188,7 +188,7 @@ Go to **Condition** section in **Dynamic Tag Manager** page.
         - **Operator** : Equals
         - **Value** : SetPantsPrice
 
-     ![SetPantsPriceCondition](https://raw.githubusercontent.com/HMS-Core/hms-flutter-plugin/master/flutter-hms-dtm/example/.docs/SetPantsPriceCondition.PNG)
+     ![SetPantsPriceCondition](https://raw.githubusercontent.com/HMS-Core/hms-flutter-plugin/master/flutter-hms-dtm/example/.docs/SetPantsPriceCondition.png)
 
 **Step 3.** Create a condition for PurchaseShoes tag.
 
@@ -202,11 +202,11 @@ Go to **Condition** section in **Dynamic Tag Manager** page.
         - **Operator** : Equals
         - **Value** : PurchaseShoes
 
-     ![PurchaseShoesCondition](https://raw.githubusercontent.com/HMS-Core/hms-flutter-plugin/master/flutter-hms-dtm/example/.docs/PurchaseShoesCondition.PNG)
+     ![PurchaseShoesCondition](https://raw.githubusercontent.com/HMS-Core/hms-flutter-plugin/master/flutter-hms-dtm/example/.docs/PurchaseShoesCondition.png)
 
 #### Create Tag
 
-A tag is used in your app to track events. DTM supports the HUAWEI Analytics and custom function templates, as well as many third-party tag extension templates. With DTM, you do not need to add additional third-party tracking tags in your app. You can set parameters and trigger conditions for a tag in DTM, and release the configuration version to track events. You can also update and release tags for your app in DTM after you have released it, so you can adjust tag configurations in real time.
+A tag is used in your app to track events. DTM supports the Huawei Analytics and custom function templates, as well as many third-party tag extension templates. With DTM, you do not need to add additional third-party tracking tags in your app. You can set parameters and trigger conditions for a tag in DTM, and release the configuration version to track events. You can also update and release tags for your app in DTM after you have released it, so you can adjust tag configurations in real time.
 
 Go to **Tag** section in **Dynamic Tag Manager** page.
 
@@ -221,9 +221,9 @@ Go to **Tag** section in **Dynamic Tag Manager** page.
    - **Add**
 
      - **Key:** itemName , **Value:** Shoes
-     - **Key:** quantity , **Value:**  50
+     - **Key:** quantity , **Value:**  40
 
-        ![PurchaseShoesTag](https://raw.githubusercontent.com/HMS-Core/hms-flutter-plugin/master/flutter-hms-dtm/example/.docs/PurchaseShoesTag.PNG)
+        ![PurchaseShoesTag](https://raw.githubusercontent.com/HMS-Core/hms-flutter-plugin/master/flutter-hms-dtm/example/.docs/PurchaseShoesTag.png)
 
 - **Condition** : PurchaseShoes
 
@@ -238,9 +238,9 @@ Go to **Tag** section in **Dynamic Tag Manager** page.
    - **Add**
 
      - **Key:** discount , **Value:** 10
-     - **Key:** price , **Value:**  100
+     - **Key:** price , **Value:**  70
 
-     ![SetPantsPriceTag](https://raw.githubusercontent.com/HMS-Core/hms-flutter-plugin/master/flutter-hms-dtm/example/.docs/SetPantsPriceTag.PNG)
+     ![SetPantsPriceTag](https://raw.githubusercontent.com/HMS-Core/hms-flutter-plugin/master/flutter-hms-dtm/example/.docs/SetPantsPriceTag.png)
 
 - **Condition** : SetPantsPrice
 
@@ -248,13 +248,13 @@ Go to **Tag** section in **Dynamic Tag Manager** page.
 
    - **Name** : PurchasePants
 
-   - **Extension** : HUAWEI Analytics
+   - **Extension** : Huawei Analytics
 
    - **Add**
 
      - **Key:** price , **Value:**  {{PantsPrice}}
 
-     ![PurchasePantsTag](https://raw.githubusercontent.com/HMS-Core/hms-flutter-plugin/master/flutter-hms-dtm/example/.docs/PurchasePantsTag.PNG)
+     ![PurchasePantsTag](https://raw.githubusercontent.com/HMS-Core/hms-flutter-plugin/master/flutter-hms-dtm/example/.docs/PurchasePantsTag.png)
 
 - **Condition** : PurchasePants
 
@@ -270,4 +270,4 @@ Go to **Version** section in **Dynamic Tag Manager** page. Press **Create** butt
 
 ## 4. Licensing and Terms
 
-Huawei DTM Kit Flutter Plugin - Demo is licensed under [Apache 2.0 license](../LICENSE)
+Huawei DTM Flutter Plugin - Demo is licensed under [Apache 2.0 license](../LICENSE)

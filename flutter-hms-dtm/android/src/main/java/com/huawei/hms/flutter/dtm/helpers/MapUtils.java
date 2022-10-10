@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 public class MapUtils {
-
     public static Map<String, Object> objectToMap(final Object args) {
         final Map<String, Object> resMap = new HashMap<>();
         if (args instanceof Map) {
@@ -40,28 +39,25 @@ public class MapUtils {
     public static Bundle mapToBundle(final Map<String, Object> map) {
         final Bundle bundle = new Bundle();
 
-        if (map == null) {
-            return bundle;
-        }
+        if (map != null) {
+            final Set<Entry<String, Object>> entries = map.entrySet();
+            for (final Map.Entry<String, Object> entry : entries) {
+                final String key = entry.getKey();
+                final Object val = entry.getValue();
 
-        final Set<Entry<String, Object>> entries = map.entrySet();
-        for (final Map.Entry<String, Object> entry : entries) {
-            final String key = entry.getKey();
-            final Object val = entry.getValue();
-
-            if (val instanceof String) {
-                bundle.putString(key, (String) val);
-            } else if (val instanceof Boolean) {
-                bundle.putBoolean(key, (Boolean) val);
-            } else if (val instanceof Integer) {
-                bundle.putInt(key, (Integer) val);
-            } else if (val instanceof Long) {
-                bundle.putLong(key, (Long) val);
-            } else if (val instanceof Double) {
-                bundle.putDouble(key, (Double) val);
-            } else {
-                throw new IllegalArgumentException(
-                    "Illegal value type. Key :" + key + ", valueType : " + val.getClass().getSimpleName());
+                if (val instanceof String) {
+                    bundle.putString(key, (String) val);
+                } else if (val instanceof Boolean) {
+                    bundle.putBoolean(key, (Boolean) val);
+                } else if (val instanceof Integer) {
+                    bundle.putInt(key, (Integer) val);
+                } else if (val instanceof Long) {
+                    bundle.putLong(key, (Long) val);
+                } else if (val instanceof Double) {
+                    bundle.putDouble(key, (Double) val);
+                } else {
+                    throw new IllegalArgumentException("Illegal value type. Key :" + key + ", valueType : " + val.getClass().getSimpleName());
+                }
             }
         }
         return bundle;

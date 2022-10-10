@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -32,15 +32,8 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 
-/**
- * Hms DTM Plugin
- *
- * @author Huawei Technologies
- * @since (5.0.4 + 301)
- */
 public class DTMPlugin implements FlutterPlugin, MethodCallHandler {
     private static final String TAG = "HmsFlutterDTM";
-
     public static final String METHOD_CHANNEL_NAME = "com.huawei.hms.flutter.dtm/method";
     public static final SparseArray<MethodChannel> CHANNELS = new SparseArray<>();
     private static final Map<String, String> ALL_RETURN_VALUES = new HashMap<>();

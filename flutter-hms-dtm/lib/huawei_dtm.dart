@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,59 +14,10 @@
     limitations under the License.
 */
 
+library huawei_dtm;
+
 import 'dart:async';
 
 import 'package:flutter/services.dart';
 
-class HMSDTM {
-  static MethodChannel _channel =
-      new MethodChannel("com.huawei.hms.flutter.dtm/method")
-        ..setMethodCallHandler(_methodCallHandler);
-  static StreamController<Map<String, dynamic>> _controller =
-      StreamController<Map<String, dynamic>>.broadcast();
-
-  /// Returns a stream which can be used to listen to the triggered Custom Tags.
-  static Stream<Map<String, dynamic>> get customTagStream => _controller.stream;
-
-  /// Records events.
-  static Future<void> onEvent(String key, Map<String, dynamic> value) async {
-    if (key == null || value == null) {
-      throw ArgumentError.notNull("key | value");
-    }
-    dynamic params = {
-      'key': key,
-      'value': value,
-    };
-    await _channel.invokeMethod('onEvent', params);
-  }
-
-  /// Sets the value that will be returned for a custom variable created in
-  /// the DTM console.
-  static Future<void> setCustomVariable(String varName, dynamic value) async {
-    dynamic params = {
-      'varName': varName,
-      'value': value,
-    };
-    await _channel.invokeMethod('setCustomVariable', params);
-  }
-
-  /// Enables the HMSLogger capability which is used for sending usage
-  /// analytics of DTM SDK's methods to improve the service quality.
-  static Future<void> enableLogger() async {
-    await _channel.invokeMethod('enableLogger');
-  }
-
-  /// Disables the HMSLogger capability which is used for sending usage
-  /// analytics of DTM SDK's methods to improve the service quality.
-  static Future<void> disableLogger() async {
-    await _channel.invokeMethod('disableLogger');
-  }
-
-  static Future<dynamic> _methodCallHandler(MethodCall call) async {
-    if (call.method == 'listenToTags') {
-      Map<dynamic, dynamic> decoded = call.arguments;
-      Map<String, dynamic> map = Map.from(decoded);
-      _controller.add(map);
-    }
-  }
-}
+part 'src/huawei_dtm.dart';

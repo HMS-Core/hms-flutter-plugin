@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ public class CustomTag implements ICustomTag {
     
     @Override
     public void call(final Map<String, Object> map) {
-        Context context = DTMPlugin.getContext();
+        final Context context = DTMPlugin.getContext();
         if (context != null) {
             HMSLogger.getInstance(context).startMethodExecutionTimer(TAG);
         }

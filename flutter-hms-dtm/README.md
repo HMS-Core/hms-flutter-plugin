@@ -8,7 +8,7 @@
  **Huawei Dynamic Tag Manager (DTM)** is a dynamic tag management system. With DTM, you can dynamically update
   tracking tags on a web-based user interface to track specific events and report data to third-party analytics platforms, tracking your marketing activity data as needed. Huawei DTM Plugin allows you to report your events to other platforms simultaneously via Custom Tags. To do so, you must integrate the third-party analytics platform which you would like to use in your application.
  
- This plugin enables communication between HUAWEI DTM SDK and Flutter platform. It exposes all functionality provided by HUAWEI DTM SDK.
+ This plugin enables communication between Huawei DTM SDK and Flutter platform. It exposes all functionality provided by Huawei DTM SDK.
 
 [Learn More](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/introduction-0000001061766543?ha_source=hms1)
 
@@ -34,4 +34,4 @@ If you run into a bug in our samples, please submit an issue to the [GitHub repo
 
 ## License
 
-Huawei DTM Flutter Plugin is licensed under [Apache 2.0 license](LICENSE)
+Huawei DTM Flutter Plugin is licensed under [Apache 2.0 license](LICENSE) 
