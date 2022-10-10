@@ -17,7 +17,6 @@
 package com.huawei.hms.flutter.location.constants;
 
 public enum Channel {
-    PERMISSON_METHOD("com.huawei.flutter.location/permission_methodchannel"),
     FUSED_LOCATION_METHOD("com.huawei.flutter.location/fusedlocation_methodchannel"),
     FUSED_LOCATION_EVENT("com.huawei.flutter.location/fusedlocation_eventchannel"),
     GEOFENCE_METHOD("com.huawei.flutter.location/geofence_methodchannel"),
@@ -26,7 +25,8 @@ public enum Channel {
     ACTIVITY_IDENTIFICATION_EVENT("com.huawei.flutter.location/activityidentification_eventchannel"),
     ACTIVITY_CONVERSION_EVENT("com.huawei.flutter.location/activityconversion_eventchannel"),
     LOCATION_ENHANCE_METHOD("com.huawei.flutter.location/locationenhance_methodchannel"),
-    HMSLOGGER_METHOD("com.huawei.flutter.location/hmslogger_methodchannel");
+    HMSLOGGER_METHOD("com.huawei.flutter.location/hmslogger_methodchannel"),
+    GEOCODER_METHOD("com.huawei.flutter.location/geocoder_methodchannel");
 
     private final String id;
 

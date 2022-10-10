@@ -23,15 +23,19 @@ import com.huawei.hms.common.ApiException;
 import com.huawei.hms.flutter.location.logger.HMSLogger;
 import com.huawei.hms.flutter.location.utils.ObjectUtils;
 
-import java.util.Map;
-
 import io.flutter.plugin.common.MethodChannel.Result;
+
+import java.util.Map;
 
 public class RequestUpdatesFailureListener<T> implements OnFailureListener {
     private final String methodName;
+
     private final Context context;
+
     private final Result result;
+
     private final Integer id;
+
     private final Map<Integer, T> map;
 
     public RequestUpdatesFailureListener(final String methodName, final Context context, final Result result,

@@ -21,9 +21,9 @@ public interface ObjectUtils {
      * Utility method that castes given object to given class type
      *
      * @param source Source object to be casted
-     * @param clazz  Class that object will be casted to its type
-     * @param <S>    Source object's type
-     * @param <D>    Destination type
+     * @param clazz Class that object will be casted to its type
+     * @param <S> Source object's type
+     * @param <D> Destination type
      * @return Object that casted to D type
      */
     static <S, D> D cast(final S source, final Class<D> clazz) {

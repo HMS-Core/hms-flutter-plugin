@@ -29,6 +29,7 @@ import io.flutter.plugin.common.EventChannel.StreamHandler;
 
 public class ActivityIdentificationStreamHandler implements StreamHandler {
     private final Context context;
+
     private BroadcastReceiver broadcastReceiver;
 
     public ActivityIdentificationStreamHandler(final Context context) {

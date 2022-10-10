@@ -19,7 +19,10 @@ import 'package:flutter/material.dart';
 class CRow extends StatelessWidget {
   final List<Widget> children;
 
-  CRow({required this.children});
+  const CRow({
+    Key? key,
+    required this.children,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

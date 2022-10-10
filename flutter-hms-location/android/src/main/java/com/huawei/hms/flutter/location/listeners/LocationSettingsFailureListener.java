@@ -32,6 +32,7 @@ import io.flutter.plugin.common.MethodChannel.Result;
 
 public class LocationSettingsFailureListener implements OnFailureListener {
     private final Result result;
+
     private final Activity activity;
 
     public LocationSettingsFailureListener(final Result result, final Activity activity) {

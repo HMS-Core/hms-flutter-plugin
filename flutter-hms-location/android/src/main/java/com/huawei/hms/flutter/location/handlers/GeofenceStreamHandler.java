@@ -29,6 +29,7 @@ import io.flutter.plugin.common.EventChannel.StreamHandler;
 
 public class GeofenceStreamHandler implements StreamHandler {
     private final Context context;
+
     private BroadcastReceiver broadcastReceiver;
 
     public GeofenceStreamHandler(final Context context) {

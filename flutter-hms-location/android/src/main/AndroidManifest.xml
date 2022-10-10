@@ -2,4 +2,10 @@
   package="com.huawei.hms.flutter.location">
 
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+  <application>
+    <service
+      android:name="com.huawei.location.service.BackGroundService"
+      android:foregroundServiceType="location" />
+  </application>
 </manifest>

@@ -19,17 +19,17 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:huawei_location/location/fused_location_provider_client.dart';
-import 'package:huawei_location/location/location.dart';
-import 'package:huawei_location/location/location_request.dart';
+import 'package:huawei_location/huawei_location.dart';
 
 import '../widgets/custom_button.dart' show Btn;
 
 class LocationUpdatesScreen extends StatefulWidget {
-  static const String ROUTE_NAME = "LocationUpdatesScreen";
+  static const String ROUTE_NAME = 'LocationUpdatesScreen';
+
+  const LocationUpdatesScreen({Key? key}) : super(key: key);
 
   @override
-  _LocationUpdatesScreenState createState() => _LocationUpdatesScreenState();
+  State<LocationUpdatesScreen> createState() => _LocationUpdatesScreenState();
 }
 
 class _LocationUpdatesScreenState extends State<LocationUpdatesScreen> {
@@ -37,17 +37,21 @@ class _LocationUpdatesScreenState extends State<LocationUpdatesScreen> {
       FusedLocationProviderClient();
   final LocationRequest _locationRequest = LocationRequest()..interval = 500;
 
-  String _topText = "";
-  String _bottomText = "";
+  String _topText = '';
+  String _bottomText = '';
   int? _requestCode;
   late StreamSubscription<Location> _streamSubscription;
 
   @override
   void initState() {
     super.initState();
-    _streamSubscription = _locationService.onLocationData!.listen((location) {
-      _appendToBottomText(location.toString());
-    });
+    _streamSubscription = _locationService.onLocationData!.listen(
+      (Location location) {
+        _appendToBottomText(
+          location.toString(),
+        );
+      },
+    );
   }
 
   void _requestLocationUpdates() async {
@@ -56,13 +60,13 @@ class _LocationUpdatesScreenState extends State<LocationUpdatesScreen> {
         final int requestCode = (await (_locationService
             .requestLocationUpdates(_locationRequest)))!;
         _requestCode = requestCode;
-        _setTopText("Location updates requested successfully");
+        _setTopText('Location updates requested successfully');
       } on PlatformException catch (e) {
         _setTopText(e.toString());
       }
     } else {
       _setTopText(
-          "Already requested location updates. Try removing location updates");
+          'Already requested location updates. Try removing location updates');
     }
   }
 
@@ -71,13 +75,13 @@ class _LocationUpdatesScreenState extends State<LocationUpdatesScreen> {
       try {
         await _locationService.removeLocationUpdates(_requestCode!);
         _requestCode = null;
-        _setTopText("Location updates are removed successfully");
+        _setTopText('Location updates are removed successfully');
         _setBottomText();
       } on PlatformException catch (e) {
         _setTopText(e.toString());
       }
     } else {
-      _setTopText("requestCode does not exist. Request location updates first");
+      _setTopText('requestCode does not exist. Request location updates first');
     }
   }
 
@@ -92,13 +96,13 @@ class _LocationUpdatesScreenState extends State<LocationUpdatesScreen> {
     }
   }
 
-  void _setTopText([String text = ""]) {
+  void _setTopText([String text = '']) {
     setState(() {
       _topText = text;
     });
   }
 
-  void _setBottomText([String text = ""]) {
+  void _setBottomText([String text = '']) {
     setState(() {
       _bottomText = text;
     });
@@ -106,7 +110,7 @@ class _LocationUpdatesScreenState extends State<LocationUpdatesScreen> {
 
   void _appendToBottomText(String text) {
     setState(() {
-      _bottomText = "$_bottomText\n\n$text";
+      _bottomText = '$_bottomText\n\n$text';
     });
   }
 
@@ -117,25 +121,25 @@ class _LocationUpdatesScreenState extends State<LocationUpdatesScreen> {
         title: const Text('Location Updates'),
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Container(
-              padding: EdgeInsets.only(
+              padding: const EdgeInsets.only(
                 top: 10,
               ),
               height: 90,
               child: Text(_topText),
             ),
-            Divider(
+            const Divider(
               thickness: 0.1,
               color: Colors.black,
             ),
-            Btn("Request Location Updates", _requestLocationUpdates),
-            Btn("Remove Location Updates", _removeLocationUpdates),
+            Btn('Request Location Updates', _requestLocationUpdates),
+            Btn('Remove Location Updates', _removeLocationUpdates),
             Expanded(
-              child: new SingleChildScrollView(
+              child: SingleChildScrollView(
                 child: Text(
                   _bottomText,
                   style: const TextStyle(

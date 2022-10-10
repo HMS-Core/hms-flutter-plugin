@@ -15,6 +15,7 @@
 */
 
 import 'package:flutter/material.dart';
+import 'package:huawei_location_example/screens/geocoder_screen.dart';
 import 'package:huawei_location_example/screens/high_precision_location_screen.dart';
 
 import '../widgets/custom_button.dart';
@@ -22,8 +23,39 @@ import 'activity_screen.dart';
 import 'fusedlocation_screen.dart';
 import 'geofence_screen.dart';
 
-class HomeScreen extends StatelessWidget {
-  static const String ROUTE_NAME = "HomeScreen";
+class HomeScreen extends StatefulWidget {
+  static const String ROUTE_NAME = 'HomeScreen';
+
+  const HomeScreen({Key? key}) : super(key: key);
+   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+
+}
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      requestPermissions();
+    });
+  }
+
+  void requestPermissions() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const AlertDialog(
+          title: Text(
+            'About Permissions',
+          ),
+          content: Text(
+            'Huawei Location needs some permissions to work properly.\n\n'
+            'You are expected to handle these permissions to use Huawei Location Demo.',
+          ),
+        );
+      },
+    );
+  }  
 
   @override
   Widget build(BuildContext context) {
@@ -35,28 +67,34 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Btn("Fused Location Service", () {
+            Btn('Fused Location Service', () {
               Navigator.pushNamed(
                 context,
                 FusedLocationScreen.ROUTE_NAME,
               );
             }),
-            Btn("Activity Identification/Recognition Service", () {
+            Btn('Activity Identification/Recognition Service', () {
               Navigator.pushNamed(
                 context,
                 ActivityScreen.ROUTE_NAME,
               );
             }),
-            Btn("Geofence Service", () {
+            Btn('Geofence Service', () {
               Navigator.pushNamed(
                 context,
                 GeofenceScreen.ROUTE_NAME,
               );
             }),
-            Btn("High Precision Location Service", () {
+            Btn('High Precision Location Service', () {
               Navigator.pushNamed(
                 context,
                 HighPrecisionLocationScreen.ROUTE_NAME,
+              );
+            }),
+            Btn('Geocoder Service', () {
+              Navigator.pushNamed(
+                context,
+                GeocoderScreen.ROUTE_NAME,
               );
             }),
           ],

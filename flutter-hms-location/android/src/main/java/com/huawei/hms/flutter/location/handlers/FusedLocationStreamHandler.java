@@ -29,6 +29,7 @@ import io.flutter.plugin.common.EventChannel.StreamHandler;
 
 public class FusedLocationStreamHandler implements StreamHandler {
     private final Context context;
+
     private BroadcastReceiver broadcastReceiver;
 
     public FusedLocationStreamHandler(final Context context) {

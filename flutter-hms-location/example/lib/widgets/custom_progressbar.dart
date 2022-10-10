@@ -21,7 +21,12 @@ class ProgressBar extends StatelessWidget {
   final int value;
   final Color color;
 
-  ProgressBar({required this.label, required this.value, required this.color});
+  const ProgressBar({
+    Key? key,
+    required this.label,
+    required this.value,
+    required this.color,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +37,7 @@ class ProgressBar extends StatelessWidget {
           flex: 4,
           child: Text(
             label,
-            style: TextStyle(fontWeight: FontWeight.w700),
+            style: const TextStyle(fontWeight: FontWeight.w700),
           ),
         ),
         Flexible(

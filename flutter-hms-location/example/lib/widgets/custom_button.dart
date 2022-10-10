@@ -20,17 +20,24 @@ class Btn extends StatelessWidget {
   final String _text;
   final VoidCallback _onPressed;
 
-  Btn(this._text, this._onPressed);
+  const Btn(
+    this._text,
+    this._onPressed, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      child: Text(_text, style: TextStyle(fontSize: 14)),
       onPressed: _onPressed,
       style: ElevatedButton.styleFrom(
         primary: Colors.blueGrey,
         onPrimary: Colors.white,
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+      ),
+      child: Text(
+        _text,
+        style: const TextStyle(fontSize: 14),
       ),
     );
   }

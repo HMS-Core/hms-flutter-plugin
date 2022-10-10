@@ -16,10 +16,18 @@
 
 package com.huawei.hms.flutter.location.handlers;
 
+import static androidx.core.content.PermissionChecker.checkSelfPermission;
+
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Looper;
+import android.util.Log;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
@@ -34,32 +42,46 @@ import com.huawei.hms.flutter.location.listeners.RequestUpdatesFailureListener;
 import com.huawei.hms.flutter.location.listeners.RequestUpdatesSuccessListener;
 import com.huawei.hms.flutter.location.logger.HMSLogger;
 import com.huawei.hms.flutter.location.utils.LocationUtils;
+import com.huawei.hms.flutter.location.utils.ValueGetter;
 import com.huawei.hms.location.FusedLocationProviderClient;
 import com.huawei.hms.location.LocationEnhanceService;
 import com.huawei.hms.location.LocationRequest;
 import com.huawei.hms.location.LocationServices;
 import com.huawei.hms.location.LocationSettingsRequest;
 import com.huawei.hms.location.LocationSettingsStates;
+import com.huawei.hms.location.LogConfig;
 import com.huawei.hms.location.NavigationRequest;
 import com.huawei.hms.location.SettingsClient;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.PluginRegistry.ActivityResultListener;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
 public class FusedLocationMethodHandler implements MethodChannel.MethodCallHandler, ActivityResultListener {
+    private static final String TAG = FusedLocationMethodHandler.class.getSimpleName();
+
     private final Activity activity;
+
     private final MethodChannel channel;
+
     private final Map<Integer, LocationCallbackHandler> callbacks;
+
     private final Map<Integer, PendingIntent> requests;
+
     private final SettingsClient settingsClient;
+
     private final FusedLocationProviderClient service;
+
     private final LocationEnhanceService enhanceService;
 
+    private LogConfig logConfig;
+
     private int requestCode = 0;
+
     private MethodChannel.Result result;
 
     public FusedLocationMethodHandler(final Activity activity, final MethodChannel channel) {
@@ -89,7 +111,7 @@ public class FusedLocationMethodHandler implements MethodChannel.MethodCallHandl
 
     private void getLastLocationWithAddress(final MethodCall call, final MethodChannel.Result result) {
         service.getLastLocationWithAddress(
-            LocationUtils.fromMapToLocationRequest(call.<Map<String, Object>>arguments()))
+                LocationUtils.fromMapToLocationRequest(call.<Map<String, Object>>arguments()))
             .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
             .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
     }
@@ -176,6 +198,78 @@ public class FusedLocationMethodHandler implements MethodChannel.MethodCallHandl
             .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
     }
 
+    private void enableBackgroundLocation(final MethodCall call, final MethodChannel.Result result) {
+        int hasPermission = checkSelfPermission(activity.getApplicationContext(),
+            android.Manifest.permission.FOREGROUND_SERVICE);
+        if (hasPermission == -1) {
+            result.error("NO_PERMISSION", "App does not have FOREGROUND_SERVICE permission.", null);
+        }
+
+        Notification.Builder builder;
+        Notification mNotification;
+        Map notification = call.argument("notification");
+        String channelName = ValueGetter.getString("channelName", notification);
+        int priority = ValueGetter.getInt("priority", notification);
+        int notificationId = call.argument("notificationId");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager notificationManager = (NotificationManager) activity.getApplicationContext()
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+            String channelId = "com.huawei.hms.location.flutter.LOCATION_NOTIFICATION";
+            NotificationChannel notificationChannel = new NotificationChannel(channelId, channelName, priority);
+            notificationManager.createNotificationChannel(notificationChannel);
+            builder = new Notification.Builder(activity.getApplicationContext(), channelId);
+        } else {
+            builder = new Notification.Builder(activity.getApplicationContext());
+        }
+        LocationUtils.fillNotificationBuilder(activity.getApplicationContext(), builder, notification);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            mNotification = builder.build();
+        } else {
+            mNotification = builder.getNotification();
+        }
+
+        service.enableBackgroundLocation(notificationId, mNotification)
+            .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
+            .addOnFailureListener(e -> Log.e(TAG, e.getMessage()));
+
+    }
+
+    private void disableBackgroundLocation(final MethodCall call, final MethodChannel.Result result) {
+        service.disableBackgroundLocation()
+            .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
+            .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
+    }
+
+    private void setLogConfig(final MethodCall call, final MethodChannel.Result result) {
+        int readStorage = checkSelfPermission(activity.getApplicationContext(),
+            android.Manifest.permission.READ_EXTERNAL_STORAGE);
+        int writeStorage = checkSelfPermission(activity.getApplicationContext(),
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (readStorage == -1 && writeStorage == -1) {
+            result.error("NO_PERMISSION", "App does not have storage permission.", null);
+        }
+
+        logConfig = LocationUtils.fromMapToLogConfig(call.arguments());
+        settingsClient.setLogConfig(logConfig).addOnFailureListener(e -> Log.e(TAG, e.getMessage()));
+        if (isLogFilePath(logConfig.getLogPath())) {
+            result.success("success");
+        }
+    }
+
+    private boolean isLogFilePath(String logPath) {
+        File folder = new File(logPath);
+        return folder.exists();
+    }
+
+    private void getLogConfig(final MethodCall call, final MethodChannel.Result result) {
+        if (logConfig == null) {
+            result.error("Error", "LogConfig is null", null);
+            return;
+        }
+        result.success(LocationUtils.fromLogConfigToMap(logConfig));
+    }
+
     private Pair<Integer, LocationCallbackHandler> buildCallback(final String methodName) {
         final LocationCallbackHandler callBack = new LocationCallbackHandler(activity.getApplicationContext(),
             methodName, ++requestCode, channel);
@@ -234,6 +328,18 @@ public class FusedLocationMethodHandler implements MethodChannel.MethodCallHandl
                 break;
             case "getNavigationContextState":
                 getNavigationContextState(call, result);
+                break;
+            case "enableBackgroundLocation":
+                enableBackgroundLocation(call, result);
+                break;
+            case "disableBackgroundLocation":
+                disableBackgroundLocation(call, result);
+                break;
+            case "setLogConfig":
+                setLogConfig(call, result);
+                break;
+            case "getLogConfig":
+                getLogConfig(call, result);
                 break;
             default:
                 result.notImplemented();

@@ -19,26 +19,24 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:huawei_location/geofence/geofence.dart';
-import 'package:huawei_location/geofence/geofence_data.dart';
-import 'package:huawei_location/geofence/geofence_request.dart';
-import 'package:huawei_location/geofence/geofence_service.dart';
-import 'package:huawei_location/permission/permission_handler.dart';
+import 'package:huawei_location/huawei_location.dart';
 
 import '../widgets/custom_button.dart';
 import '../widgets/custom_textinput.dart';
 import 'add_geofence_screen.dart';
 
 class GeofenceScreen extends StatefulWidget {
-  static const String ROUTE_NAME = "GeofenceScreen";
+  static const String ROUTE_NAME = 'GeofenceScreen';
+
+  const GeofenceScreen({Key? key}) : super(key: key);
 
   @override
-  _GeofenceScreenState createState() => _GeofenceScreenState();
+  State<GeofenceScreen> createState() => _GeofenceScreenState();
 }
 
 class _GeofenceScreenState extends State<GeofenceScreen> {
-  String _topText = "";
-  String _bottomText = "";
+  String _topText = '';
+  String _bottomText = '';
 
   int? _fenceCount;
   int? _requestCode;
@@ -50,51 +48,45 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
   final GeofenceService _geofenceService = GeofenceService();
   final GeofenceRequest _geofenceRequest = GeofenceRequest();
   final TextEditingController _uniqueId = TextEditingController();
-  final PermissionHandler _permissionHandler = PermissionHandler();
 
   @override
   void initState() {
     super.initState();
     _fenceCount = _geofenceList.length;
     _geofenceListText = _geofenceIdList.toString();
-    _streamSubscription = _geofenceService.onGeofenceData!.listen((data) {
-      _appendToBottomText(data.toString());
-    });
+    _streamSubscription = _geofenceService.onGeofenceData!.listen(
+      (GeofenceData data) {
+        _appendToBottomText(
+          data.toString(),
+        );
+      },
+    );
+    _requestPermission();
   }
 
-  void _hasPermission() async {
-    try {
-      final bool status =
-          await _permissionHandler.hasBackgroundLocationPermission();
-      _setTopText("Has permission: $status");
-    } on PlatformException catch (e) {
-      _setTopText(e.toString());
-    }
-  }
-
+  // TODO: Please implement your own 'Permission Handler'.
   void _requestPermission() async {
-    try {
-      final bool status =
-          await _permissionHandler.requestBackgroundLocationPermission();
-      _setTopText("Is permission granted: $status");
-    } on PlatformException catch (e) {
-      _setTopText(e.toString());
-    }
+    // Huawei Location needs some permissions to work properly.
+    // You are expected to handle these permissions to use Huawei Location Demo.
+
+    // You can learn more about the required permissions from our official documentations.
+    // https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/dev-process-0000001089376648?ha_source=hms1
   }
 
   void _createGeofenceList() async {
     if (_requestCode != null) {
       _setTopText(
-          "Already created Geofence list. Call deleteGeofenceList method first.");
+        'Already created Geofence list. Call deleteGeofenceList method first.',
+      );
     } else if (_geofenceList.isEmpty) {
-      _setTopText("Add Geofence first.");
+      _setTopText('Add Geofence first.');
     } else {
       _geofenceRequest.geofenceList = _geofenceList;
       _geofenceRequest.initConversions = 5;
       try {
         _requestCode =
             await _geofenceService.createGeofenceList(_geofenceRequest);
-        _setTopText("Created geofence list successfully.");
+        _setTopText('Created geofence list successfully.');
       } on PlatformException catch (e) {
         _setTopText(e.toString());
       }
@@ -103,13 +95,13 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
 
   void _deleteGeofenceList() async {
     if (_requestCode == null) {
-      _setTopText("Call createGeofenceList method first.");
+      _setTopText('Call createGeofenceList method first.');
     } else {
       try {
         await _geofenceService.deleteGeofenceList(_requestCode!);
         _requestCode = null;
         _setBottomText();
-        _setTopText("");
+        _setTopText('');
       } on PlatformException catch (e) {
         _setTopText(e.toString());
       }
@@ -118,13 +110,13 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
 
   void _deleteGeofenceListWithIds() async {
     if (_requestCode == null) {
-      _setTopText("Call createGeofenceList method first.");
+      _setTopText('Call createGeofenceList method first.');
     } else {
       try {
         await _geofenceService.deleteGeofenceListWithIds(_geofenceIdList);
         _requestCode = null;
         _setBottomText();
-        _setTopText("Geofence list is successfully deleted.");
+        _setTopText('Geofence list is successfully deleted.');
       } on PlatformException catch (e) {
         _setTopText(e.toString());
       }
@@ -144,18 +136,18 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
 
   void _removeGeofence() {
     if (_geofenceList.isEmpty) {
-      _setTopText("Geofence list is empty. Add geofence first.");
+      _setTopText('Geofence list is empty. Add geofence first.');
     }
 
     final String uniqueId = _uniqueId.text;
 
     if (uniqueId.isEmpty) {
-      _setTopText("Enter unique id of the Geofence to remove it.");
+      _setTopText('Enter unique id of the Geofence to remove it.');
     } else if (!_geofenceIdList.contains(uniqueId)) {
       _setTopText("Id '$uniqueId' does not exist on Geofence list.");
     } else {
       _geofenceIdList.remove(uniqueId);
-      _geofenceList.removeWhere((e) => e.uniqueId == uniqueId);
+      _geofenceList.removeWhere((Geofence e) => e.uniqueId == uniqueId);
       setState(() {
         _fenceCount = _geofenceList.length;
         _geofenceListText = _geofenceIdList.toString();
@@ -165,24 +157,26 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
 
   void _navigateAndWaitData(BuildContext context) async {
     final dynamic result = await Navigator.pushNamed(
-        context, AddGeofenceScreen.ROUTE_NAME,
-        arguments: {
-          'geofenceList': _geofenceList,
-          'geofenceIdList': _geofenceIdList,
-        });
+      context,
+      AddGeofenceScreen.ROUTE_NAME,
+      arguments: <String, List<Object>>{
+        'geofenceList': _geofenceList,
+        'geofenceIdList': _geofenceIdList,
+      },
+    );
     setState(() {
       _fenceCount = _geofenceList.length;
       _geofenceListText = result['geofenceIdList'].toString();
     });
   }
 
-  void _setTopText([String text = ""]) {
+  void _setTopText([String text = '']) {
     setState(() {
       _topText = text;
     });
   }
 
-  void _setBottomText([String text = ""]) {
+  void _setBottomText([String text = '']) {
     setState(() {
       _bottomText = text;
     });
@@ -190,7 +184,7 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
 
   void _appendToBottomText(String text) {
     setState(() {
-      _bottomText = "$_bottomText\n\n$text";
+      _bottomText = '$_bottomText\n\n$text';
     });
   }
 
@@ -202,78 +196,67 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.only(top: 5),
+                  padding: const EdgeInsets.only(top: 5),
                   child: Text(_topText),
                 ),
-                Divider(
+                const Divider(
                   thickness: 0.1,
                   color: Colors.black,
                 ),
-                Container(
-                  child: Center(
-                    child: Column(
-                      children: <Widget>[
-                        Text("Geofences: $_fenceCount"),
-                        SizedBox(height: 15),
-                        Text(_geofenceListText),
-                      ],
-                    ),
+                Center(
+                  child: Column(
+                    children: <Widget>[
+                      Text('Geofences: $_fenceCount'),
+                      const SizedBox(height: 15),
+                      Text(_geofenceListText),
+                    ],
                   ),
                 ),
-                Divider(
+                const Divider(
+                  thickness: 0.1,
+                  color: Colors.black,
+                ),
+                Btn('Add Geofence', () {
+                  _navigateAndWaitData(context);
+                }),
+                const Divider(
                   thickness: 0.1,
                   color: Colors.black,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Btn("hasPermission", _hasPermission),
-                    Btn("requestPermission", _requestPermission),
+                    Flexible(
+                      flex: 9,
+                      child: CustomTextInput(
+                        padding: const EdgeInsets.all(0),
+                        controller: _uniqueId,
+                        labelText: 'Geofence UniqueId',
+                        keyboardType: TextInputType.text,
+                      ),
+                    ),
+                    Flexible(
+                      flex: 6,
+                      child: SizedBox(
+                        height: 45,
+                        child: Btn('Remove Geofence', _removeGeofence),
+                      ),
+                    ),
                   ],
                 ),
-                Btn("Add Geofence", () {
-                  _navigateAndWaitData(context);
-                }),
-                Divider(
+                const Divider(
                   thickness: 0.1,
                   color: Colors.black,
                 ),
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Flexible(
-                        flex: 9,
-                        child: CustomTextInput(
-                          padding: EdgeInsets.all(0),
-                          controller: _uniqueId,
-                          labelText: "Geofence UniqueId",
-                          keyboardType: TextInputType.text,
-                        ),
-                      ),
-                      Flexible(
-                        flex: 6,
-                        child: Container(
-                          height: 45,
-                          child: Btn("Remove Geofence", _removeGeofence),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Divider(
-                  thickness: 0.1,
-                  color: Colors.black,
-                ),
-                Btn("createGeofenceList", _createGeofenceList),
-                Btn("deleteGeofenceList", _deleteGeofenceList),
-                Btn("deleteGeofenceListWithIds", _deleteGeofenceListWithIds),
+                Btn('createGeofenceList', _createGeofenceList),
+                Btn('deleteGeofenceList', _deleteGeofenceList),
+                Btn('deleteGeofenceListWithIds', _deleteGeofenceListWithIds),
                 Text(_bottomText),
               ],
             ),

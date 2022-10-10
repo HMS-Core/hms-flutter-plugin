@@ -33,7 +33,9 @@ import io.flutter.plugin.common.MethodChannel.Result;
 
 public class DefaultSuccessListener<T> implements OnSuccessListener<T> {
     private final String methodName;
+
     private final Context context;
+
     private final Result result;
 
     public DefaultSuccessListener(final String methodName, final Context context, final Result result) {
@@ -75,5 +77,6 @@ public class DefaultSuccessListener<T> implements OnSuccessListener<T> {
             final NavigationResult navigationResult = ObjectUtils.cast(o, NavigationResult.class);
             result.success(LocationUtils.fromNavigationResultToMap(navigationResult));
         }
+
     }
 }

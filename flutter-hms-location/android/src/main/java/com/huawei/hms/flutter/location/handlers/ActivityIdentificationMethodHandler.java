@@ -35,17 +35,19 @@ import com.huawei.hms.location.ActivityConversionRequest;
 import com.huawei.hms.location.ActivityIdentification;
 import com.huawei.hms.location.ActivityIdentificationService;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class ActivityIdentificationMethodHandler implements MethodCallHandler {
     private final Activity activity;
+
     private final Map<Integer, PendingIntent> requests;
+
     private final ActivityIdentificationService service;
 
     private int requestCode = 0;

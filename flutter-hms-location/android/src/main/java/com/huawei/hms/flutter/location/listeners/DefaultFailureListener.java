@@ -27,7 +27,9 @@ import io.flutter.plugin.common.MethodChannel.Result;
 
 public class DefaultFailureListener implements OnFailureListener {
     private final String methodName;
+
     private final Context context;
+
     private final Result result;
 
     public DefaultFailureListener(final String methodName, final Context context, final Result result) {

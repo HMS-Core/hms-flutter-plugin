@@ -16,32 +16,29 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:huawei_location/location/fused_location_provider_client.dart';
-import 'package:huawei_location/location/location_callback.dart';
-import 'package:huawei_location/location/location_request.dart';
-import 'package:huawei_location/permission/permission_handler.dart';
+import 'package:huawei_location/huawei_location.dart';
 import 'package:huawei_location_example/widgets/custom_button.dart';
-import 'package:huawei_location_example/widgets/custom_row.dart';
 
 class HighPrecisionLocationScreen extends StatefulWidget {
-  static const String ROUTE_NAME = "HighPrecisionLocationScreen";
+  static const String ROUTE_NAME = 'HighPrecisionLocationScreen';
+
+  const HighPrecisionLocationScreen({Key? key}) : super(key: key);
 
   @override
-  _HighPrecisionLocationScreenState createState() =>
+  State<HighPrecisionLocationScreen> createState() =>
       _HighPrecisionLocationScreenState();
 }
 
 class _HighPrecisionLocationScreenState
     extends State<HighPrecisionLocationScreen> {
-  final PermissionHandler _permissionHandler = PermissionHandler();
   final FusedLocationProviderClient _locationService =
       FusedLocationProviderClient();
-  LocationRequest _locationRequest = LocationRequest()
+  final LocationRequest _locationRequest = LocationRequest()
     ..interval = 10000
     ..priority = LocationRequest.PRIORITY_HD_ACCURACY;
 
-  String _topText = "";
-  String _bottomText = "";
+  String _topText = '';
+  String _bottomText = '';
   int? _callbackId;
   late LocationCallback _locationCallback;
 
@@ -53,28 +50,21 @@ class _HighPrecisionLocationScreenState
       onLocationResult: _onCallbackResult,
       onLocationAvailability: _onCallbackResult,
     );
+
+    _requestPermission();
   }
 
-  void _onCallbackResult(result) {
+  void _onCallbackResult(dynamic result) {
     _appendToBottomText(result.toString());
   }
 
-  void _hasPermission() async {
-    try {
-      final bool status = await _permissionHandler.hasLocationPermission();
-      _setTopText("Has permission: $status");
-    } on PlatformException catch (e) {
-      _setTopText(e.toString());
-    }
-  }
-
+  // TODO: Please implement your own 'Permission Handler'.
   void _requestPermission() async {
-    try {
-      final bool status = await _permissionHandler.requestLocationPermission();
-      _setTopText("Is permission granted $status");
-    } on PlatformException catch (e) {
-      _setTopText(e.toString());
-    }
+    // Huawei Location needs some permissions to work properly.
+    // You are expected to handle these permissions to use Huawei Location Demo.
+
+    // You can learn more about the required permissions from our official documentations.
+    // https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/dev-process-0000001089376648?ha_source=hms1
   }
 
   void _reqHighPrecisionLoc() async {
@@ -83,13 +73,13 @@ class _HighPrecisionLocationScreenState
         final int callbackId = await _locationService
             .requestLocationUpdatesExCb(_locationRequest, _locationCallback);
         _callbackId = callbackId;
-        _setTopText("Location updates are requested successfully.");
+        _setTopText('Location updates are requested successfully.');
       } on PlatformException catch (e) {
         _setTopText(e.toString());
       }
     } else {
       _setTopText(
-          "Already requested location updates. Try removing location updates");
+          'Already requested location updates. Try removing location updates');
     }
   }
 
@@ -99,16 +89,16 @@ class _HighPrecisionLocationScreenState
       try {
         await _locationService.removeLocationUpdatesCb(_callbackId!);
         _callbackId = null;
-        _setTopText("Location updates are removed successfully");
+        _setTopText('Location updates are removed successfully');
       } on PlatformException catch (e) {
         _setTopText(e.toString());
       }
     } else {
-      _setTopText("callbackId does not exist. Request location updates first");
+      _setTopText('callbackId does not exist. Request location updates first');
     }
   }
 
-  void _setTopText([String text = ""]) {
+  void _setTopText([String text = '']) {
     setState(() {
       _topText = text;
     });
@@ -116,7 +106,7 @@ class _HighPrecisionLocationScreenState
 
   void _appendToBottomText(String text) {
     setState(() {
-      _bottomText = "$_bottomText\n\n$text";
+      _bottomText = '$_bottomText\n\n$text';
     });
   }
 
@@ -127,31 +117,25 @@ class _HighPrecisionLocationScreenState
         title: const Text('High Precision Location Service'),
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+          children: <Widget>[
             Container(
-              padding: EdgeInsets.only(
+              padding: const EdgeInsets.only(
                 top: 10,
               ),
               height: 90,
               child: Text(_topText),
             ),
-            Divider(
+            const Divider(
               thickness: 0.1,
               color: Colors.black,
             ),
-            CRow(
-              children: <Widget>[
-                Btn("hasPermission", _hasPermission),
-                Btn("requestPermission", this._requestPermission),
-              ],
-            ),
-            Btn("Request High Precision Location", _reqHighPrecisionLoc),
-            Btn("Remove High Precision Location", _removeHighPrecisionLoc),
+            Btn('Request High Precision Location', _reqHighPrecisionLoc),
+            Btn('Remove High Precision Location', _removeHighPrecisionLoc),
             Expanded(
-              child: new SingleChildScrollView(
+              child: SingleChildScrollView(
                 child: Text(
                   _bottomText,
                   style: const TextStyle(

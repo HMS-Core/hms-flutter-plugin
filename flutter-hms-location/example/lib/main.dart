@@ -15,6 +15,8 @@
 */
 
 import 'package:flutter/material.dart';
+import 'package:huawei_location_example/screens/geocoder_screen.dart';
+import 'package:huawei_location_example/screens/get_from_location_screen.dart';
 import 'package:huawei_location_example/screens/high_precision_location_screen.dart';
 
 import 'screens/activity_conversion_screen.dart';
@@ -23,37 +25,53 @@ import 'screens/activity_screen.dart';
 import 'screens/add_geofence_screen.dart';
 import 'screens/fusedlocation_screen.dart';
 import 'screens/geofence_screen.dart';
+import 'screens/get_from_location_name_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/location_enhance_screen.dart';
 import 'screens/location_updates_cb_screen.dart';
 import 'screens/location_updates_ex_cb_screen.dart';
 import 'screens/location_updates_screen.dart';
 
-void main() => runApp(LocationKitDemoApp());
+void main() => runApp(const LocationKitDemoApp());
 
 class LocationKitDemoApp extends StatelessWidget {
+  const LocationKitDemoApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomeScreen(),
-      routes: {
-        HomeScreen.ROUTE_NAME: (context) => HomeScreen(),
-        FusedLocationScreen.ROUTE_NAME: (context) => FusedLocationScreen(),
-        ActivityScreen.ROUTE_NAME: (context) => ActivityScreen(),
-        GeofenceScreen.ROUTE_NAME: (context) => GeofenceScreen(),
-        AddGeofenceScreen.ROUTE_NAME: (context) => AddGeofenceScreen(),
-        ActivityIdentificationScreen.ROUTE_NAME: (context) =>
-            ActivityIdentificationScreen(),
-        ActivityConversionScreen.ROUTE_NAME: (context) =>
-            ActivityConversionScreen(),
-        LocationUpdatesScreen.ROUTE_NAME: (context) => LocationUpdatesScreen(),
-        LocationUpdatesCbScreen.ROUTE_NAME: (context) =>
-            LocationUpdatesCbScreen(),
-        LocationUpdatesExCbScreen.ROUTE_NAME: (context) =>
-            LocationUpdatesExCbScreen(),
-        LocationEnhanceScreen.ROUTE_NAME: (context) => LocationEnhanceScreen(),
-        HighPrecisionLocationScreen.ROUTE_NAME: (context) =>
-            HighPrecisionLocationScreen(),
+      home: const HomeScreen(),
+      routes: <String, Widget Function(BuildContext)>{
+        HomeScreen.ROUTE_NAME: (BuildContext context) => const HomeScreen(),
+        FusedLocationScreen.ROUTE_NAME: (BuildContext context) =>
+            const FusedLocationScreen(),
+        ActivityScreen.ROUTE_NAME: (BuildContext context) =>
+            const ActivityScreen(),
+        GeofenceScreen.ROUTE_NAME: (BuildContext context) =>
+            const GeofenceScreen(),
+        AddGeofenceScreen.ROUTE_NAME: (BuildContext context) =>
+            const AddGeofenceScreen(),
+        ActivityIdentificationScreen.ROUTE_NAME: (BuildContext context) =>
+            const ActivityIdentificationScreen(),
+        ActivityConversionScreen.ROUTE_NAME: (BuildContext context) =>
+            const ActivityConversionScreen(),
+        LocationUpdatesScreen.ROUTE_NAME: (BuildContext context) =>
+            const LocationUpdatesScreen(),
+        LocationUpdatesCbScreen.ROUTE_NAME: (BuildContext context) =>
+            const LocationUpdatesCbScreen(),
+        LocationUpdatesExCbScreen.ROUTE_NAME: (BuildContext context) =>
+            const LocationUpdatesExCbScreen(),
+        LocationEnhanceScreen.ROUTE_NAME: (BuildContext context) =>
+            const LocationEnhanceScreen(),
+        HighPrecisionLocationScreen.ROUTE_NAME: (BuildContext context) =>
+            const HighPrecisionLocationScreen(),
+        GeocoderScreen.ROUTE_NAME: (BuildContext context) =>
+            const GeocoderScreen(),
+        GetFromLocationScreen.ROUTE_NAME: (BuildContext context) =>
+            const GetFromLocationScreen(),
+        GetFromLocationNameScreen.ROUTE_NAME: (BuildContext context) =>
+            const GetFromLocationNameScreen(),         
+
       },
     );
   }

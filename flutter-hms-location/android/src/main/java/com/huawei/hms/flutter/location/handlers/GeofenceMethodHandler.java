@@ -36,17 +36,19 @@ import com.huawei.hms.location.GeofenceRequest;
 import com.huawei.hms.location.GeofenceService;
 import com.huawei.hms.location.LocationServices;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class GeofenceMethodHandler implements MethodCallHandler {
     private final Activity activity;
+
     private final GeofenceService service;
+
     private final Map<Integer, PendingIntent> requests;
 
     private int requestCode = 0;

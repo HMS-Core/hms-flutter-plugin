@@ -18,17 +18,17 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:huawei_location/location/fused_location_provider_client.dart';
-import 'package:huawei_location/location/location_callback.dart';
-import 'package:huawei_location/location/location_request.dart';
+import 'package:huawei_location/huawei_location.dart';
 
 import '../widgets/custom_button.dart' show Btn;
 
 class LocationUpdatesExCbScreen extends StatefulWidget {
-  static const String ROUTE_NAME = "LocationUpdatesExCbScreen";
+  static const String ROUTE_NAME = 'LocationUpdatesExCbScreen';
+
+  const LocationUpdatesExCbScreen({Key? key}) : super(key: key);
 
   @override
-  _LocationUpdatesExCbScreenState createState() =>
+  State<LocationUpdatesExCbScreen> createState() =>
       _LocationUpdatesExCbScreenState();
 }
 
@@ -37,8 +37,8 @@ class _LocationUpdatesExCbScreenState extends State<LocationUpdatesExCbScreen> {
       FusedLocationProviderClient();
   final LocationRequest _locationRequest = LocationRequest()..interval = 500;
 
-  String _topText = "";
-  String _bottomText = "";
+  String _topText = '';
+  String _bottomText = '';
   int? _callbackId;
   late LocationCallback _locationCallback;
 
@@ -52,7 +52,7 @@ class _LocationUpdatesExCbScreenState extends State<LocationUpdatesExCbScreen> {
     );
   }
 
-  void _onCallbackResult(result) {
+  void _onCallbackResult(dynamic result) {
     _appendToBottomText(result.toString());
   }
 
@@ -62,13 +62,13 @@ class _LocationUpdatesExCbScreenState extends State<LocationUpdatesExCbScreen> {
         final int callbackId = await _locationService
             .requestLocationUpdatesExCb(_locationRequest, _locationCallback);
         _callbackId = callbackId;
-        _setTopText("Location updates are requested successfully.");
+        _setTopText('Location updates are requested successfully.');
       } on PlatformException catch (e) {
         _setTopText(e.toString());
       }
     } else {
       _setTopText(
-          "Already requested location updates. Try removing location updates");
+          'Already requested location updates. Try removing location updates');
     }
   }
 
@@ -78,12 +78,12 @@ class _LocationUpdatesExCbScreenState extends State<LocationUpdatesExCbScreen> {
       try {
         await _locationService.removeLocationUpdatesCb(_callbackId!);
         _callbackId = null;
-        _setTopText("Location updates are removed successfully");
+        _setTopText('Location updates are removed successfully');
       } on PlatformException catch (e) {
         _setTopText(e.toString());
       }
     } else {
-      _setTopText("callbackId does not exist. Request location updates first");
+      _setTopText('callbackId does not exist. Request location updates first');
     }
   }
 
@@ -98,7 +98,7 @@ class _LocationUpdatesExCbScreenState extends State<LocationUpdatesExCbScreen> {
     }
   }
 
-  void _setTopText([String text = ""]) {
+  void _setTopText([String text = '']) {
     setState(() {
       _topText = text;
     });
@@ -106,7 +106,7 @@ class _LocationUpdatesExCbScreenState extends State<LocationUpdatesExCbScreen> {
 
   void _appendToBottomText(String text) {
     setState(() {
-      _bottomText = "$_bottomText\n\n$text";
+      _bottomText = '$_bottomText\n\n$text';
     });
   }
 
@@ -117,26 +117,26 @@ class _LocationUpdatesExCbScreenState extends State<LocationUpdatesExCbScreen> {
         title: const Text('Location Updates Ex with CB'),
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Container(
-              padding: EdgeInsets.only(
+              padding: const EdgeInsets.only(
                 top: 10,
               ),
               height: 90,
               child: Text(_topText),
             ),
-            Divider(
+            const Divider(
               thickness: 0.1,
               color: Colors.black,
             ),
-            Btn("Request Location Updates Ex with Callback",
+            Btn('Request Location Updates Ex with Callback',
                 _requestLocationUpdatesExCb),
-            Btn("Remove Location Updates", _removeLocationUpdatesExCb),
+            Btn('Remove Location Updates', _removeLocationUpdatesExCb),
             Expanded(
-              child: new SingleChildScrollView(
+              child: SingleChildScrollView(
                 child: Text(
                   _bottomText,
                   style: const TextStyle(

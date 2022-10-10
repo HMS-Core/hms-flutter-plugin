@@ -29,15 +29,16 @@ class CustomTextInput extends StatelessWidget {
   final int? maxLength;
   final EdgeInsets padding;
 
-  CustomTextInput({
-    this.labelText = "",
-    this.hintText = "",
+  const CustomTextInput({
+    Key? key,
+    this.labelText = '',
+    this.hintText = '',
     this.controller,
     this.keyboardType,
     this.inputFormatters,
     this.maxLength,
     this.padding = const EdgeInsets.only(top: 10),
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +54,7 @@ class CustomTextInput extends StatelessWidget {
             contentPadding: _CONTENT_PADDING,
             labelText: labelText,
             hintText: hintText,
-            fillColor: Color(0xfff3f3f4),
+            fillColor: const Color(0xfff3f3f4),
             filled: true),
       ),
     );

@@ -25,8 +25,11 @@ import io.flutter.plugin.common.MethodChannel.Result;
 
 public class RequestUpdatesSuccessListener implements OnSuccessListener<Void> {
     private final Result result;
+
     private final Integer requestCode;
+
     private final Context context;
+
     private final String methodName;
 
     public RequestUpdatesSuccessListener(final String methodName, final Context context, final Result result,

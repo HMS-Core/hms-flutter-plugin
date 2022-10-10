@@ -19,19 +19,17 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:huawei_location/activity/activity_conversion_data.dart';
-import 'package:huawei_location/activity/activity_conversion_info.dart';
-import 'package:huawei_location/activity/activity_conversion_response.dart';
-import 'package:huawei_location/activity/activity_identification_data.dart';
-import 'package:huawei_location/activity/activity_identification_service.dart';
+import 'package:huawei_location/huawei_location.dart';
 
 import '../widgets/custom_button.dart';
 
 class ActivityConversionScreen extends StatefulWidget {
-  static const String ROUTE_NAME = "ActivityRecognitionScreen";
+  static const String ROUTE_NAME = 'ActivityRecognitionScreen';
+
+  const ActivityConversionScreen({Key? key}) : super(key: key);
 
   @override
-  _ActivityConversionScreenState createState() =>
+  State<ActivityConversionScreen> createState() =>
       _ActivityConversionScreenState();
 }
 
@@ -51,21 +49,21 @@ class _ActivityConversionScreenState extends State<ActivityConversionScreen> {
   ];
 
   static const List<String> _ACTIVITY_TYPES = <String>[
-    "VEHICLE[100]",
-    "BIKE[101]",
-    "FOOT[102]",
-    "STILL[103]",
-    "WALKING[107]",
-    "RUNNING[108]"
+    'VEHICLE[100]',
+    'BIKE[101]',
+    'FOOT[102]',
+    'STILL[103]',
+    'WALKING[107]',
+    'RUNNING[108]'
   ];
 
   final ActivityIdentificationService _service =
       ActivityIdentificationService();
-  final List<bool> _inStates = List.filled(_NUM_OF_ACTIVITY, false);
-  final List<bool> _outStates = List.filled(_NUM_OF_ACTIVITY, false);
+  final List<bool> _inStates = List<bool>.filled(_NUM_OF_ACTIVITY, false);
+  final List<bool> _outStates = List<bool>.filled(_NUM_OF_ACTIVITY, false);
 
-  String _topText = "";
-  String _bottomText = "";
+  String _topText = '';
+  String _bottomText = '';
   int? _requestCode;
   late StreamSubscription<ActivityConversionResponse> _streamSubscription;
 
@@ -104,12 +102,12 @@ class _ActivityConversionScreenState extends State<ActivityConversionScreen> {
         final int requestCode = await _service
             .createActivityConversionUpdates(_getConversionList());
         _requestCode = requestCode;
-        _setTopText("Created Activity Conversion Updates successfully.");
+        _setTopText('Created Activity Conversion Updates successfully.');
       } on PlatformException catch (e) {
         _setTopText(e.toString());
       }
     } else {
-      _setTopText("Already receiving Activity Conversion Updates.");
+      _setTopText('Already receiving Activity Conversion Updates.');
     }
   }
 
@@ -119,12 +117,12 @@ class _ActivityConversionScreenState extends State<ActivityConversionScreen> {
         await _service.deleteActivityConversionUpdates(_requestCode!);
         _requestCode = null;
         _setBottomText();
-        _setTopText("Deleted Activity Conversion Updates successfully.");
+        _setTopText('Deleted Activity Conversion Updates successfully.');
       } on PlatformException catch (e) {
         _setTopText(e.toString());
       }
     } else {
-      _setTopText("Create Activity Conversion Updates first.");
+      _setTopText('Create Activity Conversion Updates first.');
     }
   }
 
@@ -139,13 +137,13 @@ class _ActivityConversionScreenState extends State<ActivityConversionScreen> {
     }
   }
 
-  void _setTopText([String text = ""]) {
+  void _setTopText([String text = '']) {
     setState(() {
       _topText = text;
     });
   }
 
-  void _setBottomText([String text = ""]) {
+  void _setBottomText([String text = '']) {
     setState(() {
       _bottomText = text;
     });
@@ -153,7 +151,7 @@ class _ActivityConversionScreenState extends State<ActivityConversionScreen> {
 
   void _appendToBottomText(String text) {
     setState(() {
-      _bottomText = "$_bottomText\n\n$text";
+      _bottomText = '$_bottomText\n\n$text';
     });
   }
 
@@ -161,69 +159,67 @@ class _ActivityConversionScreenState extends State<ActivityConversionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Activity Conversion"),
+        title: const Text('Activity Conversion'),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             Container(
-              padding: EdgeInsets.only(top: 15, bottom: 6),
+              padding: const EdgeInsets.only(top: 15, bottom: 6),
               child: Text(_topText),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Container(width: _CONT_WIDTH1, child: Text("Activity")),
-                Container(width: _CONT_WIDTH2, child: Text("Transition")),
-                Container(width: _CONT_WIDTH3, child: Text("Transition")),
+              children: const <Widget>[
+                SizedBox(width: _CONT_WIDTH1, child: Text('Activity')),
+                SizedBox(width: _CONT_WIDTH2, child: Text('Transition')),
+                SizedBox(width: _CONT_WIDTH3, child: Text('Transition')),
               ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Container(width: _CONT_WIDTH1),
-                Container(width: _CONT_WIDTH2, child: Text("IN(0)")),
-                Container(width: _CONT_WIDTH3, child: Text("OUT(1)")),
+                const SizedBox(width: _CONT_WIDTH2, child: Text('IN(0)')),
+                const SizedBox(width: _CONT_WIDTH3, child: Text('OUT(1)')),
               ],
             ),
-            Container(
-              child: Column(
-                children: List.generate(_NUM_OF_ACTIVITY, (i) {
-                  return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Container(
-                          width: _CONT_WIDTH1,
-                          child: Text(_ACTIVITY_TYPES[i]),
+            Column(
+              children: List<Widget>.generate(_NUM_OF_ACTIVITY, (int i) {
+                return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      SizedBox(
+                        width: _CONT_WIDTH1,
+                        child: Text(_ACTIVITY_TYPES[i]),
+                      ),
+                      SizedBox(
+                        width: _CONT_WIDTH2,
+                        child: Checkbox(
+                          value: _inStates[i],
+                          onChanged: (bool? value) => setState(() {
+                            _inStates[i] = value!;
+                          }),
                         ),
-                        Container(
-                          width: _CONT_WIDTH2,
-                          child: Checkbox(
-                            value: _inStates[i],
-                            onChanged: (bool? value) => setState(() {
-                              _inStates[i] = value!;
-                            }),
-                          ),
+                      ),
+                      SizedBox(
+                        width: _CONT_WIDTH3,
+                        child: Checkbox(
+                          value: _outStates[i],
+                          onChanged: (bool? value) => setState(() {
+                            _outStates[i] = value!;
+                          }),
                         ),
-                        Container(
-                          width: _CONT_WIDTH3,
-                          child: Checkbox(
-                            value: _outStates[i],
-                            onChanged: (bool? value) => setState(() {
-                              _outStates[i] = value!;
-                            }),
-                          ),
-                        ),
-                      ]);
-                }),
-              ),
+                      ),
+                    ]);
+              }),
             ),
-            Btn("createActivityConversionUpdates",
+            Btn('createActivityConversionUpdates',
                 _createActivityConversionUpdates),
-            Btn("deleteActivityConversionUpdates",
+            Btn('deleteActivityConversionUpdates',
                 _deleteActivityConversionUpdates),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Text(_bottomText),
             ),
           ],

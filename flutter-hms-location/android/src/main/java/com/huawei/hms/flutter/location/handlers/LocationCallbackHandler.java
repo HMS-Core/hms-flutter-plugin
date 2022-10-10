@@ -24,15 +24,18 @@ import com.huawei.hms.location.LocationAvailability;
 import com.huawei.hms.location.LocationCallback;
 import com.huawei.hms.location.LocationResult;
 
+import io.flutter.plugin.common.MethodChannel;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import io.flutter.plugin.common.MethodChannel;
-
 public class LocationCallbackHandler extends LocationCallback {
     private final Context context;
+
     private final String methodName;
+
     private final int callbackId;
+
     private final MethodChannel channel;
 
     LocationCallbackHandler(final Context context, final String methodName, final int callbackId,
