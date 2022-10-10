@@ -1,0 +1,18 @@
+name: huawei_location_example
+description: Demonstrates how to use the Huawei Location plugin.
+
+environment:
+  sdk: '>=2.12.0 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  huawei_location:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
