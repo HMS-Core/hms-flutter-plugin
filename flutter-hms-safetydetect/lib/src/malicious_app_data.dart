@@ -14,22 +14,26 @@
     limitations under the License.
 */
 
+part of huawei_safetydetect;
+
 /// The malicious app entity class.
 class MaliciousAppData {
   final int apkCategory;
   final String apkPackageName;
   final String apkSha256;
 
-  MaliciousAppData._(
-      {required this.apkCategory,
-      required this.apkPackageName,
-      required this.apkSha256});
+  MaliciousAppData._({
+    required this.apkCategory,
+    required this.apkPackageName,
+    required this.apkSha256,
+  });
 
   factory MaliciousAppData.fromMap(Map<String, dynamic> map) {
     return MaliciousAppData._(
-        apkCategory: map['apkCategory'],
-        apkPackageName: map['apkPackageName'],
-        apkSha256: map['apkSha256']);
+      apkCategory: map['apkCategory'],
+      apkPackageName: map['apkPackageName'],
+      apkSha256: map['apkSha256'],
+    );
   }
 
   /// Obtains the MaliciousAppType that corresponds to the detected apkCategory of
@@ -45,10 +49,10 @@ class MaliciousAppData {
   }
 
   Map<String, dynamic> toMap() {
-    return {
-      "apkCategory": apkCategory,
-      "apkPackageName": apkPackageName,
-      "apkSha256": apkSha256
+    return <String, dynamic>{
+      'apkCategory': apkCategory,
+      'apkPackageName': apkPackageName,
+      'apkSha256': apkSha256,
     };
   }
 
@@ -64,5 +68,5 @@ enum MaliciousAppType {
   virus_level_risk,
 
   /// Virus app.
-  virus_level_virus
+  virus_level_virus,
 }

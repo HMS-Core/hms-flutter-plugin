@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_safetydetect;
+
 /// The entity class of the WifiDetect API.
 class WifiDetectResponse {
   final int _wifiDetectStatus;
@@ -33,7 +35,7 @@ class WifiDetectResponse {
   WifiDetectType get getWifiDetectType {
     try {
       return WifiDetectType.values[_wifiDetectStatus];
-    } catch (e) {
+    } catch (_) {
       throw ('Unsupported wifi detect status');
     }
   }
@@ -48,5 +50,5 @@ enum WifiDetectType {
   secure_wifi,
 
   /// The Wi-Fi is insecure.
-  insecure_wifi
+  insecure_wifi,
 }

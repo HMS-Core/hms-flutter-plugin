@@ -132,8 +132,8 @@ public class MethodHandler implements MethodCallHandler {
     }
 
     private void urlCheck(final Result result, final MethodCall call) {
-        String url = call.argument("url");
-        String appId = call.argument(Constants.APP_ID);
+        final String url = call.argument("url");
+        final String appId = call.argument(Constants.APP_ID);
         int[] threatTypes = PlatformUtil.getThreatTypes(call);
         if (threatTypes.length > 0) {
             mClient.urlCheck(url, appId, threatTypes).addOnSuccessListener(urlCheckResponse -> {
@@ -165,7 +165,7 @@ public class MethodHandler implements MethodCallHandler {
     }
 
     private void userDetection(final Result result, final MethodCall call) {
-        String appId = PlatformUtil.getStringArg(call, Constants.APP_ID);
+        final String appId = PlatformUtil.getStringArg(call, Constants.APP_ID);
         mClient.userDetection(appId).addOnSuccessListener(userDetectResponse -> {
             hmsLogger.sendSingleEvent(call.method);
             result.success(userDetectResponse.getResponseToken());
@@ -186,7 +186,7 @@ public class MethodHandler implements MethodCallHandler {
     }
 
     private void initAntiFraud(final Result result, final MethodCall call) {
-        String appId = PlatformUtil.getStringArg(call, Constants.APP_ID);
+        final String appId = PlatformUtil.getStringArg(call, Constants.APP_ID);
         mClient.initAntiFraud(appId)
             .addOnSuccessListener(v -> handleVoidTaskResponse("Successfully initialized anti fraud", result, call))
             .addOnFailureListener(new CommonFailureListener(result, hmsLogger, APIMethod.INIT_ANTI_FRAUD));

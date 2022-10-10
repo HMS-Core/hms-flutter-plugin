@@ -14,8 +14,11 @@
     limitations under the License.
 */
 
-export 'src/constants/constants.dart' show SafetyDetectStatusCodes;
-export 'src/malicious_app_data.dart';
-export 'src/safety_detect.dart';
-export 'src/url_check_threat.dart';
-export 'src/wifi_detect_response.dart';
+library huawei_safetydetect;
+
+import 'package:flutter/services.dart';
+
+part 'src/malicious_app_data.dart';
+part 'src/safety_detect.dart';
+part 'src/url_check_threat.dart';
+part 'src/wifi_detect_response.dart';

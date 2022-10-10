@@ -3,7 +3,7 @@ description: Huawei Safety Detect Flutter Plugin exposes all the functionality o
 homepage: https://www.huawei.com
 repository: https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-safetydetect
 
-version: 6.4.0+301
+version: 6.4.0+302
 
 environment:
   sdk: '>=2.12.0 <3.0.0'

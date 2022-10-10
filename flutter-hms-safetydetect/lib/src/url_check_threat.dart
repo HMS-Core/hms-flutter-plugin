@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_safetydetect;
+
 /// The entity class of URL threat types.
 class UrlCheckThreat {
   final int _urlCheckResult;
@@ -33,10 +35,14 @@ class UrlCheckThreat {
       return UrlThreatType.malware;
     } else if (_urlCheckResult == 3) {
       return UrlThreatType.phishing;
-    } else
+    } else {
       throw ('Unsupported urlCheckResult value');
+    }
   }
 }
 
 /// Threat Types that can be detected during an url check.
-enum UrlThreatType { malware, phishing }
+enum UrlThreatType {
+  malware,
+  phishing,
+}

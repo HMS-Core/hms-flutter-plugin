@@ -27,7 +27,6 @@ import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 public class SafetyDetectPlugin implements FlutterPlugin, ActivityAware {
     private MethodChannel channel;
@@ -37,17 +36,6 @@ public class SafetyDetectPlugin implements FlutterPlugin, ActivityAware {
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), Channel.METHOD_CHANNEL);
-    }
-
-    public static void registerWith(Registrar registrar) {
-        final MethodChannel channel = new MethodChannel(registrar.messenger(), Channel.METHOD_CHANNEL);
-        channel.setMethodCallHandler(new MethodHandler(registrar.activity()));
-    }
-
-    @Override
-    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-        methodCallHandler = null;
-        channel = null;
     }
 
     @Override
@@ -72,5 +60,11 @@ public class SafetyDetectPlugin implements FlutterPlugin, ActivityAware {
     @Override
     public void onDetachedFromActivity() {
         this.activity = null;
+    }
+
+    @Override
+    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+        methodCallHandler = null;
+        channel = null;
     }
 }

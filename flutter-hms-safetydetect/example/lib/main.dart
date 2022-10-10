@@ -15,342 +15,271 @@
 */
 
 import 'dart:convert';
-import 'dart:math';
-import 'dart:typed_data';
+import 'dart:developer' as developer;
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:huawei_safetydetect/huawei_safetydetect.dart';
-import 'package:huawei_safetydetect_example/widgets/list_tile_button.dart';
-import 'package:huawei_safetydetect_example/widgets/result_container.dart';
-
-import 'style.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const App());
 }
 
-class MyApp extends StatefulWidget {
+class App extends StatelessWidget {
+  const App({Key? key}) : super(key: key);
+
   @override
-  _MyAppState createState() => _MyAppState();
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: HomeScreen(),
+    );
+  }
 }
 
-class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
-  late Animation animation;
-  late AnimationController animationController;
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
-  String selectedMethodName = '';
-  String currentMethodResult = '';
-  late String appId;
-  String urlToCheck = "http://example.com/hms/safetydetect/malware";
-  TextEditingController? urlTextController;
-  bool antiFraudEnabled = true;
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final List<String> logs = <String>[];
+  late final String appId;
 
   @override
   void initState() {
     super.initState();
-    urlTextController = TextEditingController(text: urlToCheck);
-    animationController = AnimationController(
-      duration: Duration(milliseconds: 800),
-      vsync: this,
+    SafetyDetect.getAppID.then((String appId) {
+      this.appId = appId;
+      log('getAppID', 'App Id: $appId');
+    }).catchError((dynamic e) {
+      log('getAppID', e, false);
+    });
+  }
+
+  Future<dynamic> isVerifyAppsCheck() async {
+    return await SafetyDetect.isVerifyAppsCheck();
+  }
+
+  Future<dynamic> enableAppsCheck() async {
+    return await SafetyDetect.enableAppsCheck();
+  }
+
+  Future<dynamic> initUrlCheck() async {
+    return await SafetyDetect.initUrlCheck();
+  }
+
+  Future<dynamic> shutdownUrlCheck() async {
+    return await SafetyDetect.shutdownUrlCheck();
+  }
+
+  Future<dynamic> urlCheck() async {
+    const String url = 'http://example.com/hms/safetydetect/malware';
+    final List<UrlCheckThreat> result = await SafetyDetect.urlCheck(
+      url,
+      appId,
+      <UrlThreatType>[
+        UrlThreatType.malware,
+        UrlThreatType.phishing,
+      ],
     );
-    animation = Tween(begin: 0.0, end: 1.0).animate(animationController);
-    animationController.addListener(() {
-      setState(() {});
-    });
-    animationController.forward();
-    getAppId();
+    return '${result.length} threat is detected for the URL: $url';
   }
 
-  void animateResult() {
-    animationController.reset();
-    animationController.forward();
+  Future<dynamic> initUserDetect() async {
+    return await SafetyDetect.initUserDetect();
   }
 
-  void getAppId() async {
-    String res = await SafetyDetect.getAppID;
-    if (!mounted) return;
-    setState(() {
-      appId = res;
-    });
+  Future<dynamic> shutdownUserDetect() async {
+    return await SafetyDetect.shutdownUserDetect();
   }
 
-  void checkSysIntegrity() async {
-    selectedMethodName = "Sys Integrity Check";
-    Random secureRandom = Random.secure();
-    List randomIntegers = <int>[];
-    for (var i = 0; i < 24; i++) {
-      randomIntegers.add(secureRandom.nextInt(255));
+  Future<dynamic> userDetection() async {
+    final String? token = await SafetyDetect.userDetection(appId);
+    return 'User verified, user token: $token';
+  }
+
+  Future<dynamic> initAntiFraud() async {
+    return await SafetyDetect.initAntiFraud(appId);
+  }
+
+  Future<dynamic> releaseAntiFraud() async {
+    return await SafetyDetect.releaseAntiFraud();
+  }
+
+  Future<dynamic> getRiskToken() async {
+    final String? riskToken = await SafetyDetect.getRiskToken();
+    return 'Risk Token: $riskToken';
+  }
+
+  Future<dynamic> sysIntegrity() async {
+    final List<int> randomIntegers = <int>[];
+    for (int i = 0; i < 24; i++) {
+      randomIntegers.add(math.Random.secure().nextInt(255));
     }
-    Uint8List nonce = Uint8List.fromList(randomIntegers as List<int>);
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      String sysintegrityresult = await SafetyDetect.sysIntegrity(
-        nonce,
-        appId,
-        alg: "RS256",
-      );
-      List<String> jwsSplit = sysintegrityresult.split(".");
-      String decodedText = utf8.decode(base64Url.decode(jwsSplit[1]));
-      Map<String, dynamic> jsonMap = json.decode(decodedText);
-      currentMethodResult =
-          "Basic Integrity: " + jsonMap['basicIntegrity'].toString();
-      print("SysIntegrityCheck result is: $decodedText");
-    } on PlatformException catch (e) {
-      currentMethodResult = "Error occurred while getting result, Error is: $e";
-      print("Error occurred while getting SysIntegrityResult. Error is : $e");
-    }
-    animateResult();
+    final Uint8List nonce = Uint8List.fromList(randomIntegers);
+    final String result = await SafetyDetect.sysIntegrity(
+      nonce,
+      appId,
+      alg: 'RS256',
+    );
+    final List<String> jwsSplit = result.split('.');
+    final String decodedText = utf8.decode(base64Url.decode(jwsSplit[1]));
+    return json.decode(decodedText);
   }
 
-  void getMaliciousAppsList() async {
-    selectedMethodName = "Malicious Apps List";
-    List<MaliciousAppData> maliciousApps = [];
-    maliciousApps = await SafetyDetect.getMaliciousAppsList();
-    animateResult();
-    setState(() {
-      currentMethodResult = maliciousApps.length == 0
-          ? "No malicious apps detected."
-          : maliciousApps.toString();
-    });
+  Future<dynamic> getWifiDetectStatus() async {
+    final WifiDetectResponse status = await SafetyDetect.getWifiDetectStatus();
+    return 'Wifi detect status is: ${status.getWifiDetectType}';
   }
 
-  void urlCheck() async {
-    selectedMethodName = "URL Check";
-    String urlCheckRes = "";
-    List<UrlThreatType> threatTypes = [
-      UrlThreatType.malware,
-      UrlThreatType.phishing
-    ];
-
-    List<UrlCheckThreat> urlCheckResults = await SafetyDetect.urlCheck(
-        urlTextController!.text, appId, threatTypes);
-
-    if (urlCheckResults.length == 0) {
-      urlCheckRes =
-          "No threat is detected for the URL: ${urlTextController!.text}";
-    } else {
-      urlCheckResults.forEach((element) {
-        urlCheckRes +=
-            "${element.getUrlThreatType} is detected on the URL: ${urlTextController!.text}";
-      });
-    }
-    currentMethodResult = urlCheckRes;
-    animateResult();
+  Future<dynamic> getMaliciousAppsList() async {
+    final List<MaliciousAppData> result =
+        await SafetyDetect.getMaliciousAppsList();
+    return '${result.length} malicious apps detected.';
   }
 
-  void userDetection() async {
-    selectedMethodName = "User Detection";
-    try {
-      String? token = await SafetyDetect.userDetection(appId);
-      currentMethodResult = "User verification succeeded, user token: $token";
-    } on PlatformException catch (e) {
-      currentMethodResult =
-          "Error occurred: " + e.code + ":${SafetyDetectStatusCodes[e.code]}";
-    }
-    animateResult();
-  }
-
-  void getWifiDetectStatus() async {
-    selectedMethodName = "Wifi Detect Status";
-    try {
-      WifiDetectResponse wifiDetectStatus =
-          await SafetyDetect.getWifiDetectStatus();
-      currentMethodResult = "Wifi detect status is: " +
-          wifiDetectStatus.getWifiDetectType.toString();
-    } on PlatformException catch (e) {
-      String? resultCodeDesc = SafetyDetectStatusCodes[e.code];
-      currentMethodResult =
-          "Error occurred with status code: ${e.code}, Description: $resultCodeDesc";
-    }
-    animateResult();
-  }
-
-  void getRiskToken() async {
-    selectedMethodName = "Get Risk Token";
-    String? riskToken = await SafetyDetect.getRiskToken();
-    currentMethodResult = "Risk Token: $riskToken";
-    animateResult();
-  }
-
-  void initAntiFraud() async {
-    SafetyDetect.initAntiFraud(appId);
-    print("Anti Fraud enabled");
-    setState(() {
-      antiFraudEnabled = true;
-    });
-  }
-
-  void releaseAntiFraud() async {
-    SafetyDetect.releaseAntiFraud();
-    print("Released Anti Fraud");
-    setState(() {
-      antiFraudEnabled = false;
-    });
+  void log(String method, dynamic message, [bool isSuccess = true]) {
+    final String status = isSuccess ? 'SUCCESS' : 'FAILURE';
+    final String logMessage = '$status\n${message ?? ''}'.trim();
+    developer.log(logMessage, name: method);
+    setState(() => logs.insert(0, '[$method]: $logMessage'));
   }
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-    return MaterialApp(
-      home: Builder(builder: (context) {
-        return Material(
-          child: Scaffold(
-            resizeToAvoidBottomInset: true,
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  // App Header
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.25,
-                    width: double.infinity,
-                    color: galleryGrey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                            height: 60,
-                            margin: EdgeInsets.only(top: 30.0, bottom: 30.0),
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image:
-                                        AssetImage('assets/huawei_logo.png')))),
-                        Text('Flutter Safety Detect',
-                            style: TextStyle(
-                                fontSize: 32,
-                                fontWeight: FontWeight.bold,
-                                color: textColor))
-                      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Tooltip(
+          message: 'Flutter Version: 6.4.0+302',
+          child: Text('HMS Safety Detect Demo'),
+        ),
+      ),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                physics: const BouncingScrollPhysics(),
+                child: Wrap(
+                  spacing: 16,
+                  alignment: WrapAlignment.center,
+                  children: <Widget>[
+                    buildButton(
+                      text: 'isVerifyAppsCheck',
+                      onPressed: isVerifyAppsCheck,
                     ),
-                  ),
-                  // App Body
-                  Column(
-                    children: [
-                      FadeTransition(
-                          opacity: animation as Animation<double>,
-                          child: ResultContainer(
-                              methodName: selectedMethodName,
-                              methodResult: currentMethodResult)),
-                      // Button List
-                      Container(
-                          height: 160,
-                          child: ListView(
-                              scrollDirection: Axis.horizontal,
-                              padding: componentPadding.copyWith(
-                                  left: 5.0, right: 5.0),
-                              children: [
-                                ListTileButton(
-                                    onTap: () => userDetection(),
-                                    title: "User Detect",
-                                    iconData: Icons.person,
-                                    iconColor: darkGrey),
-                                ListTileButton(
-                                  onTap: () => getMaliciousAppsList(),
-                                  title: "Malicious App List",
-                                  iconData: Icons.bug_report,
-                                  iconColor: Colors.red,
-                                ),
-                                ListTileButton(
-                                    onTap: () => checkSysIntegrity(),
-                                    title: "Sys Integrity",
-                                    iconData: Icons.security,
-                                    iconColor: Colors.blue),
-                                ListTileButton(
-                                    onTap: () => getWifiDetectStatus(),
-                                    iconData: Icons.wifi,
-                                    iconColor: Colors.deepOrange,
-                                    title: "Wifi Detect"),
-                                ListTileButton(
-                                    onTap: () => getRiskToken(),
-                                    iconData: Icons.vpn_key,
-                                    iconColor: Colors.amber,
-                                    title: "Get Risk Token"),
-                                ListTileButton(
-                                  onTap: () => antiFraudEnabled
-                                      ? releaseAntiFraud()
-                                      : initAntiFraud(),
-                                  iconData: Icons.power_settings_new,
-                                  iconColor: antiFraudEnabled
-                                      ? Colors.red
-                                      : Colors.green,
-                                  title: antiFraudEnabled
-                                      ? "Release AntiFraud"
-                                      : "Init Anti Fraud",
-                                )
-                              ])),
-                      // Url Check Widget
-                      Container(
-                        height: 150,
-                        width: double.infinity,
-                        margin: componentPadding,
-                        decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10.0)),
-                            gradient: LinearGradient(
-                                colors: [galleryGrey, mercuryGrey],
-                                begin: Alignment.centerLeft,
-                                end: Alignment.centerRight),
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 8,
-                                color: alto,
-                                offset: Offset(4, 4),
-                              ),
-                              BoxShadow(
-                                blurRadius: 8,
-                                color: alabaster,
-                                offset: Offset(-4, -4),
-                              )
-                            ]),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                                margin: const EdgeInsets.symmetric(
-                                    horizontal: 20.0),
-                                decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5.0))),
-                                child: TextField(
-                                  textAlign: TextAlign.start,
-                                  controller: urlTextController,
-                                  style: TextStyle(
-                                      fontSize: 12.0, color: mineShaft),
-                                  maxLines: 1,
-                                  decoration: InputDecoration(
-                                      enabledBorder: OutlineInputBorder(
-                                          borderSide:
-                                              BorderSide(color: Colors.white),
-                                          borderRadius:
-                                              BorderRadius.circular(5.0))),
-                                )),
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20.0, vertical: 5.0),
-                              child: FlatButton(
-                                color: darkGrey,
-                                onPressed: () => urlCheck(),
-                                child: Text(
-                                  'Check Url Safety',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ],
+                    buildButton(
+                      text: 'enableAppsCheck',
+                      onPressed: enableAppsCheck,
+                    ),
+                    const Divider(),
+                    buildButton(
+                      text: 'initUrlCheck',
+                      onPressed: initUrlCheck,
+                    ),
+                    buildButton(
+                      text: 'shutdownUrlCheck',
+                      onPressed: shutdownUrlCheck,
+                    ),
+                    buildButton(
+                      text: 'urlCheck',
+                      onPressed: urlCheck,
+                    ),
+                    const Divider(),
+                    buildButton(
+                      text: 'initUserDetect',
+                      onPressed: initUserDetect,
+                    ),
+                    buildButton(
+                      text: 'shutdownUserDetect',
+                      onPressed: shutdownUserDetect,
+                    ),
+                    buildButton(
+                      text: 'userDetection',
+                      onPressed: userDetection,
+                    ),
+                    const Divider(),
+                    buildButton(
+                      text: 'initAntiFraud',
+                      onPressed: initAntiFraud,
+                    ),
+                    buildButton(
+                      text: 'releaseAntiFraud',
+                      onPressed: releaseAntiFraud,
+                    ),
+                    buildButton(
+                      text: 'getRiskToken',
+                      onPressed: getRiskToken,
+                    ),
+                    const Divider(),
+                    buildButton(
+                      text: 'sysIntegrity',
+                      onPressed: sysIntegrity,
+                    ),
+                    buildButton(
+                      text: 'getWifiDetectStatus',
+                      onPressed: getWifiDetectStatus,
+                    ),
+                    buildButton(
+                      text: 'getMaliciousAppsList',
+                      onPressed: getMaliciousAppsList,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        );
-      }),
+          const Divider(),
+          buildLogcat(),
+        ],
+      ),
+    );
+  }
+
+  Widget buildButton({
+    required String text,
+    required Future<dynamic> Function() onPressed,
+  }) {
+    return ElevatedButton(
+      onPressed: () async {
+        try {
+          final dynamic result = await onPressed.call();
+          log(text, result);
+        } catch (e) {
+          log(text, e, false);
+        }
+      },
+      child: Text(text),
+    );
+  }
+
+  Widget buildLogcat() {
+    return GestureDetector(
+      onDoubleTap: () => setState(() => logs.clear()),
+      child: AspectRatio(
+        aspectRatio: 2,
+        child: Container(
+          alignment: Alignment.center,
+          margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.10),
+            borderRadius: const BorderRadius.all(Radius.circular(16)),
+          ),
+          child: logs.isEmpty
+              ? const Text('Double tap to clear logs')
+              : ListView.separated(
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: logs.length,
+                  itemBuilder: (_, int index) => Text(logs[index]),
+                  separatorBuilder: (_, __) => const Divider(),
+                ),
+        ),
+      ),
     );
   }
 }

@@ -1,5 +1,5 @@
 <p align="center">
-  <h1 align="center">HUAWEI Safety Detect Flutter Plugin</h1>
+  <h1 align="center">Huawei Safety Detect Flutter Plugin</h1>
 </p>
 
 
@@ -9,8 +9,8 @@
 
 ----
 
-**HUAWEI Safety Detect** builds robust security capabilities, including system integrity check (SysIntegrity), app security check (AppsCheck), malicious URL check (URLCheck), fake user detection (UserDetect), and malicious WiFi detection (WifiDetect), into your app, effectively protecting it against security threats.
-This plugin enables communication between HUAWEI Safety Detect Kit SDK and Flutter platform. It exposes all functionality provided by HUAWEI Safety Detect Kit SDK.
+**Huawei Safety Detect** builds robust security capabilities, including system integrity check (SysIntegrity), app security check (AppsCheck), malicious URL check (URLCheck), fake user detection (UserDetect), and malicious WiFi detection (WifiDetect), into your app, effectively protecting it against security threats.
+This plugin enables communication between Huawei Safety Detect Kit SDK and Flutter platform. It exposes all functionality provided by Huawei Safety Detect Kit SDK.
 
 [Learn More](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides-V1/introduction-0000001061296565-V1?ha_source=hms1)
 
@@ -36,4 +36,4 @@ If you run into a bug in our samples, please submit an issue to the [GitHub repo
 
 ## License
 
-HUAWEI Safety Detect Flutter Plugin is licensed under [Apache 2.0 license](LICENCE)
+Huawei Safety Detect Flutter Plugin is licensed under [Apache 2.0 license](LICENSE)
