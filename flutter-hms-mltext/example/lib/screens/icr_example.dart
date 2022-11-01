@@ -17,25 +17,27 @@
 import 'package:flutter/material.dart';
 import 'package:huawei_ml_text/huawei_ml_text.dart';
 import 'package:huawei_ml_text_example/utils/constants.dart';
-
-import '../utils/utils.dart';
+import 'package:huawei_ml_text_example/utils/utils.dart';
 
 class IcrExample extends StatefulWidget {
+  const IcrExample({
+    Key? key,
+  }) : super(key: key);
+
   @override
-  _IcrExampleState createState() => _IcrExampleState();
+  State<IcrExample> createState() => _IcrExampleState();
 }
 
 class _IcrExampleState extends State<IcrExample> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   late MLVnIcrCapture _capture;
-
   Image? _image;
   String? _name;
 
   @override
   void initState() {
-    _capture = MLVnIcrCapture();
     super.initState();
+    _capture = MLVnIcrCapture();
   }
 
   @override
@@ -46,24 +48,27 @@ class _IcrExampleState extends State<IcrExample> {
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: <Widget>[
             bcrImageContainer(context, _image),
             resultBox(resultBoxText, _name, context),
             containerElevatedButton(
               context,
               ElevatedButton(
                 style: buttonStyle,
-                onPressed: () => pickerDialog(_key, context, _captureCard()),
-                child: Text(captureText),
+                onPressed: () {
+                  pickerDialog(_key, context, _captureCard());
+                },
+                child: const Text(captureText),
               ),
             ),
             containerElevatedButton(
               context,
               ElevatedButton(
                 style: buttonStyle,
-                onPressed: () =>
-                    pickerDialog(_key, context, _analyzeLocalImage),
-                child: Text(localImageText),
+                onPressed: () {
+                  pickerDialog(_key, context, _analyzeLocalImage);
+                },
+                child: const Text(localImageText),
               ),
             ),
           ],
@@ -72,29 +77,30 @@ class _IcrExampleState extends State<IcrExample> {
     );
   }
 
-  _captureCard() async {
+  dynamic _captureCard() async {
     try {
-      MLVnIcrCaptureResult result = await _capture.capture();
+      final MLVnIcrCaptureResult result = await _capture.capture();
       _update(result);
     } on Exception catch (e) {
       exceptionDialog(context, e.toString());
     }
   }
 
-  _analyzeLocalImage(String? path) async {
+  void _analyzeLocalImage(String? path) async {
     if (path == null || path.isEmpty) {
       return;
     }
-
     try {
-      MLVnIcrCaptureResult result = await _capture.captureImage(path);
+      final MLVnIcrCaptureResult result = await _capture.captureImage(
+        path,
+      );
       _update(result);
     } on Exception catch (e) {
       exceptionDialog(context, e.toString());
     }
   }
 
-  _update(MLVnIcrCaptureResult result) {
+  void _update(MLVnIcrCaptureResult result) {
     setState(() {
       _name = result.name;
       _image = Image.memory(result.bytes!);

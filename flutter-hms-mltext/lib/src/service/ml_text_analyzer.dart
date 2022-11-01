@@ -14,44 +14,57 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
-import 'package:huawei_ml_text/huawei_ml_text.dart';
+part of huawei_ml_text;
 
 class MLTextAnalyzer implements TextAnalyzer<dynamic, MLTextAnalyzerSetting> {
   late MethodChannel _channel;
 
   MLTextAnalyzer() {
-    _channel = const MethodChannel("$baseChannel.text_analyzer");
+    _channel = const MethodChannel('$baseChannel.text_analyzer');
   }
 
   Future<int> getAnalyzeType() async {
-    return await _channel.invokeMethod("text#getAnalyzeType");
+    return await _channel.invokeMethod(
+      'text#getAnalyzeType',
+    );
   }
 
   Future<bool> stop() async {
-    return await _channel.invokeMethod("text#stop");
+    return await _channel.invokeMethod(
+      'text#stop',
+    );
   }
 
   @override
   Future<List<TextBlock>> analyseFrame(MLTextAnalyzerSetting setting) async {
-    final List result =
-        await _channel.invokeMethod("text#analyseFrame", setting.toMap());
-    return result.map((e) => TextBlock.fromMap(e)).toList();
+    final List<dynamic> result = await _channel.invokeMethod(
+      'text#analyseFrame',
+      setting.toMap(),
+    );
+    return result.map((dynamic e) => TextBlock.fromMap(e)).toList();
   }
 
   @override
   Future<MLText> asyncAnalyseFrame(MLTextAnalyzerSetting setting) async {
     return MLText.fromMap(
-        await _channel.invokeMethod('text#asyncAnalyseFrame', setting.toMap()));
+      await _channel.invokeMethod(
+        'text#asyncAnalyseFrame',
+        setting.toMap(),
+      ),
+    );
   }
 
   @override
   Future<bool> destroy() async {
-    return await _channel.invokeMethod("text#destroy");
+    return await _channel.invokeMethod(
+      'text#destroy',
+    );
   }
 
   @override
   Future<bool> isAvailable() async {
-    return await _channel.invokeMethod("text#isAvailable");
+    return await _channel.invokeMethod(
+      'text#isAvailable',
+    );
   }
 }

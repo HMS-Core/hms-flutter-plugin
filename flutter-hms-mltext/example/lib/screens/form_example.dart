@@ -17,25 +17,26 @@
 import 'package:flutter/material.dart';
 import 'package:huawei_ml_text/huawei_ml_text.dart';
 import 'package:huawei_ml_text_example/utils/constants.dart';
-
-import '../utils/utils.dart';
+import 'package:huawei_ml_text_example/utils/utils.dart';
 
 class FormExample extends StatefulWidget {
+  const FormExample({
+    Key? key,
+  }) : super(key: key);
+
   @override
-  _FormExampleState createState() => _FormExampleState();
+  State<FormExample> createState() => _FormExampleState();
 }
 
 class _FormExampleState extends State<FormExample> with DemoMixin {
-  final _key = GlobalKey<ScaffoldState>();
-
+  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   late MLFormRecognitionAnalyzer _analyzer;
-
-  List _texts = [];
+  final List<String?> _texts = <String?>[];
 
   @override
   void initState() {
-    _analyzer = MLFormRecognitionAnalyzer();
     super.initState();
+    _analyzer = MLFormRecognitionAnalyzer();
   }
 
   @override
@@ -46,16 +47,16 @@ class _FormExampleState extends State<FormExample> with DemoMixin {
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: <Widget>[
             resultBox(resultBoxTextsDetected, _texts, context),
             containerElevatedButton(
               context,
               ElevatedButton(
                 style: buttonStyle,
                 onPressed: () => pickerDialog(_key, context, analyze),
-                child: Text(startRecognitionText),
+                child: const Text(startRecognitionText),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -68,13 +69,18 @@ class _FormExampleState extends State<FormExample> with DemoMixin {
       return;
     }
     try {
-      MLFormRecognitionTablesAttribute res =
+      final MLFormRecognitionTablesAttribute res =
           await _analyzer.asyncAnalyseFrame(path);
-      res.tablesContent?.tableAttributes.forEach((e1) {
-        e1?.tableCellAttributes.forEach((e2) {
-          setState(() => _texts.add(e2?.textInfo));
-        });
-      });
+      final TablesContent? tablesContent = res.tablesContent;
+      if (tablesContent != null) {
+        for (TableAttribute? e1 in tablesContent.tableAttributes) {
+          if (e1 != null) {
+            for (TableCellAttribute? e2 in e1.tableCellAttributes) {
+              setState(() => _texts.add(e2?.textInfo));
+            }
+          }
+        }
+      }
     } on Exception catch (e) {
       exceptionDialog(context, e.toString());
     }
@@ -92,7 +98,8 @@ class _FormExampleState extends State<FormExample> with DemoMixin {
   @override
   void isAvailable() async {
     try {
-      print(await _analyzer.isAvailable());
+      final bool res = await _analyzer.isAvailable();
+      debugPrint('$res');
     } on Exception catch (e) {
       exceptionDialog(context, e.toString());
     }

@@ -1,9 +1,9 @@
 name: huawei_ml_text
-description: HUAWEI ML Kit Text Plugin for Flutter. Provides capabilities like Text, document, id, bank card, general card & form recognition.
+description: Huawei ML Kit Text Plugin for Flutter. Provides capabilities like Text, document, id, bank card, general card & form recognition.
 homepage: https://www.huawei.com
 repository: https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-mltext
 
-version: 3.2.0+301
+version: 3.7.0+300
 
 environment:
   sdk: ">=2.12.0 <3.0.0"

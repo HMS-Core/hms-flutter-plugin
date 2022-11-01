@@ -14,11 +14,7 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
-import 'package:huawei_ml_text/src/common/constants.dart';
-import 'package:huawei_ml_text/src/common/text_analyzer.dart';
-import 'package:huawei_ml_text/src/request/ml_bankcard_settings.dart';
-import 'package:huawei_ml_text/src/result/ml_bankcard.dart';
+part of huawei_ml_text;
 
 class MLBankcardAnalyzer implements TextAnalyzer<dynamic, MlBankcardSettings> {
   late MethodChannel _channel;
@@ -28,28 +24,42 @@ class MLBankcardAnalyzer implements TextAnalyzer<dynamic, MlBankcardSettings> {
   }
 
   Future<bool> stop() async {
-    return await _channel.invokeMethod("bankcard#stop");
+    return await _channel.invokeMethod(
+      'bankcard#stop',
+    );
   }
 
   @override
-  analyseFrame(MlBankcardSettings settings) async {
+  dynamic analyseFrame(MlBankcardSettings settings) async {
     return MLBankcard.fromMap(
-        await _channel.invokeMethod("bankcard#analyseFrame", settings.toMap()));
+      await _channel.invokeMethod(
+        'bankcard#analyseFrame',
+        settings.toMap(),
+      ),
+    );
   }
 
   @override
-  asyncAnalyseFrame(MlBankcardSettings? settings) async {
-    return MLBankcard.fromMap(await _channel.invokeMethod(
-        "bankcard#asyncAnalyseFrame", settings?.toMap() ?? null));
+  dynamic asyncAnalyseFrame(MlBankcardSettings? settings) async {
+    return MLBankcard.fromMap(
+      await _channel.invokeMethod(
+        'bankcard#asyncAnalyseFrame',
+        settings?.toMap(),
+      ),
+    );
   }
 
   @override
   Future<bool> destroy() async {
-    return await _channel.invokeMethod("bankcard#destroy");
+    return await _channel.invokeMethod(
+      'bankcard#destroy',
+    );
   }
 
   @override
   Future<bool> isAvailable() async {
-    return await _channel.invokeMethod("bankcard#isAvailable");
+    return await _channel.invokeMethod(
+      'bankcard#isAvailable',
+    );
   }
 }

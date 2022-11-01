@@ -24,7 +24,6 @@ public interface Channel {
     String GCR_CHANNEL = BASE_CHANNEL + ".gcr";
     String FORM_CHANNEL = BASE_CHANNEL + ".form";
     String ICR_CHANNEL = BASE_CHANNEL + ".icr";
-    String PERMISSION_CHANNEL = BASE_CHANNEL + ".permission";
     String TEXT_EMBEDDING_CHANNEL = BASE_CHANNEL + ".text_embedding";
     String APPLICATION_CHANNEL = BASE_CHANNEL + ".application";
     String LENS_CHANNEL = BASE_CHANNEL + ".lens";

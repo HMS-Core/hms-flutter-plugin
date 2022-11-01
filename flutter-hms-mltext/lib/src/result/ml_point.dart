@@ -14,12 +14,16 @@
     limitations under the License.
 */
 
+part of huawei_ml_text;
+
 class MLPoint {
   dynamic x;
-
   dynamic y;
 
-  MLPoint({this.x, this.y});
+  MLPoint({
+    this.x,
+    this.y,
+  });
 
   MLPoint.fromJson(Map<dynamic, dynamic> map) {
     x = map['x'];

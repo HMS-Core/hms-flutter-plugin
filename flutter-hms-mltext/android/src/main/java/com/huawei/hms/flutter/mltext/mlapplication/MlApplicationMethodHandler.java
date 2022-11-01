@@ -28,6 +28,8 @@ import com.huawei.hms.flutter.mltext.utils.FromMap;
 import com.huawei.hms.flutter.mltext.utils.TextResponseHandler;
 import com.huawei.hms.mlsdk.common.MLApplication;
 
+import java.util.Objects;
+
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
@@ -52,6 +54,12 @@ public class MlApplicationMethodHandler implements MethodChannel.MethodCallHandl
             case Method.SET_ACCESS_TOKEN:
                 setAccessToken(call);
                 break;
+            case Method.SET_USER_REGION:
+                setUserRegion(call);
+                break;
+            case Method.GET_COUNTRY_CODE:
+                getCountryCode();
+                break;
             case Method.ENABLE_LOGGER:
                 enableLogger();
                 break;
@@ -64,15 +72,26 @@ public class MlApplicationMethodHandler implements MethodChannel.MethodCallHandl
     }
 
     private void setApiKey(@NonNull MethodCall call) {
-        String key = FromMap.toString(Param.KEY, call.argument(Param.KEY), false);
+        final String key = FromMap.toString(Param.KEY, call.argument(Param.KEY), false);
         MLApplication.getInstance().setApiKey(key);
         responseHandler.success(true);
     }
 
     private void setAccessToken(@NonNull MethodCall call) {
-        String key = FromMap.toString(Param.TOKEN, call.argument(Param.TOKEN), false);
+        final String key = FromMap.toString(Param.TOKEN, call.argument(Param.TOKEN), false);
         MLApplication.getInstance().setAccessToken(key);
         responseHandler.success(true);
+    }
+
+    private void setUserRegion(@NonNull MethodCall call) {
+        final Integer region = FromMap.toInteger("region", call.argument("region"));
+        MLApplication.getInstance().setUserRegion(Objects.requireNonNull(region));
+        responseHandler.success(true);
+    }
+
+    private void getCountryCode() {
+        final String countryCode = MLApplication.getInstance().getCountryCode();
+        responseHandler.success(countryCode);
     }
 
     private void enableLogger() {

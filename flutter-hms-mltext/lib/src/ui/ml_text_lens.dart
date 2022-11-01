@@ -14,34 +14,40 @@
     limitations under the License.
 */
 
-import 'package:flutter/material.dart';
+part of huawei_ml_text;
 
 class MLTextLens extends StatefulWidget {
+  const MLTextLens({
+    Key? key,
+    this.textureId,
+    this.width,
+    this.height,
+  }) : super(key: key);
+
   final int? textureId;
   final double? width;
   final double? height;
 
-  const MLTextLens({Key? key, this.textureId, this.width, this.height})
-      : super(key: key);
-
   @override
-  _MLTextLensState createState() => _MLTextLensState();
+  State<MLTextLens> createState() => _MLTextLensState();
 }
 
 class _MLTextLensState extends State<MLTextLens> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Colors.grey,
-        width: widget.width ?? MediaQuery.of(context).size.width * .8,
-        height: widget.height ?? MediaQuery.of(context).size.height * .8,
-        child: textureReady
-            ? Texture(textureId: widget.textureId!)
-            : const Center(
-                child: CircularProgressIndicator(
+      color: Colors.grey,
+      width: widget.width ?? MediaQuery.of(context).size.width * 0.8,
+      height: widget.height ?? MediaQuery.of(context).size.height * 0.8,
+      child: widget.textureId != null
+          ? Texture(
+              textureId: widget.textureId!,
+            )
+          : const Center(
+              child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
-              )));
+              ),
+            ),
+    );
   }
-
-  bool get textureReady => widget.textureId != null;
 }

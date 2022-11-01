@@ -15,13 +15,13 @@
 */
 
 import 'package:flutter/material.dart';
+import 'package:huawei_ml_text_example/utils/constants.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'constants.dart';
-
 Future<String?> getImage(ImageSource source) async {
-  final picker = ImagePicker();
-  final image = await picker.pickImage(source: source);
+  final XFile? image = await ImagePicker().pickImage(
+    source: source,
+  );
   return image?.path;
 }
 
@@ -32,132 +32,204 @@ mixin DemoMixin {
   void destroy();
 }
 
-pickerDialog(GlobalKey<ScaffoldState> key, BuildContext context,
-    Function(String? s) f) async {
-  key.currentState?.showBottomSheet((context) => Container(
-        height: MediaQuery.of(context).size.height / 4,
-        width: MediaQuery.of(context).size.width,
-        margin: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        primary: kBlueColor, onPrimary: Colors.white),
-                    child: Text(cameraText),
-                    onPressed: () async {
-                      final String? path = await getImage(ImageSource.camera);
-                      f(path);
-                    })),
-            SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        primary: kBlueColor, onPrimary: Colors.white),
-                    child: Text(galleryText),
-                    onPressed: () async {
-                      final String? path = await getImage(ImageSource.gallery);
-                      f(path);
-                    })),
-          ],
-        ),
-      ));
+void pickerDialog(
+  GlobalKey<ScaffoldState> key,
+  BuildContext context,
+  Function(String? s) f,
+) async {
+  key.currentState?.showBottomSheet((BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height / 4,
+      width: MediaQuery.of(context).size.width,
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: kBlueColor,
+                foregroundColor: Colors.white,
+              ),
+              onPressed: () async {
+                final String? path = await getImage(
+                  ImageSource.camera,
+                );
+                f(path);
+              },
+              child: const Text(cameraText),
+            ),
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: kBlueColor,
+                foregroundColor: Colors.white,
+              ),
+              onPressed: () async {
+                final String? path = await getImage(
+                  ImageSource.gallery,
+                );
+                f(path);
+              },
+              child: const Text(galleryText),
+            ),
+          ),
+        ],
+      ),
+    );
+  });
 }
 
-exceptionDialog(BuildContext context, String content) {
+void exceptionDialog(
+  BuildContext context,
+  String content,
+) {
   showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(exceptionText),
-          content: Text(content),
-        );
-      });
-}
-
-Widget recognitionButton(Future<dynamic> callback,
-    {String? text, Color? color, BuildContext? context}) {
-  return Container(
-    width: double.infinity,
-    margin: context!.paddingNormal,
-    child: customElevatedButton(text, callback),
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text(exceptionText),
+        content: Text(content),
+      );
+    },
   );
 }
 
-Widget customElevatedButton(String? text, Future<dynamic> callback) {
-  return ElevatedButton(
-      style: buttonStyle,
-      child: Text(text ?? startRecognitionText),
-      onPressed: () => callback);
+Widget recognitionButton(
+  Future<dynamic> callback, {
+  String? text,
+  Color? color,
+  BuildContext? context,
+}) {
+  return Container(
+    width: double.infinity,
+    margin: context!.paddingNormal,
+    child: customElevatedButton(
+      text,
+      callback,
+    ),
+  );
 }
 
-Widget resultBox(String name, dynamic value, BuildContext context) {
+Widget customElevatedButton(
+  String? text,
+  Future<dynamic> callback,
+) {
+  return ElevatedButton(
+    style: buttonStyle,
+    onPressed: () => callback,
+    child: Text(text ?? startRecognitionText),
+  );
+}
+
+Widget resultBox(
+  String name,
+  dynamic value,
+  BuildContext context,
+) {
   return Container(
     width: context.highWidthValue,
     padding: smallAllPadding(context),
     margin: context.paddingNormal,
     decoration: BoxDecoration(
-        color: kGrayColor.withOpacity(.6),
-        borderRadius: BorderRadius.circular(4)),
-    child: RichText(
-      text: TextSpan(children: [
-        TextSpan(
-            text: "$name: ",
-            style: TextStyle(color: Colors.black.withOpacity(.5))),
-        TextSpan(
-            text: "${value ?? "$noneText"}",
-            style: const TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold))
-      ]),
+      color: kGrayColor.withOpacity(.6),
+      borderRadius: BorderRadius.circular(4),
     ),
-  );
-}
-
-Widget resultBoxWidget(
-    BuildContext context, String resultBoxText, String? res) {
-  return Expanded(
-      child:
-          SingleChildScrollView(child: resultBox(resultBoxText, res, context)));
-}
-
-Widget lensControllerButton(VoidCallback callback, Color color, String title) {
-  return Expanded(
-    child: SizedBox(
-      height: 60,
-      child: ElevatedButton(
-        onPressed: callback,
-        child: Text(title),
-        style: buttonStyle,
+    child: RichText(
+      text: TextSpan(
+        children: <InlineSpan>[
+          TextSpan(
+            text: '$name: ',
+            style: TextStyle(
+              color: Colors.black.withOpacity(.5),
+            ),
+          ),
+          TextSpan(
+            text: '${value ?? noneText}',
+            style: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
     ),
   );
 }
 
-Widget bcrImageContainer(BuildContext context, Image? image) {
+Widget resultBoxWidget(
+  BuildContext context,
+  String resultBoxText,
+  String? res,
+) {
+  return Expanded(
+    child: SingleChildScrollView(
+      child: resultBox(
+        resultBoxText,
+        res,
+        context,
+      ),
+    ),
+  );
+}
+
+Widget lensControllerButton(
+  VoidCallback callback,
+  Color color,
+  String title,
+) {
+  return Expanded(
+    child: SizedBox(
+      height: 60,
+      child: ElevatedButton(
+        onPressed: callback,
+        style: buttonStyle,
+        child: Text(title),
+      ),
+    ),
+  );
+}
+
+Widget bcrImageContainer(
+  BuildContext context,
+  Image? image,
+) {
   return Container(
     color: kGrayColor,
     margin: context.paddingLow,
     width: MediaQuery.of(context).size.width,
     height: MediaQuery.of(context).size.width,
-    child: image != null ? image : Image.asset(userImage),
+    child: image ?? Image.asset(userImage),
   );
 }
 
 PreferredSizeWidget demoAppBar(String title) {
-  return AppBar(title: Text(title));
+  return AppBar(
+    title: Tooltip(
+      message: 'Flutter Version: 3.7.0+300',
+      child: Text(title),
+    ),
+  );
 }
 
 ButtonStyle get buttonStyle {
   return ElevatedButton.styleFrom(
-      elevation: 2,
-      primary: kPrimaryColor,
-      onPrimary: Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)));
+    elevation: 2,
+    backgroundColor: kPrimaryColor,
+    foregroundColor: Colors.white,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(4),
+    ),
+  );
 }
 
-Widget containerElevatedButton(BuildContext context, Widget child) {
+Widget containerElevatedButton(
+  BuildContext context,
+  Widget child,
+) {
   return Container(
     width: context.highWidthValue,
     margin: context.paddingLow,
@@ -166,42 +238,59 @@ Widget containerElevatedButton(BuildContext context, Widget child) {
 }
 
 class CustomGridElement extends StatelessWidget {
-  final Widget? page;
+  const CustomGridElement({
+    Key? key,
+    required this.name,
+    required this.imagePath,
+    this.page,
+  }) : super(key: key);
+
   final String imagePath;
   final String name;
-
-  const CustomGridElement(
-      {Key? key, this.page, required this.name, required this.imagePath})
-      : super(key: key);
+  final Widget? page;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         if (page != null) {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (BuildContext context) => page!));
+          Navigator.push(
+            context,
+            MaterialPageRoute<dynamic>(
+              builder: (BuildContext context) => page!,
+            ),
+          );
         }
       },
       child: ConstrainedBox(
         constraints: BoxConstraints(
-            minWidth: MediaQuery.of(context).size.width / 4,
-            minHeight: MediaQuery.of(context).size.width / 4 + 10),
+          minWidth: MediaQuery.of(context).size.width / 4,
+          minHeight: MediaQuery.of(context).size.width / 4 + 10,
+        ),
         child: Container(
           alignment: Alignment.center,
           padding: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey.withOpacity(0.5),
+            ),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset("assets/$imagePath.png", height: 75),
+            children: <Widget>[
+              Image.asset(
+                'assets/$imagePath.png',
+                height: 75,
+              ),
               const SizedBox(height: 5),
-              Text(name, textAlign: TextAlign.center)
+              Text(
+                name,
+                textAlign: TextAlign.center,
+              ),
             ],
           ),
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey.withOpacity(.5)),
-              color: page != null ? Colors.white : Colors.white,
-              borderRadius: BorderRadius.circular(10)),
         ),
       ),
     );

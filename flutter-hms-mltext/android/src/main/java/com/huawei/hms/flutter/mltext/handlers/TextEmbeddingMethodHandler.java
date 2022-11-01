@@ -32,7 +32,6 @@ import com.huawei.hms.mlsdk.textembedding.MLVocabularyVersion;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -43,9 +42,7 @@ import io.flutter.plugin.common.MethodChannel;
 
 public class TextEmbeddingMethodHandler implements MethodChannel.MethodCallHandler {
     private final static String TAG = TextEmbeddingMethodHandler.class.getSimpleName();
-
     private final TextResponseHandler responseHandler;
-
     private MLTextEmbeddingAnalyzer analyzer;
 
     public TextEmbeddingMethodHandler(final Activity activity) {
@@ -88,9 +85,8 @@ public class TextEmbeddingMethodHandler implements MethodChannel.MethodCallHandl
     }
 
     private void createTextEmbeddingAnalyzer(MethodCall call) {
-        String language = FromMap.toString(Param.LANGUAGE, call.argument(Param.LANGUAGE), false);
-
-        MLTextEmbeddingSetting setting = new MLTextEmbeddingSetting.Factory().setLanguage(language).create();
+        final String language = FromMap.toString(Param.LANGUAGE, call.argument(Param.LANGUAGE), false);
+        final MLTextEmbeddingSetting setting = new MLTextEmbeddingSetting.Factory().setLanguage(language).create();
         analyzer = MLTextEmbeddingAnalyzerFactory.getInstance().getMLTextEmbeddingAnalyzer(setting);
         responseHandler.success(true);
     }
@@ -100,11 +96,9 @@ public class TextEmbeddingMethodHandler implements MethodChannel.MethodCallHandl
             responseHandler.noService();
             return;
         }
-
-        String sentence = FromMap.toString(Param.SENTENCE, call.argument(Param.SENTENCE), false);
-
+        final String sentence = FromMap.toString(Param.SENTENCE, call.argument(Param.SENTENCE), false);
         analyzer.analyseSentenceVector(sentence)
-                .addOnSuccessListener(floats -> responseHandler.success(new ArrayList<>(Arrays.asList(floats))))
+                .addOnSuccessListener(floats -> responseHandler.success(Arrays.asList(floats)))
                 .addOnFailureListener(responseHandler::exception);
     }
 
@@ -113,9 +107,8 @@ public class TextEmbeddingMethodHandler implements MethodChannel.MethodCallHandl
             responseHandler.noService();
             return;
         }
-        String sentence1 = FromMap.toString(Param.SENTENCE1, call.argument(Param.SENTENCE1), true);
-        String sentence2 = FromMap.toString(Param.SENTENCE2, call.argument(Param.SENTENCE2), true);
-
+        final String sentence1 = FromMap.toString(Param.SENTENCE1, call.argument(Param.SENTENCE1), true);
+        final String sentence2 = FromMap.toString(Param.SENTENCE2, call.argument(Param.SENTENCE2), true);
         analyzer.analyseSentencesSimilarity(sentence1, sentence2)
                 .addOnSuccessListener(responseHandler::success)
                 .addOnFailureListener(responseHandler::exception);
@@ -126,10 +119,9 @@ public class TextEmbeddingMethodHandler implements MethodChannel.MethodCallHandl
             responseHandler.noService();
             return;
         }
-        String word = FromMap.toString(Param.WORD, call.argument(Param.WORD), false);
-
+        final String word = FromMap.toString(Param.WORD, call.argument(Param.WORD), false);
         analyzer.analyseWordVector(word)
-                .addOnSuccessListener(floats -> responseHandler.success(new ArrayList<>(Arrays.asList(floats))))
+                .addOnSuccessListener(floats -> responseHandler.success(Arrays.asList(floats)))
                 .addOnFailureListener(responseHandler::exception);
     }
 
@@ -138,9 +130,8 @@ public class TextEmbeddingMethodHandler implements MethodChannel.MethodCallHandl
             responseHandler.noService();
             return;
         }
-        String word1 = FromMap.toString(Param.WORD1, call.argument(Param.WORD1), true);
-        String word2 = FromMap.toString(Param.WORD2, call.argument(Param.WORD2), true);
-
+        final String word1 = FromMap.toString(Param.WORD1, call.argument(Param.WORD1), true);
+        final String word2 = FromMap.toString(Param.WORD2, call.argument(Param.WORD2), true);
         analyzer.analyseWordsSimilarity(word1, word2)
                 .addOnSuccessListener(responseHandler::success)
                 .addOnFailureListener(responseHandler::exception);
@@ -151,9 +142,8 @@ public class TextEmbeddingMethodHandler implements MethodChannel.MethodCallHandl
             responseHandler.noService();
             return;
         }
-        String word = FromMap.toString(Param.WORD, call.argument(Param.WORD), false);
-        Integer number = FromMap.toInteger(Param.NUMBER, call.argument(Param.NUMBER));
-
+        final String word = FromMap.toString(Param.WORD, call.argument(Param.WORD), false);
+        final Integer number = FromMap.toInteger(Param.NUMBER, call.argument(Param.NUMBER));
         analyzer.analyseSimilarWords(word, number != null ? number : 1)
                 .addOnSuccessListener(responseHandler::success)
                 .addOnFailureListener(responseHandler::exception);
@@ -164,7 +154,6 @@ public class TextEmbeddingMethodHandler implements MethodChannel.MethodCallHandl
             responseHandler.noService();
             return;
         }
-
         analyzer.getVocabularyVersion()
                 .addOnSuccessListener(mlVocabularyVersion -> responseHandler.success(vocabularyVersionToMap(mlVocabularyVersion).toString()))
                 .addOnFailureListener(responseHandler::exception);
@@ -175,8 +164,7 @@ public class TextEmbeddingMethodHandler implements MethodChannel.MethodCallHandl
             responseHandler.noService();
             return;
         }
-        List<String> words = FromMap.toStringArrayList(Param.WORDS, call.argument(Param.WORDS));
-
+        final List<String> words = FromMap.toStringArrayList(Param.WORDS, call.argument(Param.WORDS));
         analyzer.analyseWordVectorBatch(Commons.getStringSet(words))
                 .addOnSuccessListener(stringMap -> {
                     Map<String, Object> map = new HashMap<>();

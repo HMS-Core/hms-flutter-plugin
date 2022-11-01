@@ -16,26 +16,28 @@
 
 import 'package:flutter/material.dart';
 import 'package:huawei_ml_text/huawei_ml_text.dart';
+import 'package:huawei_ml_text_example/utils/constants.dart';
+import 'package:huawei_ml_text_example/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../utils/constants.dart';
-import '../utils/utils.dart';
-
 class GcrExample extends StatefulWidget {
+  const GcrExample({
+    Key? key,
+  }) : super(key: key);
+
   @override
-  _GcrExampleState createState() => _GcrExampleState();
+  State<GcrExample> createState() => _GcrExampleState();
 }
 
 class _GcrExampleState extends State<GcrExample> {
   late MLGeneralCardAnalyzer _analyzer;
-
   String? _res;
   Image? _image;
 
   @override
   void initState() {
-    _analyzer = MLGeneralCardAnalyzer();
     super.initState();
+    _analyzer = MLGeneralCardAnalyzer();
   }
 
   @override
@@ -46,7 +48,7 @@ class _GcrExampleState extends State<GcrExample> {
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+            children: <Widget>[
               bcrImageContainer(context, _image),
               resultBox(resultBoxCardText, _res, context),
               containerElevatedButton(
@@ -54,7 +56,7 @@ class _GcrExampleState extends State<GcrExample> {
                 ElevatedButton(
                   style: buttonStyle,
                   onPressed: _capture,
-                  child: Text(captureText),
+                  child: const Text(captureText),
                 ),
               ),
               containerElevatedButton(
@@ -62,7 +64,7 @@ class _GcrExampleState extends State<GcrExample> {
                 ElevatedButton(
                   style: buttonStyle,
                   onPressed: _takePicture,
-                  child: Text(takePictureText),
+                  child: const Text(takePictureText),
                 ),
               ),
               containerElevatedButton(
@@ -70,9 +72,9 @@ class _GcrExampleState extends State<GcrExample> {
                 ElevatedButton(
                   style: buttonStyle,
                   onPressed: _localImage,
-                  child: Text(localImageText),
+                  child: const Text(localImageText),
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -80,41 +82,47 @@ class _GcrExampleState extends State<GcrExample> {
     );
   }
 
-  _capture() async {
-    final setting = MLGeneralCardAnalyzerSetting.capture(
-        tipText: captureTipTextText,
-        tipTextColor: Colors.red,
-        scanBoxCornerColor: Colors.white);
-
+  void _capture() async {
+    final MLGeneralCardAnalyzerSetting setting =
+        MLGeneralCardAnalyzerSetting.capture(
+      tipText: captureTipTextText,
+      tipTextColor: Colors.red,
+      scanBoxCornerColor: Colors.white,
+    );
     try {
-      MLGeneralCard card = await _analyzer.capturePreview(setting);
+      final MLGeneralCard card = await _analyzer.capturePreview(setting);
       _update(card);
     } on Exception catch (e) {
       exceptionDialog(context, e.toString());
     }
   }
 
-  _takePicture() async {
-    final setting = MLGeneralCardAnalyzerSetting.capture(
-        tipText: takePictureText,
-        tipTextColor: Colors.red,
-        scanBoxCornerColor: Colors.white);
-
+  void _takePicture() async {
+    final MLGeneralCardAnalyzerSetting setting =
+        MLGeneralCardAnalyzerSetting.capture(
+      tipText: takePictureText,
+      tipTextColor: Colors.red,
+      scanBoxCornerColor: Colors.white,
+    );
     try {
-      MLGeneralCard card = await _analyzer.capturePhoto(setting);
+      final MLGeneralCard card = await _analyzer.capturePhoto(setting);
       _update(card);
     } on Exception catch (e) {
       exceptionDialog(context, e.toString());
     }
   }
 
-  _localImage() async {
-    String? path = await getImage(ImageSource.gallery);
-
+  void _localImage() async {
+    final String? path = await getImage(
+      ImageSource.gallery,
+    );
     if (path != null) {
-      final setting = MLGeneralCardAnalyzerSetting.image(path: path);
       try {
-        MLGeneralCard card = await _analyzer.captureImage(setting);
+        final MLGeneralCardAnalyzerSetting setting =
+            MLGeneralCardAnalyzerSetting.image(
+          path: path,
+        );
+        final MLGeneralCard card = await _analyzer.captureImage(setting);
         _update(card);
       } on Exception catch (e) {
         exceptionDialog(context, e.toString());
@@ -122,7 +130,7 @@ class _GcrExampleState extends State<GcrExample> {
     }
   }
 
-  _update(MLGeneralCard card) {
+  void _update(MLGeneralCard card) {
     setState(() {
       _res = card.text?.stringValue;
       _image = Image.memory(card.bytes!);

@@ -14,45 +14,64 @@
     limitations under the License.
 */
 
-import 'dart:convert';
-
-import 'package:flutter/services.dart';
-import 'package:huawei_ml_text/src/common/text_analyzer.dart';
-import 'package:huawei_ml_text/src/common/constants.dart';
-import 'package:huawei_ml_text/src/result/ml_table.dart';
+part of huawei_ml_text;
 
 class MLFormRecognitionAnalyzer implements TextAnalyzer<dynamic, String> {
   late MethodChannel _channel;
 
   MLFormRecognitionAnalyzer() {
-    _channel = const MethodChannel("$baseChannel.form");
+    _channel = const MethodChannel('$baseChannel.form');
   }
 
   Future<bool> stop() async {
-    return await _channel.invokeMethod("form#stop");
+    return await _channel.invokeMethod(
+      'form#stop',
+    );
   }
 
   @override
   Future<MLFormRecognitionTablesAttribute> analyseFrame(
-      String imagePath) async {
-    return MLFormRecognitionTablesAttribute.fromJson(json.decode(
-        await _channel.invokeMethod("form#analyseFrame", {"path": imagePath})));
+    String imagePath,
+  ) async {
+    return MLFormRecognitionTablesAttribute.fromJson(
+      json.decode(
+        await _channel.invokeMethod(
+          'form#analyseFrame',
+          <String, dynamic>{
+            'path': imagePath,
+          },
+        ),
+      ),
+    );
   }
 
   @override
   Future<MLFormRecognitionTablesAttribute> asyncAnalyseFrame(
-      String imagePath) async {
-    return MLFormRecognitionTablesAttribute.fromJson(json.decode(await _channel
-        .invokeMethod("form#asyncAnalyseFrame", {"path": imagePath})));
+    String imagePath,
+  ) async {
+    return MLFormRecognitionTablesAttribute.fromJson(
+      json.decode(
+        await _channel.invokeMethod(
+          'form#asyncAnalyseFrame',
+          <String, dynamic>{
+            'path': imagePath,
+          },
+        ),
+      ),
+    );
   }
 
   @override
   Future<bool> destroy() async {
-    return await _channel.invokeMethod("form#destroy");
+    return await _channel.invokeMethod(
+      'form#destroy',
+    );
   }
 
   @override
   Future<bool> isAvailable() async {
-    return await _channel.invokeMethod("form#isAvailable");
+    return await _channel.invokeMethod(
+      'form#isAvailable',
+    );
   }
 }

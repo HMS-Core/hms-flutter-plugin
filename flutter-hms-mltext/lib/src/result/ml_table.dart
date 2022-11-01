@@ -14,126 +14,137 @@
     limitations under the License.
 */
 
+part of huawei_ml_text;
+
 class MLFormRecognitionTablesAttribute {
   int? retCode;
   TablesContent? tablesContent;
 
-  MLFormRecognitionTablesAttribute({this.retCode, this.tablesContent});
+  MLFormRecognitionTablesAttribute({
+    this.retCode,
+    this.tablesContent,
+  });
 
   factory MLFormRecognitionTablesAttribute.fromJson(Map<String, dynamic> json) {
     return MLFormRecognitionTablesAttribute(
-        retCode: json['retCode'],
-        tablesContent: json['tableContent'] != null
-            ? TablesContent.fromJson(json['tableContent'])
-            : null);
+      retCode: json['retCode'],
+      tablesContent: json['tableContent'] != null
+          ? TablesContent.fromJson(json['tableContent'])
+          : null,
+    );
   }
 }
 
 class TablesContent {
-  int? tableCount;
   List<TableAttribute?> tableAttributes;
+  int? tableCount;
 
-  TablesContent({required this.tableAttributes, this.tableCount});
+  TablesContent({
+    required this.tableAttributes,
+    this.tableCount,
+  });
 
   factory TablesContent.fromJson(Map<String, dynamic> json) {
-    var attributes = List<TableAttribute>.empty(growable: true);
+    final List<TableAttribute> attributes = <TableAttribute>[];
+
     if (json['tables'] != null) {
-      json['tables'].forEach((v) {
+      json['tables'].forEach((dynamic v) {
         attributes.add(TableAttribute.fromJson(v));
       });
     }
     return TablesContent(
-        tableAttributes: attributes, tableCount: json['tableCount']);
+      tableAttributes: attributes,
+      tableCount: json['tableCount'],
+    );
   }
 }
 
 class TableAttribute {
-  int? id;
   List<TableCellAttribute?> tableCellAttributes;
+  int? id;
 
-  TableAttribute({required this.tableCellAttributes, this.id});
+  TableAttribute({
+    required this.tableCellAttributes,
+    this.id,
+  });
 
   factory TableAttribute.fromJson(Map<String, dynamic> json) {
-    var attributes = List<TableCellAttribute>.empty(growable: true);
+    final List<TableCellAttribute> attributes = <TableCellAttribute>[];
+
     if (json['tableBody'] != null) {
-      json['tableBody'].forEach((v) {
+      json['tableBody'].forEach((dynamic v) {
         attributes.add(TableCellAttribute.fromJson(v));
       });
     }
-    return TableAttribute(tableCellAttributes: attributes, id: json['tableID']);
+    return TableAttribute(
+      tableCellAttributes: attributes,
+      id: json['tableID'],
+    );
   }
 }
 
 class TableCellAttribute {
   int? endCol;
-
   int? endRow;
-
   int? startCol;
-
   int? startRow;
-
   String? textInfo;
-
   TableCellCoordinateAttribute? tableCellCoordinateAttribute;
 
-  TableCellAttribute(
-      {this.endCol,
-      this.tableCellCoordinateAttribute,
-      this.endRow,
-      this.startCol,
-      this.startRow,
-      this.textInfo});
+  TableCellAttribute({
+    this.endCol,
+    this.tableCellCoordinateAttribute,
+    this.endRow,
+    this.startCol,
+    this.startRow,
+    this.textInfo,
+  });
 
   factory TableCellAttribute.fromJson(Map<String, dynamic> json) {
     return TableCellAttribute(
-        endCol: json['endCol'],
-        endRow: json['endRow'],
-        startCol: json['startCol'],
-        startRow: json['startRow'],
-        textInfo: json['textInfo'],
-        tableCellCoordinateAttribute: json['cellCoordinate'] != null
-            ? TableCellCoordinateAttribute.fromJson(json['cellCoordinate'])
-            : null);
+      endCol: json['endCol'],
+      endRow: json['endRow'],
+      startCol: json['startCol'],
+      startRow: json['startRow'],
+      textInfo: json['textInfo'],
+      tableCellCoordinateAttribute: json['cellCoordinate'] != null
+          ? TableCellCoordinateAttribute.fromJson(json['cellCoordinate'])
+          : null,
+    );
   }
 }
 
 class TableCellCoordinateAttribute {
   double? bottomLeftX;
-
   double? bottomLeftY;
-
   double? bottomRightX;
-
   double? bottomRightY;
-
   double? topLeftX;
-
   double? topLeftY;
-
   double? topRightX;
-
   double? topRightY;
 
-  TableCellCoordinateAttribute(
-      {this.bottomLeftX,
-      this.bottomLeftY,
-      this.bottomRightX,
-      this.bottomRightY,
-      this.topLeftX,
-      this.topLeftY,
-      this.topRightX,
-      this.topRightY});
+  TableCellCoordinateAttribute({
+    this.bottomLeftX,
+    this.bottomLeftY,
+    this.bottomRightX,
+    this.bottomRightY,
+    this.topLeftX,
+    this.topLeftY,
+    this.topRightX,
+    this.topRightY,
+  });
 
   factory TableCellCoordinateAttribute.fromJson(Map<String, dynamic> json) {
     return TableCellCoordinateAttribute(
-        bottomLeftX: json['bottomLeft_x'],
-        bottomLeftY: json['bottomLeft_y'],
-        bottomRightX: json['bottomRight_x'],
-        bottomRightY: json['bottomRight_y'],
-        topLeftX: json['topLeft_x'],
-        topLeftY: json['topLeft_y'],
-        topRightX: json['topRight_x'],
-        topRightY: json['topRight_y']);
+      bottomLeftX: json['bottomLeft_x'],
+      bottomLeftY: json['bottomLeft_y'],
+      bottomRightX: json['bottomRight_x'],
+      bottomRightY: json['bottomRight_y'],
+      topLeftX: json['topLeft_x'],
+      topLeftY: json['topLeft_y'],
+      topRightX: json['topRight_x'],
+      topRightY: json['topRight_y'],
+    );
   }
 }

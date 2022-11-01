@@ -14,29 +14,41 @@
     limitations under the License.
 */
 
-import 'package:flutter/material.dart';
+part of huawei_ml_text;
 
 class MLTextEmbeddingAnalyzerSetting {
-  static const String languageZh = "zh";
-  static const String languageEn = "en";
+  static const String languageZh = 'zh';
+  static const String languageEn = 'en';
 
   String? language;
 
-  MLTextEmbeddingAnalyzerSetting({this.language});
+  MLTextEmbeddingAnalyzerSetting({
+    this.language,
+  });
 
   String? get getLanguage => language;
 
   Map<String, dynamic> toMap() {
-    return {"language": language ?? languageEn};
+    return <String, dynamic>{
+      'language': language ?? languageEn,
+    };
   }
 
   @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-
-    return o is MLTextEmbeddingAnalyzerSetting && o.language == language;
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    return other is MLTextEmbeddingAnalyzerSetting &&
+        other.language == language;
   }
 
   @override
-  int get hashCode => hashList([language]);
+  int get hashCode {
+    return Object.hashAll(
+      <Object?>[
+        language,
+      ],
+    );
+  }
 }

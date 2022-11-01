@@ -27,13 +27,6 @@ public interface Method {
     String BANKCARD_STOP = "bankcard#stop";
 
     /**
-     * Permission methods
-     */
-    String REQUEST_PERMISSION = "requestPermission";
-    String HAS_CAMERA_PERMISSION = "hasCameraPermission";
-    String HAS_STORAGE_PERMISSION = "hasStoragePermission";
-
-    /**
      * Form methods
      */
     String FORM_ASYNC_ANALYSE_FRAME = "form#asyncAnalyseFrame";
@@ -104,6 +97,8 @@ public interface Method {
      */
     String SET_API_KEY = "setApiKey";
     String SET_ACCESS_TOKEN = "setAccessToken";
+    String SET_USER_REGION = "setUserRegion";
+    String GET_COUNTRY_CODE = "getCountryCode";
     String ENABLE_LOGGER = "enableLogger";
     String DISABLE_LOGGER = "disableLogger";
 }

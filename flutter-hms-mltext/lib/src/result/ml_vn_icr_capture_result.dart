@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:typed_data';
+part of huawei_ml_text;
 
 class MLVnIcrCaptureResult {
   Uint8List? bytes;
@@ -24,21 +24,23 @@ class MLVnIcrCaptureResult {
   String? sex;
   int? sideType;
 
-  MLVnIcrCaptureResult(
-      {this.birthday,
-      this.bytes,
-      this.idNum,
-      this.name,
-      this.sex,
-      this.sideType});
+  MLVnIcrCaptureResult({
+    this.birthday,
+    this.bytes,
+    this.idNum,
+    this.name,
+    this.sex,
+    this.sideType,
+  });
 
   factory MLVnIcrCaptureResult.fromMap(Map<dynamic, dynamic> map) {
     return MLVnIcrCaptureResult(
-        bytes: map['bytes'],
-        birthday: map['birthday'],
-        idNum: map['idNum'],
-        name: map['name'],
-        sex: map['sex'],
-        sideType: map['sideType']);
+      bytes: map['bytes'],
+      birthday: map['birthday'],
+      idNum: map['idNum'],
+      name: map['name'],
+      sex: map['sex'],
+      sideType: map['sideType'],
+    );
   }
 }

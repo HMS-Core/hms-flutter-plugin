@@ -14,24 +14,24 @@
     limitations under the License.
 */
 
-import 'dart:typed_data';
-
-import 'ml_text.dart';
+part of huawei_ml_text;
 
 class MLGeneralCard {
   static const int captureContinue = 0;
-
   static const int captureStop = -1;
 
   MLText? text;
-
   Uint8List? bytes;
 
-  MLGeneralCard({this.text, this.bytes});
+  MLGeneralCard({
+    this.text,
+    this.bytes,
+  });
 
   factory MLGeneralCard.fromJson(Map<dynamic, dynamic> map) {
     return MLGeneralCard(
-        text: map['text'] != null ? MLText.fromMap(map['text']) : null,
-        bytes: map['cardBytes']);
+      text: map['text'] != null ? MLText.fromMap(map['text']) : null,
+      bytes: map['cardBytes'],
+    );
   }
 }

@@ -14,40 +14,45 @@
     limitations under the License.
 */
 
-import 'dart:async';
-import 'dart:typed_data';
-import 'dart:ui';
-
-import 'package:flutter/services.dart';
-import 'package:huawei_ml_text/src/common/constants.dart';
-import 'package:huawei_ml_text/src/request/ml_text_lens_controller.dart';
-import 'package:huawei_ml_text/src/result/ml_text.dart';
+part of huawei_ml_text;
 
 class MLTextLensEngine {
   late MethodChannel _channel;
   final MLTextLensController controller;
-
   TextTransactor? _transactor;
   bool _isRunning = false;
 
-  MLTextLensEngine({required this.controller}) {
+  MLTextLensEngine({
+    required this.controller,
+  }) {
     _channel = _initMethodChannel();
   }
 
   MethodChannel _initMethodChannel() {
-    const channel = MethodChannel('$baseChannel.lens');
+    const MethodChannel channel = MethodChannel('$baseChannel.lens');
     channel.setMethodCallHandler(_onMethodCall);
     return channel;
   }
 
   void _setup() {
-    _channel.invokeMethod("lens#setup", controller.toMap());
+    _channel.invokeMethod(
+      'lens#setup',
+      controller.toMap(),
+    );
   }
 
-  Future<int> init({int? width, int? height}) async {
+  Future<int> init({
+    int? width,
+    int? height,
+  }) async {
     _setup();
     return await _channel.invokeMethod(
-        "lens#init", {'width': width ?? 1440, 'height': height ?? 1080});
+      'lens#init',
+      <String, dynamic>{
+        'width': width ?? 1440,
+        'height': height ?? 1080,
+      },
+    );
   }
 
   void run() {
@@ -55,40 +60,55 @@ class MLTextLensEngine {
       return;
     }
     _isRunning = true;
-    _channel.invokeMethod("lens#run");
+    _channel.invokeMethod(
+      'lens#run',
+    );
   }
 
   Future<bool> release() async {
-    final bool res = await _channel.invokeMethod("lens#release");
+    final bool res = await _channel.invokeMethod(
+      'lens#release',
+    );
     if (res) {
       _isRunning = false;
     }
-
     return res;
   }
 
   Future<Uint8List> capture() async {
-    return await _channel.invokeMethod("lens#capture");
+    return await _channel.invokeMethod(
+      'lens#capture',
+    );
   }
 
   Future<void> zoom(double z) async {
-    await _channel.invokeMethod("lens#zoom", {'zoom': z});
+    await _channel.invokeMethod(
+      'lens#zoom',
+      <String, dynamic>{
+        'zoom': z,
+      },
+    );
   }
 
   Future<int> getLensType() async {
-    return await _channel.invokeMethod("lens#getLensType");
+    return await _channel.invokeMethod(
+      'lens#getLensType',
+    );
   }
 
   Future<Size> getDisplayDimension() async {
-    Map<dynamic, dynamic> map =
-        await _channel.invokeMethod("lens#getDimensions");
-    int width = map['width'];
-    int height = map['height'];
+    final Map<dynamic, dynamic> map = await _channel.invokeMethod(
+      'lens#getDimensions',
+    );
+    final int width = map['width'];
+    final int height = map['height'];
     return Size(width.toDouble(), height.toDouble());
   }
 
   Future<void> switchCamera() async {
-    await _channel.invokeMethod("lens#switchCam");
+    await _channel.invokeMethod(
+      'lens#switchCam',
+    );
   }
 
   void setTransactor(TextTransactor transactor) {
@@ -96,15 +116,15 @@ class MLTextLensEngine {
   }
 
   Future<dynamic> _onMethodCall(MethodCall call) {
-    Map<dynamic, dynamic> map = call.arguments;
+    final Map<dynamic, dynamic> map = call.arguments;
+    final List<dynamic> res = map['result'] ?? <dynamic>[];
 
-    List res = map['result'] ?? List<dynamic>.empty();
-
-    if (call.method == "text") {
-      final blocks = res.map((e) => TextBlock.fromMap(e)).toList();
+    if (call.method == 'text') {
+      final List<TextBlock> blocks = res.map((dynamic e) {
+        return TextBlock.fromMap(e);
+      }).toList();
       _transactor!.call(result: blocks);
     }
-
     return Future<dynamic>.value(null);
   }
 }

@@ -14,29 +14,35 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
-import 'package:huawei_ml_text/src/common/constants.dart';
-import 'package:huawei_ml_text/src/result/ml_document.dart';
-import '../request/ml_document_analyzer_setting.dart';
+part of huawei_ml_text;
 
 class MLDocumentAnalyzer {
   late MethodChannel _channel;
 
   MLDocumentAnalyzer() {
-    _channel = const MethodChannel("$baseChannel.document");
+    _channel = const MethodChannel('$baseChannel.document');
   }
 
   Future<MLDocument> asyncAnalyzeFrame(
-      MLDocumentAnalyzerSetting setting) async {
+    MLDocumentAnalyzerSetting setting,
+  ) async {
     return MLDocument.fromMap(
-        await _channel.invokeMethod("asyncDocumentAnalyze", setting.toMap()));
+      await _channel.invokeMethod(
+        'asyncDocumentAnalyze',
+        setting.toMap(),
+      ),
+    );
   }
 
   Future<bool> closeDocumentAnalyzer() async {
-    return await _channel.invokeMethod("close");
+    return await _channel.invokeMethod(
+      'close',
+    );
   }
 
   Future<bool> stopDocumentAnalyzer() async {
-    return await _channel.invokeMethod("stop");
+    return await _channel.invokeMethod(
+      'stop',
+    );
   }
 }

@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import 'package:flutter/material.dart';
+part of huawei_ml_text;
 
 class MLGeneralCardAnalyzerSetting {
   String path;
@@ -27,58 +27,65 @@ class MLGeneralCardAnalyzerSetting {
   int? torchOnResId;
   int? torchOffResId;
 
-  factory MLGeneralCardAnalyzerSetting.image(
-      {required String path, String? language}) {
-    return MLGeneralCardAnalyzerSetting._(path: path, language: language);
-  }
+  MLGeneralCardAnalyzerSetting._({
+    required this.path,
+    this.language,
+    this.backButtonResId,
+    this.photoButtonResId,
+    this.scanBoxCornerColor,
+    this.tipText,
+    this.tipTextColor,
+    this.torchOffResId,
+    this.torchOnResId,
+  });
 
-  factory MLGeneralCardAnalyzerSetting.capture(
-      {String? language,
-      int? backButtonResId,
-      int? photoButtonResId,
-      Color? scanBoxCornerColor,
-      Color? tipTextColor,
-      String? tipText,
-      int? torchOnResId,
-      int? torchOffResId}) {
+  factory MLGeneralCardAnalyzerSetting.image({
+    required String path,
+    String? language,
+  }) {
     return MLGeneralCardAnalyzerSetting._(
-        path: "",
-        language: language,
-        backButtonResId: backButtonResId,
-        photoButtonResId: photoButtonResId,
-        scanBoxCornerColor: scanBoxCornerColor,
-        tipTextColor: tipTextColor,
-        tipText: tipText,
-        torchOnResId: torchOnResId,
-        torchOffResId: torchOffResId);
+      path: path,
+      language: language,
+    );
   }
 
-  MLGeneralCardAnalyzerSetting._(
-      {required this.path,
-      this.language,
-      this.backButtonResId,
-      this.photoButtonResId,
-      this.scanBoxCornerColor,
-      this.tipText,
-      this.tipTextColor,
-      this.torchOffResId,
-      this.torchOnResId});
+  factory MLGeneralCardAnalyzerSetting.capture({
+    String? language,
+    int? backButtonResId,
+    int? photoButtonResId,
+    Color? scanBoxCornerColor,
+    Color? tipTextColor,
+    String? tipText,
+    int? torchOnResId,
+    int? torchOffResId,
+  }) {
+    return MLGeneralCardAnalyzerSetting._(
+      path: '',
+      language: language,
+      backButtonResId: backButtonResId,
+      photoButtonResId: photoButtonResId,
+      scanBoxCornerColor: scanBoxCornerColor,
+      tipTextColor: tipTextColor,
+      tipText: tipText,
+      torchOnResId: torchOnResId,
+      torchOffResId: torchOffResId,
+    );
+  }
 
   Map<String, dynamic> toMap() {
-    return {
-      "path": path,
-      "language": language ?? "zh",
-      "scanBoxCornerColor": scanBoxCornerColor != null
-          ? '#${scanBoxCornerColor!.value.toRadixString(16)}'
-          : '#${Colors.green.value.toRadixString(16)}',
-      "tipText": tipText ?? "Recognizing..",
-      "tipTextColor": scanBoxCornerColor != null
+    return <String, dynamic>{
+      'path': path,
+      'language': language ?? 'zh',
+      'scanBoxCornerColor':
+          '#${(scanBoxCornerColor ?? Colors.green).value.toRadixString(16)}',
+      'tipText': tipText ?? 'Recognizing..',
+      'tipTextColor': scanBoxCornerColor != null
           ? '#${tipTextColor?.value.toRadixString(16)}'
           : '#${Colors.white.value.toRadixString(16)}',
-      "backButtonResId": backButtonResId ?? 2131165292,
-      "photoButtonResId": photoButtonResId ?? 2131165293,
-      "torchOnResId": torchOnResId ?? 2131165294,
-      "torchOffResId": torchOffResId ?? 2131165295
+      'backButtonResId': backButtonResId ?? 2131165292,
+      'photoButtonResId': photoButtonResId ?? 2131165293,
+      'torchOnResId': torchOnResId ?? 2131165294,
+      'torchOffResId': torchOffResId ?? 2131165295,
     };
   }
 }

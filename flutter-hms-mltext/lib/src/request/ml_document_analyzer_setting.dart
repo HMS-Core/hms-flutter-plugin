@@ -14,39 +14,41 @@
     limitations under the License.
 */
 
+part of huawei_ml_text;
+
 class MLDocumentAnalyzerSetting {
   String path;
   String? borderType;
   List<String?> languageList;
   bool? enableFingerPrintVerification;
 
-  /// Language list if no list is specified.
-  static const List<String> _emptyStringList = [];
+  MLDocumentAnalyzerSetting._({
+    required this.path,
+    this.languageList = const <String>[],
+    this.borderType,
+    this.enableFingerPrintVerification,
+  });
 
-  factory MLDocumentAnalyzerSetting.create(
-      {required String path,
-      String borderType = "ARC",
-      List<String> languageList = _emptyStringList,
-      bool enableFingerPrintVerification = true}) {
+  factory MLDocumentAnalyzerSetting.create({
+    required String path,
+    String borderType = 'ARC',
+    List<String> languageList = const <String>[],
+    bool enableFingerPrintVerification = true,
+  }) {
     return MLDocumentAnalyzerSetting._(
-        path: path,
-        borderType: borderType,
-        languageList: languageList,
-        enableFingerPrintVerification: enableFingerPrintVerification);
+      path: path,
+      borderType: borderType,
+      languageList: languageList,
+      enableFingerPrintVerification: enableFingerPrintVerification,
+    );
   }
 
-  MLDocumentAnalyzerSetting._(
-      {required this.path,
-      this.languageList = _emptyStringList,
-      this.borderType,
-      this.enableFingerPrintVerification});
-
   Map<String, dynamic> toMap() {
-    return {
-      "path": path,
-      "borderType": borderType,
-      "languageList": languageList,
-      "fingerPrint": enableFingerPrintVerification
+    return <String, dynamic>{
+      'path': path,
+      'borderType': borderType,
+      'languageList': languageList,
+      'fingerPrint': enableFingerPrintVerification,
     };
   }
 }

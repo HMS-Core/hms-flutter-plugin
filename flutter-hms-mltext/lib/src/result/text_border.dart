@@ -14,19 +14,27 @@
     limitations under the License.
 */
 
+part of huawei_ml_text;
+
 class TextBorder {
   int? bottom;
   int? left;
   int? right;
   int? top;
 
-  TextBorder({this.bottom, this.left, this.right, this.top});
+  TextBorder({
+    this.bottom,
+    this.left,
+    this.right,
+    this.top,
+  });
 
   factory TextBorder.fromMap(Map<dynamic, dynamic> map) {
     return TextBorder(
-        bottom: map['bottom'],
-        left: map['left'],
-        right: map['right'],
-        top: map['top']);
+      bottom: map['bottom'],
+      left: map['left'],
+      right: map['right'],
+      top: map['top'],
+    );
   }
 }

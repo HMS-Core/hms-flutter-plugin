@@ -17,24 +17,26 @@
 import 'package:flutter/material.dart';
 import 'package:huawei_ml_text/huawei_ml_text.dart';
 import 'package:huawei_ml_text_example/utils/constants.dart';
-
-import '../utils/utils.dart';
+import 'package:huawei_ml_text_example/utils/utils.dart';
 
 class DocumentExample extends StatefulWidget {
+  const DocumentExample({
+    Key? key,
+  }) : super(key: key);
+
   @override
-  _DocumentExampleState createState() => _DocumentExampleState();
+  State<DocumentExample> createState() => _DocumentExampleState();
 }
 
 class _DocumentExampleState extends State<DocumentExample> {
-  final _key = GlobalKey<ScaffoldState>();
-
+  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   late MLDocumentAnalyzer _analyzer;
   String? _res;
 
   @override
   void initState() {
-    _analyzer = MLDocumentAnalyzer();
     super.initState();
+    _analyzer = MLDocumentAnalyzer();
   }
 
   @override
@@ -45,30 +47,33 @@ class _DocumentExampleState extends State<DocumentExample> {
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: <Widget>[
             resultBoxWidget(context, resultBoxText, _res),
             containerElevatedButton(
               context,
               ElevatedButton(
                 style: buttonStyle,
-                onPressed: () => pickerDialog(_key, context, _startRecognition),
-                child: Text(startRecognitionText),
+                onPressed: () {
+                  pickerDialog(_key, context, _startRecognition);
+                },
+                child: const Text(startRecognitionText),
               ),
-            )
+            ),
           ],
         ),
       ),
     );
   }
 
-  _startRecognition(String? path) async {
+  void _startRecognition(String? path) async {
     if (path == null || path.isEmpty) {
       return;
     }
-
-    final setting = MLDocumentAnalyzerSetting.create(path: path);
+    final MLDocumentAnalyzerSetting setting = MLDocumentAnalyzerSetting.create(
+      path: path,
+    );
     try {
-      MLDocument document = await _analyzer.asyncAnalyzeFrame(setting);
+      final MLDocument document = await _analyzer.asyncAnalyzeFrame(setting);
       setState(() => _res = document.stringValue);
     } on Exception catch (e) {
       exceptionDialog(context, e.toString());

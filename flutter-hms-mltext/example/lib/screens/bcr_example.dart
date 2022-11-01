@@ -16,26 +16,27 @@
 
 import 'package:flutter/material.dart';
 import 'package:huawei_ml_text/huawei_ml_text.dart';
-
-import '../utils/constants.dart';
-import '../utils/utils.dart';
+import 'package:huawei_ml_text_example/utils/constants.dart';
+import 'package:huawei_ml_text_example/utils/utils.dart';
 
 class BcrExample extends StatefulWidget {
+  const BcrExample({
+    Key? key,
+  }) : super(key: key);
+
   @override
-  _BcrExampleState createState() => _BcrExampleState();
+  State<BcrExample> createState() => _BcrExampleState();
 }
 
 class _BcrExampleState extends State<BcrExample> with DemoMixin {
-  final _key = GlobalKey<ScaffoldState>();
-
+  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   late MLBankcardAnalyzer _analyzer;
-
   Image? _image;
 
   @override
   void initState() {
-    _analyzer = MLBankcardAnalyzer();
     super.initState();
+    _analyzer = MLBankcardAnalyzer();
   }
 
   @override
@@ -47,21 +48,24 @@ class _BcrExampleState extends State<BcrExample> with DemoMixin {
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+            children: <Widget>[
               bcrImageContainer(context, _image),
-              containerElevatedButton(
-                  context,
-                  ElevatedButton(
-                    style: buttonStyle,
-                    onPressed: _captureCard,
-                    child: Text(captureText),
-                  )),
               containerElevatedButton(
                 context,
                 ElevatedButton(
                   style: buttonStyle,
-                  onPressed: () => pickerDialog(_key, context, analyze),
-                  child: Text(localImageText),
+                  onPressed: _captureCard,
+                  child: const Text(captureText),
+                ),
+              ),
+              containerElevatedButton(
+                context,
+                ElevatedButton(
+                  style: buttonStyle,
+                  onPressed: () {
+                    pickerDialog(_key, context, analyze);
+                  },
+                  child: const Text(localImageText),
                 ),
               ),
             ],
@@ -71,10 +75,10 @@ class _BcrExampleState extends State<BcrExample> with DemoMixin {
     );
   }
 
-  _captureCard() async {
-    final setting = MlBankcardSettings.capture();
+  void _captureCard() async {
+    final MlBankcardSettings setting = MlBankcardSettings.capture();
     try {
-      MLBankcard card = await _analyzer.asyncAnalyseFrame(setting);
+      final MLBankcard card = await _analyzer.asyncAnalyseFrame(setting);
       setState(() {
         _image = Image.memory(card.originalBitmap!);
       });
@@ -88,9 +92,11 @@ class _BcrExampleState extends State<BcrExample> with DemoMixin {
     if (path == null || path.isEmpty) {
       return;
     }
-    final setting = MlBankcardSettings.image(path: path);
+    final MlBankcardSettings setting = MlBankcardSettings.image(
+      path: path,
+    );
     try {
-      MLBankcard card = await _analyzer.analyseFrame(setting);
+      final MLBankcard card = await _analyzer.analyseFrame(setting);
       setState(() {
         _image = Image.memory(card.originalBitmap!);
       });
@@ -111,7 +117,8 @@ class _BcrExampleState extends State<BcrExample> with DemoMixin {
   @override
   void isAvailable() async {
     try {
-      print(await _analyzer.isAvailable());
+      final bool res = await _analyzer.isAvailable();
+      debugPrint('$res');
     } on Exception catch (e) {
       exceptionDialog(context, e.toString());
     }

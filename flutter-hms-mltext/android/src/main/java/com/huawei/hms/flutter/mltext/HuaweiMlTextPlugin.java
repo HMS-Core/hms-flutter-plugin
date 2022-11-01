@@ -30,7 +30,6 @@ import com.huawei.hms.flutter.mltext.handlers.LensHandler;
 import com.huawei.hms.flutter.mltext.handlers.TextAnalyzerMethodHandler;
 import com.huawei.hms.flutter.mltext.handlers.TextEmbeddingMethodHandler;
 import com.huawei.hms.flutter.mltext.mlapplication.MlApplicationMethodHandler;
-import com.huawei.hms.flutter.mltext.permissions.PermissionHandler;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -50,7 +49,6 @@ public class HuaweiMlTextPlugin implements FlutterPlugin, ActivityAware {
     private MethodChannel textEmbeddingMethodChannel;
     private MethodChannel mlApplicationMethodChannel;
     private MethodChannel lensMethodChannel;
-    private MethodChannel permissionChannel;
 
     private void onAttachedToEngine(@NonNull final BinaryMessenger messenger, @NonNull final Activity activity, final TextureRegistry textureRegistry) {
         initializeChannels(messenger);
@@ -67,7 +65,6 @@ public class HuaweiMlTextPlugin implements FlutterPlugin, ActivityAware {
         textEmbeddingMethodChannel = new MethodChannel(messenger, Channel.TEXT_EMBEDDING_CHANNEL);
         mlApplicationMethodChannel = new MethodChannel(messenger, Channel.APPLICATION_CHANNEL);
         lensMethodChannel = new MethodChannel(messenger, Channel.LENS_CHANNEL);
-        permissionChannel = new MethodChannel(messenger, Channel.PERMISSION_CHANNEL);
     }
 
     private void setHandlers(final Activity activity, TextureRegistry textureRegistry) {
@@ -80,7 +77,6 @@ public class HuaweiMlTextPlugin implements FlutterPlugin, ActivityAware {
         textEmbeddingMethodChannel.setMethodCallHandler(new TextEmbeddingMethodHandler(activity));
         mlApplicationMethodChannel.setMethodCallHandler(new MlApplicationMethodHandler(activity));
         lensMethodChannel.setMethodCallHandler(new LensHandler(activity, lensMethodChannel, textureRegistry));
-        permissionChannel.setMethodCallHandler(new PermissionHandler(activity));
     }
 
     @Override
@@ -122,7 +118,6 @@ public class HuaweiMlTextPlugin implements FlutterPlugin, ActivityAware {
         idCardChannel = null;
         mlApplicationMethodChannel = null;
         lensMethodChannel = null;
-        permissionChannel = null;
     }
 
     @Override
@@ -135,6 +130,5 @@ public class HuaweiMlTextPlugin implements FlutterPlugin, ActivityAware {
         idCardChannel.setMethodCallHandler(null);
         mlApplicationMethodChannel.setMethodCallHandler(null);
         lensMethodChannel.setMethodCallHandler(null);
-        permissionChannel.setMethodCallHandler(null);
     }
 }

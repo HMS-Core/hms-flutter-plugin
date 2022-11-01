@@ -14,33 +14,45 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
-import 'package:huawei_ml_text/src/common/constants.dart';
-import 'package:huawei_ml_text/src/result/ml_general_card.dart';
-import '../request/ml_general_card_analyzer_setting.dart';
+part of huawei_ml_text;
 
 class MLGeneralCardAnalyzer {
   late MethodChannel _channel;
 
   MLGeneralCardAnalyzer() {
-    _channel = const MethodChannel("$baseChannel.gcr");
+    _channel = const MethodChannel('$baseChannel.gcr');
   }
 
   Future<MLGeneralCard> capturePreview(
-      MLGeneralCardAnalyzerSetting setting) async {
+    MLGeneralCardAnalyzerSetting setting,
+  ) async {
     return MLGeneralCard.fromJson(
-        await _channel.invokeMethod("capturePreview", setting.toMap()));
+      await _channel.invokeMethod(
+        'capturePreview',
+        setting.toMap(),
+      ),
+    );
   }
 
   Future<MLGeneralCard> capturePhoto(
-      MLGeneralCardAnalyzerSetting setting) async {
+    MLGeneralCardAnalyzerSetting setting,
+  ) async {
     return MLGeneralCard.fromJson(
-        await _channel.invokeMethod("capturePhoto", setting.toMap()));
+      await _channel.invokeMethod(
+        'capturePhoto',
+        setting.toMap(),
+      ),
+    );
   }
 
   Future<MLGeneralCard> captureImage(
-      MLGeneralCardAnalyzerSetting setting) async {
+    MLGeneralCardAnalyzerSetting setting,
+  ) async {
     return MLGeneralCard.fromJson(
-        await _channel.invokeMethod("captureImage", setting.toMap()));
+      await _channel.invokeMethod(
+        'captureImage',
+        setting.toMap(),
+      ),
+    );
   }
 }

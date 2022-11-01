@@ -14,13 +14,18 @@
     limitations under the License.
 */
 
+part of huawei_ml_text;
+
 class MlVocabularyVersion {
   String? dictionaryDimension;
   String? dictionarySize;
   String? versionNumber;
 
-  MlVocabularyVersion(
-      {this.dictionaryDimension, this.dictionarySize, this.versionNumber});
+  MlVocabularyVersion({
+    this.dictionaryDimension,
+    this.dictionarySize,
+    this.versionNumber,
+  });
 
   MlVocabularyVersion.fromJson(Map<String, dynamic> map) {
     dictionaryDimension = map['dictionaryDimension'];

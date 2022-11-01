@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_ml_text;
+
 abstract class TextAnalyzer<T, K> {
   T asyncAnalyseFrame(K k);
   T analyseFrame(K k);

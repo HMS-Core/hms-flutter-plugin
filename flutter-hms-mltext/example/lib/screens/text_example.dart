@@ -16,32 +16,27 @@
 
 import 'package:flutter/material.dart';
 import 'package:huawei_ml_text/huawei_ml_text.dart';
-
-import '../utils/constants.dart';
-import '../utils/utils.dart';
+import 'package:huawei_ml_text_example/utils/constants.dart';
+import 'package:huawei_ml_text_example/utils/utils.dart';
 
 class TextExample extends StatefulWidget {
-  const TextExample({Key? key}) : super(key: key);
+  const TextExample({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  _TextExampleState createState() => _TextExampleState();
+  State<TextExample> createState() => _TextExampleState();
 }
 
 class _TextExampleState extends State<TextExample> with DemoMixin {
-  final _key = GlobalKey<ScaffoldState>();
-
+  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   late MLTextAnalyzer _analyzer;
   String? _res;
 
   @override
   void initState() {
-    _analyzer = MLTextAnalyzer();
-    _set();
     super.initState();
-  }
-
-  _set() async {
-    MLTextApplication().setApiKey(homeApiKey);
+    _analyzer = MLTextAnalyzer();
   }
 
   @override
@@ -50,16 +45,20 @@ class _TextExampleState extends State<TextExample> with DemoMixin {
       key: _key,
       appBar: demoAppBar(textAppbarText),
       body: Column(
-        children: [
-          resultBoxWidget(context, resultBoxText, _res),
+        children: <Widget>[
+          resultBoxWidget(
+            context,
+            resultBoxText,
+            _res,
+          ),
           containerElevatedButton(
             context,
             ElevatedButton(
               style: buttonStyle,
               onPressed: () => pickerDialog(_key, context, analyze),
-              child: Text(startRecognitionText),
+              child: const Text(startRecognitionText),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -70,10 +69,11 @@ class _TextExampleState extends State<TextExample> with DemoMixin {
     if (path == null || path.isEmpty) {
       return;
     }
-
-    final setting = MLTextAnalyzerSetting.remote(path: path);
+    final MLTextAnalyzerSetting setting = MLTextAnalyzerSetting.remote(
+      path: path,
+    );
     try {
-      final text = await _analyzer.asyncAnalyseFrame(setting);
+      final MLText text = await _analyzer.asyncAnalyseFrame(setting);
       setState(() => _res = text.stringValue);
     } on Exception catch (e) {
       exceptionDialog(context, e.toString());
@@ -92,7 +92,7 @@ class _TextExampleState extends State<TextExample> with DemoMixin {
   @override
   void isAvailable() async {
     try {
-      final res = await _analyzer.isAvailable();
+      final bool res = await _analyzer.isAvailable();
       debugPrint(res.toString());
     } on Exception catch (e) {
       debugPrint(e.toString());

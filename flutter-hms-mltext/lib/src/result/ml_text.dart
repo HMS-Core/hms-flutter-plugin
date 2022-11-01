@@ -14,180 +14,178 @@
     limitations under the License.
 */
 
-import 'package:huawei_ml_text/src/result/text_border.dart';
-
-import 'ml_point.dart';
-import 'ml_text_language.dart';
+part of huawei_ml_text;
 
 class MLText {
-  String? stringValue;
   List<TextBlock?> blocks;
+  String? stringValue;
 
-  MLText({this.stringValue, required this.blocks});
+  MLText({
+    required this.blocks,
+    this.stringValue,
+  });
 
   factory MLText.fromMap(Map<dynamic, dynamic> map) {
-    var blockList = List<TextBlock>.empty(growable: true);
+    final List<TextBlock> blockList = <TextBlock>[];
+
     if (map['blocks'] != null) {
-      map['blocks'].forEach((v) {
+      map['blocks'].forEach((dynamic v) {
         blockList.add(TextBlock.fromMap(v));
       });
     }
-
-    return MLText(stringValue: map['stringValue'], blocks: blockList);
+    return MLText(
+      stringValue: map['stringValue'],
+      blocks: blockList,
+    );
   }
 }
 
 class TextBlock {
-  TextBorder? border;
-  String? stringValue;
   List<TextLine?> textLines;
   List<MLPoint?> vertexes;
-  String? language;
   List<MLTextLanguage?> languageList;
+  TextBorder? border;
+  String? stringValue;
+  String? language;
   dynamic possibility;
 
-  TextBlock(
-      {this.border,
-      this.stringValue,
-      required this.textLines,
-      required this.vertexes,
-      required this.languageList,
-      this.language,
-      this.possibility});
+  TextBlock({
+    required this.textLines,
+    required this.vertexes,
+    required this.languageList,
+    this.border,
+    this.stringValue,
+    this.language,
+    this.possibility,
+  });
 
   factory TextBlock.fromMap(Map<dynamic, dynamic> map) {
-    var lines = List<TextLine>.empty(growable: true);
-    var vertexes = List<MLPoint>.empty(growable: true);
-    var languageList = List<MLTextLanguage>.empty(growable: true);
+    final List<TextLine> lines = <TextLine>[];
+    final List<MLPoint> vertexes = <MLPoint>[];
+    final List<MLTextLanguage> languageList = <MLTextLanguage>[];
 
     if (map['textLines'] != null) {
-      map['textLines'].forEach((v) {
+      map['textLines'].forEach((dynamic v) {
         lines.add(TextLine.fromMap(v));
       });
     }
-
     if (map['vertexes'] != null) {
-      map['vertexes'].forEach((v) {
+      map['vertexes'].forEach((dynamic v) {
         vertexes.add(MLPoint.fromJson(v));
       });
     }
-
     if (map['languageList'] != null) {
-      map['languageList'].forEach((v) {
+      map['languageList'].forEach((dynamic v) {
         languageList.add(MLTextLanguage.fromJson(v));
       });
     }
-
     return TextBlock(
-        border:
-            map['border'] != null ? TextBorder.fromMap(map['border']) : null,
-        stringValue: map['stringValue'],
-        textLines: lines,
-        vertexes: vertexes,
-        languageList: languageList,
-        language: map['language'],
-        possibility: map['possibility']);
+      border: map['border'] != null ? TextBorder.fromMap(map['border']) : null,
+      stringValue: map['stringValue'],
+      textLines: lines,
+      vertexes: vertexes,
+      languageList: languageList,
+      language: map['language'],
+      possibility: map['possibility'],
+    );
   }
 }
 
 class TextLine {
+  List<TextWord?> words;
+  List<MLPoint?> vertexes;
+  List<MLTextLanguage?> languageList;
   TextBorder? border;
   String? stringValue;
   bool? isVertical;
   dynamic rotationDegree;
-  List<TextWord?> words;
-  List<MLPoint?> vertexes;
   String? language;
-  List<MLTextLanguage?> languageList;
   dynamic possibility;
 
-  TextLine(
-      {this.border,
-      this.stringValue,
-      this.isVertical,
-      this.rotationDegree,
-      required this.words,
-      required this.vertexes,
-      required this.languageList,
-      this.language,
-      this.possibility});
+  TextLine({
+    required this.words,
+    required this.vertexes,
+    required this.languageList,
+    this.border,
+    this.stringValue,
+    this.isVertical,
+    this.rotationDegree,
+    this.language,
+    this.possibility,
+  });
 
   factory TextLine.fromMap(Map<dynamic, dynamic> map) {
-    var words = List<TextWord>.empty(growable: true);
-    var vertexes = List<MLPoint>.empty(growable: true);
-    var languages = List<MLTextLanguage>.empty(growable: true);
+    final List<TextWord> words = <TextWord>[];
+    final List<MLPoint> vertexes = <MLPoint>[];
+    final List<MLTextLanguage> languages = <MLTextLanguage>[];
 
     if (map['words'] != null) {
-      map['words'].forEach((v) {
+      map['words'].forEach((dynamic v) {
         words.add(TextWord.fromMap(v));
       });
     }
-
     if (map['vertexes'] != null) {
-      map['vertexes'].forEach((v) {
+      map['vertexes'].forEach((dynamic v) {
         vertexes.add(MLPoint.fromJson(v));
       });
     }
-
     if (map['languageList'] != null) {
-      map['languageList'].forEach((v) {
+      map['languageList'].forEach((dynamic v) {
         languages.add(MLTextLanguage.fromJson(v));
       });
     }
-
     return TextLine(
-        border:
-            map['border'] != null ? TextBorder.fromMap(map['border']) : null,
-        stringValue: map['stringValue'],
-        isVertical: map['isVertical'],
-        rotationDegree: map['rotationDegree'],
-        words: words,
-        vertexes: vertexes,
-        languageList: languages,
-        language: map['language'],
-        possibility: map['possibility']);
+      border: map['border'] != null ? TextBorder.fromMap(map['border']) : null,
+      stringValue: map['stringValue'],
+      isVertical: map['isVertical'],
+      rotationDegree: map['rotationDegree'],
+      words: words,
+      vertexes: vertexes,
+      languageList: languages,
+      language: map['language'],
+      possibility: map['possibility'],
+    );
   }
 }
 
 class TextWord {
+  List<MLPoint?> vertexes;
+  List<MLTextLanguage?> languageList;
   TextBorder? border;
   String? stringValue;
-  List<MLPoint?> vertexes;
   String? language;
-  List<MLTextLanguage?> languageList;
   dynamic possibility;
 
-  TextWord(
-      {this.border,
-      this.stringValue,
-      required this.vertexes,
-      required this.languageList,
-      this.language,
-      this.possibility});
+  TextWord({
+    required this.vertexes,
+    required this.languageList,
+    this.border,
+    this.stringValue,
+    this.language,
+    this.possibility,
+  });
 
   factory TextWord.fromMap(Map<dynamic, dynamic> map) {
-    var vertexes = List<MLPoint>.empty(growable: true);
-    var languages = List<MLTextLanguage>.empty(growable: true);
+    final List<MLPoint> vertexes = <MLPoint>[];
+    final List<MLTextLanguage> languages = <MLTextLanguage>[];
 
     if (map['vertexes'] != null) {
-      map['vertexes'].forEach((v) {
+      map['vertexes'].forEach((dynamic v) {
         vertexes.add(MLPoint.fromJson(v));
       });
     }
-
     if (map['languageList'] != null) {
-      map['languageList'].forEach((v) {
+      map['languageList'].forEach((dynamic v) {
         languages.add(MLTextLanguage.fromJson(v));
       });
     }
-
     return TextWord(
-        border:
-            map['border'] != null ? TextBorder.fromMap(map['border']) : null,
-        stringValue: map['stringValue'],
-        vertexes: vertexes,
-        languageList: languages,
-        language: map['language'],
-        possibility: map['possibility']);
+      border: map['border'] != null ? TextBorder.fromMap(map['border']) : null,
+      stringValue: map['stringValue'],
+      vertexes: vertexes,
+      languageList: languages,
+      language: map['language'],
+      possibility: map['possibility'],
+    );
   }
 }

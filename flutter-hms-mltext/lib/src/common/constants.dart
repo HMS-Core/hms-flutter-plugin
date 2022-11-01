@@ -14,10 +14,12 @@
     limitations under the License.
 */
 
+part of huawei_ml_text;
+
 const String baseChannel = 'huawei.hms.flutter.ml.text';
 
-enum TextTransaction { text }
-
-enum TextPermission { camera, storage }
+enum TextTransaction {
+  text,
+}
 
 typedef TextTransactor = void Function({dynamic result});

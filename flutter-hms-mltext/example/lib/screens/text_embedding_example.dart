@@ -17,34 +17,33 @@
 import 'package:flutter/material.dart';
 import 'package:huawei_ml_text/huawei_ml_text.dart';
 import 'package:huawei_ml_text_example/utils/constants.dart';
-
-import '../utils/utils.dart';
+import 'package:huawei_ml_text_example/utils/utils.dart';
 
 class TextEmbeddingExample extends StatefulWidget {
+  const TextEmbeddingExample({Key? key}) : super(key: key);
+
   @override
-  _TextEmbeddingExampleState createState() => _TextEmbeddingExampleState();
+  State<TextEmbeddingExample> createState() => _TextEmbeddingExampleState();
 }
 
 class _TextEmbeddingExampleState extends State<TextEmbeddingExample> {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   late MLTextEmbeddingAnalyzer _analyzer;
   late MLTextEmbeddingAnalyzerSetting _setting;
-
   double? _wordsSimilarity;
-  List _similarWords = [];
+  final List<String> _similarWords = <String>[];
 
   @override
   void initState() {
+    super.initState();
     // Initialize the analyzer.
     _analyzer = MLTextEmbeddingAnalyzer();
-
     // Create configuration instance and set the language.
     _setting = MLTextEmbeddingAnalyzerSetting(
-        language: MLTextEmbeddingAnalyzerSetting.languageEn);
-
+      language: MLTextEmbeddingAnalyzerSetting.languageEn,
+    );
     // Create the actual analyzer before you call other methods.
     _createAnalyzer();
-    super.initState();
   }
 
   @override
@@ -54,31 +53,39 @@ class _TextEmbeddingExampleState extends State<TextEmbeddingExample> {
       appBar: demoAppBar(embeddingAppbarText),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
+        children: <Widget>[
           Padding(
             padding: context.paddingLow,
-            child: Text(embeddingTextSimilarity),
+            child: const Text(embeddingTextSimilarity),
           ),
-          resultBox(embeddingWordsSimilarity, _wordsSimilarity, context),
+          resultBox(
+            embeddingWordsSimilarity,
+            _wordsSimilarity,
+            context,
+          ),
           containerElevatedButton(
             context,
             ElevatedButton(
               style: buttonStyle,
               onPressed: _getWordsSimilarity,
-              child: Text(embeddingGetWordsSimilarity),
+              child: const Text(embeddingGetWordsSimilarity),
             ),
           ),
           Padding(
             padding: context.paddingLow,
-            child: Text(embeddingTextSimilar),
+            child: const Text(embeddingTextSimilar),
           ),
-          resultBox(embeddingWordsSimilarity, _similarWords, context),
+          resultBox(
+            embeddingWordsSimilarity,
+            _similarWords,
+            context,
+          ),
           containerElevatedButton(
             context,
             ElevatedButton(
               style: buttonStyle,
               onPressed: _getSimilarWords,
-              child: Text(embeddingGetSimilarWords),
+              child: const Text(embeddingGetSimilarWords),
             ),
           ),
         ],
@@ -86,21 +93,27 @@ class _TextEmbeddingExampleState extends State<TextEmbeddingExample> {
     );
   }
 
-  _createAnalyzer() {
-    _analyzer.createTextEmbeddingAnalyzer(setting: _setting);
+  void _createAnalyzer() {
+    _analyzer.createTextEmbeddingAnalyzer(
+      setting: _setting,
+    );
   }
 
-  _getWordsSimilarity() async {
+  void _getWordsSimilarity() async {
     final double similarity = await _analyzer.analyseWordsSimilarity(
-        word1: spaceText, word2: planetsText);
+      word1: spaceText,
+      word2: planetsText,
+    );
     setState(() => _wordsSimilarity = similarity);
   }
 
-  _getSimilarWords() async {
-    List<dynamic> list =
-        await _analyzer.analyseSimilarWords(word: spaceText, number: 10);
-    list.forEach((v) {
+  void _getSimilarWords() async {
+    final List<String> list = await _analyzer.analyseSimilarWords(
+      word: spaceText,
+      number: 10,
+    );
+    for (String v in list) {
       setState(() => _similarWords.add(v));
-    });
+    }
   }
 }

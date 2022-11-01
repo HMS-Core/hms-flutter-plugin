@@ -14,10 +14,14 @@
     limitations under the License.
 */
 
+part of huawei_ml_text;
+
 class MLTextLanguage {
   String? language;
 
-  MLTextLanguage({this.language});
+  MLTextLanguage({
+    this.language,
+  });
 
   MLTextLanguage.fromJson(Map<dynamic, dynamic> map) {
     language = map['language'];

@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:typed_data';
+part of huawei_ml_text;
 
 class MLBankcard {
   String? expire;
@@ -26,25 +26,27 @@ class MLBankcard {
   Uint8List? numberBitmap;
   int? errorCode;
 
-  MLBankcard(
-      {this.expire,
-      this.number,
-      this.numberBitmap,
-      this.originalBitmap,
-      this.errorCode,
-      this.type,
-      this.issuer,
-      this.organization});
+  MLBankcard({
+    this.expire,
+    this.number,
+    this.numberBitmap,
+    this.originalBitmap,
+    this.errorCode,
+    this.type,
+    this.issuer,
+    this.organization,
+  });
 
   factory MLBankcard.fromMap(Map<dynamic, dynamic> json) {
     return MLBankcard(
-        expire: json['expire'],
-        number: json['number'],
-        errorCode: json['errorCode'],
-        originalBitmap: json['originalBytes'],
-        numberBitmap: json['numberBytes'],
-        type: json['type'],
-        issuer: json['issuer'],
-        organization: json['organization']);
+      expire: json['expire'],
+      number: json['number'],
+      errorCode: json['errorCode'],
+      originalBitmap: json['originalBytes'],
+      numberBitmap: json['numberBytes'],
+      type: json['type'],
+      issuer: json['issuer'],
+      organization: json['organization'],
+    );
   }
 }

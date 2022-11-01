@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_ml_text;
+
 class MLTextAnalyzerSetting {
   /// Independent detection mode. Each supplied image is detected independently.
   /// This mode applies to single image detection.
@@ -24,19 +26,16 @@ class MLTextAnalyzerSetting {
   static const int ocrTrackingMode = 2;
 
   /// Text bounding box that is a polygon.
-  static const String arc = "ARC";
+  static const String arc = 'ARC';
 
   /// Text bounding box that is a quadrilateral.
-  static const String ngon = "NGON";
+  static const String ngon = 'NGON';
 
   /// Dense text type, such as user instructions.
   static const int ocrCompactScene = 2;
 
   /// Sparse text type, such as business cards.
   static const int ocrLooseScene = 1;
-
-  /// Language list if no list is specified.
-  static const List<String> _emptyStringList = [];
 
   String path;
   bool isRemote;
@@ -46,47 +45,55 @@ class MLTextAnalyzerSetting {
   String? borderType;
   int? textDensityScene;
 
+  MLTextAnalyzerSetting._({
+    required this.path,
+    required this.isRemote,
+    this.ocrMode,
+    this.language,
+    this.languageList = const <String>[],
+    this.borderType,
+    this.textDensityScene,
+  });
+
   /// Constructor for on device text recognition.
-  factory MLTextAnalyzerSetting.local(
-      {required String path,
-      int ocrMode = ocrDetectMode,
-      String language = "zh"}) {
+  factory MLTextAnalyzerSetting.local({
+    required String path,
+    int ocrMode = ocrDetectMode,
+    String language = 'zh',
+  }) {
     return MLTextAnalyzerSetting._(
-        path: path, isRemote: false, ocrMode: ocrMode, language: language);
+      path: path,
+      isRemote: false,
+      ocrMode: ocrMode,
+      language: language,
+    );
   }
 
   /// Constructor for on cloud text recognition.
-  factory MLTextAnalyzerSetting.remote(
-      {required String path,
-      String borderType = arc,
-      List<String> languageList = _emptyStringList,
-      int textDensityScene = ocrCompactScene}) {
+  factory MLTextAnalyzerSetting.remote({
+    required String path,
+    String borderType = arc,
+    List<String> languageList = const <String>[],
+    int textDensityScene = ocrCompactScene,
+  }) {
     return MLTextAnalyzerSetting._(
-        path: path,
-        isRemote: true,
-        borderType: borderType,
-        languageList: languageList,
-        textDensityScene: textDensityScene);
+      path: path,
+      isRemote: true,
+      borderType: borderType,
+      languageList: languageList,
+      textDensityScene: textDensityScene,
+    );
   }
 
-  MLTextAnalyzerSetting._(
-      {required this.path,
-      required this.isRemote,
-      this.ocrMode,
-      this.language,
-      this.languageList = _emptyStringList,
-      this.borderType,
-      this.textDensityScene});
-
   Map<String, dynamic> toMap() {
-    return {
-      "path": path,
-      "ocrMode": ocrMode,
-      "language": language,
-      "languageList": languageList,
-      "borderType": borderType,
-      "textDensityScene": textDensityScene,
-      "isRemote": isRemote
+    return <String, dynamic>{
+      'path': path,
+      'ocrMode': ocrMode,
+      'language': language,
+      'languageList': languageList,
+      'borderType': borderType,
+      'textDensityScene': textDensityScene,
+      'isRemote': isRemote,
     };
   }
 }

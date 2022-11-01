@@ -13,11 +13,32 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import 'package:flutter/material.dart';
-import 'screens/home.dart';
 
-void main() {
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:huawei_ml_text/huawei_ml_text.dart';
+import 'package:huawei_ml_text_example/screens/home.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+    <DeviceOrientation>[
+      DeviceOrientation.portraitUp,
+    ],
+  );
+  // TODO: Copy and paste the api_key value in your agconnect-services.json file.
+  await MLTextApplication().setApiKey('<api_key>');
+  await requestPermissions();
   runApp(const MyApp());
+}
+
+// TODO: Please implement your own 'Permission Handler'.
+Future<void> requestPermissions() async {
+  // This plugin needs some permissions to work properly.
+  // You are expected to handle these permissions to use this Demo.
+
+  // You can learn more about the required permissions from our official documentations.
+  // https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/assigning-permissions-0000001052789343?ha_source=hms1
 }
 
 class MyApp extends StatelessWidget {
@@ -26,14 +47,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-            appBarTheme: const AppBarTheme(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        appBarTheme: const AppBarTheme(
           elevation: 0,
           centerTitle: false,
           foregroundColor: Colors.black,
           backgroundColor: Colors.white,
-        )),
-        home: Home());
+        ),
+      ),
+      home: const Home(),
+    );
   }
 }

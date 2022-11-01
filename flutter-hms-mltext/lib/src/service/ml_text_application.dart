@@ -14,29 +14,77 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
-import 'package:huawei_ml_text/src/common/constants.dart';
+part of huawei_ml_text;
 
 class MLTextApplication {
   late MethodChannel _channel;
+  static const int REGION_DR_UNKNOWN = 1001;
+  static const int REGION_DR_CHINA = 1002;
+  static const int REGION_DR_RUSSIA = 1005;
+  static const int REGION_DR_GERMAN = 1006;
+  static const int REGION_DR_SINGAPORE = 1007;
 
   MLTextApplication() {
-    _channel = const MethodChannel("$baseChannel.application");
+    _channel = const MethodChannel('$baseChannel.application');
   }
 
-  void setApiKey(String apiKey) {
-    _channel.invokeMethod("setApiKey", {'key': apiKey});
+  /// Sets the API key for on-cloud services.
+  Future<void> setApiKey(String apiKey) async {
+    await _channel.invokeMethod(
+      'setApiKey',
+      <String, dynamic>{
+        'key': apiKey,
+      },
+    );
   }
 
-  void setAccessToken(String accessToken) {
-    _channel.invokeMethod("setAccessToken", {'token': accessToken});
+  /// Sets the access token for on-cloud services.
+  Future<void> setAccessToken(String accessToken) async {
+    await _channel.invokeMethod(
+      'setAccessToken',
+      <String, dynamic>{
+        'token': accessToken,
+      },
+    );
   }
 
-  void enableLogger() {
-    _channel.invokeMethod("enableLogger");
+  /// Sets a data processing location when you choose to manually manage and specify such a location.
+  ///
+  /// REGION_DR_UNKNOWN = 1001,
+  /// REGION_DR_CHINA = 1002,
+  /// REGION_DR_RUSSIA = 1005,
+  /// REGION_DR_GERMAN = 1006,
+  /// REGION_DR_SINGAPORE = 1007
+  Future<void> setUserRegion(int region) async {
+    await _channel.invokeMethod(
+      'setUserRegion',
+      <String, dynamic>{
+        'region': region,
+      },
+    );
   }
 
-  void disableLogger() {
-    _channel.invokeMethod("disableLogger");
+  /// Obtains the country/region code of the data processing location you have specified
+  /// when you choose to manually manage and specify such a location.
+  ///
+  /// When the parameter value is invalid or not specified, null will be returned.
+  Future<String?> getCountryCode() async {
+    return await _channel.invokeMethod(
+      'getCountryCode',
+    );
+  }
+
+  /// Enables the HMS plugin method analytics.
+  Future<void> enableLogger() async {
+    await _channel.invokeMethod(
+      'enableLogger',
+    );
+  }
+
+  /// Disables the HMS plugin method analytics.
+  Future<void> disableLogger() async {
+    await _channel.invokeMethod(
+      'disableLogger',
+    );
   }
 }

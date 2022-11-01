@@ -18,61 +18,51 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:huawei_ml_text/huawei_ml_text.dart';
 import 'package:huawei_ml_text_example/utils/constants.dart';
-
-import '../utils/utils.dart';
+import 'package:huawei_ml_text_example/utils/utils.dart';
 
 class LensExample extends StatefulWidget {
-  const LensExample({Key? key}) : super(key: key);
+  const LensExample({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  _LensExampleState createState() => _LensExampleState();
+  State<LensExample> createState() => _LensExampleState();
 }
 
 class _LensExampleState extends State<LensExample> {
-  final _controller = MLTextLensController(
-      lensType: MLTextLensController.backLens,
-      transaction: TextTransaction.text);
-
+  final MLTextLensController _controller = MLTextLensController(
+    lensType: MLTextLensController.backLens,
+    transaction: TextTransaction.text,
+  );
   late MLTextLensEngine _lensEngine;
   int? _textureId;
   String? _text = '';
 
   @override
   void initState() {
+    super.initState();
     _lensEngine = MLTextLensEngine(controller: _controller);
     _lensEngine.setTransactor(_onTransaction);
-    _reqPermission();
     _initialize();
-    super.initState();
-  }
-
-  void _reqPermission() async {
-    MLTextPermissions().requestPermission(
-        [TextPermission.camera, TextPermission.storage]).then((value) {
-      debugPrint('$permissionText: $value');
-      if (!value) {
-        _reqPermission();
-      }
-    });
   }
 
   void _onTransaction({dynamic result}) {
     _updateResult(result);
   }
 
-  _updateResult(List<TextBlock> texts) {
+  void _updateResult(List<TextBlock> texts) {
     setState(() => _text = texts.first.stringValue);
   }
 
   // To use LensView after you call release method, call this method first.
-  _initialize() async {
-    await _lensEngine.init().then((value) {
+  void _initialize() async {
+    await _lensEngine.init().then((int value) {
       setState(() => _textureId = value);
     });
   }
 
   // Start live detection.
-  _run() {
+  void _run() {
     try {
       _lensEngine.run();
     } on PlatformException catch (e) {
@@ -81,7 +71,7 @@ class _LensExampleState extends State<LensExample> {
   }
 
   // Stop live detection and release resources.
-  _release() {
+  void _release() {
     _lensEngine.release();
   }
 
@@ -91,18 +81,40 @@ class _LensExampleState extends State<LensExample> {
       appBar: demoAppBar(lensAppbarText),
       body: SafeArea(
         child: Column(
-          children: [
+          children: <Widget>[
             Expanded(
-                child: MLTextLens(
-              textureId: _textureId,
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.width,
-            )),
+              child: MLTextLens(
+                textureId: _textureId,
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.width,
+              ),
+            ),
             Padding(
               padding: context.paddingLow,
-              child: Text(" $lensText: $_text"),
+              child: Text(' $lensText: $_text'),
             ),
-            _lensControllerWidget()
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Row(
+                children: <Widget>[
+                  _lensControllerButton(
+                    _initialize,
+                    kGreenColor,
+                    lensInitButton,
+                  ),
+                  _lensControllerButton(
+                    _run,
+                    kPrimaryColor,
+                    lensStartButton,
+                  ),
+                  _lensControllerButton(
+                    _release,
+                    kDangerColor,
+                    lensRelaseButton,
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -110,32 +122,25 @@ class _LensExampleState extends State<LensExample> {
   }
 
   Widget _lensControllerButton(
-      VoidCallback callback, Color color, String title) {
+    VoidCallback callback,
+    Color color,
+    String title,
+  ) {
     return Expanded(
-      child: Container(
+      child: SizedBox(
         height: 60,
         child: ElevatedButton(
           onPressed: callback,
-          child: Text(title),
           style: ElevatedButton.styleFrom(
-              elevation: 0,
-              primary: color,
-              onPrimary: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
+            elevation: 0,
+            backgroundColor: color,
+            foregroundColor: Colors.white,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.zero,
+            ),
+          ),
+          child: Text(title),
         ),
-      ),
-    );
-  }
-
-  Widget _lensControllerWidget() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      child: Row(
-        children: [
-          _lensControllerButton(_initialize, kGreenColor, lensInitButton),
-          _lensControllerButton(_run, kPrimaryColor, lensStartButton),
-          _lensControllerButton(_release, kDangerColor, lensRelaseButton)
-        ],
       ),
     );
   }

@@ -14,24 +14,31 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
-import 'package:huawei_ml_text/src/common/constants.dart';
-import 'package:huawei_ml_text/src/result/ml_vn_icr_capture_result.dart';
+part of huawei_ml_text;
 
 class MLVnIcrCapture {
   late MethodChannel _channel;
 
   MLVnIcrCapture() {
-    _channel = const MethodChannel("$baseChannel.icr");
+    _channel = const MethodChannel('$baseChannel.icr');
   }
 
   Future<MLVnIcrCaptureResult> capture() async {
     return MLVnIcrCaptureResult.fromMap(
-        await _channel.invokeMethod("captureIdCard"));
+      await _channel.invokeMethod(
+        'captureIdCard',
+      ),
+    );
   }
 
   Future<MLVnIcrCaptureResult> captureImage(String path) async {
     return MLVnIcrCaptureResult.fromMap(
-        await _channel.invokeMethod("analyzeIdCardImage", {'path': path}));
+      await _channel.invokeMethod(
+        'analyzeIdCardImage',
+        <String, dynamic>{
+          'path': path,
+        },
+      ),
+    );
   }
 }
