@@ -22,22 +22,19 @@ class SkeletonExample extends StatefulWidget {
   const SkeletonExample({Key? key}) : super(key: key);
 
   @override
-  _SkeletonExampleState createState() => _SkeletonExampleState();
+  State<SkeletonExample> createState() => _SkeletonExampleState();
 }
 
 class _SkeletonExampleState extends State<SkeletonExample> with DemoMixin {
-  final _key = GlobalKey<ScaffoldState>();
-
+  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   late MLSkeletonAnalyzer _analyzer;
-
-  List types = [];
-
-  late List<MLSkeleton> listt = [];
+  final List<int?> types = <int?>[];
+  late List<MLSkeleton> listt = <MLSkeleton>[];
 
   @override
   void initState() {
-    _analyzer = MLSkeletonAnalyzer();
     super.initState();
+    _analyzer = MLSkeletonAnalyzer();
   }
 
   @override
@@ -45,14 +42,13 @@ class _SkeletonExampleState extends State<SkeletonExample> with DemoMixin {
     if (path == null || path.isEmpty) {
       return;
     }
-
-    final setting = MLSkeletonAnalyzerSetting(path: path);
-
-    final skeletons = await _analyzer.analyseFrame(setting);
+    final MLSkeletonAnalyzerSetting setting = MLSkeletonAnalyzerSetting(
+      path: path,
+    );
+    final List<MLSkeleton> skeletons = await _analyzer.analyseFrame(setting);
     setState(() => listt.addAll(skeletons));
-
-    for (var element in skeletons.first.joints) {
-      setState(() => types.add(element!.type));
+    for (MLJoint element in skeletons.first.joints) {
+      setState(() => types.add(element.type));
     }
   }
 
@@ -68,7 +64,7 @@ class _SkeletonExampleState extends State<SkeletonExample> with DemoMixin {
   @override
   void isAvailable() async {
     try {
-      final res = await _analyzer.isAvailable();
+      final bool res = await _analyzer.isAvailable();
       debugPrint(res.toString());
     } on Exception catch (e) {
       debugPrint(e.toString());
@@ -90,8 +86,8 @@ class _SkeletonExampleState extends State<SkeletonExample> with DemoMixin {
       key: _key,
       appBar: demoAppBar('Skeleton Example'),
       body: Column(
-        children: [
-          resultBox("Joint types detected", types),
+        children: <Widget>[
+          resultBox('Joint types detected', types),
           Container(
             width: double.infinity - 20,
             margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -100,7 +96,7 @@ class _SkeletonExampleState extends State<SkeletonExample> with DemoMixin {
               onPressed: () => pickerDialog(_key, context, analyze),
               child: const Text('Start Recognition'),
             ),
-          )
+          ),
         ],
       ),
     );

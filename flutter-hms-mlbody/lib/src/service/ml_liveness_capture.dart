@@ -14,13 +14,10 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
-import 'package:huawei_ml_body/src/common/constants.dart';
-import 'package:huawei_ml_body/src/result/ml_liveness_capture_result.dart';
+part of huawei_ml_body;
 
 class MLLivenessCapture {
   static const int startDetectFace = 1;
-
   static const int startDetectLiveness = 2;
 
   /// The camera permission is not obtained.
@@ -50,8 +47,16 @@ class MLLivenessCapture {
     _channel = const MethodChannel('$baseChannel.liveness');
   }
 
-  Future<MLLivenessCaptureResult> startDetect({bool? detectMask}) async {
-    return MLLivenessCaptureResult.fromJson(await _channel.invokeMethod(
-        "liveness#startDetect", {'detectMask': detectMask ?? true}));
+  Future<MLLivenessCaptureResult> startDetect({
+    bool? detectMask,
+  }) async {
+    return MLLivenessCaptureResult.fromJson(
+      await _channel.invokeMethod(
+        'liveness#startDetect',
+        <String, dynamic>{
+          'detectMask': detectMask ?? true,
+        },
+      ),
+    );
   }
 }

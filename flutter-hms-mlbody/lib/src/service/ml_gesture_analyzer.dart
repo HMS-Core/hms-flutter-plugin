@@ -14,11 +14,7 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
-import 'package:huawei_ml_body/src/common/constants.dart';
-import 'package:huawei_ml_body/src/result/ml_gesture.dart';
-
-import '../common/ml_body_analyzer.dart';
+part of huawei_ml_body;
 
 class MLGestureAnalyzer implements MLBodyAnalyzer<MLGesture, String> {
   late MethodChannel _channel;
@@ -28,38 +24,54 @@ class MLGestureAnalyzer implements MLBodyAnalyzer<MLGesture, String> {
   }
 
   @override
-  Future<List<MLGesture>> asyncAnalyseFrame(String path) async {
+  Future<List<MLGesture>> asyncAnalyseFrame(
+    String path,
+  ) async {
     if (path.isEmpty) {
       throw ArgumentError('Image path can not be empty!');
     }
-
-    List res = await _channel
-        .invokeMethod("gesture#asyncAnalyseFrame", {'path': path});
-    return res.map((e) => MLGesture.fromMap(e)).toList();
+    final List<dynamic> res = await _channel.invokeMethod(
+      'gesture#asyncAnalyseFrame',
+      <String, dynamic>{
+        'path': path,
+      },
+    );
+    return res.map((dynamic e) => MLGesture.fromMap(e)).toList();
   }
 
   @override
-  Future<List<MLGesture>> analyseFrame(String path) async {
+  Future<List<MLGesture>> analyseFrame(
+    String path,
+  ) async {
     if (path.isEmpty) {
       throw ArgumentError('Image path can not be empty!');
     }
-
-    List res =
-        await _channel.invokeMethod("gesture#analyseFrame", {'path': path});
-    return res.map((e) => MLGesture.fromMap(e)).toList();
+    final List<dynamic> res = await _channel.invokeMethod(
+      'gesture#analyseFrame',
+      <String, dynamic>{
+        'path': path,
+      },
+    );
+    return res.map((dynamic e) => MLGesture.fromMap(e)).toList();
   }
 
   @override
   Future<bool> destroy() async {
-    return await _channel.invokeMethod('gesture#destroy');
+    return await _channel.invokeMethod(
+      'gesture#destroy',
+    );
   }
 
   @override
   Future<bool> isAvailable() async {
-    return await _channel.invokeMethod('gesture#isAvailable');
+    return await _channel.invokeMethod(
+      'gesture#isAvailable',
+    );
   }
 
   Future<bool> stop() async {
-    return await _channel.invokeMethod('gesture#stop');
+    return await _channel.invokeMethod(
+      'gesture#stop',
+    );
   }
 }

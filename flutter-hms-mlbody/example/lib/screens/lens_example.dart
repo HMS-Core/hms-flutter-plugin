@@ -22,54 +22,43 @@ class LensExample extends StatefulWidget {
   const LensExample({Key? key}) : super(key: key);
 
   @override
-  _LensExampleState createState() => _LensExampleState();
+  State<LensExample> createState() => _LensExampleState();
 }
 
 class _LensExampleState extends State<LensExample> {
-  final _permissions = MLBodyPermissions();
-
-  final _controller = MLBodyLensController(
-      transaction: BodyTransaction.face,
-      lensType: MLBodyLensController.backLens);
-
+  final MLBodyLensController _controller = MLBodyLensController(
+    transaction: BodyTransaction.face,
+    lensType: MLBodyLensController.backLens,
+  );
   late MLBodyLensEngine _lensEngine;
   int? _textureId;
   dynamic _smilingProb = 0;
 
   @override
   void initState() {
-    _lensEngine = MLBodyLensEngine(controller: _controller);
-    _lensEngine.setTransactor(_onTransaction);
-    _reqPermission();
-    _initialize();
     super.initState();
-  }
-
-  void _reqPermission() async {
-    _permissions.requestPermission(
-        [BodyPermission.camera, BodyPermission.storage]).then((value) {
-      debugPrint('permissions granted: $value');
-      if (!value) {
-        _reqPermission();
-      }
-    });
+    _lensEngine = MLBodyLensEngine(
+      controller: _controller,
+    );
+    _lensEngine.setTransactor(_onTransaction);
+    _initialize();
   }
 
   void _onTransaction({dynamic result}) {
     _updateResult(result);
   }
 
-  _updateResult(List<MLFace> faces) {
+  void _updateResult(List<MLFace> faces) {
     setState(() => _smilingProb = faces.first.possibilityOfSmiling);
   }
 
-  _initialize() async {
-    await _lensEngine.init().then((value) {
+  void _initialize() async {
+    await _lensEngine.init().then((int value) {
       setState(() => _textureId = value);
     });
   }
 
-  _run() {
+  void _run() {
     try {
       _lensEngine.run();
     } on Exception catch (e) {
@@ -77,7 +66,7 @@ class _LensExampleState extends State<LensExample> {
     }
   }
 
-  _release() {
+  void _release() {
     _lensEngine.release();
   }
 
@@ -86,7 +75,7 @@ class _LensExampleState extends State<LensExample> {
     return Scaffold(
       appBar: demoAppBar('Lens Example'),
       body: Column(
-        children: [
+        children: <Widget>[
           Expanded(
             child: MLBodyLens(
               textureId: _textureId,
@@ -96,22 +85,30 @@ class _LensExampleState extends State<LensExample> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Text(" Smiling probability: $_smilingProb"),
+            child: Text(' Smiling probability: $_smilingProb'),
           ),
-          _lensControllerWidget()
-        ],
-      ),
-    );
-  }
-
-  Widget _lensControllerWidget() {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: Row(
-        children: [
-          lensControllerButton(_initialize, const Color(0xff6e7c7c), "init"),
-          lensControllerButton(_run, const Color(0xff6ddccf), "start"),
-          lensControllerButton(_release, const Color(0xffec4646), "release"),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Row(
+              children: <Widget>[
+                lensControllerButton(
+                  _initialize,
+                  const Color(0xff6e7c7c),
+                  'init',
+                ),
+                lensControllerButton(
+                  _run,
+                  const Color(0xff6ddccf),
+                  'start',
+                ),
+                lensControllerButton(
+                  _release,
+                  const Color(0xffec4646),
+                  'release',
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

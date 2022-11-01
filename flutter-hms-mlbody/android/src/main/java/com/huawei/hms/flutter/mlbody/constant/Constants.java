@@ -26,7 +26,7 @@ public interface Constants {
     String SKELETON_CHANNEL = BASE_CHANNEL + ".skeleton";
     String VERIFICATION_CHANNEL = BASE_CHANNEL + ".verification";
     String LIVENESS_CHANNEL = BASE_CHANNEL + ".liveness";
-    String PERMISSION_CHANNEL = BASE_CHANNEL + ".permission";
+    String INTERACTIVE_LIVENESS_CHANNEL = BASE_CHANNEL + ".interactiveLiveness";
     String LENS_CHANNEL = BASE_CHANNEL + ".lens";
     String NOT_INITIALIZED = "ml-body-001";
 }

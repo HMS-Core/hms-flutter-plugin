@@ -22,21 +22,19 @@ class GestureExample extends StatefulWidget {
   const GestureExample({Key? key}) : super(key: key);
 
   @override
-  _GestureExampleState createState() => _GestureExampleState();
+  State<GestureExample> createState() => _GestureExampleState();
 }
 
 class _GestureExampleState extends State<GestureExample> with DemoMixin {
-  final _key = GlobalKey<ScaffoldState>();
-
+  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   late MLGestureAnalyzer _analyzer;
-
-  List scores = [];
-  List categories = [];
+  final List<double?> scores = <double?>[];
+  final List<int?> categories = <int?>[];
 
   @override
   void initState() {
-    _analyzer = MLGestureAnalyzer();
     super.initState();
+    _analyzer = MLGestureAnalyzer();
   }
 
   @override
@@ -44,10 +42,8 @@ class _GestureExampleState extends State<GestureExample> with DemoMixin {
     if (path == null || path.isEmpty) {
       return;
     }
-
-    final gestures = await _analyzer.asyncAnalyseFrame(path);
-
-    for (var element in gestures) {
+    final List<MLGesture> gestures = await _analyzer.asyncAnalyseFrame(path);
+    for (MLGesture element in gestures) {
       setState(() {
         categories.add(element.category);
         scores.add(element.score);
@@ -67,7 +63,7 @@ class _GestureExampleState extends State<GestureExample> with DemoMixin {
   @override
   void isAvailable() async {
     try {
-      final res = await _analyzer.isAvailable();
+      final bool res = await _analyzer.isAvailable();
       debugPrint(res.toString());
     } on Exception catch (e) {
       debugPrint(e.toString());
@@ -89,9 +85,9 @@ class _GestureExampleState extends State<GestureExample> with DemoMixin {
       key: _key,
       appBar: demoAppBar('Gesture Example'),
       body: Column(
-        children: [
-          resultBox("Gesture categories", categories),
-          resultBox("Gesture score", scores),
+        children: <Widget>[
+          resultBox('Gesture categories', categories),
+          resultBox('Gesture score', scores),
           Container(
             width: double.infinity - 20,
             margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -100,7 +96,7 @@ class _GestureExampleState extends State<GestureExample> with DemoMixin {
               onPressed: () => pickerDialog(_key, context, analyze),
               child: const Text('Start Recognition'),
             ),
-          )
+          ),
         ],
       ),
     );

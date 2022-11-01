@@ -18,8 +18,9 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 Future<String?> getImage(ImageSource source) async {
-  final picker = ImagePicker();
-  final image = await picker.pickImage(source: source);
+  final XFile? image = await ImagePicker().pickImage(
+    source: source,
+  );
   return image?.path;
 }
 
@@ -30,160 +31,229 @@ mixin DemoMixin {
   void destroy();
 }
 
-pickerDialog(GlobalKey<ScaffoldState> key, BuildContext context,
-    Function(String? s) f) async {
-  key.currentState?.showBottomSheet((context) => Container(
-        height: MediaQuery.of(context).size.height / 4,
-        width: MediaQuery.of(context).size.width,
-        margin: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.blueAccent, onPrimary: Colors.white),
-                    child: const Text("USE CAMERA"),
-                    onPressed: () async {
-                      final String? path = await getImage(ImageSource.camera);
-                      f(path);
-                    })),
-            SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.blueAccent, onPrimary: Colors.white),
-                    child: const Text("PICK FROM GALLERY"),
-                    onPressed: () async {
-                      final String? path = await getImage(ImageSource.gallery);
-                      f(path);
-                    })),
-          ],
-        ),
-      ));
+void pickerDialog(
+  GlobalKey<ScaffoldState> key,
+  BuildContext context,
+  Function(String? s) f,
+) async {
+  key.currentState?.showBottomSheet((BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height / 4,
+      width: MediaQuery.of(context).size.width,
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+                foregroundColor: Colors.white,
+              ),
+              child: const Text('USE CAMERA'),
+              onPressed: () async {
+                final String? path = await getImage(
+                  ImageSource.camera,
+                );
+                f(path);
+              },
+            ),
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+                foregroundColor: Colors.white,
+              ),
+              child: const Text('PICK FROM GALLERY'),
+              onPressed: () async {
+                final String? path = await getImage(
+                  ImageSource.gallery,
+                );
+                f(path);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  });
 }
 
-exceptionDialog(BuildContext context, String m) {
+void exceptionDialog(
+  BuildContext context,
+  String m,
+) {
   showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Exception'),
-          content: Text(m),
-        );
-      });
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Exception'),
+        content: Text(m),
+      );
+    },
+  );
 }
 
-Widget recognitionButton(Future<dynamic> callback,
-    {String? text, Color? color}) {
+Widget recognitionButton(
+  Future<dynamic> callback, {
+  String? text,
+  Color? color,
+}) {
   return Container(
     width: double.infinity,
     margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
     child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            elevation: 0,
-            primary: color ?? const Color(0xff6ddccf),
-            onPrimary: Colors.white,
-            padding: const EdgeInsets.symmetric(vertical: 14),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
-        child: Text(text ?? "Start Recognition"),
-        onPressed: () => callback),
+      style: ElevatedButton.styleFrom(
+        elevation: 0,
+        backgroundColor: color ?? const Color(0xff6ddccf),
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
+        ),
+      ),
+      child: Text(text ?? 'Start Recognition'),
+      onPressed: () => callback,
+    ),
   );
 }
 
-Widget resultBox(String name, dynamic value) {
+Widget resultBox(
+  String name,
+  dynamic value,
+) {
   return Container(
     width: double.infinity - 20,
     padding: const EdgeInsets.all(12),
     margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
     decoration: BoxDecoration(
-        color: const Color(0xffdbe2ef).withOpacity(.6),
-        borderRadius: BorderRadius.circular(4)),
+      color: const Color(0xffdbe2ef).withOpacity(.6),
+      borderRadius: BorderRadius.circular(4),
+    ),
     child: RichText(
-      text: TextSpan(children: [
-        TextSpan(
-            text: "$name: ",
-            style: TextStyle(color: Colors.black.withOpacity(.5))),
-        TextSpan(
+      text: TextSpan(
+        children: <InlineSpan>[
+          TextSpan(
+            text: '$name: ',
+            style: TextStyle(
+              color: Colors.black.withOpacity(.5),
+            ),
+          ),
+          TextSpan(
             text: "${value ?? "None"}",
             style: const TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold))
-      ]),
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
     ),
-    //child: Text("$name: ${value ?? "null"}"),
   );
 }
 
-Widget lensControllerButton(VoidCallback callback, Color color, String title) {
+Widget lensControllerButton(
+  VoidCallback callback,
+  Color color,
+  String title,
+) {
   return Expanded(
     child: SizedBox(
       height: 60,
       child: ElevatedButton(
         onPressed: callback,
-        child: Text(title),
         style: ElevatedButton.styleFrom(
-            elevation: 0,
-            primary: color,
-            onPrimary: Colors.white,
-            shape:
-                const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
+          elevation: 0,
+          backgroundColor: color,
+          foregroundColor: Colors.white,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero,
+          ),
+        ),
+        child: Text(title),
       ),
     ),
   );
 }
 
 PreferredSizeWidget demoAppBar(String title) {
-  return AppBar(title: Text(title));
+  return AppBar(
+    title: Tooltip(
+      message: 'Flutter Version: 3.7.0+300',
+      child: Text(title),
+    ),
+  );
 }
 
 ButtonStyle buttonStyle() {
   return ElevatedButton.styleFrom(
-      elevation: 0,
-      primary: const Color(0xff6ddccf),
-      onPrimary: Colors.white,
-      padding: const EdgeInsets.symmetric(vertical: 14),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)));
+    elevation: 0,
+    backgroundColor: const Color(0xff6ddccf),
+    foregroundColor: Colors.white,
+    padding: const EdgeInsets.symmetric(vertical: 14),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(4),
+    ),
+  );
 }
 
 class CustomGridElement extends StatelessWidget {
-  final Widget? page;
+  const CustomGridElement({
+    Key? key,
+    required this.name,
+    required this.imagePath,
+    this.page,
+  }) : super(key: key);
+
   final String imagePath;
   final String name;
-
-  const CustomGridElement(
-      {Key? key, this.page, required this.name, required this.imagePath})
-      : super(key: key);
+  final Widget? page;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         if (page != null) {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (BuildContext context) => page!));
+          Navigator.push(
+            context,
+            MaterialPageRoute<dynamic>(
+              builder: (BuildContext context) => page!,
+            ),
+          );
         }
       },
       child: ConstrainedBox(
         constraints: BoxConstraints(
-            minWidth: MediaQuery.of(context).size.width / 4,
-            minHeight: MediaQuery.of(context).size.width / 4 + 10),
+          minWidth: MediaQuery.of(context).size.width / 4,
+          minHeight: MediaQuery.of(context).size.width / 4 + 10,
+        ),
         child: Container(
           alignment: Alignment.center,
           padding: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey.withOpacity(.5),
+            ),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset("assets/$imagePath.png", height: 75),
+            children: <Widget>[
+              Image.asset(
+                'assets/$imagePath.png',
+                height: 75,
+              ),
               const SizedBox(height: 5),
-              Text(name, textAlign: TextAlign.center)
+              Text(
+                name,
+                textAlign: TextAlign.center,
+              ),
             ],
           ),
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey.withOpacity(.5)),
-              color: page != null ? Colors.white : Colors.white,
-              borderRadius: BorderRadius.circular(10)),
         ),
       ),
     );

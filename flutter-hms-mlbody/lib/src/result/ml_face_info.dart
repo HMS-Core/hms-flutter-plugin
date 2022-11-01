@@ -14,49 +14,58 @@
     limitations under the License.
 */
 
-import 'body_border.dart';
+part of huawei_ml_body;
 
 class MLFaceInfo {
-  BodyBorder? faceRect;
+  final BodyBorder? faceRect;
 
-  MLFaceInfo({this.faceRect});
+  const MLFaceInfo._({
+    this.faceRect,
+  });
 
   factory MLFaceInfo.fromMap(Map<dynamic, dynamic> map) {
-    return MLFaceInfo(
-        faceRect: map['faceRect'] != null
-            ? BodyBorder.fromMap(map['faceRect'])
-            : null);
+    return MLFaceInfo._(
+      faceRect:
+          map['faceRect'] != null ? BodyBorder.fromMap(map['faceRect']) : null,
+    );
   }
 }
 
 class MLFaceTemplateResult {
-  int? templateId;
-  MLFaceInfo? faceInfo;
+  final int? templateId;
+  final MLFaceInfo? faceInfo;
 
-  MLFaceTemplateResult({this.faceInfo, this.templateId});
+  const MLFaceTemplateResult._({
+    this.faceInfo,
+    this.templateId,
+  });
 
   factory MLFaceTemplateResult.fromMap(Map<dynamic, dynamic> map) {
-    return MLFaceTemplateResult(
-        templateId: map['templateId'],
-        faceInfo: map['faceInfo'] != null
-            ? MLFaceInfo.fromMap(map['faceInfo'])
-            : null);
+    return MLFaceTemplateResult._(
+      templateId: map['templateId'],
+      faceInfo:
+          map['faceInfo'] != null ? MLFaceInfo.fromMap(map['faceInfo']) : null,
+    );
   }
 }
 
 class MLFaceVerificationResult {
-  MLFaceInfo? faceInfo;
-  dynamic similarity;
-  int? templateId;
+  final MLFaceInfo? faceInfo;
+  final dynamic similarity;
+  final int? templateId;
 
-  MLFaceVerificationResult({this.templateId, this.faceInfo, this.similarity});
+  const MLFaceVerificationResult._({
+    this.templateId,
+    this.faceInfo,
+    this.similarity,
+  });
 
   factory MLFaceVerificationResult.fromMap(Map<dynamic, dynamic> map) {
-    return MLFaceVerificationResult(
-        faceInfo: map['faceInfo'] != null
-            ? MLFaceInfo.fromMap(map['faceInfo'])
-            : null,
-        similarity: map['similarity'],
-        templateId: map['templateId']);
+    return MLFaceVerificationResult._(
+      faceInfo:
+          map['faceInfo'] != null ? MLFaceInfo.fromMap(map['faceInfo']) : null,
+      similarity: map['similarity'],
+      templateId: map['templateId'],
+    );
   }
 }

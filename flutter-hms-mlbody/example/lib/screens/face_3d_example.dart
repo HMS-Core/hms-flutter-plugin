@@ -22,22 +22,20 @@ class Face3dExample extends StatefulWidget {
   const Face3dExample({Key? key}) : super(key: key);
 
   @override
-  _Face3dExampleState createState() => _Face3dExampleState();
+  State<Face3dExample> createState() => _Face3dExampleState();
 }
 
 class _Face3dExampleState extends State<Face3dExample> with DemoMixin {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
-
   late ML3DFaceAnalyzer _analyzer;
-
-  List eulerXs = [];
-  List eulerYs = [];
-  List eulerZs = [];
+  final List<double> eulerXs = <double>[];
+  final List<double> eulerYs = <double>[];
+  final List<double> eulerZs = <double>[];
 
   @override
   void initState() {
-    _analyzer = ML3DFaceAnalyzer();
     super.initState();
+    _analyzer = ML3DFaceAnalyzer();
   }
 
   @override
@@ -45,12 +43,11 @@ class _Face3dExampleState extends State<Face3dExample> with DemoMixin {
     if (path == null || path.isEmpty) {
       return;
     }
-
-    final setting = ML3DFaceAnalyzerSetting(path: path);
-
-    final faces = await _analyzer.asyncAnalyseFrame(setting);
-
-    for (var element in faces) {
+    final ML3DFaceAnalyzerSetting setting = ML3DFaceAnalyzerSetting(
+      path: path,
+    );
+    final List<ML3DFace> faces = await _analyzer.asyncAnalyseFrame(setting);
+    for (ML3DFace element in faces) {
       setState(() {
         eulerXs.add(element.eulerX);
         eulerYs.add(element.eulerY);
@@ -71,7 +68,7 @@ class _Face3dExampleState extends State<Face3dExample> with DemoMixin {
   @override
   void isAvailable() async {
     try {
-      final res = await _analyzer.isAvailable();
+      final bool res = await _analyzer.isAvailable();
       debugPrint(res.toString());
     } on Exception catch (e) {
       debugPrint(e.toString());
@@ -93,10 +90,10 @@ class _Face3dExampleState extends State<Face3dExample> with DemoMixin {
       appBar: demoAppBar('Face 3d Example'),
       key: _key,
       body: Column(
-        children: [
-          resultBox("Euler Xs", eulerXs),
-          resultBox("Euler Ys", eulerYs),
-          resultBox("Euler Zs", eulerZs),
+        children: <Widget>[
+          resultBox('Euler Xs', eulerXs),
+          resultBox('Euler Ys', eulerYs),
+          resultBox('Euler Zs', eulerZs),
           Container(
             width: double.infinity - 20,
             margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -105,7 +102,7 @@ class _Face3dExampleState extends State<Face3dExample> with DemoMixin {
               onPressed: () => pickerDialog(_key, context, analyze),
               child: const Text('Start Recognition'),
             ),
-          )
+          ),
         ],
       ),
     );

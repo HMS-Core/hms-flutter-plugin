@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_ml_body;
+
 class MLSkeletonAnalyzerSetting {
   /// Detection mode 0: Detect skeleton points for normal postures.
   static const int typeNormal = 0;
@@ -24,9 +26,15 @@ class MLSkeletonAnalyzerSetting {
   String path;
   int? analyzerType;
 
-  MLSkeletonAnalyzerSetting({required this.path, this.analyzerType});
+  MLSkeletonAnalyzerSetting({
+    required this.path,
+    this.analyzerType,
+  });
 
   Map<String, dynamic> toMap() {
-    return {"path": path, "analyzerType": analyzerType ?? typeNormal};
+    return <String, dynamic>{
+      'path': path,
+      'analyzerType': analyzerType ?? typeNormal,
+    };
   }
 }

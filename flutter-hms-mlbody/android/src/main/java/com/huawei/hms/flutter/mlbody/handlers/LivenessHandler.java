@@ -51,12 +51,13 @@ public class LivenessHandler implements MethodChannel.MethodCallHandler {
     }
 
     private void detect(MethodCall call) {
-        Boolean detectMask = FromMap.toBoolean("detectMask", call.argument("detectMask"));
+        final Boolean detectMask = FromMap.toBoolean("detectMask", call.argument("detectMask"));
 
-        MLLivenessCapture capture = MLLivenessCapture.getInstance();
-        MLLivenessCaptureConfig captureConfig = new MLLivenessCaptureConfig.Builder().setOptions(detectMask ? 1 : 0).build();
+        final MLLivenessCaptureConfig.Builder builder = new MLLivenessCaptureConfig.Builder();
+        builder.setOptions(detectMask ? 1 : 0);
 
-        capture.setConfig(captureConfig);
+        final MLLivenessCapture capture = MLLivenessCapture.getInstance();
+        capture.setConfig(builder.build());
         capture.startDetect(activity, callback);
     }
 

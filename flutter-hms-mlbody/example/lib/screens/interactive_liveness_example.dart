@@ -18,35 +18,35 @@ import 'package:flutter/material.dart';
 import 'package:huawei_ml_body/huawei_ml_body.dart';
 import 'package:huawei_ml_body_example/utils/demo_util.dart';
 
-class LivenessExample extends StatefulWidget {
-  const LivenessExample({Key? key}) : super(key: key);
+class InteractiveLivenessExample extends StatefulWidget {
+  const InteractiveLivenessExample({Key? key}) : super(key: key);
 
   @override
-  State<LivenessExample> createState() => _LivenessExampleState();
+  State<InteractiveLivenessExample> createState() =>
+      _InteractiveLivenessExampleState();
 }
 
-class _LivenessExampleState extends State<LivenessExample> {
-  late MLLivenessCapture _capture;
-  Image? image;
-  bool? isLive;
-  dynamic score;
+class _InteractiveLivenessExampleState
+    extends State<InteractiveLivenessExample> {
+  late MLInteractiveLivenessCapture _capture;
+  final List<MLInteractiveLivenessCaptureResult> _events =
+      <MLInteractiveLivenessCaptureResult>[];
 
   @override
   void initState() {
     super.initState();
-    _capture = MLLivenessCapture();
+    _capture = MLInteractiveLivenessCapture();
   }
 
   void _startRecognition() async {
     try {
-      final MLLivenessCaptureResult result = await _capture.startDetect();
-      setState(() {
-        isLive = result.isLive;
-        score = result.score;
-        image = Image.memory(
-          result.bitmap!,
-          fit: BoxFit.cover,
-        );
+      _events.clear();
+      final Stream<MLInteractiveLivenessCaptureResult> listener =
+          await _capture.startDetect();
+      listener.listen((MLInteractiveLivenessCaptureResult result) {
+        setState(() {
+          _events.add(result);
+        });
       });
     } on Exception catch (e) {
       exceptionDialog(context, e.toString());
@@ -56,19 +56,21 @@ class _LivenessExampleState extends State<LivenessExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: demoAppBar('Liveness Detection Demo'),
+      appBar: demoAppBar('Interactive Liveness Detection Demo'),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Container(
-            color: Colors.grey,
-            margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.width,
-            child: image ?? Image.asset('assets/user.png'),
+          Expanded(
+            child: ListView.separated(
+              reverse: true,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: _events.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Text('$index: ${_events[index]}');
+              },
+              separatorBuilder: (_, __) => const Divider(),
+            ),
           ),
-          resultBox('Is live', isLive),
-          resultBox('Score', score),
           Container(
             width: double.infinity - 20,
             margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),

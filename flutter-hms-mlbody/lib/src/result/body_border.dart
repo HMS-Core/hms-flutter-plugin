@@ -14,19 +14,27 @@
     limitations under the License.
 */
 
-class BodyBorder {
-  int? bottom;
-  int? left;
-  int? right;
-  int? top;
+part of huawei_ml_body;
 
-  BodyBorder({this.bottom, this.left, this.right, this.top});
+class BodyBorder {
+  final int? bottom;
+  final int? left;
+  final int? right;
+  final int? top;
+
+  const BodyBorder._({
+    this.bottom,
+    this.left,
+    this.right,
+    this.top,
+  });
 
   factory BodyBorder.fromMap(Map<dynamic, dynamic> map) {
-    return BodyBorder(
-        bottom: map['bottom'],
-        left: map['left'],
-        right: map['right'],
-        top: map['top']);
+    return BodyBorder._(
+      bottom: map['bottom'],
+      left: map['left'],
+      right: map['right'],
+      top: map['top'],
+    );
   }
 }

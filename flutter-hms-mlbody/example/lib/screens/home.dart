@@ -19,6 +19,7 @@ import 'package:huawei_ml_body_example/screens/face_3d_example.dart';
 import 'package:huawei_ml_body_example/screens/face_example.dart';
 import 'package:huawei_ml_body_example/screens/gesture_example.dart';
 import 'package:huawei_ml_body_example/screens/hand_example.dart';
+import 'package:huawei_ml_body_example/screens/interactive_liveness_example.dart';
 import 'package:huawei_ml_body_example/screens/lens_example.dart';
 import 'package:huawei_ml_body_example/screens/liveness_example.dart';
 import 'package:huawei_ml_body_example/screens/skeleton_example.dart';
@@ -29,53 +30,67 @@ class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
-  _HomeState createState() => _HomeState();
+  State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: demoAppBar('ML Body Demo'),
-        body: GridView.count(
-          padding: const EdgeInsets.all(10),
-          crossAxisCount: 2,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-          children: const [
-            CustomGridElement(
-                name: 'Face\nDetection',
-                imagePath: 'face',
-                page: FaceExample()),
-            CustomGridElement(
-                name: 'Face 3D\nDetection',
-                imagePath: 'face',
-                page: Face3dExample()),
-            CustomGridElement(
-                name: 'Face\nVerification',
-                imagePath: 'face',
-                page: VerificationExample()),
-            CustomGridElement(
-                name: 'Skeleton\nDetection',
-                imagePath: 'skeleton',
-                page: SkeletonExample()),
-            CustomGridElement(
-                name: 'Liveness\nDetection',
-                imagePath: 'liveness',
-                page: LivenessExample()),
-            CustomGridElement(
-                name: 'Hand Keypoint\nDetection',
-                imagePath: 'handkey',
-                page: HandExample()),
-            CustomGridElement(
-                name: 'Hand Gesture\nDetection',
-                imagePath: 'handkey',
-                page: GestureExample()),
-            CustomGridElement(
-                name: 'Body Lens\nExample',
-                imagePath: 'face',
-                page: LensExample()),
-          ],
-        ));
+      appBar: demoAppBar('ML Body Demo'),
+      body: GridView.count(
+        padding: const EdgeInsets.all(10),
+        crossAxisCount: 2,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+        children: const <Widget>[
+          CustomGridElement(
+            name: 'Face\nDetection',
+            imagePath: 'face',
+            page: FaceExample(),
+          ),
+          CustomGridElement(
+            name: 'Face 3D\nDetection',
+            imagePath: 'face',
+            page: Face3dExample(),
+          ),
+          CustomGridElement(
+            name: 'Face\nVerification',
+            imagePath: 'face',
+            page: VerificationExample(),
+          ),
+          CustomGridElement(
+            name: 'Skeleton\nDetection',
+            imagePath: 'skeleton',
+            page: SkeletonExample(),
+          ),
+          CustomGridElement(
+            name: 'Liveness\nDetection',
+            imagePath: 'liveness',
+            page: LivenessExample(),
+          ),
+          CustomGridElement(
+            name: 'Interactive Liveness\nDetection',
+            imagePath: 'liveness',
+            page: InteractiveLivenessExample(),
+          ),
+          CustomGridElement(
+            name: 'Hand Keypoint\nDetection',
+            imagePath: 'handkey',
+            page: HandExample(),
+          ),
+          CustomGridElement(
+            name: 'Hand Gesture\nDetection',
+            imagePath: 'handkey',
+            page: GestureExample(),
+          ),
+          CustomGridElement(
+            name: 'Body Lens\nExample',
+            imagePath: 'face',
+            page: LensExample(),
+          ),
+        ],
+      ),
+    );
   }
 }

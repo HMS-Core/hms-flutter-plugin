@@ -14,26 +14,32 @@
     limitations under the License.
 */
 
-class MLSkeleton {
-  List<MLJoint?> joints;
+part of huawei_ml_body;
 
-  MLSkeleton({required this.joints});
+class MLSkeleton {
+  final List<MLJoint> joints;
+
+  const MLSkeleton._({
+    required this.joints,
+  });
 
   factory MLSkeleton.fromMap(Map<dynamic, dynamic> json) {
-    var joints = List<MLJoint>.empty(growable: true);
+    final List<MLJoint> joints = <MLJoint>[];
 
     if (json['joints'] != null) {
-      json['joints'].forEach((v) {
+      json['joints'].forEach((dynamic v) {
         joints.add(MLJoint.fromMap(v));
       });
     }
-    return MLSkeleton(joints: joints);
+    return MLSkeleton._(
+      joints: joints,
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['joints'] = joints.map((v) => v?.toJson()).toList();
-    return data;
+    return <String, dynamic>{
+      'joints': joints.map((MLJoint v) => v.toJson()).toList(),
+    };
   }
 }
 
@@ -80,27 +86,33 @@ class MLJoint {
   /// Right wrist point.
   static const int typeRightWrist = 103;
 
-  int? type;
-  dynamic pointX;
-  dynamic pointY;
-  dynamic score;
+  final int? type;
+  final double pointX;
+  final double pointY;
+  final double score;
 
-  MLJoint({this.pointY, this.pointX, this.type, this.score});
+  const MLJoint._({
+    required this.type,
+    required this.pointX,
+    required this.pointY,
+    required this.score,
+  });
 
   factory MLJoint.fromMap(Map<dynamic, dynamic> json) {
-    return MLJoint(
-        pointX: json['pointX'],
-        pointY: json['pointY'],
-        type: json['type'],
-        score: json['score']);
+    return MLJoint._(
+      type: json['type'],
+      pointX: json['pointX'],
+      pointY: json['pointY'],
+      score: json['score'],
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['pointX'] = pointX;
-    data['pointY'] = pointY;
-    data['type'] = type;
-    data['score'] = score;
-    return data;
+    return <String, dynamic>{
+      'pointX': pointX,
+      'pointY': pointY,
+      'type': type,
+      'score': score,
+    };
   }
 }

@@ -14,120 +14,119 @@
     limitations under the License.
 */
 
-import 'package:huawei_ml_body/src/result/body_border.dart';
-import 'package:huawei_ml_body/src/result/body_position.dart';
+part of huawei_ml_body;
 
 class MLFace {
   /// Default value of facial expression and feature possibility, such as eye opening and age.
   static const double unanalyzedPossibility = 1.0;
 
-  BodyBorder? border;
-  MLFaceEmotion? emotions;
-  MLFaceFeature? features;
-  List<MLFaceShape?> faceShapeList;
-  List<MLFaceKeyPoint?> keyPoints;
-  List<BodyPosition?> allPoints;
-  dynamic rotationAngleY;
-  dynamic rotationAngleZ;
-  dynamic rotationAngleX;
-  dynamic opennessOfRightEye;
-  dynamic possibilityOfSmiling;
-  dynamic opennessOfLeftEye;
-  int? tracingIdentity;
-  dynamic width;
-  dynamic height;
+  final BodyBorder? border;
+  final MLFaceEmotion? emotions;
+  final MLFaceFeature? features;
+  final List<MLFaceShape> faceShapeList;
+  final List<MLFaceKeyPoint> keyPoints;
+  final List<BodyPosition> allPoints;
+  final double rotationAngleY;
+  final double rotationAngleZ;
+  final double rotationAngleX;
+  final double opennessOfRightEye;
+  final double possibilityOfSmiling;
+  final double opennessOfLeftEye;
+  final int tracingIdentity;
+  final double width;
+  final double height;
 
-  MLFace(
-      {required this.keyPoints,
-      required this.allPoints,
-      required this.faceShapeList,
-      this.border,
-      this.emotions,
-      this.rotationAngleY,
-      this.rotationAngleZ,
-      this.rotationAngleX,
-      this.tracingIdentity,
-      this.opennessOfRightEye,
-      this.features,
-      this.width,
-      this.possibilityOfSmiling,
-      this.opennessOfLeftEye,
-      this.height});
+  const MLFace._({
+    required this.keyPoints,
+    required this.allPoints,
+    required this.faceShapeList,
+    this.border,
+    this.emotions,
+    this.features,
+    required this.rotationAngleY,
+    required this.rotationAngleZ,
+    required this.rotationAngleX,
+    required this.tracingIdentity,
+    required this.opennessOfRightEye,
+    required this.width,
+    required this.possibilityOfSmiling,
+    required this.opennessOfLeftEye,
+    required this.height,
+  });
 
   factory MLFace.fromMap(Map<dynamic, dynamic> map) {
-    var shapes = List<MLFaceShape>.empty(growable: true);
-    var keyPoints = List<MLFaceKeyPoint>.empty(growable: true);
-    var positions = List<BodyPosition>.empty(growable: true);
+    final List<MLFaceShape> shapes = <MLFaceShape>[];
+    final List<MLFaceKeyPoint> keyPoints = <MLFaceKeyPoint>[];
+    final List<BodyPosition> positions = <BodyPosition>[];
 
     if (map['faceShapeList'] != null) {
-      map['faceShapeList'].forEach((v) {
+      map['faceShapeList'].forEach((dynamic v) {
         shapes.add(MLFaceShape.fromMap(v));
       });
     }
-
     if (map['keyPoints'] != null) {
-      map['keyPoints'].forEach((v) {
+      map['keyPoints'].forEach((dynamic v) {
         keyPoints.add(MLFaceKeyPoint.fromMap(v));
       });
     }
-
     if (map['allPoints'] != null) {
-      map['allPoints'].forEach((v) {
+      map['allPoints'].forEach((dynamic v) {
         positions.add(BodyPosition.fromMap(v));
       });
     }
-
-    return MLFace(
-        border:
-            map['border'] != null ? BodyBorder.fromMap(map['border']) : null,
-        emotions: map['emotions'] != null
-            ? MLFaceEmotion.fromMap(map['emotions'])
-            : null,
-        rotationAngleX: map['rotationAngleX'],
-        rotationAngleY: map['rotationAngleY'],
-        rotationAngleZ: map['rotationAngleZ'],
-        tracingIdentity: map['tracingIdentity'],
-        opennessOfRightEye: map['opennessOfRightEye'],
-        features: map['features'] != null
-            ? MLFaceFeature.fromMap(map['features'])
-            : null,
-        width: map['width'],
-        height: map['height'],
-        possibilityOfSmiling: map['possibilityOfSmiling'],
-        opennessOfLeftEye: map['opennessOfLeftEye'],
-        keyPoints: keyPoints,
-        allPoints: positions,
-        faceShapeList: shapes);
+    return MLFace._(
+      border: map['border'] != null ? BodyBorder.fromMap(map['border']) : null,
+      emotions: map['emotions'] != null
+          ? MLFaceEmotion.fromMap(map['emotions'])
+          : null,
+      rotationAngleX: map['rotationAngleX'],
+      rotationAngleY: map['rotationAngleY'],
+      rotationAngleZ: map['rotationAngleZ'],
+      tracingIdentity: map['tracingIdentity'],
+      opennessOfRightEye: map['opennessOfRightEye'],
+      features: map['features'] != null
+          ? MLFaceFeature.fromMap(map['features'])
+          : null,
+      width: map['width'],
+      height: map['height'],
+      possibilityOfSmiling: map['possibilityOfSmiling'],
+      opennessOfLeftEye: map['opennessOfLeftEye'],
+      keyPoints: keyPoints,
+      allPoints: positions,
+      faceShapeList: shapes,
+    );
   }
 }
 
 class MLFaceEmotion {
-  dynamic angryProbability;
-  dynamic disgustProbability;
-  dynamic surpriseProbability;
-  dynamic sadProbability;
-  dynamic neutralProbability;
-  dynamic smilingProbability;
-  dynamic fearProbability;
+  final double angryProbability;
+  final double disgustProbability;
+  final double surpriseProbability;
+  final double sadProbability;
+  final double neutralProbability;
+  final double smilingProbability;
+  final double fearProbability;
 
-  MLFaceEmotion(
-      {this.angryProbability,
-      this.disgustProbability,
-      this.surpriseProbability,
-      this.sadProbability,
-      this.neutralProbability,
-      this.smilingProbability,
-      this.fearProbability});
+  const MLFaceEmotion._({
+    required this.angryProbability,
+    required this.disgustProbability,
+    required this.surpriseProbability,
+    required this.sadProbability,
+    required this.neutralProbability,
+    required this.smilingProbability,
+    required this.fearProbability,
+  });
 
   factory MLFaceEmotion.fromMap(Map<dynamic, dynamic> map) {
-    return MLFaceEmotion(
-        angryProbability: map['angryProbability'],
-        disgustProbability: map['disgustProbability'],
-        surpriseProbability: map['surpriseProbability'],
-        sadProbability: map['sadProbability'],
-        neutralProbability: map['neutralProbability'],
-        smilingProbability: map['smilingProbability'],
-        fearProbability: map['fearProbability']);
+    return MLFaceEmotion._(
+      angryProbability: map['angryProbability'],
+      disgustProbability: map['disgustProbability'],
+      surpriseProbability: map['surpriseProbability'],
+      sadProbability: map['sadProbability'],
+      neutralProbability: map['neutralProbability'],
+      smilingProbability: map['smilingProbability'],
+      fearProbability: map['fearProbability'],
+    );
   }
 }
 
@@ -147,51 +146,58 @@ class MLFaceShape {
   static const int typeBottomOfNose = 12;
   static const int typeBridgeOfNose = 13;
 
-  int? faceShapeType;
-  List<BodyPosition?> points;
+  final List<BodyPosition> points;
+  final int? faceShapeType;
 
-  MLFaceShape({this.faceShapeType, required this.points});
+  const MLFaceShape._({
+    required this.points,
+    this.faceShapeType,
+  });
 
   factory MLFaceShape.fromMap(Map<dynamic, dynamic> map) {
-    var points = List<BodyPosition>.empty(growable: true);
+    final List<BodyPosition> points = <BodyPosition>[];
 
     if (map['points'] != null) {
-      map['points'].forEach((v) {
+      map['points'].forEach((dynamic v) {
         points.add(BodyPosition.fromMap(v));
       });
     }
-
-    return MLFaceShape(faceShapeType: map['faceShapeType'], points: points);
+    return MLFaceShape._(
+      faceShapeType: map['faceShapeType'],
+      points: points,
+    );
   }
 }
 
 class MLFaceFeature {
-  int? age;
-  dynamic moustacheProbability;
-  dynamic hatProbability;
-  dynamic sexProbability;
-  dynamic leftEyeOpenProbability;
-  dynamic sunGlassProbability;
-  dynamic rightEyeOpenProbability;
+  final int age;
+  final double moustacheProbability;
+  final double hatProbability;
+  final double sexProbability;
+  final double leftEyeOpenProbability;
+  final double sunGlassProbability;
+  final double rightEyeOpenProbability;
 
-  MLFaceFeature(
-      {this.moustacheProbability,
-      this.hatProbability,
-      this.sexProbability,
-      this.leftEyeOpenProbability,
-      this.sunGlassProbability,
-      this.age,
-      this.rightEyeOpenProbability});
+  const MLFaceFeature._({
+    required this.age,
+    required this.moustacheProbability,
+    required this.hatProbability,
+    required this.sexProbability,
+    required this.leftEyeOpenProbability,
+    required this.sunGlassProbability,
+    required this.rightEyeOpenProbability,
+  });
 
   factory MLFaceFeature.fromMap(Map<dynamic, dynamic> map) {
-    return MLFaceFeature(
-        moustacheProbability: map['moustacheProbability'],
-        hatProbability: map['hatProbability'],
-        sexProbability: map['sexProbability'],
-        leftEyeOpenProbability: map['leftEyeOpenProbability'],
-        sunGlassProbability: map['sunGlassProbability'],
-        age: map['age'],
-        rightEyeOpenProbability: map['rightEyeOpenProbability']);
+    return MLFaceFeature._(
+      age: map['age'],
+      moustacheProbability: map['moustacheProbability'],
+      hatProbability: map['hatProbability'],
+      sexProbability: map['sexProbability'],
+      leftEyeOpenProbability: map['leftEyeOpenProbability'],
+      sunGlassProbability: map['sunGlassProbability'],
+      rightEyeOpenProbability: map['rightEyeOpenProbability'],
+    );
   }
 }
 
@@ -209,15 +215,18 @@ class MLFaceKeyPoint {
   static const int typeRightEye = 11;
   static const int typeRightSideOfMouth = 12;
 
-  int? type;
-  BodyPosition? point;
+  final int? type;
+  final BodyPosition? point;
 
-  MLFaceKeyPoint({this.type, this.point});
+  const MLFaceKeyPoint._({
+    this.type,
+    this.point,
+  });
 
   factory MLFaceKeyPoint.fromMap(Map<dynamic, dynamic> map) {
-    return MLFaceKeyPoint(
-        type: map['type'],
-        point:
-            map['point'] != null ? BodyPosition.fromMap(map['point']) : null);
+    return MLFaceKeyPoint._(
+      type: map['type'],
+      point: map['point'] != null ? BodyPosition.fromMap(map['point']) : null,
+    );
   }
 }

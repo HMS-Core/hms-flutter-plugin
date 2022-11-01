@@ -14,12 +14,11 @@
     limitations under the License.
 */
 
+part of huawei_ml_body;
+
 abstract class MLBodyAnalyzer<T, K> {
   Future<List<T>> asyncAnalyseFrame(K k);
-
   Future<List<T>> analyseFrame(K k);
-
   Future<bool> isAvailable();
-
   Future<bool> destroy();
 }

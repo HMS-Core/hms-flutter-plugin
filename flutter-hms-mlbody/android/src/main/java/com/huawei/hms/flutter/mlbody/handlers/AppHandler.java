@@ -24,6 +24,8 @@ import com.huawei.hms.flutter.mlbody.data.FromMap;
 import com.huawei.hms.flutter.mlbody.data.HMSLogger;
 import com.huawei.hms.mlsdk.common.MLApplication;
 
+import java.util.Objects;
+
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
@@ -42,17 +44,23 @@ public class AppHandler implements MethodChannel.MethodCallHandler {
     public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         handler.setup(TAG, call.method, result);
         switch (call.method) {
-            case "enableLogger":
+            case "bodyApp#enableLogger":
                 enableLogger();
                 break;
-            case "disableLogger":
+            case "bodyApp#disableLogger":
                 disableLogger();
                 break;
-            case "setApiKey":
+            case "bodyApp#setApiKey":
                 setApiKey(call);
                 break;
-            case "setAccessToken":
+            case "bodyApp#setAccessToken":
                 setAccessToken(call);
+                break;
+            case "bodyApp#setUserRegion":
+                setUserRegion(call);
+                break;
+            case "bodyApp#getCountryCode":
+                getCountryCode();
                 break;
             default:
                 result.notImplemented();
@@ -80,5 +88,16 @@ public class AppHandler implements MethodChannel.MethodCallHandler {
         String token = FromMap.toString("token", call.argument("token"), false);
         MLApplication.getInstance().setAccessToken(token);
         handler.success(true);
+    }
+
+    private void setUserRegion(@NonNull MethodCall call) {
+        final Integer region = FromMap.toInteger("region", call.argument("region"));
+        MLApplication.getInstance().setUserRegion(Objects.requireNonNull(region));
+        handler.success(true);
+    }
+
+    private void getCountryCode() {
+        final String countryCode = MLApplication.getInstance().getCountryCode();
+        handler.success(countryCode);
     }
 }

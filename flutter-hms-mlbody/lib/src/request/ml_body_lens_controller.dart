@@ -14,24 +14,16 @@
     limitations under the License.
 */
 
-import 'package:flutter/foundation.dart';
-
-import '../common/constants.dart';
+part of huawei_ml_body;
 
 class MLBodyLensController {
   static const int backLens = 0;
-
   static const int frontLens = 1;
-
-  static const String flashModeOff = "off";
-
-  static const String flashModeAuto = "auto";
-
-  static const String flashModeOn = "on";
-
-  static const String focusModeContinuousVideo = "continuous-video";
-
-  static const String focusModeContinuousPicture = "continuous-picture";
+  static const String flashModeOff = 'off';
+  static const String flashModeAuto = 'auto';
+  static const String flashModeOn = 'on';
+  static const String focusModeContinuousVideo = 'continuous-video';
+  static const String focusModeContinuousPicture = 'continuous-picture';
 
   BodyTransaction transaction;
   int? lensType;
@@ -41,24 +33,25 @@ class MLBodyLensController {
   bool? automaticFocus;
   int? maxFrameLostCount;
 
-  MLBodyLensController(
-      {this.lensType = backLens,
-      this.applyFps = 30.0,
-      this.automaticFocus = true,
-      required this.transaction,
-      this.maxFrameLostCount = 2,
-      this.flashMode = flashModeAuto,
-      this.focusMode = focusModeContinuousVideo});
+  MLBodyLensController({
+    required this.transaction,
+    this.lensType = backLens,
+    this.applyFps = 30.0,
+    this.automaticFocus = true,
+    this.maxFrameLostCount = 2,
+    this.flashMode = flashModeAuto,
+    this.focusMode = focusModeContinuousVideo,
+  });
 
   Map<String, dynamic> toMap() {
-    return {
-      "lensType": lensType ?? backLens,
-      "analyzerType": describeEnum(transaction),
-      "applyFps": applyFps ?? 30.0,
-      "automaticFocus": automaticFocus ?? true,
-      "flashMode": flashMode ?? flashModeAuto,
-      "focusMode": focusMode ?? focusModeContinuousVideo,
-      "maxFrameLostCount": maxFrameLostCount ?? 2
+    return <String, dynamic>{
+      'lensType': lensType ?? backLens,
+      'analyzerType': describeEnum(transaction),
+      'applyFps': applyFps ?? 30.0,
+      'automaticFocus': automaticFocus ?? true,
+      'flashMode': flashMode ?? flashModeAuto,
+      'focusMode': focusMode ?? focusModeContinuousVideo,
+      'maxFrameLostCount': maxFrameLostCount ?? 2,
     };
   }
 }

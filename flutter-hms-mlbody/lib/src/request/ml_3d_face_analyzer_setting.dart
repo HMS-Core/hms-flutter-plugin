@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_ml_body;
+
 class ML3DFaceAnalyzerSetting {
   /// Precision preference mode.
   /// This mode will detect more faces and be more precise in detecting key points and contours, but will run slower.
@@ -28,14 +30,17 @@ class ML3DFaceAnalyzerSetting {
   int? performanceType;
   bool? tracingAllowed;
 
-  ML3DFaceAnalyzerSetting(
-      {required this.path, this.performanceType, this.tracingAllowed});
+  ML3DFaceAnalyzerSetting({
+    required this.path,
+    this.performanceType,
+    this.tracingAllowed,
+  });
 
   Map<String, dynamic> toMap() {
-    return {
-      "path": path,
-      "performanceType": performanceType ?? typePrecision,
-      "tracingAllowed": tracingAllowed ?? false
+    return <String, dynamic>{
+      'path': path,
+      'performanceType': performanceType ?? typePrecision,
+      'tracingAllowed': tracingAllowed ?? false,
     };
   }
 }

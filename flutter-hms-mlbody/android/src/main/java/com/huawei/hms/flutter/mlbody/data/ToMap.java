@@ -33,6 +33,7 @@ import com.huawei.hms.mlsdk.faceverify.MLFaceVerificationResult;
 import com.huawei.hms.mlsdk.gesture.MLGesture;
 import com.huawei.hms.mlsdk.handkeypoint.MLHandKeypoint;
 import com.huawei.hms.mlsdk.handkeypoint.MLHandKeypoints;
+import com.huawei.hms.mlsdk.interactiveliveness.MLInteractiveLivenessCaptureResult;
 import com.huawei.hms.mlsdk.livenessdetection.MLLivenessCaptureResult;
 import com.huawei.hms.mlsdk.skeleton.MLJoint;
 import com.huawei.hms.mlsdk.skeleton.MLSkeleton;
@@ -281,19 +282,32 @@ public class ToMap {
         }
     }
 
-    // LIVENESS
+    // Static Biometric Verification
     public static class LivenessToMap {
         public static Map<String, Object> getResult(MLLivenessCaptureResult result) {
-            Map<String, Object> liveMap = new HashMap<>();
+            final Map<String, Object> map = new HashMap<>();
+            map.put("score", result.getScore());
+            map.put("pitch", result.getPitch());
+            map.put("roll", result.getRoll());
+            map.put("yaw", result.getYaw());
+            map.put("bitmap", Commons.bitmapToByteArray(result.getBitmap()));
+            map.put("isLive", result.isLive());
+            return map;
+        }
+    }
 
-            liveMap.put("score", result.getScore());
-            liveMap.put("pitch", result.getPitch());
-            liveMap.put("roll", result.getRoll());
-            liveMap.put("yaw", result.getYaw());
-            liveMap.put("bitmap", Commons.bitmapToByteArray(result.getBitmap()));
-            liveMap.put("isLive", result.isLive());
-
-            return liveMap;
+    // Interactive Biometric Verification
+    public static class InteractiveLivenessToMap {
+        public static Map<String, Object> getResult(MLInteractiveLivenessCaptureResult result) {
+            final Map<String, Object> map = new HashMap<>();
+            if (result.getBitmap() != null) {
+                map.put("bitmap", Commons.bitmapToByteArray(result.getBitmap()));
+            }
+            map.put("score", result.getScore());
+            map.put("stateCode", result.getStateCode());
+            map.put("actionType", result.getActionType());
+            map.put("frameNum", result.getFrameNum());
+            return map;
         }
     }
 }

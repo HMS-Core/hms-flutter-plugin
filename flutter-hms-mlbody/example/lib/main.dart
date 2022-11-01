@@ -15,10 +15,30 @@
 */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:huawei_ml_body/huawei_ml_body.dart';
 import 'package:huawei_ml_body_example/screens/home.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+    <DeviceOrientation>[
+      DeviceOrientation.portraitUp,
+    ],
+  );
+  // TODO: Copy and paste the api_key value in your agconnect-services.json file.
+  MLBodyApplication.instance.setApiKey('<api_key>');
+  await requestPermissions();
   runApp(const MyApp());
+}
+
+// TODO: Please implement your own 'Permission Handler'.
+Future<void> requestPermissions() async {
+  // This plugin needs some permissions to work properly.
+  // You are expected to handle these permissions to use this Demo.
+
+  // You can learn more about the required permissions from our official documentations.
+  // https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/assigning-permissions-0000001052789343?ha_source=hms1
 }
 
 class MyApp extends StatefulWidget {
@@ -34,12 +54,13 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          appBarTheme: const AppBarTheme(
-        elevation: 0,
-        centerTitle: false,
-        foregroundColor: Colors.black,
-        backgroundColor: Colors.white,
-      )),
+        appBarTheme: const AppBarTheme(
+          elevation: 0,
+          centerTitle: false,
+          foregroundColor: Colors.black,
+          backgroundColor: Colors.white,
+        ),
+      ),
       home: const Home(),
     );
   }

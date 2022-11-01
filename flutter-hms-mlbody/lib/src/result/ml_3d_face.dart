@@ -14,31 +14,36 @@
     limitations under the License.
 */
 
-import 'package:huawei_ml_body/src/result/body_position.dart';
+part of huawei_ml_body;
 
 class ML3DFace {
   static const int landmarkFive = 0;
 
-  List<BodyPosition?> allVertexes;
-  dynamic eulerX;
-  dynamic eulerY;
-  dynamic eulerZ;
+  final List<BodyPosition> allVertexes;
+  final double eulerX;
+  final double eulerY;
+  final double eulerZ;
 
-  ML3DFace({required this.allVertexes, this.eulerX, this.eulerY, this.eulerZ});
+  const ML3DFace._({
+    required this.allVertexes,
+    required this.eulerX,
+    required this.eulerY,
+    required this.eulerZ,
+  });
 
   factory ML3DFace.fromMap(Map<dynamic, dynamic> map) {
-    var points = List<BodyPosition>.empty(growable: true);
+    final List<BodyPosition> points = <BodyPosition>[];
 
     if (map['allVertexes'] != null) {
-      map['allVertexes'].forEach((v) {
+      map['allVertexes'].forEach((dynamic v) {
         points.add(BodyPosition.fromMap(v));
       });
     }
-
-    return ML3DFace(
-        eulerX: map['eulerX'],
-        eulerY: map['eulerY'],
-        eulerZ: map['eulerZ'],
-        allVertexes: points);
+    return ML3DFace._(
+      eulerX: map['eulerX'],
+      eulerY: map['eulerY'],
+      eulerZ: map['eulerZ'],
+      allVertexes: points,
+    );
   }
 }

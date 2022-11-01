@@ -14,18 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:async';
-import 'dart:typed_data';
-import 'dart:ui';
-
-import 'package:flutter/services.dart';
-import 'package:huawei_ml_body/src/common/constants.dart';
-import 'package:huawei_ml_body/src/request/ml_body_lens_controller.dart';
-import 'package:huawei_ml_body/src/result/ml_3d_face.dart';
-import 'package:huawei_ml_body/src/result/ml_face.dart';
-import 'package:huawei_ml_body/src/result/ml_gesture.dart';
-import 'package:huawei_ml_body/src/result/ml_hand_keypoints.dart';
-import 'package:huawei_ml_body/src/result/ml_skeleton.dart';
+part of huawei_ml_body;
 
 class MLBodyLensEngine {
   late MethodChannel _c;
@@ -34,24 +23,37 @@ class MLBodyLensEngine {
   BodyTransactor? _transactor;
   bool _isRunning = false;
 
-  MLBodyLensEngine({required this.controller}) {
+  MLBodyLensEngine({
+    required this.controller,
+  }) {
     _c = _initMethodChannel();
   }
 
   MethodChannel _initMethodChannel() {
-    const channel = MethodChannel('$baseChannel.lens');
+    const MethodChannel channel = MethodChannel('$baseChannel.lens');
     channel.setMethodCallHandler(_onMethodCall);
     return channel;
   }
 
   void _setup() {
-    _c.invokeMethod("lens#setup", controller.toMap());
+    _c.invokeMethod(
+      'lens#setup',
+      controller.toMap(),
+    );
   }
 
-  Future<int> init({int? width, int? height}) async {
+  Future<int> init({
+    int? width,
+    int? height,
+  }) async {
     _setup();
     return await _c.invokeMethod(
-        "lens#init", {'width': width ?? 1440, 'height': height ?? 1080});
+      'lens#init',
+      <String, dynamic>{
+        'width': width ?? 1440,
+        'height': height ?? 1080,
+      },
+    );
   }
 
   void run() {
@@ -59,11 +61,15 @@ class MLBodyLensEngine {
       return;
     }
     _isRunning = true;
-    _c.invokeMethod("lens#run");
+    _c.invokeMethod(
+      'lens#run',
+    );
   }
 
   Future<bool> release() async {
-    final bool res = await _c.invokeMethod("lens#release");
+    final bool res = await _c.invokeMethod(
+      'lens#release',
+    );
     if (res) {
       _isRunning = false;
     }
@@ -71,26 +77,42 @@ class MLBodyLensEngine {
   }
 
   Future<Uint8List> capture() async {
-    return await _c.invokeMethod("lens#capture");
+    return await _c.invokeMethod(
+      'lens#capture',
+    );
   }
 
   Future<int> zoom(double z) async {
-    return await _c.invokeMethod("lens#zoom", {'zoom': z});
+    return await _c.invokeMethod(
+      'lens#zoom',
+      <String, dynamic>{
+        'zoom': z,
+      },
+    );
   }
 
   Future<int> getLensType() async {
-    return await _c.invokeMethod("lens#getLensType");
+    return await _c.invokeMethod(
+      'lens#getLensType',
+    );
   }
 
   Future<Size> getDisplayDimension() async {
-    Map<dynamic, dynamic> map = await _c.invokeMethod("lens#getDimensions");
-    int width = map['width'];
-    int height = map['height'];
-    return Size(width.toDouble(), height.toDouble());
+    final Map<dynamic, dynamic> map = await _c.invokeMethod(
+      'lens#getDimensions',
+    );
+    final int width = map['width'];
+    final int height = map['height'];
+    return Size(
+      width.toDouble(),
+      height.toDouble(),
+    );
   }
 
   Future<void> switchCamera() async {
-    await _c.invokeMethod("lens#switchCam");
+    await _c.invokeMethod(
+      'lens#switchCam',
+    );
   }
 
   void setTransactor(BodyTransactor transactor) {
@@ -98,30 +120,44 @@ class MLBodyLensEngine {
   }
 
   Future<dynamic> _onMethodCall(MethodCall call) {
-    Map<dynamic, dynamic> map = call.arguments;
-
-    List res = map['result'] ?? List<dynamic>.empty();
+    final Map<dynamic, dynamic> map = call.arguments;
+    final List<dynamic> res = map['result'] ?? <dynamic>[];
 
     switch (call.method) {
       case 'face':
-        final faces = res.map((e) => MLFace.fromMap(e)).toList();
-        _transactor!.call(result: faces);
+        final List<MLFace> faces =
+            res.map((dynamic e) => MLFace.fromMap(e)).toList();
+        _transactor!.call(
+          result: faces,
+        );
         break;
       case 'face3d':
-        final faces1 = res.map((e) => ML3DFace.fromMap(e)).toList();
-        _transactor!.call(result: faces1);
+        final List<ML3DFace> faces1 =
+            res.map((dynamic e) => ML3DFace.fromMap(e)).toList();
+        _transactor!.call(
+          result: faces1,
+        );
         break;
       case 'skeleton':
-        final skl = res.map((e) => MLSkeleton.fromMap(e)).toList();
-        _transactor!.call(result: skl);
+        final List<MLSkeleton> skl =
+            res.map((dynamic e) => MLSkeleton.fromMap(e)).toList();
+        _transactor!.call(
+          result: skl,
+        );
         break;
       case 'hand':
-        final hands = res.map((e) => MLHandKeyPoints.fromMap(e)).toList();
-        _transactor!.call(result: hands);
+        final List<MLHandKeyPoints> hands =
+            res.map((dynamic e) => MLHandKeyPoints.fromMap(e)).toList();
+        _transactor!.call(
+          result: hands,
+        );
         break;
       case 'gesture':
-        final gestures = res.map((e) => MLGesture.fromMap(e)).toList();
-        _transactor!.call(result: gestures);
+        final List<MLGesture> gestures =
+            res.map((dynamic e) => MLGesture.fromMap(e)).toList();
+        _transactor!.call(
+          result: gestures,
+        );
         break;
       default:
         throw ArgumentError('Unsupported type of body stream!');

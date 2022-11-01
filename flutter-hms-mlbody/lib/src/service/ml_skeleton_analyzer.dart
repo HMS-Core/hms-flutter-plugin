@@ -14,14 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:convert';
-
-import 'package:flutter/services.dart';
-import 'package:huawei_ml_body/src/common/constants.dart';
-import 'package:huawei_ml_body/src/request/ml_skeleton_analyzer_setting.dart';
-import 'package:huawei_ml_body/src/result/ml_skeleton.dart';
-
-import '../common/ml_body_analyzer.dart';
+part of huawei_ml_body;
 
 class MLSkeletonAnalyzer
     implements MLBodyAnalyzer<MLSkeleton, MLSkeletonAnalyzerSetting> {
@@ -33,37 +26,56 @@ class MLSkeletonAnalyzer
 
   @override
   Future<List<MLSkeleton>> asyncAnalyseFrame(
-      MLSkeletonAnalyzerSetting setting) async {
-    List res = await _channel.invokeMethod(
-        "skeleton#asyncAnalyseFrame", setting.toMap());
-    return (res).map((e) => MLSkeleton.fromMap(e)).toList();
+    MLSkeletonAnalyzerSetting setting,
+  ) async {
+    final List<dynamic> res = await _channel.invokeMethod(
+      'skeleton#asyncAnalyseFrame',
+      setting.toMap(),
+    );
+    return (res).map((dynamic e) => MLSkeleton.fromMap(e)).toList();
   }
 
   @override
   Future<List<MLSkeleton>> analyseFrame(
-      MLSkeletonAnalyzerSetting setting) async {
-    List res =
-        await _channel.invokeMethod("skeleton#analyseFrame", setting.toMap());
-    return (res).map((e) => MLSkeleton.fromMap(e)).toList();
+    MLSkeletonAnalyzerSetting setting,
+  ) async {
+    final List<dynamic> res = await _channel.invokeMethod(
+      'skeleton#analyseFrame',
+      setting.toMap(),
+    );
+    return (res).map((dynamic e) => MLSkeleton.fromMap(e)).toList();
   }
 
   @override
   Future<bool> destroy() async {
-    return await _channel.invokeMethod('skeleton#destroy');
+    return await _channel.invokeMethod(
+      'skeleton#destroy',
+    );
   }
 
   @override
   Future<bool> isAvailable() async {
-    return await _channel.invokeMethod('skeleton#isAvailable');
+    return await _channel.invokeMethod(
+      'skeleton#isAvailable',
+    );
   }
 
   Future<double> calculateSimilarity(
-      List<MLSkeleton> list1, List<MLSkeleton> list2) async {
-    return await _channel.invokeMethod("skeleton#similarity",
-        {'list1': json.encode(list1), 'list2': json.encode(list2)});
+    List<MLSkeleton> list1,
+    List<MLSkeleton> list2,
+  ) async {
+    return await _channel.invokeMethod(
+      'skeleton#similarity',
+      <String, dynamic>{
+        'list1': json.encode(list1),
+        'list2': json.encode(list2),
+      },
+    );
   }
 
   Future<bool> stop() async {
-    return await _channel.invokeMethod('skeleton#stop');
+    return await _channel.invokeMethod(
+      'skeleton#stop',
+    );
   }
 }

@@ -26,9 +26,9 @@ import com.huawei.hms.flutter.mlbody.handlers.Face3dMethodHandler;
 import com.huawei.hms.flutter.mlbody.handlers.FaceMethodHandler;
 import com.huawei.hms.flutter.mlbody.handlers.GestureHandler;
 import com.huawei.hms.flutter.mlbody.handlers.HandMethodHandler;
+import com.huawei.hms.flutter.mlbody.handlers.InteractiveLivenessHandler;
 import com.huawei.hms.flutter.mlbody.handlers.LensHandler;
 import com.huawei.hms.flutter.mlbody.handlers.LivenessHandler;
-import com.huawei.hms.flutter.mlbody.handlers.PermissionHandler;
 import com.huawei.hms.flutter.mlbody.handlers.SkeletonHandler;
 import com.huawei.hms.flutter.mlbody.handlers.VerificationHandler;
 
@@ -49,12 +49,12 @@ public class HuaweiMlBodyPlugin implements FlutterPlugin, ActivityAware {
     private MethodChannel skeletonMethodChannel;
     private MethodChannel verificationMethodChannel;
     private MethodChannel livenessMethodChannel;
-    private MethodChannel permissionChannel;
+    private MethodChannel interactiveLivenessMethodChannel;
     private MethodChannel lensMethodChannel;
 
     private void onAttachedToEngine(final BinaryMessenger messenger, final Activity activity, final TextureRegistry registry) {
         initChannels(messenger);
-        setHandlers(activity, registry);
+        setHandlers(activity, messenger, registry);
     }
 
     private void initChannels(BinaryMessenger messenger) {
@@ -66,11 +66,11 @@ public class HuaweiMlBodyPlugin implements FlutterPlugin, ActivityAware {
         skeletonMethodChannel = new MethodChannel(messenger, Constants.SKELETON_CHANNEL);
         verificationMethodChannel = new MethodChannel(messenger, Constants.VERIFICATION_CHANNEL);
         livenessMethodChannel = new MethodChannel(messenger, Constants.LIVENESS_CHANNEL);
-        permissionChannel = new MethodChannel(messenger, Constants.PERMISSION_CHANNEL);
+        interactiveLivenessMethodChannel = new MethodChannel(messenger, Constants.INTERACTIVE_LIVENESS_CHANNEL);
         lensMethodChannel = new MethodChannel(messenger, Constants.LENS_CHANNEL);
     }
 
-    private void setHandlers(Activity activity, TextureRegistry registry) {
+    private void setHandlers(Activity activity, BinaryMessenger messenger, TextureRegistry registry) {
         appChannel.setMethodCallHandler(new AppHandler(activity));
         faceMethodChannel.setMethodCallHandler(new FaceMethodHandler(activity));
         face3DMethodChannel.setMethodCallHandler(new Face3dMethodHandler(activity));
@@ -79,7 +79,7 @@ public class HuaweiMlBodyPlugin implements FlutterPlugin, ActivityAware {
         skeletonMethodChannel.setMethodCallHandler(new SkeletonHandler(activity));
         verificationMethodChannel.setMethodCallHandler(new VerificationHandler(activity));
         livenessMethodChannel.setMethodCallHandler(new LivenessHandler(activity));
-        permissionChannel.setMethodCallHandler(new PermissionHandler(activity));
+        interactiveLivenessMethodChannel.setMethodCallHandler(new InteractiveLivenessHandler(activity, messenger));
         lensMethodChannel.setMethodCallHandler(new LensHandler(activity, lensMethodChannel, registry));
     }
 
@@ -122,7 +122,7 @@ public class HuaweiMlBodyPlugin implements FlutterPlugin, ActivityAware {
         skeletonMethodChannel = null;
         verificationMethodChannel = null;
         livenessMethodChannel = null;
-        permissionChannel = null;
+        interactiveLivenessMethodChannel = null;
         lensMethodChannel = null;
     }
 
@@ -136,7 +136,7 @@ public class HuaweiMlBodyPlugin implements FlutterPlugin, ActivityAware {
         skeletonMethodChannel.setMethodCallHandler(null);
         verificationMethodChannel.setMethodCallHandler(null);
         livenessMethodChannel.setMethodCallHandler(null);
-        permissionChannel.setMethodCallHandler(null);
+        interactiveLivenessMethodChannel.setMethodCallHandler(null);
         lensMethodChannel.setMethodCallHandler(null);
     }
 }

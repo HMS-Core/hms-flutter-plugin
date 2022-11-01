@@ -16,8 +16,37 @@
 
 library huawei_ml_body;
 
-export 'src/service/xport.dart';
-export 'src/request/xport.dart';
-export 'src/result/xport.dart';
-export 'src/common/xport.dart';
-export 'src/ui/ml_body_lens.dart';
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+part 'src/common/constants.dart';
+part 'src/common/ml_body_analyzer.dart';
+part 'src/request/ml_3d_face_analyzer_setting.dart';
+part 'src/request/ml_body_lens_controller.dart';
+part 'src/request/ml_face_analyzer_setting.dart';
+part 'src/request/ml_hand_keypoint_analyzer_setting.dart';
+part 'src/request/ml_skeleton_analyzer_setting.dart';
+part 'src/result/body_border.dart';
+part 'src/result/body_position.dart';
+part 'src/result/ml_3d_face.dart';
+part 'src/result/ml_face.dart';
+part 'src/result/ml_face_info.dart';
+part 'src/result/ml_gesture.dart';
+part 'src/result/ml_hand_keypoints.dart';
+part 'src/result/ml_interactive_liveness_capture_result.dart';
+part 'src/result/ml_liveness_capture_result.dart';
+part 'src/result/ml_skeleton.dart';
+part 'src/service/body_lens_engine.dart';
+part 'src/service/ml_3d_face_analyzer.dart';
+part 'src/service/ml_body_application.dart';
+part 'src/service/ml_face_analyzer.dart';
+part 'src/service/ml_face_verification_analyzer.dart';
+part 'src/service/ml_gesture_analyzer.dart';
+part 'src/service/ml_hand_keypoint_analyzer.dart';
+part 'src/service/ml_interactive_liveness_capture.dart';
+part 'src/service/ml_liveness_capture.dart';
+part 'src/service/ml_skeleton_analyzer.dart';
+part 'src/ui/ml_body_lens.dart';

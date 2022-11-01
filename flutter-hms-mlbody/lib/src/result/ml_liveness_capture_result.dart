@@ -14,26 +14,33 @@
     limitations under the License.
 */
 
-import 'dart:typed_data';
+part of huawei_ml_body;
 
 class MLLivenessCaptureResult {
-  Uint8List? bitmap;
-  bool? isLive;
-  double? score;
-  double? pitch;
-  double? roll;
-  double? yaw;
+  final Uint8List? bitmap;
+  final bool? isLive;
+  final double? score;
+  final double? pitch;
+  final double? roll;
+  final double? yaw;
 
-  MLLivenessCaptureResult(
-      {this.score, this.bitmap, this.pitch, this.roll, this.yaw, this.isLive});
+  const MLLivenessCaptureResult._({
+    this.score,
+    this.bitmap,
+    this.pitch,
+    this.roll,
+    this.yaw,
+    this.isLive,
+  });
 
   factory MLLivenessCaptureResult.fromJson(Map<dynamic, dynamic> json) {
-    return MLLivenessCaptureResult(
-        bitmap: json['bitmap'],
-        isLive: json['isLive'],
-        score: json['score'],
-        pitch: json['pitch'],
-        roll: json['roll'],
-        yaw: json['yaw']);
+    return MLLivenessCaptureResult._(
+      bitmap: json['bitmap'],
+      isLive: json['isLive'],
+      score: json['score'],
+      pitch: json['pitch'],
+      roll: json['roll'],
+      yaw: json['yaw'],
+    );
   }
 }

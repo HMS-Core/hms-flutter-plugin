@@ -14,49 +14,40 @@
     limitations under the License.
 */
 
-import 'package:huawei_ml_body/src/result/body_border.dart';
+part of huawei_ml_body;
 
 class MLGesture {
   static const int one = 0;
-
   static const int second = 1;
-
   static const int three = 2;
-
   static const int four = 3;
-
   static const int five = 4;
-
   static const int six = 5;
-
   static const int seven = 6;
-
   static const int eight = 7;
-
   static const int nine = 8;
-
   static const int diss = 9;
-
   static const int fist = 10;
-
   static const int good = 11;
-
   static const int heart = 12;
-
   static const int ok = 13;
-
   static const int unknown = 14;
 
-  int? category;
-  double? score;
-  BodyBorder? border;
+  final int? category;
+  final double? score;
+  final BodyBorder? border;
 
-  MLGesture({this.border, this.category, this.score});
+  const MLGesture._({
+    this.border,
+    this.category,
+    this.score,
+  });
 
   factory MLGesture.fromMap(Map<dynamic, dynamic> map) {
-    return MLGesture(
-        category: map['category'],
-        score: map['score'],
-        border: map['rect'] != null ? BodyBorder.fromMap(map['rect']) : null);
+    return MLGesture._(
+      category: map['category'],
+      score: map['score'],
+      border: map['rect'] != null ? BodyBorder.fromMap(map['rect']) : null,
+    );
   }
 }

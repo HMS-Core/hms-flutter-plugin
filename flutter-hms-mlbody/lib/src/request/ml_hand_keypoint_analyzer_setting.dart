@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_ml_body;
+
 class MLHandKeyPointAnalyzerSetting {
   /// Maximum number of returned hand regions.
   static const int maxHandsNum = 10;
@@ -31,14 +33,17 @@ class MLHandKeyPointAnalyzerSetting {
   int? sceneType;
   int? maxHandResults;
 
-  MLHandKeyPointAnalyzerSetting(
-      {required this.path, this.maxHandResults, this.sceneType});
+  MLHandKeyPointAnalyzerSetting({
+    required this.path,
+    this.maxHandResults,
+    this.sceneType,
+  });
 
   Map<String, dynamic> toMap() {
-    return {
-      "path": path,
-      "sceneType": sceneType ?? typeAll,
-      "maxHandResults": maxHandResults ?? maxHandsNum
+    return <String, dynamic>{
+      'path': path,
+      'sceneType': sceneType ?? typeAll,
+      'maxHandResults': maxHandResults ?? maxHandsNum,
     };
   }
 }

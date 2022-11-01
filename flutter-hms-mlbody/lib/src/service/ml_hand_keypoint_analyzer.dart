@@ -14,12 +14,7 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
-import 'package:huawei_ml_body/src/common/constants.dart';
-import 'package:huawei_ml_body/src/request/ml_hand_keypoint_analyzer_setting.dart';
-import 'package:huawei_ml_body/src/result/ml_hand_keypoints.dart';
-
-import '../common/ml_body_analyzer.dart';
+part of huawei_ml_body;
 
 class MLHandKeypointAnalyzer
     implements MLBodyAnalyzer<MLHandKeyPoints, MLHandKeyPointAnalyzerSetting> {
@@ -31,31 +26,43 @@ class MLHandKeypointAnalyzer
 
   @override
   Future<List<MLHandKeyPoints>> asyncAnalyseFrame(
-      MLHandKeyPointAnalyzerSetting setting) async {
-    List res =
-        await _channel.invokeMethod("hand#asyncAnalyseFrame", setting.toMap());
-    return res.map((e) => MLHandKeyPoints.fromMap(e)).toList();
+    MLHandKeyPointAnalyzerSetting setting,
+  ) async {
+    final List<dynamic> res = await _channel.invokeMethod(
+      'hand#asyncAnalyseFrame',
+      setting.toMap(),
+    );
+    return res.map((dynamic e) => MLHandKeyPoints.fromMap(e)).toList();
   }
 
   @override
   Future<List<MLHandKeyPoints>> analyseFrame(
-      MLHandKeyPointAnalyzerSetting setting) async {
-    List res =
-        await _channel.invokeMethod("hand#analyseFrame", setting.toMap());
-    return res.map((e) => MLHandKeyPoints.fromMap(e)).toList();
+    MLHandKeyPointAnalyzerSetting setting,
+  ) async {
+    final List<dynamic> res = await _channel.invokeMethod(
+      'hand#analyseFrame',
+      setting.toMap(),
+    );
+    return res.map((dynamic e) => MLHandKeyPoints.fromMap(e)).toList();
   }
 
   @override
   Future<bool> destroy() async {
-    return await _channel.invokeMethod('hand#destroy');
+    return await _channel.invokeMethod(
+      'hand#destroy',
+    );
   }
 
   @override
   Future<bool> isAvailable() async {
-    return await _channel.invokeMethod('hand#isAvailable');
+    return await _channel.invokeMethod(
+      'hand#isAvailable',
+    );
   }
 
   Future<bool> stop() async {
-    return await _channel.invokeMethod('hand#stop');
+    return await _channel.invokeMethod(
+      'hand#stop',
+    );
   }
 }

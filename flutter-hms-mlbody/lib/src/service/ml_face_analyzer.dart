@@ -14,12 +14,7 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
-
-import '../common/constants.dart';
-import '../common/ml_body_analyzer.dart';
-import '../request/ml_face_analyzer_setting.dart';
-import '../result/ml_face.dart';
+part of huawei_ml_body;
 
 class MLFaceAnalyzer implements MLBodyAnalyzer<MLFace, MLFaceAnalyzerSetting> {
   late MethodChannel _channel;
@@ -29,30 +24,44 @@ class MLFaceAnalyzer implements MLBodyAnalyzer<MLFace, MLFaceAnalyzerSetting> {
   }
 
   @override
-  Future<List<MLFace>> asyncAnalyseFrame(MLFaceAnalyzerSetting setting) async {
-    final List res =
-        await _channel.invokeMethod("face#asyncAnalyseFrame", setting.toMap());
-    return res.map((e) => MLFace.fromMap(e)).toList();
+  Future<List<MLFace>> asyncAnalyseFrame(
+    MLFaceAnalyzerSetting setting,
+  ) async {
+    final List<dynamic> res = await _channel.invokeMethod(
+      'face#asyncAnalyseFrame',
+      setting.toMap(),
+    );
+    return res.map((dynamic e) => MLFace.fromMap(e)).toList();
   }
 
   @override
-  Future<List<MLFace>> analyseFrame(MLFaceAnalyzerSetting setting) async {
-    final List res =
-        await _channel.invokeMethod("face#analyseFrame", setting.toMap());
-    return res.map((e) => MLFace.fromMap(e)).toList();
+  Future<List<MLFace>> analyseFrame(
+    MLFaceAnalyzerSetting setting,
+  ) async {
+    final List<dynamic> res = await _channel.invokeMethod(
+      'face#analyseFrame',
+      setting.toMap(),
+    );
+    return res.map((dynamic e) => MLFace.fromMap(e)).toList();
   }
 
   @override
   Future<bool> destroy() async {
-    return await _channel.invokeMethod('face#destroy');
+    return await _channel.invokeMethod(
+      'face#destroy',
+    );
   }
 
   @override
   Future<bool> isAvailable() async {
-    return await _channel.invokeMethod('face#isAvailable');
+    return await _channel.invokeMethod(
+      'face#isAvailable',
+    );
   }
 
   Future<bool> stop() async {
-    return await _channel.invokeMethod('face#stop');
+    return await _channel.invokeMethod(
+      'face#stop',
+    );
   }
 }

@@ -14,12 +14,7 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
-import 'package:huawei_ml_body/src/common/constants.dart';
-import 'package:huawei_ml_body/src/request/ml_3d_face_analyzer_setting.dart';
-import 'package:huawei_ml_body/src/result/ml_3d_face.dart';
-
-import '../common/ml_body_analyzer.dart';
+part of huawei_ml_body;
 
 class ML3DFaceAnalyzer
     implements MLBodyAnalyzer<ML3DFace, ML3DFaceAnalyzerSetting> {
@@ -31,30 +26,43 @@ class ML3DFaceAnalyzer
 
   @override
   Future<List<ML3DFace>> asyncAnalyseFrame(
-      ML3DFaceAnalyzerSetting setting) async {
-    List res = await _channel.invokeMethod(
-        "face3d#asyncAnalyseFrame", setting.toMap());
-    return res.map((e) => ML3DFace.fromMap(e)).toList();
+    ML3DFaceAnalyzerSetting setting,
+  ) async {
+    final List<dynamic> res = await _channel.invokeMethod(
+      'face3d#asyncAnalyseFrame',
+      setting.toMap(),
+    );
+    return res.map((dynamic e) => ML3DFace.fromMap(e)).toList();
   }
 
   @override
-  Future<List<ML3DFace>> analyseFrame(ML3DFaceAnalyzerSetting setting) async {
-    List res =
-        await _channel.invokeMethod("face3d#analyseFrame", setting.toMap());
-    return res.map((e) => ML3DFace.fromMap(e)).toList();
+  Future<List<ML3DFace>> analyseFrame(
+    ML3DFaceAnalyzerSetting setting,
+  ) async {
+    final List<dynamic> res = await _channel.invokeMethod(
+      'face3d#analyseFrame',
+      setting.toMap(),
+    );
+    return res.map((dynamic e) => ML3DFace.fromMap(e)).toList();
   }
 
   @override
   Future<bool> destroy() async {
-    return await _channel.invokeMethod("face3d#destroy");
+    return await _channel.invokeMethod(
+      'face3d#destroy',
+    );
   }
 
   @override
   Future<bool> isAvailable() async {
-    return await _channel.invokeMethod("face3d#isAvailable");
+    return await _channel.invokeMethod(
+      'face3d#isAvailable',
+    );
   }
 
   Future<bool> stop() async {
-    return await _channel.invokeMethod("face3d#stop");
+    return await _channel.invokeMethod(
+      'face3d#stop',
+    );
   }
 }

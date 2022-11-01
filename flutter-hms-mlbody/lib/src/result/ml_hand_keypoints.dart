@@ -14,28 +14,32 @@
     limitations under the License.
 */
 
-import 'package:huawei_ml_body/src/result/body_border.dart';
+part of huawei_ml_body;
 
 class MLHandKeyPoints {
-  List<MLHandKeyPoint?> handKeyPoints;
-  BodyBorder? rect;
-  double? score;
+  final List<MLHandKeyPoint> handKeyPoints;
+  final BodyBorder? rect;
+  final double? score;
 
-  MLHandKeyPoints({required this.handKeyPoints, this.rect, this.score});
+  const MLHandKeyPoints._({
+    required this.handKeyPoints,
+    required this.rect,
+    required this.score,
+  });
 
   factory MLHandKeyPoints.fromMap(Map<dynamic, dynamic> map) {
-    var points = List<MLHandKeyPoint>.empty(growable: true);
+    final List<MLHandKeyPoint> points = <MLHandKeyPoint>[];
 
     if (map['handKeypoints'] != null) {
-      map['handKeypoints'].forEach((v) {
+      map['handKeypoints'].forEach((dynamic v) {
         points.add(MLHandKeyPoint.fromMap(v));
       });
     }
-
-    return MLHandKeyPoints(
-        handKeyPoints: points,
-        score: map['score'],
-        rect: map['border'] != null ? BodyBorder.fromMap(map['border']) : null);
+    return MLHandKeyPoints._(
+      handKeyPoints: points,
+      score: map['score'],
+      rect: map['border'] != null ? BodyBorder.fromMap(map['border']) : null,
+    );
   }
 }
 
@@ -103,18 +107,24 @@ class MLHandKeyPoint {
   /// Wrist joint.
   static const int typeWrist = 0;
 
-  dynamic pointX;
-  dynamic pointY;
-  double? score;
-  int? type;
+  final double pointX;
+  final double pointY;
+  final double score;
+  final int? type;
 
-  MLHandKeyPoint({this.pointX, this.pointY, this.score, this.type});
+  const MLHandKeyPoint._({
+    required this.pointX,
+    required this.pointY,
+    required this.score,
+    required this.type,
+  });
 
   factory MLHandKeyPoint.fromMap(Map<dynamic, dynamic> map) {
-    return MLHandKeyPoint(
-        pointX: map['pointX'],
-        pointY: map['pointY'],
-        score: map['score'],
-        type: map['type']);
+    return MLHandKeyPoint._(
+      pointX: map['pointX'],
+      pointY: map['pointY'],
+      score: map['score'],
+      type: map['type'],
+    );
   }
 }

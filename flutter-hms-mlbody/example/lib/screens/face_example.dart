@@ -22,23 +22,21 @@ class FaceExample extends StatefulWidget {
   const FaceExample({Key? key}) : super(key: key);
 
   @override
-  _FaceExampleState createState() => _FaceExampleState();
+  State<FaceExample> createState() => _FaceExampleState();
 }
 
 class _FaceExampleState extends State<FaceExample> with DemoMixin {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
-
   late MLFaceAnalyzer _analyzer;
-
-  dynamic _neutralProbability;
-  dynamic _angryProbability;
-  dynamic _sadProbability;
-  dynamic _smilingProbability;
+  double? _neutralProbability;
+  double? _angryProbability;
+  double? _sadProbability;
+  double? _smilingProbability;
 
   @override
   void initState() {
-    _analyzer = MLFaceAnalyzer();
     super.initState();
+    _analyzer = MLFaceAnalyzer();
   }
 
   @override
@@ -46,17 +44,19 @@ class _FaceExampleState extends State<FaceExample> with DemoMixin {
     if (path == null || path.isEmpty) {
       return;
     }
-
-    final setting = MLFaceAnalyzerSetting(path: path);
-
+    final MLFaceAnalyzerSetting setting = MLFaceAnalyzerSetting(
+      path: path,
+    );
     try {
-      final faces = await _analyzer.asyncAnalyseFrame(setting);
-      setState(() {
-        _angryProbability = faces.first.emotions?.angryProbability;
-        _sadProbability = faces.first.emotions?.sadProbability;
-        _neutralProbability = faces.first.emotions?.neutralProbability;
-        _smilingProbability = faces.first.emotions?.smilingProbability;
-      });
+      final List<MLFace> faces = await _analyzer.asyncAnalyseFrame(setting);
+      if (faces.isNotEmpty) {
+        setState(() {
+          _angryProbability = faces.first.emotions?.angryProbability;
+          _sadProbability = faces.first.emotions?.sadProbability;
+          _neutralProbability = faces.first.emotions?.neutralProbability;
+          _smilingProbability = faces.first.emotions?.smilingProbability;
+        });
+      }
     } on Exception catch (e) {
       exceptionDialog(context, e.toString());
     }
@@ -74,7 +74,7 @@ class _FaceExampleState extends State<FaceExample> with DemoMixin {
   @override
   void isAvailable() async {
     try {
-      final res = await _analyzer.isAvailable();
+      final bool res = await _analyzer.isAvailable();
       debugPrint(res.toString());
     } on Exception catch (e) {
       debugPrint(e.toString());
@@ -96,11 +96,11 @@ class _FaceExampleState extends State<FaceExample> with DemoMixin {
       key: _key,
       appBar: demoAppBar('Face Detection Demo'),
       body: Column(
-        children: [
-          resultBox("Smiling possibility", _smilingProbability),
-          resultBox("Neutral possibility", _neutralProbability),
-          resultBox("Angry possibility", _angryProbability),
-          resultBox("Sad possibility", _sadProbability),
+        children: <Widget>[
+          resultBox('Smiling possibility', _smilingProbability),
+          resultBox('Neutral possibility', _neutralProbability),
+          resultBox('Angry possibility', _angryProbability),
+          resultBox('Sad possibility', _sadProbability),
           Container(
             width: double.infinity - 20,
             margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -109,7 +109,7 @@ class _FaceExampleState extends State<FaceExample> with DemoMixin {
               onPressed: () => pickerDialog(_key, context, analyze),
               child: const Text('Start Recognition'),
             ),
-          )
+          ),
         ],
       ),
     );

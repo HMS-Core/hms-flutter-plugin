@@ -23,27 +23,28 @@ class VerificationExample extends StatefulWidget {
   const VerificationExample({Key? key}) : super(key: key);
 
   @override
-  _VerificationExampleState createState() => _VerificationExampleState();
+  State<VerificationExample> createState() => _VerificationExampleState();
 }
 
 class _VerificationExampleState extends State<VerificationExample> {
   late MLFaceVerificationAnalyzer _analyzer;
-
   int? templateId;
   dynamic similarity;
 
   @override
   void initState() {
-    _analyzer = MLFaceVerificationAnalyzer();
     super.initState();
+    _analyzer = MLFaceVerificationAnalyzer();
   }
 
-  _setTemplateFace() async {
-    String? pickedImagePath = await getImage(ImageSource.camera);
+  void _setTemplateFace() async {
+    final String? pickedImagePath = await getImage(ImageSource.camera);
     if (pickedImagePath != null) {
       try {
-        List<MLFaceTemplateResult> list =
-            await _analyzer.setTemplateFace(pickedImagePath, 1);
+        final List<MLFaceTemplateResult> list = await _analyzer.setTemplateFace(
+          pickedImagePath,
+          1,
+        );
         setState(() => templateId = list.first.templateId);
       } on Exception catch (e) {
         exceptionDialog(context, e.toString());
@@ -51,12 +52,14 @@ class _VerificationExampleState extends State<VerificationExample> {
     }
   }
 
-  _verifyFace() async {
-    String? pickedImagePath = await getImage(ImageSource.camera);
+  void _verifyFace() async {
+    final String? pickedImagePath = await getImage(ImageSource.camera);
     if (pickedImagePath != null) {
       try {
-        List<MLFaceVerificationResult> list =
-            await _analyzer.asyncAnalyseFrame(pickedImagePath);
+        final List<MLFaceVerificationResult> list =
+            await _analyzer.asyncAnalyseFrame(
+          pickedImagePath,
+        );
         setState(() => similarity = list.first.similarity);
       } on Exception catch (e) {
         exceptionDialog(context, e.toString());
@@ -69,9 +72,9 @@ class _VerificationExampleState extends State<VerificationExample> {
     return Scaffold(
       appBar: demoAppBar('Face Verification Demo'),
       body: Column(
-        children: [
-          resultBox("Template Id", templateId),
-          resultBox("Similarity", similarity),
+        children: <Widget>[
+          resultBox('Template Id', templateId),
+          resultBox('Similarity', similarity),
           Container(
             width: double.infinity - 20,
             margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -89,7 +92,7 @@ class _VerificationExampleState extends State<VerificationExample> {
               onPressed: _verifyFace,
               child: const Text('Verify Face'),
             ),
-          )
+          ),
         ],
       ),
     );

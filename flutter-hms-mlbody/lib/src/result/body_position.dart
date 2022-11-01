@@ -14,14 +14,24 @@
     limitations under the License.
 */
 
-class BodyPosition {
-  dynamic x;
-  dynamic y;
-  dynamic z;
+part of huawei_ml_body;
 
-  BodyPosition({this.x, this.y, this.z});
+class BodyPosition {
+  final double? x;
+  final double? y;
+  final double? z;
+
+  const BodyPosition._({
+    required this.x,
+    required this.y,
+    required this.z,
+  });
 
   factory BodyPosition.fromMap(Map<dynamic, dynamic> map) {
-    return BodyPosition(x: map['x'], y: map['y'], z: map['z']);
+    return BodyPosition._(
+      x: map['x'],
+      y: map['y'],
+      z: map['z'],
+    );
   }
 }

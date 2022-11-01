@@ -22,22 +22,20 @@ class HandExample extends StatefulWidget {
   const HandExample({Key? key}) : super(key: key);
 
   @override
-  _HandExampleState createState() => _HandExampleState();
+  State<HandExample> createState() => _HandExampleState();
 }
 
 class _HandExampleState extends State<HandExample> with DemoMixin {
-  final _key = GlobalKey<ScaffoldState>();
-
+  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   late MLHandKeypointAnalyzer _analyzer;
-
-  List detectedXs = [];
-  List detectedYs = [];
-  List scores = [];
+  final List<dynamic> detectedXs = <dynamic>[];
+  final List<dynamic> detectedYs = <dynamic>[];
+  final List<double?> scores = <double?>[];
 
   @override
   void initState() {
-    _analyzer = MLHandKeypointAnalyzer();
     super.initState();
+    _analyzer = MLHandKeypointAnalyzer();
   }
 
   @override
@@ -45,13 +43,13 @@ class _HandExampleState extends State<HandExample> with DemoMixin {
     if (path == null || path.isEmpty) {
       return;
     }
-
-    final setting = MLHandKeyPointAnalyzerSetting(path: path);
-
-    final points = await _analyzer.asyncAnalyseFrame(setting);
-
-    for (var e1 in points) {
-      for (var e2 in e1.handKeyPoints) {
+    final MLHandKeyPointAnalyzerSetting setting = MLHandKeyPointAnalyzerSetting(
+      path: path,
+    );
+    final List<MLHandKeyPoints> points =
+        await _analyzer.asyncAnalyseFrame(setting);
+    for (MLHandKeyPoints e1 in points) {
+      for (MLHandKeyPoint? e2 in e1.handKeyPoints) {
         setState(() {
           detectedXs.add(e2?.pointX);
           detectedYs.add(e2?.pointY);
@@ -73,7 +71,7 @@ class _HandExampleState extends State<HandExample> with DemoMixin {
   @override
   void isAvailable() async {
     try {
-      final res = await _analyzer.isAvailable();
+      final bool res = await _analyzer.isAvailable();
       debugPrint(res.toString());
     } on Exception catch (e) {
       debugPrint(e.toString());
@@ -96,7 +94,7 @@ class _HandExampleState extends State<HandExample> with DemoMixin {
       appBar: demoAppBar('Hand Example'),
       body: SingleChildScrollView(
         child: Column(
-          children: [
+          children: <Widget>[
             resultBox('Detected X points', detectedXs),
             resultBox('Detected Y points', detectedYs),
             resultBox('Detection scores', scores),
@@ -108,7 +106,7 @@ class _HandExampleState extends State<HandExample> with DemoMixin {
                 onPressed: () => pickerDialog(_key, context, analyze),
                 child: const Text('Start Recognition'),
               ),
-            )
+            ),
           ],
         ),
       ),

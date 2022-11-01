@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_ml_body;
+
 class MLFaceAnalyzerSetting {
   /// Detects all facial features and expressions.
   static const int typeFeatures = 1;
@@ -86,30 +88,31 @@ class MLFaceAnalyzerSetting {
   bool? tracingAllowed;
   int? tracingMode;
 
-  MLFaceAnalyzerSetting(
-      {required this.path,
-      this.featureType,
-      this.keyPointType,
-      this.maxSizeFaceOnly,
-      this.minFaceProportion,
-      this.performanceType,
-      this.poseDisabled,
-      this.shapeType,
-      this.tracingAllowed,
-      this.tracingMode});
+  MLFaceAnalyzerSetting({
+    required this.path,
+    this.featureType,
+    this.keyPointType,
+    this.maxSizeFaceOnly,
+    this.minFaceProportion,
+    this.performanceType,
+    this.poseDisabled,
+    this.shapeType,
+    this.tracingAllowed,
+    this.tracingMode,
+  });
 
   Map<String, dynamic> toMap() {
-    return {
-      "path": path,
-      "featureType": featureType ?? typeFeatures,
-      "keyPointType": keyPointType ?? typeKeyPoints,
-      "maxSizeFaceOnly": maxSizeFaceOnly ?? true,
-      "minFaceProportion": minFaceProportion ?? 0.5,
-      "performanceType": performanceType ?? typePrecision,
-      "poseDisabled": poseDisabled ?? false,
-      "shapeType": shapeType ?? typeShapes,
-      "tracingAllowed": tracingAllowed ?? false,
-      "tracingMode": tracingMode ?? modeTracingRobust
+    return <String, dynamic>{
+      'path': path,
+      'featureType': featureType ?? typeFeatures,
+      'keyPointType': keyPointType ?? typeKeyPoints,
+      'maxSizeFaceOnly': maxSizeFaceOnly ?? true,
+      'minFaceProportion': minFaceProportion ?? 0.5,
+      'performanceType': performanceType ?? typePrecision,
+      'poseDisabled': poseDisabled ?? false,
+      'shapeType': shapeType ?? typeShapes,
+      'tracingAllowed': tracingAllowed ?? false,
+      'tracingMode': tracingMode ?? modeTracingRobust,
     };
   }
 }

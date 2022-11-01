@@ -14,10 +14,16 @@
     limitations under the License.
 */
 
+part of huawei_ml_body;
+
 const String baseChannel = 'huawei.hms.flutter.ml.body';
 
-enum BodyTransaction { face, face3d, hand, skeleton, gesture }
-
-enum BodyPermission { camera, storage }
+enum BodyTransaction {
+  face,
+  face3d,
+  hand,
+  skeleton,
+  gesture,
+}
 
 typedef BodyTransactor = void Function({dynamic result});
