@@ -33,7 +33,6 @@ import com.huawei.hms.flutter.mlimage.handlers.SegmentationMethodHandler;
 import com.huawei.hms.flutter.mlimage.handlers.TextResolutionMethodHandler;
 import com.huawei.hms.flutter.mlimage.handlers.product.ProductVisionSearchMethodHandler;
 import com.huawei.hms.flutter.mlimage.mlapplication.MlApplicationMethodHandler;
-import com.huawei.hms.flutter.mlimage.permissions.PermissionHandler;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -45,7 +44,6 @@ import io.flutter.view.TextureRegistry;
 public class HuaweiMlImagePlugin implements FlutterPlugin, ActivityAware {
     private FlutterPluginBinding mFlutterPluginBinding;
     private MethodChannel classificationMethodChannel;
-    private MethodChannel permissionChannel;
     private MethodChannel mlApplicationMethodChannel;
     private MethodChannel objectAnalyzerMethodChannel;
     private MethodChannel landMarkMethodChannel;
@@ -70,7 +68,6 @@ public class HuaweiMlImagePlugin implements FlutterPlugin, ActivityAware {
 
     private void initializeChannels(final BinaryMessenger messenger) {
         classificationMethodChannel = new MethodChannel(messenger, Channel.CLASSIFICATION_CHANNEL);
-        permissionChannel = new MethodChannel(messenger, Channel.PERMISSION_CHANNEL);
         mlApplicationMethodChannel = new MethodChannel(messenger, Channel.APPLICATION_CHANNEL);
         objectAnalyzerMethodChannel = new MethodChannel(messenger, Channel.OBJECT_CHANNEL);
         landMarkMethodChannel = new MethodChannel(messenger, Channel.LANDMARK_CHANNEL);
@@ -87,7 +84,6 @@ public class HuaweiMlImagePlugin implements FlutterPlugin, ActivityAware {
 
     private void setHandlers(final Activity activity, TextureRegistry registry) {
         classificationMethodChannel.setMethodCallHandler(new ClassificationMethodHandler(activity));
-        permissionChannel.setMethodCallHandler(new PermissionHandler(activity));
         mlApplicationMethodChannel.setMethodCallHandler(new MlApplicationMethodHandler(activity));
         objectAnalyzerMethodChannel.setMethodCallHandler(new ObjectDetectionMethodHandler(activity));
         landMarkMethodChannel.setMethodCallHandler(new LandmarkMethodHandler(activity));
@@ -129,7 +125,6 @@ public class HuaweiMlImagePlugin implements FlutterPlugin, ActivityAware {
     @Override
     public void onDetachedFromActivity() {
         classificationMethodChannel.setMethodCallHandler(null);
-        permissionChannel.setMethodCallHandler(null);
         mlApplicationMethodChannel.setMethodCallHandler(null);
         objectAnalyzerMethodChannel.setMethodCallHandler(null);
         landMarkMethodChannel.setMethodCallHandler(null);
@@ -145,7 +140,6 @@ public class HuaweiMlImagePlugin implements FlutterPlugin, ActivityAware {
 
     private void removeChannels() {
         classificationMethodChannel = null;
-        permissionChannel = null;
         mlApplicationMethodChannel = null;
         objectAnalyzerMethodChannel = null;
         landMarkMethodChannel = null;

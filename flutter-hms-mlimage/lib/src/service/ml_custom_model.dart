@@ -14,56 +14,75 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
-import 'package:huawei_ml_image/src/common/xport.dart';
-import 'package:huawei_ml_image/src/request/xport.dart';
+part of huawei_ml_image;
 
 class MLCustomModel {
   late MethodChannel _channel;
 
   MLCustomModel() {
-    _channel = MethodChannel("$baseChannel.custom_model");
+    _channel = const MethodChannel('$baseChannel.custom_model');
   }
 
   Future<bool> createBitmap(String imagePath) async {
-    return await _channel.invokeMethod(mCreateBitmap, {"path": imagePath});
+    return await _channel.invokeMethod(
+      mCreateBitmap,
+      <String, dynamic>{
+        'path': imagePath,
+      },
+    );
   }
 
   Future<bool> downloadRemoteModel(
     String remoteModelName,
     String assetPath,
   ) async {
-    return await _channel.invokeMethod(mDownloadRemoteModel, {
-      "modelName": remoteModelName,
-      "assetPath": assetPath,
-    });
+    return await _channel.invokeMethod(
+      mDownloadRemoteModel,
+      <String, dynamic>{
+        'modelName': remoteModelName,
+        'assetPath': assetPath,
+      },
+    );
   }
 
   Future<bool> prepareExecutor(
     String modelName,
     String assetPath,
   ) async {
-    return await _channel.invokeMethod(mPrepareExecutor, {
-      "modelName": modelName,
-      "assetPath": assetPath,
-    });
+    return await _channel.invokeMethod(
+      mPrepareExecutor,
+      <String, dynamic>{
+        'modelName': modelName,
+        'assetPath': assetPath,
+      },
+    );
   }
 
   Future<Map<dynamic, dynamic>> startExecutor(
     MLModelInputOutputSettings settings,
     String labelFileName,
   ) async {
-    return await _channel.invokeMethod(mStartExecutor, {
-      "settings": settings.toMap(),
-      "labelFileName": labelFileName,
-    });
+    return await _channel.invokeMethod(
+      mStartExecutor,
+      <String, dynamic>{
+        'settings': settings.toMap(),
+        'labelFileName': labelFileName,
+      },
+    );
   }
 
   Future<int> getOutputIndex(String name) async {
-    return await _channel.invokeMethod(mGetOutputIndex, {'name': name});
+    return await _channel.invokeMethod(
+      mGetOutputIndex,
+      <String, dynamic>{
+        'name': name,
+      },
+    );
   }
 
   Future<bool> stopExecutor() async {
-    return await _channel.invokeMethod(mStopModelExecutor);
+    return await _channel.invokeMethod(
+      mStopModelExecutor,
+    );
   }
 }

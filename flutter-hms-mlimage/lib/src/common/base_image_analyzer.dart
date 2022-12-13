@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_ml_image;
+
 abstract class BaseImageAnalyzer<T, K> {
   Future<T> analyseFrame(K k);
   Future<T> asyncAnalyseFrame(K k);

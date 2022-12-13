@@ -16,119 +16,128 @@
 
 import 'package:flutter/material.dart';
 import 'package:huawei_ml_image/huawei_ml_image.dart';
-import 'package:image_picker/image_picker.dart';
-
-import '../utils/constants.dart';
-import '../utils/utils.dart';
+import 'package:huawei_ml_image_example/utils/constants.dart';
+import 'package:huawei_ml_image_example/utils/utils.dart';
 
 class ImageSuperResolutionExample extends StatefulWidget {
+  const ImageSuperResolutionExample({Key? key}) : super(key: key);
+
   @override
-  _ImageSuperResolutionExampleState createState() =>
+  State<ImageSuperResolutionExample> createState() =>
       _ImageSuperResolutionExampleState();
 }
 
 class _ImageSuperResolutionExampleState
     extends State<ImageSuperResolutionExample> with DemoMixin {
-  final _key = GlobalKey<ScaffoldState>();
-
-  late MLImageSuperResolutionAnalyzer _analyzer;
-
+  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
+  final MLImageSuperResolutionAnalyzer _analyzer =
+      MLImageSuperResolutionAnalyzer();
   Image? _image;
-
-  @override
-  void initState() {
-    _analyzer = MLImageSuperResolutionAnalyzer();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _key,
-      appBar: demoAppBar("Image Super Resolution Demo"),
+      appBar: demoAppBar('Image Super Resolution Demo'),
       body: SafeArea(
-          child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            color: kGrayColor,
-            margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.width,
-            child: _image != null ? _image : Image.asset(superImage),
-          ),
-          containerElevatedButton(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              color: kGrayColor,
+              margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.width,
+              child: _image ?? Image.asset(superImage),
+            ),
+            containerElevatedButton(
               context,
               ElevatedButton(
                 style: buttonStyle,
-                onPressed: () => pickerDialog(_key, context, analyseFrame),
-                child: Text(startClassificationText),
-              )),
-          containerElevatedButton(
+                onPressed: () {
+                  pickerDialog(
+                    _key,
+                    context,
+                    analyseFrame,
+                  );
+                },
+                child: const Text(startClassificationText),
+              ),
+            ),
+            containerElevatedButton(
               context,
               ElevatedButton(
                 style: buttonStyle,
-                onPressed: () => pickerDialog(_key, context, asyncAnalyseFrame),
-                child: Text(startAsyncClassificationText),
-              )),
-          containerElevatedButton(
+                onPressed: () {
+                  pickerDialog(
+                    _key,
+                    context,
+                    asyncAnalyseFrame,
+                  );
+                },
+                child: const Text(startAsyncClassificationText),
+              ),
+            ),
+            containerElevatedButton(
               context,
               ElevatedButton(
                 style: dangerbuttonStyle,
                 onPressed: stop,
-                child: Text(stopText),
-              )),
-        ],
-      )),
+                child: const Text(stopText),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
   @override
-  void analyseFrame(String? path) async {
-    String? pickedImagePath = await getImage(ImageSource.gallery);
-
-    if (pickedImagePath != null) {
-      final setting =
-          MLImageSuperResolutionAnalyzerSetting.create(path: pickedImagePath);
-
+  Future<void> analyseFrame(String? path) async {
+    if (path != null) {
       try {
-        List<MLImageSuperResolutionResult> list =
+        final MLImageSuperResolutionAnalyzerSetting setting =
+            MLImageSuperResolutionAnalyzerSetting.create(
+          path: path,
+        );
+        final List<MLImageSuperResolutionResult> list =
             await _analyzer.analyseFrame(setting);
-        list.forEach((element) {
+        for (MLImageSuperResolutionResult element in list) {
           setState(() {
             _image = Image.memory(element.bytes!);
           });
-        });
-      } on Exception catch (e) {
-        exceptionDialog(context, e.toString());
+        }
+      } catch (e) {
+        exceptionDialog(context, '$e');
       }
     }
   }
 
   @override
-  void asyncAnalyseFrame(String? path) async {
-    String? pickedImagePath = await getImage(ImageSource.gallery);
-
-    if (pickedImagePath != null) {
-      final setting =
-          MLImageSuperResolutionAnalyzerSetting.create(path: pickedImagePath);
-
+  Future<void> asyncAnalyseFrame(String? path) async {
+    if (path != null) {
       try {
-        MLImageSuperResolutionResult result =
+        final MLImageSuperResolutionAnalyzerSetting setting =
+            MLImageSuperResolutionAnalyzerSetting.create(
+          path: path,
+        );
+        final MLImageSuperResolutionResult result =
             await _analyzer.asyncAnalyseFrame(setting);
-        setState(() => _image = Image.memory(result.bytes!));
-      } on Exception catch (e) {
-        exceptionDialog(context, e.toString());
+        setState(() {
+          _image = Image.memory(result.bytes!);
+        });
+      } catch (e) {
+        exceptionDialog(context, '$e');
       }
     }
   }
 
   @override
-  void stop() async {
+  Future<void> stop() async {
     try {
       await _analyzer.stop();
-    } on Exception catch (e) {
-      exceptionDialog(context, e.toString());
+    } catch (e) {
+      exceptionDialog(context, '$e');
     }
   }
 }

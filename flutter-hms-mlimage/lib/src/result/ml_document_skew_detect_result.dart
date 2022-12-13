@@ -14,16 +14,16 @@
     limitations under the License.
 */
 
-import 'ml_point.dart';
+part of huawei_ml_image;
 
 class MLDocumentSkewDetectResult {
-  MLImagePoint? leftTop;
-  MLImagePoint? leftBottom;
-  MLImagePoint? rightTop;
-  MLImagePoint? rightBottom;
-  int? resultCode;
+  final MLImagePoint? leftTop;
+  final MLImagePoint? leftBottom;
+  final MLImagePoint? rightTop;
+  final MLImagePoint? rightBottom;
+  final int? resultCode;
 
-  MLDocumentSkewDetectResult({
+  const MLDocumentSkewDetectResult._({
     this.leftBottom,
     this.leftTop,
     this.resultCode,
@@ -31,8 +31,8 @@ class MLDocumentSkewDetectResult {
     this.rightTop,
   });
 
-  factory MLDocumentSkewDetectResult.fromJson(Map<String, dynamic> json) {
-    return MLDocumentSkewDetectResult(
+  factory MLDocumentSkewDetectResult.fromJson(Map<dynamic, dynamic> json) {
+    return MLDocumentSkewDetectResult._(
       leftTop: json['leftTop'] != null
           ? MLImagePoint(
               x: json['leftTop']['x'],
@@ -57,7 +57,7 @@ class MLDocumentSkewDetectResult {
               y: json['rightBottom']['y'],
             )
           : null,
-      resultCode: json['resultCode'] ?? null,
+      resultCode: json['resultCode'],
     );
   }
 }

@@ -14,31 +14,39 @@
     limitations under the License.
 */
 
+part of huawei_ml_image;
+
 class MLLandmarkAnalyzerSetting {
   static const int STEADY_PATTERN = 1;
-
   static const int NEWEST_PATTERN = 2;
 
-  String path;
-  int? patternType;
-  int? largestNumberOfReturns;
+  final String path;
+  final int? patternType;
+  final int? largestNumberOfReturns;
 
-  factory MLLandmarkAnalyzerSetting.create(
-      {required String path, int? patternType, int? largestNumberOfReturns}) {
+  const MLLandmarkAnalyzerSetting._({
+    required this.path,
+    this.largestNumberOfReturns,
+    this.patternType,
+  });
+
+  factory MLLandmarkAnalyzerSetting.create({
+    required String path,
+    int? patternType,
+    int? largestNumberOfReturns,
+  }) {
     return MLLandmarkAnalyzerSetting._(
-        path: path,
-        largestNumberOfReturns: largestNumberOfReturns,
-        patternType: patternType);
+      path: path,
+      largestNumberOfReturns: largestNumberOfReturns,
+      patternType: patternType,
+    );
   }
 
-  MLLandmarkAnalyzerSetting._(
-      {required this.path, this.largestNumberOfReturns, this.patternType});
-
   Map<String, dynamic> toMap() {
-    return {
-      "path": path,
-      "largestNumberOfReturns": largestNumberOfReturns ?? 10,
-      "patternType": patternType ?? STEADY_PATTERN
+    return <String, dynamic>{
+      'path': path,
+      'largestNumberOfReturns': largestNumberOfReturns ?? 10,
+      'patternType': patternType ?? STEADY_PATTERN,
     };
   }
 }

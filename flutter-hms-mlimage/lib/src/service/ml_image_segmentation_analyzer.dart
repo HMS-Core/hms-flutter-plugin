@@ -14,60 +14,55 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
-import 'package:huawei_ml_image/src/common/base_image_analyzer.dart';
-import 'package:huawei_ml_image/src/common/constants.dart';
-import 'package:huawei_ml_image/src/common/method.dart';
-import 'package:huawei_ml_image/src/request/ml_segmentation_analyzer_setting.dart';
-import 'package:huawei_ml_image/src/result/ml_image_segmentation.dart';
+part of huawei_ml_image;
 
 class MLImageSegmentationAnalyzer
     implements BaseImageAnalyzer<dynamic, MLImageSegmentationAnalyzerSetting> {
   static const int TYPE_BACKGROUND = 0;
-
   static const int TYPE_HUMAN = 1;
-
   static const int TYPE_SKY = 2;
-
   static const int TYPE_GRASS = 3;
-
   static const int TYPE_FOOD = 4;
-
   static const int TYPE_CAT = 5;
-
   static const int TYPE_BUILD = 6;
-
   static const int TYPE_FLOWER = 7;
-
   static const int TYPE_WATER = 8;
-
   static const int TYPE_SAND = 9;
-
   static const int TYPE_MOUNTAIN = 10;
 
   late MethodChannel _methodChannel;
 
   MLImageSegmentationAnalyzer() {
-    _methodChannel = MethodChannel("$baseChannel.segmentation");
+    _methodChannel = const MethodChannel('$baseChannel.segmentation');
   }
 
   @override
   Future<List<MLImageSegmentation>> analyseFrame(
-      MLImageSegmentationAnalyzerSetting setting) async {
-    List res =
-        await _methodChannel.invokeMethod(mAnalyzeFrame, setting.toMap());
-    return res.map((e) => MLImageSegmentation.fromMap(e)).toList();
+    MLImageSegmentationAnalyzerSetting setting,
+  ) async {
+    final List<dynamic> res = await _methodChannel.invokeMethod(
+      mAnalyzeFrame,
+      setting.toMap(),
+    );
+    return res.map((dynamic e) => MLImageSegmentation.fromMap(e)).toList();
   }
 
   @override
   Future<MLImageSegmentation> asyncAnalyseFrame(
-      MLImageSegmentationAnalyzerSetting setting) async {
-    return new MLImageSegmentation.fromMap(
-        await _methodChannel.invokeMethod(mAsyncAnalyzeFrame, setting.toMap()));
+    MLImageSegmentationAnalyzerSetting setting,
+  ) async {
+    return MLImageSegmentation.fromMap(
+      await _methodChannel.invokeMethod(
+        mAsyncAnalyzeFrame,
+        setting.toMap(),
+      ),
+    );
   }
 
   @override
   Future<bool> stop() async {
-    return await _methodChannel.invokeMethod(mStop);
+    return await _methodChannel.invokeMethod(
+      mStop,
+    );
   }
 }

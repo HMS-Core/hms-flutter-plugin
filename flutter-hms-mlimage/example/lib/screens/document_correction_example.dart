@@ -16,81 +16,85 @@
 
 import 'package:flutter/material.dart';
 import 'package:huawei_ml_image/huawei_ml_image.dart';
+import 'package:huawei_ml_image_example/utils/constants.dart';
+import 'package:huawei_ml_image_example/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../utils/constants.dart';
-import '../utils/utils.dart';
-
 class DocumentCorrectionExample extends StatefulWidget {
+  const DocumentCorrectionExample({Key? key}) : super(key: key);
+
   @override
-  _DocumentCorrectionExampleState createState() =>
+  State<DocumentCorrectionExample> createState() =>
       _DocumentCorrectionExampleState();
 }
 
 class _DocumentCorrectionExampleState extends State<DocumentCorrectionExample> {
-  late MLDocumentSkewCorrectionAnalyzer _analyzer;
-
+  final MLDocumentSkewCorrectionAnalyzer _analyzer =
+      MLDocumentSkewCorrectionAnalyzer();
   int? _detectionResultCode;
   Image? _image;
 
   @override
-  void initState() {
-    _analyzer = MLDocumentSkewCorrectionAnalyzer();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: demoAppBar("Doc. Skew Correction Demo"),
+      appBar: demoAppBar('Doc. Skew Correction Demo'),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              resultBox(detectionResultCode, _detectionResultCode, context),
+            children: <Widget>[
+              resultBox(
+                detectionResultCode,
+                _detectionResultCode,
+                context,
+              ),
               Container(
                 color: kGrayColor,
-                margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                 width: context.width,
                 height: context.width,
-                child: _image != null ? _image : Image.asset(tisImage),
+                child: _image ?? Image.asset(tisImage),
               ),
               containerElevatedButton(
-                  context,
-                  ElevatedButton(
-                    style: buttonStyle,
-                    onPressed: _startDetection,
-                    child: Text(startDocumentDetection),
-                  )),
+                context,
+                ElevatedButton(
+                  style: buttonStyle,
+                  onPressed: _startDetection,
+                  child: const Text(startDocumentDetection),
+                ),
+              ),
               containerElevatedButton(
-                  context,
-                  ElevatedButton(
-                    style: buttonStyle,
-                    onPressed: _startCorrection,
-                    child: Text(startDocumentCorrection),
-                  )),
+                context,
+                ElevatedButton(
+                  style: buttonStyle,
+                  onPressed: _startCorrection,
+                  child: const Text(startDocumentCorrection),
+                ),
+              ),
               containerElevatedButton(
-                  context,
-                  ElevatedButton(
-                    style: buttonStyle,
-                    onPressed: _startAsyncDetection,
-                    child: Text(startAsyncDocumentDetection),
-                  )),
+                context,
+                ElevatedButton(
+                  style: buttonStyle,
+                  onPressed: _startAsyncDetection,
+                  child: const Text(startAsyncDocumentDetection),
+                ),
+              ),
               containerElevatedButton(
-                  context,
-                  ElevatedButton(
-                    style: buttonStyle,
-                    onPressed: _startAsyncCorrection,
-                    child: Text(startAsyncDocumentCorrection),
-                  )),
+                context,
+                ElevatedButton(
+                  style: buttonStyle,
+                  onPressed: _startAsyncCorrection,
+                  child: const Text(startAsyncDocumentCorrection),
+                ),
+              ),
               containerElevatedButton(
-                  context,
-                  ElevatedButton(
-                    style: dangerbuttonStyle,
-                    onPressed: _stopRecognition,
-                    child: Text(stopText),
-                  )),
+                context,
+                ElevatedButton(
+                  style: dangerbuttonStyle,
+                  onPressed: _stopRecognition,
+                  child: const Text(stopText),
+                ),
+              ),
             ],
           ),
         ),
@@ -98,61 +102,71 @@ class _DocumentCorrectionExampleState extends State<DocumentCorrectionExample> {
     );
   }
 
-  _startDetection() async {
-    String? pickedImagePath = await getImage(ImageSource.gallery);
+  Future<void> _startDetection() async {
+    try {
+      final String? pickedImagePath = await getImage(ImageSource.gallery);
 
-    if (pickedImagePath != null) {
-      try {
-        MLDocumentSkewDetectResult result =
+      if (pickedImagePath != null) {
+        final MLDocumentSkewDetectResult result =
             await _analyzer.analyseFrame(pickedImagePath);
-        setState(() => _detectionResultCode = result.resultCode);
-      } on Exception catch (e) {
-        exceptionDialog(context, e.toString());
+        setState(() {
+          _detectionResultCode = result.resultCode;
+        });
       }
+    } catch (e) {
+      exceptionDialog(context, '$e');
     }
   }
 
-  _startCorrection() async {
+  Future<void> _startCorrection() async {
     try {
-      MLDocumentSkewCorrectionResult result =
+      final MLDocumentSkewCorrectionResult result =
           await _analyzer.syncDocumentSkewCorrect();
-      if (result.bytes != null)
-        setState(() => _image = Image.memory(result.bytes!));
-    } on Exception catch (e) {
-      exceptionDialog(context, e.toString());
-    }
-  }
-
-  _startAsyncDetection() async {
-    String? pickedImagePath = await getImage(ImageSource.gallery);
-
-    if (pickedImagePath != null) {
-      try {
-        MLDocumentSkewDetectResult result =
-            await _analyzer.asyncDocumentSkewDetect(pickedImagePath);
-        setState(() => _detectionResultCode = result.resultCode);
-      } on Exception catch (e) {
-        exceptionDialog(context, e.toString());
+      if (result.bytes != null) {
+        setState(() {
+          _image = Image.memory(result.bytes!);
+        });
       }
+    } catch (e) {
+      exceptionDialog(context, '$e');
     }
   }
 
-  _startAsyncCorrection() async {
+  Future<void> _startAsyncDetection() async {
     try {
-      MLDocumentSkewCorrectionResult result =
-          await _analyzer.asyncDocumentSkewCorrect();
-      if (result.bytes != null)
-        setState(() => _image = Image.memory(result.bytes!));
-    } on Exception catch (e) {
-      exceptionDialog(context, e.toString());
+      final String? pickedImagePath = await getImage(ImageSource.gallery);
+
+      if (pickedImagePath != null) {
+        final MLDocumentSkewDetectResult result =
+            await _analyzer.asyncDocumentSkewDetect(pickedImagePath);
+        setState(() {
+          _detectionResultCode = result.resultCode;
+        });
+      }
+    } catch (e) {
+      exceptionDialog(context, '$e');
     }
   }
 
-  _stopRecognition() async {
+  Future<void> _startAsyncCorrection() async {
+    try {
+      final MLDocumentSkewCorrectionResult result =
+          await _analyzer.asyncDocumentSkewCorrect();
+      if (result.bytes != null) {
+        setState(() {
+          _image = Image.memory(result.bytes!);
+        });
+      }
+    } catch (e) {
+      exceptionDialog(context, '$e');
+    }
+  }
+
+  Future<void> _stopRecognition() async {
     try {
       await _analyzer.stop();
-    } on Exception catch (e) {
-      exceptionDialog(context, e.toString());
+    } catch (e) {
+      exceptionDialog(context, '$e');
     }
   }
 }

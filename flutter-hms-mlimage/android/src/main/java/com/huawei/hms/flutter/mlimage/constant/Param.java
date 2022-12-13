@@ -17,11 +17,6 @@
 package com.huawei.hms.flutter.mlimage.constant;
 
 public interface Param {
-    // Permission params
-    String LIST = "list";
-    String CAMERA = "camera";
-    String STORAGE = "storage";
-
     // Classification params
     String CLASSIFICATION_IDENTITY = "classificationIdentity";
     String NAME = "name";

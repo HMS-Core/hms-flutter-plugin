@@ -16,121 +16,116 @@
 
 import 'package:flutter/material.dart';
 import 'package:huawei_ml_image/huawei_ml_image.dart';
+import 'package:huawei_ml_image_example/utils/constants.dart';
+import 'package:huawei_ml_image_example/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../utils/constants.dart';
-import '../utils/utils.dart';
-
 class ProductExample extends StatefulWidget {
+  const ProductExample({Key? key}) : super(key: key);
+
   @override
-  _ProductExampleState createState() => _ProductExampleState();
+  State<ProductExample> createState() => _ProductExampleState();
 }
 
 class _ProductExampleState extends State<ProductExample> {
-  late MLProductVisionSearchAnalyzer _analyzer;
-
-  dynamic _length;
-
-  @override
-  void initState() {
-    _analyzer = MLProductVisionSearchAnalyzer();
-    _setApiKey();
-    super.initState();
-  }
-
-  _setApiKey() {
-    MLImageApplication().setApiKey(apiKey);
-  }
+  final MLProductVisionSearchAnalyzer _analyzer =
+      MLProductVisionSearchAnalyzer();
+  String? _length;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: demoAppBar("Product Search Demo"),
+      appBar: demoAppBar('Product Search Demo'),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Container(
               color: kGrayColor,
-              margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+              margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
               width: context.width * 0.4,
               height: context.width * 0.4,
               child: Image.asset(
                 productImage,
               ),
             ),
-            resultBox(productDetection, _length, context),
+            resultBox(
+              productDetection,
+              _length,
+              context,
+            ),
             containerElevatedButton(
-                context,
-                ElevatedButton(
-                  style: buttonStyle,
-                  onPressed: _detectWithLocalImage,
-                  child: Text(detectWithLocalImage),
-                )),
+              context,
+              ElevatedButton(
+                style: buttonStyle,
+                onPressed: _detectWithLocalImage,
+                child: const Text(detectWithLocalImage),
+              ),
+            ),
             containerElevatedButton(
-                context,
-                ElevatedButton(
-                  style: buttonStyle,
-                  onPressed: _detectWithCapturing,
-                  child: Text(detectWithCapturing),
-                )),
+              context,
+              ElevatedButton(
+                style: buttonStyle,
+                onPressed: _detectWithCapturing,
+                child: const Text(detectWithCapturing),
+              ),
+            ),
             containerElevatedButton(
-                context,
-                ElevatedButton(
-                  style: buttonStyle,
-                  onPressed: _stopRecognition,
-                  child: Text(stopText),
-                )),
+              context,
+              ElevatedButton(
+                style: buttonStyle,
+                onPressed: _stopRecognition,
+                child: const Text(stopText),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  _detectWithLocalImage() async {
-    String? pickedImagePath = await getImage(ImageSource.gallery);
-
-    if (pickedImagePath != null) {
-      try {
-        final setting = MLProductVisionSearchAnalyzerSetting.local(
-            path: pickedImagePath, productSetId: phone);
-        List<MlProductVisualSearch?> list =
-            await _analyzer.searchProduct(setting);
-
-        if (list.isNotEmpty) {
-          setState(() => _length = list.length);
-        } else {
-          setState(() => _length = listIsEmpty);
-        }
-      } on Exception catch (e) {
-        exceptionDialog(context, e.toString());
-      }
-    }
-  }
-
-  _detectWithCapturing() async {
-    final setting =
-        MLProductVisionSearchAnalyzerSetting.plugin(productSetId: bags);
-
+  void _detectWithLocalImage() async {
     try {
-      List<MLProductCaptureResult?> list =
-          await _analyzer.searchProductWithPlugin(setting);
+      final String? pickedImagePath = await getImage(ImageSource.gallery);
 
-      if (list.isNotEmpty) {
-        setState(() => _length = list.length);
-      } else {
-        setState(() => _length = listIsEmpty);
+      if (pickedImagePath != null) {
+        final MLProductVisionSearchAnalyzerSetting setting =
+            MLProductVisionSearchAnalyzerSetting.local(
+          path: pickedImagePath,
+          productSetId: phone,
+        );
+        final List<MlProductVisualSearch?> list =
+            await _analyzer.searchProduct(setting);
+        setState(() {
+          _length = list.isNotEmpty ? '${list.length}' : listIsEmpty;
+        });
       }
-    } on Exception catch (e) {
-      exceptionDialog(context, e.toString());
+    } catch (e) {
+      exceptionDialog(context, '$e');
     }
   }
 
-  _stopRecognition() async {
+  void _detectWithCapturing() async {
+    try {
+      final MLProductVisionSearchAnalyzerSetting setting =
+          MLProductVisionSearchAnalyzerSetting.plugin(
+        productSetId: bags,
+      );
+      final List<MLProductCaptureResult?> list =
+          await _analyzer.searchProductWithPlugin(setting);
+      setState(() {
+        _length = list.isNotEmpty ? '${list.length}' : listIsEmpty;
+      });
+    } catch (e) {
+      exceptionDialog(context, '$e');
+    }
+  }
+
+  void _stopRecognition() async {
     try {
       await _analyzer.stopProductAnalyzer();
-    } on Exception catch (e) {
-      exceptionDialog(context, e.toString());
+    } catch (e) {
+      exceptionDialog(context, '$e');
     }
   }
 }

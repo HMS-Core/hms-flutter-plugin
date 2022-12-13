@@ -14,48 +14,48 @@
     limitations under the License.
 */
 
+part of huawei_ml_image;
+
 class MLModelInputOutputSettings {
   static const int FLOAT32 = 1;
-
   static const int INT32 = 2;
-
   static const int BYTE = 3;
-
   static const int LONG = 4;
 
   int? _modelDataType;
-  late List<int> _inputs;
-  late List<int> _outputs;
+  final List<int> _inputs = List<int>.filled(4, 0, growable: false);
+  final List<int> _outputs = List<int>.filled(2, 0, growable: false);
 
-  MLModelInputOutputSettings() {
-    _inputs = List.filled(4, 0, growable: false);
-    _outputs = List.filled(2, 0, growable: false);
-  }
-
-  /// for example FLOAT32
+  /// for example 1 for FLOAT32
   void setDataType(int type) {
-    this._modelDataType = type;
+    _modelDataType = type;
   }
 
   /// for example [1, 224, 224, 3]
   void setInputList(List<int> inputList) {
-    if (inputList.length < 4) throw "List length must be 4";
-
+    if (inputList.length < 4) {
+      throw 'List length must be 4';
+    }
     for (int i = 0; i < _inputs.length; i++) {
       _inputs[i] = inputList[i];
     }
   }
 
-  /// for example [1 1001]
+  /// for example [1, 1001]
   void setOutputList(List<int> outputList) {
-    if (outputList.length < 2) throw "List length must be 2";
-
+    if (outputList.length < 2) {
+      throw 'List length must be 2';
+    }
     for (int i = 0; i < _outputs.length; i++) {
       _outputs[i] = outputList[i];
     }
   }
 
-  Map toMap() {
-    return {"type": _modelDataType, "inputs": _inputs, "outputs": _outputs};
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'type': _modelDataType,
+      'inputs': _inputs,
+      'outputs': _outputs,
+    };
   }
 }

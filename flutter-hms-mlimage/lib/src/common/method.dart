@@ -14,42 +14,44 @@
     limitations under the License.
 */
 
+part of huawei_ml_image;
+
 /// Classification
-const String asyncClassification = "asyncClassification";
-const String syncClassification = "syncClassification";
-const String mStop = "stop";
-const String mGetAnalyzerType = "getAnalyzerType";
+const String asyncClassification = 'asyncClassification';
+const String syncClassification = 'syncClassification';
+const String mStop = 'stop';
+const String mGetAnalyzerType = 'getAnalyzerType';
 
 /// Object
-const String mAnalyzeFrame = "analyzeFrame";
-const String mAsyncAnalyzeFrame = "asyncAnalyzeFrame";
-const String stopObject = "stopObjectAnalyzer";
+const String mAnalyzeFrame = 'analyzeFrame';
+const String mAsyncAnalyzeFrame = 'asyncAnalyzeFrame';
+const String stopObject = 'stopObjectAnalyzer';
 
 /// Document Skew Correction
-const String mSyncDocumentSkewCorrect = "syncDocumentSkewCorrect";
-const String mAsyncDocumentSkewDetect = "asyncDocumentSkewDetect";
-const String mAsyncDocumentSkewCorrect = "asyncDocumentSkewCorrect";
+const String mSyncDocumentSkewCorrect = 'syncDocumentSkewCorrect';
+const String mAsyncDocumentSkewDetect = 'asyncDocumentSkewDetect';
+const String mAsyncDocumentSkewCorrect = 'asyncDocumentSkewCorrect';
 
 /// Custom Model
-const String mCreateBitmap = "createBitmap";
-const String mDownloadRemoteModel = "downloadRemoteModel";
-const String mPrepareExecutor = "prepareExecutor";
-const String mStartExecutor = "startExecutor";
-const String mGetOutputIndex = "getOutputIndex";
-const String mStopModelExecutor = "stopModelExecutor";
+const String mCreateBitmap = 'createBitmap';
+const String mDownloadRemoteModel = 'downloadRemoteModel';
+const String mPrepareExecutor = 'prepareExecutor';
+const String mStartExecutor = 'startExecutor';
+const String mGetOutputIndex = 'getOutputIndex';
+const String mStopModelExecutor = 'stopModelExecutor';
 
 /// Product Vision
-const String mAnalyzeProduct = "analyzeProduct";
-const String mAnalyzeProductWithPlugin = "analyzeProductWithPlugin";
-const String mStopProductAnalyzer = "stopProductAnalyzer";
+const String mAnalyzeProduct = 'analyzeProduct';
+const String mAnalyzeProductWithPlugin = 'analyzeProductWithPlugin';
+const String mStopProductAnalyzer = 'stopProductAnalyzer';
 
 /// Lens Engine
-const String setup = "lens#setup";
-const String mInit = "lens#init";
-const String mRun = "lens#run";
-const String mRelease = "lens#release";
-const String mCapture = "lens#capture";
-const String mZoom = "lens#zoom";
-const String mGetLensType = "lens#getLensType";
-const String mGetDimensions = "lens#getDimensions";
-const String mSwitchCam = "lens#switchCam";
+const String setup = 'lens#setup';
+const String mInit = 'lens#init';
+const String mRun = 'lens#run';
+const String mRelease = 'lens#release';
+const String mCapture = 'lens#capture';
+const String mZoom = 'lens#zoom';
+const String mGetLensType = 'lens#getLensType';
+const String mGetDimensions = 'lens#getDimensions';
+const String mSwitchCam = 'lens#switchCam';

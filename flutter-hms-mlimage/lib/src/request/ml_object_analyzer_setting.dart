@@ -14,40 +14,44 @@
     limitations under the License.
 */
 
+part of huawei_ml_image;
+
 class MLObjectAnalyzerSetting {
   static const int TYPE_PICTURE = 0;
-
   static const int TYPE_VIDEO = 1;
 
-  String path;
-  bool? allowMultiResults;
-  bool? allowClassification;
-  int? analyzerType;
+  final String path;
+  final bool? allowMultiResults;
+  final bool? allowClassification;
+  final int? analyzerType;
 
-  factory MLObjectAnalyzerSetting.create(
-      {required String path,
-      bool? allowMultiResults,
-      bool? allowClassification,
-      int? analyzerType}) {
+  const MLObjectAnalyzerSetting._({
+    required this.path,
+    this.analyzerType,
+    this.allowClassification,
+    this.allowMultiResults,
+  });
+
+  factory MLObjectAnalyzerSetting.create({
+    required String path,
+    bool? allowMultiResults,
+    bool? allowClassification,
+    int? analyzerType,
+  }) {
     return MLObjectAnalyzerSetting._(
-        path: path,
-        allowClassification: allowClassification,
-        allowMultiResults: allowMultiResults,
-        analyzerType: analyzerType);
+      path: path,
+      allowClassification: allowClassification,
+      allowMultiResults: allowMultiResults,
+      analyzerType: analyzerType,
+    );
   }
 
-  MLObjectAnalyzerSetting._(
-      {required this.path,
-      this.analyzerType,
-      this.allowClassification,
-      this.allowMultiResults});
-
   Map<String, dynamic> toMap() {
-    return {
-      "path": path,
-      "analyzerType": analyzerType ?? TYPE_PICTURE,
-      "allowMultiResults": allowMultiResults ?? true,
-      "allowClassification": allowClassification ?? true
+    return <String, dynamic>{
+      'path': path,
+      'analyzerType': analyzerType ?? TYPE_PICTURE,
+      'allowMultiResults': allowMultiResults ?? true,
+      'allowClassification': allowClassification ?? true,
     };
   }
 }

@@ -14,50 +14,55 @@
     limitations under the License.
 */
 
-import 'ml_border.dart';
+part of huawei_ml_image;
 
 class MLRemoteLandmark {
-  List<MLCoordinate?> positionInfos;
-  MLImageBorder? border;
-  String? landmark;
-  String? landmarkId;
-  dynamic possibility;
+  final List<MLCoordinate> positionInfos;
+  final MLImageBorder? border;
+  final String? landmark;
+  final String? landmarkId;
+  final dynamic possibility;
 
-  MLRemoteLandmark(
-      {required this.positionInfos,
-      this.border,
-      this.landmark,
-      this.landmarkId,
-      this.possibility});
+  const MLRemoteLandmark._({
+    required this.positionInfos,
+    this.border,
+    this.landmark,
+    this.landmarkId,
+    this.possibility,
+  });
 
   factory MLRemoteLandmark.fromMap(Map<dynamic, dynamic> map) {
-    var positions = List<MLCoordinate>.empty(growable: true);
+    final List<MLCoordinate> positions = <MLCoordinate>[];
 
     if (map['positionInfos'] != null) {
-      map['positionInfos'].forEach((v) {
+      map['positionInfos'].forEach((dynamic v) {
         positions.add(MLCoordinate.fromMap(v));
       });
     }
-
-    return MLRemoteLandmark(
-      border: map['border'] != null
-          ? new MLImageBorder.fromMap(map['border'])
-          : null,
-      landmark: map['landmark'] ?? null,
-      landmarkId: map['landmarkIdentity'] ?? null,
-      possibility: map['possibility'] ?? null,
+    return MLRemoteLandmark._(
+      border:
+          map['border'] != null ? MLImageBorder.fromMap(map['border']) : null,
+      landmark: map['landmark'],
+      landmarkId: map['landmarkIdentity'],
+      possibility: map['possibility'],
       positionInfos: positions,
     );
   }
 }
 
 class MLCoordinate {
-  double? lat;
-  double? lng;
+  final double? lat;
+  final double? lng;
 
-  MLCoordinate({this.lat, this.lng});
+  const MLCoordinate._({
+    this.lat,
+    this.lng,
+  });
 
   factory MLCoordinate.fromMap(Map<dynamic, dynamic> map) {
-    return MLCoordinate(lat: map['lat'] ?? null, lng: map['lng'] ?? null);
+    return MLCoordinate._(
+      lat: map['lat'],
+      lng: map['lng'],
+    );
   }
 }

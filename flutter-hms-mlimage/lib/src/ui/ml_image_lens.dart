@@ -14,13 +14,9 @@
     limitations under the License.
 */
 
-import 'package:flutter/material.dart';
+part of huawei_ml_image;
 
 class MLImageLens extends StatefulWidget {
-  final int? textureId;
-  final double? width;
-  final double? height;
-
   const MLImageLens({
     Key? key,
     this.textureId,
@@ -28,23 +24,31 @@ class MLImageLens extends StatefulWidget {
     this.height,
   }) : super(key: key);
 
+  final int? textureId;
+  final double? width;
+  final double? height;
+
   @override
-  _MLImageLensState createState() => _MLImageLensState();
+  State<MLImageLens> createState() => _MLImageLensState();
 }
 
 class _MLImageLensState extends State<MLImageLens> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: Colors.grey,
-        width: widget.width ?? MediaQuery.of(context).size.width * .8,
-        height: widget.height ?? MediaQuery.of(context).size.height * .8,
-        child: textureReady
-            ? Texture(textureId: widget.textureId!)
-            : const Center(
-                child: CircularProgressIndicator(
+      color: Colors.grey,
+      width: widget.width ?? MediaQuery.of(context).size.width * .8,
+      height: widget.height ?? MediaQuery.of(context).size.height * .8,
+      child: textureReady
+          ? Texture(
+              textureId: widget.textureId!,
+            )
+          : const Center(
+              child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
-              )));
+              ),
+            ),
+    );
   }
 
   bool get textureReady => widget.textureId != null;

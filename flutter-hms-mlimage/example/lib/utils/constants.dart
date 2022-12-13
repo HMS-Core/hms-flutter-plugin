@@ -16,68 +16,71 @@
 
 import 'package:flutter/material.dart';
 
-double getWidth(BuildContext context) => MediaQuery.of(context).size.width;
-double getHeight(BuildContext context) => MediaQuery.of(context).size.height;
+double getWidth(BuildContext context) {
+  return MediaQuery.of(context).size.width;
+}
 
-EdgeInsetsGeometry smallAllPadding(BuildContext context) =>
-    EdgeInsets.all(getHeight(context) * 0.01);
+double getHeight(BuildContext context) {
+  return MediaQuery.of(context).size.height;
+}
 
-EdgeInsetsGeometry smallPadding(BuildContext context) =>
-    EdgeInsets.only(top: getHeight(context) * 0.15);
+EdgeInsetsGeometry smallAllPadding(BuildContext context) {
+  return EdgeInsets.all(getHeight(context) * 0.01);
+}
+
+EdgeInsetsGeometry smallPadding(BuildContext context) {
+  return EdgeInsets.only(top: getHeight(context) * 0.15);
+}
 
 /// Strings
-const String cameraText = "USE CAMERA";
-const String galleryText = "PICK FROM GALLERY";
-const String exceptionText = "Exception";
-const String startRecognitionText = "Start Recognition";
-const String startSegmentationText = "Start Segmentation";
-const String startAsyncSegmentationText = "Start Async Segmentation";
-const String startClassificationText = "Start Classification";
-const String startAsyncClassificationText = "Start Async Classification";
-const String stopText = "Stop";
-const String noneText = "None";
-const String unknownText = "unknown";
-const String phone = "phone";
-const String bags = "bags";
-const String possibility = "Possibilities";
-const String confidences = "Confidences";
-const String classificationNames = "Classification Names";
-const String landmarkNames = "Landmark Names";
-const String listIsEmpty = "List is empty";
-const String objectTypes = "Object Types";
-const String detectionResultCode = "Detection Result Code";
-const String sceneDetectionResults = "Scene Detection Results";
-const String startSceneDetection = "Start Scene Detection";
-const String startAsyncSceneDetection = "Start Async Scene Detection";
-const String startObjectDetection = "Start Object Detection";
-const String startDocumentDetection = "Start Document Detection";
-const String startAsyncDocumentDetection = "Start Async Document Detection";
-const String startDocumentCorrection = "Start Document Correction";
-const String startImageResolution = "Start Image Resolution";
-const String startAsyncImageResolution = "Start Async Image Resolution";
-const String startAsyncDocumentCorrection = "Start Async Document Correction";
-const String startAsyncObjectDetection = "Start Async Object Detection";
-const String productDetection = "Detected product number";
-const String detectWithLocalImage = "Detect With Local Image";
-const String detectWithCapturing = "Detect With Capturing";
-const String homeAppbarText = "Hms ML Image Flutter Plugin";
+const String cameraText = 'USE CAMERA';
+const String galleryText = 'PICK FROM GALLERY';
+const String exceptionText = 'Exception';
+const String startRecognitionText = 'Start Recognition';
+const String startSegmentationText = 'Start Segmentation';
+const String startAsyncSegmentationText = 'Start Async Segmentation';
+const String startClassificationText = 'Start Classification';
+const String startAsyncClassificationText = 'Start Async Classification';
+const String stopText = 'Stop';
+const String noneText = 'None';
+const String unknownText = 'unknown';
+const String phone = 'phone';
+const String bags = 'bags';
+const String possibility = 'Possibilities';
+const String confidences = 'Confidences';
+const String classificationNames = 'Classification Names';
+const String landmarkNames = 'Landmark Names';
+const String listIsEmpty = 'List is empty';
+const String objectTypes = 'Object Types';
+const String detectionResultCode = 'Detection Result Code';
+const String sceneDetectionResults = 'Scene Detection Results';
+const String startSceneDetection = 'Start Scene Detection';
+const String startAsyncSceneDetection = 'Start Async Scene Detection';
+const String startObjectDetection = 'Start Object Detection';
+const String startDocumentDetection = 'Start Document Detection';
+const String startAsyncDocumentDetection = 'Start Async Document Detection';
+const String startDocumentCorrection = 'Start Document Correction';
+const String startImageResolution = 'Start Image Resolution';
+const String startAsyncImageResolution = 'Start Async Image Resolution';
+const String startAsyncDocumentCorrection = 'Start Async Document Correction';
+const String startAsyncObjectDetection = 'Start Async Object Detection';
+const String productDetection = 'Detected product number';
+const String detectWithLocalImage = 'Detect With Local Image';
+const String detectWithCapturing = 'Detect With Capturing';
+const String homeAppbarText = 'Hms ML Image Flutter Plugin';
 
 /// String image path
-const String userImage = "assets/user.png";
-const String addImage = "assets/addimage.png";
-const String objectImage = "assets/object.png";
-const String landmarkImage = "assets/landmark.png";
-const String selectImage = "assets/selectimg.png";
-const String textImage = "assets/textimg.png";
-const String tisImage = "assets/tisr.png";
-const String superImage = "assets/imgsuper.png";
-const String productImage = "assets/product.png";
-const String sceneImage = "assets/scenedt.png";
-const String bannerImage = "assets/banner.jpg";
-
-/// Api Keys
-const String apiKey =
-    "CgB6e3x9P33R+B2u+UHaEIK06gxzH883IZxpQc7BvJmmRgx8wl/sJ0bKGjlKNP46oiTtW6eWj4I73PXtjM2lcHhZ";
+const String userImage = 'assets/user.png';
+const String addImage = 'assets/addimage.png';
+const String objectImage = 'assets/object.png';
+const String landmarkImage = 'assets/landmark.png';
+const String selectImage = 'assets/selectimg.png';
+const String textImage = 'assets/textimg.png';
+const String tisImage = 'assets/tisr.png';
+const String superImage = 'assets/imgsuper.png';
+const String productImage = 'assets/product.png';
+const String sceneImage = 'assets/scenedt.png';
+const String bannerImage = 'assets/banner.jpg';
 
 /// colors
 const Color kPrimaryColor = Color.fromRGBO(109, 220, 207, 1);
@@ -92,8 +95,8 @@ extension ContextExtension on BuildContext {
 }
 
 extension MediaQueryExtension on BuildContext {
-  double get height => mediaQuery.size.height;
   double get width => mediaQuery.size.width;
+  double get height => mediaQuery.size.height;
 
   double get lowValue => height * 0.01;
   double get normalValue => height * 0.02;

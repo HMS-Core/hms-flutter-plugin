@@ -14,30 +14,32 @@
     limitations under the License.
 */
 
-class MLImageClassification {
-  String? classificationIdentity;
-  String? name;
-  dynamic possibility;
+part of huawei_ml_image;
 
-  MLImageClassification({
+class MLImageClassification {
+  final String? classificationIdentity;
+  final String? name;
+  final dynamic possibility;
+
+  const MLImageClassification._({
     this.classificationIdentity,
     this.name,
     this.possibility,
   });
 
-  factory MLImageClassification.fromJson(Map<String, dynamic> json) {
-    return MLImageClassification(
-      classificationIdentity: json['classificationIdentity'] ?? null,
-      name: json['name'] ?? null,
-      possibility: json['possibility'] ?? null,
+  factory MLImageClassification.fromJson(Map<dynamic, dynamic> json) {
+    return MLImageClassification._(
+      classificationIdentity: json['classificationIdentity'],
+      name: json['name'],
+      possibility: json['possibility'],
     );
   }
 
   factory MLImageClassification.fromTransaction(Map<dynamic, dynamic> map) {
-    return MLImageClassification(
-      classificationIdentity: map['classificationIdentity'] ?? null,
-      name: map['name'] ?? null,
-      possibility: map['possibility'] ?? null,
+    return MLImageClassification._(
+      classificationIdentity: map['classificationIdentity'],
+      name: map['name'],
+      possibility: map['possibility'],
     );
   }
 }

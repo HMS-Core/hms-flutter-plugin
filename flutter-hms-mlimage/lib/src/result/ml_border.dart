@@ -14,19 +14,27 @@
     limitations under the License.
 */
 
-class MLImageBorder {
-  int? bottom;
-  int? left;
-  int? right;
-  int? top;
+part of huawei_ml_image;
 
-  MLImageBorder({this.bottom, this.left, this.right, this.top});
+class MLImageBorder {
+  final int? bottom;
+  final int? left;
+  final int? right;
+  final int? top;
+
+  const MLImageBorder._({
+    this.bottom,
+    this.left,
+    this.right,
+    this.top,
+  });
 
   factory MLImageBorder.fromMap(Map<dynamic, dynamic> map) {
-    return MLImageBorder(
-        bottom: map['bottom'] ?? null,
-        left: map['left'] ?? null,
-        right: map['right'] ?? null,
-        top: map['top'] ?? null);
+    return MLImageBorder._(
+      bottom: map['bottom'],
+      left: map['left'],
+      right: map['right'],
+      top: map['top'],
+    );
   }
 }

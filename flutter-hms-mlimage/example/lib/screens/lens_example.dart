@@ -16,73 +16,54 @@
 
 import 'package:flutter/material.dart';
 import 'package:huawei_ml_image/huawei_ml_image.dart';
-
-import '../utils/constants.dart';
-import '../utils/utils.dart';
+import 'package:huawei_ml_image_example/utils/constants.dart';
+import 'package:huawei_ml_image_example/utils/utils.dart';
 
 class LensExample extends StatefulWidget {
   const LensExample({Key? key}) : super(key: key);
 
   @override
-  _LensExampleState createState() => _LensExampleState();
+  State<LensExample> createState() => _LensExampleState();
 }
 
 class _LensExampleState extends State<LensExample> {
-  final _permissions = MLImagePermissions();
-
-  final _controller = MLImageLensController(
-    transaction: ImageTransaction.classification,
-    lensType: MLImageLensController.backLens,
+  final MLImageLensEngine _lensEngine = MLImageLensEngine(
+    controller: MLImageLensController(
+      transaction: ImageTransaction.classification,
+      lensType: MLImageLensController.backLens,
+    ),
   );
-
-  late MLImageLensEngine _lensEngine;
   int? _textureId;
-  dynamic _objType = unknownText;
+  String? _objType = unknownText;
 
   @override
   void initState() {
-    _lensEngine = MLImageLensEngine(controller: _controller);
-    _lensEngine.setTransactor(_onTransaction);
-    _reqPermission();
-    _initialize();
     super.initState();
+    _lensEngine.setTransactor(({dynamic result}) {
+      setState(() {
+        _objType = (result as List<MLImageClassification>).first.name;
+      });
+    });
+    _initialize();
   }
 
-  void _reqPermission() async {
-    _permissions.requestPermission([
-      ImagePermission.camera,
-      ImagePermission.storage,
-    ]).then((value) {
-      debugPrint('permissions granted: $value');
-      if (!value) {
-        _reqPermission();
-      }
+  void _initialize() async {
+    await _lensEngine.init().then((int value) {
+      setState(() {
+        _textureId = value;
+      });
     });
   }
 
-  void _onTransaction({dynamic result}) {
-    _updateResult(result);
-  }
-
-  _updateResult(List<MLImageClassification> objects) {
-    setState(() => _objType = objects.first.name);
-  }
-
-  _initialize() async {
-    await _lensEngine.init().then((value) {
-      setState(() => _textureId = value);
-    });
-  }
-
-  _run() {
+  void _run() {
     try {
       _lensEngine.run();
-    } on Exception catch (e) {
-      exceptionDialog(context, e.toString());
+    } catch (e) {
+      exceptionDialog(context, '$e');
     }
   }
 
-  _release() {
+  void _release() {
     _lensEngine.release();
   }
 
@@ -91,7 +72,7 @@ class _LensExampleState extends State<LensExample> {
     return Scaffold(
       appBar: demoAppBar('Lens Example'),
       body: Column(
-        children: [
+        children: <Widget>[
           Expanded(
             child: MLImageLens(
               textureId: _textureId,
@@ -101,22 +82,30 @@ class _LensExampleState extends State<LensExample> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Text(" Object type: $_objType"),
+            child: Text('Object type: $_objType'),
           ),
-          _lensControllerWidget()
-        ],
-      ),
-    );
-  }
-
-  Widget _lensControllerWidget() {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: Row(
-        children: [
-          lensControllerButton(_initialize, const Color(0xff6e7c7c), "init"),
-          lensControllerButton(_run, const Color(0xff6ddccf), "start"),
-          lensControllerButton(_release, const Color(0xffec4646), "release"),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Row(
+              children: <Widget>[
+                lensControllerButton(
+                  _initialize,
+                  const Color(0xff6e7c7c),
+                  'init',
+                ),
+                lensControllerButton(
+                  _run,
+                  const Color(0xff6ddccf),
+                  'start',
+                ),
+                lensControllerButton(
+                  _release,
+                  const Color(0xffec4646),
+                  'release',
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

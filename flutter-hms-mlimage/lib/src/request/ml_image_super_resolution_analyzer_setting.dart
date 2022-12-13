@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_ml_image;
+
 class MLImageSuperResolutionAnalyzerSetting {
   /// 1x super-resolution, which is used to remove the blocking artifact caused by image compression.
   /// In this scenario, the maximum size of an input image is 1024 x 768 px or 768 x 1024 px.
@@ -27,10 +29,15 @@ class MLImageSuperResolutionAnalyzerSetting {
   static const double ISR_SCALE_3X = 3.0;
 
   /// Local image path obtained from device.
-  String path;
+  final String path;
 
   /// Scale for resolution.
-  double? scale;
+  final double? scale;
+
+  const MLImageSuperResolutionAnalyzerSetting._({
+    required this.path,
+    this.scale,
+  });
 
   /// Creates an [MLImageSuperResolutionAnalyzerSetting] instance.
   ///
@@ -38,15 +45,21 @@ class MLImageSuperResolutionAnalyzerSetting {
   ///        This parameter must not be null.
   ///
   /// [scale] scale option for resolution.
-  factory MLImageSuperResolutionAnalyzerSetting.create(
-      {required String path, double? scale}) {
-    return MLImageSuperResolutionAnalyzerSetting._(path: path, scale: scale);
+  factory MLImageSuperResolutionAnalyzerSetting.create({
+    required String path,
+    double? scale,
+  }) {
+    return MLImageSuperResolutionAnalyzerSetting._(
+      path: path,
+      scale: scale,
+    );
   }
-
-  MLImageSuperResolutionAnalyzerSetting._({required this.path, this.scale});
 
   /// Returns a map from properties.
   Map<String, dynamic> toMap() {
-    return {"path": path, "scale": scale ?? ISR_SCALE_3X};
+    return <String, dynamic>{
+      'path': path,
+      'scale': scale ?? ISR_SCALE_3X,
+    };
   }
 }

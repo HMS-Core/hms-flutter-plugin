@@ -16,44 +16,37 @@
 
 import 'package:flutter/material.dart';
 import 'package:huawei_ml_image/huawei_ml_image.dart';
+import 'package:huawei_ml_image_example/utils/constants.dart';
+import 'package:huawei_ml_image_example/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../utils/constants.dart';
-import '../utils/utils.dart';
-
 class LandmarkExample extends StatefulWidget {
+  const LandmarkExample({Key? key}) : super(key: key);
+
   @override
-  _LandmarkExampleState createState() => _LandmarkExampleState();
+  State<LandmarkExample> createState() => _LandmarkExampleState();
 }
 
 class _LandmarkExampleState extends State<LandmarkExample> {
-  final _key = GlobalKey<ScaffoldState>();
-
-  late MLLandmarkAnalyzer _analyzer;
-  List _names = [];
-  List _possibilities = [];
-
-  @override
-  void initState() {
-    _analyzer = MLLandmarkAnalyzer();
-    _setApiKey();
-    super.initState();
-  }
-
-  _setApiKey() {
-    MLImageApplication().setApiKey(apiKey);
-  }
+  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
+  final MLLandmarkAnalyzer _analyzer = MLLandmarkAnalyzer();
+  final List<String?> _names = <String?>[];
+  final List<dynamic> _possibilities = <dynamic>[];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _key,
-      appBar: demoAppBar("Landmark Recognition Demo"),
+      appBar: demoAppBar('Landmark Recognition Demo'),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            resultBox(landmarkNames, _names, context),
+          children: <Widget>[
+            resultBox(
+              landmarkNames,
+              _names,
+              context,
+            ),
             Container(
               color: kGrayColor,
               margin: context.paddingLow,
@@ -61,52 +54,61 @@ class _LandmarkExampleState extends State<LandmarkExample> {
               height: context.highValue,
               child: Image.asset(landmarkImage),
             ),
-            resultBox(possibility, _possibilities, context),
+            resultBox(
+              possibility,
+              _possibilities,
+              context,
+            ),
             containerElevatedButton(
-                context,
-                ElevatedButton(
-                  style: buttonStyle,
-                  onPressed: _startRecognition,
-                  child: Text(startAsyncClassificationText),
-                )),
+              context,
+              ElevatedButton(
+                style: buttonStyle,
+                onPressed: _startRecognition,
+                child: const Text(startAsyncClassificationText),
+              ),
+            ),
             containerElevatedButton(
-                context,
-                ElevatedButton(
-                  style: dangerbuttonStyle,
-                  onPressed: _stopRecognition,
-                  child: Text(stopText),
-                )),
+              context,
+              ElevatedButton(
+                style: dangerbuttonStyle,
+                onPressed: _stopRecognition,
+                child: const Text(stopText),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  _startRecognition() async {
-    String? pickedImagePath = await getImage(ImageSource.gallery);
+  Future<void> _startRecognition() async {
+    try {
+      final String? pickedImagePath = await getImage(ImageSource.gallery);
 
-    if (pickedImagePath != null) {
-      final setting = MLLandmarkAnalyzerSetting.create(path: pickedImagePath);
-      try {
-        List<MLRemoteLandmark> list =
+      if (pickedImagePath != null) {
+        final MLLandmarkAnalyzerSetting setting =
+            MLLandmarkAnalyzerSetting.create(
+          path: pickedImagePath,
+        );
+        final List<MLRemoteLandmark> list =
             await _analyzer.asyncAnalyseFrame(setting);
-        list.forEach((element) {
+        for (MLRemoteLandmark element in list) {
           setState(() {
             _names.add(element.landmark);
             _possibilities.add(element.possibility);
           });
-        });
-      } on Exception catch (e) {
-        exceptionDialog(context, e.toString());
+        }
       }
+    } catch (e) {
+      exceptionDialog(context, '$e');
     }
   }
 
-  _stopRecognition() async {
+  Future<void> _stopRecognition() async {
     try {
       await _analyzer.stopLandmarkDetection();
-    } on Exception catch (e) {
-      exceptionDialog(context, e.toString());
+    } catch (e) {
+      exceptionDialog(context, '$e');
     }
   }
 }

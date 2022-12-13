@@ -14,14 +14,21 @@
     limitations under the License.
 */
 
-class MLSceneDetection {
-  String? result;
-  dynamic confidence;
+part of huawei_ml_image;
 
-  MLSceneDetection({this.confidence, this.result});
+class MLSceneDetection {
+  final String? result;
+  final dynamic confidence;
+
+  const MLSceneDetection._({
+    this.confidence,
+    this.result,
+  });
 
   factory MLSceneDetection.fromJson(Map<dynamic, dynamic> json) {
-    return MLSceneDetection(
-        result: json['result'] ?? null, confidence: json['confidence'] ?? null);
+    return MLSceneDetection._(
+      result: json['result'],
+      confidence: json['confidence'],
+    );
   }
 }

@@ -14,22 +14,27 @@
     limitations under the License.
 */
 
-import 'dart:typed_data';
+part of huawei_ml_image;
 
 class MLImageSegmentation {
-  Uint8List? foreground;
-  Uint8List? grayscale;
-  Uint8List? original;
-  Uint8List? masks;
+  final Uint8List? foreground;
+  final Uint8List? grayscale;
+  final Uint8List? original;
+  final Uint8List? masks;
 
-  MLImageSegmentation(
-      {this.foreground, this.grayscale, this.original, this.masks});
+  const MLImageSegmentation._({
+    this.foreground,
+    this.grayscale,
+    this.original,
+    this.masks,
+  });
 
   factory MLImageSegmentation.fromMap(Map<dynamic, dynamic> map) {
-    return MLImageSegmentation(
-        foreground: map['foreground'] ?? null,
-        grayscale: map['grayscale'] ?? null,
-        original: map['original'] ?? null,
-        masks: map['masks'] ?? null);
+    return MLImageSegmentation._(
+      foreground: map['foreground'],
+      grayscale: map['grayscale'],
+      original: map['original'],
+      masks: map['masks'],
+    );
   }
 }

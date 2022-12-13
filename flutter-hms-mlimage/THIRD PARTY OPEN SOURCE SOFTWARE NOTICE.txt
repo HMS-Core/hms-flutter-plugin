@@ -245,7 +245,7 @@ aFileChooser
    See the License for the specific language governing permissions and
    limitations under the License.
 
-Software: com.facebook.fresco:fresco 2.2.0
+Software: com.facebook.fresco:fresco 2.6.0
 --------------------------------------------------------------------------
 Copyright Notice:
 

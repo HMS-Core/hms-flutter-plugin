@@ -1,11 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.huawei.hms.flutter.mlimage">
+    package="com.huawei.hms.flutter.mlimage">
 
-  <uses-feature
+    <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <application></application>
 </manifest>

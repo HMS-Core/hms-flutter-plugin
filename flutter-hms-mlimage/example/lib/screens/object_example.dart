@@ -16,40 +16,36 @@
 
 import 'package:flutter/material.dart';
 import 'package:huawei_ml_image/huawei_ml_image.dart';
-import 'package:image_picker/image_picker.dart';
-
-import '../utils/constants.dart';
-import '../utils/utils.dart';
+import 'package:huawei_ml_image_example/utils/constants.dart';
+import 'package:huawei_ml_image_example/utils/utils.dart';
 
 class ObjectExample extends StatefulWidget {
+  const ObjectExample({Key? key}) : super(key: key);
+
   @override
-  _ObjectExampleState createState() => _ObjectExampleState();
+  State<ObjectExample> createState() => _ObjectExampleState();
 }
 
 class _ObjectExampleState extends State<ObjectExample> with DemoMixin {
-  final _key = GlobalKey<ScaffoldState>();
-
-  late MLObjectAnalyzer _analyzer;
-
-  List _types = [];
-  List _possibilities = [];
-
-  @override
-  void initState() {
-    _analyzer = MLObjectAnalyzer();
-    super.initState();
-  }
+  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
+  final MLObjectAnalyzer _analyzer = MLObjectAnalyzer();
+  final List<int?> _types = <int?>[];
+  final List<dynamic> _possibilities = <dynamic>[];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _key,
-      appBar: demoAppBar("Object Detection Demo"),
+      appBar: demoAppBar('Object Detection Demo'),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            resultBox(objectTypes, _types, context),
+          children: <Widget>[
+            resultBox(
+              objectTypes,
+              _types,
+              context,
+            ),
             Container(
               color: kGrayColor,
               margin: context.paddingLow,
@@ -57,29 +53,39 @@ class _ObjectExampleState extends State<ObjectExample> with DemoMixin {
               height: context.highValue,
               child: Image.asset(objectImage),
             ),
-            resultBox(possibility, _possibilities, context),
+            resultBox(
+              possibility,
+              _possibilities,
+              context,
+            ),
             containerElevatedButton(
-                context,
-                ElevatedButton(
-                  style: buttonStyle,
-                  onPressed: () => pickerDialog(_key, context, analyseFrame),
-                  child: Text(startObjectDetection),
-                )),
+              context,
+              ElevatedButton(
+                style: buttonStyle,
+                onPressed: () {
+                  pickerDialog(_key, context, analyseFrame);
+                },
+                child: const Text(startObjectDetection),
+              ),
+            ),
             containerElevatedButton(
-                context,
-                ElevatedButton(
-                  style: buttonStyle,
-                  onPressed: () =>
-                      pickerDialog(_key, context, asyncAnalyseFrame),
-                  child: Text(startAsyncObjectDetection),
-                )),
+              context,
+              ElevatedButton(
+                style: buttonStyle,
+                onPressed: () {
+                  pickerDialog(_key, context, asyncAnalyseFrame);
+                },
+                child: const Text(startAsyncObjectDetection),
+              ),
+            ),
             containerElevatedButton(
-                context,
-                ElevatedButton(
-                  style: dangerbuttonStyle,
-                  onPressed: stop,
-                  child: Text(stopText),
-                )),
+              context,
+              ElevatedButton(
+                style: dangerbuttonStyle,
+                onPressed: stop,
+                child: const Text(stopText),
+              ),
+            ),
           ],
         ),
       ),
@@ -87,51 +93,51 @@ class _ObjectExampleState extends State<ObjectExample> with DemoMixin {
   }
 
   @override
-  void analyseFrame(String? path) async {
-    String? pickedImagePath = await getImage(ImageSource.gallery);
-
-    if (pickedImagePath != null) {
-      final setting = MLObjectAnalyzerSetting.create(path: pickedImagePath);
+  Future<void> analyseFrame(String? path) async {
+    if (path != null) {
       try {
-        List<MLObject> list = await _analyzer.analyseFrame(setting);
-        list.forEach((element) {
+        final MLObjectAnalyzerSetting setting = MLObjectAnalyzerSetting.create(
+          path: path,
+        );
+        final List<MLObject> list = await _analyzer.analyseFrame(setting);
+        for (MLObject element in list) {
           setState(() {
             _types.add(element.type);
             _possibilities.add(element.possibility);
           });
-        });
-      } on Exception catch (e) {
-        exceptionDialog(context, e.toString());
+        }
+      } catch (e) {
+        exceptionDialog(context, '$e');
       }
     }
   }
 
   @override
-  void asyncAnalyseFrame(String? path) async {
-    String? pickedImagePath = await getImage(ImageSource.gallery);
-
-    if (pickedImagePath != null) {
-      final setting = MLObjectAnalyzerSetting.create(path: pickedImagePath);
+  Future<void> asyncAnalyseFrame(String? path) async {
+    if (path != null) {
       try {
-        List<MLObject> list = await _analyzer.asyncAnalyseFrame(setting);
-        list.forEach((element) {
+        final MLObjectAnalyzerSetting setting = MLObjectAnalyzerSetting.create(
+          path: path,
+        );
+        final List<MLObject> list = await _analyzer.asyncAnalyseFrame(setting);
+        for (MLObject element in list) {
           setState(() {
             _types.add(element.type);
             _possibilities.add(element.possibility);
           });
-        });
-      } on Exception catch (e) {
-        exceptionDialog(context, e.toString());
+        }
+      } catch (e) {
+        exceptionDialog(context, '$e');
       }
     }
   }
 
   @override
-  void stop() async {
+  Future<void> stop() async {
     try {
       await _analyzer.stop();
-    } on Exception catch (e) {
-      exceptionDialog(context, e.toString());
+    } catch (e) {
+      exceptionDialog(context, '$e');
     }
   }
 }

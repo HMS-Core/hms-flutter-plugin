@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_ml_image;
+
 class MLProductVisionSearchAnalyzerSetting {
   /// Singapore
   static const int REGION_DR_SINGAPORE = 1007;
@@ -29,50 +31,56 @@ class MLProductVisionSearchAnalyzerSetting {
 
   /// Europe
   static const int REGION_DR_EUROPE = 1004;
-
   static const int REGION_DR_AFILA = 1003;
 
   /// Unknown
   static const int REGION_DR_UNKNOWN = 1001;
 
-  String path;
-  String? productSetId;
-  int? largestNumberOfReturns;
-  int? region;
+  final String path;
+  final String? productSetId;
+  final int? largestNumberOfReturns;
+  final int? region;
 
-  factory MLProductVisionSearchAnalyzerSetting.local(
-      {required String path,
-      String? productSetId,
-      int? largestNumberOfReturns,
-      int? region}) {
+  const MLProductVisionSearchAnalyzerSetting._({
+    required this.path,
+    this.largestNumberOfReturns,
+    this.productSetId,
+    this.region,
+  });
+
+  factory MLProductVisionSearchAnalyzerSetting.local({
+    required String path,
+    String? productSetId,
+    int? largestNumberOfReturns,
+    int? region,
+  }) {
     return MLProductVisionSearchAnalyzerSetting._(
-        path: path,
-        productSetId: productSetId,
-        largestNumberOfReturns: largestNumberOfReturns,
-        region: region);
+      path: path,
+      productSetId: productSetId,
+      largestNumberOfReturns: largestNumberOfReturns,
+      region: region,
+    );
   }
 
-  factory MLProductVisionSearchAnalyzerSetting.plugin(
-      {String? productSetId, int? largestNumberOfReturns, int? region}) {
+  factory MLProductVisionSearchAnalyzerSetting.plugin({
+    String? productSetId,
+    int? largestNumberOfReturns,
+    int? region,
+  }) {
     return MLProductVisionSearchAnalyzerSetting._(
-        path: "",
-        productSetId: productSetId,
-        largestNumberOfReturns: largestNumberOfReturns,
-        region: region);
+      path: '',
+      productSetId: productSetId,
+      largestNumberOfReturns: largestNumberOfReturns,
+      region: region,
+    );
   }
-
-  MLProductVisionSearchAnalyzerSetting._(
-      {required this.path,
-      this.largestNumberOfReturns,
-      this.productSetId,
-      this.region});
 
   Map<String, dynamic> toMap() {
-    return {
-      "path": path,
-      "productSetId": productSetId ?? "vmall",
-      "largestNumberOfReturns": largestNumberOfReturns ?? 20,
-      "region": region ?? REGION_DR_CHINA
+    return <String, dynamic>{
+      'path': path,
+      'productSetId': productSetId ?? 'vmall',
+      'largestNumberOfReturns': largestNumberOfReturns ?? 20,
+      'region': region ?? REGION_DR_CHINA,
     };
   }
 }

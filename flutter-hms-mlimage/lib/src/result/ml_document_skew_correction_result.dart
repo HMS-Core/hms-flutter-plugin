@@ -14,18 +14,21 @@
     limitations under the License.
 */
 
-import 'dart:typed_data';
+part of huawei_ml_image;
 
 class MLDocumentSkewCorrectionResult {
-  Uint8List? bytes;
-  int? resultCode;
+  final Uint8List? bytes;
+  final int? resultCode;
 
-  MLDocumentSkewCorrectionResult({this.bytes, this.resultCode});
+  const MLDocumentSkewCorrectionResult._({
+    this.bytes,
+    this.resultCode,
+  });
 
   factory MLDocumentSkewCorrectionResult.fromJson(Map<dynamic, dynamic> json) {
-    return MLDocumentSkewCorrectionResult(
-      bytes: json['bytes'] ?? null,
-      resultCode: json['resultCode'] ?? null,
+    return MLDocumentSkewCorrectionResult._(
+      bytes: json['bytes'],
+      resultCode: json['resultCode'],
     );
   }
 }

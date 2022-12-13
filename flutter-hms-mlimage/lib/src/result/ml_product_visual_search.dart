@@ -14,100 +14,113 @@
     limitations under the License.
 */
 
-import '../../huawei_ml_image.dart';
+part of huawei_ml_image;
 
 class MlProductVisualSearch {
-  List<MLVisionSearchProduct?>? productList;
-  MLImageBorder? border;
-  String? type;
+  final List<MLVisionSearchProduct>? productList;
+  final MLImageBorder? border;
+  final String? type;
 
-  MlProductVisualSearch({this.border, this.type, this.productList});
+  const MlProductVisualSearch._({
+    this.border,
+    this.type,
+    this.productList,
+  });
 
   factory MlProductVisualSearch.fromMap(Map<dynamic, dynamic>? map) {
     if (map == null) {
-      return MlProductVisualSearch();
+      return const MlProductVisualSearch._();
     }
-
-    var products = List<MLVisionSearchProduct>.empty(growable: true);
-
+    final List<MLVisionSearchProduct> products = <MLVisionSearchProduct>[];
     if (map['productList'] != null) {
-      map['productList'].forEach((v) {
+      map['productList'].forEach((dynamic v) {
         products.add(MLVisionSearchProduct.fromMap(v));
       });
     }
-
-    return MlProductVisualSearch(
-        border:
-            map['border'] != null ? MLImageBorder.fromMap(map['border']) : null,
-        type: map['type'] ?? null,
-        productList: products);
+    return MlProductVisualSearch._(
+      border:
+          map['border'] != null ? MLImageBorder.fromMap(map['border']) : null,
+      type: map['type'],
+      productList: products,
+    );
   }
 }
 
 class MLVisionSearchProduct {
-  List<MLVisionSearchProductImage?>? imageList;
-  String? customContent;
-  String? productId;
-  String? productUrl;
+  final List<MLVisionSearchProductImage>? imageList;
+  final String? customContent;
+  final String? productId;
+  final String? productUrl;
 
-  MLVisionSearchProduct(
-      {this.productId, this.productUrl, this.customContent, this.imageList});
+  const MLVisionSearchProduct._({
+    this.productId,
+    this.productUrl,
+    this.customContent,
+    this.imageList,
+  });
 
   factory MLVisionSearchProduct.fromMap(Map<dynamic, dynamic>? map) {
     if (map == null) {
-      return MLVisionSearchProduct();
+      return const MLVisionSearchProduct._();
     }
-
-    var images = List<MLVisionSearchProductImage>.empty(growable: true);
-
+    final List<MLVisionSearchProductImage> images =
+        <MLVisionSearchProductImage>[];
     if (map['imageList'] != null) {
-      map['imageList'].forEach((v) {
+      map['imageList'].forEach((dynamic v) {
         images.add(MLVisionSearchProductImage.fromMap(v));
       });
     }
-
-    return MLVisionSearchProduct(
-        customContent: map['customContent'] ?? null,
-        productId: map['productId'] ?? null,
-        productUrl: map['productUrl'] ?? null,
-        imageList: images);
+    return MLVisionSearchProduct._(
+      customContent: map['customContent'],
+      productId: map['productId'],
+      productUrl: map['productUrl'],
+      imageList: images,
+    );
   }
 }
 
 class MLVisionSearchProductImage {
-  double? possibility;
-  String? imageId;
-  String? productId;
+  final double? possibility;
+  final String? imageId;
+  final String? productId;
 
-  MLVisionSearchProductImage({this.possibility, this.imageId, this.productId});
+  const MLVisionSearchProductImage._({
+    this.possibility,
+    this.imageId,
+    this.productId,
+  });
 
   factory MLVisionSearchProductImage.fromMap(Map<dynamic, dynamic>? map) {
     if (map == null) {
-      return MLVisionSearchProductImage();
+      return const MLVisionSearchProductImage._();
     }
-
-    return MLVisionSearchProductImage(
-        possibility: map['possibility'] ?? null,
-        imageId: map['imageId'] ?? null,
-        productId: map['productId'] ?? null);
+    return MLVisionSearchProductImage._(
+      possibility: map['possibility'],
+      imageId: map['imageId'],
+      productId: map['productId'],
+    );
   }
 }
 
 class MLProductCaptureResult {
-  String? imageUrl;
-  String? id;
-  String? other;
+  final String? imageUrl;
+  final String? id;
+  final String? other;
 
-  MLProductCaptureResult({this.id, this.imageUrl, this.other});
+  const MLProductCaptureResult._({
+    this.id,
+    this.imageUrl,
+    this.other,
+  });
 
-  factory MLProductCaptureResult.fromJson(Map<String, dynamic>? json) {
+  factory MLProductCaptureResult.fromJson(Map<dynamic, dynamic>? json) {
     if (json == null) {
-      return MLProductCaptureResult();
+      return const MLProductCaptureResult._();
     }
-
-    return MLProductCaptureResult(
-        imageUrl: json['imgUrl'] ?? null,
-        id: json['id'],
-        other: json['other'] ?? null);
+    return MLProductCaptureResult._(
+      imageUrl: json['imgUrl'],
+      id: json['id'],
+      other: json['other'],
+    );
   }
 }

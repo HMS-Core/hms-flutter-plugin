@@ -15,44 +15,27 @@
 */
 
 import 'package:flutter/material.dart';
-import 'package:huawei_ml_image/huawei_ml_image.dart';
-
-import '../screens/classification_example.dart';
-import '../screens/document_correction_example.dart';
-import '../screens/image_super_resolution_example.dart';
-import '../screens/landmark_example.dart';
-import '../screens/lens_example.dart';
-import '../screens/object_example.dart';
-import '../screens/product_example.dart';
-import '../screens/scene_example.dart';
-import '../screens/segmentation_example.dart';
-import '../screens/text_image_super_res_example.dart';
-import '../utils/constants.dart';
-import '../utils/utils.dart';
+import 'package:huawei_ml_image_example/screens/classification_example.dart';
+import 'package:huawei_ml_image_example/screens/document_correction_example.dart';
+import 'package:huawei_ml_image_example/screens/image_super_resolution_example.dart';
+import 'package:huawei_ml_image_example/screens/landmark_example.dart';
+import 'package:huawei_ml_image_example/screens/lens_example.dart';
+import 'package:huawei_ml_image_example/screens/object_example.dart';
+import 'package:huawei_ml_image_example/screens/product_example.dart';
+import 'package:huawei_ml_image_example/screens/scene_example.dart';
+import 'package:huawei_ml_image_example/screens/segmentation_example.dart';
+import 'package:huawei_ml_image_example/screens/text_image_super_res_example.dart';
+import 'package:huawei_ml_image_example/utils/constants.dart';
+import 'package:huawei_ml_image_example/utils/utils.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
-  _HomeState createState() => _HomeState();
+  State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  @override
-  void initState() {
-    _handlePermissions();
-    super.initState();
-  }
-
-  _handlePermissions() async {
-    await MLImagePermissions().requestPermission(
-        [ImagePermission.camera, ImagePermission.storage]).then((granted) {
-      if (!granted) {
-        _handlePermissions();
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,17 +45,16 @@ class _HomeState extends State<Home> {
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: <Widget>[
               Container(
-                  padding: context.paddingLow,
-                  child: Image.asset(
-                    bannerImage,
-                    fit: BoxFit.cover,
-                  )),
-              Container(
-                child: Material(
-                  child: _columnItems(context),
+                padding: context.paddingLow,
+                child: Image.asset(
+                  bannerImage,
+                  fit: BoxFit.cover,
                 ),
+              ),
+              Material(
+                child: _columnItems(context),
               ),
             ],
           ),
@@ -84,59 +66,77 @@ class _HomeState extends State<Home> {
   Widget _columnItems(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
+      children: <Widget>[
         _paddingRow(
-            context,
-            _homePageRowItems(name: [
-              "Classification",
-              "Object Detection",
-              "Landmark"
-            ], imagePath: [
-              "classification",
-              "object",
-              "landmark"
-            ], page: [
-              ClassificationExample(),
-              ObjectExample(),
-              LandmarkExample()
-            ])),
+          context,
+          _homePageRowItems(
+            name: <String>[
+              'Classification',
+              'Object Detection',
+              'Landmark',
+            ],
+            imagePath: <String>[
+              'classification',
+              'object',
+              'landmark',
+            ],
+            page: <Widget>[
+              const ClassificationExample(),
+              const ObjectExample(),
+              const LandmarkExample(),
+            ],
+          ),
+        ),
         _paddingRow(
-            context,
-            _homePageRowItems(name: [
-              "Segmentation",
-              "Product",
-              "Image\nResolution"
-            ], imagePath: [
-              "segmentation",
-              "productsegment",
-              "imageresolution"
-            ], page: [
-              SegmentationExample(),
-              ProductExample(),
-              ImageSuperResolutionExample()
-            ])),
+          context,
+          _homePageRowItems(
+            name: <String>[
+              'Segmentation',
+              'Product',
+              'Image\nResolution',
+            ],
+            imagePath: <String>[
+              'segmentation',
+              'productsegment',
+              'imageresolution',
+            ],
+            page: <Widget>[
+              const SegmentationExample(),
+              const ProductExample(),
+              const ImageSuperResolutionExample(),
+            ],
+          ),
+        ),
         _paddingRow(
-            context,
-            _homePageRowItems(name: [
-              "Document\nCorrection",
-              "Scene\nDetection",
-              "Text\nResolution"
-            ], imagePath: [
-              "document",
-              "scene",
-              "tisr"
-            ], page: [
-              DocumentCorrectionExample(),
-              SceneExample(),
-              TextImageSuperResolutionExample()
-            ])),
+          context,
+          _homePageRowItems(
+            name: <String>[
+              'Document\nCorrection',
+              'Scene\nDetection',
+              'Text\nResolution',
+            ],
+            imagePath: <String>[
+              'document',
+              'scene',
+              'tisr',
+            ],
+            page: <Widget>[
+              const DocumentCorrectionExample(),
+              const SceneExample(),
+              const TextImageSuperResolutionExample(),
+            ],
+          ),
+        ),
         Padding(
           padding: smallAllPadding(context),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
+            children: const <Widget>[
               CustomGridElement(
-                  name: "Lens", imagePath: "tisr", page: LensExample()),
+                name: 'Lens',
+                imagePath: 'tisr',
+                page: LensExample(),
+              ),
             ],
           ),
         ),
@@ -144,7 +144,10 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget _paddingRow(BuildContext context, List<Widget> child) {
+  Widget _paddingRow(
+    BuildContext context,
+    List<Widget> child,
+  ) {
     return Padding(
       padding: smallAllPadding(context),
       child: Row(
@@ -154,21 +157,27 @@ class _HomeState extends State<Home> {
     );
   }
 
-  List<Widget> _homePageRowItems(
-      {required List<String> name,
-      required List<String> imagePath,
-      required List<Widget> page}) {
-    return [
+  List<Widget> _homePageRowItems({
+    required List<String> name,
+    required List<String> imagePath,
+    required List<Widget> page,
+  }) {
+    return <Widget>[
       CustomGridElement(
-          name: name.first, imagePath: imagePath.first, page: page.first),
+        name: name.first,
+        imagePath: imagePath.first,
+        page: page.first,
+      ),
       CustomGridElement(
-          name: name.elementAt(1),
-          imagePath: imagePath.elementAt(1),
-          page: page.elementAt(1)),
+        name: name.elementAt(1),
+        imagePath: imagePath.elementAt(1),
+        page: page.elementAt(1),
+      ),
       CustomGridElement(
-          name: name.elementAt(2),
-          imagePath: imagePath.elementAt(2),
-          page: page.elementAt(2)),
+        name: name.elementAt(2),
+        imagePath: imagePath.elementAt(2),
+        page: page.elementAt(2),
+      ),
     ];
   }
 }

@@ -14,14 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:convert';
-
-import 'package:flutter/services.dart';
-import 'package:huawei_ml_image/src/common/base_image_analyzer.dart';
-import 'package:huawei_ml_image/src/common/constants.dart';
-import 'package:huawei_ml_image/src/common/method.dart';
-import 'package:huawei_ml_image/src/request/ml_classification_analyzer_setting.dart';
-import 'package:huawei_ml_image/src/result/ml_image_classification.dart';
+part of huawei_ml_image;
 
 class MLImageClassificationAnalyzer
     implements BaseImageAnalyzer<dynamic, MLClassificationAnalyzerSetting> {
@@ -31,31 +24,45 @@ class MLImageClassificationAnalyzer
   late MethodChannel _methodChannel;
 
   MLImageClassificationAnalyzer() {
-    _methodChannel = MethodChannel("$baseChannel.classification");
+    _methodChannel = const MethodChannel('$baseChannel.classification');
   }
 
   @override
   Future<List<MLImageClassification>> analyseFrame(
-      MLClassificationAnalyzerSetting setting) async {
-    List res = json.decode(
-        await _methodChannel.invokeMethod(syncClassification, setting.toMap()));
-    return res.map((e) => MLImageClassification.fromJson(e)).toList();
+    MLClassificationAnalyzerSetting setting,
+  ) async {
+    final List<dynamic> res = json.decode(
+      await _methodChannel.invokeMethod(
+        syncClassification,
+        setting.toMap(),
+      ),
+    );
+    return res.map((dynamic e) => MLImageClassification.fromJson(e)).toList();
   }
 
   @override
   Future<List<MLImageClassification>> asyncAnalyseFrame(
-      MLClassificationAnalyzerSetting setting) async {
-    List res = json.decode(await _methodChannel.invokeMethod(
-        asyncClassification, setting.toMap()));
-    return res.map((e) => MLImageClassification.fromJson(e)).toList();
+    MLClassificationAnalyzerSetting setting,
+  ) async {
+    final List<dynamic> res = json.decode(
+      await _methodChannel.invokeMethod(
+        asyncClassification,
+        setting.toMap(),
+      ),
+    );
+    return res.map((dynamic e) => MLImageClassification.fromJson(e)).toList();
   }
 
   @override
   Future<bool> stop() async {
-    return await _methodChannel.invokeMethod(mStop);
+    return await _methodChannel.invokeMethod(
+      mStop,
+    );
   }
 
   Future<int> getAnalyzerType() async {
-    return await _methodChannel.invokeMethod(mGetAnalyzerType);
+    return await _methodChannel.invokeMethod(
+      mGetAnalyzerType,
+    );
   }
 }

@@ -16,118 +16,127 @@
 
 import 'package:flutter/material.dart';
 import 'package:huawei_ml_image/huawei_ml_image.dart';
-import 'package:image_picker/image_picker.dart';
-
-import '../utils/constants.dart';
-import '../utils/utils.dart';
+import 'package:huawei_ml_image_example/utils/constants.dart';
+import 'package:huawei_ml_image_example/utils/utils.dart';
 
 class TextImageSuperResolutionExample extends StatefulWidget {
+  const TextImageSuperResolutionExample({Key? key}) : super(key: key);
+
   @override
-  _TextImageSuperResolutionExampleState createState() =>
+  State<TextImageSuperResolutionExample> createState() =>
       _TextImageSuperResolutionExampleState();
 }
 
 class _TextImageSuperResolutionExampleState
     extends State<TextImageSuperResolutionExample> with DemoMixin {
-  final _key = GlobalKey<ScaffoldState>();
-
-  late MLTextImageSuperResolutionAnalyzer _analyzer;
-
+  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
+  final MLTextImageSuperResolutionAnalyzer _analyzer =
+      MLTextImageSuperResolutionAnalyzer();
   Image? _image;
-
-  @override
-  void initState() {
-    _analyzer = MLTextImageSuperResolutionAnalyzer();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _key,
-      appBar: demoAppBar("Text Image Super Res. Demo"),
+      appBar: demoAppBar('Text Image Super Res. Demo'),
       body: SafeArea(
-          child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            color: kGrayColor,
-            margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.width,
-            child: _image != null
-                ? _image
-                : Image.asset(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              color: kGrayColor,
+              margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.width,
+              child: _image ??
+                  Image.asset(
                     textImage,
                     fit: BoxFit.scaleDown,
                   ),
-          ),
-          containerElevatedButton(
+            ),
+            containerElevatedButton(
               context,
               ElevatedButton(
                 style: buttonStyle,
-                onPressed: () => pickerDialog(_key, context, analyseFrame),
-                child: Text(startImageResolution),
-              )),
-          containerElevatedButton(
+                onPressed: () {
+                  pickerDialog(
+                    _key,
+                    context,
+                    analyseFrame,
+                  );
+                },
+                child: const Text(startImageResolution),
+              ),
+            ),
+            containerElevatedButton(
               context,
               ElevatedButton(
                 style: buttonStyle,
-                onPressed: () => pickerDialog(_key, context, asyncAnalyseFrame),
-                child: Text(startAsyncImageResolution),
-              )),
-          containerElevatedButton(
+                onPressed: () {
+                  pickerDialog(
+                    _key,
+                    context,
+                    asyncAnalyseFrame,
+                  );
+                },
+                child: const Text(startAsyncImageResolution),
+              ),
+            ),
+            containerElevatedButton(
               context,
               ElevatedButton(
                 style: dangerbuttonStyle,
                 onPressed: stop,
-                child: Text(stopText),
-              )),
-        ],
-      )),
+                child: const Text(stopText),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
   @override
-  void analyseFrame(String? path) async {
-    String? pickedImagePath = await getImage(ImageSource.gallery);
-
-    if (pickedImagePath != null) {
-      try {
-        List<MLTextImageSuperResolution> list =
-            await _analyzer.analyseFrame(pickedImagePath);
-        list.forEach((element) {
+  Future<void> analyseFrame(String? path) async {
+    try {
+      if (path != null) {
+        final List<MLTextImageSuperResolution> list =
+            await _analyzer.analyseFrame(path);
+        for (MLTextImageSuperResolution element in list) {
           setState(() {
             _image = Image.memory(element.bytes!);
           });
+        }
+      }
+    } catch (e) {
+      exceptionDialog(context, '$e');
+    }
+  }
+
+  @override
+  Future<void> asyncAnalyseFrame(String? path) async {
+    try {
+      if (path != null) {
+        final MLTextImageSuperResolution result =
+            await _analyzer.asyncAnalyseFrame(path);
+        setState(() {
+          _image = Image.memory(
+            result.bytes!,
+            fit: BoxFit.cover,
+          );
         });
-      } on Exception catch (e) {
-        exceptionDialog(context, e.toString());
       }
+    } catch (e) {
+      exceptionDialog(context, '$e');
     }
   }
 
   @override
-  void asyncAnalyseFrame(String? path) async {
-    String? pickedImagePath = await getImage(ImageSource.gallery);
-
-    if (pickedImagePath != null) {
-      try {
-        MLTextImageSuperResolution result =
-            await _analyzer.asyncAnalyseFrame(pickedImagePath);
-        setState(() => _image = Image.memory(result.bytes!, fit: BoxFit.cover));
-      } on Exception catch (e) {
-        exceptionDialog(context, e.toString());
-      }
-    }
-  }
-
-  @override
-  void stop() async {
+  Future<void> stop() async {
     try {
       await _analyzer.stop();
-    } on Exception catch (e) {
-      exceptionDialog(context, e.toString());
+    } catch (e) {
+      exceptionDialog(context, '$e');
     }
   }
 }

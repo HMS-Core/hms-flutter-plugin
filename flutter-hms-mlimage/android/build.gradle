@@ -5,7 +5,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        maven {url 'https://developer.huawei.com/repo/'}
+        maven { url 'https://developer.huawei.com/repo/' }
     }
 
     dependencies {
@@ -17,7 +17,7 @@ rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
-        maven {url 'https://developer.huawei.com/repo/'}
+        maven { url 'https://developer.huawei.com/repo/' }
     }
 }
 
@@ -26,11 +26,13 @@ apply plugin: 'com.android.library'
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
+
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 30
         vectorDrawables.useSupportLibrary = true
     }
+
     lintOptions {
         disable 'InvalidPackage'
     }
@@ -41,40 +43,47 @@ android {
     }
 }
 
-dependencies{
-    // Import the base SDK.
-    implementation 'com.huawei.hms:ml-computer-vision-classification:3.5.0.300'
-    // Import the image classification model package.
-    implementation 'com.huawei.hms:ml-computer-vision-image-classification-model:3.5.0.300'
-    // object
-    implementation 'com.huawei.hms:ml-computer-vision-object:3.5.0.303'
-    implementation 'com.huawei.hms:ml-computer-vision-object-detection-model:3.5.0.303'
-    // vision cloud
-    implementation 'com.huawei.hms:ml-computer-vision-cloud:3.5.0.300'
-    // segmentation
-    implementation 'com.huawei.hms:ml-computer-vision-segmentation:3.5.0.300'
-    implementation 'com.huawei.hms:ml-computer-vision-image-segmentation-multiclass-model:3.5.0.300'
-    implementation 'com.huawei.hms:ml-computer-vision-image-segmentation-body-model:3.5.0.300'
-    implementation 'com.huawei.hms:ml-computer-vision-image-segmentation-hair-model:3.5.0.300'
-    // product
-    implementation 'com.huawei.hms:ml-product-visual-search-plugin:3.5.0.302'
-    // image super resolution
-    implementation 'com.huawei.hms:ml-computer-vision-imagesuperresolution:3.5.0.301'
+dependencies {
+    // Image Classification
+    implementation 'com.huawei.hms:ml-computer-vision-classification:3.7.0.301'
+    implementation 'com.huawei.hms:ml-computer-vision-image-classification-model:3.7.0.301'
+
+    // Object Detection and Tracking
+    implementation 'com.huawei.hms:ml-computer-vision-object:3.7.0.301'
+    implementation 'com.huawei.hms:ml-computer-vision-object-detection-model:3.7.0.301'
+
+    // Landmark Detection
+    implementation 'com.huawei.hms:ml-computer-vision-cloud:3.7.0.302'
+
+    // Image Segmentation
+    implementation 'com.huawei.hms:ml-computer-vision-segmentation:3.7.0.302'
+    implementation 'com.huawei.hms:ml-computer-vision-image-segmentation-multiclass-model:3.7.0.302'
+    implementation 'com.huawei.hms:ml-computer-vision-image-segmentation-body-model:3.7.0.302'
+    implementation 'com.huawei.hms:ml-computer-vision-image-segmentation-hair-model:3.7.0.302'
+
+    // Product Visual Search
+    implementation 'com.huawei.hms:ml-product-visual-search-plugin:3.7.0.302'
+
+    // Image Super-Resolution
+    implementation 'com.huawei.hms:ml-computer-vision-imagesuperresolution:3.7.0.302'
     implementation 'com.huawei.hms:ml-computer-vision-imagesuperresolution-model:3.5.0.301'
-    // document skew correction
-    implementation 'com.huawei.hms:ml-computer-vision-documentskew:3.5.0.301'
-    implementation 'com.huawei.hms:ml-computer-vision-documentskew-model:3.5.0.301'
-    // text image super resolution
-    implementation 'com.huawei.hms:ml-computer-vision-textimagesuperresolution:3.5.0.300'
-    implementation 'com.huawei.hms:ml-computer-vision-textimagesuperresolution-model:3.5.0.300'
-    // scene detection
-    implementation 'com.huawei.hms:ml-computer-vision-scenedetection:3.5.0.300'
-    implementation 'com.huawei.hms:ml-computer-vision-scenedetection-model:3.5.0.300'
-    // text embedding
-    implementation 'com.huawei.hms:ml-nlp-textembedding:3.5.0.300'
-    // custom model
-    implementation 'com.huawei.hms:ml-computer-model-executor:3.5.0.300'
+
+    // Document Skew Correction
+    implementation 'com.huawei.hms:ml-computer-vision-documentskew:3.7.0.301'
+    implementation 'com.huawei.hms:ml-computer-vision-documentskew-model:3.7.0.301'
+
+    // Text Image Super-Resolution
+    implementation 'com.huawei.hms:ml-computer-vision-textimagesuperresolution:3.7.0.301'
+    implementation 'com.huawei.hms:ml-computer-vision-textimagesuperresolution-model:3.7.0.301'
+
+    // Scene Detection
+    implementation 'com.huawei.hms:ml-computer-vision-scenedetection:3.7.0.303'
+    implementation 'com.huawei.hms:ml-computer-vision-scenedetection-model:3.7.0.303'
+
+    // Custom Model
+    implementation 'com.huawei.hms:ml-computer-model-executor:3.7.0.302'
     implementation 'mindspore:mindspore-lite:5.0.5.300'
-    // fresco
-    implementation "com.facebook.fresco:fresco:2.5.0"
+
+    // Fresco
+    implementation "com.facebook.fresco:fresco:2.6.0"
 }

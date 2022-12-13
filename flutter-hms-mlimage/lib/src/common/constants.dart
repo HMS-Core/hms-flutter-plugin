@@ -14,9 +14,9 @@
     limitations under the License.
 */
 
-const String baseChannel = 'huawei.hms.flutter.ml.image';
+part of huawei_ml_image;
 
-enum ImagePermission { camera, storage }
+const String baseChannel = 'huawei.hms.flutter.ml.image';
 
 enum ImageTransaction {
   classification,
@@ -25,4 +25,6 @@ enum ImageTransaction {
   scene,
 }
 
-typedef ImageTransactor = void Function({dynamic result});
+typedef ImageTransactor = void Function({
+  dynamic result,
+});

@@ -16,72 +16,70 @@
 
 import 'package:flutter/material.dart';
 import 'package:huawei_ml_image/huawei_ml_image.dart';
-import 'package:image_picker/image_picker.dart';
-
-import '../utils/constants.dart';
-import '../utils/utils.dart';
+import 'package:huawei_ml_image_example/utils/constants.dart';
+import 'package:huawei_ml_image_example/utils/utils.dart';
 
 class SegmentationExample extends StatefulWidget {
+  const SegmentationExample({Key? key}) : super(key: key);
+
   @override
-  _SegmentationExampleState createState() => _SegmentationExampleState();
+  State<SegmentationExample> createState() => _SegmentationExampleState();
 }
 
 class _SegmentationExampleState extends State<SegmentationExample>
     with DemoMixin {
-  final _key = GlobalKey<ScaffoldState>();
-  late MLImageSegmentationAnalyzer _analyzer;
-
+  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
+  final MLImageSegmentationAnalyzer _analyzer = MLImageSegmentationAnalyzer();
   Image? _image;
-
-  @override
-  void initState() {
-    _analyzer = MLImageSegmentationAnalyzer();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _key,
-      appBar: demoAppBar("Segmentation Demo"),
+      appBar: demoAppBar('Segmentation Demo'),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+            children: <Widget>[
               Container(
                 color: kGrayColor,
-                margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                 width: context.width,
                 height: context.width,
-                child: _image != null
-                    ? _image
-                    : Image.asset(
-                        selectImage,
-                      ),
+                child: _image ??
+                    Image.asset(
+                      selectImage,
+                    ),
               ),
               containerElevatedButton(
-                  context,
-                  ElevatedButton(
-                    style: buttonStyle,
-                    onPressed: () => pickerDialog(_key, context, analyseFrame),
-                    child: Text(startSegmentationText),
-                  )),
+                context,
+                ElevatedButton(
+                  style: buttonStyle,
+                  onPressed: () {
+                    pickerDialog(_key, context, analyseFrame);
+                  },
+                  child: const Text(startSegmentationText),
+                ),
+              ),
               containerElevatedButton(
-                  context,
-                  ElevatedButton(
-                    style: buttonStyle,
-                    onPressed: () =>
-                        pickerDialog(_key, context, asyncAnalyseFrame),
-                    child: Text(startAsyncSegmentationText),
-                  )),
+                context,
+                ElevatedButton(
+                  style: buttonStyle,
+                  onPressed: () {
+                    pickerDialog(_key, context, asyncAnalyseFrame);
+                  },
+                  child: const Text(startAsyncSegmentationText),
+                ),
+              ),
               containerElevatedButton(
-                  context,
-                  ElevatedButton(
-                    style: dangerbuttonStyle,
-                    onPressed: stop,
-                    child: Text(stopText),
-                  )),
+                context,
+                ElevatedButton(
+                  style: dangerbuttonStyle,
+                  onPressed: stop,
+                  child: const Text(stopText),
+                ),
+              ),
             ],
           ),
         ),
@@ -90,54 +88,56 @@ class _SegmentationExampleState extends State<SegmentationExample>
   }
 
   @override
-  void analyseFrame(String? path) async {
-    String? pickedImagePath = await getImage(ImageSource.gallery);
-
-    if (pickedImagePath != null) {
-      final setting = MLImageSegmentationAnalyzerSetting.create(
-          path: pickedImagePath,
-          analyzerType: MLImageSegmentationAnalyzerSetting.BODY_SEG);
-
-      try {
-        List<MLImageSegmentation> list = await _analyzer.analyseFrame(setting);
-        list.forEach((element) {
+  Future<void> analyseFrame(String? path) async {
+    try {
+      if (path != null) {
+        final MLImageSegmentationAnalyzerSetting setting =
+            MLImageSegmentationAnalyzerSetting.create(
+          path: path,
+          analyzerType: MLImageSegmentationAnalyzerSetting.BODY_SEG,
+        );
+        final List<MLImageSegmentation> list =
+            await _analyzer.analyseFrame(setting);
+        for (MLImageSegmentation element in list) {
           setState(() {
             _image = Image.memory(element.foreground!);
           });
-        });
-      } on Exception catch (e) {
-        exceptionDialog(context, e.toString());
+        }
       }
+    } catch (e) {
+      exceptionDialog(context, '$e');
     }
   }
 
   @override
-  void asyncAnalyseFrame(String? path) async {
-    String? pickedImagePath = await getImage(ImageSource.gallery);
-
-    if (pickedImagePath != null) {
-      final setting = MLImageSegmentationAnalyzerSetting.create(
-          path: pickedImagePath,
-          analyzerType: MLImageSegmentationAnalyzerSetting.BODY_SEG);
-
-      try {
-        MLImageSegmentation segmentation =
+  Future<void> asyncAnalyseFrame(String? path) async {
+    try {
+      if (path != null) {
+        final MLImageSegmentationAnalyzerSetting setting =
+            MLImageSegmentationAnalyzerSetting.create(
+          path: path,
+          analyzerType: MLImageSegmentationAnalyzerSetting.BODY_SEG,
+        );
+        final MLImageSegmentation segmentation =
             await _analyzer.asyncAnalyseFrame(setting);
         setState(() {
-          _image = Image.memory(segmentation.foreground!, fit: BoxFit.cover);
+          _image = Image.memory(
+            segmentation.foreground!,
+            fit: BoxFit.cover,
+          );
         });
-      } on Exception catch (e) {
-        exceptionDialog(context, e.toString());
       }
+    } catch (e) {
+      exceptionDialog(context, '$e');
     }
   }
 
   @override
-  void stop() async {
+  Future<void> stop() async {
     try {
       await _analyzer.stop();
-    } on Exception catch (e) {
-      exceptionDialog(context, e.toString());
+    } catch (e) {
+      exceptionDialog(context, '$e');
     }
   }
 }

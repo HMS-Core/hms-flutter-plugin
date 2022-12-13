@@ -14,11 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:convert';
-
-import 'package:flutter/services.dart';
-import 'package:huawei_ml_image/src/common/xport.dart';
-import 'package:huawei_ml_image/src/result/xport.dart';
+part of huawei_ml_image;
 
 class MLDocumentSkewCorrectionAnalyzer {
   /// Text box correction failed.
@@ -28,39 +24,64 @@ class MLDocumentSkewCorrectionAnalyzer {
   static const int DETECT_FAILED = 1;
 
   /// Incorrect input parameter for text box detection/correction.
-  static const IMAGE_DATA_ERROR = 3;
+  static const int IMAGE_DATA_ERROR = 3;
 
   /// Text box detection/correction succeeded.
-  static const SUCCESS = 0;
+  static const int SUCCESS = 0;
 
   late MethodChannel _channel;
 
   MLDocumentSkewCorrectionAnalyzer() {
-    _channel = MethodChannel("$baseChannel.document_correction");
+    _channel = const MethodChannel('$baseChannel.document_correction');
   }
 
   Future<MLDocumentSkewDetectResult> analyseFrame(String imagePath) async {
-    return new MLDocumentSkewDetectResult.fromJson(json.decode(
-        await _channel.invokeMethod(mAnalyzeFrame, {"path": imagePath})));
+    return MLDocumentSkewDetectResult.fromJson(
+      json.decode(
+        await _channel.invokeMethod(
+          mAnalyzeFrame,
+          <String, dynamic>{
+            'path': imagePath,
+          },
+        ),
+      ),
+    );
   }
 
   Future<MLDocumentSkewCorrectionResult> syncDocumentSkewCorrect() async {
-    return new MLDocumentSkewCorrectionResult.fromJson(
-        await _channel.invokeMethod(mSyncDocumentSkewCorrect));
+    return MLDocumentSkewCorrectionResult.fromJson(
+      await _channel.invokeMethod(
+        mSyncDocumentSkewCorrect,
+      ),
+    );
   }
 
   Future<MLDocumentSkewDetectResult> asyncDocumentSkewDetect(
-      String imagePath) async {
-    return new MLDocumentSkewDetectResult.fromJson(json.decode(await _channel
-        .invokeMethod(mAsyncDocumentSkewDetect, {"path": imagePath})));
+    String imagePath,
+  ) async {
+    return MLDocumentSkewDetectResult.fromJson(
+      json.decode(
+        await _channel.invokeMethod(
+          mAsyncDocumentSkewDetect,
+          <String, dynamic>{
+            'path': imagePath,
+          },
+        ),
+      ),
+    );
   }
 
   Future<MLDocumentSkewCorrectionResult> asyncDocumentSkewCorrect() async {
-    return new MLDocumentSkewCorrectionResult.fromJson(
-        await _channel.invokeMethod(mAsyncDocumentSkewCorrect));
+    return MLDocumentSkewCorrectionResult.fromJson(
+      await _channel.invokeMethod(
+        mAsyncDocumentSkewCorrect,
+      ),
+    );
   }
 
   Future<bool> stop() async {
-    return await _channel.invokeMethod(mStop);
+    return await _channel.invokeMethod(
+      mStop,
+    );
   }
 }

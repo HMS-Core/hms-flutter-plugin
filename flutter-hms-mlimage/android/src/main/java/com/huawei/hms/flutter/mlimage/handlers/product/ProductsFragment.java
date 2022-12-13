@@ -48,6 +48,7 @@ public class ProductsFragment extends MLProductVisionSearchCapture.AbstractProdu
     private final MethodChannel.Result mResult;
     private final List<MLRealProductBean> mlProducts = new ArrayList<>();
     private BottomSheetAdapter adapter;
+    private boolean isReplySubmitted = false;
 
     public ProductsFragment(Context context, MethodChannel.Result result) {
         this.context = context;
@@ -90,7 +91,10 @@ public class ProductsFragment extends MLProductVisionSearchCapture.AbstractProdu
         adapter.notifyDataSetChanged();
 
         HMSLogger.getInstance(context).sendSingleEvent("analyzeProductWithPlugin");
-        mResult.success(pluginProductResultToJSON(list).toString());
+        if (!isReplySubmitted) {
+            isReplySubmitted = true;
+            mResult.success(pluginProductResultToJSON(list).toString());
+        }
     }
 
     @Override

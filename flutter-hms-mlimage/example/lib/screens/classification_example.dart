@@ -16,45 +16,38 @@
 
 import 'package:flutter/material.dart';
 import 'package:huawei_ml_image/huawei_ml_image.dart';
-
-import '../utils/constants.dart';
-import '../utils/utils.dart';
+import 'package:huawei_ml_image_example/utils/constants.dart';
+import 'package:huawei_ml_image_example/utils/utils.dart';
 
 class ClassificationExample extends StatefulWidget {
+  const ClassificationExample({Key? key}) : super(key: key);
+
   @override
-  _ClassificationExampleState createState() => _ClassificationExampleState();
+  State<ClassificationExample> createState() => _ClassificationExampleState();
 }
 
 class _ClassificationExampleState extends State<ClassificationExample>
     with DemoMixin {
-  final _key = GlobalKey<ScaffoldState>();
-
-  late MLImageClassificationAnalyzer _analyzer;
-
-  List names = [];
-  List possibilities = [];
-
-  @override
-  void initState() {
-    _analyzer = MLImageClassificationAnalyzer();
-    _setApiKey();
-    super.initState();
-  }
-
-  _setApiKey() {
-    MLImageApplication().setApiKey(apiKey);
-  }
+  final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
+  final MLImageClassificationAnalyzer _analyzer =
+      MLImageClassificationAnalyzer();
+  final List<String?> names = <String?>[];
+  final List<dynamic> possibilities = <dynamic>[];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _key,
-      appBar: demoAppBar("Classification Demo"),
+      appBar: demoAppBar('Classification Demo'),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            resultBox(classificationNames, names, context),
+          children: <Widget>[
+            resultBox(
+              classificationNames,
+              names,
+              context,
+            ),
             Container(
               color: kGrayColor,
               margin: context.paddingLow,
@@ -62,29 +55,35 @@ class _ClassificationExampleState extends State<ClassificationExample>
               height: context.highValue,
               child: Image.asset(addImage),
             ),
-            resultBox(possibility, possibilities, context),
+            resultBox(
+              possibility,
+              possibilities,
+              context,
+            ),
             containerElevatedButton(
-                context,
-                ElevatedButton(
-                  style: buttonStyle,
-                  onPressed: () => pickerDialog(_key, context, analyseFrame),
-                  child: Text(startClassificationText),
-                )),
+              context,
+              ElevatedButton(
+                style: buttonStyle,
+                onPressed: () => pickerDialog(_key, context, analyseFrame),
+                child: const Text(startClassificationText),
+              ),
+            ),
             containerElevatedButton(
-                context,
-                ElevatedButton(
-                  style: buttonStyle,
-                  onPressed: () =>
-                      pickerDialog(_key, context, asyncAnalyseFrame),
-                  child: Text(startAsyncClassificationText),
-                )),
+              context,
+              ElevatedButton(
+                style: buttonStyle,
+                onPressed: () => pickerDialog(_key, context, asyncAnalyseFrame),
+                child: const Text(startAsyncClassificationText),
+              ),
+            ),
             containerElevatedButton(
-                context,
-                ElevatedButton(
-                  style: dangerbuttonStyle,
-                  onPressed: stop,
-                  child: Text(stopText),
-                )),
+              context,
+              ElevatedButton(
+                style: dangerbuttonStyle,
+                onPressed: stop,
+                child: const Text(stopText),
+              ),
+            ),
           ],
         ),
       ),
@@ -92,52 +91,57 @@ class _ClassificationExampleState extends State<ClassificationExample>
   }
 
   @override
-  analyseFrame(String? path) async {
-    if (path == null || path.isEmpty) {
-      return;
-    }
-    final setting =
-        MLClassificationAnalyzerSetting.create(path: path, isRemote: false);
-    try {
-      List<MLImageClassification> list = await _analyzer.analyseFrame(setting);
-      list.forEach((element) {
-        setState(() {
-          names.add(element.name);
-          possibilities.add(element.possibility);
-        });
-      });
-    } on Exception catch (e) {
-      exceptionDialog(context, e.toString());
-    }
-  }
-
-  @override
-  void asyncAnalyseFrame(String? path) async {
-    if (path == null || path.isEmpty) {
-      return;
-    }
-    final setting =
-        MLClassificationAnalyzerSetting.create(path: path, isRemote: false);
-    try {
-      List<MLImageClassification> list =
-          await _analyzer.asyncAnalyseFrame(setting);
-      list.forEach((element) {
-        setState(() {
-          names.add(element.name);
-          possibilities.add(element.possibility);
-        });
-      });
-    } on Exception catch (e) {
-      exceptionDialog(context, e.toString());
+  Future<void> analyseFrame(String? path) async {
+    if (path != null) {
+      try {
+        final MLClassificationAnalyzerSetting setting =
+            MLClassificationAnalyzerSetting.create(
+          path: path,
+          isRemote: false,
+        );
+        final List<MLImageClassification> list =
+            await _analyzer.analyseFrame(setting);
+        for (MLImageClassification element in list) {
+          setState(() {
+            names.add(element.name);
+            possibilities.add(element.possibility);
+          });
+        }
+      } catch (e) {
+        exceptionDialog(context, '$e');
+      }
     }
   }
 
   @override
-  void stop() {
+  Future<void> asyncAnalyseFrame(String? path) async {
+    if (path != null) {
+      try {
+        final MLClassificationAnalyzerSetting setting =
+            MLClassificationAnalyzerSetting.create(
+          path: path,
+          isRemote: false,
+        );
+        final List<MLImageClassification> list =
+            await _analyzer.asyncAnalyseFrame(setting);
+        for (MLImageClassification element in list) {
+          setState(() {
+            names.add(element.name);
+            possibilities.add(element.possibility);
+          });
+        }
+      } catch (e) {
+        exceptionDialog(context, '$e');
+      }
+    }
+  }
+
+  @override
+  Future<void> stop() async {
     try {
-      _analyzer.stop();
-    } on Exception catch (e) {
-      exceptionDialog(context, e.toString());
+      await _analyzer.stop();
+    } catch (e) {
+      exceptionDialog(context, '$e');
     }
   }
 }

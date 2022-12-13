@@ -14,11 +14,18 @@
     limitations under the License.
 */
 
+part of huawei_ml_image;
+
 class MLSceneDetectionAnalyzerSetting {
-  String path;
+  final String path;
 
   /// confidence for scene detection.
-  double? confidence;
+  final double? confidence;
+
+  const MLSceneDetectionAnalyzerSetting._({
+    required this.path,
+    this.confidence,
+  });
 
   /// Creates an [MLSceneDetectionAnalyzerSetting] instance.
   ///
@@ -26,16 +33,21 @@ class MLSceneDetectionAnalyzerSetting {
   ///        This parameter must not be null.
   ///
   /// [confidence] confidence option for scene detection.
-  factory MLSceneDetectionAnalyzerSetting.create(
-      {required String path, double? confidence}) {
+  factory MLSceneDetectionAnalyzerSetting.create({
+    required String path,
+    double? confidence,
+  }) {
     return MLSceneDetectionAnalyzerSetting._(
-        path: path, confidence: confidence);
+      path: path,
+      confidence: confidence,
+    );
   }
-
-  MLSceneDetectionAnalyzerSetting._({required this.path, this.confidence});
 
   /// Returns a map from properties.
   Map<String, dynamic> toMap() {
-    return {"path": path, "confidence": confidence ?? 0.5};
+    return <String, dynamic>{
+      'path': path,
+      'confidence': confidence ?? 0.5,
+    };
   }
 }

@@ -18,7 +18,6 @@ package com.huawei.hms.flutter.mlimage.constant;
 
 public interface Channel {
     String BASE_CHANNEL = "huawei.hms.flutter.ml.image";
-    String PERMISSION_CHANNEL = BASE_CHANNEL + ".permission";
     String CLASSIFICATION_CHANNEL = BASE_CHANNEL + ".classification";
     String APPLICATION_CHANNEL = BASE_CHANNEL + ".application";
     String OBJECT_CHANNEL = BASE_CHANNEL + ".object";

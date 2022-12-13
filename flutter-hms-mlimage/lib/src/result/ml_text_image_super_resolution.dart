@@ -14,14 +14,18 @@
     limitations under the License.
 */
 
-import 'dart:typed_data';
+part of huawei_ml_image;
 
 class MLTextImageSuperResolution {
-  Uint8List? bytes;
+  final Uint8List? bytes;
 
-  MLTextImageSuperResolution({this.bytes});
+  const MLTextImageSuperResolution._({
+    this.bytes,
+  });
 
   factory MLTextImageSuperResolution.fromMap(Map<dynamic, dynamic> json) {
-    return MLTextImageSuperResolution(bytes: json['bytes'] ?? null);
+    return MLTextImageSuperResolution._(
+      bytes: json['bytes'],
+    );
   }
 }

@@ -1,27 +1,29 @@
 buildscript {
     repositories {
         google()
-        mavenCentral() 
-        maven {url 'https://developer.huawei.com/repo/'}
+        mavenCentral()
+        maven { url 'https://developer.huawei.com/repo/' }
     }
 
     dependencies {
         classpath 'com.android.tools.build:gradle:3.6.0'
-        classpath 'com.huawei.agconnect:agcp:1.6.5.300'
+        classpath 'com.huawei.agconnect:agcp:1.7.2.300'
     }
 }
 
 allprojects {
     repositories {
         google()
-        mavenCentral() 
-        maven {url 'https://developer.huawei.com/repo/'}
+        mavenCentral()
+        maven { url 'https://developer.huawei.com/repo/' }
     }
 }
 
 rootProject.buildDir = '../build'
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
     project.evaluationDependsOn(':app')
 }
 
