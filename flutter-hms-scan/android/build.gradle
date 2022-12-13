@@ -1,0 +1,49 @@
+group 'com.huawei.hms.flutter.scan'
+version '1.0'
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://developer.huawei.com/repo/' }
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.6.0'
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://developer.huawei.com/repo/' }
+    }
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 30
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies{
+    implementation 'com.huawei.hms:scan:2.8.0.300'
+    implementation 'com.huawei.hms:stats:6.6.0.300'
+    implementation 'android.arch.lifecycle:common:1.1.1'
+    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+}

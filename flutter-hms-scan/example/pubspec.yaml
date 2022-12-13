@@ -1,0 +1,26 @@
+name: huawei_scan_example
+description: Demonstrates how to use the scan_flutter plugin.
+version: 2.8.0+300
+publish_to: none
+
+environment:
+  sdk: '>=2.12.0 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  huawei_scan:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter 
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/aztecBarcode.png
+    - assets/multipleBarcode.png
+    - assets/multipleBarcode2.png
+    - assets/scan_kit_logo.png
