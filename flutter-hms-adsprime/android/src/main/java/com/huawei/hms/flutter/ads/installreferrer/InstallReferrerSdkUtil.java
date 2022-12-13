@@ -26,7 +26,6 @@ import android.util.SparseArray;
 import com.huawei.hms.ads.installreferrer.api.InstallReferrerClient;
 import com.huawei.hms.ads.installreferrer.api.InstallReferrerStateListener;
 import com.huawei.hms.ads.installreferrer.api.ReferrerDetails;
-import com.huawei.hms.flutter.ads.HmsAdsPlugin;
 import com.huawei.hms.flutter.ads.logger.HMSLogger;
 import com.huawei.hms.flutter.ads.utils.ToMap;
 import com.huawei.hms.flutter.ads.utils.constants.ErrorCodes;

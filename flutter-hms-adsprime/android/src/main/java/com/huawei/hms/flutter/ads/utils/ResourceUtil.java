@@ -21,8 +21,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import java.util.Locale;
-
 public class ResourceUtil {
     private static final String TAG = "ResourceUtil";
 

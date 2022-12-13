@@ -25,7 +25,6 @@ import androidx.annotation.NonNull;
 import com.huawei.hms.ads.consent.constant.ConsentStatus;
 import com.huawei.hms.ads.consent.constant.DebugNeedConsent;
 import com.huawei.hms.ads.consent.inter.Consent;
-import com.huawei.hms.flutter.ads.HmsAdsPlugin;
 import com.huawei.hms.flutter.ads.logger.HMSLogger;
 import com.huawei.hms.flutter.ads.utils.FromMap;
 import com.huawei.hms.flutter.ads.utils.constants.ConsentConst;

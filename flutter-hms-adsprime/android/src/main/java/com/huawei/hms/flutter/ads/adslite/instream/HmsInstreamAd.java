@@ -19,13 +19,11 @@ package com.huawei.hms.flutter.ads.adslite.instream;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 import android.util.SparseArray;
 
 import androidx.annotation.NonNull;
 
 import com.huawei.hms.ads.instreamad.InstreamAd;
-import com.huawei.hms.flutter.ads.HmsAdsPlugin;
 import com.huawei.hms.flutter.ads.logger.HMSLogger;
 import com.huawei.hms.flutter.ads.utils.constants.Channels;
 import com.huawei.hms.flutter.ads.utils.constants.ErrorCodes;

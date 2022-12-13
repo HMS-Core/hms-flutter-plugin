@@ -1,3 +1,7 @@
+## 13.4.56+302
+
+- Optimized the feedback function of HUAWEI Ads for users to give comments.
+
 ## 13.4.55+301
 
 - Fixed an issue when destroying NativeAd.

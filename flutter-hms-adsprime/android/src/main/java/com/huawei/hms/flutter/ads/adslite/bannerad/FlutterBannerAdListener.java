@@ -19,7 +19,6 @@ package com.huawei.hms.flutter.ads.adslite.bannerad;
 import android.content.Context;
 
 import com.huawei.hms.ads.AdListener;
-import com.huawei.hms.flutter.ads.HmsAdsPlugin;
 import com.huawei.hms.flutter.ads.logger.HMSLogger;
 
 import java.util.HashMap;
