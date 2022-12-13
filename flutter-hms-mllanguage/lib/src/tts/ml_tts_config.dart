@@ -14,8 +14,7 @@
     limitations under the License.
 */
 
-import 'ml_tts_constants.dart';
-import 'ml_tts_engine.dart';
+part of huawei_ml_language;
 
 class MLTtsConfig {
   String text;
@@ -37,14 +36,14 @@ class MLTtsConfig {
   });
 
   Map<String, dynamic> toMap() {
-    return {
-      "text": text,
-      "language": language ?? MLTtsConstants.TTS_EN_US,
-      "person": person ?? MLTtsConstants.TTS_SPEAKER_FEMALE_EN,
-      "speed": speed ?? 1.0,
-      "volume": volume ?? 1.0,
-      "queuingMode": queuingMode ?? MLTtsEngine.QUEUE_APPEND,
-      "synthesizeMode": synthesizeMode ?? MLTtsConstants.TTS_ONLINE_MODE
+    return <String, dynamic>{
+      'text': text,
+      'language': language ?? MLTtsConstants.TTS_EN_US,
+      'person': person ?? MLTtsConstants.TTS_SPEAKER_FEMALE_EN,
+      'speed': speed ?? 1.0,
+      'volume': volume ?? 1.0,
+      'queuingMode': queuingMode ?? MLTtsEngine.QUEUE_APPEND,
+      'synthesizeMode': synthesizeMode ?? MLTtsConstants.TTS_ONLINE_MODE,
     };
   }
 }

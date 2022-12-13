@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:typed_data';
+part of huawei_ml_language;
 
 class MLTtsAudioFragment {
   Uint8List? audioData;

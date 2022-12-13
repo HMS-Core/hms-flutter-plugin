@@ -14,14 +14,16 @@
     limitations under the License.
 */
 
+part of huawei_ml_language;
+
 class MLSpeechRealTimeTranscriptionConfig {
-  static const String LAN_ZH_CN = "zh-CN";
-  static const String LAN_EN_US = "en-US";
-  static const String LAN_FR_FR = "fr-FR";
-  static const String LAN_ES_ES = "es-ES";
-  static const String LAN_EN_IN = "en-IN";
-  static const String LAN_DE_DE = "de-DE";
-  static const String SCENES_SHOPPING = "shopping";
+  static const String LAN_ZH_CN = 'zh-CN';
+  static const String LAN_EN_US = 'en-US';
+  static const String LAN_FR_FR = 'fr-FR';
+  static const String LAN_ES_ES = 'es-ES';
+  static const String LAN_EN_IN = 'en-IN';
+  static const String LAN_DE_DE = 'de-DE';
+  static const String SCENES_SHOPPING = 'shopping';
 
   String? language;
   String? scene;
@@ -29,20 +31,21 @@ class MLSpeechRealTimeTranscriptionConfig {
   bool? sentenceTimeOffsetEnabled;
   bool? wordTimeOffsetEnabled;
 
-  MLSpeechRealTimeTranscriptionConfig(
-      {this.language,
-      this.scene,
-      this.punctuationEnabled,
-      this.sentenceTimeOffsetEnabled,
-      this.wordTimeOffsetEnabled});
+  MLSpeechRealTimeTranscriptionConfig({
+    this.language,
+    this.scene,
+    this.punctuationEnabled,
+    this.sentenceTimeOffsetEnabled,
+    this.wordTimeOffsetEnabled,
+  });
 
   Map<String, dynamic> toMap() {
-    return {
-      "language": language ?? LAN_EN_US,
-      "scene": scene ?? SCENES_SHOPPING,
-      "punctuationEnabled": punctuationEnabled ?? true,
-      "sentenceTimeOffsetEnabled": sentenceTimeOffsetEnabled ?? false,
-      "wordTimeOffsetEnabled": wordTimeOffsetEnabled ?? false
+    return <String, dynamic>{
+      'language': language ?? LAN_EN_US,
+      'scene': scene ?? SCENES_SHOPPING,
+      'punctuationEnabled': punctuationEnabled ?? true,
+      'sentenceTimeOffsetEnabled': sentenceTimeOffsetEnabled ?? false,
+      'wordTimeOffsetEnabled': wordTimeOffsetEnabled ?? false,
     };
   }
 }

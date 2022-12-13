@@ -16,54 +16,60 @@
 
 import 'package:flutter/material.dart';
 import 'package:huawei_ml_language/huawei_ml_language.dart';
-
-import '../utils/demo_utils.dart';
+import 'package:huawei_ml_language_example/utils/demo_utils.dart';
 
 class LanguagesDemo extends StatefulWidget {
   const LanguagesDemo({Key? key}) : super(key: key);
 
   @override
-  _LanguagesDemoState createState() => _LanguagesDemoState();
+  State<LanguagesDemo> createState() => _LanguagesDemoState();
 }
 
 class _LanguagesDemoState extends State<LanguagesDemo> {
-  late MLTranslateLanguage mlTranslateLanguage;
-
-  List cloudSync = ['no item'];
-  List cloud = ['no item'];
-  List localSync = ['no item'];
-  List local = ['no item'];
-
-  @override
-  void initState() {
-    mlTranslateLanguage = MLTranslateLanguage();
-    super.initState();
-  }
+  final MLTranslateLanguage mlTranslateLanguage = MLTranslateLanguage();
+  final List<dynamic> cloudSync = <dynamic>['no item'];
+  final List<dynamic> cloud = <dynamic>['no item'];
+  final List<dynamic> localSync = <dynamic>['no item'];
+  final List<dynamic> local = <dynamic>['no item'];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Translate Lang Demo')),
+      appBar: AppBar(
+        title: const Text('Translate Lang Demo'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Cloud Sync'),
+          children: <Widget>[
+            const Text('Cloud Sync'),
             Text(cloudSync.toString()),
-            Divider(height: 5),
-            Text('Cloud'),
+            const Divider(height: 5),
+            const Text('Cloud'),
             Text(cloud.toString()),
-            Divider(height: 5),
-            Text('Local Sync'),
+            const Divider(height: 5),
+            const Text('Local Sync'),
             Text(localSync.toString()),
-            Divider(height: 5),
-            Text('Local'),
+            const Divider(height: 5),
+            const Text('Local'),
             Text(local.toString()),
-            recognitionButton(getCloudSync, text: 'Get cloud langs sync'),
-            recognitionButton(getCloud, text: 'Get cloud langs async'),
-            recognitionButton(getLocalSync, text: 'Get local langs sync'),
-            recognitionButton(getLocal, text: 'Get local langs async'),
+            recognitionButton(
+              getCloudSync,
+              text: 'Get cloud langs sync',
+            ),
+            recognitionButton(
+              getCloud,
+              text: 'Get cloud langs async',
+            ),
+            recognitionButton(
+              getLocalSync,
+              text: 'Get local langs sync',
+            ),
+            recognitionButton(
+              getLocal,
+              text: 'Get local langs async',
+            ),
           ],
         ),
       ),
@@ -72,7 +78,8 @@ class _LanguagesDemoState extends State<LanguagesDemo> {
 
   void getCloudSync() async {
     try {
-      final res = await mlTranslateLanguage.syncGetCloudAllLanguages();
+      final List<dynamic> res =
+          await mlTranslateLanguage.syncGetCloudAllLanguages();
       setState(() => cloudSync.addAll(res));
     } on Exception catch (e) {
       exceptionDialog(context, e.toString());
@@ -81,7 +88,8 @@ class _LanguagesDemoState extends State<LanguagesDemo> {
 
   void getCloud() async {
     try {
-      final res = await mlTranslateLanguage.getCloudAllLanguages();
+      final List<dynamic> res =
+          await mlTranslateLanguage.getCloudAllLanguages();
       setState(() => cloud.addAll(res));
     } on Exception catch (e) {
       exceptionDialog(context, e.toString());
@@ -90,7 +98,8 @@ class _LanguagesDemoState extends State<LanguagesDemo> {
 
   void getLocalSync() async {
     try {
-      final res = await mlTranslateLanguage.syncGetLocalAllLanguages();
+      final List<dynamic> res =
+          await mlTranslateLanguage.syncGetLocalAllLanguages();
       setState(() => localSync.addAll(res));
     } on Exception catch (e) {
       exceptionDialog(context, e.toString());
@@ -99,7 +108,8 @@ class _LanguagesDemoState extends State<LanguagesDemo> {
 
   void getLocal() async {
     try {
-      final res = await mlTranslateLanguage.getLocalAllLanguages();
+      final List<dynamic> res =
+          await mlTranslateLanguage.getLocalAllLanguages();
       setState(() => local.addAll(res));
     } on Exception catch (e) {
       exceptionDialog(context, e.toString());

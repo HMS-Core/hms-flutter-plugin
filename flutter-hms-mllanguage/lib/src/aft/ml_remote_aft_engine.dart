@@ -14,14 +14,7 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
-import 'package:huawei_ml_language/huawei_ml_language.dart';
-
-const String _ON_RESULT = "onResult";
-const String _ON_ERROR = "onError";
-const String _ON_INIT_COMPLETE = "onInitComplete";
-const String _ON_UPLOAD_PROGRESS = "onUploadProgress";
-const String _ON_EVENT = "onEvent";
+part of huawei_ml_language;
 
 class MLRemoteAftEngine {
   late MethodChannel _c;
@@ -32,7 +25,7 @@ class MLRemoteAftEngine {
   }
 
   MethodChannel _initMethodChannel() {
-    final channel = MethodChannel("hms_lang_aft");
+    const MethodChannel channel = MethodChannel('hms_lang_aft');
     channel.setMethodCallHandler(_onMethodCall);
     return channel;
   }
@@ -44,49 +37,81 @@ class MLRemoteAftEngine {
 
   /// Obtains languages supported for short audio file transcription.
   Future<List<String>?> getShortAftLanguages() async {
-    final res = await _c.invokeMethod("shortAftLang");
+    final List<dynamic>? res = await _c.invokeMethod(
+      'shortAftLang',
+    );
     return res != null ? List<String>.from(res) : null;
   }
 
   /// Obtains languages supported for long audio file transcription.
   Future<List<String>?> getLongAftLanguages() async {
-    final res = await _c.invokeMethod("longAftLang");
+    final List<dynamic>? res = await _c.invokeMethod(
+      'longAftLang',
+    );
     return res != null ? List<String>.from(res) : null;
   }
 
   /// Disables the audio transcription engine to release engine resources.
   void close() {
-    _c.invokeMethod("close");
+    _c.invokeMethod(
+      'close',
+    );
   }
 
   /// Resumes a long audio transcription task on the cloud.
   void startTask(String taskId) {
-    _c.invokeMethod("startTask", {'taskId': taskId});
+    _c.invokeMethod(
+      'startTask',
+      <String, dynamic>{
+        'taskId': taskId,
+      },
+    );
   }
 
   /// Pauses a long audio transcription task on the cloud.
   void pauseTask(String taskId) {
-    _c.invokeMethod("pauseTask", {'taskId': taskId});
+    _c.invokeMethod(
+      'pauseTask',
+      <String, dynamic>{
+        'taskId': taskId,
+      },
+    );
   }
 
   /// Resumes a long audio transcription task on the cloud.
   void destroyTask(String taskId) {
-    _c.invokeMethod("destroyTask", {'taskId': taskId});
+    _c.invokeMethod(
+      'destroyTask',
+      <String, dynamic>{
+        'taskId': taskId,
+      },
+    );
   }
 
   /// Obtains the long audio transcription result from the cloud.
   void getLongAftResult(String taskId) {
-    _c.invokeMethod("getLongAftResult", {'taskId': taskId});
+    _c.invokeMethod(
+      'getLongAftResult',
+      <String, dynamic>{
+        'taskId': taskId,
+      },
+    );
   }
 
   /// Converts a short audio file on the cloud.
   void shortRecognize(MLRemoteAftSetting setting) {
-    _c.invokeMethod("shortRecognize", setting.toMap());
+    _c.invokeMethod(
+      'shortRecognize',
+      setting.toMap(),
+    );
   }
 
   /// Converts a long audio file on the cloud.
   void longRecognize(MLRemoteAftSetting setting) {
-    _c.invokeMethod("longRecognize", setting.toMap());
+    _c.invokeMethod(
+      'longRecognize',
+      setting.toMap(),
+    );
   }
 
   Future<dynamic> _onMethodCall(MethodCall call) {
@@ -94,34 +119,36 @@ class MLRemoteAftEngine {
     final String event = call.arguments['event'];
 
     switch (event) {
-      case _ON_RESULT:
-        final res = MLRemoteAftResult.fromMap(call.arguments['result']);
+      case 'onResult':
+        final MLRemoteAftResult res = MLRemoteAftResult.fromMap(
+          call.arguments['result'],
+        );
         _listener!.onResult.call(taskId, res);
         break;
-      case _ON_ERROR:
+      case 'onError':
         _listener!.onError.call(
           taskId,
           call.arguments['errorCode'],
           call.arguments['message'],
         );
         break;
-      case _ON_INIT_COMPLETE:
+      case 'onInitComplete':
         _listener!.onInitComplete.call(taskId);
         break;
-      case _ON_UPLOAD_PROGRESS:
+      case 'onUploadProgress':
         _listener!.onUploadProgress.call(
           taskId,
           call.arguments['progress'],
         );
         break;
-      case _ON_EVENT:
+      case 'onEvent':
         _listener!.onEvent.call(
           taskId,
           call.arguments['eventId'],
         );
         break;
       default:
-        throw "Unexpected event!";
+        throw 'Unexpected event!';
     }
     return Future<dynamic>.value(null);
   }

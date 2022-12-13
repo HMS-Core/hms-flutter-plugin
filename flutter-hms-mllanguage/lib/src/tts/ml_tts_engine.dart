@@ -14,21 +14,23 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
-
-import '../common/common.dart';
-import '../common/model_download_strategy.dart';
-import 'ml_tts_audio_fragment.dart';
-import 'ml_tts_callback.dart';
-import 'ml_tts_config.dart';
-import 'ml_tts_error.dart';
-import 'ml_tts_speaker.dart';
-import 'ml_tts_warn.dart';
+part of huawei_ml_language;
 
 class MLTtsEngine {
+  /// The audio synthesized by the TTS engine is not automatically played by the internal player.
   static const int EXTERNAL_PLAYBACK = 2;
+
+  /// The audio synthesized by the TTS engine is returned to the app through onAudioAvailable.
   static const int OPEN_STREAM = 4;
+
+  /// Serial queuing mode.
+  /// In this mode, multiple audio synthesis tasks are executed in the call sequence.
   static const int QUEUE_APPEND = 0;
+
+  /// Queue clear mode.
+  /// In this mode, the audio synthesis tasks to be executed are cleared,
+  /// the audio synthesis task being executed is stopped,
+  /// and a specified audio synthesis task is executed.
   static const int QUEUE_FLUSH = 1;
 
   late MethodChannel _c;
@@ -40,50 +42,74 @@ class MLTtsEngine {
   }
 
   MethodChannel _initMethodChannel() {
-    final channel = MethodChannel('hms_lang_tts');
+    const MethodChannel channel = MethodChannel('hms_lang_tts');
     channel.setMethodCallHandler(_onMethodCall);
     return channel;
   }
 
   Future<List<String>> getLanguages() async {
-    return await _c.invokeMethod("getLanguages");
+    return await _c.invokeMethod(
+      'getLanguages',
+    );
   }
 
   Future<List<MLTtsSpeaker>> getSpeaker(String language) async {
-    List res = await _c.invokeMethod("getSpeaker", {'language': language});
-    return res.map((e) => MLTtsSpeaker.fromMap(e)).toList();
+    final List<dynamic> res = await _c.invokeMethod(
+      'getSpeaker',
+      <String, dynamic>{
+        'language': language,
+      },
+    );
+    return res.map((dynamic e) => MLTtsSpeaker.fromMap(e)).toList();
   }
 
   Future<List<MLTtsSpeaker>> getSpeakers() async {
-    List res = await _c.invokeMethod("getSpeakers");
-    return res.map((e) => MLTtsSpeaker.fromMap(e)).toList();
+    final List<dynamic> res = await _c.invokeMethod(
+      'getSpeakers',
+    );
+    return res.map((dynamic e) => MLTtsSpeaker.fromMap(e)).toList();
   }
 
   Future<int> isLanguageAvailable(String language) async {
     return await _c.invokeMethod(
       'isLanguageAvailable',
-      {'language': language},
+      <String, dynamic>{
+        'language': language,
+      },
     );
   }
 
   void pause() {
-    _c.invokeMethod("pause");
+    _c.invokeMethod(
+      'pause',
+    );
   }
 
   void resume() {
-    _c.invokeMethod("resume");
+    _c.invokeMethod(
+      'resume',
+    );
   }
 
   void stop() {
-    _c.invokeMethod("stop");
+    _c.invokeMethod(
+      'stop',
+    );
   }
 
   void shutdown() {
-    _c.invokeMethod("shutdown");
+    _c.invokeMethod(
+      'shutdown',
+    );
   }
 
   void setPlayerVolume(int volume) {
-    _c.invokeMethod("setPlayerVolume", {'volume': volume});
+    _c.invokeMethod(
+      'setPlayerVolume',
+      <String, dynamic>{
+        'volume': volume,
+      },
+    );
   }
 
   void setTtsCallback(MLTtsCallback callback) {
@@ -91,11 +117,19 @@ class MLTtsEngine {
   }
 
   Future<String> speak(MLTtsConfig config) async {
-    return await _c.invokeMethod("speak", config.toMap());
+    return await _c.invokeMethod(
+      'speak',
+      config.toMap(),
+    );
   }
 
   Future<bool> isModelExist(String model) async {
-    return await _c.invokeMethod('isModelExist', {'model': model});
+    return await _c.invokeMethod(
+      'isModelExist',
+      <String, dynamic>{
+        'model': model,
+      },
+    );
   }
 
   Future<bool> downloadModel(
@@ -104,12 +138,15 @@ class MLTtsEngine {
     LanguageModelDownloadStrategy? strategy,
   ]) async {
     _downloadListener = listener;
-    return await _c.invokeMethod("downloadModel", {
-      'model': model,
-      'strategy': strategy != null
-          ? strategy.toMap()
-          : LanguageModelDownloadStrategy().toMap()
-    });
+    return await _c.invokeMethod(
+      'downloadModel',
+      <String, dynamic>{
+        'model': model,
+        'strategy': strategy != null
+            ? strategy.toMap()
+            : LanguageModelDownloadStrategy().toMap(),
+      },
+    );
   }
 
   Future<dynamic> _onMethodCall(MethodCall call) {
@@ -123,11 +160,11 @@ class MLTtsEngine {
       final String taskId = call.arguments['taskId'];
       switch (event) {
         case 'onError':
-          final errObj = MLTtsError.fromMap(call.arguments);
+          final MLTtsError errObj = MLTtsError.fromMap(call.arguments);
           _callback?.onError.call(taskId, errObj);
           break;
         case 'onWarn':
-          final warnObj = MLTtsWarn.fromMap(call.arguments);
+          final MLTtsWarn warnObj = MLTtsWarn.fromMap(call.arguments);
           _callback?.onWarn?.call(taskId, warnObj);
           break;
         case 'onRangeStart':
@@ -138,7 +175,8 @@ class MLTtsEngine {
           );
           break;
         case 'onAudioAvailable':
-          final fragment = MLTtsAudioFragment.fromMap(call.arguments);
+          final MLTtsAudioFragment fragment =
+              MLTtsAudioFragment.fromMap(call.arguments);
           _callback?.onAudioAvailable?.call(
             taskId,
             fragment,
@@ -146,7 +184,10 @@ class MLTtsEngine {
           );
           break;
         case 'onEvent':
-          _callback?.onEvent?.call(taskId, call.arguments['eventId']);
+          _callback?.onEvent?.call(
+            taskId,
+            call.arguments['eventId'],
+          );
           break;
         default:
           throw 'Unexpected event!';

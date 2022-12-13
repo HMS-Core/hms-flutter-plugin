@@ -15,21 +15,39 @@
 */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:huawei_ml_language/huawei_ml_language.dart';
+import 'package:huawei_ml_language_example/screens/home.dart';
 
-import '../screens/home.dart';
-
-void main() {
-  runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+    <DeviceOrientation>[
+      DeviceOrientation.portraitUp,
+    ],
+  );
+  // TODO: Copy and paste the api_key value in your agconnect-services.json file.
+  await MLLanguageApp().setApiKey('<api_key>');
+  await requestPermissions();
+  runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
+// TODO: Please implement your own 'Permission Handler'.
+Future<void> requestPermissions() async {
+  // This plugin needs some permissions to work properly.
+  // You are expected to handle these permissions to use this Demo.
+
+  // You can learn more about the required permissions from our official documentations.
+  // https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/assigning-permissions-0000001052789343?ha_source=hms1
 }
 
-class _MyAppState extends State<MyApp> {
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: Home());
+    return const MaterialApp(
+      home: Home(),
+    );
   }
 }

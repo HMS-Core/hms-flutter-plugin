@@ -14,38 +14,78 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
+part of huawei_ml_language;
 
 class MLLanguageApp {
   late MethodChannel _c;
 
   MLLanguageApp() {
-    _c = const MethodChannel("hms_lang_app");
+    _c = const MethodChannel('hms_lang_app');
   }
 
-  void enableLogger() {
-    _c.invokeMethod("enableLogger");
-  }
-
-  void disableLogger() {
-    _c.invokeMethod("disableLogger");
-  }
-
-  void setApiKey(String apiKey) {
-    _c.invokeMethod(
-      "setApiKey",
-      {'apiKey': apiKey},
+  /// Sets the API key for on-cloud services.
+  Future<void> setApiKey(String apiKey) async {
+    await _c.invokeMethod(
+      'setApiKey',
+      <String, dynamic>{
+        'apiKey': apiKey,
+      },
     );
   }
 
-  void setAccessToken(String accessToken) {
-    _c.invokeMethod(
-      "setAccessToken",
-      {'accessToken': accessToken},
+  /// Sets the access token for on-cloud services.
+  Future<void> setAccessToken(String accessToken) async {
+    await _c.invokeMethod(
+      'setAccessToken',
+      <String, dynamic>{
+        'accessToken': accessToken,
+      },
     );
   }
 
   Future<String?> getAppDirectory() async {
-    return await _c.invokeMethod('getAppDirectory');
+    return await _c.invokeMethod(
+      'getAppDirectory',
+    );
+  }
+
+  /// Sets a data processing location when you choose to manually manage and specify such a location.
+  ///
+  /// REGION_DR_UNKNOWN = 1001,
+  /// REGION_DR_CHINA = 1002,
+  /// REGION_DR_RUSSIA = 1005,
+  /// REGION_DR_GERMAN = 1006,
+  /// REGION_DR_SINGAPORE = 1007
+  Future<void> setUserRegion(int region) async {
+    await _c.invokeMethod(
+      'setUserRegion',
+      <String, dynamic>{
+        'region': region,
+      },
+    );
+  }
+
+  /// Obtains the country/region code of the data processing location you have specified
+  /// when you choose to manually manage and specify such a location.
+  ///
+  /// When the parameter value is invalid or not specified, null will be returned.
+  Future<String?> getCountryCode() async {
+    return await _c.invokeMethod(
+      'getCountryCode',
+    );
+  }
+
+  /// Enables the HMS plugin method analytics.
+  Future<void> enableLogger() async {
+    await _c.invokeMethod(
+      'enableLogger',
+    );
+  }
+
+  /// Disables the HMS plugin method analytics.
+  Future<void> disableLogger() async {
+    await _c.invokeMethod(
+      'disableLogger',
+    );
   }
 }

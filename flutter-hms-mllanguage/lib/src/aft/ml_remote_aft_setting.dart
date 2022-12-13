@@ -14,9 +14,11 @@
     limitations under the License.
 */
 
+part of huawei_ml_language;
+
 class MLRemoteAftSetting {
-  static const String LANGUAGE_ZH = "zh";
-  static const String LANGUAGE_EN_US = "en-US";
+  static const String LANGUAGE_ZH = 'zh';
+  static const String LANGUAGE_EN_US = 'en-US';
 
   String path;
   String? language;
@@ -33,12 +35,12 @@ class MLRemoteAftSetting {
   });
 
   Map<String, dynamic> toMap() {
-    return {
-      "path": path,
-      "language": language ?? LANGUAGE_EN_US,
-      "enablePunctuation": enablePunctuation ?? false,
-      "enableWordTimeOffset": enableWordTimeOffset ?? false,
-      "enableSentenceTimeOffset": enableSentenceTimeOffset ?? false,
+    return <String, dynamic>{
+      'path': path,
+      'language': language ?? LANGUAGE_EN_US,
+      'enablePunctuation': enablePunctuation ?? false,
+      'enableWordTimeOffset': enableWordTimeOffset ?? false,
+      'enableSentenceTimeOffset': enableSentenceTimeOffset ?? false,
     };
   }
 }

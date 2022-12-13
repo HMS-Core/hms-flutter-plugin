@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_ml_language;
+
 class MLRemoteAftResult {
   List<Segment?> segments;
   List<Segment?> sentences;
@@ -23,41 +25,38 @@ class MLRemoteAftResult {
   bool? isComplete;
 
   MLRemoteAftResult({
-    this.taskId,
-    this.text,
-    this.isComplete,
     required this.segments,
     required this.sentences,
     required this.words,
+    this.taskId,
+    this.text,
+    this.isComplete,
   });
 
   factory MLRemoteAftResult.fromMap(Map<dynamic, dynamic> map) {
-    var segments = List<Segment>.empty(growable: true);
-    var sentences = List<Segment>.empty(growable: true);
-    var words = List<Segment>.empty(growable: true);
+    final List<Segment> segments = <Segment>[];
+    final List<Segment> sentences = <Segment>[];
+    final List<Segment> words = <Segment>[];
 
     if (map['segments'] != null) {
-      map['segments'].forEach((v) {
+      map['segments'].forEach((dynamic v) {
         segments.add(Segment.fromMap(v));
       });
     }
-
     if (map['sentences'] != null) {
-      map['sentences'].forEach((v) {
+      map['sentences'].forEach((dynamic v) {
         sentences.add(Segment.fromMap(v));
       });
     }
-
     if (map['words'] != null) {
-      map['words'].forEach((v) {
+      map['words'].forEach((dynamic v) {
         words.add(Segment.fromMap(v));
       });
     }
-
     return MLRemoteAftResult(
-      isComplete: map['isComplete'] ?? null,
-      text: map['text'] ?? null,
-      taskId: map['taskId'] ?? null,
+      isComplete: map['isComplete'],
+      text: map['text'],
+      taskId: map['taskId'],
       segments: segments,
       sentences: sentences,
       words: words,
@@ -78,9 +77,9 @@ class Segment {
 
   factory Segment.fromMap(Map<dynamic, dynamic> map) {
     return Segment(
-      text: map['text'] ?? null,
-      startTime: map['startTime'] ?? null,
-      endTime: map['endTime'] ?? null,
+      text: map['text'],
+      startTime: map['startTime'],
+      endTime: map['endTime'],
     );
   }
 }

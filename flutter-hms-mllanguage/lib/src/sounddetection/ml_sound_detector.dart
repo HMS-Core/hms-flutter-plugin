@@ -14,9 +14,12 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
+part of huawei_ml_language;
 
-typedef SoundDetectListener = void Function({int? result, int? errCode});
+typedef SoundDetectListener = void Function({
+  int? result,
+  int? errCode,
+});
 
 class MLSoundDetector {
   late MethodChannel _c;
@@ -28,7 +31,7 @@ class MLSoundDetector {
   }
 
   MethodChannel _initMethodChannel() {
-    final channel = const MethodChannel("hms_lang_sound_detection");
+    const MethodChannel channel = MethodChannel('hms_lang_sound_detection');
     channel.setMethodCallHandler(_onDetection);
     return channel;
   }
@@ -41,30 +44,40 @@ class MLSoundDetector {
   /// Starts detection. The microphone picks up real-time audio data and
   /// [setSoundDetectListener] is used to set a listener to receive the result.
   Future<bool> start() async {
-    return await _c.invokeMethod("startSoundDetector");
+    return await _c.invokeMethod(
+      'startSoundDetector',
+    );
   }
 
   /// Stops detecting the audio data picked up by the
   /// microphone but does not release resources.
   void stop() {
-    _c.invokeMethod("stopSoundDetector");
+    _c.invokeMethod(
+      'stopSoundDetector',
+    );
   }
 
   /// Releases sound detector resources.
   void destroy() {
-    _c.invokeMethod("destroySoundDetector");
+    _c.invokeMethod(
+      'destroySoundDetector',
+    );
   }
 
   Future<dynamic> _onDetection(MethodCall call) {
     switch (call.method) {
-      case "success":
-        _listener?.call(result: call.arguments['result']);
+      case 'success':
+        _listener?.call(
+          result: call.arguments['result'],
+        );
         break;
-      case "fail":
-        _listener?.call(errCode: call.arguments['errCode']);
+      case 'fail':
+        _listener?.call(
+          errCode: call.arguments['errCode'],
+        );
         break;
       default:
-        throw Exception("Unexpected response");
+        throw Exception('Unexpected response');
     }
     return Future<dynamic>.value(null);
   }

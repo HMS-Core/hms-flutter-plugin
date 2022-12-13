@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_ml_language;
+
 class LanguageModelDownloadStrategy {
   bool _needWifi = false;
   bool _needCharging = false;
@@ -36,8 +38,8 @@ class LanguageModelDownloadStrategy {
     _region = region;
   }
 
-  Map toMap() {
-    return {
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
       'needWifi': _needWifi,
       'needCharging': _needCharging,
       'needDeviceIdle': _needDeviceIdle,

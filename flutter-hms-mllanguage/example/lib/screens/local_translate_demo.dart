@@ -16,80 +16,87 @@
 
 import 'package:flutter/material.dart';
 import 'package:huawei_ml_language/huawei_ml_language.dart';
-
-import '../utils/demo_utils.dart';
+import 'package:huawei_ml_language_example/utils/demo_utils.dart';
 
 class LocalTranslateDemo extends StatefulWidget {
   const LocalTranslateDemo({Key? key}) : super(key: key);
 
   @override
-  _LocalTranslateDemoState createState() => _LocalTranslateDemoState();
+  State<LocalTranslateDemo> createState() => _LocalTranslateDemoState();
 }
 
 class _LocalTranslateDemoState extends State<LocalTranslateDemo> {
-  late MLLocalTranslator localTranslator;
-
+  final MLLocalTranslator localTranslator = MLLocalTranslator();
   String? _res;
   String? _downloadProgress;
-  String _btnText = "Download and Translate";
-
-  String _selectedLanguage = "lv";
-  final List<String> _languages = [
-    "de",
-    "no",
-    "hi",
-    "ru",
-    "fi",
-    "pt",
-    "lv",
-    "fr",
-    "hu",
+  String _btnText = 'Download and Translate';
+  String _selectedLanguage = 'lv';
+  final List<String> _languages = <String>[
+    'de',
+    'no',
+    'hi',
+    'ru',
+    'fi',
+    'pt',
+    'lv',
+    'fr',
+    'hu',
   ];
 
   @override
   void initState() {
-    localTranslator = MLLocalTranslator();
-    localTranslator.setDownloadListener(downloadListener);
     super.initState();
+    localTranslator.setDownloadListener(downloadListener);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Local Translate Demo')),
+      appBar: AppBar(
+        title: const Text('Local Translate Demo'),
+      ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Select a target language   (en to => )"),
+                children: <Widget>[
+                  const Text('Select a target language (en to => )'),
                   DropdownButton<String>(
                     value: _selectedLanguage,
                     onChanged: (String? s) {
                       setState(() => _selectedLanguage = s!);
                     },
-                    items: _languages
-                        .map((e) => DropdownMenuItem(
-                              value: e,
-                              child: Text(e),
-                            ))
-                        .toList(),
+                    items: _languages.map((String e) {
+                      return DropdownMenuItem<String>(
+                        value: e,
+                        child: Text(e),
+                      );
+                    }).toList(),
                   ),
                 ],
               ),
             ),
-            resultBox("Download progress", _downloadProgress),
-            resultBox("Hey, how are you? ==> ", _res),
-            recognitionButton(prepare, text: _btnText),
+            resultBox(
+              'Download progress',
+              _downloadProgress,
+            ),
+            resultBox(
+              'Hey, how are you? ==> ',
+              _res,
+            ),
+            recognitionButton(
+              prepare,
+              text: _btnText,
+            ),
             recognitionButton(
               stop,
-              text: "Stop Translation",
+              text: 'Stop Translation',
               color: Colors.redAccent,
-            )
+            ),
           ],
         ),
       ),
@@ -98,23 +105,26 @@ class _LocalTranslateDemoState extends State<LocalTranslateDemo> {
 
   // Methods
   void prepare() async {
-    setState(() => _btnText = "Wait Please...");
-    final strategy = LanguageModelDownloadStrategy();
+    setState(() => _btnText = 'Wait Please...');
+    final LanguageModelDownloadStrategy strategy =
+        LanguageModelDownloadStrategy();
     strategy.needWifi();
 
-    final setting = MLTranslateSetting.local(
-      sourceLangCode: "en",
+    final MLTranslateSetting setting = MLTranslateSetting.local(
+      sourceLangCode: 'en',
       targetLangCode: _selectedLanguage,
     );
-
     try {
-      final prepared = await localTranslator.prepareModel(setting, strategy);
+      final bool prepared = await localTranslator.prepareModel(
+        setting,
+        strategy,
+      );
       if (prepared) {
         final String? res =
-            await localTranslator.asyncTranslate("Hey, how are you?");
+            await localTranslator.asyncTranslate('Hey, how are you?');
         setState(() {
           _res = res;
-          _btnText = "Download and Translate";
+          _btnText = 'Download and Translate';
         });
       }
     } on Exception catch (e) {
@@ -131,7 +141,7 @@ class _LocalTranslateDemoState extends State<LocalTranslateDemo> {
   }
 
   // Listener
-  void downloadListener({all, downloaded}) {
-    setState(() => _downloadProgress = "%${(downloaded! * 100) / all!}");
+  void downloadListener({dynamic all, dynamic downloaded}) {
+    setState(() => _downloadProgress = '%${(downloaded! * 100) / all!}');
   }
 }

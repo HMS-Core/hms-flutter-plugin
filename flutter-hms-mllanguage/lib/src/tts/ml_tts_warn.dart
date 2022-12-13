@@ -14,11 +14,16 @@
     limitations under the License.
 */
 
+part of huawei_ml_language;
+
 class MLTtsWarn {
   String? warnMsg;
   int? warnId;
 
-  MLTtsWarn({this.warnMsg, this.warnId});
+  MLTtsWarn({
+    this.warnMsg,
+    this.warnId,
+  });
 
   factory MLTtsWarn.fromMap(Map<dynamic, dynamic> map) {
     return MLTtsWarn(

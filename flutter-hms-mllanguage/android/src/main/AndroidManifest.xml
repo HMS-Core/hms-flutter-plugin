@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.huawei.hms.flutter.mllanguage">
+    package="com.huawei.hms.flutter.mllanguage">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 </manifest>

@@ -22,8 +22,8 @@ if (flutterVersionName == null) {
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'com.huawei.agconnect'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+apply plugin: 'com.huawei.agconnect'
 
 android {
     compileSdkVersion 30
@@ -37,12 +37,23 @@ android {
         versionName flutterVersionName
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+
     signingConfigs {
         config {
             storeFile file('<keystore_file>')
             storePassword '<keystore_password>'
             keyAlias '<key_alias>'
             keyPassword '<key_password>'
+            v1SigningEnabled true
+            v2SigningEnabled true
         }
     }
 
@@ -51,15 +62,11 @@ android {
             signingConfig signingConfigs.config
         }
         release {
+            signingConfig signingConfigs.config
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.config
         }
-    }
-    compileOptions {
-        targetCompatibility JavaVersion.VERSION_1_8
-        sourceCompatibility JavaVersion.VERSION_1_8
     }
 }
 

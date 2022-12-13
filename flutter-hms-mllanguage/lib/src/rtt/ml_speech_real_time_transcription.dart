@@ -14,18 +14,7 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
-import 'package:huawei_ml_language/src/rtt/ml_speech_real_time_transcription_result.dart';
-
-import 'ml_speech_real_time_transcription_config.dart';
-import 'ml_speech_real_time_transcription_listener.dart';
-
-const String _ON_RESULT = 'onRecognizingResults';
-const String _ON_ERROR = 'onError';
-const String _ON_START_LISTENING = 'onStartListening';
-const String _ON_STARTING_OF_SPEECH = 'onStartingOfSpeech';
-const String _ON_VOICE_DATA_RECEIVED = 'onVoiceDataReceived';
-const String _ON_STATE = 'onState';
+part of huawei_ml_language;
 
 class MLSpeechRealTimeTranscription {
   late MethodChannel _c;
@@ -36,55 +25,69 @@ class MLSpeechRealTimeTranscription {
   }
 
   MethodChannel _initMethodChannel() {
-    final channel = MethodChannel("hms_lang_rtt");
+    const MethodChannel channel = MethodChannel('hms_lang_rtt');
     channel.setMethodCallHandler(_onMethodCall);
     return channel;
   }
 
   void destroy() {
-    _c.invokeMethod("destroy");
+    _c.invokeMethod(
+      'destroy',
+    );
   }
 
   void setRealTimeTranscriptionListener(
-      MLSpeechRealTimeTranscriptionListener listener) {
+    MLSpeechRealTimeTranscriptionListener listener,
+  ) {
     _listener = listener;
   }
 
-  void startRecognizing(MLSpeechRealTimeTranscriptionConfig config) {
-    _c.invokeMethod("startRecognizing", config.toMap());
+  void startRecognizing(
+    MLSpeechRealTimeTranscriptionConfig config,
+  ) {
+    _c.invokeMethod(
+      'startRecognizing',
+      config.toMap(),
+    );
   }
 
   Future<List<String>?> getLanguages() async {
-    final res = await _c.invokeMethod("getLanguages");
+    final List<dynamic>? res = await _c.invokeMethod(
+      'getLanguages',
+    );
     return res != null ? List<String>.from(res) : null;
   }
 
   Future<dynamic> _onMethodCall(MethodCall call) {
-    final event = call.arguments['event'];
+    final dynamic event = call.arguments['event'];
 
     switch (event) {
-      case _ON_RESULT:
-        final rttRes =
+      case 'onRecognizingResults':
+        final MLSpeechRealTimeTranscriptionResult rttRes =
             MLSpeechRealTimeTranscriptionResult.fromMap(call.arguments);
         _listener?.onResult.call(rttRes);
         break;
-      case _ON_ERROR:
+      case 'onError':
         _listener?.onError.call(
           call.arguments['errCode'],
           call.arguments['errMsg'],
         );
         break;
-      case _ON_START_LISTENING:
+      case 'onStartListening':
         _listener?.onStartListening?.call();
         break;
-      case _ON_STARTING_OF_SPEECH:
+      case 'onStartingOfSpeech':
         _listener?.onStartingOfSpeech?.call();
         break;
-      case _ON_VOICE_DATA_RECEIVED:
-        _listener?.onVoiceDataReceived?.call(call.arguments['bytes']);
+      case 'onVoiceDataReceived':
+        _listener?.onVoiceDataReceived?.call(
+          call.arguments['bytes'],
+        );
         break;
-      case _ON_STATE:
-        _listener?.onState?.call(call.arguments['state']);
+      case 'onState':
+        _listener?.onState?.call(
+          call.arguments['state'],
+        );
         break;
       default:
         throw 'Unexpected event!';

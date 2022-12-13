@@ -16,87 +16,90 @@
 
 import 'package:flutter/material.dart';
 import 'package:huawei_ml_language/huawei_ml_language.dart';
-
-import '../utils/demo_utils.dart';
+import 'package:huawei_ml_language_example/utils/demo_utils.dart';
 
 class RemoteTranslateDemo extends StatefulWidget {
   const RemoteTranslateDemo({Key? key}) : super(key: key);
 
   @override
-  _RemoteTranslateDemoState createState() => _RemoteTranslateDemoState();
+  State<RemoteTranslateDemo> createState() => _RemoteTranslateDemoState();
 }
 
 class _RemoteTranslateDemoState extends State<RemoteTranslateDemo> {
-  late MLRemoteTranslator _translator;
-
+  final MLRemoteTranslator _translator = MLRemoteTranslator();
   String? _res;
-  String _selectedLanguage = "bg";
-  final List<String> _languages = [
-    "ar",
-    "bg",
-    "cs",
-    "da",
-    "de",
-    "el",
-    "en",
-    "es",
-    "et",
-    "fa",
-    "fi",
-    "fr",
+  String _selectedLanguage = 'bg';
+  final List<String> _languages = <String>[
+    'ar',
+    'bg',
+    'cs',
+    'da',
+    'de',
+    'el',
+    'en',
+    'es',
+    'et',
+    'fa',
+    'fi',
+    'fr',
   ];
-
-  @override
-  void initState() {
-    _translator = MLRemoteTranslator();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Remote Translate Demo')),
+      appBar: AppBar(
+        title: const Text('Remote Translate Demo'),
+      ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Select a target language   (en to => )"),
+                children: <Widget>[
+                  const Text('Select a target language (en to => )'),
                   DropdownButton<String>(
                     value: _selectedLanguage,
                     onChanged: (String? s) {
                       setState(() => _selectedLanguage = s!);
                     },
-                    items: _languages
-                        .map((e) => DropdownMenuItem(
-                              value: e,
-                              child: Text(e),
-                            ))
-                        .toList(),
+                    items: _languages.map((String e) {
+                      return DropdownMenuItem<String>(
+                        value: e,
+                        child: Text(e),
+                      );
+                    }).toList(),
                   ),
                 ],
               ),
             ),
-            resultBox("How are you ==", _res),
-            recognitionButton(_translate, text: "Translate"),
-            recognitionButton(_stopTranslator,
-                text: "Stop Translation", color: Colors.red)
+            resultBox(
+              'How are you ==',
+              _res,
+            ),
+            recognitionButton(
+              _translate,
+              text: 'Translate',
+            ),
+            recognitionButton(
+              _stopTranslator,
+              text: 'Stop Translation',
+              color: Colors.red,
+            ),
           ],
         ),
       ),
     );
   }
 
-  _translate() async {
-    final setting = MLTranslateSetting.remote(
-        sourceText: "How are you",
-        sourceLangCode: "en",
-        targetLangCode: _selectedLanguage);
-
+  void _translate() async {
+    final MLTranslateSetting setting = MLTranslateSetting.remote(
+      sourceText: 'How are you',
+      sourceLangCode: 'en',
+      targetLangCode: _selectedLanguage,
+    );
     try {
       final String? res = await _translator.syncTranslate(setting);
       if (res != null) {
@@ -107,7 +110,7 @@ class _RemoteTranslateDemoState extends State<RemoteTranslateDemo> {
     }
   }
 
-  _stopTranslator() async {
+  void _stopTranslator() async {
     try {
       await _translator.stopTranslate();
     } on Exception catch (e) {

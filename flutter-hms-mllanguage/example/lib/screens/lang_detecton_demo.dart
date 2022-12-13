@@ -16,70 +16,94 @@
 
 import 'package:flutter/material.dart';
 import 'package:huawei_ml_language/huawei_ml_language.dart';
-
-import '../utils/demo_utils.dart';
+import 'package:huawei_ml_language_example/utils/demo_utils.dart';
 
 class LangDetectionDemo extends StatefulWidget {
   const LangDetectionDemo({Key? key}) : super(key: key);
 
   @override
-  _LangDetectionDemoState createState() => _LangDetectionDemoState();
+  State<LangDetectionDemo> createState() => _LangDetectionDemoState();
 }
 
 class _LangDetectionDemoState extends State<LangDetectionDemo> {
-  late MLLangDetector _detector;
-
+  final MLLangDetector _detector = MLLangDetector();
+  final List<String?> _list = <String?>[];
   String? _res;
-  List _list = [];
-
-  @override
-  void initState() {
-    _detector = MLLangDetector();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Lang Detection Demo")),
+      appBar: AppBar(
+        title: const Text('Lang Detection Demo'),
+      ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: RichText(
-                text: TextSpan(children: [
-                  TextSpan(
+                text: TextSpan(
+                  children: <TextSpan>[
+                    TextSpan(
                       text: "We'll use ",
-                      style: TextStyle(color: Colors.black.withOpacity(.5))),
-                  TextSpan(
+                      style: TextStyle(
+                        color: Colors.black.withOpacity(.5),
+                      ),
+                    ),
+                    const TextSpan(
                       text: "il fait si froid aujourd'hui",
                       style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.bold)),
-                  TextSpan(
-                      text: " for this demo",
-                      style: TextStyle(color: Colors.black.withOpacity(.5))),
-                ]),
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextSpan(
+                      text: ' for this demo',
+                      style: TextStyle(
+                        color: Colors.black.withOpacity(.5),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            resultBox("First best detection", _res),
-            recognitionButton(_firstBestDetect, text: "Get First Best"),
-            resultBox("Lang probabilities", _list),
-            recognitionButton(_probabilityDetect, text: "Get Probabilities"),
-            recognitionButton(_stop,
-                text: "Stop Detector", color: Colors.redAccent),
+            resultBox(
+              'First best detection',
+              _res,
+            ),
+            recognitionButton(
+              _firstBestDetect,
+              text: 'Get First Best',
+            ),
+            resultBox(
+              'Lang probabilities',
+              _list,
+            ),
+            recognitionButton(
+              _probabilityDetect,
+              text: 'Get Probabilities',
+            ),
+            recognitionButton(
+              _stop,
+              text: 'Stop Detector',
+              color: Colors.redAccent,
+            ),
           ],
         ),
       ),
     );
   }
 
-  _firstBestDetect() async {
-    final setting = MLLangDetectorSetting.create(
-        sourceText: "il fait si froid aujourd'hui", isRemote: false);
+  void _firstBestDetect() async {
+    final MLLangDetectorSetting setting = MLLangDetectorSetting.create(
+      sourceText: "il fait si froid aujourd'hui",
+      isRemote: false,
+    );
     try {
-      final String? res = await _detector.firstBestDetect(setting: setting);
+      final String? res = await _detector.firstBestDetect(
+        setting: setting,
+      );
       if (res != null) {
         setState(() => _res = res);
       }
@@ -88,21 +112,24 @@ class _LangDetectionDemoState extends State<LangDetectionDemo> {
     }
   }
 
-  _probabilityDetect() async {
-    final setting = MLLangDetectorSetting.create(
-        sourceText: "il fait si froid aujourd'hui", isRemote: false);
+  void _probabilityDetect() async {
+    final MLLangDetectorSetting setting = MLLangDetectorSetting.create(
+      sourceText: "il fait si froid aujourd'hui",
+      isRemote: false,
+    );
     try {
-      List<MLDetectedLang> res =
-          await _detector.probabilityDetect(setting: setting);
-      res.forEach((element) {
+      final List<MLDetectedLang> res = await _detector.probabilityDetect(
+        setting: setting,
+      );
+      for (MLDetectedLang element in res) {
         setState(() => _list.add(element.langCode));
-      });
+      }
     } on Exception catch (e) {
       exceptionDialog(context, e.toString());
     }
   }
 
-  _stop() async {
+  void _stop() async {
     try {
       await _detector.stop();
     } on Exception catch (e) {

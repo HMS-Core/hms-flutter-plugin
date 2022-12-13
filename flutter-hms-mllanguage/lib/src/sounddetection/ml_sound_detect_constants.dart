@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_ml_language;
+
 class MLSoundDetectConstants {
   /// Detection failure: memory exhausted.
   static const int SOUND_DETECT_ERROR_NO_MEM = 12201;

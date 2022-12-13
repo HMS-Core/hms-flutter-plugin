@@ -16,31 +16,37 @@
 
 import 'package:flutter/material.dart';
 
-exceptionDialog(BuildContext context, String m) {
+void exceptionDialog(BuildContext context, String m) {
   showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Exception'),
-          content: Text(m),
-        );
-      });
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Exception'),
+        content: Text(m),
+      );
+    },
+  );
 }
 
-Widget recognitionButton(VoidCallback callback, {String? text, Color? color}) {
+Widget recognitionButton(
+  VoidCallback callback, {
+  String? text,
+  Color? color,
+}) {
   return Container(
     width: double.infinity,
     margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
     child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            elevation: 0,
-            primary: color ?? const Color(0xff6ddccf),
-            onPrimary: Colors.white,
-            padding: const EdgeInsets.symmetric(vertical: 14),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
-        child: Text(text ?? "Start Recognition"),
-        onPressed: callback),
+      style: ElevatedButton.styleFrom(
+        elevation: 0,
+        backgroundColor: color ?? const Color(0xff6ddccf),
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+      ),
+      onPressed: callback,
+      child: Text(text ?? 'Start Recognition'),
+    ),
   );
 }
 
@@ -50,60 +56,83 @@ Widget resultBox(String name, dynamic value) {
     padding: const EdgeInsets.all(12),
     margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
     decoration: BoxDecoration(
-        color: const Color(0xffdbe2ef).withOpacity(.6),
-        borderRadius: BorderRadius.circular(4)),
+      color: const Color(0xffdbe2ef).withOpacity(.6),
+      borderRadius: BorderRadius.circular(4),
+    ),
     child: RichText(
-      text: TextSpan(children: [
-        TextSpan(
-            text: "$name: ",
-            style: TextStyle(color: Colors.black.withOpacity(.5))),
-        TextSpan(
+      text: TextSpan(
+        children: <TextSpan>[
+          TextSpan(
+            text: '$name: ',
+            style: TextStyle(
+              color: Colors.black.withOpacity(.5),
+            ),
+          ),
+          TextSpan(
             text: "${value ?? "None"}",
             style: const TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold))
-      ]),
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
     ),
-    //child: Text("$name: ${value ?? "null"}"),
   );
 }
 
 class CustomGridElement extends StatelessWidget {
-  final Widget? page;
   final String imagePath;
   final String name;
+  final Widget? page;
 
-  const CustomGridElement(
-      {Key? key, this.page, required this.name, required this.imagePath})
-      : super(key: key);
+  const CustomGridElement({
+    required this.name,
+    required this.imagePath,
+    this.page,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         if (page != null) {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (BuildContext context) => page!));
+          Navigator.push(
+            context,
+            MaterialPageRoute<dynamic>(
+              builder: (BuildContext context) => page!,
+            ),
+          );
         }
       },
       child: ConstrainedBox(
         constraints: BoxConstraints(
-            minWidth: MediaQuery.of(context).size.width / 4,
-            minHeight: MediaQuery.of(context).size.width / 4 + 10),
+          minWidth: MediaQuery.of(context).size.width / 4,
+          minHeight: MediaQuery.of(context).size.width / 4 + 10,
+        ),
         child: Container(
           alignment: Alignment.center,
           padding: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey.withOpacity(.5)),
+            color: page != null ? Colors.white : Colors.white,
+            borderRadius: BorderRadius.circular(10),
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset("assets/$imagePath.png", height: 75),
+            children: <Widget>[
+              Image.asset(
+                'assets/$imagePath.png',
+                height: 75,
+              ),
               const SizedBox(height: 5),
-              Text(name, textAlign: TextAlign.center)
+              Text(
+                name,
+                textAlign: TextAlign.center,
+              ),
             ],
           ),
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey.withOpacity(.5)),
-              color: page != null ? Colors.white : Colors.white,
-              borderRadius: BorderRadius.circular(10)),
         ),
       ),
     );

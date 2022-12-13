@@ -16,52 +16,55 @@
 
 import 'package:flutter/material.dart';
 import 'package:huawei_ml_language/huawei_ml_language.dart';
-
-import '../utils/demo_utils.dart';
+import 'package:huawei_ml_language_example/utils/demo_utils.dart';
 
 class TtsDemo extends StatefulWidget {
   const TtsDemo({Key? key}) : super(key: key);
 
   @override
-  _TtsDemoState createState() => _TtsDemoState();
+  State<TtsDemo> createState() => _TtsDemoState();
 }
 
 class _TtsDemoState extends State<TtsDemo> {
-  late MLTtsEngine engine;
-  List _events = ["Initial event"];
-  String text =
-      'We use essential cookies for the website to function, as well as analytics cookies for analyzing and creating statistics of the website performance.';
+  final MLTtsEngine engine = MLTtsEngine();
+  final List<String?> _events = <String?>[
+    'Initial event',
+  ];
+  final String text = ''
+      'We use essential cookies for the website to function, '
+      'as well as analytics cookies for analyzing and creating '
+      'statistics of the website performance.';
 
   @override
   void initState() {
-    engine = MLTtsEngine();
-    engine.setTtsCallback(MLTtsCallback(
-      onError: _onError,
-      onEvent: _onEvent,
-      onAudioAvailable: _onAudioAvailable,
-      onRangeStart: _onRangeStart,
-      onWarn: _onWarn,
-    ));
     super.initState();
+    engine.setTtsCallback(
+      MLTtsCallback(
+        onError: _onError,
+        onEvent: _onEvent,
+        onAudioAvailable: _onAudioAvailable,
+        onRangeStart: _onRangeStart,
+        onWarn: _onWarn,
+      ),
+    );
   }
 
   Widget _customTextWidget(String text) {
     return InkWell(
-      onTap: () {
-        speak(text);
-      },
+      onTap: () => speak(text),
       child: Container(
         alignment: Alignment.center,
-        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
         decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              width: .5,
-              color: Colors.blueAccent.withOpacity(.5),
-              style: BorderStyle.solid,
-            )),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            width: .5,
+            color: Colors.blueAccent.withOpacity(.5),
+            style: BorderStyle.solid,
+          ),
+        ),
         child: Text(text),
       ),
     );
@@ -70,22 +73,28 @@ class _TtsDemoState extends State<TtsDemo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Tts Demo')),
+      appBar: AppBar(
+        title: const Text('Tts Demo'),
+      ),
       body: Column(
-        children: [
-          _customTextWidget("Hi, how are you"),
+        children: <Widget>[
           _customTextWidget(
-              "Dave watched as the forest burned up on the hill, only a few miles from her house."),
+            'Hi, how are you',
+          ),
           _customTextWidget(
-              "The computer wouldn't start. She banged on the side and tried again. Nothing. She lifted it up and dropped it to the table. Still nothing."),
-          Divider(height: 5, color: Colors.grey),
+            'Dave watched as the forest burned up on the hill, only a few miles from her house.',
+          ),
+          _customTextWidget(
+            "The computer wouldn't start. She banged on the side and tried again. Nothing. She lifted it up and dropped it to the table. Still nothing.",
+          ),
+          const Divider(height: 5, color: Colors.grey),
           Expanded(
             child: ListView.builder(
               itemCount: _events.length,
-              itemBuilder: (ctx, index) {
+              itemBuilder: (BuildContext ctx, int index) {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(_events[index]),
+                  child: Text('${_events[index]}'),
                 );
               },
             ),
@@ -95,11 +104,23 @@ class _TtsDemoState extends State<TtsDemo> {
       bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            IconButton(icon: Icon(Icons.pause), onPressed: pause),
-            IconButton(icon: Icon(Icons.play_arrow), onPressed: resume),
-            IconButton(icon: Icon(Icons.stop), onPressed: stop),
-            IconButton(icon: Icon(Icons.close), onPressed: shutdown)
+          children: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.pause),
+              onPressed: pause,
+            ),
+            IconButton(
+              icon: const Icon(Icons.play_arrow),
+              onPressed: resume,
+            ),
+            IconButton(
+              icon: const Icon(Icons.stop),
+              onPressed: stop,
+            ),
+            IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: shutdown,
+            ),
           ],
         ),
       ),
@@ -107,10 +128,9 @@ class _TtsDemoState extends State<TtsDemo> {
   }
 
   // Methods
-
   void getLangs() async {
     try {
-      final list = await engine.getLanguages();
+      final List<String> list = await engine.getLanguages();
       setState(() => _events.addAll(list));
     } on Exception catch (e) {
       exceptionDialog(context, e.toString());
@@ -119,8 +139,10 @@ class _TtsDemoState extends State<TtsDemo> {
 
   void getSpeaker() async {
     try {
-      final list = await engine.getSpeaker(MLTtsConstants.TTS_EN_US);
-      for (var item in list) {
+      final List<MLTtsSpeaker> list = await engine.getSpeaker(
+        MLTtsConstants.TTS_EN_US,
+      );
+      for (MLTtsSpeaker item in list) {
         setState(() => _events.add(item.name));
       }
     } on Exception catch (e) {
@@ -130,8 +152,8 @@ class _TtsDemoState extends State<TtsDemo> {
 
   void getSpeakers() async {
     try {
-      final list = await engine.getSpeakers();
-      for (var item in list) {
+      final List<MLTtsSpeaker> list = await engine.getSpeakers();
+      for (MLTtsSpeaker item in list) {
         setState(() => _events.add(item.name));
       }
     } on Exception catch (e) {
@@ -141,7 +163,9 @@ class _TtsDemoState extends State<TtsDemo> {
 
   void isLangAvailable() async {
     try {
-      final res = await engine.isLanguageAvailable(MLTtsConstants.TTS_EN_US);
+      final int res = await engine.isLanguageAvailable(
+        MLTtsConstants.TTS_EN_US,
+      );
       setState(() => _events.add(res.toString()));
     } on Exception catch (e) {
       exceptionDialog(context, e.toString());
@@ -181,7 +205,7 @@ class _TtsDemoState extends State<TtsDemo> {
   }
 
   void speak(String text) async {
-    final config = MLTtsConfig(
+    final MLTtsConfig config = MLTtsConfig(
       language: MLTtsConstants.TTS_EN_US,
       synthesizeMode: MLTtsConstants.TTS_ONLINE_MODE,
       text: text,
@@ -195,27 +219,47 @@ class _TtsDemoState extends State<TtsDemo> {
   }
 
   // Listeners
-
   void _onError(String taskId, MLTtsError err) {
-    setState(
-        () => _events.add('onError: $taskId  ${err.errorMsg}  ${err.errorId}'));
+    setState(() {
+      _events.add(
+        'onError: $taskId  ${err.errorMsg}  ${err.errorId}',
+      );
+    });
   }
 
   void _onEvent(String taskId, int eventId) {
-    setState(() => _events.add('onEvent: $taskId  $taskId  $eventId'));
+    setState(() {
+      _events.add(
+        'onEvent: $taskId  $taskId  $eventId',
+      );
+    });
   }
 
   void _onAudioAvailable(
-      String taskId, MLTtsAudioFragment audioFragment, int offset) {
-    setState(() => _events
-        .add('audio available: ${audioFragment.audioFormat}  offset: $offset'));
+    String taskId,
+    MLTtsAudioFragment audioFragment,
+    int offset,
+  ) {
+    setState(() {
+      _events.add(
+        'audio available: ${audioFragment.audioFormat}  offset: $offset',
+      );
+    });
   }
 
   void _onRangeStart(String taskId, int start, int end) {
-    setState(() => _events.add('range start & end: $start  $end'));
+    setState(() {
+      _events.add(
+        'range start & end: $start  $end',
+      );
+    });
   }
 
   void _onWarn(String taskId, MLTtsWarn warn) {
-    setState(() => _events.add('onWarn: ${warn.warnMsg}'));
+    setState(() {
+      _events.add(
+        'onWarn: ${warn.warnMsg}',
+      );
+    });
   }
 }

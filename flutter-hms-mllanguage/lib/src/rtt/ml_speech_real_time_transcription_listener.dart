@@ -14,19 +14,27 @@
     limitations under the License.
 */
 
-import 'dart:typed_data';
-
-import 'ml_speech_real_time_transcription_result.dart';
-
-part 'rtt_callbacks.dart';
+part of huawei_ml_language;
 
 class MLSpeechRealTimeTranscriptionListener {
-  _OnError onError;
-  _OnRecognizingResults onResult;
-  _OnStartListening? onStartListening;
-  _OnStartingOfSpeech? onStartingOfSpeech;
-  _OnState? onState;
-  _OnVoiceDataReceived? onVoiceDataReceived;
+  /// Called when a network error or recognition error occurs.
+  void Function(int error, String errorMessage) onError;
+
+  /// Receives text recognized by the speech recognizer.
+  void Function(MLSpeechRealTimeTranscriptionResult result) onResult;
+
+  /// Called when the recorder starts to receive speech.
+  void Function()? onStartListening;
+
+  /// Called when a user starts to speak, that is, the speech recognizer
+  /// detects that the user starts to speak.
+  void Function()? onStartingOfSpeech;
+
+  /// Notifies the app status change.
+  void Function(int state)? onState;
+
+  /// Returns the original PCM stream and audio power to the user.
+  void Function(Uint8List bytes)? onVoiceDataReceived;
 
   MLSpeechRealTimeTranscriptionListener({
     required this.onError,

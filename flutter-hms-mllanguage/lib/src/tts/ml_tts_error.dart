@@ -14,11 +14,16 @@
     limitations under the License.
 */
 
+part of huawei_ml_language;
+
 class MLTtsError {
   String? errorMsg;
   int? errorId;
 
-  MLTtsError({this.errorId, this.errorMsg});
+  MLTtsError({
+    this.errorId,
+    this.errorMsg,
+  });
 
   factory MLTtsError.fromMap(Map<dynamic, dynamic> map) {
     return MLTtsError(

@@ -5,7 +5,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        maven {url 'https://developer.huawei.com/repo/'}
+        maven { url 'https://developer.huawei.com/repo/' }
     }
 
     dependencies {
@@ -17,7 +17,7 @@ rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
-        maven {url 'https://developer.huawei.com/repo/'}
+        maven { url 'https://developer.huawei.com/repo/' }
     }
 }
 
@@ -26,13 +26,16 @@ apply plugin: 'com.android.library'
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
+
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 30
     }
+
     lintOptions {
         disable 'InvalidPackage'
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -40,25 +43,34 @@ android {
 }
 
 dependencies {
-    // TRANSLATE
-    implementation 'com.huawei.hms:ml-computer-translate:3.5.0.302'
-    implementation 'com.huawei.hms:ml-computer-translate-model:3.5.0.302'
-    // LANG DETECTION
-    implementation 'com.huawei.hms:ml-computer-language-detection:3.5.0.302'
-    implementation 'com.huawei.hms:ml-computer-language-detection-model:3.5.0.302'
-    // ASR
-    implementation 'com.huawei.hms:ml-computer-voice-asr-plugin:3.5.0.301'
-    // TTS
-    implementation 'com.huawei.hms:ml-computer-voice-tts:3.5.0.305'
-    implementation 'com.huawei.hms:ml-computer-voice-tts-model-bee:3.5.0.305'
-    implementation 'com.huawei.hms:ml-computer-voice-tts-model-eagle:3.5.0.305'
-    // AFT
-    implementation 'com.huawei.hms:ml-computer-voice-aft:3.5.0.300'
-    // RTT
-    implementation 'com.huawei.hms:ml-computer-voice-realtimetranscription:3.5.0.301'
-    // SOUND DETECTION
+    // Real-Time Translation
+    implementation 'com.huawei.hms:ml-computer-translate:3.7.0.301'
+    // On-device Translation
+    implementation 'com.huawei.hms:ml-computer-translate-model:3.7.0.301'
+
+    // Real-Time Language Detection
+    implementation 'com.huawei.hms:ml-computer-language-detection:3.7.0.301'
+    // On-device Language Detection
+    implementation 'com.huawei.hms:ml-computer-language-detection-model:3.7.0.301'
+
+    // Automatic Speech Recognition
+    implementation 'com.huawei.hms:ml-computer-voice-asr-plugin:3.7.0.301'
+
+    // Text to Speech
+    implementation 'com.huawei.hms:ml-computer-voice-tts:3.7.0.303'
+    // On-device Text to Speech
+    implementation 'com.huawei.hms:ml-computer-voice-tts-model-bee:3.6.0.300'
+    implementation 'com.huawei.hms:ml-computer-voice-tts-model-eagle:3.6.0.300'
+
+    // Audio File Transcription
+    implementation 'com.huawei.hms:ml-computer-voice-aft:3.7.0.301'
+
+    // Real-Time Transcription
+    implementation 'com.huawei.hms:ml-computer-voice-realtimetranscription:3.7.0.301'
+
+    // Sound Detection
     implementation 'com.huawei.hms:ml-speech-semantics-sounddect-sdk:3.5.0.302'
     implementation 'com.huawei.hms:ml-speech-semantics-sounddect-model:3.5.0.302'
 
-    implementation 'com.huawei.hms:stats:6.4.0.300'
+    implementation 'com.huawei.hms:stats:6.6.0.300'
 }

@@ -14,13 +14,7 @@
     limitations under the License.
 */
 
-import 'dart:async';
-
-import 'package:flutter/services.dart';
-
-import '../common/common.dart';
-import '../common/model_download_strategy.dart';
-import '../translation/ml_translate_setting.dart';
+part of huawei_ml_language;
 
 class MLLocalTranslator {
   late MethodChannel _c;
@@ -32,7 +26,7 @@ class MLLocalTranslator {
   }
 
   MethodChannel _initMethodChannel() {
-    final channel = MethodChannel('hms_lang_local_translator');
+    const MethodChannel channel = MethodChannel('hms_lang_local_translator');
     channel.setMethodCallHandler(_onMethodCall);
     return channel;
   }
@@ -41,37 +35,61 @@ class MLLocalTranslator {
     _listener = listener;
   }
 
-  Future<bool> prepareModel(MLTranslateSetting? setting,
-      LanguageModelDownloadStrategy? strategy) async {
-    return await _c.invokeMethod("prepareModel", {
-      "setting": setting?.toMap() ?? MLTranslateSetting.local().toMap(),
-      "strategy": strategy?.toMap() ?? LanguageModelDownloadStrategy().toMap()
-    });
+  Future<bool> prepareModel(
+    MLTranslateSetting? setting,
+    LanguageModelDownloadStrategy? strategy,
+  ) async {
+    return await _c.invokeMethod(
+      'prepareModel',
+      <String, dynamic>{
+        'setting': setting?.toMap() ?? MLTranslateSetting.local().toMap(),
+        'strategy':
+            strategy?.toMap() ?? LanguageModelDownloadStrategy().toMap(),
+      },
+    );
   }
 
   Future<String?> asyncTranslate(String text) async {
-    return await _c.invokeMethod('asyncTranslate', {'sourceText': text});
+    return await _c.invokeMethod(
+      'asyncTranslate',
+      <String, dynamic>{
+        'sourceText': text,
+      },
+    );
   }
 
   Future<String?> syncTranslate(String text) async {
-    return await _c.invokeMethod('syncTranslate', {'sourceText': text});
+    return await _c.invokeMethod(
+      'syncTranslate',
+      <String, dynamic>{
+        'sourceText': text,
+      },
+    );
   }
 
   /// Deletes a specific model associated with [langCode].
   Future<bool> deleteModel(String langCode) async {
-    return await _c.invokeMethod("deleteModel", {'langCode': langCode});
+    return await _c.invokeMethod(
+      'deleteModel',
+      <String, dynamic>{
+        'langCode': langCode,
+      },
+    );
   }
 
   Future<bool> stop() async {
-    return await _c.invokeMethod('stop');
+    return await _c.invokeMethod(
+      'stop',
+    );
   }
 
   Future<dynamic> _onMethodCall(MethodCall call) {
     final int all = call.arguments['all'];
     final int downloaded = call.arguments['downloaded'];
-
-    _listener?.call(all: all, downloaded: downloaded);
-
+    _listener?.call(
+      all: all,
+      downloaded: downloaded,
+    );
     return Future<dynamic>.value(null);
   }
 }

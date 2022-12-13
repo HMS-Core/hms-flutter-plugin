@@ -14,20 +14,24 @@
     limitations under the License.
 */
 
-import 'ml_asr_constants.dart';
+part of huawei_ml_language;
 
 class MLAsrSetting {
   String? language;
   String? scene;
   int? feature;
 
-  MLAsrSetting({this.scene, this.language, this.feature});
+  MLAsrSetting({
+    this.scene,
+    this.language,
+    this.feature,
+  });
 
   Map<String, dynamic> toMap() {
-    return {
-      "language": language ?? MLAsrConstants.LAN_EN_US,
-      "scene": scene ?? MLAsrConstants.SCENES,
-      "feature": feature ?? MLAsrConstants.FEATURE_WORDFLUX
+    return <String, dynamic>{
+      'language': language ?? MLAsrConstants.LAN_EN_US,
+      'scene': scene ?? MLAsrConstants.SCENES,
+      'feature': feature ?? MLAsrConstants.FEATURE_WORDFLUX,
     };
   }
 }

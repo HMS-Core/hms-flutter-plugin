@@ -14,15 +14,21 @@
     limitations under the License.
 */
 
+part of huawei_ml_language;
+
 class MLDetectedLang {
   dynamic probability;
   String? langCode;
 
-  MLDetectedLang({this.probability, this.langCode});
+  MLDetectedLang({
+    this.probability,
+    this.langCode,
+  });
 
-  factory MLDetectedLang.fromJson(Map<String, dynamic> json) {
+  factory MLDetectedLang.fromJson(Map<dynamic, dynamic> json) {
     return MLDetectedLang(
-        probability: json['probability'] ?? null,
-        langCode: json['langCode'] ?? null);
+      probability: json['probability'],
+      langCode: json['langCode'],
+    );
   }
 }

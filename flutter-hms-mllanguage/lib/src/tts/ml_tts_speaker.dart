@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_ml_language;
+
 class MLTtsSpeaker {
   String? language;
   String? name;
@@ -29,10 +31,10 @@ class MLTtsSpeaker {
 
   factory MLTtsSpeaker.fromMap(Map<dynamic, dynamic> map) {
     return MLTtsSpeaker(
-      language: map['language'] ?? null,
-      name: map['name'] ?? null,
-      modelSize: map['modelSize'] ?? null,
-      speakerDesc: map['speakerDesc'] ?? null,
+      language: map['language'],
+      name: map['name'],
+      modelSize: map['modelSize'],
+      speakerDesc: map['speakerDesc'],
     );
   }
 }

@@ -14,9 +14,7 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
-
-import 'ml_translate_setting.dart';
+part of huawei_ml_language;
 
 class MLRemoteTranslator {
   late MethodChannel _c;
@@ -26,17 +24,29 @@ class MLRemoteTranslator {
   }
 
   /// Performs translation asynchronously.
-  Future<String?> asyncTranslate(MLTranslateSetting setting) async {
-    return await _c.invokeMethod("asyncTranslate", setting.toMap());
+  Future<String?> asyncTranslate(
+    MLTranslateSetting setting,
+  ) async {
+    return await _c.invokeMethod(
+      'asyncTranslate',
+      setting.toMap(),
+    );
   }
 
   /// Performs translation synchronously.
-  Future<String?> syncTranslate(MLTranslateSetting setting) async {
-    return await _c.invokeMethod("syncTranslate", setting.toMap());
+  Future<String?> syncTranslate(
+    MLTranslateSetting setting,
+  ) async {
+    return await _c.invokeMethod(
+      'syncTranslate',
+      setting.toMap(),
+    );
   }
 
   /// Stops the on-cloud translator.
   Future<bool> stopTranslate() async {
-    return await _c.invokeMethod("stop");
+    return await _c.invokeMethod(
+      'stop',
+    );
   }
 }

@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_ml_language;
+
 typedef LanguageDownloadListener = void Function({
   dynamic downloaded,
   dynamic all,

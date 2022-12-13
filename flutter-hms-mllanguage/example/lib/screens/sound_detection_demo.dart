@@ -16,53 +16,56 @@
 
 import 'package:flutter/material.dart';
 import 'package:huawei_ml_language/huawei_ml_language.dart';
-
-import '../utils/demo_utils.dart';
+import 'package:huawei_ml_language_example/utils/demo_utils.dart';
 
 class SoundDetectionDemo extends StatefulWidget {
   const SoundDetectionDemo({Key? key}) : super(key: key);
 
   @override
-  _SoundDetectionDemoState createState() => _SoundDetectionDemoState();
+  State<SoundDetectionDemo> createState() => _SoundDetectionDemoState();
 }
 
 class _SoundDetectionDemoState extends State<SoundDetectionDemo> {
-  late MLSoundDetector detector;
-  List _events = ['Initial event'];
+  final MLSoundDetector detector = MLSoundDetector();
+  final List<String> _events = <String>[
+    'Initial event',
+  ];
 
   @override
   void initState() {
-    detector = MLSoundDetector();
-    detector.setSoundDetectListener(onDetection);
     super.initState();
+    detector.setSoundDetectListener(onDetection);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Sound Detection Demo')),
+      appBar: AppBar(
+        title: const Text('Sound Detection Demo'),
+      ),
       body: Column(
-        children: [
+        children: <Widget>[
           recognitionButton(_start, text: 'Start'),
           recognitionButton(_stop, text: 'Stop'),
           recognitionButton(_destroy, text: 'Destroy'),
           Expanded(
-              child: ListView.builder(
-            itemCount: _events.length,
-            itemBuilder: (_, index) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(_events[index]),
-              );
-            },
-          ))
+            child: ListView.builder(
+              itemCount: _events.length,
+              itemBuilder: (_, int index) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(_events[index]),
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
   }
 
   void _start() async {
-    final isStarted = await detector.start();
+    final bool isStarted = await detector.start();
     setState(() => _events.add('is started: $isStarted'));
   }
 

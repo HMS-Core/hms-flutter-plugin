@@ -14,50 +14,70 @@
     limitations under the License.
 */
 
-import 'dart:convert';
-
-import 'package:flutter/services.dart';
-
-import 'ml_detected_lang.dart';
-import 'ml_lang_detector_setting.dart';
+part of huawei_ml_language;
 
 class MLLangDetector {
+  /// Confidence threshold in the scenario where the language detection result with the highest confidence is returned.
   static const double FIRST_BEST_DETECTION_LANGUAGE_TRUSTED_THRESHOLD = 0.5;
+
+  /// Confidence threshold in the scenario where detection results of multiple languages are returned.
   static const double PROBABILITY_DETECTION_LANGUAGE_TRUSTED_THRESHOLD =
       0.009999999776482582;
-  static const String UNDETECTION_LANGUAGE_TRUSTED_THRESHOLD = "unknown";
+
+  /// Undetected language code.
+  static const String UNDETECTION_LANGUAGE_TRUSTED_THRESHOLD = 'unknown';
 
   late MethodChannel _c;
 
   MLLangDetector() {
-    _c = const MethodChannel("hms_lang_detection");
+    _c = const MethodChannel('hms_lang_detection');
   }
 
-  Future<String?> firstBestDetect(
-      {required MLLangDetectorSetting setting}) async {
-    return await _c.invokeMethod("firstBestDetect", setting.toMap());
+  Future<String?> firstBestDetect({
+    required MLLangDetectorSetting setting,
+  }) async {
+    return await _c.invokeMethod(
+      'firstBestDetect',
+      setting.toMap(),
+    );
   }
 
-  Future<String?> syncFirstBestDetect(
-      {required MLLangDetectorSetting setting}) async {
-    return await _c.invokeMethod("syncFirstBestDetect", setting.toMap());
+  Future<String?> syncFirstBestDetect({
+    required MLLangDetectorSetting setting,
+  }) async {
+    return await _c.invokeMethod(
+      'syncFirstBestDetect',
+      setting.toMap(),
+    );
   }
 
-  Future<List<MLDetectedLang>> probabilityDetect(
-      {required MLLangDetectorSetting setting}) async {
-    List res = json
-        .decode(await _c.invokeMethod("probabilityDetect", setting.toMap()));
-    return res.map((e) => MLDetectedLang.fromJson(e)).toList();
+  Future<List<MLDetectedLang>> probabilityDetect({
+    required MLLangDetectorSetting setting,
+  }) async {
+    final List<dynamic> res = json.decode(
+      await _c.invokeMethod(
+        'probabilityDetect',
+        setting.toMap(),
+      ),
+    );
+    return res.map((dynamic e) => MLDetectedLang.fromJson(e)).toList();
   }
 
-  Future<List<MLDetectedLang>> syncProbabilityDetect(
-      {required MLLangDetectorSetting setting}) async {
-    List res = json.decode(
-        await _c.invokeMethod("syncProbabilityDetect", setting.toMap()));
-    return res.map((e) => MLDetectedLang.fromJson(e)).toList();
+  Future<List<MLDetectedLang>> syncProbabilityDetect({
+    required MLLangDetectorSetting setting,
+  }) async {
+    final List<dynamic> res = json.decode(
+      await _c.invokeMethod(
+        'syncProbabilityDetect',
+        setting.toMap(),
+      ),
+    );
+    return res.map((dynamic e) => MLDetectedLang.fromJson(e)).toList();
   }
 
   Future<bool> stop() async {
-    return await _c.invokeMethod("stopLangDetector");
+    return await _c.invokeMethod(
+      'stopLangDetector',
+    );
   }
 }

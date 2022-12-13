@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_ml_language;
+
 class MLAftConstants {
   const MLAftConstants();
 

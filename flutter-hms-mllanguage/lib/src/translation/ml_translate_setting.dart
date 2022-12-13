@@ -14,31 +14,47 @@
     limitations under the License.
 */
 
+part of huawei_ml_language;
+
 class MLTranslateSetting {
   String _sourceTextOnRemote;
   String? _sourceLangCode;
   String? _targetLangCode;
 
-  factory MLTranslateSetting.remote(
-      {required String sourceText,
-      String? sourceLangCode,
-      String? targetLangCode}) {
-    return MLTranslateSetting._(sourceText, sourceLangCode, targetLangCode);
+  MLTranslateSetting._(
+    this._sourceTextOnRemote, [
+    this._sourceLangCode,
+    this._targetLangCode,
+  ]);
+
+  factory MLTranslateSetting.remote({
+    required String sourceText,
+    String? sourceLangCode,
+    String? targetLangCode,
+  }) {
+    return MLTranslateSetting._(
+      sourceText,
+      sourceLangCode,
+      targetLangCode,
+    );
   }
 
-  factory MLTranslateSetting.local(
-      {String? sourceLangCode, String? targetLangCode}) {
-    return MLTranslateSetting._("", sourceLangCode, targetLangCode);
+  factory MLTranslateSetting.local({
+    String? sourceLangCode,
+    String? targetLangCode,
+  }) {
+    return MLTranslateSetting._(
+      '',
+      sourceLangCode,
+      targetLangCode,
+    );
   }
-
-  MLTranslateSetting._(this._sourceTextOnRemote,
-      [this._sourceLangCode, this._targetLangCode]);
 
   Map<String, dynamic> toMap() {
-    return {
-      "sourceText": _sourceTextOnRemote,
-      "sourceLang": _sourceLangCode ?? "en",
-      "targetLang": _targetLangCode ?? "zh"
+    return <String, dynamic>{
+      'sourceText': _sourceTextOnRemote,
+      'sourceLang': _sourceLangCode ?? 'en',
+      'targetLang': _targetLangCode ?? 'zh',
     };
   }
 }

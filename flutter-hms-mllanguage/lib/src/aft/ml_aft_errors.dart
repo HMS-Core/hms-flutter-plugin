@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_ml_language;
+
 abstract class MLAftErrors {
   /// Audio file format unsupported.
   static const int ERR_AUDIO_FILE_NOTSUPPORTED = 11101;

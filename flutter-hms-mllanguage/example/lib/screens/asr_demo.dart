@@ -21,19 +21,20 @@ class AsrDemo extends StatefulWidget {
   const AsrDemo({Key? key}) : super(key: key);
 
   @override
-  _AsrDemoState createState() => _AsrDemoState();
+  State<AsrDemo> createState() => _AsrDemoState();
 }
 
 class _AsrDemoState extends State<AsrDemo> {
   late MLAsrRecognizer recognizer;
   String res = 'No result';
-
-  List _events = ['Initial event'];
+  final List<String> _events = <String>[
+    'Initial event',
+  ];
 
   @override
   void initState() {
+    super.initState();
     recognizer = MLAsrRecognizer();
-
     recognizer.setAsrListener(
       MLAsrListener(
         onRecognizingResults: onRecognizingResults,
@@ -42,7 +43,6 @@ class _AsrDemoState extends State<AsrDemo> {
         onState: onState,
       ),
     );
-    super.initState();
   }
 
   void onResults(String s) {
@@ -64,14 +64,16 @@ class _AsrDemoState extends State<AsrDemo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Asr Demo')),
+      appBar: AppBar(
+        title: const Text('Asr Demo'),
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
+        children: <Widget>[
           Expanded(
             child: ListView.builder(
               itemCount: _events.length,
-              itemBuilder: (_, index) {
+              itemBuilder: (_, int index) {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(_events[index]),
@@ -80,69 +82,67 @@ class _AsrDemoState extends State<AsrDemo> {
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(vertical: 15),
+            padding: const EdgeInsets.symmetric(vertical: 15),
             width: double.infinity,
             color: Colors.grey,
             child: Column(
-              children: [
+              children: <Widget>[
                 Row(
-                  children: [
-                    SizedBox(width: 10),
+                  children: <Widget>[
+                    const SizedBox(width: 10),
                     Expanded(
                       child: ElevatedButton(
                         onPressed: startWithoutUi,
-                        child: Text('start asr'),
+                        child: const Text('start asr'),
                       ),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: ElevatedButton(
                         onPressed: startWithUi,
-                        child: Text('start asr with ui'),
+                        child: const Text('start asr with ui'),
                       ),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: ElevatedButton(
                         onPressed: destroy,
-                        child: Text('destroy'),
+                        child: const Text('destroy'),
                       ),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                   ],
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
   }
 
-  startWithoutUi() {
-    final setting = MLAsrSetting(
+  void startWithoutUi() {
+    final MLAsrSetting setting = MLAsrSetting(
       language: MLAsrConstants.LAN_EN_US,
       feature: MLAsrConstants.FEATURE_WORDFLUX,
     );
-
     recognizer.startRecognizing(setting);
   }
 
-  startWithUi() async {
-    final setting = MLAsrSetting(
+  void startWithUi() async {
+    final MLAsrSetting setting = MLAsrSetting(
       language: MLAsrConstants.LAN_EN_US,
       feature: MLAsrConstants.FEATURE_WORDFLUX,
     );
-
-    final res = await recognizer.startRecognizingWithUi(setting);
-    setState(() => _events.add('ui picker result: ' + res!));
+    final String? res = await recognizer.startRecognizingWithUi(setting);
+    setState(() => _events.add('ui picker result: $res'));
   }
 
-  destroy() {
+  void destroy() {
     try {
       recognizer.destroy();
     } on Exception catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 }

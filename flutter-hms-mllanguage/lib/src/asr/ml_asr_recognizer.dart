@@ -14,9 +14,7 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
-import 'package:huawei_ml_language/src/asr/ml_asr_listener.dart';
-import 'package:huawei_ml_language/src/asr/ml_asr_setting.dart';
+part of huawei_ml_language;
 
 class MLAsrRecognizer {
   late MethodChannel _c;
@@ -28,7 +26,7 @@ class MLAsrRecognizer {
   }
 
   MethodChannel _initMethodChannel() {
-    final channel = const MethodChannel("hms_lang_asr");
+    const MethodChannel channel = MethodChannel('hms_lang_asr');
     channel.setMethodCallHandler(_onMethodCall);
     return channel;
   }
@@ -41,54 +39,76 @@ class MLAsrRecognizer {
 
   /// Obtains supported languages.
   Future<List<String>?> getLanguages() async {
-    final res = await _c.invokeMethod("getSupportedLanguages");
+    final List<dynamic>? res = await _c.invokeMethod(
+      'getSupportedLanguages',
+    );
     return res != null ? List<String>.from(res) : null;
   }
 
   /// Starts recognition.
-  void startRecognizing(MLAsrSetting? setting) {
-    _c.invokeMethod("startRecognizing",
-        setting != null ? setting.toMap() : MLAsrSetting().toMap());
+  void startRecognizing(
+    MLAsrSetting? setting,
+  ) {
+    _c.invokeMethod(
+      'startRecognizing',
+      setting != null ? setting.toMap() : MLAsrSetting().toMap(),
+    );
   }
 
   /// Starts recognition with a ui picker dialog.
-  Future<String?> startRecognizingWithUi(MLAsrSetting? setting) async {
-    return await _c.invokeMethod("startRecognizingWithUi",
-        setting != null ? setting.toMap() : MLAsrSetting().toMap());
+  Future<String?> startRecognizingWithUi(
+    MLAsrSetting? setting,
+  ) async {
+    return await _c.invokeMethod(
+      'startRecognizingWithUi',
+      setting != null ? setting.toMap() : MLAsrSetting().toMap(),
+    );
   }
 
   /// Destroys an instance of MLAsrRecognizer.
   void destroy() {
-    _c.invokeMethod("destroy");
+    _c.invokeMethod(
+      'destroy',
+    );
   }
 
   Future<dynamic> _onMethodCall(MethodCall call) {
     final String event = call.arguments['event'];
     switch (event) {
-      case "onRecognizingResults":
-        _listener?.onRecognizingResults.call(call.arguments['result']);
+      case 'onRecognizingResults':
+        _listener?.onRecognizingResults.call(
+          call.arguments['result'],
+        );
         break;
-      case "onError":
-        _listener?.onError
-            .call(call.arguments['errCode'], call.arguments['errMsg']);
+      case 'onError':
+        _listener?.onError.call(
+          call.arguments['errCode'],
+          call.arguments['errMsg'],
+        );
         break;
-      case "onResults":
-        _listener?.onResults?.call(call.arguments['result']);
+      case 'onResults':
+        _listener?.onResults?.call(
+          call.arguments['result'],
+        );
         break;
-      case "onStartListening":
+      case 'onStartListening':
         _listener?.onStartListening?.call();
         break;
-      case "onStartingOfSpeech":
+      case 'onStartingOfSpeech':
         _listener?.onStartingOfSpeech?.call();
         break;
-      case "onVoiceDataReceived":
-        _listener?.onVoiceDataReceived?.call(call.arguments['bytes']);
+      case 'onVoiceDataReceived':
+        _listener?.onVoiceDataReceived?.call(
+          call.arguments['bytes'],
+        );
         break;
-      case "onState":
-        _listener?.onState?.call(call.arguments['state']);
+      case 'onState':
+        _listener?.onState?.call(
+          call.arguments['state'],
+        );
         break;
       default:
-        throw "Unknown event!";
+        throw 'Unknown event!';
     }
     return Future<dynamic>.value(null);
   }

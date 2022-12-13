@@ -14,30 +14,30 @@
     limitations under the License.
 */
 
-import 'ml_tts_audio_fragment.dart';
-import 'ml_tts_error.dart';
-import 'ml_tts_warn.dart';
-
-part 'tts_callbacks.dart';
+part of huawei_ml_language;
 
 class MLTtsCallback {
   /// Error event callback function.
-  _OnError onError;
+  void Function(String taskId, MLTtsError err) onError;
 
   /// Audio stream callback API, which is used to return the
   /// synthesized audio data to the app.
-  _OnAudioAvailable? onAudioAvailable;
+  void Function(
+    String taskId,
+    MLTtsAudioFragment audioFragment,
+    int offset,
+  )? onAudioAvailable;
 
   /// Audio synthesis task callback extension method.
-  _OnEvent? onEvent;
+  void Function(String taskId, int eventId)? onEvent;
 
   /// The TTS engine splits the text input by the audio synthesis task.
   /// This callback function can be used to listen to the playback start event of
   /// the split text.
-  _OnRangeStart? onRangeStart;
+  void Function(String taskId, int start, int end)? onRangeStart;
 
   /// Alarm event callback function.
-  _OnWarn? onWarn;
+  void Function(String taskId, MLTtsWarn warn)? onWarn;
 
   MLTtsCallback({
     required this.onError,

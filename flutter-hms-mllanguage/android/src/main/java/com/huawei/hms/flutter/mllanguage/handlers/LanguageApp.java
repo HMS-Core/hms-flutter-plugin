@@ -27,6 +27,7 @@ import com.huawei.hms.mlsdk.common.MLApplication;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -55,6 +56,12 @@ public class LanguageApp implements MethodChannel.MethodCallHandler {
                 break;
             case "getAppDirectory":
                 getAppDir(result);
+                break;
+            case "setUserRegion":
+                setUserRegion(call, result);
+                break;
+            case "getCountryCode":
+                getCountryCode(result);
                 break;
             default:
                 result.notImplemented();
@@ -85,16 +92,27 @@ public class LanguageApp implements MethodChannel.MethodCallHandler {
     }
 
     private void setApiKey(MethodCall call, MethodChannel.Result result) {
-        String apiKey = FromMap.toString("apiKey", call.argument("apiKey"), false);
+        final String apiKey = FromMap.toString("apiKey", call.argument("apiKey"), false);
         MLApplication.getInstance().setApiKey(apiKey);
         HMSLogger.getInstance(activity).sendSingleEvent("setApiKey");
         result.success(true);
     }
 
     private void setAccessToken(MethodCall call, MethodChannel.Result result) {
-        String token = FromMap.toString("accessToken", call.argument("accessToken"), false);
+        final String token = FromMap.toString("accessToken", call.argument("accessToken"), false);
         MLApplication.getInstance().setAccessToken(token);
         HMSLogger.getInstance(activity).sendSingleEvent("setAccessToken");
         result.success(true);
+    }
+
+    private void setUserRegion(MethodCall call, MethodChannel.Result result) {
+        final Integer region = FromMap.toInteger("region", call.argument("region"));
+        MLApplication.getInstance().setUserRegion(Objects.requireNonNull(region));
+        result.success(true);
+    }
+
+    private void getCountryCode(MethodChannel.Result result) {
+        final String countryCode = MLApplication.getInstance().getCountryCode();
+        result.success(countryCode);
     }
 }

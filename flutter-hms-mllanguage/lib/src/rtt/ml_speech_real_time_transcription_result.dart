@@ -14,6 +14,8 @@
     limitations under the License.
 */
 
+part of huawei_ml_language;
+
 class MLSpeechRealTimeTranscriptionResult {
   String? result;
   List<RttOffset>? sentenceOffset;
@@ -28,22 +30,21 @@ class MLSpeechRealTimeTranscriptionResult {
   });
 
   factory MLSpeechRealTimeTranscriptionResult.fromMap(
-      Map<dynamic, dynamic> json) {
-    var words = List<RttOffset>.empty(growable: true);
-    var sentences = List<RttOffset>.empty(growable: true);
+    Map<dynamic, dynamic> json,
+  ) {
+    final List<RttOffset> words = <RttOffset>[];
+    final List<RttOffset> sentences = <RttOffset>[];
 
     if (json['sentenceOffset'] != null) {
-      json['sentenceOffset'].forEach((v) {
-        sentences.add(new RttOffset.fromMap(v));
+      json['sentenceOffset'].forEach((dynamic v) {
+        sentences.add(RttOffset.fromMap(v));
       });
     }
-
     if (json['wordOffset'] != null) {
-      json['wordOffset'].forEach((v) {
-        words.add(new RttOffset.fromMap(v));
+      json['wordOffset'].forEach((dynamic v) {
+        words.add(RttOffset.fromMap(v));
       });
     }
-
     return MLSpeechRealTimeTranscriptionResult(
       result: json['result'],
       event: json['event'],

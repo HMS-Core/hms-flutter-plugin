@@ -14,11 +14,8 @@
     limitations under the License.
 */
 
-import 'dart:async';
-import 'dart:io' as io;
-
 import 'package:flutter/material.dart';
-import 'package:flutter_audio_recorder2/flutter_audio_recorder2.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:huawei_ml_language/huawei_ml_language.dart';
 import 'package:huawei_ml_language_example/utils/demo_utils.dart';
 
@@ -26,124 +23,42 @@ class AftDemo extends StatefulWidget {
   const AftDemo({Key? key}) : super(key: key);
 
   @override
-  _AftDemoState createState() => _AftDemoState();
+  State<AftDemo> createState() => _AftDemoState();
 }
 
 class _AftDemoState extends State<AftDemo> {
   late MLRemoteAftEngine engine;
-  late FlutterAudioRecorder2 recorder;
-  late Recording _current;
-  RecordingStatus _currentStatus = RecordingStatus.Unset;
-  String _pathResult = "";
-  int? _duration;
   String _taskId = '';
-
-  List _events = ["Initial event"];
+  final List<String> _events = <String>['Initial event'];
 
   @override
   void initState() {
-    engine = MLRemoteAftEngine();
-    engine.setAftListener(MLRemoteAftListener(
-      onError,
-      onEvent,
-      onInitComplete,
-      onResult,
-      onUploadProgress,
-    ));
     super.initState();
-  }
-
-  initRecorder() async {
-    String customPath = '/myAudioPath';
-
-    final p = await MLLanguageApp().getAppDirectory();
-    print('path is   $p');
-
-    final dir = io.Directory('$p$customPath');
-    dir.create().then((dir) async {
-      print("dir path:  " + dir.path);
-
-      setState(() {
-        customPath = dir.path +
-            customPath +
-            DateTime.now().millisecondsSinceEpoch.toString();
-      });
-      print('custom path:   $customPath');
-
-      recorder = FlutterAudioRecorder2(
-        customPath,
-        audioFormat: AudioFormat.WAV,
-      );
-
-      await recorder.initialized;
-
-      var current = await recorder.current(channel: 0);
-
-      print('current path:  ' + current!.path.toString());
-
-      setState(() {
-        _current = current;
-        _currentStatus = current.status!;
-        _events.add('recorder status: $_currentStatus');
-      });
-    });
-  }
-
-  startRecording() async {
-    try {
-      await recorder.start();
-      var recording = await recorder.current(channel: 0);
-
-      setState(() {
-        _current = recording!;
-      });
-
-      const tick = const Duration(milliseconds: 50);
-
-      new Timer.periodic(tick, (Timer t) async {
-        if (_currentStatus == RecordingStatus.Stopped) {
-          t.cancel();
-        }
-
-        var current = await recorder.current(channel: 0);
-        setState(() {
-          _current = current!;
-          _currentStatus = current.status!;
-          if (!_events
-              .contains('recorder status: ${RecordingStatus.Recording}')) {
-            _events.add('recorder status: $_currentStatus');
-          }
-        });
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  stopRecording() async {
-    var result = await recorder.stop();
-    print("Stop recording: ${result!.path}");
-    print("Stop recording: ${result.duration}");
-    setState(() {
-      _current = result;
-      _currentStatus = _current.status!;
-      _pathResult = _current.path!;
-      _duration = result.duration!.inSeconds;
-      _events.add('recorder status: $_currentStatus');
-    });
-    print("recording duration:  $_duration");
+    engine = MLRemoteAftEngine();
+    engine.setAftListener(
+      MLRemoteAftListener(
+        onError,
+        onEvent,
+        onInitComplete,
+        onResult,
+        onUploadProgress,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Aft Demo')),
+      appBar: AppBar(
+        title: const Text('Aft Demo'),
+      ),
       body: Column(
-        children: [
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
           Expanded(
             child: ListView.builder(
               itemCount: _events.length,
-              itemBuilder: (_, index) {
+              itemBuilder: (_, int index) {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(_events[index]),
@@ -152,91 +67,87 @@ class _AftDemoState extends State<AftDemo> {
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(vertical: 15),
+            padding: const EdgeInsets.all(16),
             width: double.infinity,
             color: Colors.grey,
             child: Column(
-              children: [
-                Text('Recorder'),
-                Row(
-                  children: [
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: initRecorder,
-                        child: Text('Init recorder'),
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: startRecording,
-                        child: Text('Start Recording'),
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: stopRecording,
-                        child: Text('Stop Recording'),
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                  ],
+              children: <Widget>[
+                const Text(
+                  'For short audio files with a duration of 1 minute or shorter',
                 ),
-                Text('AFT Engine'),
-                Row(
-                  children: [
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: recognize,
-                        child: Text('recognize'),
-                      ),
+                ElevatedButton(
+                  onPressed: pickAndRecognizeShortAudio,
+                  child: const Text('recognize'),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'For audio files with a duration longer than 1 minute',
+                ),
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 8,
+                  children: <Widget>[
+                    ElevatedButton(
+                      onPressed: pickAndRecognizeLongAudio,
+                      child: const Text('recognize'),
                     ),
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () => startTask(_taskId),
-                        child: Text('start task'),
-                      ),
+                    ElevatedButton(
+                      onPressed: () => startTask(_taskId),
+                      child: const Text('start task'),
                     ),
-                    SizedBox(width: 10),
-                    Expanded(
-                        child: ElevatedButton(
+                    ElevatedButton(
                       onPressed: () => getLongResult(_taskId),
-                      child: Text('get long result'),
-                    )),
-                    SizedBox(width: 10),
-                  ],
-                ),
-                Row(
-                  children: [
-                    SizedBox(width: 10),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () => destroyTask(_taskId),
-                        child: Text('Destroy task'),
-                      ),
+                      child: const Text('get long result'),
                     ),
-                    SizedBox(width: 10),
+                    ElevatedButton(
+                      onPressed: () => destroyTask(_taskId),
+                      child: const Text('Destroy task'),
+                    ),
                   ],
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
   }
 
-  // AFT ENGINE METHODS
-  void recognize() {
-    final setting = MLRemoteAftSetting(path: _pathResult);
-    if (_duration != null && _duration! >= 60) {
-      engine.longRecognize(setting);
-    } else {
-      engine.shortRecognize(setting);
+  Future<String?> pickAudioFile() async {
+    final FilePickerResult? pickerResult = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      type: FileType.audio,
+    );
+    return pickerResult?.paths.first;
+  }
+
+  void pickAndRecognizeShortAudio() async {
+    try {
+      final String? path = await pickAudioFile();
+      if (path != null) {
+        engine.shortRecognize(
+          MLRemoteAftSetting(
+            path: path,
+          ),
+        );
+      }
+    } on Exception catch (e) {
+      exceptionDialog(context, e.toString());
+    }
+  }
+
+  void pickAndRecognizeLongAudio() async {
+    try {
+      final String? path = await pickAudioFile();
+      if (path != null) {
+        engine.longRecognize(
+          MLRemoteAftSetting(
+            path: path,
+          ),
+        );
+      }
+    } on Exception catch (e) {
+      exceptionDialog(context, e.toString());
     }
   }
 
@@ -256,7 +167,7 @@ class _AftDemoState extends State<AftDemo> {
     }
   }
 
-  destroyTask(String taskId) {
+  void destroyTask(String taskId) {
     try {
       engine.destroyTask(taskId);
     } on Exception catch (e) {
@@ -265,13 +176,16 @@ class _AftDemoState extends State<AftDemo> {
   }
 
   // AFT LISTENERS
-
   void onError(String taskId, int errCode, String errMsg) {
-    setState(() => _events.add('onError: $errCode: $errMsg'));
+    setState(() {
+      _events.add('onError: $errCode: $errMsg');
+    });
   }
 
   void onEvent(String taskId, int eventId) {
-    setState(() => _events.add('onEvent: $eventId'));
+    setState(() {
+      _events.add('onEvent: $eventId');
+    });
   }
 
   void onInitComplete(String taskId) {
@@ -281,11 +195,15 @@ class _AftDemoState extends State<AftDemo> {
     });
   }
 
-  onUploadProgress(String taskId, double progress) {
-    setState(() => _events.add('uploadProgress: $progress'));
+  void onUploadProgress(String taskId, double progress) {
+    setState(() {
+      _events.add('uploadProgress: $progress');
+    });
   }
 
   void onResult(String taskId, MLRemoteAftResult result) {
-    setState(() => _events.add('onResult: ${result.text}'));
+    setState(() {
+      _events.add('onResult: ${result.text}');
+    });
   }
 }
