@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -38,13 +38,18 @@ import java.util.List;
 public class ScanResultView extends View {
 
     private final Object lock = new Object();
-    protected float widthScaleFactor = 1.0f;
-    protected float heightScaleFactor = 1.0f;
-    protected float previewWidth;
-    protected float previewHeight;
-    public boolean showText;
 
     private final List<HmsScanGraphic> hmsScanGraphics = new ArrayList<>();
+
+    public boolean showText;
+
+    protected float widthScaleFactor = 1.0f;
+
+    protected float heightScaleFactor = 1.0f;
+
+    protected float previewWidth;
+
+    protected float previewHeight;
 
     public ScanResultView(Context context) {
         super(context);
@@ -77,6 +82,7 @@ public class ScanResultView extends View {
 
     /**
      * Draw MultiCodes on screen.
+     *
      * @param canvas canvas
      */
     @Override
@@ -99,25 +105,33 @@ public class ScanResultView extends View {
     static class HmsScanGraphic {
 
         private final Paint rectPaint;
+
         private final HmsScan hmsScan;
-        private ScanResultView scanResultView;
 
         // Options from Flutter.
-        private final int TEXT_COLOR;
-        private final float TEXT_SIZE;
+        private final int textColor;
+
+        private final float textSize;
+
         private final int textBackgroundColor;
+
         private final boolean showTextOutBounds;
+
         private final boolean autoSizeText;
+
         private final int minTextSize;
+
         private final int granularity;
+
+        private ScanResultView scanResultView;
 
         HmsScanGraphic(ScanResultView scanResultView, HmsScan hmsScan, int color, int textColor, float textSize,
             float strokeWidth, int textBackgroundColor, boolean mShowText, boolean showTextOutBounds,
             boolean autoSizeText, int minTextSize, int granularity) {
             this.scanResultView = scanResultView;
             this.hmsScan = hmsScan;
-            this.TEXT_COLOR = textColor;
-            this.TEXT_SIZE = textSize;
+            this.textColor = textColor;
+            this.textSize = textSize;
             this.textBackgroundColor = textBackgroundColor;
             this.showTextOutBounds = showTextOutBounds;
             this.autoSizeText = autoSizeText;
@@ -132,8 +146,8 @@ public class ScanResultView extends View {
             rectPaint.setStrokeWidth(strokeWidth);
 
             Paint hmsScanResult = new Paint();
-            hmsScanResult.setColor(TEXT_COLOR);
-            hmsScanResult.setTextSize(TEXT_SIZE);
+            hmsScanResult.setColor(this.textColor);
+            hmsScanResult.setTextSize(this.textSize);
         }
 
         void drawGraphic(Canvas canvas) {
@@ -154,6 +168,7 @@ public class ScanResultView extends View {
 
         /**
          * getTextHeight
+         *
          * @param text text
          * @param paint paint
          * @return text height
@@ -166,6 +181,7 @@ public class ScanResultView extends View {
 
         /**
          * getTextHeightInRect
+         *
          * @param text text
          * @param width width
          * @param fontSize fontSize
@@ -184,13 +200,14 @@ public class ScanResultView extends View {
 
         /**
          * getOptimalTextSize
+         *
          * @param text text
          * @param width width
          * @param height height
          * @return optimal text size a.k.a Auto Size Text
          */
         private int getOptimalTextSize(String text, int width, int height) {
-            int targetTextSize = (int) TEXT_SIZE;
+            int targetTextSize = (int) textSize;
             while (getTextHeightInRect(text, width, targetTextSize) >= height && targetTextSize > minTextSize) {
                 targetTextSize = Math.max(targetTextSize - granularity, minTextSize);
             }
@@ -226,8 +243,8 @@ public class ScanResultView extends View {
 
             // Text options from Flutter.
             TextPaint tp = new TextPaint();
-            tp.setColor(TEXT_COLOR);
-            tp.setTextSize(autoSizeText && !showTextOutBounds ? getOptimalTextSize(text, width, height) : TEXT_SIZE);
+            tp.setColor(textColor);
+            tp.setTextSize(autoSizeText && !showTextOutBounds ? getOptimalTextSize(text, width, height) : textSize);
             tp.setAntiAlias(true);
 
             float textHeight = getTextHeight(text, tp);

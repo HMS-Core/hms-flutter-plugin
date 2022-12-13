@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -15,20 +15,20 @@
 */
 
 import 'package:flutter/material.dart';
-import 'package:huawei_scan/HmsScanLibrary.dart';
+import 'package:huawei_scan/huawei_scan.dart';
 
 //Get Unique List
-getUniqueList(List<ScanResponse> list) {
-  Map<String?, ScanResponse> mp = {};
-  for (var item in list) {
+List<ScanResponse> getUniqueList(List<ScanResponse> list) {
+  Map<String?, ScanResponse> mp = <String?, ScanResponse>{};
+  for (ScanResponse item in list) {
     mp[item.originalValue] = item;
   }
-  var filteredList = mp.values.toList();
+  List<ScanResponse> filteredList = mp.values.toList();
   return filteredList;
 }
 
 //Color Lists
-List<Color> colorList = [
+List<Color> colorList = <Color>[
   Colors.white,
   Colors.yellow,
   Colors.red,
@@ -38,18 +38,18 @@ List<Color> colorList = [
   Colors.black,
 ];
 
-List<String> colorStringList = [
-  "White",
-  "Yellow",
-  "Red",
-  "Green",
-  "Gray",
-  "Blue",
-  "Black",
+List<String> colorStringList = <String>[
+  'White',
+  'Yellow',
+  'Red',
+  'Green',
+  'Gray',
+  'Blue',
+  'Black',
 ];
 
 //Scan Types
-List<int> scanTypeList = [
+List<int> scanTypeList = <int>[
   HmsScanTypes.AllScanType,
   HmsScanTypes.Aztec,
   HmsScanTypes.Code128,
@@ -66,41 +66,41 @@ List<int> scanTypeList = [
   HmsScanTypes.Pdf417,
 ];
 
-List<String> scanTypeStringList = [
-  "All Scan Types",
-  "Aztec",
-  "Code128",
-  "Code39",
-  "Code93",
-  "Codabar",
-  "DataMatrix",
-  "EAN13",
-  "EAN8",
-  "ITF14",
-  "QRCode",
-  "UPCCodeA",
-  "UPCCodeE",
-  "Pdf417",
+List<String> scanTypeStringList = <String>[
+  'All Scan Types',
+  'Aztec',
+  'Code128',
+  'Code39',
+  'Code93',
+  'Codabar',
+  'DataMatrix',
+  'EAN13',
+  'EAN8',
+  'ITF14',
+  'QRCode',
+  'UPCCodeA',
+  'UPCCodeE',
+  'Pdf417',
 ];
 
 //Dropdown Controllers
-dropdownController(String value) {
+int dropdownController(String value) {
   int result = scanTypeStringList.indexOf(value);
   return scanTypeList[result];
 }
 
-dropdownColorController(String value) {
+Color dropdownColorController(String value) {
   int result = colorStringList.indexOf(value);
   return colorList[result];
 }
 
-dropdownControllerBitmap(String value) {
+int dropdownControllerBitmap(String value) {
   int result = scanTypeStringList.indexOf(value);
   return scanTypeList[result];
 }
 
 //Scan Types for Build Bitmap
-List<int> scanTypeListBitmap = [
+List<int> scanTypeListBitmap = <int>[
   HmsScanTypes.Aztec,
   HmsScanTypes.Code128,
   HmsScanTypes.Code39,
@@ -116,80 +116,84 @@ List<int> scanTypeListBitmap = [
   HmsScanTypes.Pdf417,
 ];
 
-List<String> scanTypeStringListBitmap = [
-  "Aztec",
-  "Code128",
-  "Code39",
-  "Code93",
-  "Codabar",
-  "DataMatrix",
-  "EAN13",
-  "EAN8",
-  "ITF14",
-  "QRCode",
-  "UPCCodeA",
-  "UPCCodeE",
-  "Pdf417",
+List<String> scanTypeStringListBitmap = <String>[
+  'Aztec',
+  'Code128',
+  'Code39',
+  'Code93',
+  'Codabar',
+  'DataMatrix',
+  'EAN13',
+  'EAN8',
+  'ITF14',
+  'QRCode',
+  'UPCCodeA',
+  'UPCCodeE',
+  'Pdf417',
 ];
 
 //Scan Type Converter
-formatConverter(int? format) {
+String formatConverter(int? format) {
   switch (format) {
     case HmsScanTypes.Code128:
-      return "Code128 Code";
+      return 'Code128 Code';
     case HmsScanTypes.Code39:
-      return "Code39 Code";
+      return 'Code39 Code';
     case HmsScanTypes.Code93:
-      return "Code93 Code";
+      return 'Code93 Code';
     case HmsScanTypes.Codabar:
-      return "Codabar Code";
+      return 'Codabar Code';
     case HmsScanTypes.DataMatrix:
-      return "Data Matrix Code";
+      return 'Data Matrix Code';
     case HmsScanTypes.EAN13:
-      return "EAN13 Code";
+      return 'EAN13 Code';
     case HmsScanTypes.EAN8:
-      return "EAN8 Code";
+      return 'EAN8 Code';
     case HmsScanTypes.ITF14:
-      return "ITF14 Code";
+      return 'ITF14 Code';
     case HmsScanTypes.QRCode:
-      return "QR Code";
+      return 'QR Code';
     case HmsScanTypes.UPCCodeA:
-      return "UPC Code - A";
+      return 'UPC Code - A';
     case HmsScanTypes.UPCCodeE:
-      return "UPC Code - E";
+      return 'UPC Code - E';
     case HmsScanTypes.Pdf417:
-      return "Pdf417 Code";
+      return 'Pdf417 Code';
     case HmsScanTypes.Aztec:
-      return "Aztec Code";
+      return 'Aztec Code';
+    default:
+      return 'Other Scan Type';
   }
 }
 
 //Result Type Converter
-resultTypeConverter(int? type) {
+String resultTypeConverter(int? type) {
   switch (type) {
     case HmsScanForm.ContactDetailForm:
-      return "Contact";
+      return 'Contact';
     case HmsScanForm.EmailContentForm:
-      return "Email";
+      return 'Email';
     case HmsScanForm.ISBNNumberForm:
-      return "ISBN";
+      return 'ISBN';
     case HmsScanForm.TelPhoneNumberForm:
-      return "Tel";
+      return 'Tel';
     case HmsScanForm.ArticleNumberForm:
-      return "Product";
+      return 'Product';
     case HmsScanForm.SMSForm:
-      return "SMS";
+      return 'SMS';
     case HmsScanForm.PureTextForm:
-      return "Text";
+      return 'Text';
     case HmsScanForm.UrlForm:
-      return "Website";
+      return 'Website';
     case HmsScanForm.WIFIConnectInfoForm:
-      return "WIFI";
+      return 'WIFI';
     case HmsScanForm.LocationCoordinateForm:
-      return "Location";
+      return 'Location';
     case HmsScanForm.EventInfoForm:
-      return "Event";
+      return 'Event';
     case HmsScanForm.DriverInfoForm:
-      return "License";
+      return 'License';
+    default:
+      return 'Other Form';
   }
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -20,10 +20,10 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
-import com.huawei.hms.flutter.scan.logger.HMSLogger;
-import com.huawei.hms.hmsscankit.RemoteView;
 import com.huawei.hms.flutter.scan.R;
+import com.huawei.hms.flutter.scan.logger.HMSLogger;
 import com.huawei.hms.flutter.scan.utils.Errors;
+import com.huawei.hms.hmsscankit.RemoteView;
 
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -31,8 +31,11 @@ import io.flutter.plugin.common.MethodChannel;
 public class RemoteViewHandler implements MethodChannel.MethodCallHandler {
 
     private RemoteView remoteView;
+
     private ImageView flushBtn;
+
     private HMSLogger mHMSLogger;
+
     private int[] img = {R.drawable.flashlight_on, R.drawable.flashlight_off};
 
     RemoteViewHandler(RemoteView mRemoteView, ImageView imageView, HMSLogger logger) {
@@ -51,9 +54,9 @@ public class RemoteViewHandler implements MethodChannel.MethodCallHandler {
                     remoteView.pauseContinuouslyScan();
                     mHMSLogger.sendSingleEvent("remoteView.pauseContinuouslyScan");
                 } else {
-                    result.error(Errors.remoteViewError.getErrorCode(), Errors.remoteViewError.getErrorMessage(), null);
+                    result.error(Errors.REMOTE_VIEW_ERROR.getErrorCode(), Errors.REMOTE_VIEW_ERROR.getErrorMessage(), null);
                     mHMSLogger.sendSingleEvent("remoteView.pauseContinuouslyScan",
-                        Errors.remoteViewError.getErrorCode());
+                        Errors.REMOTE_VIEW_ERROR.getErrorCode());
                 }
                 break;
             // remote view resume
@@ -63,9 +66,9 @@ public class RemoteViewHandler implements MethodChannel.MethodCallHandler {
                     remoteView.resumeContinuouslyScan();
                     mHMSLogger.sendSingleEvent("remoteView.resumeContinuouslyScan");
                 } else {
-                    result.error(Errors.remoteViewError.getErrorCode(), Errors.remoteViewError.getErrorMessage(), null);
+                    result.error(Errors.REMOTE_VIEW_ERROR.getErrorCode(), Errors.REMOTE_VIEW_ERROR.getErrorMessage(), null);
                     mHMSLogger.sendSingleEvent("remoteView.resumeContinuouslyScan",
-                        Errors.remoteViewError.getErrorCode());
+                        Errors.REMOTE_VIEW_ERROR.getErrorCode());
                 }
                 break;
             // Switch light
@@ -83,8 +86,8 @@ public class RemoteViewHandler implements MethodChannel.MethodCallHandler {
                         flushBtn.setImageResource(img[0]);
                     }
                 } else {
-                    result.error(Errors.remoteViewError.getErrorCode(), Errors.remoteViewError.getErrorMessage(), null);
-                    mHMSLogger.sendSingleEvent("remoteView.switchLight", Errors.remoteViewError.getErrorCode());
+                    result.error(Errors.REMOTE_VIEW_ERROR.getErrorCode(), Errors.REMOTE_VIEW_ERROR.getErrorMessage(), null);
+                    mHMSLogger.sendSingleEvent("remoteView.switchLight", Errors.REMOTE_VIEW_ERROR.getErrorCode());
                 }
                 break;
             // get light status
@@ -94,8 +97,8 @@ public class RemoteViewHandler implements MethodChannel.MethodCallHandler {
                     result.success(remoteView.getLightStatus());
                     mHMSLogger.sendSingleEvent("remoteView.getLightStatus");
                 } else {
-                    result.error(Errors.remoteViewError.getErrorCode(), Errors.remoteViewError.getErrorMessage(), null);
-                    mHMSLogger.sendSingleEvent("remoteView.getLightStatus", Errors.remoteViewError.getErrorCode());
+                    result.error(Errors.REMOTE_VIEW_ERROR.getErrorCode(), Errors.REMOTE_VIEW_ERROR.getErrorMessage(), null);
+                    mHMSLogger.sendSingleEvent("remoteView.getLightStatus", Errors.REMOTE_VIEW_ERROR.getErrorCode());
                 }
                 break;
             default:

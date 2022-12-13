@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -17,13 +17,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:huawei_scan/HmsScanLibrary.dart';
+import 'package:huawei_scan/huawei_scan.dart';
 
 import 'package:huawei_scan_example/widgets/ResponseWidget.dart';
 
 class DefaultViewScreen extends StatefulWidget {
+  const DefaultViewScreen({Key? key}) : super(key: key);
+
   @override
-  _DefaultViewScreenState createState() => _DefaultViewScreenState();
+  State<DefaultViewScreen> createState() => _DefaultViewScreenState();
 }
 
 class _DefaultViewScreenState extends State<DefaultViewScreen> {
@@ -37,10 +39,10 @@ class _DefaultViewScreenState extends State<DefaultViewScreen> {
     defaultView();
   }
 
-  defaultView() async {
+  void defaultView() async {
     try {
       DefaultViewRequest request =
-          new DefaultViewRequest(scanType: HmsScanTypes.AllScanType);
+          DefaultViewRequest(scanType: HmsScanTypes.AllScanType);
       ScanResponse response = await HmsScanUtils.startDefaultView(request);
       setState(() {
         resultScan = response.originalValue;
@@ -62,10 +64,10 @@ class _DefaultViewScreenState extends State<DefaultViewScreen> {
       ),
       body: resultScan == null
           ? AlertDialog(
-              content: Text("Please scan a valid barcode."),
-              actions: [
-                RaisedButton(
-                    child: Text("Back"),
+              content: const Text('Please scan a valid barcode.'),
+              actions: <Widget>[
+                ElevatedButton(
+                    child: const Text('Back'),
                     onPressed: () {
                       Navigator.pop(context);
                     })
@@ -73,11 +75,12 @@ class _DefaultViewScreenState extends State<DefaultViewScreen> {
             )
           : SingleChildScrollView(
               child: ResponseWidget(
-              isMulti: false,
-              codeFormat: codeFormatScan,
-              result: resultScan,
-              resultType: resultTypeScan,
-            )),
+                isMulti: false,
+                codeFormat: codeFormatScan,
+                result: resultScan,
+                resultType: resultTypeScan,
+              ),
+            ),
     );
   }
 }

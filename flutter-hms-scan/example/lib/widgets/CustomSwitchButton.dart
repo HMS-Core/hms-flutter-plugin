@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -23,13 +23,14 @@ class CustomSwitchButton extends StatelessWidget {
   final String? rightLabel;
   final String? leftLabel;
 
-  CustomSwitchButton(
-      {Key? key,
-      this.value,
-      this.onChanged,
-      this.label,
-      this.leftLabel,
-      this.rightLabel});
+  const CustomSwitchButton({
+    Key? key,
+    this.value,
+    this.onChanged,
+    this.label,
+    this.leftLabel,
+    this.rightLabel,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,7 @@ class CustomSwitchButton extends StatelessWidget {
       children: <Widget>[
         Text(
           label ?? '',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,

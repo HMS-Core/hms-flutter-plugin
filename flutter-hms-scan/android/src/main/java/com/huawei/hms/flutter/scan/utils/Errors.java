@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -21,33 +21,34 @@ import com.huawei.hms.hmsscankit.ScanUtil;
 public enum Errors {
 
     // Scan Utils Errors
-    scanUtilNoCameraPermission(String.valueOf(ScanUtil.ERROR_NO_CAMERA_PERMISSION), "NO CAMERA PERMISSION"),
-    scanUtilNoReadPermission(String.valueOf(ScanUtil.ERROR_NO_READ_PERMISSION), "NO READ PERMISSION"),
+    SCAN_UTIL_NO_CAMERA_PERMISSION(String.valueOf(ScanUtil.ERROR_NO_CAMERA_PERMISSION), "NO CAMERA PERMISSION"),
+    SCAN_UTIL_NO_READ_PERMISSION(String.valueOf(ScanUtil.ERROR_NO_READ_PERMISSION), "NO READ PERMISSION"),
 
     // Decode Multi Errors
-    decodeMultiAsyncCouldntFind("13", "Multi Async - Couldn't find anything."),
-    decodeMultiAsyncOnFailure("14", "Multi Async - On Failure"),
-    decodeMultiSyncCouldntFind("15", "Multi Sync - Couldn't find anything."),
+    DECODE_MULTI_ASYNC_COULDNT_FIND("13", "Multi Async - Couldn't find anything."),
+    DECODE_MULTI_ASYNC_ON_FAILURE("14", "Multi Async - On Failure"),
+    DECODE_MULTI_SYNC_COULDNT_FIND("15", "Multi Sync - Couldn't find anything."),
 
     // Multi Processor Camera
-    mpCameraScanModeError("16", "Please check your scan mode."),
+    MP_CAMERA_SCAN_MODE_ERROR("16", "Please check your scan mode."),
 
     // Decode With Bitmap
-    decodeWithBitmapError("17", "Please check your barcode and scan type."),
+    DECODE_WITH_BITMAP_ERROR("17", "Please check your barcode and scan type."),
 
     // Build Bitmap
-    buildBitmap("18", "Barcode generation failed."),
+    BUILD_BITMAP("18", "Barcode generation failed."),
 
     // HmsScanAnalyzer
-    hmsScanAnalyzerError("19", "Analyzer is not available."),
+    HMS_SCAN_ANALYZER_ERROR("19", "Analyzer is not available."),
 
     // Remote View Error
-    remoteViewError("20", "Remote View is not initialized."),
+    REMOTE_VIEW_ERROR("20", "Remote View is not initialized."),
 
     // Multi Processor channel initialization
-    mpChannelError("21", "Multi Processor Channel cannot be initialized.");
+    MP_CHANNEL_ERROR("21", "Multi Processor Channel cannot be initialized.");
 
     private final String errorCode;
+
     private final String errorMessage;
 
     Errors(String errorCode, String errorMessage) {

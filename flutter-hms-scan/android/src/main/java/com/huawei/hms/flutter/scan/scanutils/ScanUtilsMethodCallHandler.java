@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -26,14 +26,14 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.huawei.hms.flutter.scan.logger.HMSLogger;
+import com.huawei.hms.flutter.scan.utils.Errors;
+import com.huawei.hms.flutter.scan.utils.ValueGetter;
 import com.huawei.hms.hmsscankit.ScanUtil;
 import com.huawei.hms.hmsscankit.WriterException;
 import com.huawei.hms.ml.scan.HmsBuildBitmapOption;
 import com.huawei.hms.ml.scan.HmsScan;
 import com.huawei.hms.ml.scan.HmsScanAnalyzerOptions;
-import com.huawei.hms.flutter.scan.logger.HMSLogger;
-import com.huawei.hms.flutter.scan.utils.Errors;
-import com.huawei.hms.flutter.scan.utils.ValueGetter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -47,12 +47,15 @@ import java.util.List;
 
 public class ScanUtilsMethodCallHandler
     implements MethodChannel.MethodCallHandler, PluginRegistry.ActivityResultListener {
-    private Activity mActivity;
-    private MethodChannel.Result pendingResult;
-    private final HMSLogger mHMSLogger;
-    private Gson gson;
-
     private static final int REQUEST_CODE_SCAN_DEFAULT = 13;
+
+    private final HMSLogger mHMSLogger;
+
+    private Activity mActivity;
+
+    private MethodChannel.Result pendingResult;
+
+    private Gson gson;
 
     public ScanUtilsMethodCallHandler(final Activity activity) {
         mActivity = activity;
@@ -102,6 +105,7 @@ public class ScanUtilsMethodCallHandler
         // Default view options
         HmsScanAnalyzerOptions.Creator creator = new HmsScanAnalyzerOptions.Creator();
         creator.setHmsScanTypes(scanType, scanTypesIntArray);
+        creator.setViewType(0);
         HmsScanAnalyzerOptions options = creator.create();
 
         // Start scan with options
@@ -110,11 +114,11 @@ public class ScanUtilsMethodCallHandler
         if (ScanUtil.startScan(mActivity, REQUEST_CODE_SCAN_DEFAULT, options) == ScanUtil.SUCCESS) {
             Log.i("DefaultView", "Camera started.");
         } else {
-            Log.i("DefaultView", Errors.scanUtilNoCameraPermission.getErrorMessage());
-            result.error(Errors.scanUtilNoCameraPermission.getErrorCode(),
-                Errors.scanUtilNoCameraPermission.getErrorMessage(), null);
+            Log.i("DefaultView", Errors.SCAN_UTIL_NO_CAMERA_PERMISSION.getErrorMessage());
+            result.error(Errors.SCAN_UTIL_NO_CAMERA_PERMISSION.getErrorCode(),
+                Errors.SCAN_UTIL_NO_CAMERA_PERMISSION.getErrorMessage(), null);
             mHMSLogger.sendSingleEvent("ScanUtilsMethodCallHandler.defaultView",
-                Errors.scanUtilNoCameraPermission.getErrorCode());
+                Errors.SCAN_UTIL_NO_CAMERA_PERMISSION.getErrorCode());
         }
     }
 
@@ -160,8 +164,8 @@ public class ScanUtilsMethodCallHandler
             mHMSLogger.sendSingleEvent("ScanUtilsMethodCallHandler.buildBitmap");
 
         } catch (WriterException e) {
-            result.error(Errors.buildBitmap.getErrorCode(), Errors.buildBitmap.getErrorMessage(), gson.toJson(e));
-            mHMSLogger.sendSingleEvent("ScanUtilsMethodCallHandler.buildBitmap", Errors.buildBitmap.getErrorCode());
+            result.error(Errors.BUILD_BITMAP.getErrorCode(), Errors.BUILD_BITMAP.getErrorMessage(), gson.toJson(e));
+            mHMSLogger.sendSingleEvent("ScanUtilsMethodCallHandler.buildBitmap", Errors.BUILD_BITMAP.getErrorCode());
         }
     }
 
@@ -193,7 +197,7 @@ public class ScanUtilsMethodCallHandler
             hmsScans[0].getOriginalValue())) {
             result.success(gson.toJson(hmsScans[0]));
         } else {
-            result.error(Errors.decodeWithBitmapError.getErrorCode(), Errors.decodeWithBitmapError.getErrorMessage(),
+            result.error(Errors.DECODE_WITH_BITMAP_ERROR.getErrorCode(), Errors.DECODE_WITH_BITMAP_ERROR.getErrorMessage(),
                 null);
         }
 

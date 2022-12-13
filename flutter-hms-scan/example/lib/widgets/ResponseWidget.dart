@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -23,7 +23,13 @@ class ResponseWidget extends StatelessWidget {
   final String? result;
   final bool? isMulti;
 
-  ResponseWidget({this.codeFormat, this.result, this.resultType, this.isMulti});
+  const ResponseWidget({
+    Key? key,
+    this.codeFormat,
+    this.result,
+    this.resultType,
+    this.isMulti,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,20 +37,20 @@ class ResponseWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 26.0, vertical: 8.0),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        color: Color.fromRGBO(247, 242, 241, 1),
+        color: const Color.fromRGBO(247, 242, 241, 1),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 8.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               Row(
                 mainAxisSize: MainAxisSize.max,
-                children: [
+                children: const <Widget>[
                   Padding(
-                    padding: const EdgeInsets.only(top: 12, bottom: 4.0),
+                    padding: EdgeInsets.only(top: 12, bottom: 4.0),
                     child: Text(
-                      "Code Format",
+                      'Code Format',
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
@@ -54,33 +60,37 @@ class ResponseWidget extends StatelessWidget {
               Text(formatConverter(codeFormat)),
               Row(
                 mainAxisSize: MainAxisSize.max,
-                children: [
+                children: const <Widget>[
                   Padding(
-                    padding: const EdgeInsets.only(top: 12, bottom: 4.0),
-                    child: Text("Result Type",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16)),
+                    padding: EdgeInsets.only(top: 12, bottom: 4.0),
+                    child: Text(
+                      'Result Type',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
                   ),
                 ],
               ),
               Text(resultTypeConverter(resultType)),
               Row(
                 mainAxisSize: MainAxisSize.max,
-                children: [
+                children: const <Widget>[
                   Padding(
-                    padding: const EdgeInsets.only(top: 12, bottom: 4.0),
-                    child: Text("Result",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16)),
+                    padding: EdgeInsets.only(top: 12, bottom: 4.0),
+                    child: Text(
+                      'Result',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
                   ),
                 ],
               ),
               Text(result ?? ''),
               isMulti != false
-                  ? SizedBox(
+                  ? const SizedBox(
                       height: 16.0,
                     )
-                  : SizedBox(
+                  : const SizedBox(
                       height: 150.0,
                     )
             ],

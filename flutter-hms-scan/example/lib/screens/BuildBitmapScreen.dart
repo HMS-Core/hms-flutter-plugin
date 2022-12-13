@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,12 +14,10 @@
     limitations under the License.
 */
 
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:huawei_scan/HmsScanLibrary.dart';
+import 'package:huawei_scan/huawei_scan.dart';
 
 import 'package:huawei_scan_example/widgets/CustomButton.dart';
 import 'package:huawei_scan_example/widgets/CustomDropdown.dart';
@@ -27,8 +25,10 @@ import 'package:huawei_scan_example/widgets/CustomTextFormField.dart';
 import 'package:huawei_scan_example/Utils.dart';
 
 class BuildBitmapScreen extends StatefulWidget {
+  const BuildBitmapScreen({Key? key}) : super(key: key);
+
   @override
-  _BuildBitmapScreenState createState() => _BuildBitmapScreenState();
+  State<BuildBitmapScreen> createState() => _BuildBitmapScreenState();
 }
 
 class _BuildBitmapScreenState extends State<BuildBitmapScreen> {
@@ -41,15 +41,15 @@ class _BuildBitmapScreenState extends State<BuildBitmapScreen> {
   Color backgroundColorValue = Colors.white;
 
   final TextEditingController barcodeContentController =
-      TextEditingController(text: "Huawei Scan Kit");
+      TextEditingController(text: 'Huawei Scan Kit');
   final TextEditingController barcodeWidthController =
-      TextEditingController(text: "200");
+      TextEditingController(text: '200');
   final TextEditingController barcodeHeightController =
-      TextEditingController(text: "200");
+      TextEditingController(text: '200');
   final TextEditingController barcodeMarginController =
-      TextEditingController(text: "1");
+      TextEditingController(text: '1');
 
-  buildBitmap() async {
+  void buildBitmap() async {
     Uint8List data = (await rootBundle.load('assets/scan_kit_logo.png'))
         .buffer
         .asUint8List();
@@ -92,74 +92,72 @@ class _BuildBitmapScreenState extends State<BuildBitmapScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      CustomTextFormField(
-                        text: "Barcode Content",
-                        controller: barcodeContentController,
-                      ),
-                      CustomTextFormField(
-                        text: "Barcode Width",
-                        controller: barcodeWidthController,
-                      ),
-                      CustomTextFormField(
-                        text: "Barcode Height",
-                        controller: barcodeHeightController,
-                      ),
-                      CustomTextFormField(
-                        text: "Barcode Margin",
-                        controller: barcodeMarginController,
-                      ),
-                      CustomDropdown(
-                        label: "Scan Type: ",
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            scanTypeValue = newValue;
-                            scanTypeValueFromDrowpDown =
-                                dropdownControllerBitmap(scanTypeValue ?? '');
-                          });
-                        },
-                        list: scanTypeStringListBitmap,
-                        value: scanTypeValue,
-                      ),
-                      CustomDropdown(
-                        label: "Bitmap Color: ",
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            bitmapColor = newValue;
-                            bitmapColorValue =
-                                dropdownColorController(bitmapColor ?? '');
-                          });
-                        },
-                        list: colorStringList,
-                        value: bitmapColor,
-                      ),
-                      CustomDropdown(
-                        label: "Background Color: ",
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            backgroundColor = newValue;
-                            backgroundColorValue =
-                                dropdownColorController(backgroundColor ?? '');
-                          });
-                        },
-                        list: colorStringList,
-                        value: backgroundColor,
-                      ),
-                    ],
-                  ),
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    CustomTextFormField(
+                      text: 'Barcode Content',
+                      controller: barcodeContentController,
+                    ),
+                    CustomTextFormField(
+                      text: 'Barcode Width',
+                      controller: barcodeWidthController,
+                    ),
+                    CustomTextFormField(
+                      text: 'Barcode Height',
+                      controller: barcodeHeightController,
+                    ),
+                    CustomTextFormField(
+                      text: 'Barcode Margin',
+                      controller: barcodeMarginController,
+                    ),
+                    CustomDropdown(
+                      label: 'Scan Type: ',
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          scanTypeValue = newValue;
+                          scanTypeValueFromDrowpDown =
+                              dropdownControllerBitmap(scanTypeValue ?? '');
+                        });
+                      },
+                      list: scanTypeStringListBitmap,
+                      value: scanTypeValue,
+                    ),
+                    CustomDropdown(
+                      label: 'Bitmap Color: ',
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          bitmapColor = newValue;
+                          bitmapColorValue =
+                              dropdownColorController(bitmapColor ?? '');
+                        });
+                      },
+                      list: colorStringList,
+                      value: bitmapColor,
+                    ),
+                    CustomDropdown(
+                      label: 'Background Color: ',
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          backgroundColor = newValue;
+                          backgroundColorValue =
+                              dropdownColorController(backgroundColor ?? '');
+                        });
+                      },
+                      list: colorStringList,
+                      value: backgroundColor,
+                    ),
+                  ],
                 ),
               ),
               CustomButton(
-                text: "Build Bitmap",
+                text: 'Build Bitmap',
                 onPressed: buildBitmap,
               ),
-              _qrImg ?? SizedBox(height: 20),
+              _qrImg ?? const SizedBox(height: 20),
             ],
           ),
         ),

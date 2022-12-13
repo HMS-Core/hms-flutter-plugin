@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -24,38 +24,36 @@ import androidx.annotation.NonNull;
 import com.huawei.hms.flutter.scan.customizedview.CustomizedViewMethodCallHandler;
 import com.huawei.hms.flutter.scan.multiprocessor.MultiProcessorMethodCallHandler;
 import com.huawei.hms.flutter.scan.scanutils.ScanUtilsMethodCallHandler;
-import com.huawei.hms.flutter.scan.scanpermissions.PermissionMethodCallHandler;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 public class ScanPlugin implements FlutterPlugin, ActivityAware {
     public final static SparseArray<MethodChannel> SCAN_CHANNELS = new SparseArray<>();
 
     private Activity activity;
+
     private FlutterPluginBinding flutterPluginBinding;
 
-    private MethodChannel permissionChannel;
-    private PermissionMethodCallHandler permissionMethodCallHandler;
-
     private MethodChannel scanUtilsChannel;
+
     private ScanUtilsMethodCallHandler scanUtilsMethodCallHandler;
 
     private MethodChannel multiProcessorChannel;
+
     private MultiProcessorMethodCallHandler multiProcessorMethodCallHandler;
 
     private MethodChannel customizedViewChannel;
+
     private CustomizedViewMethodCallHandler customizedViewMethodCallHandler;
 
     private MethodChannel remoteViewChannel;
 
     private void initChannels(final BinaryMessenger messenger) {
         // init channels
-        permissionChannel = new MethodChannel(messenger, "permissionChannel");
         scanUtilsChannel = new MethodChannel(messenger, "scanUtilsChannel");
         multiProcessorChannel = new MethodChannel(messenger, "multiProcessorChannel");
         customizedViewChannel = new MethodChannel(messenger, "customizedViewChannel");
@@ -63,7 +61,6 @@ public class ScanPlugin implements FlutterPlugin, ActivityAware {
     }
 
     private void initHandlers() {
-        permissionMethodCallHandler = new PermissionMethodCallHandler(activity);
         scanUtilsMethodCallHandler = new ScanUtilsMethodCallHandler(activity);
         multiProcessorMethodCallHandler = new MultiProcessorMethodCallHandler(activity, multiProcessorChannel);
         customizedViewMethodCallHandler = new CustomizedViewMethodCallHandler(activity, customizedViewChannel,
@@ -71,16 +68,12 @@ public class ScanPlugin implements FlutterPlugin, ActivityAware {
     }
 
     private void setHandlers() {
-        permissionChannel.setMethodCallHandler(permissionMethodCallHandler);
         scanUtilsChannel.setMethodCallHandler(scanUtilsMethodCallHandler);
         multiProcessorChannel.setMethodCallHandler(multiProcessorMethodCallHandler);
         customizedViewChannel.setMethodCallHandler(customizedViewMethodCallHandler);
     }
 
     private void resetHandlers() {
-        if (permissionChannel != null) {
-            permissionChannel.setMethodCallHandler(null);
-        }
         if (scanUtilsChannel != null) {
             scanUtilsChannel.setMethodCallHandler(null);
         }
@@ -96,7 +89,6 @@ public class ScanPlugin implements FlutterPlugin, ActivityAware {
     }
 
     private void removeHandlers() {
-        permissionMethodCallHandler = null;
         scanUtilsMethodCallHandler = null;
         multiProcessorMethodCallHandler = null;
         customizedViewMethodCallHandler = null;
@@ -104,7 +96,6 @@ public class ScanPlugin implements FlutterPlugin, ActivityAware {
 
     private void removeChannels() {
         // remove channels
-        permissionChannel = null;
         scanUtilsChannel = null;
         multiProcessorChannel = null;
         customizedViewChannel = null;
@@ -124,14 +115,6 @@ public class ScanPlugin implements FlutterPlugin, ActivityAware {
         this.flutterPluginBinding = flutterPluginBinding;
     }
 
-    public static void registerWith(Registrar registrar) {
-        final ScanPlugin instance = new ScanPlugin();
-        instance.onAttachedToEngine(registrar.messenger(), registrar.activity());
-        registrar.addRequestPermissionsResultListener(instance.permissionMethodCallHandler);
-        registrar.addActivityResultListener(instance.scanUtilsMethodCallHandler);
-        registrar.addActivityResultListener(instance.multiProcessorMethodCallHandler);
-    }
-
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         this.flutterPluginBinding = null;
@@ -144,7 +127,6 @@ public class ScanPlugin implements FlutterPlugin, ActivityAware {
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
         if (flutterPluginBinding != null) {
             onAttachedToEngine(flutterPluginBinding.getBinaryMessenger(), binding.getActivity());
-            binding.addRequestPermissionsResultListener(permissionMethodCallHandler);
             binding.addActivityResultListener(scanUtilsMethodCallHandler);
             binding.addActivityResultListener(multiProcessorMethodCallHandler);
         }

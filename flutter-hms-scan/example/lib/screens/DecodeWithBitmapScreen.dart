@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -15,17 +15,18 @@
 */
 
 import 'package:flutter/material.dart';
-import 'dart:typed_data';
 import 'package:flutter/services.dart';
 
-import 'package:huawei_scan/HmsScanLibrary.dart';
+import 'package:huawei_scan/huawei_scan.dart';
 
 import 'package:huawei_scan_example/widgets/CustomButton.dart';
 import 'package:huawei_scan_example/widgets/ResponseWidget.dart';
 
 class DecodeWithBitmapScreen extends StatefulWidget {
+  const DecodeWithBitmapScreen({Key? key}) : super(key: key);
+
   @override
-  _DecodeWithBitmapScreenState createState() => _DecodeWithBitmapScreenState();
+  State<DecodeWithBitmapScreen> createState() => _DecodeWithBitmapScreenState();
 }
 
 class _DecodeWithBitmapScreenState extends State<DecodeWithBitmapScreen> {
@@ -33,7 +34,7 @@ class _DecodeWithBitmapScreenState extends State<DecodeWithBitmapScreen> {
   int? codeFormatScan;
   int? resultTypeScan;
 
-  decodeWithBitmap() async {
+  void decodeWithBitmap() async {
     Uint8List data =
         (await rootBundle.load('assets/aztecBarcode.png')).buffer.asUint8List();
 
@@ -62,16 +63,16 @@ class _DecodeWithBitmapScreenState extends State<DecodeWithBitmapScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+          children: <Widget>[
             Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset("assets/aztecBarcode.png"),
+              children: <Widget>[
+                Image.asset('assets/aztecBarcode.png'),
               ],
             ),
             CustomButton(
-              text: "Decode With Bitmap",
+              text: 'Decode With Bitmap',
               onPressed: () {
                 decodeWithBitmap();
               },
@@ -83,7 +84,7 @@ class _DecodeWithBitmapScreenState extends State<DecodeWithBitmapScreen> {
                     result: resultScan,
                     resultType: resultTypeScan,
                   )
-                : SizedBox()
+                : const SizedBox()
           ],
         ),
       ),

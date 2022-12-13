@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
 
-import 'package:huawei_scan/HmsScanLibrary.dart';
+import 'package:huawei_scan/huawei_scan.dart';
 
 import 'package:huawei_scan_example/screens/BuildBitmapScreen.dart';
 import 'package:huawei_scan_example/screens/CustomizedViewScreen.dart';
@@ -29,46 +29,57 @@ import 'package:huawei_scan_example/widgets/CustomButton.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([
+  SystemChrome.setPreferredOrientations(<DeviceOrientation>[
     DeviceOrientation.portraitUp,
   ]);
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: HomeScreen(),
     );
   }
 }
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String permissionState = "Permissions Are Not Granted.";
   bool hmsLoggerStatus = true;
 
   @override
   void initState() {
-    permissionRequest();
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      permissionRequest();
+    });
   }
 
-  permissionRequest() async {
-    bool? permissionResult =
-        await HmsScanPermissions.hasCameraAndStoragePermission();
-    if (permissionResult != true) {
-      await HmsScanPermissions.requestCameraAndStoragePermissions();
-    } else {
-      setState(() {
-        permissionState = "All Permissions Are Granted";
-      });
-    }
+  void permissionRequest() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const AlertDialog(
+          title: Text(
+            'About Permissions',
+          ),
+          content: Text(
+            'Huawei Scan needs some permissions to work properly.\n\n'
+            'You are expected to handle these permissions to use Huawei'
+            ' Scan Demo.',
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -76,14 +87,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.redAccent,
-        title: Text("HMS Flutter Scan Kit"),
+        title: const Text('HMS Flutter Scan Kit'),
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
+          children: <Widget>[
+            const SizedBox(
               height: 12.0,
             ),
             ConstrainedBox(
@@ -91,51 +102,36 @@ class _HomeScreenState extends State<HomeScreen> {
                 maxHeight: MediaQuery.of(context).size.height / 8,
               ),
               child: Image.asset(
-                "assets/scan_kit_logo.png",
+                'assets/scan_kit_logo.png',
                 fit: BoxFit.fitHeight,
               ),
             ),
             Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Text(
-                      "Huawei Scan Kit Flutter Plugin",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 8.0,
-                    ),
-                    Text(
-                      "HUAWEI Scan Kit scans and parses all major 1D and 2D barcodes, helping you quickly build barcode scanning functions into your apps.",
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                )),
-            SizedBox(
-              height: 12.0,
-            ),
-            Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    children: [
-                      Text(
-                        "Permission State",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Text(permissionState),
-                    ],
-                  )
+              child: Column(
+                children: const <Widget>[
+                  Text(
+                    'Huawei Scan Kit Flutter Plugin',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                  Text(
+                    'Huawei Scan Kit scans and parses all major 1D and 2D'
+                    ' barcodes, helping you quickly build barcode scanning'
+                    ' functions into your apps.',
+                    textAlign: TextAlign.center,
+                  ),
                 ],
               ),
             ),
+            const SizedBox(
+              height: 12.0,
+            ),
             CustomButton(
-              text: "Enable/Disable Hms Logger",
+              text: 'Enable/Disable Hms Logger',
               onPressed: () {
                 if (hmsLoggerStatus) {
                   HmsScanUtils.disableLogger();
@@ -147,70 +143,83 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             CustomButton(
-              text: "Request Permissions",
-              onPressed: () {
-                permissionRequest();
-              },
-            ),
-            CustomButton(
-              text: "Default View Mode",
+              text: 'Default View Mode',
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => DefaultViewScreen()),
+                  MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) {
+                      return const DefaultViewScreen();
+                    },
+                  ),
                 );
               },
             ),
             CustomButton(
-              text: "Customized View Mode",
+              text: 'Customized View Mode',
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => CustomizedViewScreen()),
+                  MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) {
+                      return const CustomizedViewScreen();
+                    },
+                  ),
                 );
               },
             ),
             CustomButton(
-              text: "Build Bitmap",
+              text: 'Build Bitmap',
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => BuildBitmapScreen()),
+                  MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) {
+                      return const BuildBitmapScreen();
+                    },
+                  ),
                 );
               },
             ),
             CustomButton(
-              text: "Decode With Bitmap",
+              text: 'Decode With Bitmap',
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => DecodeWithBitmapScreen()),
+                  MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) {
+                      return const DecodeWithBitmapScreen();
+                    },
+                  ),
                 );
               },
             ),
             CustomButton(
-              text: "Multi Processor Camera",
+              text: 'Multi Processor Camera',
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => MultiProcessorCameraScreen()),
+                  MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) {
+                      return const MultiProcessorCameraScreen();
+                    },
+                  ),
                 );
               },
             ),
             CustomButton(
-              text: "Decode with Multi Processor",
+              text: 'Decode with Multi Processor',
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => MultiProcessorScreen()),
+                  MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) =>
+                        const MultiProcessorScreen(),
+                  ),
                 );
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 30.0,
             ),
           ],

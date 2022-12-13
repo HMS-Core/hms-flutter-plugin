@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -20,22 +20,27 @@ class CustomTextFormField extends StatelessWidget {
   final String? text;
   final TextEditingController? controller;
 
-  const CustomTextFormField({this.text, this.controller});
+  const CustomTextFormField({
+    Key? key,
+    this.text,
+    this.controller,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: 10),
       child: TextFormField(
         controller: controller,
-        decoration: new InputDecoration(
-            labelText: text,
-            enabledBorder: new OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-              borderSide: new BorderSide(
-                color: Colors.black38,
-              ),
-            )),
+        decoration: InputDecoration(
+          labelText: text,
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+            borderSide: const BorderSide(
+              color: Colors.black38,
+            ),
+          ),
+        ),
       ),
     );
   }

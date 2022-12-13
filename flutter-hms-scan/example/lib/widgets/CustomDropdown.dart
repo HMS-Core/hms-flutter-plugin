@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -22,18 +22,24 @@ class CustomDropdown extends StatelessWidget {
   final List<String>? list;
   final String? label;
 
-  CustomDropdown({Key? key, this.label, this.value, this.onChanged, this.list});
+  const CustomDropdown({
+    Key? key,
+    this.label,
+    this.value,
+    this.onChanged,
+    this.list,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
+      children: <Widget>[
         Expanded(
           child: Text(
             label ?? '',
-            style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 13.0, fontWeight: FontWeight.bold),
           ),
         ),
         Expanded(
@@ -41,24 +47,26 @@ class CustomDropdown extends StatelessWidget {
           child: DropdownButton<String>(
             isExpanded: true,
             value: value,
-            icon: Icon(
+            icon: const Icon(
               Icons.keyboard_arrow_down,
               color: Colors.black38,
             ),
             iconSize: 24,
             elevation: 16,
-            style: TextStyle(color: Colors.black),
+            style: const TextStyle(color: Colors.black),
             underline: Container(
               height: 1,
               color: Colors.black38,
             ),
             onChanged: onChanged,
-            items: list?.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
+            items: list?.map<DropdownMenuItem<String>>(
+              (String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              },
+            ).toList(),
           ),
         )
       ],

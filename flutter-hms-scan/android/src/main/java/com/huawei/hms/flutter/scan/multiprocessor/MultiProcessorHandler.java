@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,6 +16,9 @@
 
 package com.huawei.hms.flutter.scan.multiprocessor;
 
+import static android.app.Activity.RESULT_OK;
+import static com.huawei.hms.flutter.scan.utils.ValueGetter.analyzerIsAvailableWithLogger;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -30,36 +33,33 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
 
-import com.huawei.hms.hmsscankit.ScanUtil;
-
 import com.huawei.hmf.tasks.OnFailureListener;
 import com.huawei.hmf.tasks.OnSuccessListener;
+import com.huawei.hms.flutter.scan.logger.HMSLogger;
+import com.huawei.hms.flutter.scan.utils.Errors;
+import com.huawei.hms.hmsscankit.ScanUtil;
 import com.huawei.hms.ml.scan.HmsScan;
 import com.huawei.hms.ml.scan.HmsScanAnalyzer;
 import com.huawei.hms.mlsdk.common.MLFrame;
-import com.huawei.hms.flutter.scan.ScanPlugin;
-import com.huawei.hms.flutter.scan.logger.HMSLogger;
-import com.huawei.hms.flutter.scan.utils.Errors;
-
-import java.io.ByteArrayOutputStream;
-import java.util.List;
-
-import static android.app.Activity.RESULT_OK;
-import static com.huawei.hms.flutter.scan.utils.ValueGetter.analyzerIsAvailableWithLogger;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import io.flutter.plugin.common.MethodChannel;
 
+import java.io.ByteArrayOutputStream;
+import java.util.List;
+
 public final class MultiProcessorHandler extends Handler {
 
-    private static final double DEFAULT_ZOOM = 1.0;
+    private static final double DEFAULT_ZOOM = 1.0d;
+
     private MultiProcessorCamera mMultiProcessorCamera;
 
     private MethodChannel mChannel;
 
     private HandlerThread decodeThread;
+
     private Handler decodeHandle;
 
     private Activity activity;
@@ -67,20 +67,27 @@ public final class MultiProcessorHandler extends Handler {
     private long[] mColorList;
 
     private int mTextColor;
+
     private float mTextSize;
+
     private float mStrokeWidth;
 
     private int mTextBackgroundColor;
+
     private boolean mShowText;
+
     private boolean mShowTextOutBounds;
+
     private boolean mAutoSizeText;
 
     private int mMinTextSize;
+
     private int mGranularity;
 
     private int mode;
 
     private Gson mGson = new GsonBuilder().setPrettyPrinting().create();
+
     private HMSLogger mHMSLogger;
 
     private HmsScanAnalyzer analyzer;
@@ -153,6 +160,7 @@ public final class MultiProcessorHandler extends Handler {
 
     /**
      * Call the MultiProcessor API in synchronous mode.
+     *
      * @param width width
      * @param height height
      * @param data data
@@ -178,13 +186,14 @@ public final class MultiProcessorHandler extends Handler {
                 return info;
             }
         } else {
-            Log.e(Errors.hmsScanAnalyzerError.getErrorCode(), Errors.hmsScanAnalyzerError.getErrorMessage(), null);
+            Log.e(Errors.HMS_SCAN_ANALYZER_ERROR.getErrorCode(), Errors.HMS_SCAN_ANALYZER_ERROR.getErrorMessage(), null);
         }
         return info;
     }
 
     /**
      * Call the MultiProcessor API in asynchronous mode.
+     *
      * @param width width
      * @param height height
      * @param data data
@@ -220,12 +229,13 @@ public final class MultiProcessorHandler extends Handler {
                 }
             });
         } else {
-            Log.e(Errors.hmsScanAnalyzerError.getErrorCode(), Errors.hmsScanAnalyzerError.getErrorMessage(), null);
+            Log.e(Errors.HMS_SCAN_ANALYZER_ERROR.getErrorCode(), Errors.HMS_SCAN_ANALYZER_ERROR.getErrorMessage(), null);
         }
     }
 
     /**
      * Convert camera data into bitmap data.
+     *
      * @param width width
      * @param height height
      * @param data data

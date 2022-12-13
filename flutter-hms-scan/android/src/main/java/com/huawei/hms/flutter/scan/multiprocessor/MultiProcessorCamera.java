@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -18,10 +18,8 @@ package com.huawei.hms.flutter.scan.multiprocessor;
 
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
-
 import android.os.Handler;
 import android.os.Message;
-
 import android.view.SurfaceHolder;
 
 import java.io.IOException;
@@ -29,12 +27,16 @@ import java.util.List;
 
 class MultiProcessorCamera {
     private Camera camera = null;
+
     private Camera.Parameters parameters = null;
+
     private boolean isPreview = false;
+
     private FrameCallback frameCallback = new FrameCallback();
 
     /**
      * Open up the camera.
+     *
      * @param holder SurfaceHolder
      * @throws IOException
      */
@@ -73,7 +75,7 @@ class MultiProcessorCamera {
     synchronized void callbackFrame(Handler handler, double zoomValue) {
         if (camera != null && isPreview) {
             frameCallback.setProperties(handler);
-            double defaultZoom = 1.0;
+            double defaultZoom = 1.0d;
             if (camera.getParameters().isZoomSupported() && zoomValue != defaultZoom) {
                 // Auto zoom.
                 parameters.setZoom(convertZoomInt(zoomValue));

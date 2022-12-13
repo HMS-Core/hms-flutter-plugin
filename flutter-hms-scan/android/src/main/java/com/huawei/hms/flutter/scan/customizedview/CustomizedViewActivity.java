@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -31,6 +31,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.huawei.hms.flutter.scan.R;
+import com.huawei.hms.flutter.scan.ScanPlugin;
+import com.huawei.hms.flutter.scan.logger.HMSLogger;
 import com.huawei.hms.flutter.scan.utils.Constants;
 import com.huawei.hms.flutter.scan.utils.Errors;
 import com.huawei.hms.hmsscankit.OnLightVisibleCallBack;
@@ -39,41 +42,49 @@ import com.huawei.hms.hmsscankit.RemoteView;
 import com.huawei.hms.hmsscankit.ScanUtil;
 import com.huawei.hms.ml.scan.HmsScan;
 import com.huawei.hms.ml.scan.HmsScanAnalyzerOptions;
-import com.huawei.hms.flutter.scan.R;
-import com.huawei.hms.flutter.scan.ScanPlugin;
-import com.huawei.hms.flutter.scan.logger.HMSLogger;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import io.flutter.plugin.common.MethodChannel;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Objects;
 
-import io.flutter.plugin.common.MethodChannel;
-
 public class CustomizedViewActivity extends Activity {
+    // Declare the key. It is used to obtain the value returned from Scan Kit.
+    public static final int REQUEST_CODE_PHOTO = 0X1113;
+
+    private static final String TAG = "CustomizedViewActivity";
+
+    int mScreenWidth;
+
+    int mScreenHeight;
+
+    int scanFrameSizeWidth;
+
+    int scanFrameSizeHeight;
+
+    boolean continuouslyScan;
+
+    Intent intent;
+
     private RemoteView remoteView;
+
     private ImageView flashButton;
+
     private Gson mGson = new GsonBuilder().setPrettyPrinting().create();
+
     private HMSLogger mHMSLogger;
 
     private MethodChannel customizedViewChannel;
-    private MethodChannel remoteViewChannel;
 
-    int mScreenWidth;
-    int mScreenHeight;
-    int SCAN_FRAME_SIZE_WIDTH;
-    int SCAN_FRAME_SIZE_HEIGHT;
-    boolean continuouslyScan;
-    Intent intent;
+    private MethodChannel remoteViewChannel;
 
     // Flash button image
     private int[] img = {R.drawable.flashlight_on, R.drawable.flashlight_off};
-
-    // Declare the key. It is used to obtain the value returned from Scan Kit.
-    public static final int REQUEST_CODE_PHOTO = 0X1113;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,144 +96,148 @@ public class CustomizedViewActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_defined);
 
-        int customizedChannelId = intent.getIntExtra(Constants.CHANNEL_ID_KEY, -1);
-        int remoteChannelId = intent.getIntExtra(Constants.CHANNEL_REMOTE_KEY, -1);
-        intent.getIntExtra(Constants.CHANNEL_REMOTE_KEY, -1);
-        if (customizedChannelId == -1 || remoteChannelId == -1) {
-            Log.e(Errors.remoteViewError.getErrorCode(), Errors.remoteViewError.getErrorMessage(), null);
-            CustomizedViewActivity.this.finish();
-        } else {
-            customizedViewChannel = ScanPlugin.SCAN_CHANNELS.get(customizedChannelId);
-            remoteViewChannel = ScanPlugin.SCAN_CHANNELS.get(remoteChannelId);
-        }
+        try {
+            int customizedChannelId = intent.getIntExtra(Constants.CHANNEL_ID_KEY, -1);
+            int remoteChannelId = intent.getIntExtra(Constants.CHANNEL_REMOTE_KEY, -1);
+            intent.getIntExtra(Constants.CHANNEL_REMOTE_KEY, -1);
+            if (customizedChannelId == -1 || remoteChannelId == -1) {
+                Log.e(Errors.REMOTE_VIEW_ERROR.getErrorCode(), Errors.REMOTE_VIEW_ERROR.getErrorMessage(), null);
+                CustomizedViewActivity.this.finish();
+            } else {
+                customizedViewChannel = ScanPlugin.SCAN_CHANNELS.get(customizedChannelId);
+                remoteViewChannel = ScanPlugin.SCAN_CHANNELS.get(remoteChannelId);
+            }
 
-        // Bind the camera preview screen.
-        FrameLayout frameLayout = findViewById(R.id.rim);
-        ImageView galleryButton = findViewById(R.id.img_btn);
-        ImageView scanFrame = findViewById(R.id.scan_area);
-        flashButton = findViewById(R.id.flush_btn);
+            // Bind the camera preview screen.
+            FrameLayout frameLayout = findViewById(R.id.rim);
+            ImageView galleryButton = findViewById(R.id.img_btn);
+            ImageView scanFrame = findViewById(R.id.scan_area);
+            flashButton = findViewById(R.id.flush_btn);
 
-        // 1. Obtain the screen density to calculate the viewfinder's rectangle.
-        DisplayMetrics dm = getResources().getDisplayMetrics();
-        float density = dm.density;
-        // 2. Obtain the screen size.
-        mScreenWidth = dm.widthPixels;
-        mScreenHeight = dm.heightPixels;
+            // 1. Obtain the screen density to calculate the viewfinder's rectangle.
+            DisplayMetrics dm = getResources().getDisplayMetrics();
+            float density = dm.density;
+            // 2. Obtain the screen size.
+            mScreenWidth = dm.widthPixels;
+            mScreenHeight = dm.heightPixels;
 
-        SCAN_FRAME_SIZE_HEIGHT = Objects.requireNonNull(intent.getExtras()).getInt("rectHeight");
-        SCAN_FRAME_SIZE_WIDTH = intent.getExtras().getInt("rectWidth");
+            scanFrameSizeHeight = Objects.requireNonNull(intent.getExtras()).getInt("rectHeight");
+            scanFrameSizeWidth = intent.getExtras().getInt("rectWidth");
 
-        int scanFrameSizeHeight = (int) (SCAN_FRAME_SIZE_HEIGHT * density);
-        int scanFrameSizeWidth = (int) (SCAN_FRAME_SIZE_WIDTH * density);
+            int scanFrameSizeHeight = (int) (this.scanFrameSizeHeight * density);
+            int scanFrameSizeWidth = (int) (this.scanFrameSizeWidth * density);
 
-        // 3. Calculate the viewfinder's rectangle, which in the middle of the layout.
-        // Set the scanning area. (Optional. Rect can be null. If no settings are specified, it will be located in the middle of the layout.)
-        Rect rect = new Rect();
-        rect.left = mScreenWidth / 2 - scanFrameSizeWidth / 2;
-        rect.right = mScreenWidth / 2 + scanFrameSizeWidth / 2;
-        rect.top = mScreenHeight / 2 - scanFrameSizeHeight / 2;
-        rect.bottom = mScreenHeight / 2 + scanFrameSizeHeight / 2;
+            // 3. Calculate the viewfinder's rectangle, which in the middle of the layout.
+            // Set the scanning area. (Optional. Rect can be null. If no settings are specified, it will be located in the middle of the layout.)
+            Rect rect = new Rect();
+            rect.left = mScreenWidth / 2 - scanFrameSizeWidth / 2;
+            rect.right = mScreenWidth / 2 + scanFrameSizeWidth / 2;
+            rect.top = mScreenHeight / 2 - scanFrameSizeHeight / 2;
+            rect.bottom = mScreenHeight / 2 + scanFrameSizeHeight / 2;
 
-        scanFrame.getLayoutParams().height = rect.height();
-        scanFrame.getLayoutParams().width = rect.width();
+            scanFrame.getLayoutParams().height = rect.height();
+            scanFrame.getLayoutParams().width = rect.width();
 
-        // Continuously Scan option from Flutter.
-        continuouslyScan = intent.getExtras().getBoolean("continuouslyScan");
+            // Continuously Scan option from Flutter.
+            continuouslyScan = intent.getExtras().getBoolean("continuouslyScan");
 
-        // Initialize the RemoteView instance, and set callback for the scanning result.
-        RemoteView.Builder builder = new RemoteView.Builder().setContext(this)
+            // Initialize the RemoteView instance, and set callback for the scanning result.
+            RemoteView.Builder builder = new RemoteView.Builder().setContext(this)
                 .setBoundingBox(rect)
                 .setContinuouslyScan(continuouslyScan)
                 .setFormat(intent.getExtras().getInt("scanType"), intent.getExtras().getIntArray("additionalScanTypes"));
 
-        if (intent.getExtras().getBoolean("enableReturnBitmap")) {
-            remoteView = builder.enableReturnBitmap().build();
-        } else {
-            remoteView = builder.build();
-        }
-
-        // Set Method Call Handler for pause and resume actions of remote view.
-        if (remoteViewChannel != null) {
-            RemoteViewHandler remoteViewHandler = new RemoteViewHandler(remoteView, flashButton, mHMSLogger);
-            remoteViewChannel.setMethodCallHandler(remoteViewHandler);
-        }
-
-        // Subscribe to the scanning result callback event.
-        mHMSLogger.startMethodExecutionTimer("CustomizedViewActivity.customizedView");
-        remoteView.setOnResultCallback(new OnResultCallback() {
-            @Override
-            public void onResult(HmsScan[] result) {
-                // Check the result.
-                if (result == null || result.length == 0 || result[0] == null || TextUtils.isEmpty(result[0].getOriginalValue())) {
-                    return;
-                }
-                HashMap<String, Object> resultMap = mGson.fromJson(mGson.toJson(result[0]), HashMap.class);
-                if (resultMap.containsKey("originalBitmap")) {
-                    resultMap.remove("originalBitmap");
-
-                    int bytes = result[0].getOriginalBitmap().getByteCount();
-                    ByteBuffer buffer = ByteBuffer.allocate(bytes);
-                    result[0].getOriginalBitmap().copyPixelsToBuffer(buffer);
-                    final byte[] array = buffer.array();
-
-                    resultMap.put("originalBitmap", array);
-                }
-
-                if (customizedViewChannel != null) {
-                    customizedViewChannel.invokeMethod("CustomizedViewResponse", resultMap);
-                }
-
-                if (continuouslyScan) {
-                    mHMSLogger.sendPeriodicEvent("CustomizedViewActivity.customizedView");
-                } else {
-                    mHMSLogger.sendSingleEvent("CustomizedViewActivity.customizedView");
-                    CustomizedViewActivity.this.finish();
-                }
+            if (intent.getExtras().getBoolean("enableReturnBitmap")) {
+                remoteView = builder.enableReturnBitmap().build();
+            } else {
+                remoteView = builder.build();
             }
-        });
 
-        // Load the customized view to the activity.
-        mHMSLogger.startMethodExecutionTimer("remoteView.onCreate");
-        remoteView.onCreate(savedInstanceState);
-        mHMSLogger.sendSingleEvent("remoteView.onCreate");
+            // Set Method Call Handler for pause and resume actions of remote view.
+            if (remoteViewChannel != null) {
+                RemoteViewHandler remoteViewHandler = new RemoteViewHandler(remoteView, flashButton, mHMSLogger);
+                remoteViewChannel.setMethodCallHandler(remoteViewHandler);
+            }
 
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.MATCH_PARENT);
-        frameLayout.addView(remoteView, params);
-
-        // Set the back, photo scanning, and flashlight operations.
-        setBackOperation();
-
-        // Flash button visibility
-        flashButton.setVisibility(View.INVISIBLE);
-
-        // When the light is dim, this API is called back to display the flashlight switch.
-        if (intent.getExtras().getBoolean("flashOnLightChange")) {
-            setFlashOperation();
-            mHMSLogger.startMethodExecutionTimer("remoteView.setOnLightVisibleCallback");
-            remoteView.setOnLightVisibleCallback(new OnLightVisibleCallBack() {
+            // Subscribe to the scanning result callback event.
+            mHMSLogger.startMethodExecutionTimer("CustomizedViewActivity.customizedView");
+            remoteView.setOnResultCallback(new OnResultCallback() {
                 @Override
-                public void onVisibleChanged(boolean visible) {
-                    if (visible) {
-                        flashButton.setVisibility(View.VISIBLE);
+                public void onResult(HmsScan[] result) {
+                    // Check the result.
+                    if (result == null || result.length == 0 || result[0] == null || TextUtils.isEmpty(result[0].getOriginalValue())) {
+                        return;
+                    }
+                    HashMap<String, Object> resultMap = mGson.fromJson(mGson.toJson(result[0]), HashMap.class);
+                    if (resultMap.containsKey("originalBitmap")) {
+                        resultMap.remove("originalBitmap");
+
+                        int bytes = result[0].getOriginalBitmap().getByteCount();
+                        ByteBuffer buffer = ByteBuffer.allocate(bytes);
+                        result[0].getOriginalBitmap().copyPixelsToBuffer(buffer);
+                        final byte[] array = buffer.array();
+
+                        resultMap.put("originalBitmap", array);
+                    }
+
+                    if (customizedViewChannel != null) {
+                        customizedViewChannel.invokeMethod("CustomizedViewResponse", resultMap);
+                    }
+
+                    if (continuouslyScan) {
+                        mHMSLogger.sendPeriodicEvent("CustomizedViewActivity.customizedView");
                     } else {
-                        flashButton.setVisibility(View.INVISIBLE);
+                        mHMSLogger.sendSingleEvent("CustomizedViewActivity.customizedView");
+                        CustomizedViewActivity.this.finish();
                     }
                 }
             });
-            mHMSLogger.sendSingleEvent("remoteView.setOnLightVisibleCallback");
-        }
 
-        // Flash Button option from Flutter.
-        if (intent.getExtras().getBoolean("isFlashAvailable")) {
-            flashButton.setVisibility(View.VISIBLE);
-            setFlashOperation();
-        }
+            // Load the customized view to the activity.
+            mHMSLogger.startMethodExecutionTimer("remoteView.onCreate");
+            remoteView.onCreate(savedInstanceState);
+            mHMSLogger.sendSingleEvent("remoteView.onCreate");
 
-        // Gallery Button option from Flutter
-        if (intent.getExtras().getBoolean("gallery")) {
-            galleryButton.setVisibility(View.VISIBLE);
-            setPictureScanOperation();
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+            frameLayout.addView(remoteView, params);
+
+            // Set the back, photo scanning, and flashlight operations.
+            setBackOperation();
+
+            // Flash button visibility
+            flashButton.setVisibility(View.INVISIBLE);
+
+            // When the light is dim, this API is called back to display the flashlight switch.
+            if (intent.getExtras().getBoolean("flashOnLightChange")) {
+                setFlashOperation();
+                mHMSLogger.startMethodExecutionTimer("remoteView.setOnLightVisibleCallback");
+                remoteView.setOnLightVisibleCallback(new OnLightVisibleCallBack() {
+                    @Override
+                    public void onVisibleChanged(boolean visible) {
+                        if (visible) {
+                            flashButton.setVisibility(View.VISIBLE);
+                        } else {
+                            flashButton.setVisibility(View.INVISIBLE);
+                        }
+                    }
+                });
+                mHMSLogger.sendSingleEvent("remoteView.setOnLightVisibleCallback");
+            }
+
+            // Flash Button option from Flutter.
+            if (intent.getExtras().getBoolean("isFlashAvailable")) {
+                flashButton.setVisibility(View.VISIBLE);
+                setFlashOperation();
+            }
+
+            // Gallery Button option from Flutter
+            if (intent.getExtras().getBoolean("gallery")) {
+                galleryButton.setVisibility(View.VISIBLE);
+                setPictureScanOperation();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
         }
     }
 
@@ -332,6 +347,7 @@ public class CustomizedViewActivity extends Activity {
 
     /**
      * Handle the return results from the gallery.
+     *
      * @param requestCode requestCode
      * @param resultCode resultCode
      * @param data Intent
