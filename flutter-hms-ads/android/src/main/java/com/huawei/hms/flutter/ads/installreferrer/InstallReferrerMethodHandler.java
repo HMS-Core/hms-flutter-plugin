@@ -96,7 +96,7 @@ public class InstallReferrerMethodHandler implements MethodChannel.MethodCallHan
         final HmsInstallReferrer referrer = HmsInstallReferrer.get(id);
         if (referrer != null && callMode != null) {
             if (referrer.isConnected()) {
-                new ReferrerDetailsThread(referrer, result, context).start();
+                new ReferrerDetailsThread(referrer, result, context, call).start();
             } else {
                 Log.i(TAG, "Referrer already is not connected");
             }
@@ -177,17 +177,20 @@ public class InstallReferrerMethodHandler implements MethodChannel.MethodCallHan
         private final HmsInstallReferrer referrer;
         private final MethodChannel.Result result;
         private final Context context;
+        private MethodCall call;
 
-        ReferrerDetailsThread(HmsInstallReferrer referrer, MethodChannel.Result result, Context context) {
+        ReferrerDetailsThread(HmsInstallReferrer referrer, MethodChannel.Result result, Context context,  MethodCall call) {
             super("getReferrerDetails");
             this.referrer = referrer;
             this.result = result;
             this.context = context;
+            this.call = call;
         }
 
         @Override
         public void run() {
-            referrer.getReferrerDetails(result);
+            final String installChannel = FromMap.toString("installChannel", call.argument("installChannel"));
+            referrer.getReferrerDetails(result, installChannel);
             HMSLogger.getInstance(context).sendSingleEvent("getInstallReferrer");
         }
     }

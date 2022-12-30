@@ -111,9 +111,8 @@ class _ConsentSettingsPageState extends State<ConsentSettingsPage> {
     setState(() {
       _bannerAd = banner;
     });
-    banner
-      ..loadAd()
-      ..show();
+    await _bannerAd!.loadAd();
+    await _bannerAd!.show();
   }
 
   void setConsent(ConsentStatus status) async {

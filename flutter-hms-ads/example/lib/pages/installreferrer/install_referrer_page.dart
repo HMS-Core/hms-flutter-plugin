@@ -223,6 +223,16 @@ class _InstallReferrerPageContentState
                     '${_referrerDetails?.getReferrerBeginTimeStampMillisecond ?? " "}',
                     style: Styles.textContentStyle,
                   ),
+                  const SizedBox(height: 30),
+                  const Text(
+                    'Install Channel',
+                    style: Styles.headerTextStyle,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    '${_referrerDetails?.getInstallChannel ?? " "}',
+                    style: Styles.textContentStyle,
+                  ),
                 ],
               ),
             ),

@@ -18,7 +18,6 @@ package com.huawei.hms.flutter.ads.adslite.instream;
 
 import android.content.Context;
 
-import com.huawei.hms.flutter.ads.adslite.bannerad.FlutterBannerView;
 import com.huawei.hms.flutter.ads.utils.FromMap;
 
 import io.flutter.plugin.common.BinaryMessenger;

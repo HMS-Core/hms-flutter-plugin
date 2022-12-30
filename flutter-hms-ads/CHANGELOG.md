@@ -1,3 +1,9 @@
+## 13.4.58+304
+
+- Optimized the feedback function of HUAWEI Ads for users to give comments.
+- Added the getInstallChannel method to the ReferrerDetails class to support the function of obtaining the channel information.
+- Fixed an issue that caused BannerAd listeners to not work properly.
+
 ## 13.4.55+301
 
 - Fixed an issue when destroying NativeAd.

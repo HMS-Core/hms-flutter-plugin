@@ -26,7 +26,6 @@ import android.util.SparseArray;
 import com.huawei.hms.ads.installreferrer.api.InstallReferrerClient;
 import com.huawei.hms.ads.installreferrer.api.InstallReferrerStateListener;
 import com.huawei.hms.ads.installreferrer.api.ReferrerDetails;
-import com.huawei.hms.flutter.ads.HmsAdsPlugin;
 import com.huawei.hms.flutter.ads.logger.HMSLogger;
 import com.huawei.hms.flutter.ads.utils.ToMap;
 import com.huawei.hms.flutter.ads.utils.constants.ErrorCodes;
@@ -140,17 +139,19 @@ public class InstallReferrerSdkUtil extends HmsInstallReferrer {
         }
     }
 
-    public void getReferrerDetails(final MethodChannel.Result result) {
+    public void getReferrerDetails(final MethodChannel.Result result, String installChannel) {
         HMSLogger.getInstance(context).startMethodExecutionTimer("getReferrerDetails");
         if (referrerClient != null) {
             try {
                 ReferrerDetails referrerDetails = referrerClient.getInstallReferrer();
+                referrerDetails.setInstallChannel(installChannel);
                 Log.i(TAG, "Referrer details retrieved successfully");
                 final Map<String, Object> response =
                 ToMap.fromArgs(
                     ReferrerDetails.KEY_INSTALL_REFERRER, referrerDetails.getInstallReferrer(),
                     ReferrerDetails.KEY_REFERRER_CLICK_TIMESTAMP, referrerDetails.getReferrerClickTimestampMillisecond(),
-                    ReferrerDetails.KEY_INSTALL_BEGIN_TIMESTAMP, referrerDetails.getInstallBeginTimestampMillisecond());
+                    ReferrerDetails.KEY_INSTALL_BEGIN_TIMESTAMP, referrerDetails.getInstallBeginTimestampMillisecond(),
+                    "install_channel", referrerDetails.getInstallChannel());
                 new ReferrerDetailsHandler(Looper.getMainLooper(), response, result).backToMain();
                 HMSLogger.getInstance(context).sendSingleEvent("getReferrerDetails");
             } catch (RemoteException | IOException e) {

@@ -22,7 +22,7 @@ class ReferrerDetails {
       'referrer_click_timestamp_seconds';
   static const String keyInstallBeginTimeStamp =
       'install_begin_timestamp_seconds';
-
+  static const String keyInstallChannel = 'install_channel';
   late Bundle _bundle;
 
   ReferrerDetails(Bundle referrerBundle) {
@@ -39,5 +39,9 @@ class ReferrerDetails {
 
   int? get getReferrerBeginTimeStampMillisecond {
     return _bundle.getInt(keyInstallBeginTimeStamp);
+  }
+
+  String? get getInstallChannel {
+    return _bundle.getString(keyInstallChannel);
   }
 }

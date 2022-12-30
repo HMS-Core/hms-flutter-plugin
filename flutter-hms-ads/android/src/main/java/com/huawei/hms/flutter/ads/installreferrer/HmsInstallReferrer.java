@@ -86,9 +86,10 @@ public abstract class HmsInstallReferrer {
      * Retrieve the referrer details from an Install Referrer connection
      *
      * @param result : Flutter method channel result
+     * @param installChannel : Channel information
      */
-    public abstract void getReferrerDetails(MethodChannel.Result result);
-
+    public abstract void getReferrerDetails(MethodChannel.Result result, String installChannel);
+    
     /**
      * Indicates whether the connection is ready
      *

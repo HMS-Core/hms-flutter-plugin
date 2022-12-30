@@ -24,18 +24,24 @@ class InstallReferrerClient {
 
   final ReferrerCallMode _callMode = ReferrerCallMode.sdk;
   bool? _test = false;
+  String? _installChannel = 'This is test install channel';
   InstallReferrerStateListener? stateListener;
   ReferrerDetails? _referrerDetails;
 
   InstallReferrerClient({
     this.stateListener,
     bool? test,
+    String? installChannel,
   }) {
     _test = test;
     allReferrers[id] = this;
+    _installChannel = installChannel ?? _installChannel;
   }
 
   set setTest(bool test) => _test = test;
+
+  set setInstallChannel(String installChannel) =>
+      _installChannel = installChannel;
 
   void startConnection([bool? isTest]) {
     Ads.instance.channelReferrer.invokeMethod(
@@ -74,6 +80,7 @@ class InstallReferrerClient {
       <String, dynamic>{
         'id': id,
         'callMode': describeEnum(_callMode),
+        'installChannel': _installChannel,
       },
     );
     if (referrer != null) {
@@ -89,6 +96,10 @@ class InstallReferrerClient {
       bundle.putInt(
         ReferrerDetails.keyInstallBeginTimeStamp,
         referrer[ReferrerDetails.keyInstallBeginTimeStamp],
+      );
+      bundle.putString(
+        ReferrerDetails.keyInstallChannel,
+        referrer[ReferrerDetails.keyInstallChannel],
       );
       _referrerDetails = ReferrerDetails(bundle);
     }

@@ -20,8 +20,6 @@ import android.content.Context;
 
 import com.huawei.hms.flutter.ads.utils.FromMap;
 
-import java.util.HashMap;
-
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.StandardMessageCodec;
 import io.flutter.plugin.platform.PlatformView;

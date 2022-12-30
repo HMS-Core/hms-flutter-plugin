@@ -48,7 +48,7 @@ class BannerAd {
   AdListener? get getAdListener => _listener;
 
   Future<bool?> _initAd() async {
-    return Ads.instance.channelBanner.invokeMethod(
+    return await Ads.instance.channelBanner.invokeMethod(
       'initBannerAd',
       <String, dynamic>{
         'id': id,
@@ -60,9 +60,9 @@ class BannerAd {
   }
 
   Future<bool?> loadAd() async {
-    _initAd();
+    await _initAd();
     _startListening();
-    return Ads.instance.channelBanner.invokeMethod(
+    return await Ads.instance.channelBanner.invokeMethod(
       'loadBannerAd',
       <String, dynamic>{
         'id': id,
@@ -72,8 +72,8 @@ class BannerAd {
     );
   }
 
-  Future<bool?> isLoading() {
-    return Ads.instance.channelBanner.invokeMethod(
+  Future<bool?> isLoading() async {
+    return await Ads.instance.channelBanner.invokeMethod(
       'isAdLoading',
       <String, dynamic>{
         'id': id,
@@ -83,8 +83,8 @@ class BannerAd {
     );
   }
 
-  Future<bool?> pause() {
-    return Ads.instance.channelBanner.invokeMethod(
+  Future<bool?> pause() async{
+    return await Ads.instance.channelBanner.invokeMethod(
       'pauseAd',
       <String, dynamic>{
         'id': id,
@@ -94,8 +94,8 @@ class BannerAd {
     );
   }
 
-  Future<bool?> resume() {
-    return Ads.instance.channelBanner.invokeMethod(
+  Future<bool?> resume() async {
+    return await Ads.instance.channelBanner.invokeMethod(
       'resumeAd',
       <String, dynamic>{
         'id': id,

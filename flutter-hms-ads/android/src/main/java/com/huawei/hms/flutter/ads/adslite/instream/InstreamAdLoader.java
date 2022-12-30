@@ -17,14 +17,12 @@
 package com.huawei.hms.flutter.ads.adslite.instream;
 
 import android.content.Context;
-import android.util.SparseArray;
 
 import androidx.annotation.NonNull;
 
 import com.huawei.hms.ads.AdParam;
 import com.huawei.hms.ads.instreamad.InstreamAd;
 import com.huawei.hms.ads.instreamad.InstreamAdLoadListener;
-import com.huawei.hms.flutter.ads.HmsAdsPlugin;
 import com.huawei.hms.flutter.ads.factory.AdParamFactory;
 import com.huawei.hms.flutter.ads.logger.HMSLogger;
 import com.huawei.hms.flutter.ads.utils.ToMap;

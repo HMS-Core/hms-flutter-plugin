@@ -185,11 +185,11 @@ class _BannerAdPageState extends State<BannerAdPage> {
                   'Load Ad',
                   style: Styles.adControlButtonStyle,
                 ),
-                onPressed: () {
-                  _bannerAd?.destroy();
-                  _bannerAd = createAd()
-                    ..loadAd()
-                    ..show();
+                onPressed: () async {
+                  await _bannerAd?.destroy();
+                  _bannerAd = createAd();
+                  await _bannerAd!.loadAd();
+                  await _bannerAd!.show();
                 },
               ),
             ),
