@@ -3,7 +3,9 @@
 /local.properties
 GeneratedPluginRegistrant.java
 agconnect-services.json
-*.jks
+key.properties
+**/*.keystore
+**/*.jks
 .project
 .settings
 app/.classpath

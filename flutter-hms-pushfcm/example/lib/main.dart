@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -18,28 +18,32 @@ import 'package:flutter/material.dart';
 import 'package:huawei_push/huawei_push.dart';
 import 'package:huawei_push_fcm/huawei_push_fcm.dart';
 
-import 'widgets/button.dart';
+import 'package:huawei_push_fcm_example/widgets/button.dart';
 
 void main() {
-  runApp(App());
+  runApp(const App());
 }
 
 class App extends StatefulWidget {
+  const App({Key? key}) : super(key: key);
+
   @override
-  _AppState createState() => _AppState();
+  State<App> createState() => _AppState();
 }
 
 class _AppState extends State<App> {
-  late var subscription;
+  late dynamic subscription;
 
   @override
   void initState() {
     super.initState();
     _setCountryCode();
     _fcmInit();
-    subscription = Push.getMultiSenderTokenStream.listen((event) {
-      print("Token: " + event["multiSenderToken"]);
-    });
+    subscription = Push.getMultiSenderTokenStream.listen(
+      (Map<String, dynamic> event) {
+        debugPrint('Token:  ${event['multiSenderToken']}');
+      },
+    );
   }
 
   @override
@@ -53,25 +57,30 @@ class _AppState extends State<App> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text("HMS Push-FCM Proxy Flutter Plugin"),
+          title: const Text('HMS Push-FCM Proxy Flutter Plugin'),
         ),
         body: Container(
-          padding: EdgeInsets.all(20),
-          child: Center(child: Btn("Get Token", _getToken)),
+          padding: const EdgeInsets.all(20),
+          child: Center(
+            child: Btn(
+              'Get Token',
+              _getToken,
+            ),
+          ),
         ),
       ),
     );
   }
 
-  _setCountryCode() {
-    PushFcm.setCountryCode("DE");
+  void _setCountryCode() {
+    PushFcm.setCountryCode('RU');
   }
 
-  _fcmInit() async {
+  void _fcmInit() async {
     await PushFcm.init();
   }
 
-  _getToken() async {
-    await Push.getToken("HCM");
+  void _getToken() async {
+    await Push.getToken('HCM');
   }
 }

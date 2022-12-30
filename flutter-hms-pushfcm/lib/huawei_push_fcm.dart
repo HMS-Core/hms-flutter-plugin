@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -20,27 +20,38 @@ import 'package:flutter/services.dart';
 
 class PushFcm {
   static const MethodChannel _channel =
-      const MethodChannel('com.huawei.hms.flutter.pushfcm/method');
+      MethodChannel('com.huawei.hms.flutter.pushfcm/method');
 
   /// Initializes the push capability of FCM.
   static Future<bool> init() async {
-    return await _channel.invokeMethod("initFcmProxy");
+    return await _channel.invokeMethod(
+      'initFcmProxy',
+    );
   }
 
   /// Sets a country/region code. This method is available only for Huawei-developed apps.
   static Future<void> setCountryCode(String countryCode) async {
-    _channel.invokeMethod("setCountryCode", {"countryCode": countryCode});
+    await _channel.invokeMethod(
+      'setCountryCode',
+      <String, dynamic>{
+        'countryCode': countryCode,
+      },
+    );
   }
 
   /// Enables the HMSLogger capability which is used for sending usage
   /// analytics of DTM SDK's methods to improve the service quality.
   static Future<void> enableLogger() async {
-    _channel.invokeMethod("enableLogger");
+    await _channel.invokeMethod(
+      'enableLogger',
+    );
   }
 
   /// Disables the HMSLogger capability which is used for sending usage
   /// analytics of DTM SDK's methods to improve the service quality.
   static Future<void> disableLogger() async {
-    _channel.invokeMethod("disableLogger");
+    await _channel.invokeMethod(
+      'disableLogger',
+    );
   }
 }

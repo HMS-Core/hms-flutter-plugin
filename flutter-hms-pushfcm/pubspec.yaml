@@ -1,21 +1,22 @@
 name: huawei_push_fcm
-description: HUAWEI Push-FCM Proxy plugin for Flutter that exposes all the functionality provided by the HUAWEI
+description: Huawei Push-FCM Proxy plugin for Flutter that exposes all the functionality provided by the Huawei
   Push-FCM Proxy SDK.
-version: 6.1.0+300
+version: 6.3.0+304
 homepage: https://www.huawei.com
 repository: https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-pushfcm
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
-  flutter: ">=1.12.13+hotfix.6"
+  flutter: ">=1.20.0"
 
 dependencies:
   flutter:
-    sdk: flutter
+    sdk: flutter  
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_lints:  
 
 flutter:
   plugin:

@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -20,17 +20,24 @@ class Btn extends StatelessWidget {
   final String _text;
   final VoidCallback _onPressed;
 
-  Btn(this._text, this._onPressed);
+  const Btn(
+    this._text,
+    this._onPressed, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      child: Text(_text, style: TextStyle(fontSize: 14)),
       onPressed: _onPressed,
       style: ElevatedButton.styleFrom(
-        primary: Colors.blue,
-        onPrimary: Colors.white,
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+      ),
+      child: Text(
+        _text,
+        style: const TextStyle(fontSize: 14),
       ),
     );
   }

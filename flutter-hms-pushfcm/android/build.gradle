@@ -24,11 +24,11 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
     defaultConfig {
         minSdkVersion 17
-        targetSdkVersion 29
+        targetSdkVersion 30
     }
 
     lintOptions {
@@ -41,5 +41,5 @@ android {
 }
 
 dependencies {
-    implementation 'com.huawei.hms:push-fcm:6.1.0.300'
+    implementation 'com.huawei.hms:push-fcm:6.3.0.304'
 }

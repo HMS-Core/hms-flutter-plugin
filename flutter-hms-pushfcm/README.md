@@ -4,9 +4,9 @@
 
 ----
 
-HUAWEI Push-FCM Proxy initializes the push capability of FCM.
+Huawei Push-FCM Proxy initializes the push capability of FCM.
 
-This plugin enables communication between HUAWEI Push-FCM SDK and Flutter platform. It exposes all functionality provided by HUAWEI Push-FCM SDK.
+This plugin enables communication between Huawei Push-FCM SDK and Flutter platform. It exposes all functionality provided by Huawei Push-FCM SDK.
 
 [> Learn More](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-References-V1/aggr-third-parties-0000001193167792?ha_source=hms1)
 
@@ -32,4 +32,4 @@ If you run into a bug in our samples, please submit an issue to the [GitHub repo
 
 ## License
 
-Huawei React-Native Plugin is licensed under [Apache 2.0 license](LICENCE)
+Huawei Push-FCM Proxy Flutter Plugin is licensed under [Apache 2.0 license](LICENSE)
