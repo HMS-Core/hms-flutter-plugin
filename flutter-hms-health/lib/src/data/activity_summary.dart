@@ -23,9 +23,13 @@ class ActivitySummary {
   /// Statistical data points that consist from [SamplePoint]s.
   List<SamplePoint>? dataSummary;
 
+  /// Segment statistical data list.
+  List<SampleSection>? sectionSummary;
+
   ActivitySummary({
     this.paceSummary,
     this.dataSummary,
+    this.sectionSummary,
   });
 
   Map<String, dynamic> toMap() {
@@ -36,22 +40,32 @@ class ActivitySummary {
               dataSummary!.map((SamplePoint e) => e.toMap()),
             )
           : null,
+      'sectionSummary': sectionSummary != null
+          ? List<Map<String, dynamic>>.from(
+              sectionSummary!.map((SampleSection e) => e._toMap()),
+            )
+          : null,
     }..removeWhere((String k, dynamic v) => v == null);
   }
 
   factory ActivitySummary.fromMap(Map<dynamic, dynamic> map) {
     return ActivitySummary(
-      dataSummary: map['dataSummary'] != null
-          ? List<SamplePoint>.from(
-              map['dataSummary'].map(
-                (dynamic e) {
-                  return SamplePoint.fromMap(e);
-                },
-              ),
-            )
-          : null,
       paceSummary: map['paceSummary'] != null
           ? PaceSummary.fromMap(map['paceSummary'])
+          : null,
+      dataSummary: map['dataSummary'] != null
+          ? List<SamplePoint>.from(
+              map['dataSummary'].map((dynamic e) {
+                return SamplePoint.fromMap(e);
+              }),
+            )
+          : null,
+      sectionSummary: map['sectionSummary'] != null
+          ? List<SampleSection>.from(
+              map['sectionSummary'].map((dynamic e) {
+                return SampleSection._fromMap(e);
+              }),
+            )
           : null,
     );
   }
@@ -65,14 +79,16 @@ class ActivitySummary {
   bool operator ==(Object other) {
     return other is ActivitySummary &&
         other.paceSummary == paceSummary &&
-        listEquals(other.dataSummary, dataSummary);
+        listEquals(other.dataSummary, dataSummary) &&
+        listEquals(other.sectionSummary, sectionSummary);
   }
 
   @override
   int get hashCode {
-    return hashValues(
+    return Object.hash(
       paceSummary,
-      hashList(dataSummary),
+      Object.hashAll(dataSummary ?? <dynamic>[]),
+      Object.hashAll(sectionSummary ?? <dynamic>[]),
     );
   }
 }

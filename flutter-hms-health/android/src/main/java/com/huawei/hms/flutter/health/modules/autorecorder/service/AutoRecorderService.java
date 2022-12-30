@@ -22,11 +22,6 @@ import com.huawei.hms.hihealth.data.DataType;
 
 import java.util.Map;
 
-/**
- * Blueprint of {@link DefaultAutoRecorderService}.
- *
- * @since v.5.0.5
- */
 public interface AutoRecorderService {
     /**
      * Record data via DataType supported by Huawei.

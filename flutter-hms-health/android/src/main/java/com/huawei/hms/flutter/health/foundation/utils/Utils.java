@@ -18,6 +18,7 @@ package com.huawei.hms.flutter.health.foundation.utils;
 
 import static com.huawei.hms.flutter.health.foundation.constants.Constants.BASE_MODULE_NAME;
 import static com.huawei.hms.flutter.health.foundation.constants.Constants.DATA_TYPE_KEY;
+import static com.huawei.hms.flutter.health.foundation.constants.Constants.DATA_TYPE_NAME_KEY;
 import static com.huawei.hms.flutter.health.foundation.constants.Constants.TIME_UNIT_KEY;
 import static com.huawei.hms.flutter.health.foundation.utils.MapUtils.toObject;
 import static com.huawei.hms.flutter.health.modules.datacontroller.utils.DataControllerConstants.DATA_COLLECTOR_NAME_KEY;
@@ -39,6 +40,7 @@ import com.huawei.hms.hihealth.data.DeviceInfo;
 import com.huawei.hms.hihealth.data.Field;
 import com.huawei.hms.hihealth.data.PaceSummary;
 import com.huawei.hms.hihealth.data.SamplePoint;
+import com.huawei.hms.hihealth.data.SampleSection;
 import com.huawei.hms.hihealth.data.SampleSet;
 
 import com.google.gson.Gson;
@@ -54,11 +56,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-/**
- * All the util methods for internal {@link com.huawei.hms.flutter.health} modules.
- *
- * @since v.5.0.5
- */
 public final class Utils {
     private Utils() {
     }
@@ -67,7 +64,7 @@ public final class Utils {
      * Returns whether key is in the Map instance or not.
      *
      * @param callMap Flutter call map instance.
-     * @param key String key.
+     * @param key     String key.
      * @return Boolean
      */
     public static synchronized boolean hasKey(final Map<String, Object> callMap, final String key) {
@@ -81,7 +78,7 @@ public final class Utils {
      * In case callMap instance has requested key, returns the String Value, in case not, returns empty string.
      *
      * @param callMap HashMap<String, Object> instance.
-     * @param key String key value.
+     * @param key     String key value.
      * @return String
      */
     public static synchronized String createEmptyStringIfNull(final Map<String, Object> callMap, final String key) {
@@ -120,18 +117,18 @@ public final class Utils {
      * Converts into {@link SampleSet} instance.
      *
      * @param sampleSetMap sampleSetMap that includes {@link SampleSet data} from the Flutter Platform.
-     * @param result Flutter Result that resolved with fail status in case of missing parameters.
-     * @param packageName Package name of the application.
+     * @param result       Flutter Result that resolved with fail status in case of missing parameters.
+     * @param packageName  Package name of the application.
      * @return SampleSet instance.
      */
     public static synchronized SampleSet toSampleSet(final Map<String, Object> sampleSetMap, final Result result,
-        final String packageName) {
+                                                     final String packageName) {
         if (sampleSetMap.get(Constants.DATA_COLLECTOR_KEY) != null) {
             DataCollector dataCollector = toDataCollector(
-                HealthRecordUtils.fromObject(sampleSetMap.get(Constants.DATA_COLLECTOR_KEY)), packageName);
+                    HealthRecordUtils.fromObject(sampleSetMap.get(Constants.DATA_COLLECTOR_KEY)), packageName);
             final SampleSet sampleSet = SampleSet.create(dataCollector);
             ArrayList<Map<String, Object>> samplePoints = HealthRecordUtils.toMapArrayList("samplePoints",
-                sampleSetMap.get("samplePoints"));
+                    sampleSetMap.get("samplePoints"));
             if (!samplePoints.isEmpty()) {
                 for (Map<String, Object> sp : samplePoints) {
                     // Build a sampling point.
@@ -149,48 +146,45 @@ public final class Utils {
         throw new InvalidParameterException("Empty or wrong parameters for SampleSet.");
     }
 
-    /**
-     * Converts the callMap into ActivitySummary
-     *
-     * @param callMap callMap that includes ActivitySummary data from Flutter Platform.
-     * @return ActivitySummary Object
-     */
     public static ActivitySummary toActivitySummary(final Map<String, Object> callMap, String packageName) {
         ActivitySummary activitySummary = new ActivitySummary();
         if (Utils.hasKey(callMap, "paceSummary")) {
-            activitySummary.setPaceSummary(toPaceSummary((HashMap<String, Object>) callMap.get("paceSummary")));
+            final PaceSummary paceSummary = toPaceSummary((HashMap<String, Object>) callMap.get("paceSummary"));
+            activitySummary.setPaceSummary(paceSummary);
         }
         if (Utils.hasKey(callMap, "dataSummary")) {
-            activitySummary.setDataSummary(
-                toDataSummary((ArrayList<Map<String, Object>>) callMap.get("dataSummary"), packageName));
+            final List<SamplePoint> dataSummary = toDataSummary((ArrayList<Map<String, Object>>) callMap.get("dataSummary"), packageName);
+            activitySummary.setDataSummary(dataSummary);
+        }
+        if (Utils.hasKey(callMap, "sectionSummary")) {
+            final List<SampleSection> sectionSummary = toSectionSummary((ArrayList<Map<String, Object>>) callMap.get("sectionSummary"), packageName);
+            activitySummary.setSectionSummary(sectionSummary);
         }
         return activitySummary;
     }
 
-    /**
-     * Converts Lis of Maps to List of SamplePoint objects in DataSummary
-     *
-     * @param dataSummaryList List that contains the {@link SamplePoint} data
-     * @return List of SamplePoint Object
-     */
-    public static synchronized List<SamplePoint> toDataSummary(final List<Map<String, Object>> dataSummaryList,
-        String packageName) {
-        List<SamplePoint> dataSummary = new ArrayList<>();
+    public static synchronized List<SamplePoint> toDataSummary(final List<Map<String, Object>> dataSummaryList, String packageName) {
+        final List<SamplePoint> dataSummary = new ArrayList<>();
         for (Map<String, Object> samplePointMap : dataSummaryList) {
             if (samplePointMap != null) {
-                SamplePoint samplePoint = Utils.toSamplePoint(samplePointMap, packageName);
+                final SamplePoint samplePoint = toSamplePoint(samplePointMap, packageName);
                 dataSummary.add(samplePoint);
             }
         }
         return dataSummary;
     }
 
-    /**
-     * Converts Flutter Call Map to PaceSummary Object
-     *
-     * @param paceMap Map Object
-     * @return PaceSummary Object
-     */
+    public static synchronized List<SampleSection> toSectionSummary(List<Map<String, Object>> list, String packageName) {
+        final List<SampleSection> sectionSummary = new ArrayList<>();
+        for (Map<String, Object> sampleSectionMap : list) {
+            if (sampleSectionMap != null) {
+                final SampleSection sampleSection = toSampleSection(sampleSectionMap, packageName);
+                sectionSummary.add(sampleSection);
+            }
+        }
+        return sectionSummary;
+    }
+
     private static synchronized PaceSummary toPaceSummary(final Map<String, Object> paceMap) {
         PaceSummary paceSummary = new PaceSummary();
         if (Utils.hasKey(paceMap, "avgPace")) {
@@ -215,8 +209,7 @@ public final class Utils {
         return paceSummary;
     }
 
-    public static synchronized SamplePoint toSamplePoint(final SampleSet sampleSet,
-        final Map<String, Object> sampleSetMap) {
+    public static synchronized SamplePoint toSamplePoint(final SampleSet sampleSet, final Map<String, Object> sampleSetMap) {
         Gson gson = new Gson();
         sampleSetMap.remove(Constants.DATA_COLLECTOR_KEY);
         FlutterSamplePoint flutterSamplePoint = gson.fromJson(sampleSetMap.toString(), FlutterSamplePoint.class);
@@ -225,12 +218,12 @@ public final class Utils {
         SamplePoint samplePoint;
         if (!isSampling) {
             samplePoint = sampleSet.createSamplePoint()
-                .setTimeInterval(flutterSamplePoint.startTime, flutterSamplePoint.endTime,
-                    Utils.toTimeUnit(sampleSetMap));
+                    .setTimeInterval(flutterSamplePoint.startTime, flutterSamplePoint.endTime,
+                            Utils.toTimeUnit(sampleSetMap));
         } else {
             long samplingTimeMillis = flutterSamplePoint.samplingTime;
             samplePoint = sampleSet.createSamplePoint()
-                .setSamplingTime(samplingTimeMillis, Utils.toTimeUnit(sampleSetMap));
+                    .setSamplingTime(samplingTimeMillis, Utils.toTimeUnit(sampleSetMap));
         }
         if (flutterSamplePoint.fieldValue.intValue != null) {
             samplePoint.getFieldValue(requestedField).setIntValue(flutterSamplePoint.fieldValue.intValue);
@@ -258,16 +251,25 @@ public final class Utils {
     }
 
     public static synchronized SamplePoint toSamplePoint(final Map<String, Object> samplePointMap, String packageName) {
-        SamplePoint.Builder samplePoint = new SamplePoint.Builder(
-            toDataCollector(HealthRecordUtils.fromObject(samplePointMap.get(Constants.DATA_COLLECTOR_KEY)),
-                packageName));
-        samplePointMap.remove(Constants.DATA_COLLECTOR_KEY);
+        SamplePoint.Builder samplePoint;
+        if (samplePointMap.containsKey(Constants.DATA_COLLECTOR_KEY)) {
+            final Map<String, Object> dataCollectorMap = HealthRecordUtils.fromObject(samplePointMap.get(Constants.DATA_COLLECTOR_KEY));
+            final DataCollector dataCollector = toDataCollector(dataCollectorMap, packageName);
+            samplePoint = new SamplePoint.Builder(dataCollector);
+            samplePointMap.remove(Constants.DATA_COLLECTOR_KEY);
+        } else {
+            final Map<String, Object> dataTypeMap = HealthRecordUtils.fromObject(samplePointMap.get(DATA_TYPE_KEY));
+            final DataType dataType = toDataType(dataTypeMap, packageName);
+            samplePoint = new SamplePoint.Builder(dataType);
+            samplePointMap.remove(Constants.DATA_TYPE_KEY);
+        }
+
         Gson gson = new Gson();
         FlutterSamplePoint flutterSamplePoint = gson.fromJson(samplePointMap.toString(), FlutterSamplePoint.class);
         Field requestedField = flutterSamplePoint.fieldValue.field.getField();
         if (!flutterSamplePoint.isSampling && flutterSamplePoint.startTime != 0 && flutterSamplePoint.endTime != 0) {
             samplePoint.setTimeInterval(flutterSamplePoint.startTime, flutterSamplePoint.endTime,
-                Utils.toTimeUnit(flutterSamplePoint.timeUnit));
+                    Utils.toTimeUnit(flutterSamplePoint.timeUnit));
         } else {
             samplePoint.setSamplingTime(flutterSamplePoint.samplingTime, Utils.toTimeUnit(flutterSamplePoint.timeUnit));
         }
@@ -292,7 +294,7 @@ public final class Utils {
         }
         SamplePoint sp = samplePoint.build();
         List<Map<String, Object>> metadataList = HealthRecordUtils.toMapArrayList("metadataValues",
-            samplePointMap.get("metadataValues"));
+                samplePointMap.get("metadataValues"));
         if (!metadataList.isEmpty()) {
             for (Map<String, Object> m : metadataList) {
                 String key = (String) m.get("key");
@@ -303,20 +305,42 @@ public final class Utils {
         return sp;
     }
 
-    /**
-     * Converts into {@link DataCollector} instance.
-     */
-    public static synchronized DataCollector toDataCollector(final Map<String, Object> dataCollectorMap,
-        String packageName) {
+    public static synchronized SampleSection toSampleSection(final Map<String, Object> map, String packageName) {
+        final SampleSection.Builder builder = new SampleSection.Builder();
+
+        if (map.containsKey("sectionNum")) {
+            builder.setSectionNum(Integer.parseInt(Objects.requireNonNull(map.get("sectionNum")).toString()));
+        }
+        if (map.containsKey("sectionTime")) {
+            builder.setSectionTime(Long.parseLong(Objects.requireNonNull(map.get("sectionTime")).toString()), TimeUnit.MILLISECONDS);
+        }
+        if (map.containsKey("startTime")) {
+            builder.setStartTime(Long.parseLong(Objects.requireNonNull(map.get("startTime")).toString()), TimeUnit.MILLISECONDS);
+        }
+        if (map.containsKey("endTime")) {
+            builder.setEndTime(Long.parseLong(Objects.requireNonNull(map.get("endTime")).toString()), TimeUnit.MILLISECONDS);
+        }
+        if (map.containsKey("sectionDataList")) {
+            final ArrayList<Map<String, Object>> list = HealthRecordUtils.toMapArrayList("sectionDataList", map.get("sectionDataList"));
+            final List<SamplePoint> sectionDataList = new ArrayList<>();
+            for (Map<String, Object> sectionDataMap : list) {
+                sectionDataList.add(toSamplePoint(sectionDataMap, packageName));
+            }
+            builder.setSectionDataList(sectionDataList);
+        }
+        return builder.build();
+    }
+
+    public static synchronized DataCollector toDataCollector(final Map<String, Object> dataCollectorMap, String packageName) {
         DataCollector.Builder builder = new DataCollector.Builder();
         builder = new HmsDataCollectorBuilder(builder, dataCollectorMap, packageName).setDataStreamName()
-            .setDeviceId()
-            .setDataCollectorName()
-            .setDeviceInfo()
-            .setLocalized()
-            .setDataGenerateType()
-            .setDataType()
-            .build();
+                .setDeviceId()
+                .setDataCollectorName()
+                .setDeviceInfo()
+                .setLocalized()
+                .setDataGenerateType()
+                .setDataType()
+                .build();
         return builder.setPackageName(packageName).build();
     }
 
@@ -364,12 +388,12 @@ public final class Utils {
 
     public static DataType toDataType(final Map<String, Object> map, final String packageName) {
         DataType dataType;
-        //Try to convert DataTypeConstant.
+        // Try to convert DataTypeConstant.
         dataType = Constants.toDataType((String) map.get("name"));
         if (dataType != null) {
             return dataType;
         } else {
-            //Create DataType from map.
+            // Create DataType from map.
             String name = (String) map.get("name");
             boolean isPolymerizedFlag = Utils.getBoolOrDefault(map, "isPolymerizedFlag");
             boolean isSelfDefined = Utils.getBoolOrDefault(map, "isSelfDefined");
@@ -386,7 +410,7 @@ public final class Utils {
                 }
             }
             return new DataType(name, scopeNameRead, scopeNameWrite, "", convertedFields, isPolymerizedFlag,
-                isSelfDefined, packageName);
+                    isSelfDefined, packageName);
         }
     }
 
@@ -440,24 +464,16 @@ public final class Utils {
         return errorCode;
     }
 
-    /**
-     * Class that represents SamplePoint from Flutter Platform
-     */
     private static class FlutterSamplePoint {
         boolean isSampling;
-
         long startTime;
-
         long endTime;
-
         long samplingTime;
-
         FieldValue fieldValue;
-
         String timeUnit;
 
         public FlutterSamplePoint(boolean isSampling, long startTime, long endTime, long samplingTime,
-            FieldValue fieldValue, String timeUnit) {
+                                  FieldValue fieldValue, String timeUnit) {
             this.isSampling = isSampling;
             this.startTime = startTime;
             this.endTime = endTime;
@@ -467,24 +483,16 @@ public final class Utils {
         }
     }
 
-    /**
-     * Class that contains Field and value from Flutter Platform
-     */
     private static class FieldValue {
         FieldData field;
-
         Integer intValue;
-
         Long longValue;
-
         Float floatValue;
-
         String stringValue;
-
         Map<String, Float> mapValue;
 
         public FieldValue(FieldData field, Integer intValue, Long longValue, Float floatValue, String stringValue,
-            Map<String, Float> mapValue) {
+                          Map<String, Float> mapValue) {
             this.field = field;
             this.intValue = intValue;
             this.longValue = longValue;
@@ -509,19 +517,13 @@ public final class Utils {
         }
     }
 
-    /**
-     * {@link HmsDataCollectorBuilder} is a helper inner class to convert HashMap<String, Object> instance into {@link
-     * DataCollector.Builder}.
-     */
     private static class HmsDataCollectorBuilder {
         private DataCollector.Builder builder;
-
         private Map<String, Object> dataCollectorMap;
-
         private String packageName;
 
         HmsDataCollectorBuilder(DataCollector.Builder builder, final Map<String, Object> dataCollectorMap,
-            String packageName) {
+                                String packageName) {
             this.builder = builder;
             this.dataCollectorMap = dataCollectorMap;
             this.packageName = packageName;
@@ -551,7 +553,7 @@ public final class Utils {
         HmsDataCollectorBuilder setDeviceInfo() {
             if (Utils.hasKey(dataCollectorMap, DEVICE_INFO_KEY)) {
                 this.builder.setDeviceInfo(
-                    toObject((HashMap<String, Object>) dataCollectorMap.get(DEVICE_INFO_KEY), DeviceInfo.class));
+                        toObject((HashMap<String, Object>) dataCollectorMap.get(DEVICE_INFO_KEY), DeviceInfo.class));
             }
             return this;
         }
@@ -565,8 +567,7 @@ public final class Utils {
 
         HmsDataCollectorBuilder setDataGenerateType() {
             if (Utils.hasKey(dataCollectorMap, DATA_GENERATE_TYPE_KEY)) {
-                this.builder.setDataGenerateType(
-                    (Integer) Objects.requireNonNull(dataCollectorMap.get(DATA_GENERATE_TYPE_KEY)));
+                this.builder.setDataGenerateType((Integer) Objects.requireNonNull(dataCollectorMap.get(DATA_GENERATE_TYPE_KEY)));
             }
             return this;
         }
@@ -574,14 +575,16 @@ public final class Utils {
         HmsDataCollectorBuilder setDataType() {
             if (Utils.hasKey(dataCollectorMap, DATA_TYPE_KEY)) {
                 try {
-                    DataType dataType = toDataType(HealthRecordUtils.fromObject(dataCollectorMap.get(DATA_TYPE_KEY)),
-                        packageName);
+                    DataType dataType = toDataType(HealthRecordUtils.fromObject(dataCollectorMap.get(DATA_TYPE_KEY)), packageName);
                     this.builder.setDataType(dataType);
                     return this;
 
                 } catch (Exception e) {
                     Log.e(BASE_MODULE_NAME, e.getMessage());
                 }
+            } else if (Utils.hasKey(dataCollectorMap, DATA_TYPE_NAME_KEY)) {
+                final String dataTypeName = (String) dataCollectorMap.get(DATA_TYPE_NAME_KEY);
+                this.builder.setDataType(dataTypeName);
             }
             return this;
         }

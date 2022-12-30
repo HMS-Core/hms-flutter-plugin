@@ -27,9 +27,9 @@ class HealthRecordDeleteOptions {
   bool deleteSubData;
 
   HealthRecordDeleteOptions({
-    this.packageName,
     required this.startTime,
     required this.endTime,
+    this.packageName,
     this.timeUnit = TimeUnit.MILLISECONDS,
     this.deleteSubData = false,
   });

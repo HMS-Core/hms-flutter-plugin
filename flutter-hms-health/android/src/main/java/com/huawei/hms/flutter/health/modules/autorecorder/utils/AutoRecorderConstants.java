@@ -18,11 +18,6 @@ package com.huawei.hms.flutter.health.modules.autorecorder.utils;
 
 import com.huawei.hms.flutter.health.modules.autorecorder.service.AutoRecorderService;
 
-/**
- * {@link AutoRecorderService} Constant Values.
- *
- * @since v.5.0.5
- */
 public final class AutoRecorderConstants {
     public static final String AUTO_RECORDER_MODULE = "HMSAutoRecorder";
 

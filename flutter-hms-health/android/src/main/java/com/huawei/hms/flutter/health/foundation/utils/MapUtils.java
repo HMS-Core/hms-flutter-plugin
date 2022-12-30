@@ -28,11 +28,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * MapUtil exposes a set of helper methods for working with {@link HashMap}, {@link Map}.
- *
- * @since v.5.0.5
- */
 public final class MapUtils {
     private static final Gson GSON = createGson();
 

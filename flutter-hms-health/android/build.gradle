@@ -24,11 +24,14 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
     defaultConfig {
         minSdkVersion 21
+        targetSdkVersion 30
     }
+
     lintOptions {
         disable 'InvalidPackage'
     }
@@ -37,11 +40,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
 }
 
 dependencies {
-    implementation "com.google.code.gson:gson:2.8.6"
-    implementation 'com.huawei.hms:health:6.4.0.301'
-    implementation 'com.huawei.hms:base:5.2.0.300'
+    implementation 'com.huawei.hms:health:6.8.0.300'
+    implementation 'com.huawei.hms:base:6.6.0.300'
+    implementation "com.google.code.gson:gson:2.9.0"
 }

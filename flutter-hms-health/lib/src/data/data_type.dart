@@ -238,6 +238,10 @@ class DataType {
       Field.FORE_FOOT_STRIKE_PATTERN,
       Field.HIND_FOOT_STRIKE_PATTERN,
       Field.WHOLE_FOOT_STRIKE_PATTERN,
+      Field.IMPACT_PEAK,
+      Field.VERTICAL_OSCILLATION,
+      Field.VERTICAL_RATIO,
+      Field.GC_TIME_BALANCE,
     ],
   );
 
@@ -255,6 +259,11 @@ class DataType {
       Field.FORE_FOOT_STRIKE_PATTERN,
       Field.HIND_FOOT_STRIKE_PATTERN,
       Field.WHOLE_FOOT_STRIKE_PATTERN,
+      Field.AVG_IMPACT_PEAK,
+      Field.AVG_VERTICAL_IMPACT_RATE,
+      Field.AVG_GC_TIME_BALANCE,
+      Field.AVG_VERTICAL_OSCILLATION,
+      Field.AVG_VERTICAL_RATIO,
     ],
   );
 
@@ -332,17 +341,14 @@ class DataType {
     'https://www.huawei.com/healthkit/activity.read',
     'https://www.huawei.com/healthkit/activity.write',
     <Field>[
-      Field.DIVING_DURATION,
-      Field.FLYING_AFTER_DIVING_TIME,
-      Field.SURFACE_INTERVAL_TIME,
-      Field.WATER_SURFACE_TEMPERATURE,
-      Field.UNDERWATER_TEMPERATURE,
-      Field.DIVE_DEPTH,
-      Field.ENTERING_WATER_LATITUDE,
-      Field.ENTERING_WATER_LONGITUDE,
-      Field.EXITING_WATER_LATITUDE,
-      Field.EXITING_WATER_LONGITUDE,
-      Field.FIELD_COORDINATE,
+      Field.DIVING_TIME,
+      Field.DIVING_COUNT,
+      Field.MAX_DEPTH,
+      Field.AVG_DEPTH,
+      Field.MAX_UNDERWATER_TIME,
+      Field.NO_FLY_TIME,
+      Field.WATER_TYPE,
+      Field.SURFACE_TIME,
     ],
   );
 
@@ -814,6 +820,7 @@ class DataType {
       Field.FIELD_AVG,
       Field.FIELD_MAX,
       Field.FIELD_MIN,
+      Field.FIELD_LAST,
     ],
     isPolymerizedFlag: true,
   );
@@ -882,6 +889,13 @@ class DataType {
       Field.FIELD_AVG,
       Field.FIELD_MAX,
       Field.FIELD_MIN,
+      Field.FIELD_LAST,
+      Field.FIELD_AVG_BODY_FAT_RATE,
+      Field.FIELD_MAX_BODY_FAT_RATE,
+      Field.FIELD_MIN_BODY_FAT_RATE,
+      Field.FIELD_AVG_SKELETAL_MUSCLEL_MASS,
+      Field.FIELD_MAX_SKELETAL_MUSCLEL_MASS,
+      Field.FIELD_MIN_SKELETAL_MUSCLEL_MASS,
     ],
     isPolymerizedFlag: true,
   );
@@ -919,6 +933,259 @@ class DataType {
     'https://www.huawei.com/healthkit/nutrition.write',
     <Field>[
       Field.FIELD_HYDRATE,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  /// Resistance set on devices like spinning bikes and elliptical machines.
+  static const DataType DT_RESISTANCE = DataType(
+    'com.huawei.resistance',
+    'https://www.huawei.com/healthkit/activity.read',
+    'https://www.huawei.com/healthkit/activity.write',
+    <Field>[
+      Field.RESISTANCE_LEVEL,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  /// Resistance statistics set on devices like spinning bikes and elliptical machines.
+  static const DataType DT_RESISTANCE_STATISTICS = DataType(
+    'com.huawei.resistance.statistics',
+    'https://www.huawei.com/healthkit/activity.read',
+    'https://www.huawei.com/healthkit/activity.write',
+    <Field>[
+      Field.MAX_RES,
+      Field.MIN_RES,
+      Field.RESISTANCE_LEVEL_ONE_LOWER_LIMIT,
+      Field.RESISTANCE_LEVEL_TWO_LOWER_LIMIT,
+      Field.RESISTANCE_LEVEL_THREE_LOWER_LIMIT,
+      Field.RESISTANCE_LEVEL_FOUR_LOWER_LIMIT,
+      Field.RESISTANCE_LEVEL_FIVE_LOWER_LIMIT,
+      Field.RESISTANCE_LEVEL_FIVE_UPPER_LIMIT,
+      Field.RESISTANCE_LEVEL_ONE_TIME,
+      Field.RESISTANCE_LEVEL_TWO_TIME,
+      Field.RESISTANCE_LEVEL_THREE_TIME,
+      Field.RESISTANCE_LEVEL_FOUR_TIME,
+      Field.RESISTANCE_LEVEL_FIVE_TIME,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  /// Rowing stroke rate.
+  static const DataType DT_INSTANTANEOUS_STROKE_RATE = DataType(
+    'com.huawei.instantaneous.stroke_rate',
+    'https://www.huawei.com/healthkit/speed.read',
+    'https://www.huawei.com/healthkit/speed.write',
+    <Field>[
+      Field.SPM,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  /// Rowing stroke rate statistics.
+  static const DataType DT_CONTINUOUS_STROKE_RATE_STATISTICS = DataType(
+    'com.huawei.continuous.stroke_rate.statistics',
+    'https://www.huawei.com/healthkit/speed.read',
+    'https://www.huawei.com/healthkit/speed.write',
+    <Field>[
+      Field.FIELD_AVG,
+      Field.FIELD_MAX,
+      Field.FIELD_MIN,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  /// Swimming stroke rate.
+  static const DataType DT_INSTANTANEOUS_SWIMMING_STROKE_RATE = DataType(
+    'com.huawei.instantaneous.swimming.stroke_rate',
+    'https://www.huawei.com/healthkit/speed.read',
+    'https://www.huawei.com/healthkit/speed.write',
+    <Field>[
+      Field.SPM,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  /// Swimming stroke rate statistics.
+  static const DataType DT_CONTINUOUS_SWIMMING_STROKE_RATE_STATISTICS =
+      DataType(
+    'com.huawei.continuous.swimming.stroke_rate.statistics',
+    'https://www.huawei.com/healthkit/speed.read',
+    'https://www.huawei.com/healthkit/speed.write',
+    <Field>[
+      Field.FIELD_AVG,
+      Field.FIELD_MAX,
+      Field.FIELD_MIN,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  /// SWOLF.
+  static const DataType DT_INSTANTANEOUS_SWIMMING_SWOLF = DataType(
+    'com.huawei.instantaneous.swimming.swolf',
+    'https://www.huawei.com/healthkit/activity.read',
+    'https://www.huawei.com/healthkit/activity.write',
+    <Field>[
+      Field.SWOLF,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  /// SWOLF statistics.
+  static const DataType DT_CONTINUOUS_SWIMMING_SWOLF_STATISTICS = DataType(
+    'com.huawei.continuous.swimming.swolf.statistics',
+    'https://www.huawei.com/healthkit/activity.read',
+    'https://www.huawei.com/healthkit/activity.write',
+    <Field>[
+      Field.FIELD_AVG,
+      Field.FIELD_MAX,
+      Field.FIELD_MIN,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  /// Maximum oxygen uptake.
+  static const DataType DT_VO2MAX = DataType(
+    'com.huawei.vo2max',
+    'https://www.huawei.com/healthkit/pulmonary.read',
+    'https://www.huawei.com/healthkit/pulmonary.write',
+    <Field>[
+      Field.VO2MAX,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  /// Maximum oxygen uptake statistics.
+  static const DataType DT_VO2MAX_STATISTICS = DataType(
+    'com.huawei.vo2max.statistics',
+    'https://www.huawei.com/healthkit/pulmonary.read',
+    'https://www.huawei.com/healthkit/pulmonary.write',
+    <Field>[
+      Field.AVG,
+      Field.MAX,
+      Field.MIN,
+      Field.LAST,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  /// Apnea training.
+  static const DataType DT_ACTIVITY_FEATURE_BREATH_HOLDING_TRAIN = DataType(
+    'com.huawei.activity.feature.breath_holding_train',
+    'https://www.huawei.com/healthkit/activity.read',
+    'https://www.huawei.com/healthkit/activity.write',
+    <Field>[
+      Field.BREATH_TIME,
+      Field.BREATH_HOLDING_TIME,
+      Field.BREATH_HOLDING_TRAIN_RHYTHM,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  /// Apnea training sampling statistics.
+  static const DataType POLYMERIZE_BREATH_HOLDING_TRAIN_STATISTICS = DataType(
+    'com.huawei.breath_holding_train.statistics',
+    'https://www.huawei.com/healthkit/activity.read',
+    'https://www.huawei.com/healthkit/activity.write',
+    <Field>[
+      Field.BREATH_TIME,
+      Field.BREATH_HOLDING_TIME,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  /// Apnea testing.
+  static const DataType DT_ACTIVITY_FEATURE_BREATH_HOLDING_TEST = DataType(
+    'com.huawei.activity.feature.breath_holding_test',
+    'https://www.huawei.com/healthkit/activity.read',
+    'https://www.huawei.com/healthkit/activity.write',
+    <Field>[
+      Field.DIAPHRAGM_TIME,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  /// Free diving sampling statistics.
+  static const DataType POLYMERIZE_FREEDIVING_STATISTICS = DataType(
+    'com.huawei.freediving.statistics',
+    'https://www.huawei.com/healthkit/activity.read',
+    'https://www.huawei.com/healthkit/activity.write',
+    <Field>[
+      Field.DIVING_TIME,
+      Field.MAX_DEPTH,
+      Field.SURFACE_TIME,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  /// Skiing feature.
+  static const DataType DT_ACTIVITY_FEATURE_SKIING = DataType(
+    'com.huawei.activity.feature.skiing',
+    'https://www.huawei.com/healthkit/activity.read',
+    'https://www.huawei.com/healthkit/activity.write',
+    <Field>[
+      Field.TRIP_TIMES,
+      Field.MAX_SLOPE_PERCENT,
+      Field.MAX_SLOPE_DEGREE,
+      Field.SKIING_TOTAL_TIME,
+      Field.SKIING_TOTAL_DISTANCE,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  /// Snowboarding feature.
+  static const DataType DT_ACTIVITY_FEATURE_SNOWBOARDING = DataType(
+    'com.huawei.activity.feature.snowboarding',
+    'https://www.huawei.com/healthkit/activity.read',
+    'https://www.huawei.com/healthkit/activity.write',
+    <Field>[
+      Field.TRIP_TIMES,
+      Field.MAX_SLOPE_PERCENT,
+      Field.MAX_SLOPE_DEGREE,
+      Field.SKIING_TOTAL_TIME,
+      Field.SKIING_TOTAL_DISTANCE,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  /// Feature statistics of swimming in open waters.
+  static const DataType DT_ACTIVITY_FEATURE_SWIMMING_OPEN_WATER = DataType(
+    'com.huawei.activity.feature.swimming.open_water',
+    'https://www.huawei.com/healthkit/activity.read',
+    'https://www.huawei.com/healthkit/activity.write',
+    <Field>[
+      Field.PULL_TIMES,
+      Field.SWIMMING_STROKE,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  /// Feature statistics of swimming in open waters.
+  static const DataType DT_ACTIVITY_FEATURE_SWIMMING_POOL = DataType(
+    'com.huawei.activity.feature.swimming.pool',
+    'https://www.huawei.com/healthkit/activity.read',
+    'https://www.huawei.com/healthkit/activity.write',
+    <Field>[
+      Field.PULL_TIMES,
+      Field.TRIP_TIMES,
+      Field.POOL_LENGTH,
+      Field.SWIMMING_STROKE,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  /// Golf feature.
+  static const DataType DT_ACTIVITY_FEATURE_GOLF = DataType(
+    'com.huawei.activity.feature.golf',
+    'https://www.huawei.com/healthkit/activity.read',
+    'https://www.huawei.com/healthkit/activity.write',
+    <Field>[
+      Field.GOLF_SWING_COUNT,
+      Field.GOLF_SWING_SPEED,
+      Field.GOLF_MAX_SWING_SPEED,
+      Field.GOLF_SWING_TEMPO,
+      Field.GOLF_DOWN_SWING_TIME,
+      Field.GOLF_BACK_SWING_TIME,
     ],
     isPolymerizedFlag: true,
   );

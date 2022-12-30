@@ -22,10 +22,12 @@ part of huawei_health;
 /// type (as defined in [HiHealthActivities]), and activity duration will be recorded.
 class ActivityRecord {
   /// ActivityRecord object contained in additional inforation.
+  @Deprecated('This constant has been deprecated.')
   static const String EXTRA_ACTIVITY_RECORD =
       'vnd.huawei.hihealth.activityRecord';
 
   /// General prefix of an activity record.
+  @Deprecated('This constant has been deprecated.')
   static const String MIME_TYPE_PREFIX = 'vnd.huawei.hihealth.mimeType/';
 
   DeviceInfo? deviceInfo;
@@ -69,12 +71,12 @@ class ActivityRecord {
   bool get hasDurationTime => _hasDurationTime;
 
   ActivityRecord({
+    required this.activityTypeId,
     this.startTime,
     this.endTime,
     this.id,
     this.name,
     this.description,
-    this.activityTypeId,
     this.timeZone,
     this.activeTimeMillis,
     this.activitySummary,
@@ -142,7 +144,7 @@ class ActivityRecord {
 
   @override
   int get hashCode {
-    return hashValues(
+    return Object.hash(
       id,
       name,
       description,

@@ -70,9 +70,11 @@ class Group {
           ? DateTime.fromMillisecondsSinceEpoch(map['endTime'])
           : null,
       activityRecord: map['activityRecord'] != null
-          ? ActivityRecord.fromMap(Map<String, dynamic>.from(
-              map['activityRecord'],
-            ))
+          ? ActivityRecord.fromMap(
+              Map<String, dynamic>.from(
+                map['activityRecord'],
+              ),
+            )
           : null,
       activityType: map['activityType'],
       sampleSets: map['sampleSets'] != null
@@ -160,12 +162,12 @@ class Group {
 
   @override
   int get hashCode {
-    return hashValues(
+    return Object.hash(
       startTime,
       endTime,
       activityRecord,
       activityType,
-      hashList(sampleSets),
+      Object.hashAll(sampleSets ?? <dynamic>[]),
       groupType,
       hasMoreSample,
     );

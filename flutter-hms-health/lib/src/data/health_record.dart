@@ -30,11 +30,11 @@ class HealthRecord {
   final List<Map<String, dynamic>> _pointList = <Map<String, dynamic>>[];
 
   HealthRecord({
-    this.metadata,
     required this.dataCollector,
     required this.startTime,
     required this.endTime,
     required this.healthRecordId,
+    this.metadata,
   });
 
   void setStartTime(DateTime st) {

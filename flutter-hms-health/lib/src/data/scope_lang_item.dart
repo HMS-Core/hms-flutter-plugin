@@ -65,8 +65,8 @@ class ScopeLangItem {
 
   @override
   int get hashCode {
-    return hashValues(
-      hashList(url2Desc?.values),
+    return Object.hash(
+      Object.hashAll(url2Desc?.values.toList() ?? <dynamic>[]),
       authTime,
       appName,
       appIconPath,

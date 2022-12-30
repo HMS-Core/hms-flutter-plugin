@@ -22,11 +22,6 @@ import com.huawei.hms.hihealth.SettingController;
 import com.huawei.hms.hihealth.data.DataType;
 import com.huawei.hms.hihealth.options.DataTypeAddOptions;
 
-/**
- * Blueprint of {@link DefaultSettingController}.
- *
- * @since v.5.0.5
- */
 public interface DefaultSettingControllerService {
     /**
      * Creates and adds a customized data type.

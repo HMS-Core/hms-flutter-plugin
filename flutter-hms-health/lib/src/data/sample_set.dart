@@ -104,9 +104,9 @@ class SampleSet {
 
   @override
   int get hashCode {
-    return hashValues(
+    return Object.hash(
       dataCollector,
-      hashList(samplePoints),
+      Object.hashAll(samplePoints),
     );
   }
 }

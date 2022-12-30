@@ -60,6 +60,15 @@ class ActivityRecordsController {
     );
   }
 
+  static Future<void> continueActivityRecord(
+    String activityRecordId,
+  ) async {
+    return await _channel.invokeMethod<void>(
+      'continueActivityRecord',
+      activityRecordId,
+    );
+  }
+
   /// Stops the ActivityRecord of a specific ID.
   static Future<List<ActivityRecord>> endActivityRecord(
     String activityRecordId,

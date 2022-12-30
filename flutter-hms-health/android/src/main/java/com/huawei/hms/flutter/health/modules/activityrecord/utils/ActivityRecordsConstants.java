@@ -33,6 +33,7 @@ public final class ActivityRecordsConstants {
     public enum ActivityRecordMethods {
         ADD_ACTIVITY_RECORD("addActivityRecord"),
         BEGIN_ACTIVITY_RECORD("beginActivityRecord"),
+        CONTINUE_ACTIVITY_RECORD("continueActivityRecord"),
         END_ACTIVITY_RECORD("endActivityRecord"),
         GET_ACTIVITY_RECORD("getActivityRecord"),
         END_ALL_ACTIVITY_RECORDS("endAllActivityRecords"),

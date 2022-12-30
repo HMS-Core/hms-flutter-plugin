@@ -20,6 +20,7 @@ import static com.huawei.hms.flutter.health.modules.autorecorder.utils.AutoRecor
 import static com.huawei.hms.flutter.health.modules.autorecorder.utils.AutoRecorderConstants.START_BACKGROUND_SERVICE_ACTION;
 import static com.huawei.hms.flutter.health.modules.autorecorder.utils.AutoRecorderConstants.STOP_BACKGROUND_SERVICE_ACTION;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -46,11 +47,6 @@ import io.flutter.Log;
 
 import java.util.Map;
 
-/**
- * Default implementation of the {@link AutoRecorderService}.
- *
- * @since v.5.0.5
- */
 public class DefaultAutoRecorderService implements AutoRecorderService {
     private static final String TAG = AutoRecorderConstants.AUTO_RECORDER_MODULE;
 
@@ -177,7 +173,7 @@ public class DefaultAutoRecorderService implements AutoRecorderService {
         Intent intent = new Intent();
         intent.setAction(AutoRecorderConstants.AUTO_RECORDER_INTENT_ACTION);
         intent.putExtra("SamplePoint", json);
-        activity.sendBroadcast(intent);
+        activity.sendBroadcast(intent, Manifest.permission.FOREGROUND_SERVICE);
     }
 
     public void unregisterReceiver() {

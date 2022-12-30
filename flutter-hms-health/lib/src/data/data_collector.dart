@@ -76,6 +76,9 @@ class DataCollector {
   /// The data type.
   DataType? dataType;
 
+  /// The data type name.
+  String? dataTypeName;
+
   /// The identifier of the device.
   String? deviceId;
 
@@ -97,6 +100,7 @@ class DataCollector {
     this.dataStreamName,
     this.dataStreamId,
     this.dataType,
+    this.dataTypeName,
     this.dataGenerateType,
     this.deviceId,
     this.deviceInfo,
@@ -137,6 +141,7 @@ class DataCollector {
       'dataStreamName': dataStreamName,
       'dataStreamId': dataStreamId,
       'dataType': dataType?.toMap(),
+      'dataTypeName': dataTypeName,
       'deviceId': deviceId,
       'deviceInfo': deviceInfo?.toString(),
       'isLocalized': isLocalized,
@@ -183,6 +188,7 @@ class DataCollector {
         other.dataStreamName == dataStreamName &&
         other.dataStreamId == dataStreamId &&
         other.dataType == dataType &&
+        other.dataTypeName == dataTypeName &&
         other.deviceId == deviceId &&
         other.deviceInfo == deviceInfo &&
         other.isLocalized == isLocalized &&
@@ -191,11 +197,12 @@ class DataCollector {
 
   @override
   int get hashCode {
-    return hashValues(
+    return Object.hash(
       name,
       dataGenerateType,
       dataStreamName,
       dataType,
+      dataTypeName,
       deviceId,
       deviceInfo,
       isLocalized,

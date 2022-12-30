@@ -20,12 +20,6 @@ import com.huawei.hmf.tasks.OnCompleteListener;
 import com.huawei.hmf.tasks.Task;
 import com.huawei.hms.flutter.health.foundation.listener.VoidResultListener;
 
-/**
- * {@link VoidOnCompleteListener} has one more listener method than {@link VoidResultListener} method implementations,
- * to be notified in onComplete success scenarios.
- *
- * @since v.5.0.5
- */
 public interface VoidOnCompleteListener extends VoidResultListener {
     /**
      * the {@link OnCompleteListener} interface won't always success, if u use the onComplete interface, u should add

@@ -92,11 +92,11 @@ class PaceSummary {
 
   @override
   int get hashCode {
-    return hashValues(
-      hashList(britishPaceMap?.values),
-      hashList(britishPartTimeMap?.values),
-      hashList(paceMap?.values),
-      hashList(partTimeMap?.values),
+    return Object.hash(
+      Object.hashAll(britishPaceMap?.values.toList() ?? <dynamic>[]),
+      Object.hashAll(britishPartTimeMap?.values.toList() ?? <dynamic>[]),
+      Object.hashAll(paceMap?.values.toList() ?? <dynamic>[]),
+      Object.hashAll(partTimeMap?.values.toList() ?? <dynamic>[]),
       avgPace,
       bestPace,
     );

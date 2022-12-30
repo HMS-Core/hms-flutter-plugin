@@ -28,93 +28,16 @@ import com.huawei.hms.hihealth.result.ActivityRecordReply;
 
 import java.util.List;
 
-/**
- * Blueprint of {@link DefaultActivityRecordService}.
- *
- * @since v.5.0.5
- */
 public interface ActivityRecordService {
-    /**
-     * Creating ActivityRecords in Real Time
-     * <p>
-     * Create ActivityRecords for ongoing workout activities. The workout data during an active ActivityRecord is
-     * implicitly associated with the ActivityRecord on the Health platform.
-     * <p>
-     * Note: When the user initiates a workout activity, use the ActivityRecordsController.beginActivityRecord method to
-     * start an ActivityRecord.
-     * </p>
-     *
-     * @param activityRecordsController {@link DefaultActivityRecordService} instance.
-     * @param activityRecord {@link ActivityRecord} instance.
-     * @param listener {@link VoidResultListener} instance.
-     */
-    void startActivityRecord(final com.huawei.hms.hihealth.ActivityRecordsController activityRecordsController,
-        final ActivityRecord activityRecord, final VoidResultListener listener);
+    void startActivityRecord(final com.huawei.hms.hihealth.ActivityRecordsController activityRecordsController, final ActivityRecord activityRecord, final VoidResultListener listener);
 
-    /**
-     * Stop the ActivityRecord
-     * <p>
-     * The app uses the {@code HmsActivityRecordsController.endActivityRecord} method to stop a specified
-     * ActivityRecord.
-     * <p>
-     * Note: When the user stops a workout activity, use the {@code HmsActivityRecordsController.endActivityRecord}
-     * method to stop an ActivityRecord.
-     * </p>
-     *
-     * @param activityRecordsController {@link DefaultActivityRecordService} instance.
-     * @param activityRecordId the ID string of {@link ActivityRecord}.
-     * @param listener List ActivityRecord instance.
-     */
-    void endActivityRecord(final com.huawei.hms.hihealth.ActivityRecordsController activityRecordsController,
-        final @Nullable String activityRecordId, final ResultListener<List> listener);
+    void continueActivityRecord(final com.huawei.hms.hihealth.ActivityRecordsController activityRecordsController, final String activityRecordId, final VoidResultListener listener);
 
-    /**
-     * Inserting ActivityRecords to the Health Platform
-     * </br>
-     * To insert ActivityRecords with data that has been previously collected to the Health platform, perform the
-     * following: 1. Create an ActivityRecord by specifying a time period and other necessary information. 2. Create an
-     * ActivityRecordInsertOptions using the ActivityRecord and optional data set or grouped sampling point data. 3. Use
-     * the ActivityRecordsController.addActivityRecord method to insert an ActivityRecordInsertOptions.
-     * <p>
-     * Note: The app uses the ActivityRecordsController.addActivityRecord method to insert the ActivityRecord and
-     * associated data to the Health platform.
-     * </p>
-     *
-     * @param activityRecordsController {@link DefaultActivityRecordService} instance.
-     * @param activityRecord {@link ActivityRecord} instance.
-     * @param sampleSet {@link SampleSet} instance.
-     * @param listener {@link VoidResultListener} instance.
-     */
-    void addActivityRecord(final com.huawei.hms.hihealth.ActivityRecordsController activityRecordsController,
-        final ActivityRecord activityRecord, final List<SampleSet> sampleSet, final VoidResultListener listener);
+    void endActivityRecord(final com.huawei.hms.hihealth.ActivityRecordsController activityRecordsController, final @Nullable String activityRecordId, final ResultListener<List> listener);
 
-    /**
-     * Reading ActivityRecords and Associated Data from the Health Platform
-     * </br>
-     * To obtain a list of ActivityRecords that meet the criteria, create an ActivityRecordReadOptions instance first.
-     * Use the ActivityRecordsController.getActivityRecord method to obtain data.
-     * <p>
-     * Note: The user can obtain a list of ActivityRecords and associated data that meets certain criteria from the
-     * Health platform. For example, you can obtain all ActivityRecords within a specific period of time for particular
-     * data, or obtain a specific ActivityRecord by name or ID. You can also obtain ActivityRecords created by other
-     * apps.
-     * </p>
-     *
-     * @param activityRecordsController {@link com.huawei.hms.hihealth.ActivityRecordsController} instance.
-     * @param readRequest {@link ActivityRecordReadOptions} request.
-     * @param listener {@link ResultListener<ActivityRecordReply>} instance.
-     */
-    void getActivityRecord(final com.huawei.hms.hihealth.ActivityRecordsController activityRecordsController,
-        final ActivityRecordReadOptions readRequest, final ResultListener<ActivityRecordReply> listener);
+    void addActivityRecord(final com.huawei.hms.hihealth.ActivityRecordsController activityRecordsController, final ActivityRecord activityRecord, final List<SampleSet> sampleSet, final VoidResultListener listener);
 
-    /**
-     * Deletes health records from Health Kit according to the record ID, start time and end time,
-     * or data type carried in the request parameters.
-     *
-     * @param activityRecordsController {@link com.huawei.hms.hihealth.ActivityRecordsController} instance.
-     * @param deleteOptions {@link ActivityRecordDeleteOptions} delete options.
-     * @param listener {@link VoidResultListener} instance.
-     */
-    void deleteActivityRecord(final com.huawei.hms.hihealth.ActivityRecordsController activityRecordsController,
-        final ActivityRecordDeleteOptions deleteOptions, final VoidResultListener listener);
+    void getActivityRecord(final com.huawei.hms.hihealth.ActivityRecordsController activityRecordsController, final ActivityRecordReadOptions readRequest, final ResultListener<ActivityRecordReply> listener);
+
+    void deleteActivityRecord(final com.huawei.hms.hihealth.ActivityRecordsController activityRecordsController, final ActivityRecordDeleteOptions deleteOptions, final VoidResultListener listener);
 }

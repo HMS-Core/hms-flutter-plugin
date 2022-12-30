@@ -711,6 +711,316 @@ class Field {
     'measure_count',
   );
 
+  /// Maximum resistance level supported by the device.
+  static const Field MAX_RES = Field.newIntField(
+    'maxRes',
+  );
+
+  /// Minimum resistance level supported by the device.
+  static const Field MIN_RES = Field.newIntField(
+    'minRes',
+  );
+
+  /// Resistance level.
+  static const Field RESISTANCE_LEVEL = Field.newIntField(
+    'resistanceLevel',
+  );
+
+  /// Lower limit of resistance level 1.
+  static const Field RESISTANCE_LEVEL_ONE_LOWER_LIMIT = Field.newIntField(
+    'resistanceLevelOneLowerLimit',
+  );
+
+  /// Lower limit of resistance level 2.
+  static const Field RESISTANCE_LEVEL_TWO_LOWER_LIMIT = Field.newIntField(
+    'resistanceLevelTwoLowerLimit',
+  );
+
+  /// Lower limit of resistance level 3.
+  static const Field RESISTANCE_LEVEL_THREE_LOWER_LIMIT = Field.newIntField(
+    'resistanceLevelThreeLowerLimit',
+  );
+
+  /// Lower limit of resistance level 3.
+  static const Field RESISTANCE_LEVEL_FOUR_LOWER_LIMIT = Field.newIntField(
+    'resistanceLevelFourLowerLimit',
+  );
+
+  /// Lower limit of resistance level 5.
+  static const Field RESISTANCE_LEVEL_FIVE_LOWER_LIMIT = Field.newIntField(
+    'resistanceLevelFiveLowerLimit',
+  );
+
+  /// Upper limit of resistance level 5.
+  static const Field RESISTANCE_LEVEL_FIVE_UPPER_LIMIT = Field.newIntField(
+    'resistanceLevelFiveUpperLimit',
+  );
+
+  /// Activity duration at resistance level 1.
+  static const Field RESISTANCE_LEVEL_ONE_TIME = Field.newIntField(
+    'resistanceLevelOneTime',
+  );
+
+  /// Activity duration at resistance level 2.
+  static const Field RESISTANCE_LEVEL_TWO_TIME = Field.newIntField(
+    'resistanceLevelTwoTime',
+  );
+
+  /// Activity duration at resistance level 3.
+  static const Field RESISTANCE_LEVEL_THREE_TIME = Field.newIntField(
+    'resistanceLevelThreeTime',
+  );
+
+  /// Activity duration at resistance level 4.
+  static const Field RESISTANCE_LEVEL_FOUR_TIME = Field.newIntField(
+    'resistanceLevelFourTime',
+  );
+
+  /// Activity duration at resistance level 5.
+  static const Field RESISTANCE_LEVEL_FIVE_TIME = Field.newIntField(
+    'resistanceLevelFiveTime',
+  );
+
+  /// Rowing stroke rate.
+  static const Field SPM = Field.newFloatField(
+    'spm',
+  );
+
+  /// SWOLF.
+  static const Field SWOLF = Field.newFloatField(
+    'swolf',
+  );
+
+  /// Sleep type.
+  static const Field SLEEP_TYPE = Field.newIntField(
+    'sleep_type',
+  );
+
+  /// Time when the user prepares for sleep.
+  static const Field PREPARE_SLEEP_TIME = Field.newLongField(
+    'prepare_sleep_time',
+  );
+
+  /// Time when the user is out of bed for the last time.
+  static const Field OFF_BED_TIME = Field.newLongField(
+    'off_bed_time',
+  );
+
+  /// Maximum oxygen uptake.
+  static const Field VO2MAX = Field.newIntField(
+    'vo2max',
+  );
+
+  /// Latest value.
+  static const Field LAST = Field.newIntField(
+    'last',
+  );
+
+  /// Breathing duration.
+  static const Field BREATH_TIME = Field.newIntField(
+    'breathTime',
+  );
+
+  /// Breath holding time.
+  static const Field BREATH_HOLDING_TIME = Field.newIntField(
+    'breathHoldingTime',
+  );
+
+  /// Number of training sessions.
+  static const Field BREATH_HOLDING_TRAIN_RHYTHM = Field.newIntField(
+    'breathHoldingTrainRhythm',
+  );
+
+  /// Diaphragm contraction.
+  static const Field DIAPHRAGM_TIME = Field.newIntField(
+    'diaphragmTime',
+  );
+
+  /// Active peak.
+  static const Field IMPACT_PEAK = Field.newFloatField(
+    'impact_peak',
+  );
+
+  /// Vertical amplitude.
+  static const Field VERTICAL_OSCILLATION = Field.newFloatField(
+    'vertical_oscillation',
+  );
+
+  /// Vertical stride ratio.
+  static const Field VERTICAL_RATIO = Field.newFloatField(
+    'vertical_ratio',
+  );
+
+  /// Left and right ground contact balance.
+  static const Field GC_TIME_BALANCE = Field.newFloatField(
+    'gc_time_balance',
+  );
+
+  /// Average active peak.
+  static const Field AVG_IMPACT_PEAK = Field.newFloatField(
+    'avg_impact_peak',
+  );
+
+  /// Average left and right ground contact balance.
+  static const Field AVG_GC_TIME_BALANCE = Field.newFloatField(
+    'avg_gc_time_balance',
+  );
+
+  /// Average vertical oscillation.
+  static const Field AVG_VERTICAL_OSCILLATION = Field.newFloatField(
+    'avg_vertical_oscillation',
+  );
+
+  /// Average vertical stride ratio.
+  static const Field AVG_VERTICAL_RATIO = Field.newFloatField(
+    'avg_vertical_ratio',
+  );
+
+  /// Average impact loading rate.
+  static const Field AVG_VERTICAL_IMPACT_RATE = Field.newFloatField(
+    'avg_vertical_impact_rate',
+  );
+
+  /// Underwater time.
+  static const Field DIVING_TIME = Field.newIntField(
+    'divingTime',
+  );
+
+  /// Number of dives.
+  static const Field DIVING_COUNT = Field.newIntField(
+    'divingCount',
+  );
+
+  /// Maximum depth of diving.
+  static const Field MAX_DEPTH = Field.newFloatField(
+    'maxDepth',
+  );
+
+  /// Average depth of diving.
+  static const Field AVG_DEPTH = Field.newFloatField(
+    'avgDepth',
+  );
+
+  /// Maximum duration of a single dive.
+  static const Field MAX_UNDERWATER_TIME = Field.newIntField(
+    'maxUnderwaterTime',
+  );
+
+  /// No-fly time.
+  static const Field NO_FLY_TIME = Field.newIntField(
+    'noFlyTime',
+  );
+
+  /// Water type.
+  static const Field WATER_TYPE = Field.newIntField(
+    'waterType',
+  );
+
+  /// Surface interval.
+  static const Field SURFACE_TIME = Field.newIntField(
+    'surfaceTime',
+  );
+
+  /// Number of trips.
+  static const Field TRIP_TIMES = Field.newIntField(
+    'trip_times',
+  );
+
+  /// Maximum slope (in percentages).
+  static const Field MAX_SLOPE_PERCENT = Field.newFloatField(
+    'max_slope_percent',
+  );
+
+  /// Maximum slope angle.
+  static const Field MAX_SLOPE_DEGREE = Field.newFloatField(
+    'max_slope_degree',
+  );
+
+  /// Ski duration.
+  static const Field SKIING_TOTAL_TIME = Field.newLongField(
+    'total_time',
+  );
+
+  /// Ski distance.
+  static const Field SKIING_TOTAL_DISTANCE = Field.newIntField(
+    'total_distance',
+  );
+
+  /// Average body fat percentage.
+  static const Field FIELD_AVG_BODY_FAT_RATE = Field.newFloatField(
+    'avg_body_fat_rate',
+  );
+
+  /// Maximum body fat percentage
+  static const Field FIELD_MAX_BODY_FAT_RATE = Field.newFloatField(
+    'max_body_fat_rate',
+  );
+
+  /// Minimum body fat percentage.
+  static const Field FIELD_MIN_BODY_FAT_RATE = Field.newFloatField(
+    'min_body_fat_rate',
+  );
+
+  /// Average skeletal muscle mass.
+  static const Field FIELD_AVG_SKELETAL_MUSCLEL_MASS = Field.newFloatField(
+    'avg_skeletal_musclel_mass',
+  );
+
+  /// Maximum skeletal muscle mass.
+  static const Field FIELD_MAX_SKELETAL_MUSCLEL_MASS = Field.newFloatField(
+    'max_skeletal_musclel_mass',
+  );
+
+  /// Minimum skeletal muscle mass.
+  static const Field FIELD_MIN_SKELETAL_MUSCLEL_MASS = Field.newFloatField(
+    'min_skeletal_musclel_mass',
+  );
+
+  /// Stroke count.
+  static const Field PULL_TIMES = Field.newIntField(
+    'pull_times',
+  );
+
+  /// Main stroke.
+  static const Field SWIMMING_STROKE = Field.newIntField(
+    'swimming_stroke',
+  );
+
+  /// Swimming pool length.
+  static const Field POOL_LENGTH = Field.newIntField(
+    'pool_length',
+  );
+
+  /// Total swings.
+  static const Field GOLF_SWING_COUNT = Field.newIntField(
+    'golf_swing_count',
+  );
+
+  /// Average swing speed.
+  static const Field GOLF_SWING_SPEED = Field.newIntField(
+    'golf_swing_speed',
+  );
+
+  /// Maximum swing speed.
+  static const Field GOLF_MAX_SWING_SPEED = Field.newIntField(
+    'golf_max_swing_speed',
+  );
+
+  /// Average swing tempo (average backswing time/average downswing time).
+  static const Field GOLF_SWING_TEMPO = Field.newFloatField(
+    'golf_swing_tempo',
+  );
+
+  /// Average downswing time.
+  static const Field GOLF_DOWN_SWING_TIME = Field.newIntField(
+    'golf_down_swing_time',
+  );
+
+  /// Average backswing time.
+  static const Field GOLF_BACK_SWING_TIME = Field.newIntField(
+    'golf_back_swing_time',
+  );
+
   /// Attribute type.
   final int format;
 
@@ -785,7 +1095,7 @@ class Field {
 
   @override
   int get hashCode {
-    return hashValues(
+    return Object.hash(
       name,
       format,
       isOptional,

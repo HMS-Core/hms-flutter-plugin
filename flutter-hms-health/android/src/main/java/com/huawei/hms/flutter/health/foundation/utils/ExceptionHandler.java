@@ -25,12 +25,6 @@ import com.huawei.hms.common.ApiException;
 
 import io.flutter.plugin.common.MethodChannel.Result;
 
-/**
- * {@link ExceptionHandler} simply looks for exception then, whether gives an ApiException log information with return
- * code or throws an exception with localized message.
- *
- * @since v.5.0.5
- */
 public enum ExceptionHandler {
     INSTANCE;
 

@@ -27,6 +27,8 @@ abstract class HealthDataTypes {
       HealthFields.FIELD_BODY_POSTURE,
       HealthFields.FIELD_MEASURE_BODY_PART_OF_BLOOD_PRESSURE,
       HealthFields.FIELD_SPHYGMUS,
+      HealthFields.FIELD_MEASUREMENT_ANOMALY_FLAG,
+      HealthFields.FIELD_BEFORE_MEASURE_ACTIVITY,
     ],
   );
 
@@ -219,6 +221,9 @@ abstract class HealthDataTypes {
       Field.SLEEP_LATENCY,
       Field.SLEEP_EFFICIENCY,
       Field.GO_BED_TIME_NEW,
+      Field.SLEEP_TYPE,
+      Field.PREPARE_SLEEP_TIME,
+      Field.OFF_BED_TIME,
     ],
   );
 
@@ -234,8 +239,10 @@ abstract class HealthDataTypes {
       HealthFields.FIELD_DIASTOLIC_PRESSURE_AVG,
       HealthFields.FIELD_DIASTOLIC_PRESSURE_MAX,
       HealthFields.FIELD_DIASTOLIC_PRESSURE_MIN,
-      HealthFields.FIELD_BODY_POSTURE,
-      HealthFields.FIELD_MEASURE_BODY_PART_OF_BLOOD_PRESSURE,
+      HealthFields.FIELD_SPHYGMUS_AVG,
+      HealthFields.FIELD_SPHYGMUS_MAX,
+      HealthFields.FIELD_SPHYGMUS_MIN,
+      HealthFields.FIELD_SPHYGMUS_LAST,
     ],
     isPolymerizedFlag: true,
   );
@@ -265,12 +272,7 @@ abstract class HealthDataTypes {
       HealthFields.FIELD_SATURATION_AVG,
       HealthFields.FIELD_SATURATION_MAX,
       HealthFields.FIELD_SATURATION_MIN,
-      HealthFields.FIELD_OXYGEN_SUPPLY_FLOW_RATE_AVG,
-      HealthFields.FIELD_OXYGEN_SUPPLY_FLOW_RATE_MAX,
-      HealthFields.FIELD_OXYGEN_SUPPLY_FLOW_RATE_MIN,
-      HealthFields.FIELD_OXYGEN_THERAPY,
-      HealthFields.FIELD_SPO2_MEASUREMENT_MECHANISM,
-      HealthFields.FIELD_SPO2_MEASUREMENT_APPROACH,
+      HealthFields.FIELD_SATURATION_LAST,
     ],
     isPolymerizedFlag: true,
   );
@@ -363,6 +365,40 @@ abstract class HealthDataTypes {
     'https://www.huawei.com/healthkit/reproductive.write',
     <Field>[
       Field.FIELD_APPEARANCE,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  static const DataType DT_HEALTH_RECORD_MENSTRUAL_CYCLE = DataType(
+    'com.huawei.health.record.menstrual_cycle',
+    'https://www.huawei.com/healthkit/reproductive.read',
+    'https://www.huawei.com/healthkit/reproductive.write',
+    <Field>[
+      HealthFields.FIELD_RECORD_DAY,
+      HealthFields.FIELD_STATUS,
+      HealthFields.FIELD_SUB_STATUS,
+      HealthFields.FIELD_REMARKS,
+      HealthFields.FIELD_TIME_ZONE,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  static const DataType FIELD_DYSMENORRHOEA = DataType(
+    'com.huawei.dysmenorrhoea',
+    'https://www.huawei.com/healthkit/reproductive.read',
+    'https://www.huawei.com/healthkit/reproductive.write',
+    <Field>[
+      HealthFields.FIELD_DYSMENORRHOEA_LEVEL,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  static const DataType FIELD_PHYSICAL_SYMPTOMS = DataType(
+    'com.huawei.physical_symptoms',
+    'https://www.huawei.com/healthkit/reproductive.read',
+    'https://www.huawei.com/healthkit/reproductive.write',
+    <Field>[
+      HealthFields.FIELD_PHYSICAL_SYMPTOMS,
     ],
     isPolymerizedFlag: true,
   );

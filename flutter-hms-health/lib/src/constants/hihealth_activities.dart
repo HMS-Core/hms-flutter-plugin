@@ -21,8 +21,7 @@ abstract class HiHealthActivities {
   /// General prefix of the MIME type as the activity state.
   static const String MIME_TYPE_PREFIX = 'vnd.huawei.hihealth.activity/';
 
-  /// A string that contains STATUS_ACTION_START and STATUS_ACTION_END as two
-  /// extra activity states.
+  /// A string that contains STATUS_ACTION_START and STATUS_ACTION_END as two extra activity states.
   static const String EXTRA_ACTION_STATUS = 'actionStatus';
 
   /// Indicates that the activity has started.
@@ -409,13 +408,13 @@ abstract class HiHealthActivities {
   static const String indoorRunning = 'indoor_running';
 
   /// The user is participating in mountaineering.
-  static const String mountainClimbing = 'mountin_climbing';
+  static const String mountainClimbing = 'mountain_climbing';
 
   /// The user is doing cross-country running.
   static const String crossCountryRace = 'cross_country_race';
 
   /// The user is roller skating.
-  static const String rollerSkating = 'roller_skatting';
+  static const String rollerSkating = 'roller_skating';
 
   /// The user is hunting.
   static const String hunting = 'hunting';
@@ -482,6 +481,15 @@ abstract class HiHealthActivities {
 
   /// The user is practising Tai chi.
   static const String taiChi = 'tai_chi';
+
+  /// The user is practising free diving.
+  static const String freeDiving = 'freediving';
+
+  /// The user is having an apnea training.
+  static const String apneaTraining = 'apnea_training';
+
+  /// The user is having an apnea testing.
+  static const String apneaTest = 'apnea_test';
 
   static const Map<int, String> typeActivityMap = <int, String>{
     0: 'unknown',
@@ -613,9 +621,9 @@ abstract class HiHealthActivities {
     126: 'orienteering',
     127: 'indoor_walk',
     128: 'indoor_running',
-    129: 'mountin_climbing',
+    129: 'mountain_climbing',
     130: 'cross_country_race',
-    131: 'roller_skatting',
+    131: 'roller_skating',
     132: 'hunting',
     133: 'fly_a_kite',
     134: 'swing',
@@ -638,9 +646,12 @@ abstract class HiHealthActivities {
     151: 'body_combat',
     152: 'kendo',
     153: 'tai_chi',
+    154: 'freediving',
+    155: 'apnea_training',
+    156: 'apnea_test',
   };
 
   static String getMimeType(String activity) {
-    return MIME_TYPE_PREFIX + activity;
+    return '$MIME_TYPE_PREFIX$activity';
   }
 }

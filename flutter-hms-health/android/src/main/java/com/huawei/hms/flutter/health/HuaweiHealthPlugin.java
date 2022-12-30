@@ -37,58 +37,71 @@ import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodChannel;
 
-/**
- * HealthPlugin
- *
- * @since 5.0.5
- */
-public class HealthPlugin implements FlutterPlugin, ActivityAware {
+public class HuaweiHealthPlugin implements FlutterPlugin, ActivityAware {
+    private ActivityPluginBinding mActivityBinding;
+
     private MethodChannel authMethodChannel;
-
     private MethodChannel activityRecordMethodChannel;
-
     private MethodChannel dataControllerMethodChannel;
-
     private MethodChannel settingControllerMethodChannel;
-
     private MethodChannel autoRecorderMethodChannel;
-
     private MethodChannel bleControllerMethodChannel;
+    private MethodChannel appInfoMethodChannel;
+    private MethodChannel healthControllerMethodChannel;
 
     private EventChannel autoRecorderEventChannel;
 
     private HealthAuthMethodHandler authMethodHandler;
-
     private ActivityRecordsMethodHandler activityRecordsMethodHandler;
-
     private DataControllerMethodHandler dataControllerMethodHandler;
-
     private SettingControllerMethodHandler settingControllerMethodHandler;
-
     private AutoRecorderMethodHandler autoRecorderMethodHandler;
-
     private HealthControllerMethodHandler healthControllerMethodHandler;
 
-    private MethodChannel appInfoMethodChannel;
+    @Override
+    public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
+        initChannels(flutterPluginBinding.getBinaryMessenger());
+        setHandlers();
+    }
 
-    private MethodChannel healthControllerMethodChannel;
+    @Override
+    public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
+        mActivityBinding = binding;
+        setupActivity(mActivityBinding.getActivity());
+        mActivityBinding.addActivityResultListener(authMethodHandler);
+        mActivityBinding.addActivityResultListener(settingControllerMethodHandler);
+    }
 
-    private ActivityPluginBinding mActivityBinding;
+    @Override
+    public void onDetachedFromActivityForConfigChanges() {
+        teardownActivity();
+    }
 
-    private void initChannels(final BinaryMessenger messenger) {
+    @Override
+    public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
+        onAttachedToActivity(binding);
+    }
+
+    @Override
+    public void onDetachedFromActivity() {
+        teardownActivity();
+    }
+
+    @Override
+    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+        teardownChannels();
+    }
+
+    private void initChannels(BinaryMessenger messenger) {
         authMethodChannel = new MethodChannel(messenger, Channel.HMS_HEALTH_AUTH_METHOD_CHANNEL);
         activityRecordMethodChannel = new MethodChannel(messenger, Channel.HMS_HEALTH_ACTIVITY_RECORDS_CHANNEL);
         dataControllerMethodChannel = new MethodChannel(messenger, Channel.HMS_HEALTH_DATA_CONTROLLER_METHOD_CHANNEL);
-        settingControllerMethodChannel = new MethodChannel(messenger,
-            Channel.HMS_HEALTH_SETTING_CONTROLLER_METHOD_CHANNEL);
+        settingControllerMethodChannel = new MethodChannel(messenger, Channel.HMS_HEALTH_SETTING_CONTROLLER_METHOD_CHANNEL);
         autoRecorderMethodChannel = new MethodChannel(messenger, Channel.HMS_HEALTH_AUTO_RECORDER_METHOD_CHANNEL);
         autoRecorderEventChannel = new EventChannel(messenger, Channel.HMS_HEALTH_AUTO_RECORDER_EVENT_CHANNEL);
         bleControllerMethodChannel = new MethodChannel(messenger, Channel.HMS_HEALTH_BLE_CONTROLLER_METHOD_CHANNEL);
-
         appInfoMethodChannel = new MethodChannel(messenger, Channel.HMS_HEALTH_APP_INFO_METHOD_CHANNEL);
-        healthControllerMethodChannel = new MethodChannel(messenger,
-            Channel.HMS_HEALTH_HEALTH_CONTROLLER_METHOD_CHANNEL);
-        setHandlers();
+        healthControllerMethodChannel = new MethodChannel(messenger, Channel.HMS_HEALTH_HEALTH_CONTROLLER_METHOD_CHANNEL);
     }
 
     private void setHandlers() {
@@ -102,7 +115,6 @@ public class HealthPlugin implements FlutterPlugin, ActivityAware {
         dataControllerMethodChannel.setMethodCallHandler(dataControllerMethodHandler);
 
         settingControllerMethodHandler = new SettingControllerMethodHandler(null);
-
         settingControllerMethodChannel.setMethodCallHandler(settingControllerMethodHandler);
 
         autoRecorderMethodHandler = new AutoRecorderMethodHandler(null);
@@ -112,26 +124,6 @@ public class HealthPlugin implements FlutterPlugin, ActivityAware {
 
         healthControllerMethodHandler = new HealthControllerMethodHandler(null);
         healthControllerMethodChannel.setMethodCallHandler(healthControllerMethodHandler);
-    }
-
-    private void teardownChannels() {
-        authMethodChannel.setMethodCallHandler(null);
-        activityRecordMethodChannel.setMethodCallHandler(null);
-        dataControllerMethodChannel.setMethodCallHandler(null);
-        settingControllerMethodChannel.setMethodCallHandler(null);
-        autoRecorderMethodChannel.setMethodCallHandler(null);
-        bleControllerMethodChannel.setMethodCallHandler(null);
-        appInfoMethodChannel.setMethodCallHandler(null);
-        healthControllerMethodChannel.setMethodCallHandler(null);
-        authMethodChannel = null;
-        activityRecordMethodChannel = null;
-        dataControllerMethodChannel = null;
-        settingControllerMethodChannel = null;
-        autoRecorderMethodChannel = null;
-        autoRecorderEventChannel = null;
-        bleControllerMethodChannel = null;
-        appInfoMethodChannel = null;
-        healthControllerMethodChannel = null;
     }
 
     private void setupActivity(Activity activity) {
@@ -157,37 +149,24 @@ public class HealthPlugin implements FlutterPlugin, ActivityAware {
             mActivityBinding = null;
         }
     }
-
-    @Override
-    public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-        initChannels(flutterPluginBinding.getBinaryMessenger());
-    }
-
-    @Override
-    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-        teardownChannels();
-    }
-
-    @Override
-    public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
-        mActivityBinding = binding;
-        setupActivity(mActivityBinding.getActivity());
-        mActivityBinding.addActivityResultListener(authMethodHandler);
-        mActivityBinding.addActivityResultListener(settingControllerMethodHandler);
-    }
-
-    @Override
-    public void onDetachedFromActivityForConfigChanges() {
-        teardownActivity();
-    }
-
-    @Override
-    public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
-        onAttachedToActivity(binding);
-    }
-
-    @Override
-    public void onDetachedFromActivity() {
-        teardownActivity();
+    
+    private void teardownChannels() {
+        authMethodChannel.setMethodCallHandler(null);
+        activityRecordMethodChannel.setMethodCallHandler(null);
+        dataControllerMethodChannel.setMethodCallHandler(null);
+        settingControllerMethodChannel.setMethodCallHandler(null);
+        autoRecorderMethodChannel.setMethodCallHandler(null);
+        bleControllerMethodChannel.setMethodCallHandler(null);
+        appInfoMethodChannel.setMethodCallHandler(null);
+        healthControllerMethodChannel.setMethodCallHandler(null);
+        authMethodChannel = null;
+        activityRecordMethodChannel = null;
+        dataControllerMethodChannel = null;
+        settingControllerMethodChannel = null;
+        autoRecorderMethodChannel = null;
+        autoRecorderEventChannel = null;
+        bleControllerMethodChannel = null;
+        appInfoMethodChannel = null;
+        healthControllerMethodChannel = null;
     }
 }

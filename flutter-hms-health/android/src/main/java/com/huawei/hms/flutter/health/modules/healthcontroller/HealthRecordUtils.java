@@ -101,7 +101,7 @@ public final class HealthRecordUtils {
     public static Boolean toBoolean(String key, Object value) {
         if (!(value instanceof Boolean)) {
             Log.w("HealthRecordUtils",
-                "toBoolean | Boolean value expected for " + key + ". Returning false as default.");
+                    "toBoolean | Boolean value expected for " + key + ". Returning false as default.");
             return false;
         }
         return (Boolean) value;
@@ -220,7 +220,7 @@ public final class HealthRecordUtils {
     }
 
     public static HealthRecord createHR(Map<String, Object> map, String packageName, MethodChannel.Result result)
-        throws InvalidParameterException {
+            throws InvalidParameterException {
         Map<String, Object> dataCollectorMap = fromObject(map.get("dataCollector"));
 
         if (dataCollectorMap.isEmpty()) {
@@ -314,13 +314,8 @@ public final class HealthRecordUtils {
     }
 
     private static SamplePoint buildSamplePoint(Map<String, Object> map) {
-        // ! get fields from dataCollector:
-        // ?    dataCollector.getDataType().getFields()
-        // ! @map contains a key called 'pairs':
-        // ?    iterate through fields of @dataCollector
-        // ?    set value of the fields if @map has them
-
         Map<String, Object> dcMap = fromObject(map.get("dataCollector"));
+        Map<String, Object> dtMap = fromObject(map.get("dataType"));
         Map<String, Object> pairMap = fromObject(map.get("pairs"));
         String packageName = toString("packageName", dcMap.get("packageName"), false);
 
@@ -336,8 +331,18 @@ public final class HealthRecordUtils {
 
         List<Map<String, Object>> metadataValues = toMapArrayList("metadataValues", map.get("metadataValues"));
 
-        DataCollector dataCollector = Utils.toDataCollector(dcMap, packageName);
-        SamplePoint.Builder builder = new SamplePoint.Builder(dataCollector);
+
+        SamplePoint.Builder builder;
+        List<Field> fields;
+        if (!dcMap.isEmpty()) {
+            final DataCollector dataCollector = Utils.toDataCollector(dcMap, packageName);
+            fields = dataCollector.getDataType().getFields();
+            builder = new SamplePoint.Builder(dataCollector);
+        } else {
+            final DataType dataType = Utils.toDataType(dtMap, packageName);
+            fields = dataType.getFields();
+            builder = new SamplePoint.Builder(dataType);
+        }
 
         if (startTime != null && endTime != null) {
             builder.setTimeInterval(startTime, endTime, timeUnit);
@@ -352,7 +357,7 @@ public final class HealthRecordUtils {
             builder.setMetadata(metadata);
         }
         SamplePoint samplePoint = builder.build();
-        for (Field field : dataCollector.getDataType().getFields()) {
+        for (Field field : fields) {
             if (pairMap.containsKey(field.getName())) {
                 setFieldValues(samplePoint, field, pairMap.get(field.getName()));
             }

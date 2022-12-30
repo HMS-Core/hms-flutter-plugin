@@ -20,11 +20,5 @@ import com.huawei.hms.flutter.health.modules.auth.listener.HealthAuthResultListe
 import com.huawei.hms.support.hwid.service.HuaweiIdAuthService;
 
 public interface HealthAuthService {
-    /**
-     * Blueprint of signIn function
-     *
-     * @param authService HuaweiIdAuthService instance.
-     * @param healthAuthResultListener LoginResultListener instance.
-     */
     void signIn(final HuaweiIdAuthService authService, final HealthAuthResultListener healthAuthResultListener);
 }

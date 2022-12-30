@@ -52,6 +52,7 @@ class ActivityRecordDeleteOptions {
     }
   }
 
+  @Deprecated('No longer recommended to use.')
   void isDeleteSubData(bool deleteSubData) {
     _isDeleteSubData = deleteSubData;
   }

@@ -30,11 +30,6 @@ import com.huawei.hms.hihealth.options.ReadOptions;
 import com.huawei.hms.hihealth.options.UpdateOptions;
 import com.huawei.hms.hihealth.result.ReadReply;
 
-/**
- * All the tasks for {@link DataController} methods are used in {@link DefaultDataController} class.
- *
- * @since v.5.0.5
- */
 public class DefaultDataController implements DataControllerService {
     private static final String TAG = DataControllerConstants.DATA_CONTROLLER_MODULE;
 
@@ -54,7 +49,7 @@ public class DefaultDataController implements DataControllerService {
 
         /* Calling the data controller to insert the sampling dataset. */
         insertTask.addOnSuccessListener(result -> {
-            /* result is void instance.*/
+            // result is void instance.
             Log.i(TAG, "insertData success");
             voidResultListener.onSuccess(result);
 
@@ -84,7 +79,7 @@ public class DefaultDataController implements DataControllerService {
 
         /*  Calling the data controller to delete the sampling dataset. */
         deleteTask.addOnSuccessListener(result -> {
-            /* result is void instance.*/
+            // result is void instance.
             Log.i(TAG, "deleteData success");
             voidResultListener.onSuccess(result);
         }).addOnFailureListener(error -> {
@@ -117,7 +112,7 @@ public class DefaultDataController implements DataControllerService {
 
         /* Calling the data controller to modify the sampling dataset. */
         updateTask.addOnSuccessListener(result -> {
-            /* result is void instance.*/
+            // result is void instance.
             Log.i(TAG, "updateData success");
             voidResultListener.onSuccess(result);
         }).addOnFailureListener(error -> {
@@ -147,7 +142,7 @@ public class DefaultDataController implements DataControllerService {
 
         /*  Calling the data controller to delete the sampling dataset. */
         readReplyTask.addOnSuccessListener(readReply -> {
-            /* result is ReadReply instance.*/
+            // result is ReadReply instance.
             Log.i(TAG, "readData success");
             dataResultListener.onSuccess(readReply);
         }).addOnFailureListener(error -> {
@@ -176,7 +171,7 @@ public class DefaultDataController implements DataControllerService {
          * When commissioning the API, you need to change the inserted data time to the current date
          * for data to be queried. */
         todaySummationTask.addOnSuccessListener(sampleSet -> {
-            /* result is ReadReply instance.*/
+            // result is ReadReply instance.
             Log.i(TAG, "readToday success");
             dataResultListener.onSuccess(sampleSet);
         });
@@ -196,12 +191,12 @@ public class DefaultDataController implements DataControllerService {
     public void clearTaskData(final DataController dataController, final VoidResultListener dataResultListener) {
         Log.i(TAG, "call clearTaskData");
 
-        /* Call the clearAll method of the data controller to delete data
-        /* inserted by the current app from the device and cloud.*/
+        // Call the clearAll method of the data controller to delete data
+        // inserted by the current app from the device and cloud.
         Task<Void> clearTask = dataController.clearAll();
 
-        /* Calling the data controller to clear user data from the device and cloud.
-        /* Listener needs to be registered to monitor whether the clearance is successful or not. */
+        // Calling the data controller to clear user data from the device and cloud.
+        // Listener needs to be registered to monitor whether the clearance is successful or not.
         clearTask.addOnSuccessListener(result -> {
             Log.i(TAG, "clearTaskData success");
             dataResultListener.onSuccess(result);
@@ -229,7 +224,7 @@ public class DefaultDataController implements DataControllerService {
         Task<SampleSet> readDailySummationTask = dataController.readDailySummation(dataType, startTime, endTime);
 
         readDailySummationTask.addOnSuccessListener(sampleSet -> {
-            /* result is SampleSet instance.*/
+            // result is SampleSet instance.
             Log.i(TAG, "readDailySummation success");
             dataResultListener.onSuccess(sampleSet);
         });

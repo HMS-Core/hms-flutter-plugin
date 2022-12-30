@@ -19,7 +19,7 @@ part of huawei_health;
 /// Defines the HiHealth result codes.
 abstract class HiHealthStatusCodes {
   /// Status codes map of the Health Kit SDK.
-  static const Map<String, String> codes = <String, String>{
+  static const Map<String, String> _codes = <String, String>{
     /// [Solution:] Make sure that the device is connected to the Internet.
     '7': 'Network error.',
 
@@ -212,11 +212,13 @@ abstract class HiHealthStatusCodes {
 
     /// [Solution:] The user has to be a HUAWEI Health app user.
     '50038': 'The user is not a HUAWEI Health app user.',
-    '50039': '',
-    '50040': '',
-    '50041': '',
-    '50042': '',
-    '50043': '',
+    '50039': 'Invalid package name and appid not found.',
+    '50040':
+        'The country/region in which your account was registered is not on the list of supported locations.',
+    '50041': 'The app package name is incorrect.',
+    '50042': 'The Physical activity permission is not enabled.',
+    '50043':
+        'Data migration is in progress. Operations related to data points are temporarily prohibited.',
     '50044': 'The data type is not supported',
     '50045': 'The Huawei account is not logged in.',
     '50046': 'The function does not have the required permission.',
@@ -240,10 +242,21 @@ abstract class HiHealthStatusCodes {
     '50058': 'This interface is not supported in this region.',
     '50059':
         'The query time in this api exceed the limit 30 days, please check it',
+    '50060': 'API calling not supported on the device.',
+    '50061': 'Data reading or writing disabled when the screen is locked.',
+    '50062': 'The app that calls the API currently is not a frontend app.',
+    '50063': 'HMS Core (APK) version not supported.',
+    '50300': 'Activity record running in the background.',
+    '50301': 'Failed to call the renewal API.',
+    '50302': 'Mandatory data types missing for activity or health records.',
+    '50303': 'Data type not supported in activity or health records.',
+    '51000': 'Activity record canceled in the background.',
+    '51001':
+        'Current activity record canceled in the background due to a new record started by another third-party app.'
   };
 
   /// Returns the error description according to the result code.
   static String getStatusCodeMessage(String statusCode) {
-    return codes[statusCode] ?? 'UNKNOWN_ERROR';
+    return _codes[statusCode] ?? 'UNKNOWN_ERROR';
   }
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+ 
 package com.huawei.hms.flutter.health_example;
 
 import io.flutter.embedding.android.FlutterActivity;

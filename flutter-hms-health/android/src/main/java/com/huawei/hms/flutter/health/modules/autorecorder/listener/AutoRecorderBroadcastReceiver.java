@@ -20,13 +20,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import io.flutter.Log;
 import io.flutter.plugin.common.EventChannel;
 
-/**
- * Broadcast receiver that sends events to Flutter Platform.
- *
- * @since 5.0.5
- */
 public class AutoRecorderBroadcastReceiver extends BroadcastReceiver {
     final EventChannel.EventSink events;
 
@@ -36,9 +32,13 @@ public class AutoRecorderBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        String samplePoint = intent.getStringExtra("SamplePoint");
-        if (samplePoint != null) {
-            this.events.success(samplePoint);
+        try {
+            String samplePoint = intent.getStringExtra("SamplePoint");
+            if (samplePoint != null) {
+                this.events.success(samplePoint);
+            }
+        } catch (Exception e) {
+            Log.e("AutoRecorderBroadcastReceiver", e.toString());
         }
     }
 }

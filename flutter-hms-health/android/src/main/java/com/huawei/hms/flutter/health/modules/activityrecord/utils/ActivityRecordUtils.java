@@ -37,6 +37,7 @@ import com.huawei.hms.hihealth.data.Field;
 import com.huawei.hms.hihealth.data.MapValue;
 import com.huawei.hms.hihealth.data.PaceSummary;
 import com.huawei.hms.hihealth.data.SamplePoint;
+import com.huawei.hms.hihealth.data.SampleSection;
 import com.huawei.hms.hihealth.data.SampleSet;
 import com.huawei.hms.hihealth.data.ScopeLangItem;
 import com.huawei.hms.hihealth.data.Value;
@@ -68,10 +69,10 @@ public final class ActivityRecordUtils {
         }
         builder.setName(Utils.createEmptyStringIfNull(callMap, NAME_KEY));
         builder.setDesc(Utils.createEmptyStringIfNull(callMap, DESCRIPTION_KEY));
-        builder.setActivityTypeId(Utils.createEmptyStringIfNull(callMap, ACTIVITY_TYPE_KEY));
+        builder.setActivityTypeId((String) callMap.get(ACTIVITY_TYPE_KEY));
         if (Boolean.TRUE.equals(Utils.hasKey(callMap, ACTIVITY_SUMMARY_KEY))) {
             builder.setActivitySummary(
-                Utils.toActivitySummary((HashMap<String, Object>) callMap.get(ACTIVITY_SUMMARY_KEY), packageName));
+                    Utils.toActivitySummary((HashMap<String, Object>) callMap.get(ACTIVITY_SUMMARY_KEY), packageName));
         }
         setBuilderTime(builder, callMap, Constants.TimeConstants.START);
         setBuilderTime(builder, callMap, Constants.TimeConstants.END);
@@ -84,7 +85,7 @@ public final class ActivityRecordUtils {
      * Sets {@link ActivityRecord.Builder} Time
      */
     private static synchronized void setBuilderTime(ActivityRecord.Builder builder, final Map<String, Object> map,
-        final Constants.TimeConstants time) {
+                                                    final Constants.TimeConstants time) {
         switch (time) {
             case START:
                 if (map.get("startTimeMillis") != null) {
@@ -129,7 +130,7 @@ public final class ActivityRecordUtils {
      * Sets {@link ActivityRecordReadOptions.Builder} Records
      */
     private static synchronized void setBuilderRecord(final ActivityRecordReadOptions.Builder builder,
-        final @Nullable String recordVal, final RecordTypes types) {
+                                                      final @Nullable String recordVal, final RecordTypes types) {
         if (recordVal == null) {
             return;
         }
@@ -141,7 +142,7 @@ public final class ActivityRecordUtils {
     }
 
     public static synchronized List<Map<String, Object>> activityRecordReplyToMap(
-        final ActivityRecordReply recordReply) {
+            final ActivityRecordReply recordReply) {
         ArrayList<Map<String, Object>> resultList = new ArrayList<>();
         for (ActivityRecord record : recordReply.getActivityRecords()) {
             HashMap<String, Object> resultMap = new HashMap<>();
@@ -156,9 +157,9 @@ public final class ActivityRecordUtils {
         if (activityRecord != null) {
             map.put("activityType", activityRecord.getActivityType());
             map.put("appDetailsUrl",
-                activityRecord.getAppDetailsUrl() != null ? activityRecord.getAppDetailsUrl() : "");
+                    activityRecord.getAppDetailsUrl() != null ? activityRecord.getAppDetailsUrl() : "");
             map.put("appDomainName",
-                activityRecord.getAppDomainName() != null ? activityRecord.getAppDomainName() : "");
+                    activityRecord.getAppDomainName() != null ? activityRecord.getAppDomainName() : "");
             map.put("appVersion", activityRecord.getAppVersion() != null ? activityRecord.getAppVersion() : "");
             map.put("description", activityRecord.getDesc());
             map.put("id", activityRecord.getId());
@@ -177,14 +178,21 @@ public final class ActivityRecordUtils {
     }
 
     public static synchronized Map<String, Object> activitySummaryToMap(final ActivitySummary activitySummary) {
-        HashMap<String, Object> map = new HashMap<>();
+        final HashMap<String, Object> map = new HashMap<>();
         if (activitySummary != null) {
             map.put("paceSummary", paceSummaryToMap(activitySummary.getPaceSummary()));
-            ArrayList<Map<String, Object>> dataSummary = new ArrayList<>();
+
+            final ArrayList<Map<String, Object>> dataSummary = new ArrayList<>();
             for (SamplePoint point : activitySummary.getDataSummary()) {
                 dataSummary.add(samplePointToMap(point));
             }
             map.put("dataSummary", dataSummary);
+
+            final ArrayList<Map<String, Object>> sectionSummary = new ArrayList<>();
+            for (SampleSection section : activitySummary.getSectionSummary()) {
+                sectionSummary.add(sampleSectionToMap(section));
+            }
+            map.put("sectionSummary", sectionSummary);
         }
         return map;
     }
@@ -213,8 +221,24 @@ public final class ActivityRecordUtils {
             map.put("dataCollector", dataCollectorToMap(samplePoint.getDataCollector()));
             map.put("dataTypeId", samplePoint.getDataTypeId());
             map.put("dataType", dataTypeToMap(samplePoint.getDataType()));
-            map.put("insertionTime  ", (samplePoint.getInsertionTime(TimeUnit.MILLISECONDS)));
+            map.put("insertionTime", (samplePoint.getInsertionTime(TimeUnit.MILLISECONDS)));
             map.put("id", (int) samplePoint.getId());
+        }
+        return map;
+    }
+
+    public static synchronized Map<String, Object> sampleSectionToMap(final SampleSection sampleSection) {
+        final HashMap<String, Object> map = new HashMap<>();
+        if (sampleSection != null) {
+            map.put("sectionNum", sampleSection.getSectionNum());
+            map.put("sectionTime", sampleSection.getSectionTime(TimeUnit.MILLISECONDS));
+            map.put("startTime", sampleSection.getStartTime(TimeUnit.MILLISECONDS));
+            map.put("endTime", sampleSection.getEndTime(TimeUnit.MILLISECONDS));
+            final List<Map<String, Object>> sectionDataList = new ArrayList<>();
+            for (SamplePoint sp : sampleSection.getSectionDataList()) {
+                sectionDataList.add(samplePointToMap(sp));
+            }
+            map.put("sectionDataList", sectionDataList);
         }
         return map;
     }
@@ -305,7 +329,7 @@ public final class ActivityRecordUtils {
     }
 
     public static synchronized List<Map<String, Object>> listActivityRecordToMap(
-        final List<ActivityRecord> activityRecords) {
+            final List<ActivityRecord> activityRecords) {
         ArrayList<Map<String, Object>> resultList = new ArrayList<>();
         for (ActivityRecord record : activityRecords) {
             resultList.add(activityRecordToMap(record));
@@ -342,9 +366,9 @@ public final class ActivityRecordUtils {
         Long endTime = HealthRecordUtils.toLong("endTime", map.get("endTime"));
         String timeUnit = (String) map.get("timeUnit");
         List<String> activityRecordIDs = HealthRecordUtils.toTypeOfArrayList(map.get("activityRecordIDs"),
-            String.class);
+                String.class);
         List<Map<String, Object>> subDataTypeList = HealthRecordUtils.toMapArrayList("subDataTypes",
-            map.get("subDataTypes"));
+                map.get("subDataTypes"));
         Boolean deleteSubData = HealthRecordUtils.toBoolean("deleteSubData", map.get("deleteSubData"));
 
         TimeUnit unit = Utils.toTimeUnit(timeUnit);
@@ -366,9 +390,6 @@ public final class ActivityRecordUtils {
         return builder.build();
     }
 
-    /**
-     * ActivityBuilder Record Types
-     */
     enum RecordTypes {
         ID,
         NAME

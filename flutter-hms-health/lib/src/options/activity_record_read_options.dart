@@ -26,10 +26,10 @@ class ActivityRecordReadOptions {
   DataType? dataType;
 
   ActivityRecordReadOptions({
-    this.activityRecordId,
-    this.activityRecordName,
     required this.startTime,
     required this.endTime,
+    this.activityRecordId,
+    this.activityRecordName,
     this.timeUnit = TimeUnit.MILLISECONDS,
     this.dataType,
   });

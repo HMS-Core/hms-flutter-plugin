@@ -25,7 +25,6 @@ import io.flutter.plugin.common.MethodChannel;
 
 public class AppInfoMethodHandler implements MethodChannel.MethodCallHandler {
     private static final String TAG = "AppInfoHandler";
-
     private AppInfo appInfo;
 
     @Override
@@ -53,10 +52,10 @@ public class AppInfoMethodHandler implements MethodChannel.MethodCallHandler {
     }
 
     private void createApp(MethodCall call, MethodChannel.Result result) {
-        String packageName = call.argument("packageName");
-        String domainName = call.argument("domainName");
-        String version = call.argument("version");
-        String detailsUrl = call.argument("detailsUrl");
+        final String packageName = call.argument("packageName");
+        final String domainName = call.argument("domainName");
+        final String version = call.argument("version");
+        final String detailsUrl = call.argument("detailsUrl");
 
         appInfo = new AppInfo(packageName, domainName, version, detailsUrl);
         result.success(true);
@@ -75,7 +74,6 @@ public class AppInfoMethodHandler implements MethodChannel.MethodCallHandler {
             result.error(TAG, "Create an AppInfo instance first", null);
             return;
         }
-
         result.success(appInfo.getDomainName());
     }
 
@@ -84,7 +82,6 @@ public class AppInfoMethodHandler implements MethodChannel.MethodCallHandler {
             result.error(TAG, "Create an AppInfo instance first", null);
             return;
         }
-
         result.success(appInfo.getPackageName());
     }
 

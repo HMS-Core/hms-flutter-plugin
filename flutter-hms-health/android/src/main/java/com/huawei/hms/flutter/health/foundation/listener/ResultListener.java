@@ -16,12 +16,6 @@
 
 package com.huawei.hms.flutter.health.foundation.listener;
 
-/**
- * Base Result Listener.
- *
- * @param <T>
- * @since v.5.0.5
- */
 public interface ResultListener<T> {
     /**
      * Presents the success scenario.

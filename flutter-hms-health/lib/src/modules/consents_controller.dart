@@ -46,6 +46,7 @@ class ConsentsController {
   }
 
   /// Revokes all permissions granted to your app.
+  @Deprecated('This method has been deprecated.')
   static Future<void> revoke(
     String appId,
   ) async {
@@ -56,12 +57,42 @@ class ConsentsController {
   }
 
   /// Revokes certain Health Kit related permissions granted to your app.
+  @Deprecated(
+    'This method has been deprecated. You are advised to use cancelAuthorizationWithScopes(String appId, List<Scope> scopes) instead.',
+  )
   static Future<void> revokeWithScopes(
     String appId,
     List<Scope> scopes,
   ) async {
     await _channel.invokeMethod<void>(
       'revokeWithScopes',
+      <String, dynamic>{
+        'appId': appId,
+        'scopes': List<String>.from(
+          scopes.map((Scope e) => e.scopeStr),
+        ),
+      },
+    );
+  }
+
+  /// Cancels all scopes granted to your app.
+  /// You can specify whether to delete user data when the scopes are canceled.
+  static Future<void> cancelAuthorization(
+    bool deleteData,
+  ) async {
+    await _channel.invokeMethod<void>(
+      'cancelAuthorization',
+      deleteData,
+    );
+  }
+
+  /// Cancels certain Health Kit related scopes granted to your app.
+  static Future<void> cancelAuthorizationWithScopes(
+    String appId,
+    List<Scope> scopes,
+  ) async {
+    await _channel.invokeMethod<void>(
+      'cancelAuthorizationWithScopes',
       <String, dynamic>{
         'appId': appId,
         'scopes': List<String>.from(

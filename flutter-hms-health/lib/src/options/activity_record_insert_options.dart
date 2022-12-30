@@ -50,9 +50,9 @@ class ActivityRecordInsertOptions {
 
   @override
   int get hashCode {
-    return hashValues(
+    return Object.hash(
       activityRecord,
-      hashList(sampleSets),
+      Object.hashAll(sampleSets),
     );
   }
 }

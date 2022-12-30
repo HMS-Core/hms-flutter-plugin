@@ -43,18 +43,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * ResultHelper<T> is a helper class for reaching {@link ResultListener <T>}.
- * </br>
- * All the generic result request types will be converted into map and returned via Flutter Result instance.
- *
- * @since v.5.0.5
- */
 public final class ResultHelper<T> implements ResultListener<T> {
-    //Internal Flutter Result instance that will be initialized during construction.
+    // Internal Flutter Result instance that will be initialized during construction.
     private Result result;
 
-    //Internal Class type instance that will be initialized during construction.
+    // Internal Class type instance that will be initialized during construction.
     private Class<T> type;
 
     // Application Context

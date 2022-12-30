@@ -218,4 +218,46 @@ abstract class HealthFields {
   static const Field FIELD_MIN_HEART_RATE = Field.newFloatField(
     'min_heart_rate',
   );
+  static const Field FIELD_MEASUREMENT_ANOMALY_FLAG = Field.newIntField(
+    'measurement_anomaly_flag',
+  );
+  static const Field FIELD_BEFORE_MEASURE_ACTIVITY = Field.newIntField(
+    'before_measure_activity',
+  );
+  static const Field FIELD_RECORD_DAY = Field.newIntField(
+    'recordDay',
+  );
+  static const Field FIELD_STATUS = Field.newIntField(
+    'status',
+  );
+  static const Field FIELD_SUB_STATUS = Field.newIntField(
+    'subStatus',
+  );
+  static const Field FIELD_REMARKS = Field.newStringField(
+    'remarks',
+  );
+  static const Field FIELD_TIME_ZONE = Field.newStringField(
+    'timeZone',
+  );
+  static const Field FIELD_DYSMENORRHOEA_LEVEL = Field.newIntField(
+    'level',
+  );
+  static const Field FIELD_PHYSICAL_SYMPTOMS = Field.newStringField(
+    'physicalSymptoms',
+  );
+  static const Field FIELD_SPHYGMUS_AVG = Field.newFloatField(
+    'sphygmus_avg',
+  );
+  static const Field FIELD_SPHYGMUS_MIN = Field.newFloatField(
+    'sphygmus_min',
+  );
+  static const Field FIELD_SPHYGMUS_MAX = Field.newFloatField(
+    'sphygmus_max',
+  );
+  static const Field FIELD_SPHYGMUS_LAST = Field.newFloatField(
+    'sphygmus_last',
+  );
+  static const Field FIELD_SATURATION_LAST = Field.newFloatField(
+    'saturation_last',
+  );
 }

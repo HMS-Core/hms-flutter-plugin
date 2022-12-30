@@ -55,15 +55,10 @@ import java.util.Map;
 
 public class SettingControllerMethodHandler implements MethodCallHandler, PluginRegistry.ActivityResultListener {
     private Activity activity;
-
     private Context context;
-
     private SettingController settingController;
-
     private ConsentsController consentsController;
-
     private DefaultSettingController settingControllerImpl;
-
     private MethodChannel.Result mResult;
 
     public SettingControllerMethodHandler(@Nullable Activity activity) {
@@ -114,6 +109,12 @@ public class SettingControllerMethodHandler implements MethodCallHandler, Plugin
                 break;
             case REVOKE_WITH_SCOPES:
                 revokeWithScopes(call, result);
+                break;
+            case CANCEL_AUTHORIZATION:
+                cancelAuthorization(call, result);
+                break;
+            case CANCEL_AUTHORIZATION_WITH_SCOPES:
+                cancelAuthorizationWithScopes(call, result);
                 break;
             case GET_APP_ID:
                 getAppId(result);
@@ -196,11 +197,6 @@ public class SettingControllerMethodHandler implements MethodCallHandler, Plugin
             new ResultHelper<>(Boolean.class, result, context, call.method));
     }
 
-    /**
-     * Obtains the applicationId from the agconnect-services.json file.
-     *
-     * @param result Flutter result instance for returning the obtained appId value.
-     */
     private void getAppId(final Result result) {
         String appId = AGConnectServicesConfig.fromContext(context).getString("client/app_id");
         if (appId == null) {
@@ -223,6 +219,7 @@ public class SettingControllerMethodHandler implements MethodCallHandler, Plugin
     private void revoke(final MethodCall call, final Result result) {
         checkControllers();
         String appId = (String) call.arguments;
+
         VoidResultListener voidResultListener = new VoidResultHelper(result, context, call.method);
         consentsController.revoke(appId)
             .addOnSuccessListener(voidResultListener::onSuccess)
@@ -237,6 +234,25 @@ public class SettingControllerMethodHandler implements MethodCallHandler, Plugin
         consentsController.revoke(appId, scopes)
             .addOnSuccessListener(voidResultListener::onSuccess)
             .addOnFailureListener(voidResultListener::onFail);
+    }
+
+    private void cancelAuthorization(final MethodCall call, final Result result) {
+        checkControllers();
+        final Boolean deleteData = (Boolean) call.arguments;
+        final VoidResultListener voidResultListener = new VoidResultHelper(result, context, call.method);
+        consentsController.cancelAuthorization(deleteData)
+                .addOnSuccessListener(voidResultListener::onSuccess)
+                .addOnFailureListener(voidResultListener::onFail);
+    }
+
+    private void cancelAuthorizationWithScopes(final MethodCall call, final Result result) {
+        checkControllers();
+        final String appId = call.argument("appId");
+        final List<String> scopes = call.argument("scopes");
+        final VoidResultListener voidResultListener = new VoidResultHelper(result, context, call.method);
+        consentsController.cancelAuthorization(appId, scopes)
+                .addOnSuccessListener(voidResultListener::onSuccess)
+                .addOnFailureListener(voidResultListener::onFail);
     }
 
     /**

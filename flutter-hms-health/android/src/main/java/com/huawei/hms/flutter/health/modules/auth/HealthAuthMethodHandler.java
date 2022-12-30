@@ -122,11 +122,11 @@ public class HealthAuthMethodHandler implements MethodCallHandler, PluginRegistr
 
         // Configure authorization parameters.
         HuaweiIdAuthParamsHelper authParamsHelper = new HuaweiIdAuthParamsHelper(
-            HuaweiIdAuthParams.DEFAULT_AUTH_REQUEST_PARAM);
+                HuaweiIdAuthParams.DEFAULT_AUTH_REQUEST_PARAM);
         HuaweiIdAuthParams authParams = authParamsHelper.setIdToken()
-            .setAccessToken()
-            .setScopeList(scopes)
-            .createParams();
+                .setAccessToken()
+                .setScopeList(scopes)
+                .createParams();
 
         // Initialize the HuaweiIdAuthService object.
         final HuaweiIdAuthService authService = HuaweiIdAuthManager.getService(mActivity, authParams);
@@ -200,7 +200,7 @@ public class HealthAuthMethodHandler implements MethodCallHandler, PluginRegistr
                     Log.d(TAG, "sign in is success");
                     // Obtain the authorization result.
                     HuaweiIdAuthResult authResult
-                        = HuaweiIdAuthAPIManager.HuaweiIdAuthAPIService.parseHuaweiIdFromIntent(data);
+                            = HuaweiIdAuthAPIManager.HuaweiIdAuthAPIService.parseHuaweiIdFromIntent(data);
                     try {
                         mResult.success(authResult.getHuaweiId().toJson());
                     } catch (JSONException e) {

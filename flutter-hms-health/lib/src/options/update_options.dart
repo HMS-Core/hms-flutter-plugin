@@ -21,22 +21,22 @@ part of huawei_health;
 class UpdateOptions {
   DateTime startTime;
   DateTime endTime;
-  TimeUnit timeUnit;
   SampleSet sampleSet;
+  TimeUnit timeUnit;
 
   UpdateOptions({
     required this.startTime,
     required this.endTime,
-    this.timeUnit = TimeUnit.MILLISECONDS,
     required this.sampleSet,
+    this.timeUnit = TimeUnit.MILLISECONDS,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'startTime': startTime.millisecondsSinceEpoch,
       'endTime': endTime.millisecondsSinceEpoch,
-      'timeUnit': describeEnum(timeUnit),
       'sampleSet': sampleSet.toMap(),
+      'timeUnit': describeEnum(timeUnit),
     }..removeWhere((String k, dynamic v) => v == null);
   }
 }

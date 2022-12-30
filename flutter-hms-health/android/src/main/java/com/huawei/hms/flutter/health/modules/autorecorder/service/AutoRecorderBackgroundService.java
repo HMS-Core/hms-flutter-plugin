@@ -26,6 +26,7 @@ import static com.huawei.hms.flutter.health.modules.autorecorder.utils.AutoRecor
 import static com.huawei.hms.flutter.health.modules.autorecorder.utils.AutoRecorderConstants.TICKER;
 import static com.huawei.hms.flutter.health.modules.autorecorder.utils.AutoRecorderConstants.TITLE;
 
+import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -68,8 +69,8 @@ public class AutoRecorderBackgroundService extends Service {
             value = bundle.getString("smallIcon");
         }
         resourceId = value != null
-            ? res.getIdentifier(value, MIPMAP, packageName)
-            : res.getIdentifier("ic_notification", MIPMAP, packageName);
+                ? res.getIdentifier(value, MIPMAP, packageName)
+                : res.getIdentifier("ic_notification", MIPMAP, packageName);
 
         if (resourceId == 0) {
             resourceId = res.getIdentifier("ic_launcher", MIPMAP, packageName);
@@ -137,22 +138,22 @@ public class AutoRecorderBackgroundService extends Service {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "HmsHealth",
-                NotificationManager.IMPORTANCE_DEFAULT);
+                    NotificationManager.IMPORTANCE_DEFAULT);
             notificationManager.createNotificationChannel(channel);
         }
         PackageManager pm = context.getPackageManager();
         Intent notificationIntent = pm.getLaunchIntentForPackage(context.getPackageName());
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context,
-            NOTIFICATION_CHANNEL_ID).setWhen(System.currentTimeMillis())
-            .setPriority(NotificationCompat.PRIORITY_MAX)
-            .setSmallIcon(configSmallIcon(bundle, context))
-            .setContentTitle(getBundleString(bundle, TITLE))
-            .setContentText(getBundleString(bundle, TEXT))
-            .setContentIntent(pendingIntent)
-            .setUsesChronometer(getBundleBoolean(bundle, CHRONOMETER))
-            .setCategory(NotificationCompat.CATEGORY_SERVICE)
-            .setOngoing(true);
+                NOTIFICATION_CHANNEL_ID).setWhen(System.currentTimeMillis())
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setSmallIcon(configSmallIcon(bundle, context))
+                .setContentTitle(getBundleString(bundle, TITLE))
+                .setContentText(getBundleString(bundle, TEXT))
+                .setContentIntent(pendingIntent)
+                .setUsesChronometer(getBundleBoolean(bundle, CHRONOMETER))
+                .setCategory(NotificationCompat.CATEGORY_SERVICE)
+                .setOngoing(true);
         if (hasValue(bundle, TICKER)) {
             notificationBuilder.setTicker(bundle.getString(TICKER));
         }
@@ -174,16 +175,16 @@ public class AutoRecorderBackgroundService extends Service {
         // Start recording real-time steps.
         Log.i(TAG, "getRemoteService");
         autoRecorderController.startRecord(datatype, samplePoint -> {
-            // The step count, time, and type data reported by the pedometer is called back to the app through
-            // samplePoint.
-            Intent intent = new Intent();
-            intent.putExtra("SamplePoint", samplePoint);
-            intent.setAction(BACKGROUND_SERVICE);
-            // Transmits service data to activities through broadcast.
-            sendBroadcast(intent);
-        })
-            .addOnSuccessListener(aVoid -> Log.i(TAG, "record steps success."))
-            .addOnFailureListener(e -> Log.i(TAG, "report steps failed."));
+                    // The step count, time, and type data reported by the pedometer is called back to the app through
+                    // samplePoint.
+                    Intent intent = new Intent();
+                    intent.putExtra("SamplePoint", samplePoint);
+                    intent.setAction(BACKGROUND_SERVICE);
+                    // Transmits service data to activities through broadcast.
+                    sendBroadcast(intent, Manifest.permission.FOREGROUND_SERVICE);
+                })
+                .addOnSuccessListener(aVoid -> Log.i(TAG, "record steps success."))
+                .addOnFailureListener(e -> Log.i(TAG, "report steps failed."));
     }
 
     private String getBundleString(Bundle bundle, String key) {

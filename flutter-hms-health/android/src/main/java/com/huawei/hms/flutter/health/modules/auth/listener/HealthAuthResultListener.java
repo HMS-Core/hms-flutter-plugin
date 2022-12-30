@@ -19,14 +19,6 @@ package com.huawei.hms.flutter.health.modules.auth.listener;
 import com.huawei.hms.flutter.health.foundation.listener.ResultListener;
 import com.huawei.hms.support.hwid.result.AuthHuaweiId;
 
-/**
- * LoginResultListener returns {@link AuthHuaweiId} instance.
- *
- * @since v.5.0.5
- */
 public interface HealthAuthResultListener extends ResultListener<AuthHuaweiId> {
-    /**
-     * Presents the silent sign in scenario.
-     */
     void onSilentSignInFail();
 }

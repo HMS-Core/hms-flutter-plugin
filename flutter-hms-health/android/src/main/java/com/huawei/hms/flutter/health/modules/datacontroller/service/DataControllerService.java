@@ -26,11 +26,6 @@ import com.huawei.hms.hihealth.options.ReadOptions;
 import com.huawei.hms.hihealth.options.UpdateOptions;
 import com.huawei.hms.hihealth.result.ReadReply;
 
-/**
- * Blueprint of {@link DefaultDataController}.
- *
- * @since v.5.0.5
- */
 public interface DataControllerService {
     /**
      * Insert the user's fitness and health data into the Health platform.

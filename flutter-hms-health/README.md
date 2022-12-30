@@ -30,12 +30,12 @@ HUAWEI Health Kit (Health Kit for short) allows ecosystem apps to access fitness
 
 ## 2. Installation Guide
 
-Before you get started, you must register as a HUAWEI Developer and complete identity verification on the [HUAWEI Developer](https://developer.huawei.com/consumer/en/) website. For details, please refer to [Register a HUAWEI ID](https://developer.huawei.com/consumer/en/doc/10104).
+Before you get started, you must register as a HUAWEI Developer and complete identity verification on the [HUAWEI Developer](https://developer.huawei.com/consumer/en?ha_source=hms1) website. For details, please refer to [Register a HUAWEI ID](https://developer.huawei.com/consumer/en/doc/10104?ha_source=hms1).
  
 ### Creating a Project in AppGallery Connect
 Creating an app in the AppGallery Connect is required in order to communicate with the Huawei services. To create an app, perform the following steps:
 
-**Step 1.** Sign in to [AppGallery Connect](https://developer.huawei.com/consumer/en/service/josp/agc/index.html)  and select **My projects**.
+**Step 1.** Sign in to [AppGallery Connect](https://developer.huawei.com/consumer/en/service/josp/agc/index.html?ha_source=hms1)  and select **My projects**.
 
 **Step 2.** Select your project from the project list or create a new one by clicking the **Add Project** button.
 
@@ -46,23 +46,23 @@ If an app exists in the project and you need to add a new one, expand the app se
 
 ### Configuring the Signing Certificate Fingerprint
 
-A signing certificate fingerprint is used to verify the authenticity of an app when it attempts to access an HMS Core (APK) through the HMS SDK. Before using the HMS Core (APK), you must locally generate a signing certificate fingerprint and configure it in the **AppGallery Connect**. You can refer to 3rd and 4th steps of [Generating a Signing Certificate](https://developer.huawei.com/consumer/en/codelab/HMSPreparation/index.html#2) codelab tutorial for the certificate generation. Perform the following steps after you have generated the certificate.
+A signing certificate fingerprint is used to verify the authenticity of an app when it attempts to access an HMS Core (APK) through the HMS SDK. Before using the HMS Core (APK), you must locally generate a signing certificate fingerprint and configure it in the **AppGallery Connect**. You can refer to 3rd and 4th steps of [Generating a Signing Certificate](https://developer.huawei.com/consumer/en/codelab/HMSPreparation/index.html#2?ha_source=hms1) codelab tutorial for the certificate generation. Perform the following steps after you have generated the certificate.
 
-**Step 1:** Sign in to [AppGallery Connect](https://developer.huawei.com/consumer/en/service/josp/agc/index.html) and select your project from **My Projects**. Then go to **Project Setting** > **General information**. In the **App information** field, click the add icon next to SHA-256 certificate fingerprint, and enter the obtained **SHA-256 certificate fingerprint**.
+**Step 1:** Sign in to [AppGallery Connect](https://developer.huawei.com/consumer/en/service/josp/agc/index.html?ha_source=hms1) and select your project from **My Projects**. Then go to **Project Setting** > **General information**. In the **App information** field, click the add icon next to SHA-256 certificate fingerprint, and enter the obtained **SHA-256 certificate fingerprint**.
 
 **Step 2:**  After completing the configuration, click **OK** (Check mark icon) to save the changes.
 
 ### Applying for the HUAWEI ID Service
 
-HUAWEI Health Kit uses the HUAWEI ID Service in order the obtain the Health Kit permissions from the user. Head over to [Huawei Developer Console](https://developer.huawei.com/consumer/en/console) and select the HUAWEI ID service from **App Services** under the **Development Section**. Click Apply for HUAWEI ID, agree to the agreement, and fill the information about your application for the required fields on the opened page. For details please visit [Applying for the HUAWEI ID Service](https://developer.huawei.com/consumer/en/doc/apply-id-0000001050069756-V5). 
+HUAWEI Health Kit uses the HUAWEI ID Service in order the obtain the Health Kit permissions from the user. Head over to [Huawei Developer Console](https://developer.huawei.com/consumer/en/console?ha_source=hms1) and select the HUAWEI ID service from **App Services** under the **Development Section**. Click Apply for HUAWEI ID, agree to the agreement, and fill the information about your application for the required fields on the opened page. For details please visit [Applying for the HUAWEI ID Service](https://developer.huawei.com/consumer/en/doc/apply-id-0000001050069756-V5?ha_source=hms1). 
 
 > Note If the HUAWEI ID card can't be found, click Customize console in the upper right corner to add it.
 ### Applying for the Health Kit
 
-In order to successfully activate the Health Kit Service for your application you need to complete the steps in the [Applying for Health Kit](https://developer.huawei.com/consumer/en/doc/apply-kitservice-0000001050071707-V5) document. After the Health Kit Service is authorized and enabled for your application on the [Huawei Developer Console](https://developer.huawei.com/consumer/en/console) you can continue with the integration process.
+In order to successfully activate the Health Kit Service for your application you need to complete the steps in the [Applying for Health Kit](https://developer.huawei.com/consumer/en/doc/apply-kitservice-0000001050071707-V5?ha_source=hms1) document. After the Health Kit Service is authorized and enabled for your application on the [Huawei Developer Console](https://developer.huawei.com/consumer/en/console?ha_source=hms1) you can continue with the integration process.
 ### Integrating the Flutter Health Kit Plugin
 
-**Step 1:** Sign in to [AppGallery Connect](https://developer.huawei.com/consumer/en/service/josp/agc/index.html) and select your project from **My Projects** then navigate to **Project Setting > General information** page, under the **App information** field, click **agconnect-services.json** to download the configuration file.
+**Step 1:** Sign in to [AppGallery Connect](https://developer.huawei.com/consumer/en/service/josp/agc/index.html?ha_source=hms1) and select your project from **My Projects** then navigate to **Project Setting > General information** page, under the **App information** field, click **agconnect-services.json** to download the configuration file.
 
 **Step 2:** Copy the **agconnect-services.json** file to the **android/app** directory of your project.
 
@@ -74,7 +74,7 @@ In order to successfully activate the Health Kit Service for your application yo
   buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven { url 'https://developer.huawei.com/repo/' }
     }
 
@@ -82,7 +82,7 @@ In order to successfully activate the Health Kit Service for your application yo
         /* 
         * <Other dependencies>
         */
-        classpath 'com.huawei.agconnect:agcp:1.4.2.301'
+        classpath 'com.huawei.agconnect:agcp:1.7.2.300'
     }
   }
   ```
@@ -93,7 +93,7 @@ In order to successfully activate the Health Kit Service for your application yo
   allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven { url 'https://developer.huawei.com/repo/' }
     }
   }
@@ -120,7 +120,7 @@ In order to successfully activate the Health Kit Service for your application yo
   }
   ```
 
-**Step 6:** Create a file **<app_dir>/android/key.properties** that contains a reference to your **keystore** which you generated on the previous step ([Generating a Signing Certificate](https://developer.huawei.com/consumer/en/codelab/HMSPreparation/index.html#2)). Add the following lines to the **key.properties** file and change the values regarding to the **keystore** you've generated.  
+**Step 6:** Create a file **<app_dir>/android/key.properties** that contains a reference to your **keystore** which you generated on the previous step ([Generating a Signing Certificate](https://developer.huawei.com/consumer/en/codelab/HMSPreparation/index.html#2?ha_source=hms1)). Add the following lines to the **key.properties** file and change the values regarding to the **keystore** you've generated.  
 
 ```
 storePassword=<your_keystore_password>
@@ -2411,7 +2411,7 @@ Constants provided by the plugin. The summary of the constants are described in 
 | Name |Description|
 |---|---|
 |[TimeUnit](#timeunit)|Options for specifying the time unit.|
-| HiHealthStatusCodes |For error status codes you can refer to [HiHealthStatusCodes](https://developer.huawei.com/consumer/en/doc/development/HMSCore-References-V5/hihealthstatuscodes-0000001050089560-V5#EN-US_TOPIC_0000001053487071__section10673269124).|
+| HiHealthStatusCodes |For error status codes you can refer to [HiHealthStatusCodes](https://developer.huawei.com/consumer/en/doc/development/HMSCore-References-V5/hihealthstatuscodes-0000001050089560-V5#EN-US_TOPIC_0000001053487071__section10673269124?ha_source=hms1).|
 
 ### enum TimeUnit
 Options for specifying the time unit.
@@ -2502,8 +2502,8 @@ If you have questions about how to use HMS samples, try the following options:
 - [Stack Overflow](https://stackoverflow.com/questions/tagged/huawei-mobile-services) is the best place for any programming questions. Be sure to tag your question with 
 **huawei-mobile-services**.
 - [Github](https://github.com/HMS-Core/hms-flutter-plugin) is the official repository for these plugins, You can open an issue or submit your ideas.
-- [Huawei Developer Forum](https://forums.developer.huawei.com/forumPortal/en/home?fid=0101187876626530001) HMS Core Module is great for general questions, or seeking recommendations and opinions.
-- [Huawei Developer Docs](https://developer.huawei.com/consumer/en/doc/overview/HMS-Core-Plugin) is place to official documentation for all HMS Core Kits, you can find detailed documentations in there.
+- [Huawei Developer Forum](https://forums.developer.huawei.com/forumPortal/en/home?fid=0101187876626530001?ha_source=hms1) HMS Core Module is great for general questions, or seeking recommendations and opinions.
+- [Huawei Developer Docs](https://developer.huawei.com/consumer/en/doc/overview/HMS-Core-Plugin?ha_source=hms1) is place to official documentation for all HMS Core Kits, you can find detailed documentations in there.
 
 If you run into a bug in our samples, please submit an issue to the [GitHub repository](https://github.com/HMS-Core/hms-flutter-plugin).
 
@@ -2511,4 +2511,4 @@ If you run into a bug in our samples, please submit an issue to the [GitHub repo
 
 ## 7. Licensing and Terms
 
-Huawei Safety Detect Kit Flutter Plugin is licensed under [Apache 2.0 license](LICENSE)
+Huawei Health Kit Flutter Plugin is licensed under [Apache 2.0 license](LICENSE)

@@ -41,17 +41,11 @@ public interface Constants {
     String FORMAT_KEY = "format";
     String TIME_UNIT_KEY = "timeUnit";
     String DATA_TYPE_KEY = "dataType";
+    String DATA_TYPE_NAME_KEY = "dataTypeName";
     String IS_SUCCESS_KEY = "isSuccess";
     String DATA_COLLECTOR_KEY = "dataCollector";
     String FIELDS_KEY = "fields";
 
-    /**
-     * Returns a {@link DataType} constant from the dataTypeName by using reflection on {@link DataType} class. If a
-     * match is not found null is returned.
-     *
-     * @param dataTypeName The name of the data type to be converted.
-     * @return DataType constant If the name matches, otherwise null.
-     */
     static DataType toDataType(String dataTypeName) {
         java.lang.reflect.Field[] declaredFields = DataType.class.getDeclaredFields();
         List<java.lang.reflect.Field> staticFields = new ArrayList<>();

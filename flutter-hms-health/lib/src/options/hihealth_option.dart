@@ -54,7 +54,7 @@ class HiHealthOption {
   /// Returns the hashCode of the [ActivityRecord] object.
   @override
   int get hashCode {
-    return hashValues(
+    return Object.hash(
       dataType,
       accessType,
     );

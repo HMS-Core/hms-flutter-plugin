@@ -38,13 +38,8 @@ import io.flutter.plugin.common.MethodChannel.Result;
 
 import java.util.Map;
 
-/**
- * {@link AutoRecorderMethodHandler} class is a module that refers to {@link AutoRecorderController}
- *
- * @since v.5.0.5
- */
 public class AutoRecorderMethodHandler implements MethodCallHandler {
-    //ViewModel instance to reach AutoRecorderController tasks
+    // ViewModel instance to reach AutoRecorderController tasks
     private DefaultAutoRecorderService autoRecorderService;
 
     // HMS Health AutoRecorderController

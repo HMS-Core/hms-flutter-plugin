@@ -16,9 +16,4 @@
 
 package com.huawei.hms.flutter.health.foundation.listener;
 
-/**
- * All the Void Results is used among {@link com.huawei.hms.flutter.health} kit.
- *
- * @since v.5.0.5
- */
 public interface VoidResultListener extends ResultListener<Void> { }

@@ -106,12 +106,12 @@ class DeleteOptions {
 
   @override
   int get hashCode {
-    return hashValues(
+    return Object.hash(
       deleteAllData,
       deleteAllActivityRecords,
-      hashList(activityRecords),
-      hashList(dataCollectors),
-      hashList(dataTypes),
+      Object.hashAll(activityRecords ?? <dynamic>[]),
+      Object.hashAll(dataCollectors ?? <dynamic>[]),
+      Object.hashAll(dataTypes ?? <dynamic>[]),
       startTime,
       endTime,
     );
