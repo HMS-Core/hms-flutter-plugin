@@ -2,6 +2,7 @@
     package="com.huawei.hms.flutter.push_example">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!-- Below permissions are to support vibration and send scheduled local notifications -->
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -44,7 +45,7 @@
         <!-- Set push kit auto enable to true (for obtaining the token on initialize)-->
         <meta-data
             android:name="push_kit_auto_init_enabled"
-            android:value="false" />
+            android:value="true" />
 
         <!-- These receivers are for sending scheduled local notifications -->
         <receiver
@@ -56,15 +57,18 @@
         </receiver>
         <receiver
             android:name="com.huawei.hms.flutter.push.receiver.local.HmsLocalNotificationScheduledPublisher"
-            android:enabled="true"
-            android:exported="true" />
+            android:exported="false" />
         <receiver
             android:name="com.huawei.hms.flutter.push.receiver.BackgroundMessageBroadcastReceiver"
-            android:enabled="true"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.huawei.hms.flutter.push.receiver.BACKGROUND_REMOTE_MESSAGE" />
             </intent-filter>
         </receiver>
     </application>
+    <queries>
+        <intent>
+            <action android:name="com.huawei.hms.core.aidlservice" />
+        </intent>
+    </queries>
 </manifest>

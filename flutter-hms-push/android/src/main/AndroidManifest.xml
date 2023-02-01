@@ -7,12 +7,11 @@
     <application>
         <service
             android:name="com.huawei.hms.flutter.push.hms.FlutterHmsMessageService"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.huawei.push.action.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
         <!-- This receiver is for local notification click actions -->
         <receiver android:name="com.huawei.hms.flutter.push.receiver.local.HmsLocalNotificationActionsReceiver" />
         <service

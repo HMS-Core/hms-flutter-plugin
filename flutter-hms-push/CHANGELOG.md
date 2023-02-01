@@ -1,3 +1,9 @@
+## 6.7.0+300
+
+- Updated Push SDK to the latest version 6.7.0.300.
+- Added the function of integrating the HMS Core Installer SDK to prompt users to download HMS Core (APK), ensuring that your app can normally use capabilities of HMS Core (APK).
+- Adapted to Android 13 (targetSdkVersion=33).
+
 ## 6.5.0+300
 
 - Updated Push SDK to the latest version 6.5.0.300.

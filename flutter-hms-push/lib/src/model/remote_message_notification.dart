@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,35 +16,35 @@
 
 part of huawei_push;
 
-class _RemoteMessageNotification {
-  static const String TITLE = 'title';
-  static const String TITLE_LOCALIZATION_KEY = 'titleLocalizationKey';
-  static const String TITLE_LOCALIZATION_ARGS = 'titleLocalizationArgs';
-  static const String BODY_LOCALIZATION_KEY = 'bodyLocalizationKey';
-  static const String BODY_LOCALIZATION_ARGS = 'bodyLocalizationArgs';
-  static const String BODY = 'body';
-  static const String ICON = 'icon';
-  static const String SOUND = 'Sound';
-  static const String TAG = 'Tag';
-  static const String COLOR = 'Color';
-  static const String CLICK_ACTION = 'ClickAction';
-  static const String CHANNEL_ID = 'ChannelId';
-  static const String IMAGE_URL = 'ImageUrl';
-  static const String LINK = 'Link';
-  static const String NOTIFY_ID = 'NotifyId';
-  static const String WHEN = 'When';
-  static const String LIGHT_SETTINGS = 'LightSettings';
-  static const String BADGE_NUMBER = 'BadgeNumber';
-  static const String IMPORTANCE = 'Importance';
-  static const String TICKER = 'Ticker';
-  static const String VIBRATE_CONFIG = 'vibrateConfig';
-  static const String VISIBILITY = 'visibility';
-  static const String INTENT_URI = 'intentUri';
-  static const String IS_AUTO_CANCEL = 'isAutoCancel';
-  static const String IS_LOCAL_ONLY = 'isLocalOnly';
-  static const String IS_DEFAULT_LIGHT = 'isDefaultLight';
-  static const String IS_DEFAULT_SOUND = 'isDefaultSound';
-  static const String IS_DEFAULT_VIBRATE = 'isDefaultVibrate';
+class RemoteMessageNotification {
+  static const String _TITLE = 'title';
+  static const String _TITLE_LOCALIZATION_KEY = 'titleLocalizationKey';
+  static const String _TITLE_LOCALIZATION_ARGS = 'titleLocalizationArgs';
+  static const String _BODY_LOCALIZATION_KEY = 'bodyLocalizationKey';
+  static const String _BODY_LOCALIZATION_ARGS = 'bodyLocalizationArgs';
+  static const String _BODY = 'body';
+  static const String _ICON = 'icon';
+  static const String _SOUND = 'Sound';
+  static const String _TAG = 'Tag';
+  static const String _COLOR = 'Color';
+  static const String _CLICK_ACTION = 'ClickAction';
+  static const String _CHANNEL_ID = 'ChannelId';
+  static const String _IMAGE_URL = 'ImageUrl';
+  static const String _LINK = 'Link';
+  static const String _NOTIFY_ID = 'NotifyId';
+  static const String _WHEN = 'When';
+  static const String _LIGHT_SETTINGS = 'LightSettings';
+  static const String _BADGE_NUMBER = 'BadgeNumber';
+  static const String _IMPORTANCE = 'Importance';
+  static const String _TICKER = 'Ticker';
+  static const String _VIBRATE_CONFIG = 'vibrateConfig';
+  static const String _VISIBILITY = 'visibility';
+  static const String _INTENT_URI = 'intentUri';
+  static const String _IS_AUTO_CANCEL = 'isAutoCancel';
+  static const String _IS_LOCAL_ONLY = 'isLocalOnly';
+  static const String _IS_DEFAULT_LIGHT = 'isDefaultLight';
+  static const String _IS_DEFAULT_SOUND = 'isDefaultSound';
+  static const String _IS_DEFAULT_VIBRATE = 'isDefaultVibrate';
 
   final String? title;
   final String? titleLocalizationKey;
@@ -80,7 +80,7 @@ class _RemoteMessageNotification {
   final List<dynamic>? titleLocalizationArgs;
   final List<dynamic>? bodyLocalizationArgs;
 
-  _RemoteMessageNotification._({
+  const RemoteMessageNotification._({
     this.title,
     this.titleLocalizationKey,
     this.titleLocalizationArgs,
@@ -180,71 +180,72 @@ class _RemoteMessageNotification {
   /// Obtains the intent in a notification message.
   String? get getIntentUri => intentUri;
 
-  factory _RemoteMessageNotification._fromMap(Map<dynamic, dynamic>? map) {
-    if (map == null) return _RemoteMessageNotification._();
-
-    return _RemoteMessageNotification._(
-      title: map[TITLE],
-      titleLocalizationKey: map[TITLE_LOCALIZATION_KEY],
-      titleLocalizationArgs: map[TITLE_LOCALIZATION_ARGS],
-      body: map[BODY],
-      bodyLocalizationKey: map[BODY_LOCALIZATION_KEY],
-      bodyLocalizationArgs: map[BODY_LOCALIZATION_ARGS],
-      icon: map[ICON],
-      sound: map[SOUND],
-      tag: map[TAG],
-      color: map[COLOR],
-      clickAction: map[CLICK_ACTION],
-      channelId: map[CHANNEL_ID],
-      ticker: map[TICKER],
-      intentUri: map[INTENT_URI],
-      isDefaultLight: map[IS_DEFAULT_LIGHT],
-      isDefaultSound: map[IS_DEFAULT_SOUND],
-      isDefaultVibrate: map[IS_DEFAULT_VIBRATE],
-      isAutoCancel: map[IS_AUTO_CANCEL],
-      isLocalOnly: map[IS_LOCAL_ONLY],
-      notifyId: map[NOTIFY_ID],
-      badgeNumber: map[BADGE_NUMBER],
-      importance: map[IMPORTANCE],
-      visibility: map[VISIBILITY],
-      imageUrl: map[IMAGE_URL] == null ? null : Uri.parse(map[IMAGE_URL]),
-      link: map[LINK] == null ? null : Uri.parse(map[LINK]),
-      when: map[WHEN],
-      lightSettings: map[LIGHT_SETTINGS],
-      vibrateConfig: map[VIBRATE_CONFIG],
+  factory RemoteMessageNotification._fromMap(Map<dynamic, dynamic>? map) {
+    if (map == null) {
+      return const RemoteMessageNotification._();
+    }
+    return RemoteMessageNotification._(
+      title: map[_TITLE],
+      titleLocalizationKey: map[_TITLE_LOCALIZATION_KEY],
+      titleLocalizationArgs: map[_TITLE_LOCALIZATION_ARGS],
+      body: map[_BODY],
+      bodyLocalizationKey: map[_BODY_LOCALIZATION_KEY],
+      bodyLocalizationArgs: map[_BODY_LOCALIZATION_ARGS],
+      icon: map[_ICON],
+      sound: map[_SOUND],
+      tag: map[_TAG],
+      color: map[_COLOR],
+      clickAction: map[_CLICK_ACTION],
+      channelId: map[_CHANNEL_ID],
+      ticker: map[_TICKER],
+      intentUri: map[_INTENT_URI],
+      isDefaultLight: map[_IS_DEFAULT_LIGHT],
+      isDefaultSound: map[_IS_DEFAULT_SOUND],
+      isDefaultVibrate: map[_IS_DEFAULT_VIBRATE],
+      isAutoCancel: map[_IS_AUTO_CANCEL],
+      isLocalOnly: map[_IS_LOCAL_ONLY],
+      notifyId: map[_NOTIFY_ID],
+      badgeNumber: map[_BADGE_NUMBER],
+      importance: map[_IMPORTANCE],
+      visibility: map[_VISIBILITY],
+      imageUrl: map[_IMAGE_URL] != null ? Uri.parse(map[_IMAGE_URL]) : null,
+      link: map[_LINK] != null ? Uri.parse(map[_LINK]) : null,
+      when: map[_WHEN],
+      lightSettings: map[_LIGHT_SETTINGS],
+      vibrateConfig: map[_VIBRATE_CONFIG],
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      TITLE: title,
-      TITLE_LOCALIZATION_KEY: titleLocalizationKey,
-      TITLE_LOCALIZATION_ARGS: titleLocalizationArgs,
-      BODY: body,
-      BODY_LOCALIZATION_KEY: bodyLocalizationKey,
-      BODY_LOCALIZATION_ARGS: bodyLocalizationArgs,
-      ICON: icon,
-      SOUND: sound,
-      TAG: tag,
-      COLOR: color,
-      CLICK_ACTION: clickAction,
-      CHANNEL_ID: channelId,
-      TICKER: ticker,
-      INTENT_URI: intentUri,
-      NOTIFY_ID: notifyId,
-      BADGE_NUMBER: badgeNumber,
-      IMPORTANCE: importance,
-      VISIBILITY: visibility,
-      IS_DEFAULT_LIGHT: isDefaultLight,
-      IS_DEFAULT_SOUND: isDefaultSound,
-      IS_DEFAULT_VIBRATE: isDefaultVibrate,
-      IS_AUTO_CANCEL: isAutoCancel,
-      IS_LOCAL_ONLY: isLocalOnly,
-      IMAGE_URL: imageUrl,
-      LINK: link,
-      WHEN: when,
-      LIGHT_SETTINGS: lightSettings,
-      VIBRATE_CONFIG: vibrateConfig,
+      _TITLE: title,
+      _TITLE_LOCALIZATION_KEY: titleLocalizationKey,
+      _TITLE_LOCALIZATION_ARGS: titleLocalizationArgs,
+      _BODY: body,
+      _BODY_LOCALIZATION_KEY: bodyLocalizationKey,
+      _BODY_LOCALIZATION_ARGS: bodyLocalizationArgs,
+      _ICON: icon,
+      _SOUND: sound,
+      _TAG: tag,
+      _COLOR: color,
+      _CLICK_ACTION: clickAction,
+      _CHANNEL_ID: channelId,
+      _TICKER: ticker,
+      _INTENT_URI: intentUri,
+      _NOTIFY_ID: notifyId,
+      _BADGE_NUMBER: badgeNumber,
+      _IMPORTANCE: importance,
+      _VISIBILITY: visibility,
+      _IS_DEFAULT_LIGHT: isDefaultLight,
+      _IS_DEFAULT_SOUND: isDefaultSound,
+      _IS_DEFAULT_VIBRATE: isDefaultVibrate,
+      _IS_AUTO_CANCEL: isAutoCancel,
+      _IS_LOCAL_ONLY: isLocalOnly,
+      _IMAGE_URL: imageUrl,
+      _LINK: link,
+      _WHEN: when,
+      _LIGHT_SETTINGS: lightSettings,
+      _VIBRATE_CONFIG: vibrateConfig,
     };
   }
 }

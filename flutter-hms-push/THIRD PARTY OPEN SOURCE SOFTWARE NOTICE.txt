@@ -11,12 +11,14 @@ APPLICABLE LICENSES FOR MORE DETAILS.
 
 Copyright Notice and License Texts
 
-Software:  com.facebook.fresco:fresco  2.5.0
+Software:  com.facebook.fresco:fresco  2.6.0
 ----------------------------------------------------------------------
 
 Copyright notice:
 
-Copyright (c) Facebook, Inc. and its affiliates.
+MIT License
+
+Copyright (c) Meta Platforms, Inc. and affiliates.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

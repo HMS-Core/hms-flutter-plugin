@@ -1,18 +1,18 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.push.constants;
 
@@ -75,7 +75,7 @@ public enum Code {
     // The message lifetime expires before the message is successfully sent to the APP server.
     ERROR_TTL_EXCEEDED("907122044"),
 
-    //  Huawei Mobile Services (APK) can't connect  Huawei Push  Kit.
+    // Huawei Mobile Services (APK) can't connect  Huawei Push  Kit.
     ERROR_HMS_CLIENT_API("907122048"),
 
     // The current EMUI version is too early to use the capability.
@@ -93,7 +93,7 @@ public enum Code {
     // The SDK is being automatically initialized. Try again later.
     ERROR_AUTO_INITIALIZING("907122054"),
 
-    /*The input parameter is incorrect. Check whether the related configuration information is correct.
+    /* The input parameter is incorrect. Check whether the related configuration information is correct.
      * Example= app_id in the agconnect - services.json file;
      * Check whether the build.gradle file is configured with the certificate signature.
      */
@@ -140,7 +140,7 @@ public enum Code {
      */
     ERROR_CERT_FINGERPRINT_EMPTY("907135702"),
 
-    //Permission is not configured on the AppGallery Connect.
+    // Permission is not configured on the AppGallery Connect.
     ERROR_PERMISSION_LIST_EMPTY("907135703"),
 
     // The authentication information of the application does not exist.

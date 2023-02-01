@@ -4,9 +4,9 @@
 
 ---
 
-HUAWEI Push Kit is a messaging service provided by Huawei. It establishes a messaging channel from the cloud to devices. By integrating Push Kit, you can send messages to your apps on users' devices in real time. This helps you maintain closer ties with users and increases user awareness and engagement with your apps.
+Huawei Push Kit is a messaging service provided by Huawei. It establishes a messaging channel from the cloud to devices. By integrating Push Kit, you can send messages to your apps on users' devices in real time. This helps you maintain closer ties with users and increases user awareness and engagement with your apps.
 
-This plugin enables communication between HUAWEI Push Kit SDK and Flutter platform. It exposes all functionality provided by HUAWEI Push Kit SDK.
+This plugin enables communication between Huawei Push Kit SDK and Flutter platform. It exposes all functionality provided by Huawei Push Kit SDK.
 
 [> Learn More](https://developer.huawei.com/consumer/en/doc/development/HMSCore-Guides/service-introduction-0000001050040060?ha_source=hms1)
 

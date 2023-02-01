@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ class RemoteMessage {
   static const int PRIORITY_HIGH = 1;
   static const int PRIORITY_NORMAL = 2;
 
-  /// Constant Json Field names
+  // Constant Json Field names
   static const String COLLAPSE_KEY = 'collapseKey';
   static const String DATA = 'data';
   static const String DATA_OF_MAP = 'dataOfMap';
@@ -54,13 +54,13 @@ class RemoteMessage {
   final int? sentTime;
   final String? data;
   final Map<String, String>? dataOfMap;
-  final _RemoteMessageNotification? notification;
+  final RemoteMessageNotification? notification;
   final int? sendMode;
   final int? receiptMode;
   final String? analyticInfo;
   final Map<String, String>? analyticInfoMap;
 
-  RemoteMessage._({
+  const RemoteMessage._({
     this.collapseKey,
     this.data,
     this.dataOfMap,
@@ -96,12 +96,12 @@ class RemoteMessage {
   String? get getMessageType => type;
 
   /// Obtains the notification data instance from a message.
-  _RemoteMessageNotification? get getNotification => notification;
+  RemoteMessageNotification? get getNotification => notification;
 
   /// Obtains the message priority set by an app.
   int? get getOriginalUrgency => originalUrgency;
 
-  /// Obtains the message priority set on the HUAWEI Push Kit server.
+  /// Obtains the message priority set on the Huawei Push Kit server.
   int? get getUrgency => urgency;
 
   /// Obtains the maximum cache duration of a message.
@@ -127,9 +127,10 @@ class RemoteMessage {
   /// Different from the [getAnalyticInfo] method, this method directly returns the instance of the Map type.
   Map<String, String>? get getAnalyticInfoMap => analyticInfoMap;
 
-  factory RemoteMessage.fromMap(Map<dynamic, dynamic>? map) {
-    if (map == null) return RemoteMessage._();
-
+  factory RemoteMessage._fromMap(Map<dynamic, dynamic>? map) {
+    if (map == null) {
+      return const RemoteMessage._();
+    }
     return RemoteMessage._(
       to: map[RemoteMessage.TO],
       from: map[RemoteMessage.FROM],
@@ -148,7 +149,7 @@ class RemoteMessage {
             )
           : null,
       notification: map[RemoteMessage.NOTIFICATION] != null
-          ? _RemoteMessageNotification._fromMap(
+          ? RemoteMessageNotification._fromMap(
               map[RemoteMessage.NOTIFICATION],
             )
           : null,
@@ -177,7 +178,7 @@ class RemoteMessage {
       COLLAPSE_KEY: collapseKey ?? '',
       DATA: data ?? '',
       DATA_OF_MAP: dataOfMap ?? <String, String>{},
-      NOTIFICATION: notification != null ? notification!.toMap() : '',
+      NOTIFICATION: notification?.toMap() ?? '',
       SEND_MODE: sendMode ?? '',
       RECEIPT_MODE: receiptMode ?? '',
       ANALYTICS_INFO: analyticInfo ?? '',

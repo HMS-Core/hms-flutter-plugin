@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -81,7 +81,7 @@ class RemoteMessageBuilder {
   /// the user after the user's device goes online.
   ///
   /// If you set [collapse_key] to `0`, offline messages of the app sent to the
-  /// user are determined by the default policy of HUAWEI Push Kit. Generally,
+  /// user are determined by the default policy of Huawei Push Kit. Generally,
   /// only the latest offline message is sent to the user after the user's device goes online.
   ///
   /// You can set [collapse_key] to a value ranging from 1 to 100 to group messages.
@@ -113,7 +113,7 @@ class RemoteMessageBuilder {
     return this;
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> _toMap() {
     return <String, dynamic>{
       RemoteMessage.TO: to,
       RemoteMessage.COLLAPSE_KEY: collapseKey,

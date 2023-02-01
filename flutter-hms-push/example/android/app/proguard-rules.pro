@@ -3,10 +3,11 @@
 -keepattributes Exceptions
 -keepattributes InnerClasses
 -keepattributes Signature
--keep class com.hianalytics.android.**{*;}
+-keepattributes SourceFile,LineNumberTable
+-keep class com.huawei.hianalytics.**{*;}
 -keep class com.huawei.updatesdk.**{*;}
 -keep class com.huawei.hms.**{*;}
--keep class com.huawei.hms.flutter.** { *; }
+-keep class com.huawei.hms.flutter.**{*;}
 -repackageclasses
 
 ## Flutter wrapper

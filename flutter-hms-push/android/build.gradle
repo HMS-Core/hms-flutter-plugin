@@ -1,15 +1,15 @@
-group 'com.huawei.hms.flutter.push'
-version '1.0'
+group "com.huawei.hms.flutter.push"
+version "1.0"
 
 buildscript {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://developer.huawei.com/repo/' }
+        maven { url "https://developer.huawei.com/repo/" }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.0'
+        classpath "com.android.tools.build:gradle:3.6.0"
     }
 }
 
@@ -17,22 +17,25 @@ rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://developer.huawei.com/repo/' }
+        maven { url "https://developer.huawei.com/repo/" }
     }
 }
 
-apply plugin: 'com.android.library'
+apply plugin: "com.android.library"
 
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
+
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 30
     }
+
     lintOptions {
-        disable 'InvalidPackage'
+        disable "InvalidPackage"
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -40,6 +43,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.huawei.hms:push:6.5.0.300'
-    implementation 'com.facebook.fresco:fresco:2.6.0'
+    implementation "com.huawei.hms:push:6.7.0.300"
+    implementation "com.facebook.fresco:fresco:2.6.0"
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -23,12 +23,12 @@ part of huawei_push;
 abstract class HmsProfile {
   /// Account Type Constant.
   ///
-  /// HUAWEI ID that you transfer by [addProfile] or [addMultiSenderProfile] in HmsProfile to verify the account.
+  /// Huawei ID that you transfer by [addProfile] or [addMultiSenderProfile] in HmsProfile to verify the account.
   static const int HUAWEI_PROFILE = 1;
 
   /// Account Type Constant.
   ///
-  /// Account different than the HUAWEI ID, which you transfer by [addProfile] or [addMultiSenderProfile] in HmsProfile to verify the account.
+  /// Account different than the Huawei ID, which you transfer by [addProfile] or [addMultiSenderProfile] in HmsProfile to verify the account.
   static const int CUSTOM_PROFILE = 2;
 
   /// Account Type Constant.
@@ -38,15 +38,18 @@ abstract class HmsProfile {
 
   /// Checks whether the device supports account verification.
   static Future<bool> isSupportProfile() async {
-    final bool? result = await _methodChannel.invokeMethod<bool?>(
+    final bool? result = await _methodChannel.invokeMethod(
       'isSupportProfile',
     );
     return result!;
   }
 
   /// Adds the relationship between the user and app on the device.
-  static Future<void> addProfile(int type, String profileId) async {
-    return await _methodChannel.invokeMethod<void>(
+  static Future<void> addProfile(
+    int type,
+    String profileId,
+  ) async {
+    return await _methodChannel.invokeMethod(
       'addProfile',
       <String, dynamic>{
         'type': type,
@@ -61,7 +64,7 @@ abstract class HmsProfile {
     int type,
     String profileId,
   ) async {
-    return await _methodChannel.invokeMethod<void>(
+    return await _methodChannel.invokeMethod(
       'addMultiSenderProfile',
       <String, dynamic>{
         'subjectId': subjectId,
@@ -72,8 +75,10 @@ abstract class HmsProfile {
   }
 
   /// Deletes the relationship between the user and app on the device.
-  static Future<void> deleteProfile(String profileId) async {
-    return await _methodChannel.invokeMethod<void>(
+  static Future<void> deleteProfile(
+    String profileId,
+  ) async {
+    return await _methodChannel.invokeMethod(
       'deleteProfile',
       <String, String>{
         'profileId': profileId,
@@ -86,7 +91,7 @@ abstract class HmsProfile {
     String subjectId,
     String profileId,
   ) async {
-    return await _methodChannel.invokeMethod<void>(
+    return await _methodChannel.invokeMethod(
       'deleteProfile',
       <String, String>{
         'subjectId': subjectId,

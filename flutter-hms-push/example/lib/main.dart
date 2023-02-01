@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
           HMSLocalNotificationAttr.MESSAGE: data,
         },
       );
-      showResult('onMessageReceived', 'Data: ' + data);
+      showResult('onMessageReceived', 'Data: $data');
     } else {
       showResult('onMessageReceived', 'No data is present.');
     }
@@ -85,12 +85,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onRemoteMessageSendStatus(String event) {
-    showResult('RemoteMessageSendStatus', 'Status: ' + event.toString());
+    showResult('RemoteMessageSendStatus', 'Status: $event');
   }
 
   void _onRemoteMessageSendError(Object error) {
     PlatformException e = error as PlatformException;
-    showResult('RemoteMessageSendError', 'Error: ' + e.toString());
+    showResult('RemoteMessageSendError', 'Error: $e');
   }
 
   void _onNewIntent(String? intentString) {
@@ -104,9 +104,11 @@ class _HomePageState extends State<HomePage> {
       if (parsedString[1] == 'app2') {
         SchedulerBinding.instance?.addPostFrameCallback(
           (Duration timeStamp) {
-            Navigator.of(context).push(MaterialPageRoute<dynamic>(
-              builder: (BuildContext context) => const CustomIntentPage(),
-            ));
+            Navigator.of(context).push(
+              MaterialPageRoute<dynamic>(
+                builder: (BuildContext context) => const CustomIntentPage(),
+              ),
+            );
           },
         );
       }
@@ -115,7 +117,7 @@ class _HomePageState extends State<HomePage> {
 
   void _onIntentError(Object err) {
     PlatformException e = err as PlatformException;
-    debugPrint('Error on intent stream: ' + e.toString());
+    debugPrint('Error on intent stream: $e');
   }
 
   void _onNotificationOpenedApp(dynamic initialNotification) {
@@ -139,13 +141,24 @@ class _HomePageState extends State<HomePage> {
     // If you want auto init enabled, after getting user agreement call this method.
     await Push.setAutoInitEnabled(true);
 
-    Push.getTokenStream.listen(_onTokenEvent, onError: _onTokenError);
-    Push.getIntentStream.listen(_onNewIntent, onError: _onIntentError);
-    Push.onNotificationOpenedApp.listen(_onNotificationOpenedApp);
-    dynamic initialNotification = await Push.getInitialNotification();
+    Push.getTokenStream.listen(
+      _onTokenEvent,
+      onError: _onTokenError,
+    );
+    Push.getIntentStream.listen(
+      _onNewIntent,
+      onError: _onIntentError,
+    );
+    Push.onNotificationOpenedApp.listen(
+      _onNotificationOpenedApp,
+    );
+
+    final dynamic initialNotification = await Push.getInitialNotification();
     _onNotificationOpenedApp(initialNotification);
-    String? intent = await Push.getInitialIntent();
+
+    final String? intent = await Push.getInitialIntent();
     _onNewIntent(intent);
+
     Push.onMessageReceivedStream.listen(
       _onMessageReceived,
       onError: _onMessageReceiveError,
@@ -154,6 +167,7 @@ class _HomePageState extends State<HomePage> {
       _onRemoteMessageSendStatus,
       onError: _onRemoteMessageSendError,
     );
+
     bool backgroundMessageHandler = await Push.registerBackgroundMessageHandler(
       backgroundMessageCallback,
     );
@@ -234,15 +248,23 @@ class _HomePageState extends State<HomePage> {
   }
 
   void subscribe() async {
-    String topic = topicTextController.text;
-    String result = await Push.subscribe(topic);
-    showResult('subscribe', result);
+    try {
+      String topic = topicTextController.text;
+      String result = await Push.subscribe(topic);
+      showResult('subscribe', result);
+    } catch (e) {
+      showResult('subscribe', '$e');
+    }
   }
 
   void unsubscribe() async {
-    String topic = topicTextController.text;
-    String result = await Push.unsubscribe(topic);
-    showResult('unsubscribe', result);
+    try {
+      String topic = topicTextController.text;
+      String result = await Push.unsubscribe(topic);
+      showResult('unsubscribe', result);
+    } catch (e) {
+      showResult('unsubscribe', '$e');
+    }
   }
 
   void enableAutoInit() async {
@@ -282,13 +304,21 @@ class _HomePageState extends State<HomePage> {
   }
 
   void consentOn() async {
-    String? result = await Push.consentOn();
-    showResult('consentOn', result);
+    try {
+      String? result = await Push.consentOn();
+      showResult('consentOn', result);
+    } catch (e) {
+      showResult('consentOn', '$e');
+    }
   }
 
   void consentOff() async {
-    String? result = await Push.consentOff();
-    showResult('consentOff', result);
+    try {
+      String? result = await Push.consentOff();
+      showResult('consentOff', result);
+    } catch (e) {
+      showResult('consentOff', '$e');
+    }
   }
 
   void showResult(
@@ -296,16 +326,16 @@ class _HomePageState extends State<HomePage> {
     String? msg = 'Button pressed.',
   ]) {
     msg ??= '';
-    appendLog('[' + name + ']' + ': ' + msg);
-    debugPrint('[' + name + ']' + ': ' + msg);
-    Push.showToast('[' + name + ']: ' + msg);
+    appendLog('[$name]: $msg');
+    debugPrint('[$name]: $msg');
+    Push.showToast('[$name]: $msg');
   }
 
   void appendLog([
     String msg = 'Button pressed.',
   ]) {
     setState(() {
-      logTextController.text = msg + '\n' + logTextController.text;
+      logTextController.text = '$msg\n${logTextController.text}';
     });
   }
 
@@ -325,7 +355,7 @@ class _HomePageState extends State<HomePage> {
             func();
           },
           style: ElevatedButton.styleFrom(
-            primary: color ?? Colors.grey.shade300,
+            backgroundColor: color ?? Colors.grey.shade300,
           ),
           child: Text(
             txt,
@@ -356,9 +386,12 @@ class _HomePageState extends State<HomePage> {
               children: <Widget>[
                 expandedButton(
                   5,
-                  () => Navigator.of(context).push(MaterialPageRoute<dynamic>(
-                    builder: (BuildContext context) => const CustomIntentPage(),
-                  )),
+                  () => Navigator.of(context).push(
+                    MaterialPageRoute<dynamic>(
+                      builder: (BuildContext context) =>
+                          const CustomIntentPage(),
+                    ),
+                  ),
                   'Open Custom Intent URI Page',
                   color: Colors.deepOrangeAccent,
                 ),
@@ -368,10 +401,12 @@ class _HomePageState extends State<HomePage> {
               children: <Widget>[
                 expandedButton(
                   5,
-                  () => Navigator.of(context).push(MaterialPageRoute<dynamic>(
-                    builder: (BuildContext context) =>
-                        const LocalNotificationPage(),
-                  )),
+                  () => Navigator.of(context).push(
+                    MaterialPageRoute<dynamic>(
+                      builder: (BuildContext context) =>
+                          const LocalNotificationPage(),
+                    ),
+                  ),
                   'Local Notification',
                   color: Colors.blue,
                 ),
@@ -381,9 +416,12 @@ class _HomePageState extends State<HomePage> {
               children: <Widget>[
                 expandedButton(
                   5,
-                  () => Navigator.of(context).push(MaterialPageRoute<dynamic>(
-                    builder: (BuildContext context) => const MultiSenderPage(),
-                  )),
+                  () => Navigator.of(context).push(
+                    MaterialPageRoute<dynamic>(
+                      builder: (BuildContext context) =>
+                          const MultiSenderPage(),
+                    ),
+                  ),
                   'Multi Sender Page',
                   color: Colors.yellow,
                 ),
@@ -757,7 +795,7 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
         receivedNotification.toString(),
       );
     }
-    Push.showToast('Clicked: ' + receivedNotification['action']);
+    Push.showToast('Clicked: ${receivedNotification['action']}');
     if (receivedNotification[HMSLocalNotificationAttr.ACTION] == 'Yes') {
       int id = int.parse(receivedNotification[HMSLocalNotificationAttr.ID]);
       String? tag = receivedNotification[HMSLocalNotificationAttr.TAG];
@@ -975,12 +1013,10 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
     List<Map<String, dynamic>> notifications = await Push.getNotifications();
     showResult(
       'getNotifications',
-      'Active Notifications: ' +
-          notifications.length.toString() +
-          ' notifications',
+      'Active Notifications: ${notifications.length} notifications',
     );
     debugPrint(
-      'getNotification result: ' + notifications.toString(),
+      'getNotification result: $notifications',
     );
   }
 
@@ -989,10 +1025,10 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
         await Push.getScheduledNotifications();
     showResult(
       'getScheduledNotifications',
-      scheduledNotifications.length.toString() + ' scheduled notifications',
+      '${scheduledNotifications.length} scheduled notifications',
     );
     debugPrint(
-      'getScheduledNotification result: ' + scheduledNotifications.toString(),
+      'getScheduledNotification result: $scheduledNotifications',
     );
   }
 
@@ -1000,8 +1036,8 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
     String name, [
     String msg = 'Button pressed.',
   ]) {
-    appendLog('[' + name + ']' + ': ' + msg);
-    debugPrint('[' + name + ']' + ': ' + msg);
+    appendLog('[$name]: $msg');
+    debugPrint('[$name]: $msg');
     if (msg.isNotEmpty) Push.showToast(msg);
   }
 
@@ -1009,7 +1045,7 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
     String msg = 'Button pressed.',
   ]) {
     setState(() {
-      logTextController.text = msg + '\n' + logTextController.text;
+      logTextController.text = '$msg\n${logTextController.text}';
     });
   }
 
@@ -1084,7 +1120,7 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
         child: ElevatedButton(
           onPressed: callback,
           style: ElevatedButton.styleFrom(
-            primary: color ?? Colors.grey.shade300,
+            backgroundColor: color ?? Colors.grey.shade300,
           ),
           child: Text(
             label,
@@ -1361,13 +1397,13 @@ class _MultiSenderPageState extends State<MultiSenderPage> {
 
   void _onMultiSenderTokenReceived(Map<String, dynamic> multiSenderTokenEvent) {
     showResult(
-      '[onMultiSenderTokenReceived]' + multiSenderTokenEvent.toString(),
+      '[onMultiSenderTokenReceived]$multiSenderTokenEvent',
     );
   }
 
   void _onMultiSenderTokenError(dynamic error) {
     showResult(
-      '[onMultiSenderTokenError]' + error.toString(),
+      '[onMultiSenderTokenError]$error',
     );
   }
 
@@ -1449,7 +1485,7 @@ class _MultiSenderPageState extends State<MultiSenderPage> {
         child: ElevatedButton(
           onPressed: callback,
           style: ElevatedButton.styleFrom(
-            primary: color ?? Colors.grey.shade300,
+            backgroundColor: color ?? Colors.grey.shade300,
           ),
           child: Text(
             label,
@@ -1468,16 +1504,16 @@ class _MultiSenderPageState extends State<MultiSenderPage> {
     String? msg = 'Button pressed.',
   ]) {
     msg ??= '';
-    appendLog('[' + name + ']' + ': ' + msg);
-    debugPrint('[' + name + ']' + ': ' + msg);
-    Push.showToast('[' + name + ']: ' + msg);
+    appendLog('[$name]: $msg');
+    debugPrint('[$name]: $msg');
+    Push.showToast('[$name]: $msg');
   }
 
   void appendLog([
     String msg = 'Button pressed.',
   ]) {
     setState(() {
-      logTextController.text = msg + '\n' + logTextController.text;
+      logTextController.text = '$msg\n${logTextController.text}';
     });
   }
 
@@ -1496,7 +1532,7 @@ class _MultiSenderPageState extends State<MultiSenderPage> {
         '[getMultiSenderToken] Success',
       ),
       onError: (dynamic e) => debugPrint(
-        '[getMultiSenderToken] Error: ' + e.toString(),
+        '[getMultiSenderToken] Error: $e',
       ),
     );
   }
@@ -1510,7 +1546,7 @@ class _MultiSenderPageState extends State<MultiSenderPage> {
         '[addProfile] + Success',
       ),
       onError: (dynamic e) => debugPrint(
-        '[addProfile] Error:' + e.toString(),
+        '[addProfile] Error:$e',
       ),
     );
     ProxySettings.setCountryCode('<countryCode>');

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -25,16 +25,13 @@ import 'package:flutter/services.dart';
 part 'src/cli/hms_profile.dart';
 part 'src/cli/proxy_settings.dart';
 part 'src/cli/push.dart';
-
 part 'src/constants/channels.dart';
 part 'src/constants/result_codes.dart';
-
 part 'src/local_notification/attributes.dart';
 part 'src/local_notification/importance.dart';
 part 'src/local_notification/priority.dart';
 part 'src/local_notification/repeat_type.dart';
 part 'src/local_notification/visibility.dart';
-
+part 'src/model/remote_message.dart';
 part 'src/model/remote_message_builder.dart';
 part 'src/model/remote_message_notification.dart';
-part 'src/model/remote_message.dart';

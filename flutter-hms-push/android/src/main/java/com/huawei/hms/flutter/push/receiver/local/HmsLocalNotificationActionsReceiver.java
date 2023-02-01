@@ -1,18 +1,18 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.push.receiver.local;
 
@@ -36,13 +36,17 @@ public class HmsLocalNotificationActionsReceiver extends BroadcastReceiver {
             return;
         }
 
-        final Bundle bundle = intent.getBundleExtra(NotificationConstants.NOTIFICATION);
-        if (bundle == null) {
+        Bundle bundle;
+        try {
+            bundle = intent.getBundleExtra(NotificationConstants.NOTIFICATION);
+            if (bundle == null) {
+                return;
+            }
+        } catch (Exception e) {
             return;
         }
 
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(
-            Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationManager == null) {
             return;
         }
@@ -59,12 +63,14 @@ public class HmsLocalNotificationActionsReceiver extends BroadcastReceiver {
         }
 
         if (BundleUtils.getB(bundle, NotificationConstants.INVOKE_APP, true)) {
-            HmsLocalNotificationController hmsLocalNotificationController = new HmsLocalNotificationController(
-                context.getApplicationContext());
+            HmsLocalNotificationController hmsLocalNotificationController = new HmsLocalNotificationController(context.getApplicationContext());
             hmsLocalNotificationController.invokeApp(bundle);
         } else {
-            Utils.sendIntent(context, PushIntent.LOCAL_NOTIFICATION_CLICK_ACTION, PushIntent.LOCAL_NOTIFICATION_CLICK,
-                BundleUtils.convertJSON(bundle));
+            Utils.sendIntent(
+                    context,
+                    PushIntent.LOCAL_NOTIFICATION_CLICK_ACTION,
+                    PushIntent.LOCAL_NOTIFICATION_CLICK,
+                    BundleUtils.convertJSON(bundle));
         }
     }
 }

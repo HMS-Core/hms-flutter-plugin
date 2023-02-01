@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ abstract class Push {
   ///
   /// Returns the corresponding Push SDK Result Code's Description
   static Future<String> turnOnPush() async {
-    final String? result = await _methodChannel.invokeMethod<String?>(
+    final String? result = await _methodChannel.invokeMethod(
       'turnOnPush',
     );
     return resultCodes[result] ?? resultCodes['-1']!;
@@ -31,7 +31,7 @@ abstract class Push {
   ///
   /// Returns the corresponding Push SDK Result Code's Description
   static Future<String> turnOffPush() async {
-    final String? result = await _methodChannel.invokeMethod<String?>(
+    final String? result = await _methodChannel.invokeMethod(
       'turnOffPush',
     );
     return resultCodes[result] ?? resultCodes['-1']!;
@@ -39,12 +39,12 @@ abstract class Push {
 
   /// Before applying for a token, an app calls this method to obtain its unique AAID.
   ///
-  /// The HUAWEI Push server generates a token for the app based on the AAID.
+  /// The Huawei Push server generates a token for the app based on the AAID.
   /// If the AAID of the app changes, a new token will be generated next time when
   /// the app applies for a token. If an app needs to report statistics events,
   /// it must carry the AAID as its unique ID.
   static Future<String?> getId() async {
-    final String? result = await _methodChannel.invokeMethod<String?>(
+    final String? result = await _methodChannel.invokeMethod(
       'getId',
     );
     return result;
@@ -52,7 +52,7 @@ abstract class Push {
 
   /// Obtains an AAID of Push SDK
   static Future<String?> getAAID() async {
-    final String? result = await _methodChannel.invokeMethod<String?>(
+    final String? result = await _methodChannel.invokeMethod(
       'getAAID',
     );
     return result;
@@ -60,7 +60,7 @@ abstract class Push {
 
   /// Obtains the Application ID from the **agconnect-services.json** file
   static Future<String> getAppId() async {
-    final String? result = await _methodChannel.invokeMethod<String?>(
+    final String? result = await _methodChannel.invokeMethod(
       'getAppId',
     );
     return result!;
@@ -68,16 +68,16 @@ abstract class Push {
 
   /// Obtains an open device ID (ODID) in asynchronous mode.
   static Future<String?> getOdid() async {
-    final String? result = await _methodChannel.invokeMethod<String?>(
+    final String? result = await _methodChannel.invokeMethod(
       'getOdid',
     );
     return result;
   }
 
-  /// Requests a token that is required for accessing HUAWEI Push Kit.
+  /// Requests a token that is required for accessing Huawei Push Kit.
   ///
   /// If there is no local AAID, this method will automatically generate an AAID
-  /// when it is called because the HUAWEI Push Kit server needs to generate a token
+  /// when it is called because the Huawei Push Kit server needs to generate a token
   /// based on the AAID.
   ///
   /// The requested token will be emitted to the token stream. Listen for the stream
@@ -93,7 +93,7 @@ abstract class Push {
 
   /// Obtains the generation timestamp of an AAID.
   static Future<String> getCreationTime() async {
-    final String? result = await _methodChannel.invokeMethod<String?>(
+    final String? result = await _methodChannel.invokeMethod(
       'getCreationTime',
     );
     return result!;
@@ -101,7 +101,7 @@ abstract class Push {
 
   /// Deletes a local AAID and its generation timestamp.
   static Future<String> deleteAAID() async {
-    final String? result = await _methodChannel.invokeMethod<String?>(
+    final String? result = await _methodChannel.invokeMethod(
       'deleteAAID',
     );
     return resultCodes[result]!;
@@ -109,7 +109,7 @@ abstract class Push {
 
   /// Deletes the push token.
   static Future<String> deleteToken(String scope) async {
-    final String? result = await _methodChannel.invokeMethod<String?>(
+    final String? result = await _methodChannel.invokeMethod(
       'deleteToken',
       <String, String>{
         'scope': scope,
@@ -120,8 +120,10 @@ abstract class Push {
 
   /// Deletes a token that a target app developer applies for a sender to integrate
   /// Push Kit in the multi-sender scenario.
-  static Future<String> deleteMultiSenderToken(String subjectId) async {
-    final String? result = await _methodChannel.invokeMethod<String?>(
+  static Future<String> deleteMultiSenderToken(
+    String subjectId,
+  ) async {
+    final String? result = await _methodChannel.invokeMethod(
       'deleteMultiSenderToken',
       <String, String>{
         'subjectId': subjectId,
@@ -155,7 +157,7 @@ abstract class Push {
   static Stream<RemoteMessage> get onMessageReceivedStream {
     return _remoteMessageReceiveEventChannel
         .receiveBroadcastStream()
-        .map((dynamic event) => RemoteMessage.fromMap(json.decode(event)));
+        .map((dynamic event) => RemoteMessage._fromMap(json.decode(event)));
   }
 
   /// Obtains the stream of [remoteMessageSendStatusEventChannel].
@@ -181,9 +183,9 @@ abstract class Push {
   static Future<String> sendRemoteMessage(
     RemoteMessageBuilder remoteMsg,
   ) async {
-    final String? result = await _methodChannel.invokeMethod<String?>(
+    final String? result = await _methodChannel.invokeMethod(
       'send',
-      remoteMsg.toMap(),
+      remoteMsg._toMap(),
     );
     return resultCodes[result]!;
   }
@@ -193,13 +195,13 @@ abstract class Push {
   /// The topic name must match the following regular expression:
   /// `[\u4e00-\u9fa5\w-_.~%]{1,900}`
   ///
-  /// The HUAWEI Push Kit topic messaging function allows you to send messages to
+  /// The Huawei Push Kit topic messaging function allows you to send messages to
   /// multiple devices whose users have subscribed to a specific topic.
-  /// You can write messages about the topic as required, and HUAWEI Push Kit
+  /// You can write messages about the topic as required, and Huawei Push Kit
   /// determines the release path and sends messages to the correct devices in a
   /// reliable manner.
   static Future<String> subscribe(String topic) async {
-    final String? result = await _methodChannel.invokeMethod<String?>(
+    final String? result = await _methodChannel.invokeMethod(
       'subscribe',
       <String, String>{
         'topic': topic,
@@ -213,7 +215,7 @@ abstract class Push {
   /// When a topic is unsubscribed from, the user will not receive a notification
   /// from that topic.
   static Future<String> unsubscribe(String topic) async {
-    final String? result = await _methodChannel.invokeMethod<String?>(
+    final String? result = await _methodChannel.invokeMethod(
       'unsubscribe',
       <String, String>{
         'topic': topic,
@@ -237,7 +239,7 @@ abstract class Push {
   /// ```
   ///
   static Future<String> setAutoInitEnabled(bool enabled) async {
-    final String? result = await _methodChannel.invokeMethod<String?>(
+    final String? result = await _methodChannel.invokeMethod(
       'setAutoInitEnabled',
       <String, bool>{
         'enabled': enabled,
@@ -248,7 +250,7 @@ abstract class Push {
 
   /// Checks whether automatic initialization is enabled.
   static Future<bool> isAutoInitEnabled() async {
-    final bool? result = await _methodChannel.invokeMethod<bool?>(
+    final bool? result = await _methodChannel.invokeMethod(
       'isAutoInitEnabled',
     );
     return result!;
@@ -256,7 +258,7 @@ abstract class Push {
 
   /// Obtains values from the **agconnect-services.json** file.
   static Future<String> getAgConnectValues() async {
-    final String? result = await _methodChannel.invokeMethod<String?>(
+    final String? result = await _methodChannel.invokeMethod(
       'getAgConnectValues',
     );
     return result!;
@@ -264,7 +266,7 @@ abstract class Push {
 
   /// Utility for showing an Android Toast Message
   static Future<void> showToast(String msg) async {
-    await _methodChannel.invokeMethod<void>(
+    await _methodChannel.invokeMethod(
       'showToast',
       <String, String>{
         'msg': msg,
@@ -277,7 +279,7 @@ abstract class Push {
   /// If another notification message with a custom intent is selected, the return
   /// value will be updated.
   static Future<String?> getInitialIntent() async {
-    final String? result = await _methodChannel.invokeMethod<String?>(
+    final String? result = await _methodChannel.invokeMethod(
       'getInitialIntent',
     );
     return result;
@@ -297,7 +299,7 @@ abstract class Push {
   /// Obtains the object that includes **remoteMessage**, **extras** and **uriPage**
   /// of the notification message which launches the app after being tapped.
   static Future<dynamic> getInitialNotification() async {
-    final dynamic result = await _methodChannel.invokeMethod<dynamic>(
+    final dynamic result = await _methodChannel.invokeMethod(
       'getInitialNotification',
     );
     return result;
@@ -329,7 +331,7 @@ abstract class Push {
   static Future<Map<String, dynamic>> localNotification(
     Map<String, dynamic> localNotification,
   ) async {
-    final String? result = await _methodChannel.invokeMethod<String?>(
+    final String? result = await _methodChannel.invokeMethod(
       'localNotification',
       localNotification,
     );
@@ -341,7 +343,7 @@ abstract class Push {
   static Future<Map<String, dynamic>> localNotificationSchedule(
     Map<String, dynamic> localNotification,
   ) async {
-    final String? result = await _methodChannel.invokeMethod<String?>(
+    final String? result = await _methodChannel.invokeMethod(
       'localNotificationSchedule',
       localNotification,
     );
@@ -351,11 +353,10 @@ abstract class Push {
 
   /// Obtains the list of all active notification messages.
   static Future<List<Map<String, dynamic>>> getNotifications() async {
-    final List<dynamic>? notifications =
-        await _methodChannel.invokeMethod<List<dynamic>?>(
+    final List<dynamic>? notifications = await _methodChannel.invokeMethod(
       'getNotifications',
     );
-    List<Map<String, dynamic>> result = <Map<String, dynamic>>[];
+    final List<Map<String, dynamic>> result = <Map<String, dynamic>>[];
     notifications?.forEach((dynamic element) {
       result.add(json.decode(element));
     });
@@ -365,10 +366,10 @@ abstract class Push {
   /// Obtains the list of all pending scheduled notification messages.
   static Future<List<Map<String, dynamic>>> getScheduledNotifications() async {
     final List<dynamic>? scheduledNotifications =
-        await _methodChannel.invokeMethod<List<dynamic>?>(
+        await _methodChannel.invokeMethod(
       'getScheduledNotifications',
     );
-    List<Map<String, dynamic>> result = <Map<String, dynamic>>[];
+    final List<Map<String, dynamic>> result = <Map<String, dynamic>>[];
     scheduledNotifications?.forEach((dynamic element) {
       result.add(json.decode(element));
     });
@@ -377,17 +378,16 @@ abstract class Push {
 
   /// Obtains the list of all notification channels.
   static Future<List<String>> getChannels() async {
-    final List<dynamic>? result =
-        await _methodChannel.invokeMethod<List<dynamic>?>(
+    final List<dynamic>? result = await _methodChannel.invokeMethod(
       'getChannels',
     );
-    List<String> strList = (result ?? <dynamic>[]).cast<String>();
+    final List<String> strList = (result ?? <dynamic>[]).cast<String>();
     return strList;
   }
 
   /// Deletes a notification channel with the given ID.
   static Future<String> deleteChannel(String channelId) async {
-    final String? result = await _methodChannel.invokeMethod<String?>(
+    final String? result = await _methodChannel.invokeMethod(
       'deleteChannel',
       channelId,
     );
@@ -396,7 +396,7 @@ abstract class Push {
 
   /// Checks whether a notification channel with the given ID exists.
   static Future<bool> channelExists(String channelId) async {
-    final bool? result = await _methodChannel.invokeMethod<bool?>(
+    final bool? result = await _methodChannel.invokeMethod(
       'channelExists',
       channelId,
     );
@@ -405,7 +405,7 @@ abstract class Push {
 
   /// Checks whether a notification channel with the given ID is blocked.
   static Future<bool> channelBlocked(String channelId) async {
-    final bool? result = await _methodChannel.invokeMethod<bool?>(
+    final bool? result = await _methodChannel.invokeMethod(
       'channelBlocked',
       channelId,
     );
@@ -414,7 +414,7 @@ abstract class Push {
 
   /// Cancels all pending notification messages registered in the notification manager.
   static Future<void> cancelNotifications() async {
-    await _methodChannel.invokeMethod<void>(
+    await _methodChannel.invokeMethod(
       'cancelNotifications',
     );
   }
@@ -422,21 +422,21 @@ abstract class Push {
   /// Cancels all pending scheduled notifications and the ones registered in the
   /// notification manager
   static Future<void> cancelAllNotifications() async {
-    await _methodChannel.invokeMethod<void>(
+    await _methodChannel.invokeMethod(
       'cancelAllNotifications',
     );
   }
 
   /// Cancels all pending scheduled notification messages.
   static Future<void> cancelScheduledNotifications() async {
-    await _methodChannel.invokeMethod<void>(
+    await _methodChannel.invokeMethod(
       'cancelScheduledNotifications',
     );
   }
 
   /// Cancels all notification messages with the specified tag.
   static Future<void> cancelNotificationsWithTag(String tag) async {
-    await _methodChannel.invokeMethod<void>(
+    await _methodChannel.invokeMethod(
       'cancelNotificationsWithTag',
       tag,
     );
@@ -444,7 +444,7 @@ abstract class Push {
 
   /// Cancels all pending notification messages by a list of IDs.
   static Future<void> cancelNotificationsWithId(List<int> ids) async {
-    await _methodChannel.invokeMethod<void>(
+    await _methodChannel.invokeMethod(
       'cancelNotificationsWithId',
       ids,
     );
@@ -457,7 +457,7 @@ abstract class Push {
   static Future<void> cancelNotificationsWithIdTag(
     Map<int, String> idTags,
   ) async {
-    await _methodChannel.invokeMethod<void>(
+    await _methodChannel.invokeMethod(
       'cancelNotificationsWithIdTag',
       idTags,
     );
@@ -469,7 +469,7 @@ abstract class Push {
   /// The requested token will be emitted to the multi sender token stream. Listen for the stream
   /// from [getMultiSenderTokenStream] to obtain the token.
   static Future<void> getMultiSenderToken(String subjectId) async {
-    await _methodChannel.invokeMethod<void>(
+    await _methodChannel.invokeMethod(
       'getMultiSenderToken',
       <String, String>{
         'subjectId': subjectId,
@@ -479,14 +479,14 @@ abstract class Push {
 
   /// Enables HMS Plugin Method Analytics
   static Future<void> enableLogger() async {
-    await _methodChannel.invokeMethod<void>(
+    await _methodChannel.invokeMethod(
       'enableLogger',
     );
   }
 
   /// Disables HMS Plugin Method Analytics
   static Future<void> disableLogger() async {
-    await _methodChannel.invokeMethod<void>(
+    await _methodChannel.invokeMethod(
       'disableLogger',
     );
   }
@@ -495,15 +495,15 @@ abstract class Push {
   static Future<bool> registerBackgroundMessageHandler(
     void Function(RemoteMessage remoteMessage) callback,
   ) async {
-    int rawHandle =
+    final int rawHandle =
         PluginUtilities.getCallbackHandle(callbackDispatcher)!.toRawHandle();
     debugPrint('rawHandle $rawHandle');
 
-    int rawCallback =
+    final int rawCallback =
         PluginUtilities.getCallbackHandle(callback)!.toRawHandle();
     debugPrint('rawCallback $rawCallback');
 
-    final bool? result = await _methodChannel.invokeMethod<bool?>(
+    final bool? result = await _methodChannel.invokeMethod(
       'registerBackgroundMessageHandler',
       <String, int>{
         'rawHandle': rawHandle,
@@ -515,7 +515,7 @@ abstract class Push {
 
   /// Revokes the background message handler.
   static Future<bool> removeBackgroundMessageHandler() async {
-    final bool? result = await _methodChannel.invokeMethod<bool?>(
+    final bool? result = await _methodChannel.invokeMethod(
       'removeBackgroundMessageHandler',
     );
     return result!;
@@ -523,7 +523,7 @@ abstract class Push {
 
   /// Enables the function of receiving messages from the User Engagement by Push service.
   static Future<String> consentOn() async {
-    final String? result = await _methodChannel.invokeMethod<String?>(
+    final String? result = await _methodChannel.invokeMethod(
       'consentOn',
     );
     return resultCodes[result]!;
@@ -531,7 +531,7 @@ abstract class Push {
 
   /// Disables the function of receiving messages from the User Engagement by Push service.
   static Future<String> consentOff() async {
-    final String? result = await _methodChannel.invokeMethod<String?>(
+    final String? result = await _methodChannel.invokeMethod(
       'consentOff',
     );
     return resultCodes[result]!;
@@ -543,21 +543,16 @@ abstract class Push {
 void callbackDispatcher() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  _backgroundMessageMethodChannel.setMethodCallHandler(
-    (MethodCall call) async {
-      RemoteMessage remoteMessage = RemoteMessage.fromMap(
-        Map<String, dynamic>.from(call.arguments[1]),
-      );
-      final Function rawHandler = PluginUtilities.getCallbackFromHandle(
-        CallbackHandle.fromRawHandle(
-          call.arguments[0],
-        ),
-      )!;
-      rawHandler(remoteMessage);
-    },
-  );
-
-  _backgroundMessageMethodChannel.invokeMethod<void>(
+  _backgroundMessageMethodChannel.setMethodCallHandler((MethodCall call) async {
+    final RemoteMessage remoteMessage = RemoteMessage._fromMap(
+      Map<String, dynamic>.from(call.arguments[1]),
+    );
+    final Function rawHandler = PluginUtilities.getCallbackFromHandle(
+      CallbackHandle.fromRawHandle(call.arguments[0]),
+    )!;
+    rawHandler(remoteMessage);
+  });
+  _backgroundMessageMethodChannel.invokeMethod(
     'BackgroundRunner.initialize',
   );
 }
