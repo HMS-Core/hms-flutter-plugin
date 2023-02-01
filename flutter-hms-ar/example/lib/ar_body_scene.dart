@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -15,26 +15,30 @@
 */
 
 import 'package:flutter/material.dart';
-import 'package:huawei_ar/ar_engine_library.dart';
+import 'package:huawei_ar/huawei_ar.dart';
 
 class ArBodyScene extends StatefulWidget {
-  ArBodyScene({Key key}) : super(key: key);
+  const ArBodyScene({Key? key}) : super(key: key);
 
   @override
-  _ArBodySceneState createState() => _ArBodySceneState();
+  State<ArBodyScene> createState() => _ArBodySceneState();
 }
 
 class _ArBodySceneState extends State<ArBodyScene> {
-  ARSceneController arSceneController;
+  late ARSceneController arSceneController;
 
-  _onARSceneCreated(ARSceneController controller) {
+  void _onARSceneCreated(ARSceneController controller) {
     arSceneController = controller;
-    arSceneController.onDetectTrackable =
-        (arHand) => _bodyDetectCallback(arHand);
+    arSceneController.onDetectTrackable = (dynamic arBody) {
+      _bodyDetectCallback(arBody);
+    };
+    arSceneController.handleMessageData = (String text) {
+      debugPrint('handleMessageData:$text');
+    };
   }
 
-  _bodyDetectCallback(ARBody arBody) {
-    print("ARBody detected: " + arBody?.toString());
+  void _bodyDetectCallback(ARBody arBody) {
+    debugPrint('ARBody detected: $arBody');
   }
 
   @override

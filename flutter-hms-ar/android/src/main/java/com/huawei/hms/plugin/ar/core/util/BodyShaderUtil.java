@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -18,29 +18,30 @@ package com.huawei.hms.plugin.ar.core.util;
 
 public class BodyShaderUtil {
     public static final String LS = System.lineSeparator();
-    public static final String BODY_VERTEX =
-            "uniform vec4 inColor;" + LS
+
+    public static final String BODY_VERTEX = 
+            "uniform vec4 inColor;" + LS 
                     + "attribute vec4 inPosition;" + LS
-                    + "uniform float inPointSize;" + LS
-                    + "varying vec4 varColor;" + LS
+                    + "uniform float inPointSize;" + LS 
+                    + "varying vec4 varColor;" + LS 
                     + "uniform mat4 inProjectionMatrix;" + LS
-                    + "uniform float inCoordinateSystem;" + LS
+                    + "uniform float inCoordinateSystem;" + LS 
                     + "void main() {" + LS
-                    + "    vec4 position = vec4(inPosition.xyz, 1.0);" + LS
+                    + "    vec4 position = vec4(inPosition.xyz, 1.0);" + LS 
                     + "    if (inCoordinateSystem == 2.0) {" + LS
-                    + "        position = inProjectionMatrix * position;" + LS
-                    + "    }" + LS
+                    + "        position = inProjectionMatrix * position;" + LS 
+                    + "    }" + LS 
                     + "    gl_Position = position;" + LS
-                    + "    varColor = inColor;" + LS
-                    + "    gl_PointSize = inPointSize;" + LS
+                    + "    varColor = inColor;" + LS 
+                    + "    gl_PointSize = inPointSize;" + LS 
                     + "}";
 
-    public static final String BODY_FRAGMENT =
-            "precision mediump float;" + LS
-                    + "varying vec4 varColor;" + LS
-                    + "void main() {" + LS
-                    + "    gl_FragColor = varColor;" + LS
-                    + "}";
+    public static final String BODY_FRAGMENT = 
+            "precision mediump float;" + LS 
+            + "varying vec4 varColor;" + LS
+            + "void main() {" + LS 
+            + "    gl_FragColor = varColor;" + LS 
+            + "}";
 
     private BodyShaderUtil() {
     }

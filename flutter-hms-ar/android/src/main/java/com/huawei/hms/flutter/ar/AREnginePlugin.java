@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -30,13 +30,11 @@ import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 public class AREnginePlugin implements FlutterPlugin, ActivityAware {
     private FlutterPluginBinding pluginBinding;
 
     private MethodChannel arEngineCommonChannel;
-    private MethodChannel arEnginePermissionChannel;
 
     private AREngineCommonHandler arEngineCommonHandler;
 
@@ -44,28 +42,22 @@ public class AREnginePlugin implements FlutterPlugin, ActivityAware {
 
     private void initChannels(BinaryMessenger messenger) {
         arEngineCommonChannel = new MethodChannel(messenger, Channel.AR_ENGINE_COMMON);
-        arEnginePermissionChannel = new MethodChannel(messenger, Channel.AR_ENGINE_PERMISSION);
     }
 
     private void initHandlers() {
         if (arEngineCommonHandler == null) {
             arEngineCommonHandler = new AREngineCommonHandler(activity);
             arEngineCommonChannel.setMethodCallHandler(arEngineCommonHandler);
-            arEnginePermissionChannel.setMethodCallHandler(arEngineCommonHandler);
         }
     }
 
     private void removeChannels() {
         arEngineCommonChannel = null;
-        arEnginePermissionChannel = null;
     }
 
     private void removeHandlers() {
         if (arEngineCommonChannel != null) {
             arEngineCommonChannel.setMethodCallHandler(null);
-        }
-        if (arEnginePermissionChannel != null) {
-            arEnginePermissionChannel.setMethodCallHandler(null);
         }
         arEngineCommonHandler = null;
     }
@@ -74,15 +66,6 @@ public class AREnginePlugin implements FlutterPlugin, ActivityAware {
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
         initChannels(flutterPluginBinding.getBinaryMessenger());
         this.pluginBinding = flutterPluginBinding;
-    }
-
-    public static void registerWith(Registrar registrar) {
-        AREnginePlugin instance = new AREnginePlugin();
-        instance.initChannels(registrar.messenger());
-        instance.initHandlers();
-        registrar.platformViewRegistry()
-            .registerViewFactory(Constants.VIEW_TYPE,
-                new ARSceneViewFactory(registrar.messenger(), registrar.activity()));
     }
 
     @Override

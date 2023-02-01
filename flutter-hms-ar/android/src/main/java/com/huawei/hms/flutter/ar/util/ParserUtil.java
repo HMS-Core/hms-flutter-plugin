@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -18,12 +18,13 @@ package com.huawei.hms.flutter.ar.util;
 
 import android.util.Log;
 
+import com.huawei.hiar.ARConfigBase;
 import com.huawei.hms.plugin.ar.core.config.ColorRGBA;
+
+import io.flutter.FlutterInjector;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import io.flutter.embedding.engine.loader.FlutterLoader;
 
 public final class ParserUtil {
     private static final String TAG = ParserUtil.class.getSimpleName();
@@ -39,10 +40,48 @@ public final class ParserUtil {
 
     public static String getDefaultPath(JSONObject sceneConfig, String pathKey) {
         try {
-            return FlutterLoader.getInstance().getLookupKeyForAsset(sceneConfig.getString(pathKey));
+            return FlutterInjector.instance().flutterLoader().getLookupKeyForAsset(sceneConfig.getString(pathKey));
         } catch (JSONException e) {
             Log.d(TAG, "Error while parsing a path from scene config. Error: " + e.getMessage(), e.getCause());
         }
         return "";
+    }
+
+    public static ARConfigBase.FocusMode intToFocusModeEnum(int val) {
+        if (val == ARConfigBase.FocusMode.FIXED_FOCUS.ordinal()) {
+            return ARConfigBase.FocusMode.FIXED_FOCUS;
+        }
+        return ARConfigBase.FocusMode.AUTO_FOCUS;
+    }
+
+    public static ARConfigBase.PowerMode intToPowerModeEnum(int val) {
+        if (val == ARConfigBase.PowerMode.NORMAL.ordinal()) {
+            return ARConfigBase.PowerMode.NORMAL;
+        } else if (val == ARConfigBase.PowerMode.POWER_SAVING.ordinal()) {
+            return ARConfigBase.PowerMode.POWER_SAVING;
+        } else if (val == ARConfigBase.PowerMode.ULTRA_POWER_SAVING.ordinal()) {
+            return ARConfigBase.PowerMode.ULTRA_POWER_SAVING;
+        } else {
+            return ARConfigBase.PowerMode.PERFORMANCE_FIRST;
+        }
+    }
+
+    public static ARConfigBase.UpdateMode intToUpdateModeEnum(int val) {
+        if (val == ARConfigBase.UpdateMode.BLOCKING.ordinal()) {
+            return ARConfigBase.UpdateMode.BLOCKING;
+        }
+        return ARConfigBase.UpdateMode.LATEST_CAMERA_IMAGE;
+    }
+
+    public static ARConfigBase.PlaneFindingMode intToPlaneFindingModeEnum(int val) {
+        if (val == ARConfigBase.PlaneFindingMode.DISABLED.ordinal()) {
+            return ARConfigBase.PlaneFindingMode.DISABLED;
+        } else if (val == ARConfigBase.PlaneFindingMode.VERTICAL_ONLY.ordinal()) {
+            return ARConfigBase.PlaneFindingMode.VERTICAL_ONLY;
+        } else if (val == ARConfigBase.PlaneFindingMode.HORIZONTAL_ONLY.ordinal()) {
+            return ARConfigBase.PlaneFindingMode.HORIZONTAL_ONLY;
+        } else {
+            return ARConfigBase.PlaneFindingMode.ENABLE;
+        }
     }
 }

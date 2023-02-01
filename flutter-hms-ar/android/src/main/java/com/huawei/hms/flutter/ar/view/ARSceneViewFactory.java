@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,17 +16,20 @@
 
 package com.huawei.hms.flutter.ar.view;
 
+import static com.huawei.hms.flutter.ar.constants.ARSceneType.AUGMENTED_IMAGE;
 import static com.huawei.hms.flutter.ar.constants.ARSceneType.BODY;
+import static com.huawei.hms.flutter.ar.constants.ARSceneType.CLOUD3D_OBJECT;
 import static com.huawei.hms.flutter.ar.constants.ARSceneType.FACE;
 import static com.huawei.hms.flutter.ar.constants.ARSceneType.HAND;
+import static com.huawei.hms.flutter.ar.constants.ARSceneType.SCENE_MESH;
 import static com.huawei.hms.flutter.ar.constants.ARSceneType.WORLD;
+import static com.huawei.hms.flutter.ar.constants.ARSceneType.WORLD_BODY;
 
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
 import com.huawei.hms.flutter.ar.constants.ARSceneType;
-import com.huawei.hms.flutter.ar.util.PermissionUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,8 +41,8 @@ import io.flutter.plugin.platform.PlatformViewFactory;
 
 public class ARSceneViewFactory extends PlatformViewFactory {
     private static final String TAG = ARSceneViewFactory.class.getSimpleName();
-    private BinaryMessenger messenger;
-    private Activity activity;
+    private final BinaryMessenger messenger;
+    private final Activity activity;
 
     public ARSceneViewFactory(BinaryMessenger messenger, Activity activity) {
         super(JSONMessageCodec.INSTANCE);
@@ -49,9 +52,6 @@ public class ARSceneViewFactory extends PlatformViewFactory {
 
     @Override
     public PlatformView create(Context context, int viewId, Object args) {
-        if (!PermissionUtil.hasPermission(activity)) {
-            PermissionUtil.requestCameraPermission(activity);
-        }
         JSONObject jsonSceneConfig;
         try {
             jsonSceneConfig = new JSONObject(args.toString());
@@ -72,6 +72,14 @@ public class ARSceneViewFactory extends PlatformViewFactory {
                 return FACE;
             case "arBody":
                 return BODY;
+            case "arCloud3DObject":
+                return CLOUD3D_OBJECT;
+            case "arAugmentedImage":
+                return AUGMENTED_IMAGE;
+            case "arWorldBody":
+                return WORLD_BODY;
+            case "arSceneMesh":
+                return SCENE_MESH;
             default:
                 return WORLD;
         }

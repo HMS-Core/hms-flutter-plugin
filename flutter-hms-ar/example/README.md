@@ -1,4 +1,4 @@
-# Huawei AR Kit Flutter Plugin - Demo
+# Huawei AR Engine Flutter Plugin - Demo
 
 ---
 
@@ -13,7 +13,7 @@
 
 ## 1. Introduction
 
-This demo project is an example to demonstrate the features of the **Huawei Flutter AR Kit** Plugin.
+This demo project is an example to demonstrate the features of the **Huawei Flutter AR Engine** Plugin.
 
 ---
 
@@ -64,4 +64,4 @@ No configuration needed.
 
 ## 4. Licensing and Terms
 
-Huawei AR Kit Flutter Plugin - Demo is licensed under [Apache 2.0 license](LICENSE)
+Huawei AR Engine Flutter Plugin - Demo is licensed under [Apache 2.0 license](LICENSE)

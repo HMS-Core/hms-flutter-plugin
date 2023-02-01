@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -15,24 +15,30 @@
 */
 
 import 'package:flutter/material.dart';
-import 'package:huawei_ar/ar_engine_library.dart';
+import 'package:huawei_ar/huawei_ar.dart';
 
 class ARWorldScene extends StatefulWidget {
+  const ARWorldScene({Key? key}) : super(key: key);
+
   @override
-  _ARWorldSceneState createState() => _ARWorldSceneState();
+  State<ARWorldScene> createState() => _ARWorldSceneState();
 }
 
 class _ARWorldSceneState extends State<ARWorldScene> {
-  ARSceneController arSceneController;
+  late ARSceneController arSceneController;
 
-  _onARSceneCreated(ARSceneController controller) {
+  void _onARSceneCreated(ARSceneController controller) {
     arSceneController = controller;
-    arSceneController.onDetectTrackable =
-        (arPlane) => _onDetectARPlane(arPlane);
+    arSceneController.onDetectTrackable = (dynamic arPlane) {
+      _onDetectARPlane(arPlane);
+    };
+    arSceneController.handleMessageData = (String text) {
+      debugPrint('handleMessageData:$text');
+    };
   }
 
-  _onDetectARPlane(ARPlane arPlane) {
-    print("ARPlane detected: " + arPlane?.toString());
+  void _onDetectARPlane(ARPlane arPlane) {
+    debugPrint('ARPlane detected: $arPlane');
   }
 
   @override
@@ -42,21 +48,28 @@ class _ARWorldSceneState extends State<ARWorldScene> {
         child: AREngineScene(
           ARSceneType.WORLD,
           ARSceneWorldConfig(
-              objPath: "assets/bob.obj",
-              texturePath: "assets/bob_texture.png",
-              // Label customization (Optional)
-              colorFloor: Colors.brown,
-              colorOther: Colors.red,
-              colorTable: Colors.amber,
-              colorSeat: Colors.blue,
-              colorWall: Colors.green,
-              textFloor: "Floor",
-              textOther: "Other",
-              textSeat: "Seat",
-              textTable: "Table",
-              textWall: "Wall",
-              imageCeiling: "assets/blue_texture.png",
-              drawLabel: true),
+            objPath: 'assets/bob.obj',
+            texturePath: 'assets/bob_texture.png',
+            // Label customization (Optional)
+            colorFloor: Colors.brown,
+            colorOther: Colors.red,
+            colorTable: Colors.amber,
+            colorSeat: Colors.blue,
+            colorWall: Colors.green,
+            colorBed: Colors.cyan,
+            colorDoor: Colors.purple,
+            colorWindow: Colors.orange,
+            textFloor: 'Floor',
+            textOther: 'Other',
+            textSeat: 'Seat',
+            textTable: 'Table',
+            textWall: 'Wall',
+            textBed: 'Bed',
+            textDoor: 'Door',
+            textWindow: 'Window',
+            imageCeiling: 'assets/blue_texture.png',
+            drawLabel: true,
+          ),
           onArSceneCreated: _onARSceneCreated,
         ),
       ),

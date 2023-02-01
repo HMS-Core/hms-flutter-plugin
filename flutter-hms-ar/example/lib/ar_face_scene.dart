@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -15,27 +15,31 @@
 */
 
 import 'package:flutter/material.dart';
-import 'package:huawei_ar/ar_engine_library.dart';
+import 'package:huawei_ar/huawei_ar.dart';
 
 class ArFaceScreen extends StatefulWidget {
-  ArFaceScreen({Key key}) : super(key: key);
+  const ArFaceScreen({Key? key}) : super(key: key);
 
   @override
-  _ArFaceScreenState createState() => _ArFaceScreenState();
+  State<ArFaceScreen> createState() => _ArFaceScreenState();
 }
 
 class _ArFaceScreenState extends State<ArFaceScreen> {
-  ARSceneController arSceneController;
+  late ARSceneController arSceneController;
 
-  _onSceneCreated(ARSceneController controller) {
-    print("ARScene created");
+  void _onSceneCreated(ARSceneController controller) {
+    debugPrint('ARScene created');
     arSceneController = controller;
-    arSceneController.onDetectTrackable =
-        (arFace) => _faceDetectCallback(arFace);
+    arSceneController.onDetectTrackable = (dynamic arFace) {
+      _faceDetectCallback(arFace);
+    };
+    arSceneController.handleMessageData = (String text) {
+      debugPrint('handleMessageData:$text');
+    };
   }
 
   void _faceDetectCallback(ARFace arFace) {
-    print("ARFace detected: " + arFace?.toString());
+    debugPrint('ARFace detected: $arFace');
   }
 
   @override
@@ -45,11 +49,12 @@ class _ArFaceScreenState extends State<ArFaceScreen> {
         child: AREngineScene(
           ARSceneType.FACE,
           ARSceneFaceConfig(
-              pointSize: 5.0,
-              depthColor: Colors.amber,
-              // Texture will override the color if specified
-              // texturePath: "assets/blue_texture.png",
-              drawFace: true),
+            pointSize: 5.0,
+            depthColor: Colors.amber,
+            // Texture will override the color if specified
+            // texturePath: 'assets/blue_texture.png',
+            drawFace: true,
+          ),
           onArSceneCreated: _onSceneCreated,
         ),
       ),

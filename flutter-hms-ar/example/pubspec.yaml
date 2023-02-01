@@ -1,14 +1,12 @@
 name: huawei_ar_example
-version: 2.13.0+5
 description: Demonstrates how to use the Huawei AR Engine Flutter Plugin.
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-
   huawei_ar:
     path: ../
 
@@ -25,3 +23,5 @@ flutter:
     - assets/bob.obj
     - assets/bob_texture.png
     - assets/blue_texture.png
+    - assets/image_default.png
+    - assets/mode_id.json

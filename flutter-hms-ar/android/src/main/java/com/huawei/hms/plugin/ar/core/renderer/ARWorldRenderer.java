@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -21,75 +21,81 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.opengl.GLES20;
 import android.util.Log;
-import android.view.MotionEvent;
+import android.util.Pair;
 
-import com.huawei.hms.plugin.ar.core.config.ARPluginConfigBase;
+import com.huawei.hiar.ARAnchor;
+import com.huawei.hiar.ARAugmentedImage;
+import com.huawei.hiar.ARCamera;
+import com.huawei.hiar.ARConfigBase;
+import com.huawei.hiar.ARFrame;
+import com.huawei.hiar.ARLightEstimate;
+import com.huawei.hiar.ARPlane;
+import com.huawei.hiar.ARPointCloud;
+import com.huawei.hiar.ARSession;
+import com.huawei.hiar.ARTrackable;
 import com.huawei.hms.plugin.ar.core.config.ARPluginConfigWorld;
 import com.huawei.hms.plugin.ar.core.config.ColorRGBA;
 import com.huawei.hms.plugin.ar.core.helper.DisplayRotationManager;
 import com.huawei.hms.plugin.ar.core.helper.GestureEvent;
 import com.huawei.hms.plugin.ar.core.helper.LabelDisplay;
 import com.huawei.hms.plugin.ar.core.helper.ObjectDisplay;
+import com.huawei.hms.plugin.ar.core.helper.PointCloudRenderer;
 import com.huawei.hms.plugin.ar.core.helper.TextureDisplay;
-import com.huawei.hms.plugin.ar.core.helper.VirtualObject;
-
-import com.huawei.hiar.ARCamera;
-import com.huawei.hiar.ARFrame;
-import com.huawei.hiar.ARHitResult;
-import com.huawei.hiar.ARLightEstimate;
-import com.huawei.hiar.ARPlane;
-import com.huawei.hiar.ARPoint;
-import com.huawei.hiar.ARPose;
-import com.huawei.hiar.ARSession;
-import com.huawei.hiar.ARTrackable;
+import com.huawei.hms.plugin.ar.core.helper.augmentedImage.ImageKeyLineDisplay;
+import com.huawei.hms.plugin.ar.core.helper.augmentedImage.ImageKeyPointDisplay;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-public class ARWorldRenderer extends ARBaseRenderer {
+public class ARWorldRenderer extends ARBaseDrawObject {
     private static final String TAG = ARBaseRenderer.class.getSimpleName();
+
     private static final int PROJ_MATRIX_OFFSET = 0;
+
     private static final float PROJ_MATRIX_NEAR = 0.1f;
+
     private static final float PROJ_MATRIX_FAR = 100.0f;
-    private static final float MATRIX_SCALE_SX = -1.0f;
-    private static final float MATRIX_SCALE_SY = -1.0f;
 
-    private static final float[] BLUE_COLORS = new float[]{66.0f, 133.0f, 244.0f, 255.0f};
-    private static final float[] GREEN_COLORS = new float[]{66.0f, 133.0f, 244.0f, 255.0f};
-
-    private ArrayBlockingQueue<GestureEvent> queuedSingleTaps;
-
-    private ObjectDisplay objectDisplay;
     private LabelDisplay labelDisplay;
-    private List<VirtualObject> virtualObjects;
-    private VirtualObject selectedObject;
+
     private Context context;
 
+    private ImageKeyPointDisplay imageKeyPointDisplay;
+
+    private ImageKeyLineDisplay imageKeyLineDisplay;
+
+    private PointCloudRenderer pointCloud = new PointCloudRenderer();
+
+    private Map<Integer, Pair<ARAugmentedImage, ARAnchor>> augmentedImageMap = new HashMap<>();
+
     public ARWorldRenderer(ARSession arSession, DisplayRotationManager displayRotationManager,
-        TextureDisplay textureDisplay, ARPluginConfigBase configBase,
+        TextureDisplay textureDisplay, ARPluginConfigWorld pluginConfig,
         ArrayBlockingQueue<GestureEvent> queuedSingleTaps, Context context) {
-        super(arSession, displayRotationManager, textureDisplay, configBase);
+        super(arSession, displayRotationManager, textureDisplay, pluginConfig);
         this.queuedSingleTaps = queuedSingleTaps;
         this.context = context;
         virtualObjects = new ArrayList<>();
-        objectDisplay = new ObjectDisplay(pluginConfig);
+        objectDisplay = new ObjectDisplay(pluginConfig.getObjPath(), pluginConfig.getTexturePath());
         labelDisplay = new LabelDisplay();
+        imageKeyPointDisplay = new ImageKeyPointDisplay(pluginConfig.getPointColor(), pluginConfig.getPointSize());
+        imageKeyLineDisplay = new ImageKeyLineDisplay(pluginConfig.getLineColor(), pluginConfig.getLineWidth());
     }
 
     @Override
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
-        GLES20.glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-        textureDisplay.init();
+        super.onSurfaceCreated(gl10, eglConfig);
         objectDisplay.init(context);
+        pointCloud.init(context);
         initLabelDisplay();
     }
 
@@ -102,48 +108,95 @@ public class ARWorldRenderer extends ARBaseRenderer {
 
     @Override
     public void onSurfaceChanged(GL10 gl10, int width, int height) {
-        textureDisplay.onSurfaceChanged(width, height);
-        GLES20.glViewport(0, 0, width, height);
-        displayRotationManager.updateViewportRotation(width, height);
+        super.onSurfaceChanged(gl10, width, height);
         objectDisplay.setSize(width, height);
     }
 
     @Override
     public void onDrawFrame(GL10 gl10) {
-        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
-        if (arSession == null) return;
-        if (displayRotationManager.isDeviceRotated())
-            displayRotationManager.updateARSessionDisplayGeometry(arSession);
-        arSession.setCameraTextureName(textureDisplay.getExternalTextureId());
+        super.onDrawFrame(gl10);
+
         ARFrame arFrame = arSession.update();
+
+        setEnvTextureData();
+
         ARCamera arCamera = arFrame.getCamera();
 
         float[] projectionMatrix = new float[16];
         arCamera.getProjectionMatrix(projectionMatrix, PROJ_MATRIX_OFFSET, PROJ_MATRIX_NEAR, PROJ_MATRIX_FAR);
         textureDisplay.onDrawFrame(arFrame);
-        callbackHelper.onDrawFrame(new ArrayList<>(arSession.getAllTrackables(ARPlane.class)));
+
+        if (hasError) {
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        updateMessageData(arFrame, sb);
+        messageDataListener.handleMessageData(sb.toString());
+
+        if (callbackHelper != null) {
+            callbackHelper.onDrawFrame(new ArrayList<>(arSession.getAllTrackables(ARPlane.class)));
+        }
         float[] viewMatrix = new float[16];
         arCamera.getViewMatrix(viewMatrix, 0);
         handleGestureEvent(arFrame, arCamera, projectionMatrix, viewMatrix);
         ARLightEstimate lightEstimate = arFrame.getLightEstimate();
         float lightPixelIntensity = 1;
-        if (lightEstimate.getState() != ARLightEstimate.State.NOT_VALID)
+        if (lightEstimate.getState() != ARLightEstimate.State.NOT_VALID) {
             lightPixelIntensity = lightEstimate.getPixelIntensity();
+        }
 
-        if (((ARPluginConfigWorld) pluginConfig).isLabelDraw())
-            labelDisplay.onDrawFrame(arSession.getAllTrackables(ARPlane.class),
-                    arCamera.getDisplayOrientedPose(), projectionMatrix);
+
+
+        if (((ARPluginConfigWorld) pluginConfig).isLabelDraw()) {
+            labelDisplay.onDrawFrame(arSession.getAllTrackables(ARPlane.class), arCamera.getDisplayOrientedPose(),
+                projectionMatrix);
+        }
+
+        ARPointCloud arPointCloud = arFrame.acquirePointCloud();
+
         drawAllObjects(projectionMatrix, viewMatrix, lightPixelIntensity);
+        pointCloud.onDrawFrame(arPointCloud, viewMatrix, projectionMatrix);
+
+        if (!lock) {
+            cameraConfigListener.handleCameraConfigData(arSession.getCameraConfig());
+            cameraIntrinsicsListener.handleCameraIntrinsicsData(arCamera.getCameraImageIntrinsics());
+            lock = true;
+        }
+
+        drawAugmentedImages(arFrame, projectionMatrix, viewMatrix);
     }
 
-    private void drawAllObjects(float[] projectionMatrix, float[] viewMatrix, float lightPixelIntensity) {
-        Iterator<VirtualObject> ite = virtualObjects.iterator();
-        while (ite.hasNext()) {
-            VirtualObject obj = ite.next();
-            if (obj.getAnchor().getTrackingState() == ARTrackable.TrackingState.STOPPED)
-                ite.remove();
-            if (obj.getAnchor().getTrackingState() == ARTrackable.TrackingState.TRACKING)
-                objectDisplay.onDrawFrame(viewMatrix, projectionMatrix, lightPixelIntensity, obj);
+    private void updateMessageData(ARFrame arFrame, StringBuilder sb) {
+        float fpsResult = doFpsCalculate();
+        sb.append("FPS=").append(fpsResult).append(System.lineSeparator());
+
+        ARLightEstimate lightEstimate = arFrame.getLightEstimate();
+
+        if ((lightEstimate.getState() != ARLightEstimate.State.VALID)) {
+            return;
+        }
+
+        // Obtain the estimated light data when the light intensity mode is enabled.
+        if ((((ARPluginConfigWorld) pluginConfig).getLightMode() & ARConfigBase.LIGHT_MODE_AMBIENT_INTENSITY) != 0) {
+            sb.append("PixelIntensity=").append(lightEstimate.getPixelIntensity()).append(System.lineSeparator());
+        }
+        // Obtain the texture data when the environment texture mode is enabled.
+        if ((((ARPluginConfigWorld) pluginConfig).getLightMode() & ARConfigBase.LIGHT_MODE_ENVIRONMENT_LIGHTING) != 0) {
+            sb.append("PrimaryLightIntensity=")
+                .append(lightEstimate.getPrimaryLightIntensity())
+                .append(System.lineSeparator());
+            sb.append("PrimaryLightDirection=")
+                .append(Arrays.toString(lightEstimate.getPrimaryLightDirection()))
+                .append(System.lineSeparator());
+            sb.append("PrimaryLightColor=")
+                .append(Arrays.toString(lightEstimate.getPrimaryLightColor()))
+                .append(System.lineSeparator());
+            sb.append("LightShadowType=").append(lightEstimate.getLightShadowType()).append(System.lineSeparator());
+            sb.append("LightShadowStrength=").append(lightEstimate.getShadowStrength()).append(System.lineSeparator());
+            sb.append("LightSphericalHarmonicCoefficients=")
+                .append(Arrays.toString(lightEstimate.getSphericalHarmonicCoefficients()))
+                .append(System.lineSeparator());
         }
     }
 
@@ -153,7 +206,7 @@ public class ARWorldRenderer extends ARBaseRenderer {
         paint.setColor(color.getColor().toArgb());
         float baseline = -paint.ascent();
         Bitmap image = Bitmap.createBitmap((int) (paint.measureText(text) + 1.f),
-                (int) (baseline + paint.descent() + 1.f), Bitmap.Config.ARGB_8888);
+            (int) (baseline + paint.descent() + 1.f), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(image);
         canvas.drawText(text, 0, baseline, paint);
         return Bitmap.createBitmap(image, 0, 0, image.getWidth(), image.getHeight(), matrix, true);
@@ -163,7 +216,7 @@ public class ARWorldRenderer extends ARBaseRenderer {
         try (InputStream inputStream = context.getAssets().open(assetFileName)) {
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
             return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-        } catch (IllegalArgumentException | IOException e) {
+        } catch (final OutOfMemoryError | IllegalArgumentException | IOException e) {
             Log.e(TAG, "Get data error!");
         }
         return null;
@@ -185,138 +238,59 @@ public class ARWorldRenderer extends ARBaseRenderer {
         bitmaps.add(getBitmap(pluginWorld.getImageFloor(), pluginWorld.getTextFloor(), pluginWorld.getColorFloor()));
         bitmaps.add(getBitmap(pluginWorld.getImageSeat(), pluginWorld.getTextSeat(), pluginWorld.getColorSeat()));
         bitmaps.add(getBitmap(pluginWorld.getImageTable(), pluginWorld.getTextTable(), pluginWorld.getColorTable()));
-        bitmaps.add(getBitmap(pluginWorld.getImageCeiling(), pluginWorld.getTextCeiling(),
-                pluginWorld.getColorCeiling()));
+        bitmaps.add(
+            getBitmap(pluginWorld.getImageCeiling(), pluginWorld.getTextCeiling(), pluginWorld.getColorCeiling()));
+        bitmaps.add(getBitmap(pluginWorld.getImageDoor(), pluginWorld.getTextDoor(), pluginWorld.getColorDoor()));
+        bitmaps.add(getBitmap(pluginWorld.getImageWindow(), pluginWorld.getTextWindow(), pluginWorld.getColorWindow()));
+        bitmaps.add(getBitmap(pluginWorld.getImageBed(), pluginWorld.getTextBed(), pluginWorld.getColorBed()));
         return bitmaps;
     }
 
-    private void handleGestureEvent(ARFrame arFrame, ARCamera arCamera, float[] projectionMatrix, float[] viewMatrix) {
-        GestureEvent event = queuedSingleTaps.poll();
-        if (event == null) return;
-        if (arCamera.getTrackingState() != ARTrackable.TrackingState.TRACKING) {
-            return;
-        }
+    private void drawAugmentedImages(ARFrame frame, float[] projmtx, float[] viewmtx) {
+        Collection<ARAugmentedImage> updatedAugmentedImages = frame.getUpdatedTrackables(ARAugmentedImage.class);
+        callbackHelper.onDrawFrame(new ArrayList<>(updatedAugmentedImages));
+        Log.d(TAG, "drawAugmentedImages: Updated augment image is " + updatedAugmentedImages.size());
 
-        int eventType = event.getType();
-        switch (eventType) {
-            case GestureEvent.GESTURE_EVENT_TYPE_DOWN: {
-                doWhenEventTypeDown(viewMatrix, projectionMatrix, event);
-                break;
-            }
-            case GestureEvent.GESTURE_EVENT_TYPE_SCROLL: {
-                if (selectedObject == null) {
+        // Iteratively update the augmented image mapping and remove the elements that cannot be drawn.
+        for (ARAugmentedImage augmentedImage : updatedAugmentedImages) {
+            switch (augmentedImage.getTrackingState()) {
+                case PAUSED:
+                    // When an image is in paused state but the camera is not paused,
+                    // the image is detected but not tracked.
                     break;
-                }
-                ARHitResult hitResult = hitTest4Result(arFrame, arCamera, event.getEventSecond());
-                if (hitResult != null) {
-                    selectedObject.setAnchor(hitResult.createAnchor());
-                }
-                break;
-            }
-            case GestureEvent.GESTURE_EVENT_TYPE_SINGLETAPUP: {
-                // Do not perform anything when an object is selected.
-                if (selectedObject != null) {
-                    return;
-                }
-
-                MotionEvent tap = event.getEventFirst();
-                ARHitResult hitResult = null;
-
-                hitResult = hitTest4Result(arFrame, arCamera, tap);
-
-                if (hitResult == null) {
+                case TRACKING:
+                    initTrackingImages(augmentedImage);
                     break;
-                }
-                doWhenEventTypeSingleTap(hitResult);
-                break;
-            }
-            default: {
-                Log.e(TAG, "Unknown motion event type, and do nothing.");
-            }
-        }
-    }
-
-    private void doWhenEventTypeDown(float[] viewMatrix, float[] projectionMatrix, GestureEvent event) {
-        if (selectedObject != null) {
-            selectedObject.setIsSelected(false);
-            selectedObject = null;
-        }
-        for (VirtualObject obj : virtualObjects) {
-            if (objectDisplay.hitTest(viewMatrix, projectionMatrix, obj, event.getEventFirst())) {
-                obj.setIsSelected(true);
-                selectedObject = obj;
-                break;
+                case STOPPED:
+                    augmentedImageMap.remove(augmentedImage.getIndex());
+                    break;
+                default:
+                    break;
             }
         }
-    }
 
-    private void doWhenEventTypeSingleTap(ARHitResult hitResult) {
-        // The hit results are sorted by distance. Only the nearest hit point is valid.
-        // Set the number of stored objects to 10 to avoid the overload of rendering and AR Engine.
-        if (virtualObjects.size() >= 16) {
-            virtualObjects.get(0).getAnchor().detach();
-            virtualObjects.remove(0);
-        }
-
-        ARTrackable currentTrackable = hitResult.getTrackable();
-        if (currentTrackable instanceof ARPoint) {
-            virtualObjects.add(new VirtualObject(hitResult.createAnchor(), BLUE_COLORS));
-        } else if (currentTrackable instanceof ARPlane) {
-            virtualObjects.add(new VirtualObject(hitResult.createAnchor(), GREEN_COLORS));
-        } else {
-            Log.i(TAG, "Hit result is not plane or point.");
-        }
-    }
-
-    private ARHitResult hitTest4Result(ARFrame frame, ARCamera camera, MotionEvent event) {
-        ARHitResult hitResult = null;
-        List<ARHitResult> hitTestResults = frame.hitTest(event);
-
-        for (int i = 0; i < hitTestResults.size(); i++) {
-            // Determine whether the hit point is within the plane polygon.
-            ARHitResult hitResultTemp = hitTestResults.get(i);
-            if (hitResultTemp == null) {
+        // Map the anchor to the AugmentedImage object and draw all augmentation effects.
+        for (Pair<ARAugmentedImage, ARAnchor> pair : augmentedImageMap.values()) {
+            ARAugmentedImage augmentedImage = pair.first;
+            if (augmentedImage.getTrackingState() != ARTrackable.TrackingState.TRACKING) {
                 continue;
             }
-            ARTrackable trackable = hitResultTemp.getTrackable();
 
-            boolean isPlanHitJudge =
-                    trackable instanceof ARPlane && ((ARPlane) trackable).isPoseInPolygon(hitResultTemp.getHitPose())
-                            && (calculateDistanceToPlane(hitResultTemp.getHitPose(), camera.getPose()) > 0);
+            if (((ARPluginConfigWorld) pluginConfig).isDrawLine()) {
+                imageKeyLineDisplay.onDrawFrame(augmentedImage, viewmtx, projmtx);
+            }
 
-            // Determine whether the point cloud is clicked and whether the point faces the camera.
-            boolean isPointHitJudge = trackable instanceof ARPoint
-                    && ((ARPoint) trackable).getOrientationMode() == ARPoint.OrientationMode.ESTIMATED_SURFACE_NORMAL;
-
-            // Select points on the plane preferentially.
-            if (isPlanHitJudge || isPointHitJudge) {
-                hitResult = hitResultTemp;
-                if (trackable instanceof ARPlane) {
-                    break;
-                }
+            if (((ARPluginConfigWorld) pluginConfig).isDrawPoint()) {
+                imageKeyPointDisplay.onDrawFrame(augmentedImage, viewmtx, projmtx);
             }
         }
-        return hitResult;
     }
 
-    /**
-     * Calculate the distance between a point in a space and a plane. This method is used
-     * to calculate the distance between a camera in a space and a specified plane.
-     *
-     * @param planePose  ARPose of a plane.
-     * @param cameraPose ARPose of a camera.
-     * @return Calculation results.
-     */
-    private static float calculateDistanceToPlane(ARPose planePose, ARPose cameraPose) {
-        // The dimension of the direction vector is 3.
-        float[] normals = new float[3];
-
-        // Obtain the unit coordinate vector of a normal vector of a plane.
-        planePose.getTransformedAxis(1, 1.0f, normals, 0);
-
-        // Calculate the distance based on projection.
-        return (cameraPose.tx() - planePose.tx()) * normals[0] // 0:x
-                + (cameraPose.ty() - planePose.ty()) * normals[1] // 1:y
-                + (cameraPose.tz() - planePose.tz()) * normals[2]; // 2:z
+    private void initTrackingImages(ARAugmentedImage augmentedImage) {
+        // Create an anchor for the newly found image and bind it to the image object.
+        if (!augmentedImageMap.containsKey(augmentedImage.getIndex())) {
+            ARAnchor centerPoseAnchor = augmentedImage.createAnchor(augmentedImage.getCenterPose());
+            augmentedImageMap.put(augmentedImage.getIndex(), Pair.create(augmentedImage, centerPoseAnchor));
+        }
     }
 }

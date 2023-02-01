@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -38,6 +38,8 @@ class PluginARBodySerializer {
         result.put("skeletonPointIsExist2D", body.getSkeletonPointIsExist2D());
         result.put("skeletonPointIsExist3D", body.getSkeletonPointIsExist3D());
         result.put("coordinateSystemType", body.getCoordinateSystemType().getKeyValues());
+        result.put("maskConfidence", body.getMaskConfidence());
+        result.put("maskDepth", body.getMaskDepth());
         return result;
     }
 

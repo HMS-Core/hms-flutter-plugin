@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -19,9 +19,9 @@ package com.huawei.hms.plugin.ar.core.helper;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 
+import com.huawei.hiar.ARFrame;
 import com.huawei.hms.plugin.ar.core.util.ErrorUtil;
 import com.huawei.hms.plugin.ar.core.util.MatrixUtil;
-import com.huawei.hiar.ARFrame;
 import com.huawei.hms.plugin.ar.core.util.OpenGLUtil;
 
 import java.nio.ByteBuffer;
@@ -32,46 +32,59 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class TextureDisplay {
     private static final String TAG = TextureDisplay.class.getSimpleName();
+
     private static final String LS = System.lineSeparator();
 
-    private static final String BASE_FRAGMENT =
-            "#extension GL_OES_EGL_image_external : require" + LS
-                    + "precision mediump float;" + LS
-                    + "varying vec2 textureCoordinate;" + LS
-                    + "uniform samplerExternalOES vTexture;" + LS
-                    + "void main() {" + LS
-                    + "    gl_FragColor = texture2D(vTexture, textureCoordinate );" + LS
-                    + "}";
+    private static final String BASE_FRAGMENT = 
+    "#extension GL_OES_EGL_image_external : require" + LS
+        + "precision mediump float;" + LS 
+        + "varying vec2 textureCoordinate;" + LS
+        + "uniform samplerExternalOES vTexture;" + LS 
+        + "void main() {" + LS
+        + "    gl_FragColor = texture2D(vTexture, textureCoordinate );" + LS
+        + "}";
 
-    private static final String BASE_VERTEX =
-            "attribute vec4 vPosition;" + LS
-                    + "attribute vec2 vCoord;" + LS
-                    + "uniform mat4 vMatrix;" + LS
-                    + "uniform mat4 vCoordMatrix;" + LS
-                    + "varying vec2 textureCoordinate;" + LS
-                    + "void main(){" + LS
-                    + "    gl_Position = vMatrix*vPosition;" + LS
-                    + "    textureCoordinate = (vCoordMatrix*vec4(vCoord,0,1)).xy;" + LS
-                    + "}";
+    private static final String BASE_VERTEX = 
+    "attribute vec4 vPosition;" + LS 
+    + "attribute vec2 vCoord;" + LS
+        + "uniform mat4 vMatrix;" + LS 
+        + "uniform mat4 vCoordMatrix;" + LS 
+        + "varying vec2 textureCoordinate;" + LS
+        + "void main(){" + LS
+        + "    gl_Position = vMatrix*vPosition;" + LS
+        + "    textureCoordinate = (vCoordMatrix*vec4(vCoord,0,1)).xy;" + LS 
+        + "}";
 
     private static final float[] COORDINATES_OF_VERTEX = {-1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f, -1.0f};
+
     private static final float[] TEXTURE_COORDINATES = {0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f};
 
     private static final int MATRIX_SIZE = 16;
+
     private static final float RGB_CLEAR_VALUE = 0.8157f;
 
     private int externalTextureId;
+
     private int program;
+
     private int position;
+
     private int coord;
+
     private int matrix;
+
     private int texture;
+
     private int coordMatrix;
 
     private FloatBuffer verBuffer;
+
     private FloatBuffer texTransformedBuffer;
+
     private FloatBuffer texBuffer;
+
     private float[] projectionMatrix = new float[MATRIX_SIZE];
+
     private float[] coordMatrixs;
 
     public TextureDisplay() {
@@ -85,10 +98,13 @@ public class TextureDisplay {
 
     public void onDrawFrame(ARFrame arFrame) {
         ErrorUtil.checkGLError(TAG, "On draw frame start..");
-        if (arFrame == null) return;
+        if (arFrame == null) {
+            return;
+        }
 
-        if (arFrame.hasDisplayGeometryChanged())
+        if (arFrame.hasDisplayGeometryChanged()) {
             arFrame.transformDisplayUvCoords(texBuffer, texTransformedBuffer);
+        }
         clear();
 
         GLES20.glDisable(GLES20.GL_DEPTH_TEST);

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,46 +16,32 @@
 
 package com.huawei.hms.plugin.ar.core.config;
 
-public class ARPluginConfigWorld extends ARPluginConfigBase {
-    private String objPath;
-    private String texturePath;
-    private boolean labelDraw;
+import com.huawei.hiar.ARConfigBase;
+import com.huawei.hms.plugin.ar.core.model.AugmentedImageDBModel;
 
-    private String imageOther;
-    private String imageWall;
-    private String imageFloor;
-    private String imageSeat;
-    private String imageTable;
-    private String imageCeiling;
-    private String textOther;
-    private String textWall;
-    private String textFloor;
-    private String textSeat;
-    private String textTable;
-    private String textCeiling;
-    private ColorRGBA colorOther;
-    private ColorRGBA colorWall;
-    private ColorRGBA colorFloor;
-    private ColorRGBA colorSeat;
-    private ColorRGBA colorTable;
-    private ColorRGBA colorCeiling;
+import java.util.Arrays;
+import java.util.List;
 
-    public ARPluginConfigWorld() {
-        this.objPath = "AR_logo.obj";
-        this.texturePath = "AR_logo.png";
-        this.labelDraw = true;
-        this.textOther = "other";
-        this.textWall = "wall";
-        this.textFloor = "floor";
-        this.textSeat = "seat";
-        this.textTable = "table";
-        this.textCeiling = "ceiling";
-        this.colorOther = new ColorRGBA(255, 0, 0, 255);
-        this.colorWall = new ColorRGBA(255, 0, 0, 255);
-        this.colorFloor = new ColorRGBA(255, 0, 0, 255);
-        this.colorSeat = new ColorRGBA(255, 0, 0, 255);
-        this.colorTable = new ColorRGBA(255, 0, 0, 255);
-        this.colorCeiling = new ColorRGBA(255, 0, 0, 255);
+public class ARPluginConfigWorld extends ARPluginConfigBaseWorld {
+
+    private List<AugmentedImageDBModel> augmentedImageDBModels = Arrays.asList();
+
+    private ARConfigBase.PlaneFindingMode planeFindingMode = ARConfigBase.PlaneFindingMode.ENABLE;
+
+    public List<AugmentedImageDBModel> getAugmentedImageDBModels() {
+        return augmentedImageDBModels;
+    }
+
+    public void setAugmentedImageDBModels(List<AugmentedImageDBModel> augmentedImageDBModels) {
+        this.augmentedImageDBModels = augmentedImageDBModels;
+    }
+
+    public ARConfigBase.PlaneFindingMode getPlaneFindingMode() {
+        return planeFindingMode;
+    }
+
+    public void setPlaneFindingMode(ARConfigBase.PlaneFindingMode planeFindingMode) {
+        this.planeFindingMode = planeFindingMode;
     }
 
     @Override
@@ -71,183 +57,33 @@ public class ARPluginConfigWorld extends ARPluginConfigBase {
             this.textSeat = configWorld.textSeat;
             this.textTable = configWorld.textTable;
             this.textCeiling = configWorld.textCeiling;
+            this.textDoor = configWorld.textDoor;
+            this.textBed = configWorld.textBed;
+            this.textWindow = configWorld.textWindow;
             this.colorOther = configWorld.colorOther;
             this.colorWall = configWorld.colorWall;
             this.colorFloor = configWorld.colorFloor;
             this.colorSeat = configWorld.colorSeat;
             this.colorTable = configWorld.colorTable;
             this.colorCeiling = configWorld.colorCeiling;
+            this.colorDoor = configWorld.colorDoor;
+            this.colorBed = configWorld.colorBed;
+            this.colorWindow = configWorld.colorWindow;
+            this.lightMode = configWorld.lightMode;
+            this.semanticMode = configWorld.semanticMode;
+            this.showSemanticSupportedInfo = configWorld.showSemanticSupportedInfo;
+            this.maxMapSize = configWorld.maxMapSize;
+            this.augmentedImageDBModels = configWorld.augmentedImageDBModels;
+            this.focusMode = configWorld.focusMode;
+            this.powerMode = configWorld.powerMode;
+            this.updateMode = configWorld.updateMode;
+            this.planeFindingMode = configWorld.planeFindingMode;
+            this.drawLine = configWorld.drawLine;
+            this.drawPoint = configWorld.drawPoint;
+            this.lineWidth = configWorld.lineWidth;
+            this.pointSize = configWorld.pointSize;
+            this.lineColor = configWorld.lineColor;
+            this.pointColor = configWorld.pointColor;
         }
-    }
-
-    public boolean isLabelDraw() {
-        return labelDraw;
-    }
-
-    public void setLabelDraw(boolean draw) {
-        this.labelDraw = draw;
-    }
-
-    public void setTexturePath(String texturePath) {
-        this.texturePath = texturePath;
-    }
-
-    public void setObjPath(String objPath) {
-        this.objPath = objPath;
-    }
-
-    public String getObjPath() {
-        return objPath;
-    }
-
-    public String getTexturePath() {
-        if (texturePath == null || texturePath.isEmpty()) {
-            return "texture.png";
-        }
-        return texturePath;
-    }
-
-    public String getImageOther() {
-        return imageOther;
-    }
-
-    public void setImageOther(String imageOther) {
-        this.imageOther = imageOther;
-    }
-
-    public String getImageWall() {
-        return imageWall;
-    }
-
-    public void setImageWall(String imageWall) {
-        this.imageWall = imageWall;
-    }
-
-    public String getImageFloor() {
-        return imageFloor;
-    }
-
-    public void setImageFloor(String imageFloor) {
-        this.imageFloor = imageFloor;
-    }
-
-    public String getImageSeat() {
-        return imageSeat;
-    }
-
-    public void setImageSeat(String imageSeat) {
-        this.imageSeat = imageSeat;
-    }
-
-    public String getImageTable() {
-        return imageTable;
-    }
-
-    public void setImageTable(String imageTable) {
-        this.imageTable = imageTable;
-    }
-
-    public String getImageCeiling() {
-        return imageCeiling;
-    }
-
-    public void setImageCeiling(String imageCeiling) {
-        this.imageCeiling = imageCeiling;
-    }
-
-    public String getTextOther() {
-        return textOther;
-    }
-
-    public void setTextOther(String textOther) {
-        this.textOther = textOther;
-    }
-
-    public String getTextWall() {
-        return textWall;
-    }
-
-    public void setTextWall(String textWall) {
-        this.textWall = textWall;
-    }
-
-    public String getTextFloor() {
-        return textFloor;
-    }
-
-    public void setTextFloor(String textFloor) {
-        this.textFloor = textFloor;
-    }
-
-    public String getTextSeat() {
-        return textSeat;
-    }
-
-    public void setTextSeat(String textSeat) {
-        this.textSeat = textSeat;
-    }
-
-    public String getTextTable() {
-        return textTable;
-    }
-
-    public void setTextTable(String textTable) {
-        this.textTable = textTable;
-    }
-
-    public String getTextCeiling() {
-        return textCeiling;
-    }
-
-    public void setTextCeiling(String textCeiling) {
-        this.textCeiling = textCeiling;
-    }
-
-    public ColorRGBA getColorOther() {
-        return colorOther;
-    }
-
-    public void setColorOther(ColorRGBA colorOther) {
-        this.colorOther = colorOther;
-    }
-
-    public ColorRGBA getColorWall() {
-        return colorWall;
-    }
-
-    public void setColorWall(ColorRGBA colorWall) {
-        this.colorWall = colorWall;
-    }
-
-    public ColorRGBA getColorFloor() {
-        return colorFloor;
-    }
-
-    public void setColorFloor(ColorRGBA colorFloor) {
-        this.colorFloor = colorFloor;
-    }
-
-    public ColorRGBA getColorSeat() {
-        return colorSeat;
-    }
-
-    public void setColorSeat(ColorRGBA colorSeat) {
-        this.colorSeat = colorSeat;
-    }
-
-    public ColorRGBA getColorTable() {
-        return colorTable;
-    }
-
-    public void setColorTable(ColorRGBA colorTable) {
-        this.colorTable = colorTable;
-    }
-
-    public ColorRGBA getColorCeiling() {
-        return colorCeiling;
-    }
-
-    public void setColorCeiling(ColorRGBA colorCeiling) {
-        this.colorCeiling = colorCeiling;
     }
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -15,20 +15,26 @@
 */
 
 import 'package:flutter/material.dart';
-import 'package:huawei_ar/ar_engine_library.dart';
+import 'package:huawei_ar/huawei_ar.dart';
 
-import 'ar_body_scene.dart';
-import 'ar_face_scene.dart';
-import 'ar_hand_scene.dart';
-import 'ar_world_scene.dart';
+import 'package:huawei_ar_example/ar_body_scene.dart';
+import 'package:huawei_ar_example/ar_face_scene.dart';
+import 'package:huawei_ar_example/ar_hand_scene.dart';
+import 'package:huawei_ar_example/ar_world_scene.dart';
+import 'package:huawei_ar_example/ar_augmented_image_scene.dart';
+import 'package:huawei_ar_example/ar_face_health_scene.dart';
+import 'package:huawei_ar_example/ar_scene_mesh_scene.dart';
+import 'package:huawei_ar_example/ar_world_body_scene.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -41,7 +47,7 @@ class _MyAppState extends State<MyApp> {
     _checkServiceApk();
   }
 
-  _checkServiceApk() async {
+  void _checkServiceApk() async {
     if (!mounted) return;
     bool result = await AREngine.isArEngineServiceApkReady();
     setState(() {
@@ -54,67 +60,148 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Builder(
-        builder: (context) => Scaffold(
-          appBar: AppBar(
-            title: const Text('Huawei AREngine Flutter Demo'),
-            centerTitle: true,
-            backgroundColor: Colors.red,
-          ),
-          body: SafeArea(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _customContainer(
-                        _serviceAppCheckColor,
-                        "AREngine Service APK "
-                        "Ready",
-                        5,
-                        false),
-                    _customContainer(_serviceAppCheckColor,
-                        _isAREngineAPKReady ? "Yes" : "No", 1, true)
-                  ],
-                ),
-                _expandedButton(() => AREngine.navigateToAppMarketPage(),
-                    "Navigate To AppGallery Page", Icons.store,
-                    color: Colors.black),
-                _expandedButton(
-                    () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ArFaceScreen())),
-                    "ARFace Scene",
-                    Icons.face),
-                _expandedButton(
-                    () => Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => ArHandScene())),
-                    "ARHand Scene",
-                    Icons.pan_tool),
-                _expandedButton(
-                    () => Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => ArBodyScene())),
-                    "ARBody Scene",
-                    Icons.accessibility),
-                _expandedButton(
-                    () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ARWorldScene())),
-                    "ARWorld "
-                    "Scene",
-                    Icons.public)
-              ],
+        builder: (BuildContext context) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Huawei AREngine Flutter Demo'),
+              centerTitle: true,
+              backgroundColor: Colors.red,
             ),
-          ),
-        ),
+            body: SafeArea(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      _customContainer(
+                        _serviceAppCheckColor,
+                        'AREngine Service APK '
+                        'Ready',
+                        5,
+                        false,
+                      ),
+                      _customContainer(
+                        _serviceAppCheckColor,
+                        _isAREngineAPKReady ? 'Yes' : 'No',
+                        1,
+                        true,
+                      )
+                    ],
+                  ),
+                  _expandedButton(
+                    () => AREngine.navigateToAppMarketPage(),
+                    'Navigate To AppGallery Page',
+                    Icons.store,
+                    color: Colors.black,
+                  ),
+                  _expandedButton(
+                    () => Navigator.of(context).push(
+                      MaterialPageRoute<dynamic>(
+                        builder: (BuildContext context) {
+                          return const ArFaceScreen();
+                        },
+                      ),
+                    ),
+                    'ARFace Scene',
+                    Icons.face,
+                  ),
+                  _expandedButton(
+                    () => Navigator.of(context).push(
+                      MaterialPageRoute<dynamic>(
+                        builder: (BuildContext context) {
+                          return const ArHandScene();
+                        },
+                      ),
+                    ),
+                    'ARHand Scene',
+                    Icons.pan_tool,
+                  ),
+                  _expandedButton(
+                    () => Navigator.of(context).push(
+                      MaterialPageRoute<dynamic>(
+                        builder: (BuildContext context) {
+                          return const ArBodyScene();
+                        },
+                      ),
+                    ),
+                    'ARBody Scene',
+                    Icons.accessibility,
+                  ),
+                  _expandedButton(
+                    () => Navigator.of(context).push(
+                      MaterialPageRoute<dynamic>(
+                        builder: (BuildContext context) {
+                          return const ARWorldScene();
+                        },
+                      ),
+                    ),
+                    'ARWorld '
+                    'Scene',
+                    Icons.public,
+                  ),
+                  _expandedButton(
+                    () => Navigator.of(context).push(
+                      MaterialPageRoute<dynamic>(
+                        builder: (BuildContext context) {
+                          return const ArAugmentedImageScene();
+                        },
+                      ),
+                    ),
+                    'ARAugmentedImage Scene',
+                    Icons.image,
+                  ),
+                  _expandedButton(
+                    () => Navigator.of(context).push(
+                      MaterialPageRoute<dynamic>(
+                        builder: (BuildContext context) {
+                          return const ArWorldBodyScene();
+                        },
+                      ),
+                    ),
+                    'ARWorldBody Scene',
+                    Icons.accessibility,
+                  ),
+                  _expandedButton(
+                    () => Navigator.of(context).push(
+                      MaterialPageRoute<dynamic>(
+                        builder: (BuildContext context) {
+                          return const ArFaceHealthScreen();
+                        },
+                      ),
+                    ),
+                    'FaceHealth Scene',
+                    Icons.health_and_safety,
+                  ),
+                  _expandedButton(
+                    () => Navigator.of(context).push(
+                      MaterialPageRoute<dynamic>(
+                        builder: (BuildContext context) {
+                          return const ArSceneMeshScene();
+                        },
+                      ),
+                    ),
+                    'ARSceneMesh Scene',
+                    Icons.grid_on,
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 
   Widget _expandedButton(
-      Function onPressed, String buttonText, IconData iconData,
-      {Color color}) {
+    Function()? onPressed,
+    String buttonText,
+    IconData iconData, {
+    Color? color,
+  }) {
     return Flexible(
       flex: 2,
       child: SizedBox(
@@ -122,23 +209,23 @@ class _MyAppState extends State<MyApp> {
           padding: const EdgeInsets.all(5.0),
           child: MaterialButton(
             onPressed: onPressed,
+            color: color ?? Colors.red,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: <Widget>[
                 Icon(
                   iconData,
                   color: Colors.white,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Text(
                   buttonText,
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                 ),
               ],
             ),
-            color: color ?? Colors.red,
           ),
         ),
       ),
@@ -146,7 +233,11 @@ class _MyAppState extends State<MyApp> {
   }
 
   Widget _customContainer(
-      Color borderColor, String text, int flex, bool reverseBorder) {
+    Color borderColor,
+    String text,
+    int flex,
+    bool reverseBorder,
+  ) {
     if (reverseBorder) {
       return Flexible(
         flex: flex,
@@ -155,15 +246,16 @@ class _MyAppState extends State<MyApp> {
           padding: const EdgeInsets.all(5.0),
           margin: const EdgeInsets.only(right: 5.0),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(5.0),
-                bottomRight: Radius.circular(5.0)),
+            borderRadius: const BorderRadius.only(
+              topRight: Radius.circular(5.0),
+              bottomRight: Radius.circular(5.0),
+            ),
             border: Border.all(color: _serviceAppCheckColor, width: 2.0),
           ),
           child: Center(
             child: Text(
               text,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
           ),
         ),
@@ -176,14 +268,16 @@ class _MyAppState extends State<MyApp> {
         padding: const EdgeInsets.all(5.0),
         margin: const EdgeInsets.only(left: 5.0),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(5.0), bottomLeft: Radius.circular(5.0)),
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(5.0),
+            bottomLeft: Radius.circular(5.0),
+          ),
           border: Border.all(color: _serviceAppCheckColor, width: 2.0),
         ),
         child: Center(
           child: Text(
             text,
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           ),
         ),
       ),

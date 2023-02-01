@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -37,7 +37,8 @@ public final class ErrorUtil {
             error = GLES20.glGetError();
         }
 
-        if (lastError != GLES20.GL_NO_ERROR)
+        if (lastError != GLES20.GL_NO_ERROR) {
             throw new ArDemoRuntimeException(label + ": glError :" + lastError);
+        }
     }
 }

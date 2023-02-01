@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,15 +16,24 @@
 
 package com.huawei.hms.plugin.ar.core.config;
 
-public class ARPluginConfigHand extends ARPluginConfigBase {
+import com.huawei.hiar.ARConfigBase;
+
+public class ARPluginConfigHand extends ARPluginConfigBasePointLine {
     private boolean drawBox;
+
     private ColorRGBA boxColor;
+
     private float lineWidth;
+
+    private ARConfigBase.CameraLensFacing cameraLensFacing = ARConfigBase.CameraLensFacing.FRONT;
+
+    private float lineWidthSkeleton;
 
     public ARPluginConfigHand() {
         this.boxColor = new ColorRGBA(0, 255, 0, 255);
         this.lineWidth = 18.0f;
         this.drawBox = true;
+        this.lineWidthSkeleton = 19.9f;
     }
 
     @Override
@@ -34,30 +43,59 @@ public class ARPluginConfigHand extends ARPluginConfigBase {
             this.drawBox = configHand.drawBox;
             this.boxColor = configHand.boxColor;
             this.lineWidth = configHand.lineWidth;
+            this.lightMode = configHand.lightMode;
+            this.cameraLensFacing = configHand.cameraLensFacing;
+            this.semanticMode = configHand.semanticMode;
+            this.showSemanticSupportedInfo = configHand.showSemanticSupportedInfo;
+            this.focusMode = configHand.focusMode;
+            this.powerMode = configHand.powerMode;
+            this.updateMode = configHand.updateMode;
+            this.drawLine = configHand.drawLine;
+            this.drawPoint = configHand.drawPoint;
+            this.lineWidthSkeleton = configHand.lineWidthSkeleton;
+            this.pointSize = configHand.pointSize;
+            this.lineColor = configHand.lineColor;
+            this.pointColor = configHand.pointColor;
         }
+    }
+
+    public float getLineWidthSkeleton() {
+        return lineWidthSkeleton;
+    }
+
+    public void setLineWidthSkeleton(float lineWidthSkeleton) {
+        this.lineWidthSkeleton = lineWidthSkeleton;
     }
 
     public ColorRGBA getBoxColor() {
         return boxColor;
     }
 
-    public boolean isDrawBox() {
-        return drawBox;
-    }
-
-    public float getLineWidth() {
-        return lineWidth;
-    }
-
     public void setBoxColor(ColorRGBA boxColor) {
         this.boxColor = boxColor;
+    }
+
+    public boolean isDrawBox() {
+        return drawBox;
     }
 
     public void setDrawBox(boolean drawBox) {
         this.drawBox = drawBox;
     }
 
+    public float getLineWidth() {
+        return lineWidth;
+    }
+
     public void setLineWidth(float lineWidth) {
         this.lineWidth = lineWidth;
+    }
+
+    public ARConfigBase.CameraLensFacing getCameraLensFacing() {
+        return this.cameraLensFacing;
+    }
+
+    public void setCameraLensFacing(ARConfigBase.CameraLensFacing cameraLensFacing) {
+        this.cameraLensFacing = cameraLensFacing;
     }
 }

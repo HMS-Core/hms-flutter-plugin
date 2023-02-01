@@ -4,7 +4,7 @@ version '1.0'
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven {url 'https://developer.huawei.com/repo/'}
     }
 
@@ -16,7 +16,7 @@ buildscript {
 rootProject.allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven {url 'https://developer.huawei.com/repo/'}
     }
 }
@@ -24,12 +24,12 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         minSdkVersion 26
-        targetSdkVersion 29
+        targetSdkVersion 30
     }
 
     lintOptions {
@@ -44,7 +44,8 @@ android {
 
 dependencies {
     implementation 'de.javagl:obj:0.3.0'
-    implementation 'com.huawei.hms:arenginesdk:2.13.0.4'
-    implementation 'com.huawei.hms:stats:5.0.3.301'
-    implementation 'com.huawei.agconnect:agconnect-core:1.4.2.301'
+    implementation 'com.huawei.hms:arenginesdk:3.7.0.3'
+    implementation 'com.huawei.hms:stats:6.6.0.300'
+    implementation 'com.huawei.agconnect:agconnect-core:1.7.2.300'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 }

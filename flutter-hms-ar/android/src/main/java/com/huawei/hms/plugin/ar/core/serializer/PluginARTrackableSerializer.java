@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,10 +16,12 @@
 
 package com.huawei.hms.plugin.ar.core.serializer;
 
+import com.huawei.hiar.ARAugmentedImage;
 import com.huawei.hiar.ARBody;
 import com.huawei.hiar.ARFace;
 import com.huawei.hiar.ARHand;
 import com.huawei.hiar.ARPlane;
+import com.huawei.hiar.ARTarget;
 import com.huawei.hiar.ARTrackable;
 
 import java.util.ArrayList;
@@ -49,6 +51,10 @@ public class PluginARTrackableSerializer {
             return PluginARPlaneSerializer.convertARPlaneToMap((ARPlane) arTrackable);
         } else if (arTrackable instanceof ARBody) {
             return PluginARBodySerializer.convertARBodyToMap((ARBody) arTrackable);
+        } else if (arTrackable instanceof ARTarget) {
+            return PluginARTargetSerializer.convertARTargetToMap((ARTarget) arTrackable);
+        } else if (arTrackable instanceof ARAugmentedImage) {
+            return PluginARAugmentedImageSerializer.convertARAugmentedImageToMap((ARAugmentedImage) arTrackable);
         } else {
             return Collections.emptyMap();
         }

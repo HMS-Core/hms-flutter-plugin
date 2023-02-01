@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import androidx.annotation.NonNull;
 import com.huawei.hms.flutter.ar.constants.Constants;
 import com.huawei.hms.flutter.ar.logger.HMSLogger;
 import com.huawei.hms.plugin.ar.core.util.AREngineAvailability;
-import com.huawei.hms.flutter.ar.util.PermissionUtil;
 
 import io.flutter.Log;
 import io.flutter.plugin.common.MethodCall;
@@ -61,21 +60,6 @@ public class AREngineCommonHandler implements MethodCallHandler {
                 break;
             case "navigateToAppMarketPage":
                 navigateToAppMarketPage(result);
-                break;
-            default:
-                onMethodCallPermission(call, result);
-                break;
-        }
-    }
-
-    public void onMethodCallPermission(@NonNull MethodCall call, @NonNull Result result) {
-        switch (call.method) {
-            case "hasCameraPermission":
-                result.success(PermissionUtil.hasPermission(activity));
-                break;
-            case "requestCameraPermission":
-                PermissionUtil.requestCameraPermission(activity);
-                result.success(Constants.RESULT_SUCCESS);
                 break;
             default:
                 onMethodCallLogger(call, result);

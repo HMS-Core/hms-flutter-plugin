@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,11 +16,24 @@
 
 package com.huawei.hms.plugin.ar.core.config;
 
+import com.huawei.hiar.ARConfigBase;
+
 public class ARPluginConfigFace extends ARPluginConfigBase {
     private float pointSize;
+
     private ColorRGBA depthColor;
+
     private String texturePath;
+
     private boolean drawFace;
+
+    private boolean health = false;
+
+    private ARConfigBase.CameraLensFacing cameraLensFacing = ARConfigBase.CameraLensFacing.FRONT;
+
+    private boolean multiFace = false;
+
+    private boolean showSemanticSupportedInfo = true;
 
     public ARPluginConfigFace() {
         this.pointSize = 5.0f;
@@ -37,11 +50,25 @@ public class ARPluginConfigFace extends ARPluginConfigBase {
             ARPluginConfigFace configFace = (ARPluginConfigFace) configBase;
             this.pointSize = configFace.pointSize;
             this.depthColor = configFace.depthColor;
+            this.texturePath = configFace.texturePath;
+            this.drawFace = configFace.drawFace;
+            this.lightMode = configFace.lightMode;
+            this.health = configFace.health;
+            this.cameraLensFacing = configFace.cameraLensFacing;
+            this.semanticMode = configFace.semanticMode;
+            this.showSemanticSupportedInfo = configFace.showSemanticSupportedInfo;
+            this.multiFace = configFace.multiFace;
+            this.focusMode = configFace.focusMode;
+            this.powerMode = configFace.powerMode;
         }
     }
 
     public float getPointSize() {
         return pointSize;
+    }
+
+    public void setPointSize(float pointSize) {
+        this.pointSize = pointSize;
     }
 
     public boolean isDrawFace() {
@@ -56,19 +83,39 @@ public class ARPluginConfigFace extends ARPluginConfigBase {
         return this.depthColor;
     }
 
-    public String getTexturePath() {
-        return texturePath;
-    }
-
-    public void setPointSize(float pointSize) {
-        this.pointSize = pointSize;
-    }
-
     public void setDepthColor(ColorRGBA depthColor) {
         this.depthColor = depthColor;
     }
 
+    public String getTexturePath() {
+        return texturePath;
+    }
+
     public void setTexturePath(String texturePath) {
         this.texturePath = texturePath;
+    }
+
+    public boolean getHealth() {
+        return this.health;
+    }
+
+    public void setHealth(boolean health) {
+        this.health = health;
+    }
+
+    public ARConfigBase.CameraLensFacing getCameraLensFacing() {
+        return this.cameraLensFacing;
+    }
+
+    public void setCameraLensFacing(ARConfigBase.CameraLensFacing cameraLensFacing) {
+        this.cameraLensFacing = cameraLensFacing;
+    }
+
+    public boolean getMultiFace() {
+        return multiFace;
+    }
+
+    public void setMultiFace(boolean multiFace) {
+        this.multiFace = multiFace;
     }
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -25,28 +25,37 @@ import com.huawei.hiar.ARSession;
 
 public class DisplayRotationManager implements DisplayManager.DisplayListener {
     private final Context context;
+
     private final Display display;
+
     private int width;
+
     private int height;
+
     private boolean deviceRotated = false;
 
     public DisplayRotationManager(Context context) {
         this.context = context;
         WindowManager systemService = context.getSystemService(WindowManager.class);
-        if (systemService != null) display = systemService.getDefaultDisplay();
-        else display = null;
+        if (systemService != null) {
+            display = systemService.getDefaultDisplay();
+        } else {
+            display = null;
+        }
     }
 
     public void registerDisplayListener() {
         DisplayManager systemService = context.getSystemService(DisplayManager.class);
-        if (systemService != null)
+        if (systemService != null) {
             systemService.registerDisplayListener(this, null);
+        }
     }
 
     public void unregisterDisplayListener() {
         DisplayManager systemService = context.getSystemService(DisplayManager.class);
-        if (systemService != null)
+        if (systemService != null) {
             systemService.unregisterDisplayListener(this);
+        }
     }
 
     public boolean isDeviceRotated() {
