@@ -1,0 +1,33 @@
+/**
+ * Authentication parameters required for 3D image recognition.
+ */
+{
+  "data": [
+    {
+      "continents": "Chinese mainland",
+      "modeInformation": {
+        // modelName: Indicates the name of the model library created and trained on the AR cloud service.
+        // One or more objects can be recognized.The name is automatically generated when the model
+        // library is created on the cloud service.
+        "modelName": "arcloud_364fd7b4b38ab0b042b55774a1725c6ac9f777ac421cf4bbV1_0",
+        // appId: Indicates the unique ID of a Huawei app.
+        "appId": "102710907",
+        // appSecret: Indicates the private key of a Huawei app.
+        "appSecret": "ad4aa10a6dcb29523ba735d8721821665c8e6916fba225338716c6c8a5af0808"
+      }
+    },
+    {
+      "continents": "Europe",
+      "modeInformation": {
+        // modelName: Indicates the name of the model library created and trained on the AR cloud service.
+        // One or more objects can be recognized.The name is automatically generated when the model
+        // library is created on the cloud service.
+        "modelName": "arcloud_80f3bebe35d0987cbb396f76ad84444c4a9302975ad4556aV1_0",
+        // appId: Indicates the unique ID of a Huawei app.
+        "appId": "102710907",
+        // appSecret: Indicates the private key of a Huawei app.
+        "appSecret": "ad4aa10a6dcb29523ba735d8721821665c8e6916fba225338716c6c8a5af0808"
+      }
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+group 'com.huawei.hms.flutter.ar'
+version '1.0'
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        maven {url 'https://developer.huawei.com/repo/'}
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.6.0'
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven {url 'https://developer.huawei.com/repo/'}
+    }
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        minSdkVersion 26
+        targetSdkVersion 30
+    }
+
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation 'de.javagl:obj:0.3.0'
+    implementation 'com.huawei.hms:arenginesdk:3.7.0.3'
+    implementation 'com.huawei.hms:stats:6.6.0.300'
+    implementation 'com.huawei.agconnect:agconnect-core:1.7.2.300'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+}
