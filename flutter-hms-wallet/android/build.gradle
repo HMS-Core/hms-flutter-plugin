@@ -1,38 +1,39 @@
-group 'com.huawei.hms.flutter.wallet'
-version '1.0'
+group "com.huawei.hms.flutter.wallet"
+version "1.0"
 
 buildscript {
     repositories {
         google()
-        jcenter()
-        maven { url 'https://developer.huawei.com/repo/' }
+        mavenCentral()
+        maven { url "https://developer.huawei.com/repo/" }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.0'
+        classpath "com.android.tools.build:gradle:3.6.0"
     }
 }
 
 rootProject.allprojects {
     repositories {
         google()
-        jcenter()
-        maven { url 'https://developer.huawei.com/repo/' }
+        mavenCentral()
+        maven { url "https://developer.huawei.com/repo/" }
     }
 }
 
-apply plugin: 'com.android.library'
+apply plugin: "com.android.library"
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 29
+        targetSdkVersion 30
     }
 
     lintOptions {
-        disable 'InvalidPackage'
+        disable "InvalidPackage"
     }
 
     compileOptions {
@@ -41,8 +42,7 @@ android {
     }
 }
 
-
 dependencies {
-    implementation fileTree(includes: ['*.jar','*.aar'], dir: 'lib')
-    implementation 'com.huawei.hms:wallet:4.0.4.301'
+    implementation fileTree(includes: ["*.jar","*.aar"], dir: "lib")
+    implementation "com.huawei.hms:wallet:4.0.5.300"
 }

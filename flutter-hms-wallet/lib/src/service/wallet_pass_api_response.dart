@@ -1,6 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
-
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -13,121 +12,97 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import 'dart:convert';
-import 'package:flutter/foundation.dart';
-import 'package:huawei_wallet/src/service/wallet_pass_status.dart';
+
+part of huawei_wallet;
 
 class WalletPassApiResponse {
-  final String returnCode;
-  final String returnRes;
-  final String accessToken;
-  final String tempAccessSec;
-  final String cardParams;
-  final List<WalletPassStatus> passStatuslist;
-  final List<WalletPassStatus> cardInfolist;
-  final String teeTempAccessSec;
-  final String teeTempTransId;
-  final WalletPassStatus passStatus;
-  final String version;
-  final String readNFCResult;
-  final String passDeviceId;
-  final String transactionId;
-  final String transactionIdSign;
-  final String authResult;
-  WalletPassApiResponse({
-    this.returnCode,
-    this.returnRes,
-    this.accessToken,
-    this.tempAccessSec,
-    this.cardParams,
-    this.passStatuslist,
-    this.cardInfolist,
-    this.teeTempAccessSec,
-    this.teeTempTransId,
-    this.passStatus,
-    this.version,
-    this.readNFCResult,
-    this.passDeviceId,
-    this.transactionId,
-    this.transactionIdSign,
-    this.authResult,
+  /// Result code.
+  final String? returnCode;
+
+  /// Result description.
+  final String? returnRes;
+
+  /// Token for interacting with the card.
+  final String? accessToken;
+
+  /// Temporary public key for communicating with the card.
+  final String? tempAccessSec;
+
+  /// Pass parameters in JSON format.
+  final String? cardParams;
+
+  /// List of WalletPassStatus.
+  final List<WalletPassStatus> passStatusList;
+
+  /// List of WalletCardInfo.
+  final List<WalletCardInfo> cardInfoList;
+
+  /// Temporary public key for communicating with TEE.
+  final String? teeTempAccessSec;
+
+  /// Temporary transaction ID for communicating with TEE.
+  final String? teeTempTransId;
+
+  /// Instance of WalletPassStatus.
+  final WalletPassStatus? passStatus;
+
+  /// Version number.
+  final String? version;
+
+  /// Card reading result.
+  final String? readNFCResult;
+
+  /// Unique ID of the device where the account is used.
+  final String? passDeviceId;
+
+  /// Transaction ID.
+  final String? transactionId;
+
+  /// Transaction ID signature.
+  final String? transactionIdSign;
+
+  /// APDU execution result for auth0 or auth1.
+  final String? authResult;
+
+  const WalletPassApiResponse._({
+    required this.returnCode,
+    required this.returnRes,
+    required this.accessToken,
+    required this.tempAccessSec,
+    required this.cardParams,
+    required this.passStatusList,
+    required this.cardInfoList,
+    required this.teeTempAccessSec,
+    required this.teeTempTransId,
+    required this.passStatus,
+    required this.version,
+    required this.readNFCResult,
+    required this.passDeviceId,
+    required this.transactionId,
+    required this.transactionIdSign,
+    required this.authResult,
   });
 
-  WalletPassApiResponse copyWith({
-    String returnCode,
-    String returnRes,
-    String accessToken,
-    String tempAccessSec,
-    String cardParams,
-    List<WalletPassStatus> passStatuslist,
-    List<WalletPassStatus> cardInfolist,
-    String teeTempAccessSec,
-    String teeTempTransId,
-    WalletPassStatus passStatus,
-    String version,
-    String readNFCResult,
-    String passDeviceId,
-    String transactionId,
-    String transactionIdSign,
-    String authResult,
-  }) {
-    return WalletPassApiResponse(
-      returnCode: returnCode ?? this.returnCode,
-      returnRes: returnRes ?? this.returnRes,
-      accessToken: accessToken ?? this.accessToken,
-      tempAccessSec: tempAccessSec ?? this.tempAccessSec,
-      cardParams: cardParams ?? this.cardParams,
-      passStatuslist: passStatuslist ?? this.passStatuslist,
-      cardInfolist: cardInfolist ?? this.cardInfolist,
-      teeTempAccessSec: teeTempAccessSec ?? this.teeTempAccessSec,
-      teeTempTransId: teeTempTransId ?? this.teeTempTransId,
-      passStatus: passStatus ?? this.passStatus,
-      version: version ?? this.version,
-      readNFCResult: readNFCResult ?? this.readNFCResult,
-      passDeviceId: passDeviceId ?? this.passDeviceId,
-      transactionId: transactionId ?? this.transactionId,
-      transactionIdSign: transactionIdSign ?? this.transactionIdSign,
-      authResult: authResult ?? this.authResult,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'returnCode': returnCode,
-      'returnRes': returnRes,
-      'accessToken': accessToken,
-      'tempAccessSec': tempAccessSec,
-      'cardParams': cardParams,
-      'passStatuslist': passStatuslist?.map((x) => x?.toMap())?.toList(),
-      'cardInfolist': cardInfolist?.map((x) => x?.toMap())?.toList(),
-      'teeTempAccessSec': teeTempAccessSec,
-      'teeTempTransId': teeTempTransId,
-      'passStatus': passStatus?.toMap(),
-      'version': version,
-      'readNFCResult': readNFCResult,
-      'passDeviceId': passDeviceId,
-      'transactionId': transactionId,
-      'transactionIdSign': transactionIdSign,
-      'authResult': authResult,
-    };
-  }
-
-  factory WalletPassApiResponse.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
-    return WalletPassApiResponse(
+  factory WalletPassApiResponse._fromMap(Map<dynamic, dynamic> map) {
+    return WalletPassApiResponse._(
       returnCode: map['returnCode'],
       returnRes: map['returnRes'],
       accessToken: map['accessToken'],
       tempAccessSec: map['tempAccessSec'],
       cardParams: map['cardParams'],
-      passStatuslist: List<WalletPassStatus>.from(
-          map['passStatuslist']?.map((x) => WalletPassStatus.fromMap(x)) ?? []),
-      cardInfolist: List<WalletPassStatus>.from(
-          map['cardInfolist']?.map((x) => WalletPassStatus.fromMap(x)) ?? []),
+      passStatusList: List<WalletPassStatus>.from(
+        ((map['passStatusList'] ?? <dynamic>[]) as List<dynamic>)
+            .map((dynamic e) => WalletPassStatus._fromMap(e)),
+      ),
+      cardInfoList: List<WalletCardInfo>.from(
+        ((map['cardInfoList'] ?? <dynamic>[]) as List<dynamic>)
+            .map((dynamic e) => WalletCardInfo._fromMap(e)),
+      ),
       teeTempAccessSec: map['teeTempAccessSec'],
       teeTempTransId: map['teeTempTransId'],
-      passStatus: WalletPassStatus.fromMap(map['passStatus']),
+      passStatus: map['passStatus'] != null
+          ? WalletPassStatus._fromMap(map['passStatus'])
+          : null,
       version: map['version'],
       readNFCResult: map['readNFCResult'],
       passDeviceId: map['passDeviceId'],
@@ -137,56 +112,24 @@ class WalletPassApiResponse {
     );
   }
 
-  String toJson() => json.encode(toMap());
-
-  factory WalletPassApiResponse.fromJson(String source) =>
-      WalletPassApiResponse.fromMap(json.decode(source));
-
   @override
   String toString() {
-    return 'WalletPassApiResponse(returnCode: $returnCode, returnRes: $returnRes, accessToken: $accessToken, tempAccessSec: $tempAccessSec, cardParams: $cardParams, passStatuslist: $passStatuslist, cardInfolist: $cardInfolist, teeTempAccessSec: $teeTempAccessSec, teeTempTransId: $teeTempTransId, passStatus: $passStatus, version: $version, readNFCResult: $readNFCResult, passDeviceId: $passDeviceId, transactionId: $transactionId, transactionIdSign: $transactionIdSign, authResult: $authResult)';
-  }
-
-  @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-
-    return o is WalletPassApiResponse &&
-        o.returnCode == returnCode &&
-        o.returnRes == returnRes &&
-        o.accessToken == accessToken &&
-        o.tempAccessSec == tempAccessSec &&
-        o.cardParams == cardParams &&
-        listEquals(o.passStatuslist, passStatuslist) &&
-        listEquals(o.cardInfolist, cardInfolist) &&
-        o.teeTempAccessSec == teeTempAccessSec &&
-        o.teeTempTransId == teeTempTransId &&
-        o.passStatus == passStatus &&
-        o.version == version &&
-        o.readNFCResult == readNFCResult &&
-        o.passDeviceId == passDeviceId &&
-        o.transactionId == transactionId &&
-        o.transactionIdSign == transactionIdSign &&
-        o.authResult == authResult;
-  }
-
-  @override
-  int get hashCode {
-    return returnCode.hashCode ^
-        returnRes.hashCode ^
-        accessToken.hashCode ^
-        tempAccessSec.hashCode ^
-        cardParams.hashCode ^
-        passStatuslist.hashCode ^
-        cardInfolist.hashCode ^
-        teeTempAccessSec.hashCode ^
-        teeTempTransId.hashCode ^
-        passStatus.hashCode ^
-        version.hashCode ^
-        readNFCResult.hashCode ^
-        passDeviceId.hashCode ^
-        transactionId.hashCode ^
-        transactionIdSign.hashCode ^
-        authResult.hashCode;
+    return '$WalletPassApiResponse('
+        'returnCode: $returnCode, '
+        'returnRes: $returnRes, '
+        'accessToken: $accessToken, '
+        'tempAccessSec: $tempAccessSec, '
+        'cardParams: $cardParams, '
+        'passStatusList: $passStatusList, '
+        'cardInfoList: $cardInfoList, '
+        'teeTempAccessSec: $teeTempAccessSec, '
+        'teeTempTransId: $teeTempTransId, '
+        'passStatus: $passStatus, '
+        'version: $version, '
+        'readNFCResult: $readNFCResult, '
+        'passDeviceId: $passDeviceId, '
+        'transactionId: $transactionId, '
+        'transactionIdSign: $transactionIdSign, '
+        'authResult: $authResult)';
   }
 }

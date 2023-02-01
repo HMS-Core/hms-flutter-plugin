@@ -1,50 +1,45 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+ * Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
 package com.huawei.hms.flutter.wallet.utils.jwe;
 
 import android.util.Base64;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.zip.GZIPOutputStream;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-
-/**
- * JWE utility class.
- *
- * @since 2020-03-02
- */
 public class JweUtil {
-    private static String TAG = "JweUtil";
+    private static final String TAG = "JweUtil";
+
     /**
      * Generate a JSON Web Encryption (JWE).
      *
      * @param dataJson JWE-type data. It can be a list of instance IDs or a wallet instance.
      * @return return a map containing a content string and a signature string.
      */
-    public static String generateJwe(String dataJson, String jwePrivateKey, String sessionKeyPublicKey) {
+    public static String generateJwe(String issuerId, String dataJson, String jwePrivateKey, String sessionKeyPublicKey) throws JSONException {
         String sessionKey = RandomUtils.generateSecureRandomFactor(16);
+
+        JSONObject jsonObject = new JSONObject(dataJson);
+        jsonObject.put("iss", issuerId);
 
         // The first part: JWE Head
         JweHeader jweHeader = getHeader();
@@ -56,26 +51,26 @@ public class JweUtil {
         // The third part: JWE IV
         byte[] iv = AESUtils.getIvByte(12);
         String ivHexStr = HwHex.encodeHexString(iv);
-        String ivEncode = Base64.encodeToString(ivHexStr.getBytes(StandardCharsets.UTF_8), Base64.URL_SAFE|Base64.NO_WRAP);
+        String ivEncode = Base64.encodeToString(ivHexStr.getBytes(StandardCharsets.UTF_8), Base64.URL_SAFE | Base64.NO_WRAP);
 
         // The fourth part: JWE CipherText
-        String cipherTextEncode = getCipherText(dataJson, sessionKey, iv, jweHeader);
+        String cipherTextEncode = getCipherText(jsonObject.toString(), sessionKey, iv, jweHeader);
 
         // The fifth part: JWE Authentication Tag
         String authenticationTagEncode =
-            getAuthenticationTag(jwePrivateKey, sessionKey, dataJson, jweHeaderEncode, ivEncode);
+                getAuthenticationTag(jwePrivateKey, sessionKey, jsonObject.toString(), jweHeaderEncode, ivEncode);
 
         StringBuilder stringBuilder = new StringBuilder();
         return stringBuilder.append(jweHeaderEncode)
-            .append(".")
-            .append(encryptedKeyEncode)
-            .append(".")
-            .append(ivEncode)
-            .append(".")
-            .append(cipherTextEncode)
-            .append(".")
-            .append(authenticationTagEncode)
-            .toString();
+                .append(".")
+                .append(encryptedKeyEncode)
+                .append(".")
+                .append(ivEncode)
+                .append(".")
+                .append(cipherTextEncode)
+                .append(".")
+                .append(authenticationTagEncode)
+                .toString();
     }
 
     private static JweHeader getHeader() {
@@ -90,24 +85,23 @@ public class JweUtil {
     private static String getEncodeHeader(JweHeader jweHeader) {
         StringBuffer stringBuffer = new StringBuffer();
         String headerJson = stringBuffer.append("alg=")
-            .append(jweHeader.getAlg())
-            .append(", enc=")
-            .append(jweHeader.getEnc())
-            .append(", kid=")
-            .append(jweHeader.getKid())
-            .append(", zip=")
-            .append(jweHeader.getZip())
-            .toString();
-        return  Base64.encodeToString(headerJson.getBytes(StandardCharsets.UTF_8), Base64.URL_SAFE|Base64.NO_WRAP);
+                .append(jweHeader.getAlg())
+                .append(", enc=")
+                .append(jweHeader.getEnc())
+                .append(", kid=")
+                .append(jweHeader.getKid())
+                .append(", zip=")
+                .append(jweHeader.getZip())
+                .toString();
+        return Base64.encodeToString(headerJson.getBytes(StandardCharsets.UTF_8), Base64.URL_SAFE | Base64.NO_WRAP);
     }
 
     private static String getEncryptedKey(String sessionKey, String sessionKeyPublicKey) {
         try {
-            String encryptedSessionKey = RSA.encrypt(sessionKey.getBytes(StandardCharsets.UTF_8), sessionKeyPublicKey,
-                "RSA/NONE/OAEPwithSHA-256andMGF1Padding", "UTF-8");
-            return Base64.encodeToString(encryptedSessionKey.getBytes(StandardCharsets.UTF_8), Base64.URL_SAFE|Base64.NO_WRAP);
-        } catch (InvalidKeySpecException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
-            Log.e(TAG, e.getMessage());
+            String encryptedSessionKey = RSA.encrypt(sessionKey.getBytes(StandardCharsets.UTF_8), sessionKeyPublicKey, "RSA/NONE/OAEPwithSHA-256andMGF1Padding");
+            return Base64.encodeToString(encryptedSessionKey.getBytes(StandardCharsets.UTF_8), Base64.URL_SAFE | Base64.NO_WRAP);
+        } catch (Exception e) {
+            Log.e(TAG, "Encrypt session key failed.");
         }
         return "";
     }
@@ -123,21 +117,20 @@ public class JweUtil {
         }
         String payLoadEncrypt = AESUtils.encryptByGcm(dataJson, sessionKey, iv);
         byte[] payLoadEncryptCompressByte = compress(payLoadEncrypt.getBytes(StandardCharsets.UTF_8));
-        String cipherTextEncode = Base64.encodeToString(payLoadEncryptCompressByte, Base64.URL_SAFE|Base64.NO_WRAP);
-        return cipherTextEncode;
+        return Base64.encodeToString(payLoadEncryptCompressByte, Base64.URL_SAFE | Base64.NO_WRAP);
     }
 
     private static String getAuthenticationTag(String jweSignPrivateKey, String sessionKey, String payLoadJson, String jweHeaderEncode, String ivEncode) {
         StringBuffer stringBuffer = new StringBuffer();
         String signContent = stringBuffer.append(jweHeaderEncode)
-            .append(".")
-            .append(sessionKey)
-            .append(".")
-            .append(ivEncode)
-            .append(".")
-            .append(payLoadJson)
-            .toString();
-        return RSA.sign(signContent, jweSignPrivateKey, "");
+                .append(".")
+                .append(sessionKey)
+                .append(".")
+                .append(ivEncode)
+                .append(".")
+                .append(payLoadJson)
+                .toString();
+        return RSA.sign(signContent, jweSignPrivateKey);
     }
 
     /**
@@ -148,17 +141,16 @@ public class JweUtil {
      */
     public static byte[] compress(byte[] originalBytes) {
         if (originalBytes == null || originalBytes.length == 0) {
-            return new byte[0];
+            return null;
         }
-        try {
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            GZIPOutputStream gzip = new GZIPOutputStream(out);
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream();
+             GZIPOutputStream gzip = new GZIPOutputStream(out)) {
             gzip.write(originalBytes);
             gzip.finish();
             return out.toByteArray();
-        } catch (IOException e) {
+        } catch (Exception e) {
             Log.e(TAG, e.getMessage());
-            return new byte[0];
+            return null;
         }
     }
 }

@@ -1,6 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
-
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -15,85 +14,118 @@
 */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:huawei_wallet/huawei_wallet.dart';
-import 'package:huawei_wallet_example/pages/pass/pass_action_page.dart';
-import 'package:huawei_wallet_example/utils/utils.dart';
+
+import 'package:huawei_wallet_example/constants.dart';
+import 'package:huawei_wallet_example/utils.dart';
+import 'package:huawei_wallet_example/pages/pass_action_page.dart';
 
 class CouponCardPage extends StatefulWidget {
+  const CouponCardPage({
+    required this.environment,
+    Key? key,
+  }) : super(key: key);
+
   final int environment;
 
-  const CouponCardPage({Key key, this.environment}) : super(key: key);
   @override
-  _CouponCardPageState createState() => _CouponCardPageState();
+  State<CouponCardPage> createState() => _CouponCardPageState();
 }
 
 class _CouponCardPageState extends State<CouponCardPage> {
   String status = 'ACTIVE';
-  DateTime lastBalanceDate = DateTime(2021, 1, 1);
-  DateTime startDate = DateTime(2020, 1, 12);
-  DateTime endDate = DateTime(2022, 1, 12);
+  DateTime? lastBalanceDate = DateTime(2021, 1, 1);
+  DateTime? startDate = DateTime(2020, 1, 12);
+  DateTime? endDate = DateTime(2023, 6, 12);
 
   TextEditingController passTypeIdController = TextEditingController.fromValue(
-    TextEditingValue(text: Constants.passTypeIdCoupon),
+    const TextEditingValue(
+      text: Constants.passTypeIdCoupon,
+    ),
   );
   TextEditingController passStyleIdController = TextEditingController.fromValue(
-    TextEditingValue(text: Constants.passStyleIdCoupon),
+    const TextEditingValue(
+      text: Constants.passStyleIdCoupon,
+    ),
   );
   TextEditingController serialNumberController =
       TextEditingController.fromValue(
-    TextEditingValue(text: Utils.getRandomNumber(12)),
+    TextEditingValue(
+      text: Utils.getRandomNumber(12),
+    ),
   );
   TextEditingController cardLogoController = TextEditingController.fromValue(
-    TextEditingValue(
+    const TextEditingValue(
       text:
           'https://contentcenter-drcn.dbankcdn.com/cch5/Wallet-WalletKit/picres/cloudRes/coupon_logo.png',
     ),
   );
   TextEditingController merchantNameController =
       TextEditingController.fromValue(
-    TextEditingValue(text: 'Merchant Name'),
+    const TextEditingValue(
+      text: 'Merchant Name',
+    ),
   );
   TextEditingController cardNameController = TextEditingController.fromValue(
-    TextEditingValue(text: 'Coupon Name'),
+    const TextEditingValue(
+      text: 'Coupon Name',
+    ),
   );
   TextEditingController cardNumberController = TextEditingController.fromValue(
-    TextEditingValue(text: Utils.getRandomNumber(6)),
+    TextEditingValue(
+      text: Utils.getRandomNumber(6),
+    ),
   );
   TextEditingController backgroundColorController =
       TextEditingController.fromValue(
-    TextEditingValue(text: '#FF483D8B'),
+    const TextEditingValue(
+      text: '#FF483D8B',
+    ),
   );
   TextEditingController barValController = TextEditingController.fromValue(
-    TextEditingValue(text: '1234567890'),
+    const TextEditingValue(
+      text: '1234567890',
+    ),
   );
   TextEditingController barTextController = TextEditingController.fromValue(
-    TextEditingValue(text: '123456789123456'),
+    const TextEditingValue(
+      text: '123456789123456',
+    ),
   );
   TextEditingController eventNumberController = TextEditingController.fromValue(
-    TextEditingValue(text: '0'),
+    const TextEditingValue(
+      text: '0',
+    ),
   );
   TextEditingController messageHeaderController =
       TextEditingController.fromValue(
-    TextEditingValue(text: 'Message'),
+    const TextEditingValue(
+      text: 'Message',
+    ),
   );
   TextEditingController messageInfoController = TextEditingController.fromValue(
-    TextEditingValue(text: 'Welcome to use Coupon Card.'),
+    const TextEditingValue(
+      text: 'Welcome to use Coupon Card.',
+    ),
   );
   TextEditingController bannerURIController = TextEditingController.fromValue(
-    TextEditingValue(
+    const TextEditingValue(
       text:
           'https://contentcenter-drcn.dbankcdn.com/cch5/wallet/HiWallet/cloudRes/ic_empty_traffic.png',
     ),
   );
   TextEditingController bannerURIDescController =
       TextEditingController.fromValue(
-    TextEditingValue(text: 'Rotation Chart'),
+    const TextEditingValue(
+      text: 'Rotation Chart',
+    ),
   );
   TextEditingController uriLabelController = TextEditingController();
   TextEditingController uriValueController = TextEditingController();
   TextEditingController nearbyLabelController = TextEditingController.fromValue(
-    TextEditingValue(text: 'Nearby Location'),
+    const TextEditingValue(
+      text: 'Nearby Location',
+    ),
   );
 
   @override
@@ -103,105 +135,146 @@ class _CouponCardPageState extends State<CouponCardPage> {
         title: const Text('Add Gift Card'),
       ),
       body: ListView(
-        children: [
+        children: <Widget>[
           TextField(
             controller: serialNumberController,
-            decoration: InputDecoration(labelText: 'Serial Number'),
+            decoration: const InputDecoration(
+              labelText: 'Serial Number',
+            ),
           ),
           TextField(
             controller: passStyleIdController,
-            decoration: InputDecoration(labelText: 'Template - Style Id'),
+            decoration: const InputDecoration(
+              labelText: 'Template - Style Id',
+            ),
           ),
           TextField(
             controller: passTypeIdController,
-            decoration: InputDecoration(labelText: 'Pass Type'),
+            decoration: const InputDecoration(
+              labelText: 'Pass Type',
+            ),
           ),
           TextField(
             // 2
             controller: cardLogoController,
-            decoration: InputDecoration(labelText: 'Logo Uri'),
+            decoration: const InputDecoration(
+              labelText: 'Logo Uri',
+            ),
           ),
           TextField(
             // 3
             controller: merchantNameController,
-            decoration: InputDecoration(labelText: 'Merchant Name'),
+            decoration: const InputDecoration(
+              labelText: 'Merchant Name',
+            ),
           ),
           TextField(
             // 4
             controller: cardNameController,
-            decoration: InputDecoration(labelText: 'Card Name'),
+            decoration: const InputDecoration(
+              labelText: 'Card Name',
+            ),
           ),
           TextField(
             // 5
             controller: cardNumberController,
-            decoration: InputDecoration(labelText: 'Gift Card Number'),
+            decoration: const InputDecoration(
+              labelText: 'Gift Card Number',
+            ),
           ),
           TextField(
             // 8
             controller: backgroundColorController,
-            decoration:
-                InputDecoration(labelText: 'Hex Background Color for Coupon'),
+            decoration: const InputDecoration(
+              labelText: 'Hex Background Color for Coupon',
+            ),
           ),
           TextField(
             // 10
             controller: barValController,
-            decoration: InputDecoration(labelText: 'Barcode Value'),
+            decoration: const InputDecoration(
+              labelText: 'Barcode Value',
+            ),
           ),
           TextField(
             // 10
             controller: barTextController,
-            decoration: InputDecoration(labelText: 'Barcode Text'),
+            decoration: const InputDecoration(
+              labelText: 'Barcode Text',
+            ),
           ),
           TextField(
             // 13
             controller: eventNumberController,
-            decoration: InputDecoration(labelText: 'Evenet Number'),
+            decoration: const InputDecoration(
+              labelText: 'Evenet Number',
+            ),
           ),
           TextField(
             // 14
             controller: messageHeaderController,
-            decoration: InputDecoration(labelText: 'Message Header'),
+            decoration: const InputDecoration(
+              labelText: 'Message Header',
+            ),
           ),
           TextField(
             // 14
             controller: messageInfoController,
-            decoration: InputDecoration(labelText: 'Message Info'),
+            decoration: const InputDecoration(
+              labelText: 'Message Info',
+            ),
           ),
           TextField(
             // 15
             controller: bannerURIController,
-            decoration: InputDecoration(labelText: 'Banner URI'),
+            decoration: const InputDecoration(
+              labelText: 'Banner URI',
+            ),
           ),
           TextField(
             // 15
             controller: bannerURIDescController,
-            decoration: InputDecoration(labelText: 'Banner URI Description'),
+            decoration: const InputDecoration(
+              labelText: 'Banner URI Description',
+            ),
           ),
           TextField(
             // 15
             controller: uriLabelController,
-            decoration: InputDecoration(labelText: 'URL Label'),
+            decoration: const InputDecoration(
+              labelText: 'URL Label',
+            ),
           ),
           TextField(
             // 15
             controller: uriValueController,
-            decoration: InputDecoration(labelText: 'URL Value'),
+            decoration: const InputDecoration(
+              labelText: 'URL Value',
+            ),
           ),
           TextField(
             // 16
             controller: nearbyLabelController,
-            decoration: InputDecoration(labelText: 'Nearby Location Label'),
+            decoration: const InputDecoration(
+              labelText: 'Nearby Location Label',
+            ),
           ),
           DropdownButton<String>(
-            hint: Text('Status'),
+            hint: const Text('Status'),
             value: status,
-            onChanged: (String newValue) {
-              setState(() {
-                status = newValue;
-              });
+            onChanged: (String? newValue) {
+              if (newValue != null) {
+                setState(() {
+                  status = newValue;
+                });
+              }
             },
-            items: <String>['ACTIVE', 'COMPLETED', 'EXPIRED', 'INACTIVE']
-                .map<DropdownMenuItem<String>>((String value) {
+            items: <String>[
+              'ACTIVE',
+              'COMPLETED',
+              'EXPIRED',
+              'INACTIVE',
+            ].map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(value),
@@ -209,7 +282,7 @@ class _CouponCardPageState extends State<CouponCardPage> {
             }).toList(),
           ),
           ListTile(
-            subtitle: Text('Last Balance Update Date'),
+            subtitle: const Text('Last Balance Update Date'),
             title: Text(lastBalanceDate?.toIso8601String() ?? ''),
             onTap: () async {
               lastBalanceDate = await showDatePicker(
@@ -222,7 +295,7 @@ class _CouponCardPageState extends State<CouponCardPage> {
             },
           ),
           ListTile(
-            subtitle: Text('Start Date'),
+            subtitle: const Text('Start Date'),
             title: Text(startDate?.toIso8601String() ?? ''),
             onTap: () async {
               startDate = await showDatePicker(
@@ -235,7 +308,7 @@ class _CouponCardPageState extends State<CouponCardPage> {
             },
           ),
           ListTile(
-            subtitle: Text('End Date'),
+            subtitle: const Text('End Date'),
             title: Text(endDate?.toIso8601String() ?? ''),
             onTap: () async {
               endDate = await showDatePicker(
@@ -249,10 +322,10 @@ class _CouponCardPageState extends State<CouponCardPage> {
           ),
           const SizedBox(height: 32),
           MaterialButton(
-            child: Text('Save Card'),
+            child: const Text('Save Card'),
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute(
+                MaterialPageRoute<dynamic>(
                   builder: (_) => PassActionPage(
                     passObject: getPassObject(),
                     environment: widget.environment,
@@ -283,7 +356,7 @@ class _CouponCardPageState extends State<CouponCardPage> {
         text: barTextController.text,
         value: barValController.text,
       ),
-      commonFields: [
+      commonFields: <CommonField>[
         CommonField(
           key: WalletPassConstant.passAppendFieldKeyBackgroundColor,
           label: 'backgroundColorLable',
@@ -310,21 +383,21 @@ class _CouponCardPageState extends State<CouponCardPage> {
           value: cardNumberController.text,
         ),
       ],
-      messageList: [
+      messageList: <AppendField>[
         AppendField(
           key: '1',
           label: messageHeaderController.text,
           value: messageInfoController.text,
         ),
       ],
-      imageList: [
+      imageList: <AppendField>[
         AppendField(
           key: '1',
           label: bannerURIDescController.text,
           value: bannerURIController.text,
         ),
       ],
-      urlList: [
+      urlList: <AppendField>[
         AppendField(
           key: '1',
           label: uriLabelController.text,

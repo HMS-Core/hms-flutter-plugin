@@ -1,6 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
-
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -13,68 +12,44 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import 'dart:convert';
+
+part of huawei_wallet;
 
 class PassStatus {
+  /// Status of a wallet pass.
+  ///
+  /// Values are:
+  ///   - WalletPassConstant.passStateCompleted;
+  ///   - WalletPassConstant.passStateExpired;
+  ///   - WalletPassConstant.passStateInactive;
+  ///   - WalletPassConstant.passStateActive;
   final String state;
+
+  /// Time when the wallet pass takes effect, in UTC format: yyyy-MM-ddTHH:mm:ss.SSSZ.
   final String effectTime;
+
+  /// Time when the wallet pass expires, in UTC format: yyyy-MM-ddTHH:mm:ss.SSSZ.
   final String expireTime;
-  PassStatus({
-    this.state,
-    this.effectTime,
-    this.expireTime,
+
+  const PassStatus({
+    required this.state,
+    required this.effectTime,
+    required this.expireTime,
   });
 
-  PassStatus copyWith({
-    String state,
-    String effectTime,
-    String expireTime,
-  }) {
-    return PassStatus(
-      state: state ?? this.state,
-      effectTime: effectTime ?? this.effectTime,
-      expireTime: expireTime ?? this.expireTime,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
+  Map<String, dynamic> _toMap() {
+    return <String, dynamic>{
       'state': state,
       'effectTime': effectTime,
       'expireTime': expireTime,
     };
   }
 
-  factory PassStatus.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
-    return PassStatus(
-      state: map['state'],
-      effectTime: map['effectTime'],
-      expireTime: map['expireTime'],
-    );
+  @override
+  String toString() {
+    return '$PassStatus('
+        'state: $state, '
+        'effectTime: $effectTime, '
+        'expireTime: $expireTime)';
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory PassStatus.fromJson(String source) =>
-      PassStatus.fromMap(json.decode(source));
-
-  @override
-  String toString() =>
-      'PassStatus(state: $state, effectTime: $effectTime, expireTime: $expireTime)';
-
-  @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-
-    return o is PassStatus &&
-        o.state == state &&
-        o.effectTime == effectTime &&
-        o.expireTime == expireTime;
-  }
-
-  @override
-  int get hashCode =>
-      state.hashCode ^ effectTime.hashCode ^ expireTime.hashCode;
 }

@@ -1,6 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
-
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -13,66 +12,47 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import 'dart:convert';
+
+part of huawei_wallet;
 
 class BarCode {
-  static final String barcodeTypeCodebar = "codabar";
-  static final String barcodeTypeQrCode = "qrCode";
+  /// 1D barcode if this constant is assigned a value.
+  static const String barcodeTypeCodabar = 'codabar';
 
+  /// 2D barcode if this constant is assigned a value.
+  static const String barcodeTypeQrCode = 'qrCode';
+
+  /// Barcode text, an additional description displayed under the barcode.
+  /// Currently, a barcode can be a QR code or codabar.
   final String text;
+
+  /// Barcode type, which can be qrCode or codabar.
   final String type;
-  final String value;
-  BarCode({
-    this.text,
-    this.type,
-    this.value,
+
+  /// Barcode value.
+  /// If no barcode value is specified, the cardNumber value will be used.
+  /// If the cardNumber value is not specified, the organizationPassId value will be used.
+  final String? value;
+
+  const BarCode({
+    required this.text,
+    required this.type,
+    required this.value,
   });
 
-  BarCode copyWith({
-    String text,
-    String type,
-    String value,
-  }) {
-    return BarCode(
-      text: text ?? this.text,
-      type: type ?? this.type,
-      value: value ?? this.value,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
+  Map<String, dynamic> _toMap() {
+    return <String, dynamic>{
       'text': text,
       'type': type,
       'value': value,
     };
   }
 
-  factory BarCode.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
-    return BarCode(
-      text: map['text'],
-      type: map['type'],
-      value: map['value'],
-    );
+  @override
+  String toString() {
+    return '$BarCode('
+        'text: $text, '
+        'type: $type, '
+        'value: $value)';
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory BarCode.fromJson(String source) =>
-      BarCode.fromMap(json.decode(source));
-
-  @override
-  String toString() => 'BarCode(text: $text, type: $type, value: $value)';
-
-  @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-
-    return o is BarCode && o.text == text && o.type == type && o.value == value;
-  }
-
-  @override
-  int get hashCode => text.hashCode ^ type.hashCode ^ value.hashCode;
 }

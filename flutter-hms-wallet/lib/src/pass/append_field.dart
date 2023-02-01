@@ -1,6 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
-
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -13,66 +12,38 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import 'dart:convert';
+
+part of huawei_wallet;
 
 class AppendField {
+  /// AppendField key.
   final String key;
+
+  /// AppendField value.
   final String value;
+
+  /// AppendField label.
   final String label;
-  AppendField({
-    this.key,
-    this.value,
-    this.label,
+
+  const AppendField({
+    required this.key,
+    required this.value,
+    required this.label,
   });
 
-  AppendField copyWith({
-    String key,
-    String value,
-    String label,
-  }) {
-    return AppendField(
-      key: key ?? this.key,
-      value: value ?? this.value,
-      label: label ?? this.label,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
+  Map<String, dynamic> _toMap() {
+    return <String, dynamic>{
       'key': key,
       'value': value,
       'label': label,
     };
   }
 
-  factory AppendField.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
-    return AppendField(
-      key: map['key'],
-      value: map['value'],
-      label: map['label'],
-    );
+  @override
+  String toString() {
+    return '$AppendField('
+        'key: $key, '
+        'value: $value, '
+        'label: $label)';
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory AppendField.fromJson(String source) =>
-      AppendField.fromMap(json.decode(source));
-
-  @override
-  String toString() => 'AppendField(key: $key, value: $value, label: $label)';
-
-  @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-
-    return o is AppendField &&
-        o.key == key &&
-        o.value == value &&
-        o.label == label;
-  }
-
-  @override
-  int get hashCode => key.hashCode ^ value.hashCode ^ label.hashCode;
 }

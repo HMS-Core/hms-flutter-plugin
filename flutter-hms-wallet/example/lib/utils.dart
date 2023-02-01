@@ -1,6 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
-
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -13,6 +12,19 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-const String WALLET_METHOD_CHANNEL = "com.huawei.hms.flutter.wallet/method";
-const String WALLET_API_METHOD_CHANNEL =
-    "com.huawei.hms.flutter.passsdk/method";
+
+import 'dart:math';
+
+abstract class Utils {
+  static const String _chars = '1234567890';
+  static final Random _rnd = Random();
+
+  static String getRandomNumber(int length) {
+    return String.fromCharCodes(
+      Iterable<int>.generate(
+        length,
+        (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length)),
+      ),
+    );
+  }
+}

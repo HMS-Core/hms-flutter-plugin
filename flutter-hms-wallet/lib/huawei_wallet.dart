@@ -1,6 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
-
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -13,21 +12,21 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+
 library huawei_wallet;
 
-export 'src/hw_wallet.dart';
+import 'package:flutter/services.dart';
 
-export 'src/passsdk/wallet_pass_api.dart';
-
-export 'src/service/wallet_pass_api_response.dart';
-export 'src/service/wallet_card_info.dart';
-export 'src/service/wallet_pass_status.dart';
-
-export 'src/pass/append_field.dart';
-export 'src/pass/bar_code.dart';
-export 'src/pass/common_field.dart';
-export 'src/pass/location.dart';
-export 'src/pass/pass_object.dart';
-export 'src/pass/pass_status.dart';
-export 'src/pass/related_pass_info.dart';
-export 'src/constants.dart';
+part 'src/huawei_wallet.dart';
+part 'src/pass/append_field.dart';
+part 'src/pass/bar_code.dart';
+part 'src/pass/common_field.dart';
+part 'src/pass/location.dart';
+part 'src/pass/pass_object.dart';
+part 'src/pass/pass_status.dart';
+part 'src/pass/related_pass_info.dart';
+part 'src/service/wallet_card_info.dart';
+part 'src/service/wallet_pass_api.dart';
+part 'src/service/wallet_pass_api_response.dart';
+part 'src/service/wallet_pass_constant.dart';
+part 'src/service/wallet_pass_status.dart';

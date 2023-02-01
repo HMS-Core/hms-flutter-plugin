@@ -1,6 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
-
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -13,57 +12,33 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import 'dart:convert';
 
+part of huawei_wallet;
+
+/// Geofence information.
 class Location {
-  final String longitude;
+  /// Latitude.
   final String latitude;
-  Location({
-    this.longitude,
-    this.latitude,
+
+  /// Longitude.
+  final String longitude;
+
+  const Location({
+    required this.latitude,
+    required this.longitude,
   });
 
-  Location copyWith({
-    String latitude,
-    String longitude,
-  }) {
-    return Location(
-      longitude: longitude ?? this.longitude,
-      latitude: latitude ?? this.latitude,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'longitude': longitude,
+  Map<String, dynamic> _toMap() {
+    return <String, dynamic>{
       'latitude': latitude,
+      'longitude': longitude,
     };
   }
 
-  factory Location.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
-    return Location(
-      longitude: map['longitude'],
-      latitude: map['latitude'],
-    );
+  @override
+  String toString() {
+    return '$Location('
+        'latitude: $latitude, '
+        'longitude: $longitude)';
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory Location.fromJson(String source) =>
-      Location.fromMap(json.decode(source));
-
-  @override
-  String toString() => 'Location(longitude: $longitude, latitude: $latitude)';
-
-  @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-
-    return o is Location && o.longitude == longitude && o.latitude == latitude;
-  }
-
-  @override
-  int get hashCode => longitude.hashCode ^ latitude.hashCode;
 }

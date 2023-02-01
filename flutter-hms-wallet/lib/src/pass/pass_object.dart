@@ -1,6 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
-
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -13,185 +12,111 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
-import 'package:huawei_wallet/huawei_wallet.dart';
+part of huawei_wallet;
 
 class PassObject {
-  String passTypeIdentifier;
-  String passStyleIdentifier;
-  String organizationPassId;
-  String serialNumber;
-  String currencyCode;
-  PassStatus status;
-  List<RelatedPassInfo> relatedPassIds;
-  List<Location> locationList;
-  BarCode barCode;
-  List<CommonField> commonFields;
-  List<AppendField> appendFields;
-  List<AppendField> messageList;
-  List<AppendField> imageList;
-  List<AppendField> textList;
-  List<AppendField> urlList;
+  /// Type of a wallet pass.
+  final String passTypeIdentifier;
 
-  PassObject({
-    this.passTypeIdentifier,
+  /// Style of a wallet pass, which can be a loyalty card, gift card, or coupon.
+  final String passStyleIdentifier;
+
+  /// ID of a wallet pass.
+  final String organizationPassId;
+
+  /// Serial number (SN) of a wallet pass, which uniquely identifies the pass on the server.
+  /// Its value can be the same as passId.
+  final String serialNumber;
+
+  /// Currency code of a wallet pass.
+  final String? currencyCode;
+
+  /// Barcode or QR code.
+  final BarCode barCode;
+
+  /// Status of a wallet pass.
+  final PassStatus status;
+
+  /// Coupons linked to the wallet pass.
+  final List<RelatedPassInfo> relatedPassIds;
+
+  /// Geofence locations.
+  final List<Location> locationList;
+
+  /// CommonField objects for constructing a wallet pass.
+  final List<CommonField> commonFields;
+
+  /// AppendField objects for constructing a wallet pass.
+  final List<AppendField> appendFields;
+
+  /// Message objects for constructing a wallet pass.
+  final List<AppendField> messageList;
+
+  /// Images for ad rotation.
+  final List<AppendField> imageList;
+
+  /// List of text information.
+  final List<AppendField> textList;
+
+  /// URLs of a wallet pass.
+  final List<AppendField> urlList;
+
+  const PassObject({
+    required this.passTypeIdentifier,
+    required this.passStyleIdentifier,
+    required this.organizationPassId,
+    required this.serialNumber,
+    required this.status,
+    required this.barCode,
     this.currencyCode,
-    this.urlList,
-    this.passStyleIdentifier,
-    this.organizationPassId,
-    this.serialNumber,
-    this.status,
-    this.relatedPassIds,
-    this.locationList,
-    this.barCode,
-    this.commonFields,
-    this.appendFields,
-    this.messageList,
-    this.imageList,
-    this.textList,
+    this.urlList = const <AppendField>[],
+    this.relatedPassIds = const <RelatedPassInfo>[],
+    this.locationList = const <Location>[],
+    this.commonFields = const <CommonField>[],
+    this.appendFields = const <AppendField>[],
+    this.messageList = const <AppendField>[],
+    this.imageList = const <AppendField>[],
+    this.textList = const <AppendField>[],
   });
 
-  PassObject copyWith({
-    String passTypeIdentifier,
-    String currencyCode,
-    List<AppendField> urlList,
-    String passStyleIdentifier,
-    String organizationPassId,
-    String serialNumber,
-    String status,
-    List<RelatedPassInfo> relatedPassIds,
-    List<Location> locationList,
-    BarCode barCode,
-    List<CommonField> commonField,
-    List<AppendField> appendFields,
-    List<AppendField> messageList,
-    List<AppendField> imageList,
-    List<AppendField> textList,
-  }) {
-    return PassObject(
-      passTypeIdentifier: passTypeIdentifier ?? this.passTypeIdentifier,
-      currencyCode: currencyCode ?? this.currencyCode,
-      urlList: urlList ?? this.urlList,
-      passStyleIdentifier: passStyleIdentifier ?? this.passStyleIdentifier,
-      organizationPassId: organizationPassId ?? this.organizationPassId,
-      serialNumber: serialNumber ?? this.serialNumber,
-      status: status ?? this.status,
-      relatedPassIds: relatedPassIds ?? this.relatedPassIds,
-      locationList: locationList ?? this.locationList,
-      barCode: barCode ?? this.barCode,
-      commonFields: commonField ?? this.commonFields,
-      appendFields: appendFields ?? this.appendFields,
-      messageList: messageList ?? this.messageList,
-      imageList: imageList ?? this.imageList,
-      textList: textList ?? this.textList,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
+  Map<String, dynamic> _toMap() {
+    return <String, dynamic>{
       'passTypeIdentifier': passTypeIdentifier,
       'passStyleIdentifier': passStyleIdentifier,
       'organizationPassId': organizationPassId,
       'serialNumber': serialNumber,
-      // fields
-      'fields': {
-        'currencyCode': currencyCode,
-        'urlList': urlList?.map((x) => x?.toMap())?.toList(),
-        'status': status.toMap(),
-        'relatedPassIds': relatedPassIds?.map((x) => x?.toMap())?.toList(),
-        'locationList': locationList?.map((x) => x?.toMap())?.toList(),
-        'barCode': barCode?.toMap(),
-        'commonFields': commonFields?.map((x) => x?.toMap())?.toList(),
-        'appendFields': appendFields?.map((x) => x?.toMap())?.toList(),
-        'messageList': messageList?.map((x) => x?.toMap())?.toList(),
-        'imageList': imageList?.map((x) => x?.toMap())?.toList(),
-        'textList': textList?.map((x) => x?.toMap())?.toList(),
-      },
-      // additional items
-      'formatVersion': '10.0',
+      'currencyCode': currencyCode,
+      'barCode': barCode._toMap(),
+      'status': status._toMap(),
+      'relatedPassIds': relatedPassIds.map((_) => _._toMap()).toList(),
+      'locationList': locationList.map((_) => _._toMap()).toList(),
+      'commonFields': commonFields.map((_) => _._toMap()).toList(),
+      'appendFields': appendFields.map((_) => _._toMap()).toList(),
+      'messageList': messageList.map((_) => _._toMap()).toList(),
+      'imageList': imageList.map((_) => _._toMap()).toList(),
+      'textList': textList.map((_) => _._toMap()).toList(),
+      'urlList': urlList.map((_) => _._toMap()).toList(),
     };
   }
 
-  factory PassObject.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
-    return PassObject(
-      passTypeIdentifier: map['passTypeIdentifier'],
-      currencyCode: map['currencyCode'],
-      urlList: List<AppendField>.from(
-          map['urlList']?.map((x) => AppendField.fromMap(x)) ?? []),
-      passStyleIdentifier: map['passStyleIdentifier'],
-      organizationPassId: map['organizationPassId'],
-      serialNumber: map['serialNumber'],
-      status: PassStatus.fromMap(map['status']),
-      relatedPassIds: List<RelatedPassInfo>.from(
-          map['relatedPassIds']?.map((x) => RelatedPassInfo.fromMap(x)) ?? []),
-      locationList: List<Location>.from(
-          map['locationList']?.map((x) => Location.fromMap(x)) ?? []),
-      barCode: BarCode.fromMap(map['barCode']),
-      commonFields: List<CommonField>.from(
-          map['commonFields']?.map((x) => CommonField.fromMap(x)) ?? []),
-      appendFields: List<AppendField>.from(
-          map['appendFields']?.map((x) => AppendField.fromMap(x)) ?? []),
-      messageList: List<AppendField>.from(
-          map['messageList']?.map((x) => AppendField.fromMap(x)) ?? []),
-      imageList: List<AppendField>.from(
-          map['imageList']?.map((x) => AppendField.fromMap(x)) ?? []),
-      textList: List<AppendField>.from(
-          map['textList']?.map((x) => AppendField.fromMap(x)) ?? []),
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory PassObject.fromJson(String source) =>
-      PassObject.fromMap(json.decode(source));
-
   @override
   String toString() {
-    return 'PassObject(passTypeIdentifier: $passTypeIdentifier, currencyCode: $currencyCode, urlList: $urlList, passStyleIdentifier: $passStyleIdentifier, organizationPassId: $organizationPassId, serialNumber: $serialNumber, status: $status, relatedPassIds: $relatedPassIds, locationList: $locationList, barCode: $barCode, commonField: $commonFields, appendFields: $appendFields, messageList: $messageList, imageList: $imageList, textList: $textList)';
-  }
-
-  @override
-  bool operator ==(Object o) {
-    if (identical(this, o)) return true;
-
-    return o is PassObject &&
-        o.passTypeIdentifier == passTypeIdentifier &&
-        o.currencyCode == currencyCode &&
-        listEquals(o.urlList, urlList) &&
-        o.passStyleIdentifier == passStyleIdentifier &&
-        o.organizationPassId == organizationPassId &&
-        o.serialNumber == serialNumber &&
-        o.status == status &&
-        listEquals(o.relatedPassIds, relatedPassIds) &&
-        listEquals(o.locationList, locationList) &&
-        o.barCode == barCode &&
-        listEquals(o.commonFields, commonFields) &&
-        listEquals(o.appendFields, appendFields) &&
-        listEquals(o.messageList, messageList) &&
-        listEquals(o.imageList, imageList) &&
-        listEquals(o.textList, textList);
-  }
-
-  @override
-  int get hashCode {
-    return passTypeIdentifier.hashCode ^
-        currencyCode.hashCode ^
-        urlList.hashCode ^
-        passStyleIdentifier.hashCode ^
-        organizationPassId.hashCode ^
-        serialNumber.hashCode ^
-        status.hashCode ^
-        relatedPassIds.hashCode ^
-        locationList.hashCode ^
-        barCode.hashCode ^
-        commonFields.hashCode ^
-        appendFields.hashCode ^
-        messageList.hashCode ^
-        imageList.hashCode ^
-        textList.hashCode;
+    return '$PassObject('
+        'passTypeIdentifier: $passTypeIdentifier, '
+        'currencyCode: $currencyCode, '
+        'urlList: $urlList, '
+        'passStyleIdentifier: $passStyleIdentifier, '
+        'organizationPassId: $organizationPassId, '
+        'serialNumber: $serialNumber, '
+        'status: $status, '
+        'relatedPassIds: $relatedPassIds, '
+        'locationList: $locationList, '
+        'barCode: $barCode, '
+        'commonField: $commonFields, '
+        'appendFields: $appendFields, '
+        'messageList: $messageList, '
+        'imageList: $imageList, '
+        'textList: $textList)';
   }
 }

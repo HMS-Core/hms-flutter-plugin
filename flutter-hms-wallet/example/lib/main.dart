@@ -1,6 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
-
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -13,24 +12,39 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+
 import 'package:flutter/material.dart';
+
 import 'package:huawei_wallet_example/pages/sdk_page.dart';
 
 void main() {
-  runApp(MaterialApp(
-    home: MyApp(),
-    theme: ThemeData(
-      appBarTheme: AppBarTheme(color: Colors.black87),
-    ),
-  ));
+  runApp(const _App());
 }
 
-class MyApp extends StatefulWidget {
+class _App extends StatelessWidget {
+  const _App({Key? key}) : super(key: key);
+
   @override
-  _MyAppState createState() => _MyAppState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: const Home(),
+      theme: ThemeData(
+        appBarTheme: const AppBarTheme(
+          color: Colors.black87,
+        ),
+      ),
+    );
+  }
 }
 
-class _MyAppState extends State<MyApp> {
+class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,18 +52,20 @@ class _MyAppState extends State<MyApp> {
         title: const Text('Huawei Wallet Kit Demo'),
       ),
       body: ListView(
-        children: [
+        children: <Widget>[
           MaterialButton(
-            padding: EdgeInsets.symmetric(horizontal: 24),
-            child: Text(
-              'Obtaining vouchers through web pages, SMS messages, emails, and apps',
-            ),
             color: Colors.grey,
+            padding: const EdgeInsets.symmetric(horizontal: 24),
             onPressed: () async {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => SdkPage()),
+                MaterialPageRoute<dynamic>(
+                  builder: (_) => const SdkPage(),
+                ),
               );
             },
+            child: const Text(
+              'Obtaining vouchers through web pages, SMS messages, emails, and apps',
+            ),
           ),
         ],
       ),

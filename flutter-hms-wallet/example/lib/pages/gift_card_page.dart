@@ -1,6 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
-
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -13,289 +12,363 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:huawei_wallet/huawei_wallet.dart';
-import 'package:huawei_wallet_example/pages/pass/pass_action_page.dart';
-import 'package:huawei_wallet_example/utils/utils.dart';
 
-class LoyaltyCardPage extends StatefulWidget {
+import 'package:flutter/material.dart';
+import 'package:huawei_wallet/huawei_wallet.dart';
+
+import 'package:huawei_wallet_example/constants.dart';
+import 'package:huawei_wallet_example/utils.dart';
+import 'package:huawei_wallet_example/pages/pass_action_page.dart';
+
+class GiftCardPage extends StatefulWidget {
+  const GiftCardPage({
+    required this.environment,
+    Key? key,
+  }) : super(key: key);
+
   final int environment;
 
-  const LoyaltyCardPage({Key key, this.environment}) : super(key: key);
   @override
-  _LoyaltyCardPageState createState() => _LoyaltyCardPageState();
+  State<GiftCardPage> createState() => _GiftCardPageState();
 }
 
-class _LoyaltyCardPageState extends State<LoyaltyCardPage> {
+class _GiftCardPageState extends State<GiftCardPage> {
   String status = 'ACTIVE';
-  DateTime startDate = DateTime(2020, 1, 12);
-  DateTime endDate = DateTime(2022, 1, 12);
+  DateTime? lastBalanceDate = DateTime(2021, 1, 1);
+  DateTime? startDate = DateTime(2020, 1, 12);
+  DateTime? endDate = DateTime(2023, 6, 12);
 
-  TextEditingController serialNumberController =
-      TextEditingController.fromValue(
-    TextEditingValue(text: Utils.getRandomNumber(12)),
+  TextEditingController passTypeIdController = TextEditingController.fromValue(
+    const TextEditingValue(
+      text: Constants.passTypeIdGift,
+    ),
   );
   TextEditingController passStyleIdController = TextEditingController.fromValue(
-    TextEditingValue(text: Constants.passStyleIdLoyalty),
+    const TextEditingValue(
+      text: Constants.passStyleIdGift,
+    ),
   );
-  TextEditingController passTypeIdController = TextEditingController.fromValue(
-    TextEditingValue(text: Constants.passTypeIdLoyalty),
-  );
-  TextEditingController cardPictureController = TextEditingController.fromValue(
+  TextEditingController serialNumberController =
+      TextEditingController.fromValue(
     TextEditingValue(
+      text: Utils.getRandomNumber(12),
+    ),
+  );
+
+  TextEditingController backgroundPictureController =
+      TextEditingController.fromValue(
+    const TextEditingValue(
       text:
-          'https://contentcenter-drcn.dbankcdn.com/cch5/wallet/AccessCard/cloudRes/img_access_edit_personalise_big6.jpg',
+          'https://contentcenter-drcn.dbankcdn.com/cch5/wallet/AccessCard/cloudRes/img_access_edit_personalise_big3.jpg',
     ),
   );
   TextEditingController cardLogoController = TextEditingController.fromValue(
-    TextEditingValue(
-        text:
-            'https://contentcenter-drcn.dbankcdn.com/cch5/Wallet-WalletKit/picres/cloudRes/card_loyalty_logo.png'),
+    const TextEditingValue(
+      text:
+          'https://contentcenter-drcn.dbankcdn.com/cch5/Wallet-WalletKit/picres/cloudRes/card_gift_logo.png',
+    ),
   );
   TextEditingController merchantNameController =
       TextEditingController.fromValue(
-    TextEditingValue(text: 'carrefour vip'),
+    const TextEditingValue(
+      text: 'carrefour vip',
+    ),
   );
   TextEditingController cardNameController = TextEditingController.fromValue(
-    TextEditingValue(text: 'carrefour'),
+    const TextEditingValue(
+      text: 'carrefour',
+    ),
   );
   TextEditingController cardNumberController = TextEditingController.fromValue(
-    TextEditingValue(text: '0'),
+    TextEditingValue(text: Utils.getRandomNumber(6)),
   );
-  TextEditingController pointsController = TextEditingController();
+  TextEditingController pinController = TextEditingController.fromValue(
+    const TextEditingValue(
+      text: '1234',
+    ),
+  );
   TextEditingController balanceController = TextEditingController.fromValue(
-    TextEditingValue(text: '199'),
+    const TextEditingValue(
+      text: '1234',
+    ),
   );
   TextEditingController currencyCodeController =
       TextEditingController.fromValue(
-    TextEditingValue(text: 'C'),
+    const TextEditingValue(
+      text: 'TL',
+    ),
   );
   TextEditingController relatedIdController = TextEditingController();
   TextEditingController relatedValueController = TextEditingController();
   TextEditingController barValController = TextEditingController.fromValue(
-    TextEditingValue(text: '1234567890'),
+    const TextEditingValue(
+      text: '1234567890',
+    ),
   );
   TextEditingController barTextController = TextEditingController.fromValue(
-    TextEditingValue(text: '123456789123456'),
+    const TextEditingValue(
+      text: '123456789123456',
+    ),
   );
-  TextEditingController memberNameController = TextEditingController.fromValue(
-    TextEditingValue(text: 'tester'),
-  );
-  TextEditingController tierLevelController = TextEditingController.fromValue(
-    TextEditingValue(text: 'tier-level-0'),
+  TextEditingController eventNumberController = TextEditingController.fromValue(
+    const TextEditingValue(
+      text: '0',
+    ),
   );
   TextEditingController messageHeaderController =
       TextEditingController.fromValue(
-    TextEditingValue(text: 'Message'),
+    const TextEditingValue(
+      text: 'Message',
+    ),
   );
   TextEditingController messageInfoController = TextEditingController.fromValue(
-    TextEditingValue(text: 'Welcome to use loyalty card.'),
+    const TextEditingValue(
+      text: 'Welcome to use gift card.',
+    ),
   );
   TextEditingController bannerURIController = TextEditingController.fromValue(
-    TextEditingValue(
+    const TextEditingValue(
       text:
           'https://contentcenter-drcn.dbankcdn.com/cch5/wallet/HiWallet/cloudRes/ic_empty_idcard.png',
     ),
   );
   TextEditingController bannerURIDescController =
       TextEditingController.fromValue(
-    TextEditingValue(text: 'Rotation Chart'),
+    const TextEditingValue(
+      text: 'Rotation Chart',
+    ),
   );
   TextEditingController uriLabelController = TextEditingController();
   TextEditingController uriValueController = TextEditingController();
   TextEditingController nearbyLabelController = TextEditingController.fromValue(
-    TextEditingValue(text: 'Nearby Location'),
+    const TextEditingValue(
+      text: 'Nearby Location',
+    ),
   );
   TextEditingController nearbyValueController = TextEditingController();
   TextEditingController webSiteLabelController =
       TextEditingController.fromValue(
-    TextEditingValue(text: 'Website'),
+    const TextEditingValue(
+      text: 'Website',
+    ),
   );
   TextEditingController webSiteValueController = TextEditingController();
   TextEditingController hotlineLabelController =
       TextEditingController.fromValue(
-    TextEditingValue(text: 'Customer Service'),
+    const TextEditingValue(
+      text: 'Customer Service',
+    ),
   );
   TextEditingController hotlineValueController =
       TextEditingController.fromValue(
-    TextEditingValue(text: '4008205566'),
-  );
-  TextEditingController latitudeController = TextEditingController.fromValue(
-    TextEditingValue(text: '89'),
-  );
-  TextEditingController longitudeController = TextEditingController.fromValue(
-    TextEditingValue(text: '114'),
+    const TextEditingValue(
+      text: '4008205566',
+    ),
   );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Loyalty Card'),
+        title: const Text('Add Gift Card'),
       ),
       body: ListView(
-        children: [
+        children: <Widget>[
           TextField(
             controller: serialNumberController,
-            decoration: InputDecoration(labelText: 'Serial Number'),
+            decoration: const InputDecoration(
+              labelText: 'Serial Number',
+            ),
           ),
           TextField(
             controller: passStyleIdController,
-            decoration: InputDecoration(labelText: 'Template - Style Id'),
+            decoration: const InputDecoration(
+              labelText: 'Template - Style Id',
+            ),
           ),
           TextField(
             controller: passTypeIdController,
-            decoration: InputDecoration(labelText: 'Pass Type'),
+            decoration: const InputDecoration(
+              labelText: 'Pass Type',
+            ),
           ),
           TextField(
             // 1
-            controller: cardPictureController,
-            decoration: InputDecoration(labelText: 'Card Picture Uri'),
+            controller: backgroundPictureController,
+            decoration: const InputDecoration(
+              labelText: 'Card Picture Uri',
+            ),
           ),
           TextField(
             // 2
             controller: cardLogoController,
-            decoration: InputDecoration(labelText: 'Logo Uri'),
+            decoration: const InputDecoration(
+              labelText: 'Logo Uri',
+            ),
           ),
           TextField(
             // 3
             controller: merchantNameController,
-            decoration: InputDecoration(labelText: 'Merchant Name'),
+            decoration: const InputDecoration(
+              labelText: 'Merchant Name',
+            ),
           ),
           TextField(
             // 4
             controller: cardNameController,
-            decoration: InputDecoration(labelText: 'Card Name'),
+            decoration: const InputDecoration(
+              labelText: 'Card Name',
+            ),
           ),
           TextField(
             // 5
             controller: cardNumberController,
-            decoration: InputDecoration(labelText: 'Card Number'),
+            decoration: const InputDecoration(
+              labelText: 'Gift Card Number',
+            ),
           ),
           TextField(
             // 6
             controller: balanceController,
-            decoration: InputDecoration(labelText: 'Balance'),
+            decoration: const InputDecoration(
+              labelText: 'Balance',
+            ),
           ),
           TextField(
             // 6
             controller: currencyCodeController,
-            decoration: InputDecoration(labelText: 'Currency Code'),
-          ),
-          TextField(
-            // 7
-            controller: relatedIdController,
-            decoration: InputDecoration(labelText: 'Related Card Id'),
-          ),
-          TextField(
-            // 7
-            controller: relatedValueController,
-            decoration: InputDecoration(labelText: 'Related Card Type'),
+            decoration: const InputDecoration(
+              labelText: 'Currency Code',
+            ),
           ),
           TextField(
             // 8
-            controller: pointsController,
-            decoration: InputDecoration(labelText: 'Points'),
+            controller: pinController,
+            decoration: const InputDecoration(
+              labelText: 'Pin',
+            ),
           ),
           TextField(
             // 10
             controller: barValController,
-            decoration: InputDecoration(labelText: 'Barcode Value'),
+            decoration: const InputDecoration(
+              labelText: 'Barcode Value',
+            ),
           ),
           TextField(
             // 10
             controller: barTextController,
-            decoration: InputDecoration(labelText: 'Barcode Text'),
-          ),
-          TextField(
-            // 11
-            controller: memberNameController,
-            decoration: InputDecoration(labelText: 'Member Name'),
+            decoration: const InputDecoration(
+              labelText: 'Barcode Text',
+            ),
           ),
           TextField(
             // 13
-            controller: tierLevelController,
-            decoration: InputDecoration(labelText: 'Tier'),
+            controller: eventNumberController,
+            decoration: const InputDecoration(
+              labelText: 'Evenet Number',
+            ),
           ),
           TextField(
             // 14
             controller: messageHeaderController,
-            decoration: InputDecoration(labelText: 'Message Header'),
+            decoration: const InputDecoration(
+              labelText: 'Message Header',
+            ),
           ),
           TextField(
             // 14
             controller: messageInfoController,
-            decoration: InputDecoration(labelText: 'Message Info'),
+            decoration: const InputDecoration(
+              labelText: 'Message Info',
+            ),
           ),
           TextField(
             // 15
             controller: bannerURIController,
-            decoration: InputDecoration(labelText: 'Banner URI'),
+            decoration: const InputDecoration(
+              labelText: 'Banner URI',
+            ),
           ),
           TextField(
             // 15
             controller: bannerURIDescController,
-            decoration: InputDecoration(labelText: 'Banner URI Description'),
+            decoration: const InputDecoration(
+              labelText: 'Banner URI Description',
+            ),
           ),
           TextField(
             // 15
             controller: uriLabelController,
-            decoration: InputDecoration(labelText: 'URL Label'),
+            decoration: const InputDecoration(
+              labelText: 'URL Label',
+            ),
           ),
           TextField(
             // 15
             controller: uriValueController,
-            decoration: InputDecoration(labelText: 'URL Value'),
+            decoration: const InputDecoration(
+              labelText: 'URL Value',
+            ),
           ),
           TextField(
             // 16
             controller: nearbyLabelController,
-            decoration: InputDecoration(labelText: 'Nearby Location Label'),
+            decoration: const InputDecoration(
+              labelText: 'Nearby Location Label',
+            ),
           ),
           TextField(
             // 16
             controller: nearbyValueController,
-            decoration: InputDecoration(labelText: 'Nearby Location Value'),
+            decoration: const InputDecoration(
+              labelText: 'Nearby Location Value',
+            ),
           ),
           TextField(
             // 17
             controller: webSiteLabelController,
-            decoration: InputDecoration(labelText: 'Website Label'),
+            decoration: const InputDecoration(
+              labelText: 'Website Label',
+            ),
           ),
           TextField(
             // 17
             controller: webSiteValueController,
-            decoration: InputDecoration(labelText: 'Website Value'),
+            decoration: const InputDecoration(
+              labelText: 'Website Value',
+            ),
           ),
           TextField(
             // 18
             controller: hotlineLabelController,
-            decoration: InputDecoration(labelText: 'Hotline Label'),
+            decoration: const InputDecoration(
+              labelText: 'Hotline Label',
+            ),
           ),
           TextField(
             // 18
             controller: hotlineValueController,
-            decoration: InputDecoration(labelText: 'Hotline Value'),
-          ),
-          TextField(
-            controller: latitudeController,
-            decoration: InputDecoration(labelText: 'latitude'),
-          ),
-          TextField(
-            controller: longitudeController,
-            decoration: InputDecoration(labelText: 'longitude'),
+            decoration: const InputDecoration(
+              labelText: 'Hotline Value',
+            ),
           ),
           DropdownButton<String>(
-            hint: Text('Status'),
+            hint: const Text('Status'),
             value: status,
-            onChanged: (String newValue) {
-              setState(() {
-                status = newValue;
-              });
+            onChanged: (String? newValue) {
+              if (newValue != null) {
+                setState(() {
+                  status = newValue;
+                });
+              }
             },
-            items: <String>['ACTIVE', 'COMPLETED', 'EXPIRED', 'INACTIVE']
-                .map<DropdownMenuItem<String>>((String value) {
+            items: <String>[
+              'ACTIVE',
+              'COMPLETED',
+              'EXPIRED',
+              'INACTIVE',
+            ].map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(value),
@@ -303,7 +376,20 @@ class _LoyaltyCardPageState extends State<LoyaltyCardPage> {
             }).toList(),
           ),
           ListTile(
-            subtitle: Text('Start Date'),
+            subtitle: const Text('Last Balance Update Date'),
+            title: Text(lastBalanceDate?.toIso8601String() ?? ''),
+            onTap: () async {
+              lastBalanceDate = await showDatePicker(
+                context: context,
+                initialDate: lastBalanceDate ?? DateTime.now(),
+                firstDate: DateTime.utc(2000),
+                lastDate: DateTime.utc(2050),
+              );
+              setState(() {});
+            },
+          ),
+          ListTile(
+            subtitle: const Text('Start Date'),
             title: Text(startDate?.toIso8601String() ?? ''),
             onTap: () async {
               startDate = await showDatePicker(
@@ -316,7 +402,7 @@ class _LoyaltyCardPageState extends State<LoyaltyCardPage> {
             },
           ),
           ListTile(
-            subtitle: Text('End Date'),
+            subtitle: const Text('End Date'),
             title: Text(endDate?.toIso8601String() ?? ''),
             onTap: () async {
               endDate = await showDatePicker(
@@ -330,10 +416,10 @@ class _LoyaltyCardPageState extends State<LoyaltyCardPage> {
           ),
           const SizedBox(height: 32),
           MaterialButton(
-            child: Text('Save Card'),
+            child: const Text('Save Card'),
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute(
+                MaterialPageRoute<dynamic>(
                   builder: (_) => PassActionPage(
                     passObject: getPassObject(),
                     environment: widget.environment,
@@ -360,38 +446,22 @@ class _LoyaltyCardPageState extends State<LoyaltyCardPage> {
         effectTime: '${startDate?.toIso8601String()}Z',
         expireTime: '${endDate?.toIso8601String()}Z',
       ),
-      relatedPassIds: [
+      relatedPassIds: <RelatedPassInfo>[
         RelatedPassInfo(
           id: relatedIdController.text,
           typeId: relatedValueController.text,
         ),
       ],
-      locationList: [
-        Location(
-          latitude: latitudeController.text,
-          longitude: longitudeController.text,
-        )
-      ],
       barCode: BarCode(
-        type: BarCode.barcodeTypeQrCode,
+        type: BarCode.barcodeTypeCodabar,
         text: barTextController.text,
         value: barValController.text,
       ),
-      appendFields: [
+      appendFields: <AppendField>[
         AppendField(
           key: WalletPassConstant.passCommonFieldKeyBalance,
           label: 'Label',
           value: balanceController.text,
-        ),
-        AppendField(
-          key: WalletPassConstant.passAppendFieldKeyPoints,
-          label: 'Points',
-          value: pointsController.text,
-        ),
-        AppendField(
-          key: WalletPassConstant.passAppendFieldKeyRewardsLevel,
-          label: 'Tier',
-          value: tierLevelController.text,
         ),
         AppendField(
           key: WalletPassConstant.passAppendFieldKeyNearbyLocations,
@@ -409,11 +479,11 @@ class _LoyaltyCardPageState extends State<LoyaltyCardPage> {
           value: hotlineValueController.text,
         ),
       ],
-      commonFields: [
+      commonFields: <CommonField>[
         CommonField(
           key: WalletPassConstant.passCommonFieldKeyBackgroundImg,
           label: 'backgroundImageLable',
-          value: cardPictureController.text,
+          value: backgroundPictureController.text,
         ),
         CommonField(
           key: WalletPassConstant.passCommonFieldKeyLogo,
@@ -435,27 +505,22 @@ class _LoyaltyCardPageState extends State<LoyaltyCardPage> {
           label: 'cardNumberLable',
           value: cardNumberController.text,
         ),
-        CommonField(
-          key: WalletPassConstant.passCommonFieldKeyMemberName,
-          label: 'memberNumberLable',
-          value: memberNameController.text,
-        ),
       ],
-      messageList: [
+      messageList: <AppendField>[
         AppendField(
           key: '1',
           label: messageHeaderController.text,
           value: messageInfoController.text,
         ),
       ],
-      imageList: [
+      imageList: <AppendField>[
         AppendField(
           key: '1',
           label: bannerURIDescController.text,
           value: bannerURIController.text,
         ),
       ],
-      urlList: [
+      urlList: <AppendField>[
         AppendField(
           key: '1',
           label: uriLabelController.text,
