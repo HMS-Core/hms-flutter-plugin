@@ -1,5 +1,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.huawei.hms.flutter.modeling3d">
+    package="com.huawei.hms.flutter.modeling3d">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <application>
+        <activity
+            android:name="com.huawei.hms.modeling3dcapturesdk.cworld.WorldArActivity"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name="com.huawei.hms.materialgeneratesdk.ui.WebActivity"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name="com.huawei.hms.objreconstructsdk.controller.cworld.PreviewModelActivity"
+            android:theme="@android:style/Theme.NoTitleBar" />
+    </application>
 </manifest>

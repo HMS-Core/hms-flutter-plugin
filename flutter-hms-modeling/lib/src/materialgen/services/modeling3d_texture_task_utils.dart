@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,36 +14,58 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
+part of materialgen;
 
-import '../result/modeling3d_texture_query_result.dart';
-
-class Modeling3dTextureTaskUtils {
-  late MethodChannel _c;
-
-  Modeling3dTextureTaskUtils() {
-    _c = MethodChannel("com.huawei.modeling3d.materialtask/method");
-  }
+/// Processes a material generation task.
+abstract class Modeling3dTextureTaskUtils {
+  static const MethodChannel _c = MethodChannel(
+    'com.huawei.hms.flutter.modeling3d/textureTaskUtils/method',
+  );
 
   /// Queries the status of a material generation task.
-  Future<Modeling3dTextureQueryResult> queryTask(String taskId) async {
-    return Modeling3dTextureQueryResult.fromMap(
-        await _c.invokeMethod("queryTask", {'taskId': taskId}));
+  static Future<Modeling3dTextureQueryResult> queryTask(String taskId) async {
+    final Map<dynamic, dynamic> result = await _c.invokeMethod(
+      'queryTask',
+      <String, dynamic>{
+        'taskId': taskId,
+      },
+    );
+    return Modeling3dTextureQueryResult._fromMap(result);
   }
 
   /// Deletes a material generation task using its ID.
-  Future<int> deleteTask(String taskId) async {
-    return await _c.invokeMethod("deleteTask", {'taskId': taskId});
+  /// 0 indicates success, and other values indicate failure.
+  static Future<int> deleteTask(String taskId) async {
+    return await _c.invokeMethod(
+      'deleteTask',
+      <String, dynamic>{
+        'taskId': taskId,
+      },
+    );
   }
 
   /// Sets the restriction status of a material generation task using its ID.
-  Future<int> setTaskRestrictStatus(String taskId, int restrictStatus) async {
-    return await _c.invokeMethod("setTaskRestrictStatus",
-        {'taskId': taskId, 'restrictStatus': restrictStatus});
+  /// 0 indicates success, and other values indicate failure.
+  static Future<int> setTaskRestrictStatus(
+    String taskId,
+    int restrictStatus,
+  ) async {
+    return await _c.invokeMethod(
+      'setTaskRestrictStatus',
+      <String, dynamic>{
+        'taskId': taskId,
+        'restrictStatus': restrictStatus,
+      },
+    );
   }
 
   /// Queries the restriction status of a material generation task using its ID.
-  Future<int> queryTaskRestrictStatus(String taskId) async {
-    return await _c.invokeMethod("queryTaskRestrictStatus", {'taskId': taskId});
+  static Future<int> queryTaskRestrictStatus(String taskId) async {
+    return await _c.invokeMethod(
+      'queryTaskRestrictStatus',
+      <String, dynamic>{
+        'taskId': taskId,
+      },
+    );
   }
 }

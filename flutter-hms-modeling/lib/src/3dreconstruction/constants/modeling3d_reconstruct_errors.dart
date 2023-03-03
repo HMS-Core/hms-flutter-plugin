@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -13,6 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+
+part of objreconstruct;
 
 /// Result codes related to 3D object reconstruction.
 abstract class Modeling3dReconstructErrors {
@@ -70,8 +72,8 @@ abstract class Modeling3dReconstructErrors {
   /// The period for storing the generated model has expired.
   static const int ERR_TASK_EXPIRED = 1117;
 
-  /// The number of API calls exceeds the maximum.
-  static const int ERR_RET_OVER_MAX_LIMIT = 1118;
+  /// The number of API calls exceeds the daily maximum.
+  static const int ERR_RET_OVER_DAY_MAX_LIMIT = 1118;
 
   /// Failed to cancel the upload.
   static const int ERR_UPLOAD_CANCEL_FAILED = 1119;
@@ -105,4 +107,34 @@ abstract class Modeling3dReconstructErrors {
 
   /// The data processing location is not set.
   static const int ERR_DATA_PROCESSING_LOCATION_NOT_SET = 1129;
+
+  /// The glTF format is not supported under the PBR mode.
+  static const int ERR_GLTF_NOT_SUPPORT_PBR_TEXTURE_MODE = 1130;
+
+  /// No PBR texture map file is found.
+  static const int ERR_PBR_MODE_NOT_EXIST = 1131;
+
+  /// The free quota for 3D Modeling Kit has been used up.
+  static const int ERR_RET_BILLING_QUOTA_EXHAUSTED = 1132;
+
+  /// The account balance is insufficient to use 3D Modeling Kit.
+  static const int ERR_RET_BILLING_OVERDUE = 1133;
+
+  /// The free quota for 3D Modeling Kit has been used up.
+  static const int ERR_RET_ORDER_NOT_EXIST = 1134;
+
+  /// Preview is not supported for auto rigging.
+  static const int ERR_AUTO_RIGGING_NOT_SUPPORT_PREVIEW = 1135;
+
+  /// The number of extra scanning tasks exceeds the maximum.
+  static const int ERR_RET_OVER_RESCAN_LIMIT = 1136;
+
+  /// The number of API calls exceeds the monthly maximum.
+  static const int ERR_RET_OVER_MONTH_MAX_LIMIT = 1137;
+
+  /// Extra scanning is unsupported by auto rigging.
+  static const int ERR_RET_RIGGING_NOT_SUPPORT_RESCAN = 1138;
+
+  /// The mesh count level of an extra scanning task is inconsistent with that of the original task.
+  static const int ERR_RET_PARAM_FACELEVEL_NOT_CONSISTENT_WITH_RESCAN = 1139;
 }

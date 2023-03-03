@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,30 +14,32 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
+part of materialgen;
 
-/// App information. To use the on-cloud material generation service,
-/// set an access token or API key for your app.
-class MaterialGenApplication {
-  late MethodChannel _c;
-
-  MaterialGenApplication._inner() {
-    _c = const MethodChannel("com.huawei.modeling3d.materialgenapp/method");
-  }
-
-  static final MaterialGenApplication _instance =
-      MaterialGenApplication._inner();
-
-  /// Returns the instance of this class.
-  static MaterialGenApplication get getInstance => _instance;
+/// App information.
+/// To use the on-cloud material generation service, set an access token or API key for your app.
+abstract class MaterialGenApplication {
+  static const MethodChannel _c = MethodChannel(
+    'com.huawei.hms.flutter.modeling3d/materialGenApplication/method',
+  );
 
   /// Sets an access token for your app.
-  void setAccessToken(String accessToken) {
-    _c.invokeMethod('setAccessToken', {'accessToken': accessToken});
+  static Future<void> setAccessToken(String accessToken) async {
+    await _c.invokeMethod(
+      'setAccessToken',
+      <String, dynamic>{
+        'accessToken': accessToken,
+      },
+    );
   }
 
   /// Sets an API key for your app.
-  void setApiKey(String apiKey) {
-    _c.invokeMethod('setApiKey', {'apiKey': apiKey});
+  static Future<void> setApiKey(String apiKey) async {
+    await _c.invokeMethod(
+      'setApiKey',
+      <String, dynamic>{
+        'apiKey': apiKey,
+      },
+    );
   }
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,34 +14,35 @@
     limitations under the License.
 */
 
-/// Image upload result.
+part of objreconstruct;
+
+/// Upload result.
 class Modeling3dReconstructUploadResult {
-  /// The ID of a 3D object reconstruction task.
+  /// ID of a 3D object reconstruction task.
+  /// A unique task ID is generated each time the 3D object reconstruction API is called.
   final String taskId;
 
-  /// The image upload result.
-  ///
-  /// `true`: upload completed.
-  /// `false`: upload not completed.
+  /// Image upload result.
   final bool isComplete;
 
-  Modeling3dReconstructUploadResult._(this.taskId, this.isComplete);
+  const Modeling3dReconstructUploadResult._({
+    required this.taskId,
+    required this.isComplete,
+  });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'taskId': taskId,
-      'isComplete': isComplete,
-    };
-  }
-
-  factory Modeling3dReconstructUploadResult.fromMap(Map<dynamic, dynamic> map) {
+  factory Modeling3dReconstructUploadResult._fromMap(
+    Map<dynamic, dynamic> map,
+  ) {
     return Modeling3dReconstructUploadResult._(
-      map['taskId'],
-      map['isComplete'],
+      taskId: map['taskId'],
+      isComplete: map['isComplete'],
     );
   }
 
   @override
-  String toString() =>
-      'Modeling3dReconstructUploadResult(taskId: $taskId, isComplete: $isComplete)';
+  String toString() {
+    return '$Modeling3dReconstructUploadResult('
+        'taskId: $taskId, '
+        'isComplete: $isComplete)';
+  }
 }

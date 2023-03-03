@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,28 +16,22 @@
 
 import 'package:flutter/services.dart';
 
-/// Provides permission handling and logging capabilities for the Modeling3D Kit.
-class Modeling3dPermissionClient {
-  static const MethodChannel _channel =
-      MethodChannel("com.huawei.modelling3d.permission/method");
-
-  /// Request for the storage permission.
-  static Future<bool> requestStoragePermission() async {
-    return await _channel.invokeMethod("requestStoragePermission");
-  }
-
-  /// Checks whether the storage permission is given.
-  static Future<bool> hasStoragePermission() async {
-    return await _channel.invokeMethod("hasStoragePermission");
-  }
+abstract class Modeling3dPermissionClient {
+  static const MethodChannel _c = MethodChannel(
+    'com.huawei.hms.flutter.modeling3d/permission/method',
+  );
 
   /// Enables HMS Plugin Method Analytics
   static Future<void> enableLogger() async {
-    _channel.invokeMethod("enableLogger");
+    await _c.invokeMethod(
+      'enableLogger',
+    );
   }
 
   /// Disables HMS Plugin Method Analytics
   static Future<void> disableLogger() async {
-    _channel.invokeMethod("disableLogger");
+    await _c.invokeMethod(
+      'disableLogger',
+    );
   }
 }

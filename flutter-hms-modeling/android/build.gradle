@@ -4,7 +4,7 @@ version '1.0'
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven { url 'https://developer.huawei.com/repo/' }
     }
 
@@ -16,7 +16,7 @@ buildscript {
 rootProject.allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven { url 'https://developer.huawei.com/repo/' }
     }
 }
@@ -24,15 +24,18 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 29
+        minSdkVersion 26
+        targetSdkVersion 30
     }
+
     lintOptions {
         disable 'InvalidPackage'
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -40,9 +43,12 @@ android {
 }
 
 dependencies {
-    implementation 'com.huawei.hms:modeling3d-material-generate:1.1.0.300'
-    implementation 'com.huawei.hms:modeling3d-object-reconstruct:1.1.0.300'
+    implementation 'com.huawei.hms:modeling3d-material-generate:1.7.0.301'
+    implementation 'com.huawei.hms:modeling3d-object-reconstruct:1.8.0.300'
+    implementation 'com.huawei.hms:modeling3d-objectreconstruct-slam:1.7.0.301'
+    implementation 'com.huawei.hms:modeling3d-motion-capture:1.7.0.301'
+    implementation 'com.huawei.hms:modeling3d-motion-capture-model:1.7.0.301'
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     implementation 'io.reactivex.rxjava3:rxjava:3.0.6'
-    implementation 'com.huawei.hms:stats:5.0.3.301'
+    implementation 'com.huawei.hms:stats:6.6.0.300'
 }

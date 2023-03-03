@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,17 +14,33 @@
     limitations under the License.
 */
 
+part of materialgen;
+
+/// Image upload result.
 class Modeling3dTextureUploadResult {
-  /// Obtains the ID of a material generation task.
-  String? taskId;
+  /// ID of a material generation task.
+  /// A unique task ID is generated each time the material generation API is called.
+  final String taskId;
 
-  /// Obtains the image upload result.
-  bool? isComplete;
+  /// Image upload result.
+  final bool isComplete;
 
-  Modeling3dTextureUploadResult({this.isComplete, this.taskId});
+  const Modeling3dTextureUploadResult._({
+    required this.taskId,
+    required this.isComplete,
+  });
 
-  factory Modeling3dTextureUploadResult.fromMap(Map<dynamic, dynamic> map) {
-    return Modeling3dTextureUploadResult(
-        taskId: map['taskId'], isComplete: map['isComplete']);
+  factory Modeling3dTextureUploadResult._fromMap(Map<dynamic, dynamic> map) {
+    return Modeling3dTextureUploadResult._(
+      taskId: map['taskId'],
+      isComplete: map['isComplete'],
+    );
+  }
+
+  @override
+  String toString() {
+    return '$Modeling3dTextureUploadResult('
+        'taskId: $taskId, '
+        'isComplete: $isComplete)';
   }
 }

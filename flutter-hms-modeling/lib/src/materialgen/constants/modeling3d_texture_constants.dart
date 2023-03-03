@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,24 +14,31 @@
     limitations under the License.
 */
 
+part of materialgen;
+
 /// Constants of material generation.
-class Modeling3dTextureConstants {
-  static AlgorithmMode algorithmMode = const AlgorithmMode();
-  static ProgressStatus progressStatus = const ProgressStatus();
-  static RestrictStatus restrictStatus = const RestrictStatus();
+abstract class Modeling3dTextureConstants {
+  /// Working mode for material generation.
+  static AlgorithmMode algorithmMode = const AlgorithmMode._();
+
+  /// Material generation status.
+  static ProgressStatus progressStatus = const ProgressStatus._();
+
+  /// Restriction status of a material generation task.
+  static RestrictStatus restrictStatus = const RestrictStatus._();
 }
 
-/// Defines the working mode for material generation through Modeling3dTextureConstants.
+/// Working mode for material generation.
 class AlgorithmMode {
-  const AlgorithmMode();
+  const AlgorithmMode._();
 
   /// AI mode.
   final int ai = 1;
 }
 
-/// Defines the status of material generation through Modeling3dTextureConstants.
+/// Material generation status.
 class ProgressStatus {
-  const ProgressStatus();
+  const ProgressStatus._();
 
   /// Task initialization is completed.
   final int inited = 0;
@@ -49,9 +56,9 @@ class ProgressStatus {
   final int textureFailed = 4;
 }
 
-/// Defines whether a material generation task is restricted through Modeling3dTextureConstants.
+/// Restriction status of a material generation task.
 class RestrictStatus {
-  const RestrictStatus();
+  const RestrictStatus._();
 
   /// The task is not restricted.
   final int unrestrict = 0;
@@ -63,9 +70,10 @@ class RestrictStatus {
 /// Material Progress Status types for conversion between an integer
 /// status value to a semantic enum type.
 ///
-/// You can obtain the corresponding Material Progress Status Type by:
+/// You can obtain the corresponding material progress status type by:
+///
 /// ```
-/// MaterialProgressStatusEnum.values[status];
+///   MaterialProgressStatusType.values[status];
 /// ```
 enum MaterialProgressStatusType {
   /// Task initialization is completed.

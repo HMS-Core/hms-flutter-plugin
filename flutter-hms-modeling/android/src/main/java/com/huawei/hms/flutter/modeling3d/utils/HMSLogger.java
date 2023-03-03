@@ -1,20 +1,22 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-        
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.modeling3d.utils;
+
+import static android.os.Build.DEVICE;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -31,22 +33,25 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static android.os.Build.DEVICE;
-
 public final class HMSLogger {
     private static final String TAG = "HMSLogger";
 
     private static final String KIT = "Modeling3d";
+
     private static final String PLATFORM = "Flutter";
-    private static final String VERSION = "1.1.0.300";
+
+    private static final String VERSION = "1.8.0.300";
 
     private static final String SERVICE = "Cross-Platform";
 
     private static final String SUCCESS = "0";
+
     private static final String UNKNOWN = "UNKNOWN";
+
     private static final String NOT_AVAILABLE = "NOT_AVAILABLE";
 
     private static final String SINGLE_EVENT_ID = "60000";
+
     private static final String PERIODIC_EVENT_ID = "60001";
 
     private static final String NETWORK_TYPE_WIFI = "WIFI";
@@ -54,17 +59,27 @@ public final class HMSLogger {
     private static volatile HMSLogger instance;
 
     private final WeakReference<Context> weakContext;
+
     private final HiAnalyticsUtils hiAnalyticsUtils;
+
     private final ConnectivityManager connectivityManager;
 
     private final Map<String, Object> singleEventMap = new HashMap<>();
+
     private final Map<String, Object> periodicEventMap = new HashMap<>();
+
     private final Map<String, Long> allCountMap = new HashMap<>();
+
     private final Map<String, Long> failCountMap = new HashMap<>();
+
     private final Map<String, Long> startTimeMap = new HashMap<>();
+
     private final Map<String, Long> firstReceiveTimeMap = new HashMap<>();
+
     private final Map<String, Long> lastReceiveTimeMap = new HashMap<>();
+
     private final Map<String, Map<String, Long>> resultCodeCountMap = new HashMap<>();
+
     private final Map<Integer, String> networkTypeMap = createNetworkTypeMap();
 
     private boolean isEnabled = false;
@@ -77,8 +92,7 @@ public final class HMSLogger {
     private HMSLogger(final Context context) {
         weakContext = new WeakReference<>(context);
         hiAnalyticsUtils = HiAnalyticsUtils.getInstance();
-        connectivityManager = objectCast(context.getSystemService(Context.CONNECTIVITY_SERVICE),
-                ConnectivityManager.class);
+        connectivityManager = objectCast(context.getSystemService(Context.CONNECTIVITY_SERVICE),ConnectivityManager.class);
 
         hiAnalyticsUtils.enableLog();
         HMSBIInitializer.getInstance(context).initBI();
@@ -296,8 +310,7 @@ public final class HMSLogger {
      * @param resultCode  Code of the method's result. "0" for success, others for error
      * @param currentTime Current timestamp in millisecond
      */
-    private synchronized void putToPeriodicEventMap(final String methodName, final String resultCode,
-                                                    final long currentTime) {
+    private synchronized void putToPeriodicEventMap(final String methodName, final String resultCode, final long currentTime) {
         increaseResultCodeCount(methodName, resultCode);
         increaseMapValue(methodName, allCountMap);
 

@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,24 +14,50 @@
     limitations under the License.
 */
 
+part of objreconstruct;
+
 /// Constants of 3D object reconstruction.
-class Modeling3dReconstructConstants {
-  static const _ReconstructMode reconstructMode = _ReconstructMode();
-  static const _RestrictStatus restrictStatus = _RestrictStatus();
-  static const _ProgressStatus progressStatus = _ProgressStatus();
+abstract class Modeling3dReconstructConstants {
+  /// Working mode for 3D object reconstruction.
+  static const ReconstructMode reconstructMode = ReconstructMode._();
+
+  /// Restriction status of a 3D object reconstruction task.
+  static const RestrictStatus restrictStatus = RestrictStatus._();
+
+  /// 3D object reconstruction status.
+  static const ProgressStatus progressStatus = ProgressStatus._();
+
+  /// Texture map mode.
+  static const TextureMode textureMode = TextureMode._();
+
+  /// Mesh count level for a 3D object reconstruction task.
+  static const FaceLevel faceLevel = FaceLevel._();
+
+  /// Extra scanning status of a 3D object reconstruction task.
+  static const NeedRescan needRescan = NeedRescan._();
+
+  /// 3D model format.
+  static const ModelFormat modelFormat = ModelFormat._();
+
+  /// Reason for a failed 3D object reconstruction task.
+  static const ReconstructFailCode reconstructFailCode =
+      ReconstructFailCode._();
+
+  /// Type of a 3D object reconstruction task.
+  static const TaskType taskType = TaskType._();
 }
 
-/// Constants of the working mode for 3D object reconstruction.
-class _ReconstructMode {
-  const _ReconstructMode();
+/// Working mode for 3D object reconstruction.
+class ReconstructMode {
+  const ReconstructMode._();
 
   /// PICTURE mode.
   final int picture = 0;
 }
 
-/// Defines the restriction status of a 3D object reconstruction task.
-class _RestrictStatus {
-  const _RestrictStatus();
+/// Restriction status of a 3D object reconstruction task.
+class RestrictStatus {
+  const RestrictStatus._();
 
   /// Not restricted.
   final int unrestrict = 0;
@@ -41,8 +67,8 @@ class _RestrictStatus {
 }
 
 /// 3D object reconstruction status.
-class _ProgressStatus {
-  const _ProgressStatus();
+class ProgressStatus {
+  const ProgressStatus._();
 
   /// Task initialization is completed.
   final int inited = 0;
@@ -58,14 +84,105 @@ class _ProgressStatus {
 
   /// A 3D object reconstruction task fails.
   final int reconstructFailed = 4;
+
+  /// The 3D object reconstruction task is under risk control check.
+  final int riskControlAuditInProgress = 5;
+
+  /// The 3D object reconstruction task passes the risk control check.
+  final int riskControlPassed = 6;
+
+  /// The 3D object reconstruction task failed to pass the risk control check.
+  final int riskControlFailed = 7;
+}
+
+/// Texture map mode.
+class TextureMode {
+  const TextureMode._();
+
+  /// Normal mode.
+  final int normal = 0;
+
+  /// PBR mode.
+  final int pbr = 1;
+}
+
+/// Mesh count level for a 3D object reconstruction task.
+class FaceLevel {
+  const FaceLevel._();
+
+  /// High.
+  final int high = 0;
+
+  /// Medium.
+  final int medium = 1;
+
+  /// Low.
+  final int low = 2;
+}
+
+/// Extra scanning status of a 3D object reconstruction task.
+class NeedRescan {
+  const NeedRescan._();
+
+  /// Disabled.
+  final String close = 'false';
+
+  /// Enabled.
+  final String open = 'true';
+}
+
+/// 3D model format.
+class ModelFormat {
+  const ModelFormat._();
+
+  /// glTF format.
+  final String GLTF = 'GLTF';
+
+  /// OBJ format.
+  final String OBJ = 'OBJ';
+}
+
+/// Reason for a failed 3D object reconstruction task.
+class ReconstructFailCode {
+  const ReconstructFailCode._();
+
+  /// Internal error.
+  final int INNER_ERROR = 1;
+
+  /// Image file verification failed.
+  final int FILE_CHECK_FAILED = 2;
+
+  /// Invalid image.
+  final int PICTURE_ILLEGAL = 3;
+
+  /// The algorithm processing failed.
+  final int ALGORITHM_FAILED = 4;
+
+  /// The quota of API calls is used up.
+  final int BILLING_QUOTA_EXHAUSTED = 5;
+
+  /// The project is in arrears.
+  final int BILLING_OVERDUE = 6;
+}
+
+/// Type of a 3D object reconstruction task.
+class TaskType {
+  const TaskType._();
+
+  /// 3D object reconstruction.
+  final int OBJ_RECONSTRUCT = 0;
+
+  /// Auto rigging.
+  final int AUTO_RIGGING = 2;
 }
 
 /// Reconstruct Progress Status types for conversion between an integer
 /// status value to a semantic enum type.
 ///
 /// You can obtain the corresponding Reconstruct Progress Status Type by:
+///
 /// ```
-/// ReconstructProgressStatusEnum.values[status];
+///   ReconstructProgressStatusType.values[status];
 /// ```
 enum ReconstructProgressStatusType {
   /// Task initialization is completed.
@@ -81,5 +198,14 @@ enum ReconstructProgressStatusType {
   reconstructCompleted,
 
   /// A 3D object reconstruction task fails.
-  reconstructFailed
+  reconstructFailed,
+
+  /// A 3D object reconstruction task is under risk control check.
+  riskControlAuditInProgress,
+
+  /// A 3D object reconstruction task passes the risk control check.
+  riskControlPassed,
+
+  /// A 3D object reconstruction task failed to pass the risk control check.
+  riskControlFailed,
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -18,112 +18,102 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:path/path.dart';
+import 'package:huawei_modeling3d_example/screens/material_engine_screen.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'material_engine_screen.dart';
-
 class ImagePickingScreen extends StatefulWidget {
+  const ImagePickingScreen({Key? key}) : super(key: key);
+
   @override
-  _ImagePickingScreenState createState() => _ImagePickingScreenState();
+  State<ImagePickingScreen> createState() => _ImagePickingScreenState();
 }
 
 class _ImagePickingScreenState extends State<ImagePickingScreen> {
   int _selectedIndex = 0;
-  late DateTime _date;
-  late String _filesPath;
 
-  saveAssetImageToFolder(BuildContext context) async {
-    _date = DateTime.now();
-
-    final bt = await rootBundle
-        .load('assets/material_generation_images/$_selectedIndex.jpg');
-
-    final file = await File(
-            '${(await getApplicationDocumentsDirectory()).path}/$_selectedIndex.jpg')
-        .create(recursive: true);
-
-    final image = await file.writeAsBytes(
-        bt.buffer.asUint8List(bt.offsetInBytes, bt.lengthInBytes));
-
-    final extDirectory = await getExternalStorageDirectory();
-
-    final imgPath =
-        '${extDirectory!.path}/${_date.millisecondsSinceEpoch.toString()}';
-
-    await new Directory(imgPath).create();
-    setState(() => _filesPath = imgPath);
+  void saveAssetImageToFolder() async {
+    final ByteData byteData = await rootBundle.load(
+      'assets/material_generation_images/$_selectedIndex.jpg',
+    );
+    final File file = await File(
+      '${(await getApplicationDocumentsDirectory()).path}/$_selectedIndex.jpg',
+    ).create(recursive: true);
+    final File image = await file.writeAsBytes(
+      byteData.buffer.asUint8List(
+        byteData.offsetInBytes,
+        byteData.lengthInBytes,
+      ),
+    );
+    final Directory? extDirectory = await getExternalStorageDirectory();
+    final String imgPath =
+        '${extDirectory!.path}/${DateTime.now().millisecondsSinceEpoch}';
+    await Directory(imgPath).create();
 
     for (int i = 0; i < 5; i++) {
-      final imgName = DateTime.now();
-      await image.copy(
-          "$imgPath/${basename('${imgName.millisecondsSinceEpoch.toString()}.jpg')}");
+      await image.copy('$imgPath/${DateTime.now().millisecondsSinceEpoch}.jpg');
     }
 
+    push(imgPath);
+  }
+
+  void push(String filesPath) {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => MaterialEngineScreen(_filesPath)));
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) {
+          return MaterialEngineScreen(filesPath);
+        },
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Material Generation"),
-          centerTitle: true,
-        ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Text("Pick a texture to create 3D model",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+      appBar: AppBar(
+        title: const Text('Material Generation'),
+      ),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: GridView.count(
+              mainAxisSpacing: 16,
+              crossAxisSpacing: 16,
+              padding: const EdgeInsets.all(16),
+              crossAxisCount: 2,
+              children: List<Widget>.generate(4, (int index) {
+                return GestureDetector(
+                  onTap: () => setState(() => _selectedIndex = index),
+                  child: Container(
+                    foregroundDecoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black,
+                        width: _selectedIndex == index ? 4 : 0,
+                      ),
+                    ),
+                    child: Image.asset(
+                      'assets/material_generation_images/$index.jpg',
+                    ),
+                  ),
+                );
+              }),
             ),
-            Expanded(
-              child: Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                width: MediaQuery.of(context).size.width,
-                child: GridView.count(
-                  crossAxisCount: 2,
-                  children: List.generate(
-                      4,
-                      (index) => Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                setState(() => _selectedIndex = index);
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                        color: Colors.greenAccent,
-                                        width:
-                                            _selectedIndex == index ? 4 : 0)),
-                                child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.asset(
-                                        'assets/material_generation_images/$index.jpg',
-                                        width: 75,
-                                        height: 75)),
-                              ),
-                            ),
-                          )),
-                ),
-              ),
+          ),
+          const Padding(
+            padding: EdgeInsets.all(16),
+            child: Text(
+              'Pick a texture to create 3D model',
             ),
-            Container(
-              margin: EdgeInsets.only(bottom: 25),
-              width: MediaQuery.of(context).size.width * .8,
-              child: ElevatedButton(
-                onPressed: () => saveAssetImageToFolder(context),
-                child: Text('Get started'),
-              ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            child: ElevatedButton(
+              onPressed: () => saveAssetImageToFolder(),
+              child: const Text('Get started'),
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }

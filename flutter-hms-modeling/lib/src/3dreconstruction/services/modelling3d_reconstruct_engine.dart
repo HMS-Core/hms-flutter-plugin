@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,140 +14,211 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
-
-import '../constants/channel.dart';
-import '../listener/listener_export.dart';
-import '../request/modeling3d_reconstruct_setting.dart';
-import '../result/result_export.dart';
+part of objreconstruct;
 
 /// 3D object reconstruction engine.
-class Modeling3dReconstructEngine {
-  static const MethodChannel _channel = modelling3dRecEngineMethodChannel;
+abstract class Modeling3dReconstructEngine {
+  static final MethodChannel _c = const MethodChannel(
+    'com.huawei.hms.flutter.modeling3d/reconstructEngine/method',
+  )..setMethodCallHandler(_onMethodCall);
 
-  Modeling3dReconstructDownloadListener? _downloadListener;
-  Modeling3dReconstructUploadListener? _uploadListener;
-  Modeling3dReconstructPreviewListener? _previewListener;
-
-  static final _instance = Modeling3dReconstructEngine._();
-
-  /// Obtains a Modeling3dReconstructEngine instance.
-  static Future<Modeling3dReconstructEngine> get instance async {
-    await _channel.invokeMethod("getInstance");
-    return _instance;
-  }
-
-  Modeling3dReconstructEngine._() {
-    _channel.setMethodCallHandler(_onMethodCall);
-  }
+  static Modeling3dReconstructUploadListener? _uploadListener;
+  static Modeling3dReconstructDownloadListener? _downloadListener;
+  static Modeling3dReconstructPreviewListener? _previewListener;
 
   /// Initializes a 3D object reconstruction task.
-  Future<Modeling3dReconstructInitResult> initTask(
-      Modeling3dReconstructSetting setting) async {
-    final resultMap = await _channel.invokeMethod("initTask", setting.toMap());
-    return Modeling3dReconstructInitResult.fromMap(
-        Map<String, dynamic>.from(resultMap));
+  static Future<Modeling3dReconstructInitResult> initTask(
+    Modeling3dReconstructSetting setting,
+  ) async {
+    final Map<dynamic, dynamic> result = await _c.invokeMethod(
+      'initTask',
+      setting._toMap(),
+    );
+    return Modeling3dReconstructInitResult._fromMap(result);
   }
 
   /// Disables the 3D object reconstruction engine.
-  Future<void> close() async {
-    await _channel.invokeMethod("close");
+  static Future<void> close() async {
+    await _c.invokeMethod(
+      'close',
+    );
   }
 
   /// Uploads images and triggers a 3D object reconstruction task.
-  Future<void> uploadFile(String taskId, String filePath) async {
-    await _channel
-        .invokeMethod("uploadFile", {"taskId": taskId, "filePath": filePath});
+  static Future<void> uploadFile(
+    String taskId,
+    String filePath,
+  ) async {
+    await _c.invokeMethod(
+      'uploadFile',
+      <String, dynamic>{
+        'taskId': taskId,
+        'filePath': filePath,
+      },
+    );
   }
 
   /// Cancels image upload.
-  Future<int> cancelUpload(String taskId) async {
-    return await _channel.invokeMethod("cancelUpload", {"taskId": taskId});
+  /// Returns cancellation result. 0 indicates success, and other values indicate failure.
+  static Future<int> cancelUpload(String taskId) async {
+    return await _c.invokeMethod(
+      'cancelUpload',
+      <String, dynamic>{
+        'taskId': taskId,
+      },
+    );
   }
 
   /// Cancels image download.
-  Future<int> cancelDownload(String taskId) async {
-    return await _channel.invokeMethod("cancelDownload", {"taskId": taskId});
+  /// Returns cancellation result. 0 indicates success, and other values indicate failure.
+  static Future<int> cancelDownload(String taskId) async {
+    return await _c.invokeMethod(
+      'cancelDownload',
+      <String, dynamic>{
+        'taskId': taskId,
+      },
+    );
   }
 
   /// Downloads a generated 3D object model.
-  Future<void> downloadModel(
+  static Future<void> downloadModel(
     String taskId,
     String fileSavePath,
   ) async {
-    await _channel.invokeMethod(
-        "downloadModel", {"taskId": taskId, "fileSavePath": fileSavePath});
+    await _c.invokeMethod(
+      'downloadModel',
+      <String, dynamic>{
+        'taskId': taskId,
+        'fileSavePath': fileSavePath,
+      },
+    );
+  }
+
+  /// Downloads the 3D object reconstruction task result using the custom configuration.
+  static Future<void> downloadModelWithConfig(
+    String taskId,
+    String fileSavePath,
+    Modeling3dReconstructDownloadConfig downloadConfig,
+  ) async {
+    await _c.invokeMethod(
+      'downloadModelWithConfig',
+      <String, dynamic>{
+        'taskId': taskId,
+        'fileSavePath': fileSavePath,
+        'downloadConfig': downloadConfig._toMap(),
+      },
+    );
   }
 
   /// Sets a listener for image upload.
-  Future<void> setReconstructUploadListener(
-      Modeling3dReconstructUploadListener listener) async {
+  static Future<void> setReconstructUploadListener(
+    Modeling3dReconstructUploadListener? listener,
+  ) async {
     _uploadListener = listener;
-    _channel.invokeMethod("setReconstructUploadListener");
+    await _c.invokeMethod(
+      'setReconstructUploadListener',
+    );
   }
 
   /// Sets a listener for model download.
-  Future<void> setReconstructDownloadListener(
-      Modeling3dReconstructDownloadListener listener) async {
+  static Future<void> setReconstructDownloadListener(
+    Modeling3dReconstructDownloadListener? listener,
+  ) async {
     _downloadListener = listener;
-    _channel.invokeMethod("setReconstructDownloadListener");
+    await _c.invokeMethod(
+      'setReconstructDownloadListener',
+    );
   }
 
   /// Previews a model.
-  Future<void> previewModel(String taskId,
-      {Modeling3dReconstructPreviewListener? previewListener}) async {
-    final Map<String, dynamic> callMap = {
-      "taskId": taskId,
-      "attachListener": false
-    };
-    if (previewListener != null) {
-      this._previewListener = previewListener;
-    }
-    _channel.invokeMethod("previewModel", callMap);
+  static Future<void> previewModel(
+    String taskId, {
+    Modeling3dReconstructPreviewListener? previewListener,
+  }) async {
+    _previewListener = previewListener;
+    await _c.invokeMethod(
+      'previewModel',
+      <String, dynamic>{
+        'taskId': taskId,
+      },
+    );
   }
 
-  Future<void> _onMethodCall(MethodCall call) async {
+  /// Previews a model.
+  static Future<void> previewModelWithConfig(
+    String taskId,
+    Modeling3dReconstructPreviewConfig previewConfig, {
+    Modeling3dReconstructPreviewListener? previewListener,
+  }) async {
+    _previewListener = previewListener;
+    await _c.invokeMethod(
+      'previewModelWithConfig',
+      <String, dynamic>{
+        'taskId': taskId,
+        'previewConfig': previewConfig._toMap(),
+      },
+    );
+  }
+
+  static Future<void> _onMethodCall(MethodCall call) {
     switch (call.method) {
-      // PreviewListener
-      case "previewListener#OnError":
-        _previewListener?.onError.call(call.arguments["taskId"],
-            call.arguments["errorCode"], call.arguments["errorMessage"]);
+      case 'previewListener#OnError':
+        _previewListener?.onError?.call(
+          call.arguments['taskId'],
+          call.arguments['errorCode'],
+          call.arguments['errorMessage'],
+        );
         break;
-      case "previewListener#OnResult":
-        _previewListener?.onResult.call(call.arguments);
+      case 'previewListener#OnResult':
+        _previewListener?.onResult?.call(
+          call.arguments,
+        );
         break;
-      // Upload Listener
-      case "uploadListener#OnResult":
-        _uploadListener?.onResult.call(
-            call.arguments["taskId"],
-            Modeling3dReconstructUploadResult.fromMap(
-                call.arguments['uploadResult']));
+      case 'uploadListener#OnResult':
+        _uploadListener?.onResult?.call(
+          call.arguments['taskId'],
+          Modeling3dReconstructUploadResult._fromMap(
+            call.arguments['uploadResult'],
+          ),
+        );
         break;
-      case "uploadListener#OnError":
-        _uploadListener?.onError.call(call.arguments["taskId"],
-            call.arguments["errorCode"], call.arguments["errorMessage"]);
+      case 'uploadListener#OnError':
+        _uploadListener?.onError?.call(
+          call.arguments['taskId'],
+          call.arguments['errorCode'],
+          call.arguments['errorMessage'],
+        );
         break;
-      case "uploadListener#OnProgress":
-        _uploadListener?.onUploadProgress
-            .call(call.arguments["taskId"], call.arguments["progress"]);
+      case 'uploadListener#OnProgress':
+        _uploadListener?.onUploadProgress?.call(
+          call.arguments['taskId'],
+          call.arguments['progress'],
+        );
         break;
-      // Download Listener
-      case "downloadListener#OnResult":
-        _downloadListener?.onResult.call(
-            call.arguments["taskId"],
-            Modeling3dReconstructDownloadResult.fromMap(
-                call.arguments['downloadResult']));
+      case 'downloadListener#OnResult':
+        _downloadListener?.onResult?.call(
+          call.arguments['taskId'],
+          Modeling3dReconstructDownloadResult._fromMap(
+            call.arguments['downloadResult'],
+          ),
+        );
         break;
-      case "downloadListener#OnError":
-        _downloadListener?.onError.call(call.arguments["taskId"],
-            call.arguments["errorCode"], call.arguments["errorMessage"]);
+      case 'downloadListener#OnError':
+        _downloadListener?.onError?.call(
+          call.arguments['taskId'],
+          call.arguments['errorCode'],
+          call.arguments['errorMessage'],
+        );
         break;
-      case "downloadListener#OnProgress":
-        _downloadListener?.onDownloadProgress
-            .call(call.arguments["taskId"], call.arguments["progress"]);
+      case 'downloadListener#OnProgress':
+        _downloadListener?.onDownloadProgress?.call(
+          call.arguments['taskId'],
+          call.arguments['progress'],
+        );
         break;
       default:
-        throw "Not implemented.";
+        throw 'Not implemented.';
     }
+    return Future<void>.value();
   }
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,36 +14,60 @@
     limitations under the License.
 */
 
-/// Initialization result of a 3D object reconstruction task.
+part of objreconstruct;
+
+/// Queries the status of a 3D object reconstruction task.
 class Modeling3dReconstructQueryResult {
+  /// ID of a 3D object reconstruction task.
+  /// A unique task ID is generated each time the 3D object reconstruction API is called.
   final String taskId;
+
+  /// Status of a 3D object reconstruction task.
+  /// Check [Modeling3dReconstructConstants.progressStatus] for more.
   final int status;
+
+  /// Result code for a 3D object reconstruction task.
   final int retCode;
-  final String retMessage;
 
-  Modeling3dReconstructQueryResult._(
-      this.taskId, this.status, this.retCode, this.retMessage);
+  /// Description of the result code for a 3D object reconstruction task.
+  final String? retMessage;
 
-  Map<String, dynamic> toMap() {
-    return {
-      'taskId': taskId,
-      'retCode': retCode,
-      'retMessage': retMessage,
-      'status': status
-    };
-  }
+  /// Reason why the 3D object reconstruction task fails.
+  final String? reconstructFailMessage;
 
-  factory Modeling3dReconstructQueryResult.fromMap(Map<String, dynamic> map) {
+  /// Supported model file formats.
+  final List<String>? modelFormat;
+
+  const Modeling3dReconstructQueryResult._({
+    required this.taskId,
+    required this.status,
+    required this.retCode,
+    required this.retMessage,
+    required this.reconstructFailMessage,
+    required this.modelFormat,
+  });
+
+  factory Modeling3dReconstructQueryResult._fromMap(Map<dynamic, dynamic> map) {
     return Modeling3dReconstructQueryResult._(
-      map['taskId'] != null ? map['taskId'] : null,
-      map['status'] != null ? map['status'] : null,
-      map['retCode'] != null ? map['retCode'] : null,
-      map['retMsg'] != null ? map['retMsg'] : null,
+      taskId: map['taskId'],
+      status: map['status'],
+      retCode: map['retCode'],
+      retMessage: map['retMsg'],
+      modelFormat: ((map['modelFormat'] ?? <String>[]) as List<dynamic>)
+          .map((dynamic e) => '$e')
+          .toList(),
+      reconstructFailMessage: map['reconstructFailMessage'],
     );
   }
 
   @override
   String toString() {
-    return toMap().toString();
+    return '$Modeling3dReconstructQueryResult('
+        'taskId: $taskId, '
+        'status: $status, '
+        'retCode: $retCode, '
+        'retMessage: $retMessage, '
+        'reconstructFailMessage: $reconstructFailMessage, '
+        'modelFormat: $modelFormat)';
   }
 }

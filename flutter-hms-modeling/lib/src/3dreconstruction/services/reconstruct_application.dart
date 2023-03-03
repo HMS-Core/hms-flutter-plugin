@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,31 +14,32 @@
     limitations under the License.
 */
 
-import 'package:flutter/services.dart';
+part of objreconstruct;
 
-import '../constants/channel.dart';
-
-/// App information. To use the on-cloud 3D object reconstruction service, set an access token or API key for your app.
-class ReconstructApplication {
-  static const MethodChannel _channel = reconstructApplicationMethodChannel;
-
-  static final _instance = ReconstructApplication._();
-
-  /// Obtains a ReconstructApplication instance.
-  static Future<ReconstructApplication> get instance async {
-    await _channel.invokeMethod("getInstance");
-    return _instance;
-  }
-
-  ReconstructApplication._();
+/// App information.
+/// To use the on-cloud 3D object reconstruction service, set an access token or API key for your app.
+abstract class ReconstructApplication {
+  static const MethodChannel _c = MethodChannel(
+    'com.huawei.hms.flutter.modeling3d/reconstructApplication/method',
+  );
 
   /// Sets an access token for your app.
-  Future<void> setAccessToken(String accessToken) async {
-    await _channel.invokeMethod("setAccessToken", accessToken);
+  static Future<void> setAccessToken(String accessToken) async {
+    await _c.invokeMethod(
+      'setAccessToken',
+      <String, dynamic>{
+        'accessToken': accessToken,
+      },
+    );
   }
 
   /// Sets an API key for your app.
-  Future<void> setApiKey(String apiKey) async {
-    await _channel.invokeMethod("setApiKey", apiKey);
+  static Future<void> setApiKey(String apiKey) async {
+    await _c.invokeMethod(
+      'setApiKey',
+      <String, dynamic>{
+        'apiKey': apiKey,
+      },
+    );
   }
 }

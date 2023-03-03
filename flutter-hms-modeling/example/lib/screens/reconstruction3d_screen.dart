@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -19,279 +19,254 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:huawei_modeling3d_example/widgets/progress_detail.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:huawei_modeling3d/huawei_modeling3d.dart';
+import 'package:huawei_modeling3d_example/main.dart';
+import 'package:path_provider/path_provider.dart';
 
 class Reconstruction3dScreen extends StatefulWidget {
   const Reconstruction3dScreen({Key? key}) : super(key: key);
 
   @override
-  _Reconstruction3dScreenState createState() => _Reconstruction3dScreenState();
+  State<Reconstruction3dScreen> createState() => _Reconstruction3dScreenState();
 }
 
 class _Reconstruction3dScreenState extends State<Reconstruction3dScreen> {
+  final List<String> _logs = <String>[
+    'Double tap to clear logs.',
+  ];
+  Modeling3dReconstructUploadListener? _uploadListener;
+  Modeling3dReconstructDownloadListener? _downloadListener;
+  Modeling3dReconstructPreviewListener? _previewListener;
   late String _path;
   late String _taskId;
-  late Modeling3dReconstructEngine _engine;
-  late Modeling3dReconstructTaskUtils taskUtils;
-  double _uploadProgress = 0.0;
-  double _downloadProgress = 0.0;
 
-  List<String> _logs = ["3D Reconstruction Engine Logs"];
-
-  @override
-  void initState() {
-    super.initState();
-    initEngine();
+  Future<dynamic> setApiKey() async {
+    await ReconstructApplication.setApiKey(apiKey);
   }
 
-  Future<void> initEngine() async {
-    if (!mounted) return;
-    _engine = await Modeling3dReconstructEngine.instance;
-    taskUtils = await Modeling3dReconstructTaskUtils.instance;
-  }
+  Future<dynamic> initTask() async {
+    const Modeling3dReconstructSetting setting = Modeling3dReconstructSetting();
+    final Modeling3dReconstructInitResult result =
+        await Modeling3dReconstructEngine.initTask(setting);
 
-  void _addToLogs(String value) {
-    setState(() => _logs.add(value));
+    setState(() => _taskId = result.taskId);
+    return result;
   }
 
   /// To run the 3D Reconstruction add your images to the `assets/3D_reconstruction_images`
   /// folder, name them as incrementing numbers (0.jpg,1.jpg...) and enter the image count to the variable below.
   late int imageCount;
   FutureOr<void> saveAssetImageToFolder() async {
-    DateTime _date = DateTime.now();
+    final DateTime date = DateTime.now();
 
-    final extDir = await getExternalStorageDirectory();
-    final myImagePath =
-        '${extDir!.path}/${_date.millisecondsSinceEpoch.toString()}';
-    await new Directory(myImagePath).create();
+    final Directory? extDir = await getExternalStorageDirectory();
+    final String myImagePath = '${extDir!.path}/${date.millisecondsSinceEpoch}';
+    await Directory(myImagePath).create();
     setState(() => _path = myImagePath);
+
     try {
-      for (var i = 1; i < imageCount + 1; i++) {
-        final byteData = await rootBundle
-            .load('assets/3D_reconstruction_images/' + i.toString() + '.jpg');
-        final file = await File(
-                '${(await getApplicationDocumentsDirectory()).path}/$i.jpg')
-            .create(recursive: true);
+      for (int i = 0; i < imageCount; i++) {
+        final ByteData byteData = await rootBundle.load(
+          'assets/3D_reconstruction_images/$i.jpg',
+        );
+        final File file = await File(
+          '${(await getApplicationDocumentsDirectory()).path}/$i.jpg',
+        ).create(recursive: true);
 
-        final image = await file.writeAsBytes(byteData.buffer
-            .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
-
-        final imgName = DateTime.now();
-
-        File newImage = await image.copy(
-            "$myImagePath/${basename('${imgName.millisecondsSinceEpoch.toString()}.jpg')}");
-        print(newImage.path);
+        final File image = await file.writeAsBytes(
+          byteData.buffer.asUint8List(
+            byteData.offsetInBytes,
+            byteData.lengthInBytes,
+          ),
+        );
+        final File newImage = await image.copy(
+          '$myImagePath/${DateTime.now().millisecondsSinceEpoch}.jpg',
+        );
+        debugPrint(newImage.path);
       }
-    } catch (e) {
-      throw ("Error while reading images, Please check if the images are in the assets/3D_reconstruction_images folder and add your images if the folder is empty.");
+    } catch (_) {
+      throw ('Error while reading images, Please check if the images are in the assets/3D_reconstruction_images folder and add your images if the folder is empty.');
     }
   }
 
-  void initTask() async {
-    try {
-      Modeling3dReconstructInitResult initResult = await _engine
-          .initTask(Modeling3dReconstructSetting(reconstructMode: 0));
-      print(" RetCode: " +
-          initResult.retCode.toString() +
-          " RetMsg: " +
-          initResult.retMessage +
-          initResult.retMessage);
-
-      setState(() {
-        _taskId = initResult.taskId;
-      });
-      _addToLogs("init task, ${initResult.taskId}");
-    } on PlatformException {
-      print('Failed to init engine.');
-    }
-  }
-
-  void cancelUpload() async {
-    final res = await _engine.cancelUpload(_taskId);
-    _addToLogs("cancel upload: $res");
-  }
-
-  void cancelDownload() async {
-    final res = await _engine.cancelDownload(_taskId);
-    _addToLogs("cancel download: $res");
-  }
-
-  void uploadFiles() async {
+  Future<dynamic> uploadFiles() async {
     await saveAssetImageToFolder();
-    _engine.setReconstructUploadListener(Modeling3dReconstructUploadListener(
-        _onUploadResult, _onUploadError, _onUploadProgress));
-    _engine.uploadFile(_taskId, _path);
+
+    _uploadListener ??= Modeling3dReconstructUploadListener(
+      onUploadProgress: (String taskId, double progress) {
+        setState(() {
+          _logs.insert(
+            0,
+            'UploadListener.onUploadProgress: taskId: $taskId, progress: $progress',
+          );
+        });
+      },
+      onResult: (String taskId, Modeling3dReconstructUploadResult result) {
+        setState(() {
+          _logs.insert(
+            0,
+            'UploadListener.onResult: taskId: $taskId, result: $result',
+          );
+        });
+      },
+      onError: (String taskId, int errorCode, String message) {
+        setState(() {
+          _logs.insert(
+            0,
+            'UploadListener.onError: taskId: $taskId, errorCode: $errorCode, message: $message',
+          );
+        });
+      },
+    );
+
+    await Modeling3dReconstructEngine.setReconstructUploadListener(
+      _uploadListener,
+    );
+    await Modeling3dReconstructEngine.uploadFile(_taskId, _path);
+    return '';
   }
 
-  void _onUploadResult(
-      String taskId, Modeling3dReconstructUploadResult result) {
-    _addToLogs("Upload completed: " + result.isComplete.toString());
+  Future<dynamic> cancelUpload() async {
+    final int result = await Modeling3dReconstructEngine.cancelUpload(
+      _taskId,
+    );
+    return result;
   }
 
-  void _onUploadError(String taskId, int errCode, String errMsg) {
-    _addToLogs("Upload error: $errCode, $errMsg");
+  Future<dynamic> downloadModelWithConfig() async {
+    _downloadListener ??= Modeling3dReconstructDownloadListener(
+      onDownloadProgress: (String taskId, double progress) {
+        setState(() {
+          _logs.insert(
+            0,
+            'DownloadListener.onDownloadProgress: taskId: $taskId, progress: $progress',
+          );
+        });
+      },
+      onResult: (String taskId, Modeling3dReconstructDownloadResult result) {
+        setState(() {
+          _logs.insert(
+            0,
+            'DownloadListener.onResult: taskId: $taskId, result: $result',
+          );
+        });
+      },
+      onError: (String taskId, int errorCode, String message) {
+        setState(() {
+          _logs.insert(
+            0,
+            'DownloadListener.onError: taskId: $taskId, errorCode: $errorCode, message: $message',
+          );
+        });
+      },
+    );
+    await Modeling3dReconstructEngine.setReconstructDownloadListener(
+      _downloadListener,
+    );
+    await Modeling3dReconstructEngine.downloadModelWithConfig(
+      _taskId,
+      '$_path/downloads',
+      const Modeling3dReconstructDownloadConfig(),
+    );
+    return '';
   }
 
-  void _onUploadProgress(String taskId, double progress) {
-    setState(() => _uploadProgress = progress / 100);
+  Future<dynamic> cancelDownload() async {
+    final int result = await Modeling3dReconstructEngine.cancelDownload(
+      _taskId,
+    );
+    return result;
   }
 
-  void downloadModel() async {
-    _engine.setReconstructDownloadListener(
-        Modeling3dReconstructDownloadListener(
-            _onDownloadResult, _onDownloadError, _onDownloadProgress));
-    _engine.downloadModel(_taskId, "$_path/downloads");
+  Future<dynamic> previewModel() async {
+    _previewListener ??= Modeling3dReconstructPreviewListener(
+      onResult: (String taskId) {
+        setState(() {
+          _logs.insert(
+            0,
+            'PreviewListener.onResult: taskId: $taskId',
+          );
+        });
+      },
+      onError: (String taskId, int errorCode, String message) {
+        setState(() {
+          _logs.insert(
+            0,
+            'PreviewListener.onError: taskId: $taskId, errorCode: $errorCode, message: $message',
+          );
+        });
+      },
+    );
+    await Modeling3dReconstructEngine.previewModel(
+      _taskId,
+      previewListener: _previewListener,
+    );
+    return '';
   }
 
-  void _onDownloadResult(
-      String taskId, Modeling3dReconstructDownloadResult result) {
-    _addToLogs("Download complete: ${result.isComplete}");
+  Future<dynamic> queryTask() async {
+    final Modeling3dReconstructQueryResult queryResult =
+        await Modeling3dReconstructTaskUtils.queryTask(_taskId);
+    return queryResult;
   }
 
-  void _onDownloadError(String taskId, int errCode, String errMsg) {
-    _addToLogs("Download error: $errCode, $errMsg");
-  }
-
-  void _onDownloadProgress(String taskId, double progress) {
-    setState(() => _downloadProgress = progress / 100);
-  }
-
-  void previewModel() async {
-    _engine.previewModel(_taskId,
-        previewListener: Modeling3dReconstructPreviewListener(
-            _onPreviewResult, _onPreviewError));
-  }
-
-  void _onPreviewError(String taskId, int errCode, String errMsg) {
-    _addToLogs("Preview error: $errCode, $errMsg");
-  }
-
-  void _onPreviewResult(String taskId) {
-    _addToLogs("Preview result: $taskId");
-  }
-
-  void queryTask() async {
-    Modeling3dReconstructQueryResult queryResult =
-        await taskUtils.queryTask(_taskId);
-    _addToLogs(
-        "Query Task Status: ${ReconstructProgressStatusType.values[queryResult.status]}");
-  }
-
-  void restartProgress() async {
-    setState(() {
-      _uploadProgress = 0.0;
-      _downloadProgress = 0.0;
-    });
+  Widget _buildButton(String text, Future<dynamic> Function() onPressed) {
+    return ElevatedButton(
+      onPressed: () async {
+        try {
+          final dynamic result = await onPressed();
+          setState(() {
+            _logs.insert(0, '$text: ${result ?? 'SUCCESS'}');
+          });
+        } catch (e) {
+          setState(() {
+            _logs.insert(0, '$text: $e');
+          });
+        }
+      },
+      child: Text(text),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(title: Text("3D Reconstruction")),
+      appBar: AppBar(
+        title: const Text('3D Reconstruction'),
+      ),
       body: Column(
-        children: [
-          ProgressDetail(
-              "Upload", _uploadProgress, cancelUpload, restartProgress),
-          ProgressDetail(
-              "Download", _downloadProgress, cancelDownload, restartProgress),
+        children: <Widget>[
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Card(
-                elevation: 2,
-                child: Container(
-                  padding: EdgeInsets.all(15),
-                  width: MediaQuery.of(context).size.width,
-                  child: ListView.builder(
-                    itemCount: _logs.length,
-                    itemBuilder: (_, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Text(_logs[index]),
-                      );
-                    },
-                  ),
-                ),
-              ),
+            child: ListView(
+              padding: const EdgeInsets.all(16),
+              children: <Widget>[
+                _buildButton('setApiKey', setApiKey),
+                const Divider(),
+                _buildButton('initTask', initTask),
+                const Divider(),
+                _buildButton('uploadFiles', uploadFiles),
+                _buildButton('cancelUpload', cancelUpload),
+                const Divider(),
+                _buildButton('downloadModel', downloadModelWithConfig),
+                _buildButton('cancelDownload', cancelDownload),
+                const Divider(),
+                _buildButton('previewModel', previewModel),
+                const Divider(),
+                _buildButton('queryTask', queryTask),
+              ],
             ),
           ),
-          SizedBox(height: 10),
+          const Divider(),
           Expanded(
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 10),
-              width: MediaQuery.of(context).size.width,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Container(
-                            width: MediaQuery.of(context).size.width,
-                            margin: EdgeInsets.only(bottom: 5),
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 15)),
-                                onPressed: initTask,
-                                child: Text("Init Task"))),
-                        Container(
-                            width: MediaQuery.of(context).size.width,
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 15)),
-                                onPressed: uploadFiles,
-                                child: Text("Upload Files"))),
-                      ],
-                    ),
-                  ),
-                  SizedBox(width: 5),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Container(
-                            width: MediaQuery.of(context).size.width,
-                            margin: EdgeInsets.only(bottom: 5),
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 15)),
-                                onPressed: downloadModel,
-                                child: Text("Download Model"))),
-                        Container(
-                            width: MediaQuery.of(context).size.width,
-                            child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 15)),
-                                onPressed: previewModel,
-                                child: Text("Preview Model"))),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 10),
-              width: MediaQuery.of(context).size.width,
-              child: Column(
-                children: [
-                  Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: EdgeInsets.only(bottom: 5),
-                      child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.symmetric(vertical: 15)),
-                          onPressed: queryTask,
-                          child: Text("Query Task"))),
-                ],
+            child: GestureDetector(
+              onDoubleTap: () => setState(() => _logs.clear()),
+              child: ListView.separated(
+                padding: const EdgeInsets.all(16),
+                itemCount: _logs.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Text(_logs[index]);
+                },
+                separatorBuilder: (_, __) => const Divider(),
               ),
             ),
           ),

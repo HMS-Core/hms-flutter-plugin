@@ -1,18 +1,18 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-        
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.modeling3d.materialgen.handlers;
 
@@ -33,6 +33,7 @@ import com.huawei.hms.materialgeneratesdk.cloud.Modeling3dTextureSetting;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -48,22 +49,17 @@ public class MaterialEngineHandler implements MethodChannel.MethodCallHandler {
     private final Activity activity;
     private final MethodChannel methodChannel;
 
-    TextureUploadListenerImpl uploadListener;
-    TextureDownloadListenerImpl downloadListener;
+    private TextureUploadListenerImpl uploadListener;
+    private TextureDownloadListenerImpl downloadListener;
 
-    private Modeling3dTextureEngine engine;
-    private Modeling3dTextureInitResult modeling3dTextureInitResult;
-
-    public MaterialEngineHandler(Activity activity, MethodChannel ch) {
+    public MaterialEngineHandler(Activity activity, MethodChannel methodChannel) {
         this.activity = activity;
-        this.methodChannel = ch;
-
-        engine = Modeling3dTextureEngine.getInstance(activity);
+        this.methodChannel = methodChannel;
     }
 
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
-        HMSLogger.getInstance(activity).startMethodExecutionTimer("#materialGen-"+call.method);
+        HMSLogger.getInstance(activity).startMethodExecutionTimer("#materialGen-" + call.method);
         switch (call.method) {
             case "initTask":
                 initTask(call, result);
@@ -91,60 +87,39 @@ public class MaterialEngineHandler implements MethodChannel.MethodCallHandler {
                 break;
             default:
                 result.notImplemented();
-                break;
         }
     }
 
     private void close(MethodChannel.Result result) {
-        engine.close();
+        Modeling3dTextureEngine.getInstance(activity).close();
         HMSLogger.getInstance(activity).sendSingleEvent("#materialGen-close");
         result.success(true);
     }
 
-    private void cancelUpload(MethodCall call, MethodChannel.Result result1) {
-        String taskId = FromMap.toString("taskId", call.argument("taskId"), false);
-
-        if (taskId == null) {
-            HMSLogger.getInstance(activity).sendSingleEvent("#materialGen-cancelUpload", "-1");
-            result1.error(TAG, "Task id is mandatory", "-1");
-            return;
-        }
-
+    private void cancelUpload(MethodCall call, MethodChannel.Result result) {
+        final String taskId = Objects.requireNonNull(call.argument("taskId"));
+        final int res = Modeling3dTextureEngine.getInstance(activity).cancelUpload(taskId);
         HMSLogger.getInstance(activity).sendSingleEvent("#materialGen-cancelUpload");
-        result1.success(engine.cancelUpload(taskId));
+        result.success(res);
     }
 
-    private void cancelDownload(MethodCall call, MethodChannel.Result result1) {
-        String taskId = FromMap.toString("taskId", call.argument("taskId"), false);
-
-        if (taskId == null) {
-            HMSLogger.getInstance(activity).sendSingleEvent("#materialGen-cancelDownload", "-1");
-            result1.error(TAG, "Task id is mandatory", "-1");
-            return;
-        }
-
+    private void cancelDownload(MethodCall call, MethodChannel.Result result) {
+        final String taskId = Objects.requireNonNull(call.argument("taskId"));
+        final int res = Modeling3dTextureEngine.getInstance(activity).cancelDownload(taskId);
         HMSLogger.getInstance(activity).sendSingleEvent("#materialGen-cancelDownload");
-        result1.success(engine.cancelDownload(taskId));
+        result.success(res);
     }
 
-    private void syncGenerate(MethodCall call, MethodChannel.Result result1) {
-        String filePath = FromMap.toString("filePath", call.argument("filePath"), false);
-        String fileSavePath = FromMap.toString("fileSavePath", call.argument("fileSavePath"), false);
+    private void syncGenerate(MethodCall call, MethodChannel.Result result) {
+        final String filePath = Objects.requireNonNull(call.argument("filePath"));
+        final String fileSavePath = Objects.requireNonNull(call.argument("fileSavePath"));
+        final Map<String, Object> settingMap = Objects.requireNonNull(call.argument("setting"));
+        final Integer textureMode = (Integer) Objects.requireNonNull(settingMap.get("textureMode"));
 
-        Map<String, Object> settingMap = call.argument("setting");
-
-        if (filePath == null || fileSavePath == null || settingMap == null) {
-            HMSLogger.getInstance(activity).sendSingleEvent("#materialGen-syncGenerate", "-1");
-            result1.error(TAG, "All parameters are mandatory", "-1");
-            return;
-        }
-
-        Integer type = (Integer) settingMap.get("textureMode");
-
-        Modeling3dTextureSetting setting = new Modeling3dTextureSetting.Factory().setTextureMode(type == null ? 1 : type).create();
+        final Modeling3dTextureSetting setting = new Modeling3dTextureSetting.Factory().setTextureMode(textureMode).create();
 
         Observable.create((ObservableOnSubscribe<Integer>) subscriber -> {
-            final int res = engine.syncGenerateTexture(filePath, fileSavePath, setting);
+            final int res = Modeling3dTextureEngine.getInstance(activity).syncGenerateTexture(filePath, fileSavePath, setting);
             subscriber.onNext(res);
             subscriber.onComplete();
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Integer>() {
@@ -156,13 +131,13 @@ public class MaterialEngineHandler implements MethodChannel.MethodCallHandler {
             @Override
             public void onNext(@NonNull Integer integer) {
                 HMSLogger.getInstance(activity).sendSingleEvent("#materialGen-syncGenerate");
-                result1.success(integer);
+                result.success(integer);
             }
 
             @Override
             public void onError(@NonNull Throwable e) {
                 HMSLogger.getInstance(activity).sendSingleEvent("#materialGen-syncGenerate", "-1");
-                result1.error(TAG, e.getMessage(), "");
+                result.error(TAG, e.getMessage(), "");
             }
 
             @Override
@@ -172,10 +147,12 @@ public class MaterialEngineHandler implements MethodChannel.MethodCallHandler {
         });
     }
 
-    private void initTask(MethodCall call, MethodChannel.Result result1) {
-        engine = Modeling3dTextureEngine.getInstance(activity);
+    private void initTask(MethodCall call, MethodChannel.Result result) {
+        final Integer textureMode = Objects.requireNonNull(call.argument("textureMode"));
+        final Modeling3dTextureSetting setting = new Modeling3dTextureSetting.Factory().setTextureMode(textureMode).create();
+
         Observable.create((ObservableOnSubscribe<Modeling3dTextureInitResult>) subscriber -> {
-            modeling3dTextureInitResult = engine.initTask(FromMap.createTextureSetting(call));
+            final Modeling3dTextureInitResult modeling3dTextureInitResult = Modeling3dTextureEngine.getInstance(activity).initTask(setting);
             subscriber.onNext(modeling3dTextureInitResult);
             subscriber.onComplete();
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Modeling3dTextureInitResult>() {
@@ -187,13 +164,13 @@ public class MaterialEngineHandler implements MethodChannel.MethodCallHandler {
             @Override
             public void onNext(@NonNull Modeling3dTextureInitResult modeling3dTextureInitResult) {
                 HMSLogger.getInstance(activity).sendSingleEvent("#materialGen-initTask");
-                result1.success(ToMap.textureInitToMap(modeling3dTextureInitResult));
+                result.success(ToMap.textureInitToMap(modeling3dTextureInitResult));
             }
 
             @Override
             public void onError(@NonNull Throwable e) {
                 HMSLogger.getInstance(activity).sendSingleEvent("#materialGen-initTask", "-1");
-                result1.error(TAG, e.getMessage(), "");
+                result.error(TAG, e.getMessage(), "");
             }
 
             @Override
@@ -203,62 +180,52 @@ public class MaterialEngineHandler implements MethodChannel.MethodCallHandler {
         });
     }
 
-    private void uploadFiles(MethodCall call, MethodChannel.Result result1) {
-        String taskId = FromMap.toString("taskId", call.argument("taskId"), false);
-        String filePath = FromMap.toString("filePath", call.argument("filePath"), false);
-        
-        if (taskId == null || filePath == null) {
-            HMSLogger.getInstance(activity).sendSingleEvent("#materialGen-uploadFiles", "-1");
-            result1.error(TAG, "all parameters are mandatory", "");
-            return;
-        }
+    private void uploadFiles(MethodCall call, MethodChannel.Result result) {
+        final String taskId = FromMap.toString("taskId", call.argument("taskId"), false);
+        final String filePath = FromMap.toString("filePath", call.argument("filePath"), false);
 
-        uploadListener = new TextureUploadListenerImpl(activity, methodChannel);
-        engine.setTextureUploadListener(uploadListener);
-        
-        engine.asyncUploadFile(taskId, filePath);
+        if (uploadListener == null) {
+            uploadListener = new TextureUploadListenerImpl(activity, methodChannel);
+        }
+        Modeling3dTextureEngine.getInstance(activity).setTextureUploadListener(uploadListener);
+        Modeling3dTextureEngine.getInstance(activity).asyncUploadFile(taskId, filePath);
+        result.success(true);
     }
 
-    private void downloadFiles(MethodCall call, MethodChannel.Result result1) {
-        String taskId = FromMap.toString("taskId", call.argument("taskId"), false);
-        String filePath = FromMap.toString("filePath", call.argument("filePath"), false);
+    private void downloadFiles(MethodCall call, MethodChannel.Result result) {
+        final String taskId = FromMap.toString("taskId", call.argument("taskId"), false);
+        final String filePath = FromMap.toString("filePath", call.argument("filePath"), false);
 
-        if (taskId == null || filePath == null) {
-            HMSLogger.getInstance(activity).sendSingleEvent("#materialGen-downloadTexture", "-1");
-            result1.error(TAG, "all parameters are mandatory", "");
-            return;
+        if (downloadListener == null) {
+            downloadListener = new TextureDownloadListenerImpl(activity, methodChannel);
         }
-
-        downloadListener = new TextureDownloadListenerImpl(activity, methodChannel);
-        engine.setTextureDownloadListener(downloadListener);
-        
-        engine.asyncDownloadTexture(taskId, filePath);
+        Modeling3dTextureEngine.getInstance(activity).setTextureDownloadListener(downloadListener);
+        Modeling3dTextureEngine.getInstance(activity).asyncDownloadTexture(taskId, filePath);
+        result.success(true);
     }
 
     private final Modeling3dTexturePreviewListener previewListener = new Modeling3dTexturePreviewListener() {
         @Override
         public void onResult(String s, Object o) {
-            Map<String, Object> args = new HashMap<>();
+            final Map<String, Object> args = new HashMap<>();
             args.put("taskId", s);
-            new Handler(activity.getMainLooper()).post(() -> {
-                methodChannel.invokeMethod("texturePreviewResult", args);
-            });
+            args.put("ext", o);
+            new Handler(activity.getMainLooper()).post(() -> methodChannel.invokeMethod("texturePreviewResult", args));
         }
 
         @Override
         public void onError(String s, int i, String s1) {
-            Map<String, Object> args = new HashMap<>();
+            final Map<String, Object> args = new HashMap<>();
             args.put("taskId", s);
             args.put("errorCode", i);
             args.put("message", s1);
-            new Handler(activity.getMainLooper()).post(() -> {
-                methodChannel.invokeMethod("texturePreviewError", args);
-            });
+            new Handler(activity.getMainLooper()).post(() -> methodChannel.invokeMethod("texturePreviewError", args));
         }
     };
 
-    private void previewModel(MethodCall call, MethodChannel.Result result1) {
-        String taskId = FromMap.toString("taskId", call.argument("taskId"), false);
-        engine.previewTexture(taskId, activity, previewListener);
+    private void previewModel(MethodCall call, MethodChannel.Result result) {
+        final String taskId = FromMap.toString("taskId", call.argument("taskId"), false);
+        Modeling3dTextureEngine.getInstance(activity).previewTexture(taskId, activity, previewListener);
+        result.success(true);
     }
 }

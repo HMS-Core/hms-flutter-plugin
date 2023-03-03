@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,20 +14,40 @@
     limitations under the License.
 */
 
+part of materialgen;
+
+/// Initialization result of a material generation task.
 class Modeling3dTextureInitResult {
-  /// Obtains the ID of a material generation task.
-  String? taskId;
+  /// ID of a material generation task.
+  /// A unique task ID is generated each time the material generation API is called.
+  final String taskId;
 
-  /// Obtains the result code for material generation task initialization.
-  int? retCode;
+  /// Result code for material generation task initialization.
+  /// 0 indicates success, and other values indicate failure.
+  final int retCode;
 
-  /// Obtains the description of the result code for material generation task initialization.
-  String? retMsg;
+  /// Description of the result code for material generation task initialization.
+  final String retMsg;
 
-  Modeling3dTextureInitResult({this.retCode, this.retMsg, this.taskId});
+  const Modeling3dTextureInitResult._({
+    required this.taskId,
+    required this.retCode,
+    required this.retMsg,
+  });
 
-  factory Modeling3dTextureInitResult.fromMap(Map<dynamic, dynamic> map) {
-    return Modeling3dTextureInitResult(
-        taskId: map['taskId'], retCode: map['retCode'], retMsg: map['retMsg']);
+  factory Modeling3dTextureInitResult._fromMap(Map<dynamic, dynamic> map) {
+    return Modeling3dTextureInitResult._(
+      taskId: map['taskId'],
+      retCode: map['retCode'],
+      retMsg: map['retMsg'],
+    );
+  }
+
+  @override
+  String toString() {
+    return '$Modeling3dTextureInitResult('
+        'taskId: $taskId, '
+        'retCode: $retCode, '
+        'retMsg: $retMsg)';
   }
 }

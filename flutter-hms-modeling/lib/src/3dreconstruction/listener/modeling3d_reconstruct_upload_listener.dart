@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,22 +14,32 @@
     limitations under the License.
 */
 
-import 'modeling_callbacks.dart';
+part of objreconstruct;
 
-/// Listens for model upload.
+/// Listens for image upload.
 class Modeling3dReconstructUploadListener {
-  /// Called to receive the upload result.
-  final OnUploadResult onResult;
+  /// Callback when the upload progress is received.
+  final void Function(
+    String taskId,
+    double progress,
+  )? onUploadProgress;
 
-  /// Called upon an upload error.
-  final OnError onError;
+  /// Callback when the upload result is received.
+  final void Function(
+    String taskId,
+    Modeling3dReconstructUploadResult result,
+  )? onResult;
 
-  /// Called to receive the upload progress.
-  final OnUploadProgress onUploadProgress;
+  /// Callback when an error occurs during upload.
+  final void Function(
+    String taskId,
+    int errorCode,
+    String message,
+  )? onError;
 
-  Modeling3dReconstructUploadListener(
+  const Modeling3dReconstructUploadListener({
+    this.onUploadProgress,
     this.onResult,
     this.onError,
-    this.onUploadProgress,
-  );
+  });
 }

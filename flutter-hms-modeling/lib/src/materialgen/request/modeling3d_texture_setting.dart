@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,21 +14,21 @@
     limitations under the License.
 */
 
-import 'package:huawei_modeling3d/src/materialgen/constants/modeling3d_texture_constants.dart';
+part of materialgen;
 
 /// Settings for material generation.
 class Modeling3dTextureSetting {
-  int? textureMode;
+  /// Working mode for material generation.
+  /// Check [Modeling3dTextureConstants.algorithmMode] for more.
+  final int textureMode;
 
-  Modeling3dTextureSetting._({this.textureMode});
+  const Modeling3dTextureSetting({
+    this.textureMode = 1,
+  });
 
-  factory Modeling3dTextureSetting.create({int? textureMode}) {
-    return Modeling3dTextureSetting._(textureMode: textureMode);
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'textureMode': textureMode ?? Modeling3dTextureConstants.algorithmMode.ai
+  Map<String, dynamic> _toMap() {
+    return <String, dynamic>{
+      'textureMode': textureMode,
     };
   }
 }

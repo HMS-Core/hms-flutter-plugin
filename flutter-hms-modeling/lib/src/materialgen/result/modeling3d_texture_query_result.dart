@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,27 +14,47 @@
     limitations under the License.
 */
 
+part of materialgen;
+
+/// Queries the status of a material generation task.
 class Modeling3dTextureQueryResult {
-  /// Obtains the ID of a material generation task.
-  String? taskId;
+  /// ID of a material generation task.
+  /// A unique task ID is generated each time the material generation API is called.
+  final String taskId;
 
-  /// Obtains the status of a material generation task.
-  int? status;
+  /// Status of a material generation task.
+  /// Check [Modeling3dTextureConstants.progressStatus] for more.
+  final int status;
 
-  /// Obtains the result code for a material generation task.
-  int? retCode;
+  /// Result code for a material generation task.
+  /// 0 indicates success, and other values indicate failure.
+  final int retCode;
 
-  /// Obtains the description of the result code for a material generation task.
-  String? retMsg;
+  /// Description of the result code for a material generation task.
+  final String? retMsg;
 
-  Modeling3dTextureQueryResult(
-      {this.retCode, this.retMsg, this.status, this.taskId});
+  const Modeling3dTextureQueryResult._({
+    required this.taskId,
+    required this.status,
+    required this.retCode,
+    required this.retMsg,
+  });
 
-  factory Modeling3dTextureQueryResult.fromMap(Map<dynamic, dynamic> map) {
-    return Modeling3dTextureQueryResult(
-        taskId: map['taskId'],
-        status: map['status'],
-        retCode: map['retCode'],
-        retMsg: map['retMsg']);
+  factory Modeling3dTextureQueryResult._fromMap(Map<dynamic, dynamic> map) {
+    return Modeling3dTextureQueryResult._(
+      taskId: map['taskId'],
+      status: map['status'],
+      retCode: map['retCode'],
+      retMsg: map['retMsg'],
+    );
+  }
+
+  @override
+  String toString() {
+    return '$Modeling3dTextureQueryResult('
+        'taskId: $taskId, '
+        'status: $status, '
+        'retCode: $retCode, '
+        'retMsg: $retMsg)';
   }
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,15 +14,24 @@
     limitations under the License.
 */
 
-import 'modeling_callbacks.dart';
+part of objreconstruct;
 
 /// Listens for 3D model preview.
 class Modeling3dReconstructPreviewListener {
-  /// Called to receive the preview result.
-  final OnResult onResult;
+  /// Callback when the preview result is received.
+  final void Function(
+    String taskId,
+  )? onResult;
 
-  /// Called upon a preview failure.
-  final OnError onError;
+  /// Callback when preview fails.
+  final void Function(
+    String taskId,
+    int errorCode,
+    String message,
+  )? onError;
 
-  Modeling3dReconstructPreviewListener(this.onResult, this.onError);
+  const Modeling3dReconstructPreviewListener({
+    this.onResult,
+    this.onError,
+  });
 }

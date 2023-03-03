@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,14 +14,32 @@
     limitations under the License.
 */
 
-import 'texture_callbacks.dart';
+part of materialgen;
 
-/// Upload listener for material generation
+/// Listens for image upload.
 class Modeling3dTextureUploadListener {
-  final OnUploadResult onResult;
-  final OnError onError;
-  final OnUploadProgress onUploadProgress;
+  /// Callback when the upload progress is received.
+  final void Function(
+    String taskId,
+    double progress,
+  )? onUploadProgress;
 
-  Modeling3dTextureUploadListener(
-      this.onResult, this.onError, this.onUploadProgress);
+  /// Callback when the upload result is received.
+  final void Function(
+    String taskId,
+    Modeling3dTextureUploadResult result,
+  )? onResult;
+
+  /// Callback when an error occurs during upload.
+  final void Function(
+    String taskId,
+    int errorCode,
+    String message,
+  )? onError;
+
+  const Modeling3dTextureUploadListener({
+    this.onUploadProgress,
+    this.onResult,
+    this.onError,
+  });
 }

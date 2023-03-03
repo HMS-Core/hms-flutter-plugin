@@ -26,31 +26,35 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 apply plugin: 'com.huawei.agconnect'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
+
+    defaultConfig {
+        applicationId "<package_name>"
+        minSdkVersion 26
+        targetSdkVersion 30
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+    }
 
     lintOptions {
         disable 'InvalidPackage'
     }
 
-    defaultConfig {
-        applicationId "<package_name>"
-        minSdkVersion 21
-        targetSdkVersion 29
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     signingConfigs {
         config {
-            storeFile file('<keystore_file>')
-            storePassword '<keystore_password>'
+            storeFile file('<store_file>')
+            storePassword '<store_password>'
             keyAlias '<key_alias>'
             keyPassword '<key_password>'
             v1SigningEnabled true
             v2SigningEnabled true
         }
     }
-
 
     buildTypes {
         debug {
@@ -62,6 +66,10 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    packagingOptions {
+        pickFirst '**/*.so'
     }
 }
 

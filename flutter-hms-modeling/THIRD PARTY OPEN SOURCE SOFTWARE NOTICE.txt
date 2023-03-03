@@ -11,7 +11,7 @@ APPLICABLE LICENSES FOR MORE DETAILS.
 
 Copyright Notice and License Texts
 
-Software: path_provider 2.0.3
+Software: path_provider 2.0.12
 ---------------------------------------------------------------
 Copyright Notice:
 

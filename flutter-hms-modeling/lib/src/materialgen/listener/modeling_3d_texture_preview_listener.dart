@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,12 +14,24 @@
     limitations under the License.
 */
 
-import 'texture_callbacks.dart';
+part of materialgen;
 
-/// Preview listener for material generation
+/// Listens for the material preview.
 class Modeling3dTexturePreviewListener {
-  final OnError onError;
-  final OnResult onResult;
+  /// Callback when the preview result is received.
+  final void Function(
+    String taskId,
+  )? onResult;
 
-  Modeling3dTexturePreviewListener(this.onError, this.onResult);
+  /// Callback when the preview fails.
+  final void Function(
+    String taskId,
+    int errorCode,
+    String message,
+  )? onError;
+
+  const Modeling3dTexturePreviewListener({
+    this.onResult,
+    this.onError,
+  });
 }

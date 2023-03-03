@@ -1,18 +1,18 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-        
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.modeling3d.materialgen.handlers;
 
@@ -25,6 +25,8 @@ import com.huawei.hms.flutter.modeling3d.utils.HMSLogger;
 import com.huawei.hms.flutter.modeling3d.utils.ToMap;
 import com.huawei.hms.materialgeneratesdk.cloud.Modeling3dTextureQueryResult;
 import com.huawei.hms.materialgeneratesdk.cloud.Modeling3dTextureTaskUtils;
+
+import java.util.Objects;
 
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -64,18 +66,11 @@ public class MaterialTaskUtilHandler implements MethodChannel.MethodCallHandler 
                 break;
             default:
                 result.notImplemented();
-                break;
         }
     }
 
-    private void performQueryTask(MethodCall call, MethodChannel.Result result1) {
-        String taskId = FromMap.toString("taskId", call.argument("taskId"), false);
-
-        if (taskId == null) {
-            HMSLogger.getInstance(activity).sendSingleEvent("#materialTask-queryTask", "-1");
-            result1.error(TAG, "Task id is mandatory", "");
-            return;
-        }
+    private void performQueryTask(MethodCall call, MethodChannel.Result result) {
+        final String taskId = FromMap.toString("taskId", call.argument("taskId"), false);
 
         Observable.create((ObservableOnSubscribe<Modeling3dTextureQueryResult>) subscriber -> {
             modeling3dTextureQueryResult = Modeling3dTextureTaskUtils.getInstance(activity).queryTask(taskId);
@@ -90,13 +85,13 @@ public class MaterialTaskUtilHandler implements MethodChannel.MethodCallHandler 
             @Override
             public void onNext(@NonNull Modeling3dTextureQueryResult modeling3dTextureQueryResult) {
                 HMSLogger.getInstance(activity).sendSingleEvent("#materialTask-queryTask");
-                result1.success(ToMap.textureQueryToMap(modeling3dTextureQueryResult));
+                result.success(ToMap.textureQueryToMap(modeling3dTextureQueryResult));
             }
 
             @Override
             public void onError(@NonNull Throwable e) {
                 HMSLogger.getInstance(activity).sendSingleEvent("#materialTask-queryTask", "-1");
-                result1.error(TAG, e.getMessage(), "");
+                result.error(TAG, e.getMessage(), "");
             }
 
             @Override
@@ -107,14 +102,7 @@ public class MaterialTaskUtilHandler implements MethodChannel.MethodCallHandler 
     }
 
     private void performDeleteTask(MethodCall call, MethodChannel.Result result) {
-        String taskId = FromMap.toString("taskId", call.argument("taskId"), false);
-
-        if (taskId == null) {
-            HMSLogger.getInstance(activity).sendSingleEvent("#materialTask-deleteTask", "-1");
-            result.error(TAG, "Task id is mandatory", "");
-            return;
-        }
-
+        final String taskId = FromMap.toString("taskId", call.argument("taskId"), false);
 
         Observable.create((ObservableOnSubscribe<Integer>) subscriber -> {
             final int res = Modeling3dTextureTaskUtils.getInstance(activity).deleteTask(taskId);
@@ -150,19 +138,11 @@ public class MaterialTaskUtilHandler implements MethodChannel.MethodCallHandler 
     }
 
     private void performSetTaskRestrictStatus(MethodCall call, MethodChannel.Result result) {
-        String taskId = FromMap.toString("taskId", call.argument("taskId"), false);
-
-        if (taskId == null) {
-            HMSLogger.getInstance(activity).sendSingleEvent("#materialTask-setTaskRestrictStatus", "-1");
-            result.error(TAG, "Task id is mandatory", "");
-            return;
-        }
-
-        Integer status = FromMap.toInteger("restrictStatus", call.argument("restrictStatus"));
-
+        final String taskId = FromMap.toString("taskId", call.argument("taskId"), false);
+        final Integer restrictStatus = Objects.requireNonNull(FromMap.toInteger("restrictStatus", call.argument("restrictStatus")));
 
         Observable.create((ObservableOnSubscribe<Integer>) subscriber -> {
-            final int res = Modeling3dTextureTaskUtils.getInstance(activity).setTaskRestrictStatus(taskId, status);
+            final int res = Modeling3dTextureTaskUtils.getInstance(activity).setTaskRestrictStatus(taskId, restrictStatus);
             subscriber.onNext(res);
             subscriber.onComplete();
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<Integer>() {
@@ -195,13 +175,7 @@ public class MaterialTaskUtilHandler implements MethodChannel.MethodCallHandler 
     }
 
     private void performQueryTaskRestrictStatus(MethodCall call, MethodChannel.Result result) {
-        String taskId = FromMap.toString("taskId", call.argument("taskId"), false);
-
-        if (taskId == null) {
-            HMSLogger.getInstance(activity).sendSingleEvent("#materialTask-queryTaskRestrictStatus", "-1");
-            result.error(TAG, "Task id is mandatory", "");
-            return;
-        }
+        final String taskId = FromMap.toString("taskId", call.argument("taskId"), false);
 
         Observable.create((ObservableOnSubscribe<Integer>) subscriber -> {
             final int res = Modeling3dTextureTaskUtils.getInstance(activity).queryTaskRestrictStatus(taskId);
