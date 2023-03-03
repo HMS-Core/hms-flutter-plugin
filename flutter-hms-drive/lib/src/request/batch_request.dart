@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -26,17 +26,17 @@ class BatchRequest {
   );
 
   BatchRequest clone({
-    List<Batchable> driveRequests,
+    required List<Batchable> driveRequests,
   }) {
     return BatchRequest(
-      driveRequests ?? this.driveRequests,
+      driveRequests,
     );
   }
 
   Map<String, dynamic> toMap() {
-    return {
-      'driveRequests': driveRequests?.map((x) => x?.toMap())?.toList(),
-    }..removeWhere((k, v) => v == null);
+    return <String, dynamic>{
+      'driveRequests': driveRequests.map((Batchable x) => x.toMap()).toList(),
+    }..removeWhere((String k, dynamic v) => v == null);
   }
 
   String toJson() => json.encode(toMap());

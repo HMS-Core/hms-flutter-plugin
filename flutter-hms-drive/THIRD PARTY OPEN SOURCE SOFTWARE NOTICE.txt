@@ -11,7 +11,7 @@ APPLICABLE LICENSES FOR MORE DETAILS.
 
 Copyright Notice and License Texts
 
-Software: com.google.code.gson:gson 2.8.6
+Software: com.google.code.gson:gson 2.9.0
 ----------------------------------------------------------------------
 Copyright notice:
 
@@ -233,11 +233,11 @@ limitations under the License.
    See the License for the specific language governing permissions and
    limitations under the License.
 
-Software: path_provider 1.6.11
+Software: path_provider 2.0.12
 ----------------------------------------------------------------------
 Copyright Notice:
 
-Copyright 2017, the Flutter project authors. All rights reserved.
+Copyright 2013 The Flutter Authors. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:

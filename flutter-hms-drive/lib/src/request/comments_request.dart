@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -17,44 +17,40 @@
 import 'dart:convert';
 
 import 'package:huawei_drive/huawei_drive.dart';
-import 'package:huawei_drive/src/model/drive_comment.dart';
-import 'package:huawei_drive/src/request/drive_request.dart';
-
-import 'batchable.dart';
 
 /// Contains the request methods about Comments.
 class CommentsRequest extends Batchable implements DriveRequest {
   /// File ID.
-  String fileId;
+  String? fileId;
 
   /// Response data format.
   ///
   /// The default data format is json, and only this format is supported currently.
   @override
-  String form;
+  String? form;
 
   /// Fields to be contained in a response.
   ///
   /// By default an asterisk (`*`) is used to match all related fields.
   @override
-  String fields;
+  String? fields;
 
   /// Indicates whether to return a response containing indentations and newline characters.
   @override
-  bool prettyPrint;
+  bool? prettyPrint;
 
   ///A string of less than 40 characters to identify a user.
   ///
   ///The string is used by the server to restrict the user's API calls.
   @override
-  String quotaId;
+  String? quotaId;
 
   /// Parameters for the request.
   @override
-  Map<String, dynamic> parameters = {};
+  Map<String, dynamic>? parameters;
 
   /// Page Size for list request.
-  int pageSize;
+  int? pageSize;
 
   /// Cursor for the current page, which is obtained from nextCursor in the previous response.
   ///
@@ -64,76 +60,97 @@ class CommentsRequest extends Batchable implements DriveRequest {
   ///
   /// This process repeats until nextCursor in the response is empty, which indicates that
   /// all comments have been returned.
-  String cursor;
+  String? cursor;
 
   /// Comment ID.
-  String commentId;
+  String? commentId;
 
   /// Comment instance to specify on the create request.
-  DriveComment comment;
+  DriveComment? comment;
 
   /// Whether to return deleted comments on a get request.
-  bool includeDeleted;
+  bool? includeDeleted;
 
   /// Earliest modification time of a comment.
-  DateTime startEditedTime;
+  DateTime? startEditedTime;
 
-  CommentsRequest._(
-      {this.fileId,
-      this.form,
-      this.fields,
-      this.prettyPrint,
-      this.quotaId,
-      this.parameters,
-      this.pageSize,
-      this.cursor,
-      this.commentId,
-      this.comment,
-      this.includeDeleted,
-      this.startEditedTime})
-      : super("Comments#Unknown");
+  CommentsRequest._({
+    this.fileId,
+    this.form,
+    this.fields,
+    this.prettyPrint,
+    this.quotaId,
+    this.parameters,
+    this.pageSize,
+    this.cursor,
+    this.commentId,
+    this.comment,
+    this.includeDeleted,
+    this.startEditedTime,
+  }) : super('Comments#Unknown');
 
   /// Constructor for a create request.
-  CommentsRequest.create(this.fileId, this.comment,
-      {this.form, this.fields, this.prettyPrint, this.quotaId, this.parameters})
-      : super("Comments#Create");
+  CommentsRequest.create(
+    this.fileId,
+    this.comment, {
+    this.form,
+    this.fields,
+    this.prettyPrint,
+    this.quotaId,
+    this.parameters,
+  }) : super('Comments#Create');
 
   /// Constructor for a delete request.
-  CommentsRequest.delete(this.fileId, this.commentId,
-      {this.form, this.fields, this.prettyPrint, this.quotaId, this.parameters})
-      : super("Comments#Delete");
+  CommentsRequest.delete(
+    this.fileId,
+    this.commentId, {
+    this.form,
+    this.fields,
+    this.prettyPrint,
+    this.quotaId,
+    this.parameters,
+  }) : super('Comments#Delete');
 
   /// Constructor for a get request.
-  CommentsRequest.getRequest(this.fileId, this.commentId,
-      {this.includeDeleted,
-      this.form,
-      this.fields,
-      this.prettyPrint,
-      this.quotaId,
-      this.parameters})
-      : super("Comments#Get");
+  CommentsRequest.getRequest(
+    this.fileId,
+    this.commentId, {
+    this.includeDeleted,
+    this.form,
+    this.fields,
+    this.prettyPrint,
+    this.quotaId,
+    this.parameters,
+  }) : super('Comments#Get');
 
   /// Constructor for a list request.
-  CommentsRequest.list(this.fileId,
-      {this.pageSize,
-      this.includeDeleted,
-      this.cursor,
-      this.startEditedTime,
-      this.form,
-      this.fields,
-      this.prettyPrint,
-      this.quotaId,
-      this.parameters})
-      : super("Comments#List");
+  CommentsRequest.list(
+    this.fileId, {
+    this.pageSize,
+    this.includeDeleted,
+    this.cursor,
+    this.startEditedTime,
+    this.form,
+    this.fields,
+    this.prettyPrint,
+    this.quotaId,
+    this.parameters,
+  }) : super('Comments#List');
 
   /// Constructor for a update request.
-  CommentsRequest.update(this.fileId, this.commentId, this.comment,
-      {this.form, this.fields, this.prettyPrint, this.quotaId})
-      : super("Comments#Update");
+  CommentsRequest.update(
+    this.fileId,
+    this.commentId,
+    this.comment, {
+    this.form,
+    this.fields,
+    this.prettyPrint,
+    this.quotaId,
+  }) : super('Comments#Update');
 
   @override
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'requestName': requestName,
       'fileId': fileId,
       'form': form,
@@ -147,7 +164,7 @@ class CommentsRequest extends Batchable implements DriveRequest {
       'comment': comment?.toMap(),
       'includeDeleted': includeDeleted,
       'startEditedTime': startEditedTime?.toIso8601String()
-    }..removeWhere((k, v) => v == null);
+    }..removeWhere((String k, dynamic v) => v == null);
   }
 
   @override
@@ -159,25 +176,23 @@ class CommentsRequest extends Batchable implements DriveRequest {
   }
 
   factory CommentsRequest.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return CommentsRequest._(
-        fileId: map['fileId'],
-        form: map['form'],
-        fields: map['fields'],
-        prettyPrint: map['prettyPrint'],
-        quotaId: map['quotaId'],
-        parameters: map['parameters'],
-        pageSize: map['pageSize'],
-        cursor: map['cursor'],
-        commentId: map['commentId'],
-        comment: map['comment'] == null
-            ? null
-            : DriveComment.fromMap(map['comment']),
-        includeDeleted: map['includeDeleted'],
-        startEditedTime: map['startEditedTime'] != null
-            ? DateTime.parse(map['startEditedTime'])
-            : null);
+      fileId: map['fileId'],
+      form: map['form'],
+      fields: map['fields'],
+      prettyPrint: map['prettyPrint'],
+      quotaId: map['quotaId'],
+      parameters: map['parameters'],
+      pageSize: map['pageSize'],
+      cursor: map['cursor'],
+      commentId: map['commentId'],
+      comment:
+          map['comment'] == null ? null : DriveComment.fromMap(map['comment']),
+      includeDeleted: map['includeDeleted'],
+      startEditedTime: map['startEditedTime'] != null
+          ? DateTime.parse(map['startEditedTime'])
+          : null,
+    );
   }
 
   factory CommentsRequest.fromJson(String source) =>

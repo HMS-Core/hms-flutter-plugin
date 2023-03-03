@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,27 +14,41 @@
     limitations under the License.
 */
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
+  final AsyncCallback onPressed;
 
   const CustomButton({
-    @required this.text,
-    @required this.onPressed,
-  });
+    required this.text,
+    required this.onPressed,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(30.0))),
-      onPressed: onPressed,
-      splashColor: Colors.redAccent,
-      padding: EdgeInsets.all(12.0),
+    return ElevatedButton(
+      style: ButtonStyle(
+        overlayColor: MaterialStateProperty.all<Color>(Colors.redAccent),
+        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+          const EdgeInsets.all(12),
+        ),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.0),
+            side: const BorderSide(color: Colors.red),
+          ),
+        ),
+        backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+      ),
+      onPressed: () async {
+        await onPressed();
+      },
       child: Text(
         text,
+        style: const TextStyle(color: Colors.red),
       ),
     );
   }

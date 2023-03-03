@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -17,59 +17,63 @@
 import 'package:flutter/services.dart';
 import 'package:huawei_drive/src/constants/channel.dart';
 
-typedef Future<String> RefreshTokenCallback();
+typedef RefreshTokenCallback = Future<String?> Function();
 
 /// Drive authentication class.
 class DriveCredentials {
   static const MethodChannel _channel = driveMethodChannel;
 
   ///	UnionID obtained after a user signs in using a HUAWEI ID.
-  String unionId;
+  String? unionId;
 
   /// Authentication information.
-  String accessToken;
+  String? accessToken;
 
   /// Sets the validity period of an access token.
-  int expiresInSeconds;
+  int? expiresInSeconds;
 
   /// User defined callback for obtaining a new access token.
-  RefreshTokenCallback callback;
+  RefreshTokenCallback? callback;
 
-  DriveCredentials(this.unionId, this.accessToken, this.callback,
-      {this.expiresInSeconds}) {
+  DriveCredentials({
+    this.unionId,
+    this.accessToken,
+    this.callback,
+    this.expiresInSeconds,
+  }) {
     _channel.setMethodCallHandler(_onMethodCall);
   }
 
   /// Method call to handle the refreshToken callbacks from the native platform.
   Future<dynamic> _onMethodCall(MethodCall call) async {
     if (call.method == 'refreshToken') {
-      return await callback();
+      return await callback?.call();
     } else {
-      throw "Method Not Implemented";
+      throw 'Method Not Implemented';
     }
   }
 
   /// Returns a map representation of the object.
   Map<String, dynamic> toMap() {
-    return {
-      "unionId": unionId,
-      "accessToken": accessToken,
-      "expiresInSeconds": expiresInSeconds
-    }..removeWhere((k, v) => v == null);
+    return <String, dynamic>{
+      'unionId': unionId,
+      'accessToken': accessToken,
+      'expiresInSeconds': expiresInSeconds
+    }..removeWhere((String k, dynamic v) => v == null);
   }
 
   /// Copies the current object and updates the specified attributes.
   DriveCredentials clone({
-    String unionId,
-    String accessToken,
-    int expiresInSeconds,
-    RefreshTokenCallback callback,
+    String? unionId,
+    String? accessToken,
+    int? expiresInSeconds,
+    RefreshTokenCallback? callback,
   }) {
     return DriveCredentials(
-      unionId ?? this.unionId,
-      accessToken ?? this.accessToken,
-      callback ?? this.callback,
-      expiresInSeconds: expiresInSeconds ?? this.expiresInSeconds,
+      unionId: unionId,
+      accessToken: accessToken,
+      callback: callback,
+      expiresInSeconds: expiresInSeconds,
     );
   }
 }

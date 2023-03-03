@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 import 'dart:convert';
 
 class DriveThumbnail {
-  String content;
-  String mimeType;
-  bool thumbnailPublic;
+  String? content;
+  String? mimeType;
+  bool? thumbnailPublic;
 
   DriveThumbnail({
     this.content,
@@ -27,29 +27,7 @@ class DriveThumbnail {
     this.thumbnailPublic,
   });
 
-  DriveThumbnail clone({
-    String content,
-    String mimeType,
-    bool thumbnailPublic,
-  }) {
-    return DriveThumbnail(
-      content: content ?? this.content,
-      mimeType: mimeType ?? this.mimeType,
-      thumbnailPublic: thumbnailPublic ?? this.thumbnailPublic,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'content': content,
-      'mimeType': mimeType,
-      'thumbnailPublic': thumbnailPublic,
-    };
-  }
-
   factory DriveThumbnail.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return DriveThumbnail(
       content: map['content'],
       mimeType: map['mimeType'],
@@ -57,10 +35,18 @@ class DriveThumbnail {
     );
   }
 
-  String toJson() => json.encode(toMap());
-
   factory DriveThumbnail.fromJson(String source) =>
       DriveThumbnail.fromMap(json.decode(source));
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'content': content,
+      'mimeType': mimeType,
+      'thumbnailPublic': thumbnailPublic,
+    };
+  }
+
+  String toJson() => json.encode(toMap());
 
   @override
   String toString() =>

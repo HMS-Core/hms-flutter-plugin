@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ const MethodChannel drivePermissionMethodChannel =
     MethodChannel('com.huawei.hms.flutter.drive.permissions');
 
 const EventChannel progressEventChannel =
-    EventChannel("com.huawei.hms.flutter.drive.progress");
+    EventChannel('com.huawei.hms.flutter.drive.progress');
 
 const EventChannel batchEventChannel =
-    EventChannel("com.huawei.hms.flutter.drive.batch");
+    EventChannel('com.huawei.hms.flutter.drive.batch');

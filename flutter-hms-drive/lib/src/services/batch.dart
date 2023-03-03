@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -29,7 +29,10 @@ class Batch {
   ///
   /// The result for each batched request will be returned to the stream of [onBatchResult].
   Future<void> execute(BatchRequest batchRequest) async {
-    return await _channel.invokeMethod("Batch#Execute", batchRequest.toMap());
+    return await _channel.invokeMethod(
+      'Batch#Execute',
+      batchRequest.toMap(),
+    );
   }
 
   /// Obtains the stream that emits the batch request results.
@@ -40,41 +43,42 @@ class Batch {
   /// will be in json format as with errors.
   ///
   /// The errors of this stream can be listened from the onError callback.
-  Stream<dynamic> get onBatchResult => _batchChannel
-      .receiveBroadcastStream()
-      .map((event) => toDriveModel(event));
+  Stream<dynamic> get onBatchResult =>
+      _batchChannel.receiveBroadcastStream().map(
+            (dynamic event) => toDriveModel(event),
+          );
 
   /// Converts json string events from [onBatchResult] stream to their corresponding
   /// drive model objects.
   dynamic toDriveModel(dynamic event) {
     Map<String, dynamic> result = Map<String, dynamic>.from(jsonDecode(event));
-    if (result.containsKey("category")) {
+    if (result.containsKey('category')) {
       switch (result['category']) {
-        case "drive#historyVersion":
+        case 'drive#historyVersion':
           return HistoryVersion.fromMap(result);
-        case "drive#historyVersionList":
+        case 'drive#historyVersionList':
           return HistoryVersionList.fromMap(result);
-        case "drive#file":
+        case 'drive#file':
           return DriveFile.fromMap(result);
-        case "drive#fileList":
+        case 'drive#fileList':
           return DriveFileList.fromMap(result);
-        case "drive#change":
+        case 'drive#change':
           return Change.fromMap(result);
-        case "drive#changeList":
+        case 'drive#changeList':
           return ChangeList.fromMap(result);
-        case "drive#startCursor":
+        case 'drive#startCursor':
           return StartCursor.fromMap(result);
-        case "drive#comment":
+        case 'drive#comment':
           return DriveComment.fromMap(result);
-        case "drive#commentList":
+        case 'drive#commentList':
           return DriveCommentList.fromMap(result);
-        case "drive#reply":
+        case 'drive#reply':
           return DriveReply.fromMap(result);
-        case "drive#replyList":
+        case 'drive#replyList':
           return DriveReplyList.fromMap(result);
-        case "drive#about":
+        case 'drive#about':
           return DriveAbout.fromMap(result);
-        case "api#channel":
+        case 'api#channel':
           return DriveChannel.fromMap(result);
       }
     }

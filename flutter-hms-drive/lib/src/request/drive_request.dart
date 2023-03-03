@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@
 import 'dart:convert';
 
 class DriveRequest {
-  String fields;
-  String form;
-  bool prettyPrint;
-  String quotaId;
-  Map<String, dynamic> parameters;
+  String? fields;
+  String? form;
+  bool? prettyPrint;
+  String? quotaId;
+  Map<String, dynamic>? parameters;
 
   DriveRequest({
     this.fields,
@@ -32,18 +32,16 @@ class DriveRequest {
   });
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'fields': fields,
       'form': form,
       'prettyPrint': prettyPrint,
       'quotaId': quotaId,
       'parameters': parameters,
-    }..removeWhere((k, v) => v == null);
+    }..removeWhere((String k, dynamic v) => v == null);
   }
 
   factory DriveRequest.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return DriveRequest(
       fields: map['fields'],
       form: map['form'],

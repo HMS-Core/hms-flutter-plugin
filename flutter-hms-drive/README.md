@@ -17,7 +17,7 @@ The core capabilities of Drive Kit include uploading, downloading, and searching
 
 The Flutter Drive Plugin enables communication between HUAWEI Drive SDK and the Flutter Platform and it exposes all capabilities provided by Huawei Drive Kit.
 
-[Learn More](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/introduction-0000001077725482)
+[Learn More](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/introduction-0000001077725482?ha_source=hms1)
 
 ## Installation
 
@@ -48,4 +48,4 @@ If you run into a bug in our samples, please submit an issue to the [GitHub repo
 
 ## License
 
-Huawei Drive Kit Flutter Plugin is licensed under [Apache 2.0 license](LICENCE)
+Huawei Drive Kit Flutter Plugin is licensed under [Apache 2.0 license](LICENSE)

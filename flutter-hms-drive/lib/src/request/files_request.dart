@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,132 +16,152 @@
 
 import 'dart:convert';
 import 'package:huawei_drive/huawei_drive.dart';
-import 'package:huawei_drive/src/request/batchable.dart';
 
 class FilesRequest extends Batchable implements DriveRequest {
-  //Common
-  String fileId;
-  DriveFile file;
-  DriveFileContent fileContent;
-  String containers;
+  // Common
+  String? fileId;
+  DriveFile? file;
+  DriveFileContent? fileContent;
+  String? containers;
 
-  //Get request
-  bool acknowledgeDownloadRisk;
+  // Get request
+  bool? acknowledgeDownloadRisk;
 
-  //List request
-  String orderBy;
-  String queryParam;
-  int pageSize;
-  String cursor;
+  // List request
+  String? orderBy;
+  String? queryParam;
+  int? pageSize;
+  String? cursor;
 
-  //Subscribe request
-  DriveChannel channel;
+  // Subscribe request
+  DriveChannel? channel;
 
-  //Update Request
-  String addParentFolder;
-  String removeParentFolder;
-
-  @override
-  String fields;
+  // Update Request
+  String? addParentFolder;
+  String? removeParentFolder;
 
   @override
-  String form;
+  String? fields;
 
   @override
-  Map<String, dynamic> parameters;
+  String? form;
 
   @override
-  bool prettyPrint;
+  Map<String, dynamic>? parameters;
 
   @override
-  String quotaId;
+  bool? prettyPrint;
 
-  FilesRequest._(
-      {this.fileId,
-      this.file,
-      this.fileContent,
-      this.containers,
-      this.acknowledgeDownloadRisk,
-      this.orderBy,
-      this.queryParam,
-      this.pageSize,
-      this.cursor,
-      this.channel,
-      this.addParentFolder,
-      this.removeParentFolder,
-      this.fields,
-      this.form,
-      this.parameters,
-      this.prettyPrint,
-      this.quotaId})
-      : super("Files#Unknown");
+  @override
+  String? quotaId;
 
-  FilesRequest.copy(this.fileId, this.file,
-      {this.form, this.fields, this.prettyPrint, this.quotaId, this.parameters})
-      : super("Files#Copy");
+  FilesRequest._({
+    this.fileId,
+    this.file,
+    this.fileContent,
+    this.containers,
+    this.acknowledgeDownloadRisk,
+    this.orderBy,
+    this.queryParam,
+    this.pageSize,
+    this.cursor,
+    this.channel,
+    this.addParentFolder,
+    this.removeParentFolder,
+    this.fields,
+    this.form,
+    this.parameters,
+    this.prettyPrint,
+    this.quotaId,
+  }) : super('Files#Unknown');
 
-  FilesRequest.create(this.file,
-      {this.fileContent,
-      this.form,
-      this.fields,
-      this.prettyPrint,
-      this.quotaId,
-      this.parameters})
-      : super("Files#Create");
+  FilesRequest.copy(
+    this.fileId,
+    this.file, {
+    this.form,
+    this.fields,
+    this.prettyPrint,
+    this.quotaId,
+    this.parameters,
+  }) : super('Files#Copy');
 
-  FilesRequest.delete(this.fileId,
-      {this.form, this.fields, this.prettyPrint, this.quotaId, this.parameters})
-      : super("Files#Delete");
+  FilesRequest.create(
+    this.file, {
+    this.fileContent,
+    this.form,
+    this.fields,
+    this.prettyPrint,
+    this.quotaId,
+    this.parameters,
+  }) : super('Files#Create');
 
-  FilesRequest.emptyRecycle(
-      {this.containers,
-      this.form,
-      this.fields,
-      this.prettyPrint,
-      this.quotaId,
-      this.parameters})
-      : super("Files#EmptyRecycle");
+  FilesRequest.delete(
+    this.fileId, {
+    this.form,
+    this.fields,
+    this.prettyPrint,
+    this.quotaId,
+    this.parameters,
+  }) : super('Files#Delete');
 
-  FilesRequest.getRequest(this.fileId,
-      {this.acknowledgeDownloadRisk,
-      this.form,
-      this.fields,
-      this.prettyPrint,
-      this.quotaId,
-      this.parameters})
-      : super("Files#Get");
+  FilesRequest.emptyRecycle({
+    this.containers,
+    this.form,
+    this.fields,
+    this.prettyPrint,
+    this.quotaId,
+    this.parameters,
+  }) : super('Files#EmptyRecycle');
 
-  FilesRequest.list(
-      {this.queryParam,
-      this.orderBy,
-      this.cursor,
-      this.pageSize,
-      this.containers,
-      this.form,
-      this.fields,
-      this.prettyPrint,
-      this.quotaId,
-      this.parameters})
-      : super("Files#List");
+  FilesRequest.getRequest(
+    this.fileId, {
+    this.acknowledgeDownloadRisk,
+    this.form,
+    this.fields,
+    this.prettyPrint,
+    this.quotaId,
+    this.parameters,
+  }) : super('Files#Get');
 
-  FilesRequest.update(this.fileId, this.file,
-      {this.fileContent,
-      this.addParentFolder,
-      this.removeParentFolder,
-      this.form,
-      this.fields,
-      this.prettyPrint,
-      this.quotaId,
-      this.parameters})
-      : super("Files#Update");
+  FilesRequest.list({
+    this.queryParam,
+    this.orderBy,
+    this.cursor,
+    this.pageSize,
+    this.containers,
+    this.form,
+    this.fields,
+    this.prettyPrint,
+    this.quotaId,
+    this.parameters,
+  }) : super('Files#List');
 
-  FilesRequest.subscribe(this.fileId, this.channel,
-      {this.form, this.fields, this.prettyPrint, this.quotaId, this.parameters})
-      : super("Files#Subscribe");
+  FilesRequest.update(
+    this.fileId,
+    this.file, {
+    this.fileContent,
+    this.addParentFolder,
+    this.removeParentFolder,
+    this.form,
+    this.fields,
+    this.prettyPrint,
+    this.quotaId,
+    this.parameters,
+  }) : super('Files#Update');
+
+  FilesRequest.subscribe(
+    this.fileId,
+    this.channel, {
+    this.form,
+    this.fields,
+    this.prettyPrint,
+    this.quotaId,
+    this.parameters,
+  }) : super('Files#Subscribe');
 
   @override
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'requestName': requestName,
       'fileId': fileId,
       'file': file?.toMap(),
@@ -160,7 +180,7 @@ class FilesRequest extends Batchable implements DriveRequest {
       'parameters': parameters,
       'prettyPrint': prettyPrint,
       'quotaId': quotaId,
-    }..removeWhere((k, v) => v == null);
+    }..removeWhere((String k, dynamic v) => v == null);
   }
 
   @override
@@ -172,8 +192,6 @@ class FilesRequest extends Batchable implements DriveRequest {
   }
 
   factory FilesRequest.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return FilesRequest._(
       fileId: map['fileId'],
       file: map['file'] == null ? null : DriveFile.fromMap(map['file']),

@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@ package com.huawei.hms.flutter.drive.services.files;
 import android.content.Context;
 import android.content.IntentFilter;
 
+import com.huawei.agconnect.LocalBrdMnger;
+
 import io.flutter.plugin.common.EventChannel.EventSink;
 import io.flutter.plugin.common.EventChannel.StreamHandler;
 
@@ -33,11 +35,11 @@ public class ProgressStreamHandler implements StreamHandler {
     @Override
     public void onListen(final Object arguments, final EventSink events) {
         progressReceiver = new ProgressReceiver(events);
-        context.registerReceiver(progressReceiver, new IntentFilter(context.getPackageName() + ".PROGRESS_CHANGED"));
+        LocalBrdMnger.getInstance(context).registerReceiver(progressReceiver, new IntentFilter(context.getPackageName() + ".PROGRESS_CHANGED"));
     }
 
     @Override
     public void onCancel(final Object arguments) {
-        context.unregisterReceiver(progressReceiver);
+        LocalBrdMnger.getInstance(context).unregisterReceiver(progressReceiver);
     }
 }

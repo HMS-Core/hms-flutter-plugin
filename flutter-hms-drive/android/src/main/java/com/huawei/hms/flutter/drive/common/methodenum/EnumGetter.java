@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -20,12 +20,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Supplies a getEnum method that returns <T> typed Enum if the value in the parameter matches.
- *
- * @param <T> an Enum type that implements the MethodEnum interface.
- * @since 5.0.0.302
- */
 public final class EnumGetter<T extends Enum<T> & MethodEnum> {
 
     private final Map<String, T> enumMap;

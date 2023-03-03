@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -20,38 +20,43 @@ import 'package:huawei_drive/huawei_drive.dart';
 
 class ChannelsRequest extends Batchable implements DriveRequest {
   @override
-  String fields;
+  String? fields;
 
   @override
-  String form;
+  String? form;
 
   @override
-  Map<String, dynamic> parameters;
+  Map<String, dynamic>? parameters;
 
   @override
-  bool prettyPrint;
+  bool? prettyPrint;
 
   @override
-  String quotaId;
+  String? quotaId;
 
-  DriveChannel channel;
+  DriveChannel? channel;
 
-  ChannelsRequest._(
-      {this.channel,
-      this.fields,
-      this.form,
-      this.parameters,
-      this.prettyPrint,
-      this.quotaId})
-      : super("Channels#Unknown");
+  ChannelsRequest._({
+    this.channel,
+    this.fields,
+    this.form,
+    this.parameters,
+    this.prettyPrint,
+    this.quotaId,
+  }) : super('Channels#Unknown');
 
-  ChannelsRequest.stop(this.channel,
-      {this.fields, this.form, this.parameters, this.prettyPrint, this.quotaId})
-      : super("Channels#Stop");
+  ChannelsRequest.stop(
+    this.channel, {
+    this.fields,
+    this.form,
+    this.parameters,
+    this.prettyPrint,
+    this.quotaId,
+  }) : super('Channels#Stop');
 
   @override
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'requestName': requestName,
       'fields': fields,
       'form': form,
@@ -63,8 +68,6 @@ class ChannelsRequest extends Batchable implements DriveRequest {
   }
 
   factory ChannelsRequest.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return ChannelsRequest._(
       fields: map['fields'],
       form: map['form'],

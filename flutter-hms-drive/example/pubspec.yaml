@@ -1,17 +1,16 @@
 name: huawei_drive_example
 description: Demonstrates how to use the huawei_drive plugin.
-version: 5.0.0+303
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  huawei_account: 5.0.3+303
   huawei_drive:
     path: ../
-  path_provider: ^1.6.11
+  huawei_account: 6.4.0+301
+  path_provider: 2.0.12
 
 dev_dependencies:
   flutter_test:
@@ -21,5 +20,4 @@ flutter:
   uses-material-design: true
 
   assets: 
-    - assets/test.txt
-    - assets/demoImage.jpg
+    - assets/

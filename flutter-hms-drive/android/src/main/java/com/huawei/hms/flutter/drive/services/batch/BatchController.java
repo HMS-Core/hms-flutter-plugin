@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import android.util.Pair;
 import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
+import com.huawei.agconnect.LocalBrdMnger;
 import com.huawei.cloud.base.batch.BatchRequest;
 import com.huawei.cloud.base.batch.json.JsonBatchCallback;
 import com.huawei.cloud.base.http.HttpHeaders;
@@ -128,6 +129,7 @@ public class BatchController {
                     try {
                         batch.execute();
                         HMSLogger.getInstance(context).sendSingleEvent("Batch.execute");
+                        DriveUtils.successHandler(result, null);
                     } catch (final IOException e) {
                         Log.e(TAG, "executeBatch: " + e.getMessage(), null);
                         HMSLogger.getInstance(context).sendSingleEvent("Batch.execute", Constants.UNKNOWN_ERROR);
@@ -408,7 +410,7 @@ public class BatchController {
             errorMap.put("JsonError", gson.toJson(jsonError));
             errorMap.put("HttpHeaders", gson.toJson(httpHeaders));
             intent.putExtra("batchError", gson.toJson(errorMap));
-            context.sendBroadcast(intent);
+            LocalBrdMnger.getInstance(context).sendBroadcast(intent);
             intent.removeExtra("batchError");
         }
 
@@ -425,7 +427,7 @@ public class BatchController {
                     DriveUtils.errorHandler(context, intent, e.toString());
                 }
             }
-            context.sendBroadcast(intent);
+            LocalBrdMnger.getInstance(context).sendBroadcast(intent);
         }
     }
 }

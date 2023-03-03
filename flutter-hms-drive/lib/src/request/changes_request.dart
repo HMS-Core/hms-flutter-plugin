@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -20,25 +20,25 @@ import 'package:huawei_drive/huawei_drive.dart';
 
 class ChangesRequest extends Batchable implements DriveRequest {
   @override
-  String fields;
+  String? fields;
 
   @override
-  String form;
+  String? form;
 
   @override
-  Map<String, dynamic> parameters;
+  Map<String, dynamic>? parameters;
 
   @override
-  bool prettyPrint;
+  bool? prettyPrint;
 
   @override
-  String quotaId;
+  String? quotaId;
 
-  String cursor;
-  String containers;
-  int pageSize;
-  bool includeDeleted;
-  DriveChannel channel;
+  String? cursor;
+  String? containers;
+  int? pageSize;
+  bool? includeDeleted;
+  DriveChannel? channel;
 
   ChangesRequest.getStartCursor({
     this.fields,
@@ -46,7 +46,7 @@ class ChangesRequest extends Batchable implements DriveRequest {
     this.parameters,
     this.prettyPrint,
     this.quotaId,
-  }) : super("Changes#GetStartCursor");
+  }) : super('Changes#GetStartCursor');
 
   ChangesRequest.list(
     this.cursor, {
@@ -58,7 +58,7 @@ class ChangesRequest extends Batchable implements DriveRequest {
     this.containers,
     this.pageSize,
     this.includeDeleted,
-  }) : super("Changes#List");
+  }) : super('Changes#List');
 
   ChangesRequest.subscribe(
     this.cursor,
@@ -71,24 +71,23 @@ class ChangesRequest extends Batchable implements DriveRequest {
     this.containers,
     this.pageSize,
     this.includeDeleted,
-  }) : super("Changes#Subscribe");
+  }) : super('Changes#Subscribe');
 
   ChangesRequest._({
     this.cursor,
     this.pageSize,
     this.includeDeleted,
     this.containers,
-    this.channel,
     this.fields,
     this.form,
     this.parameters,
     this.prettyPrint,
     this.quotaId,
-  }) : super("Changes#Unknown");
+  }) : super('Changes#Unknown');
 
   @override
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'requestName': requestName,
       'fields': fields,
       'form': form,
@@ -100,12 +99,10 @@ class ChangesRequest extends Batchable implements DriveRequest {
       'pageSize': pageSize,
       'includeDeleted': includeDeleted,
       'channel': channel?.toMap()
-    }..removeWhere((k, v) => v == null);
+    }..removeWhere((String k, dynamic v) => v == null);
   }
 
   factory ChangesRequest.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return ChangesRequest._(
       fields: map['fields'],
       form: map['form'],

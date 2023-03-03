@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -19,31 +19,30 @@ import 'dart:convert';
 import 'package:huawei_drive/huawei_drive.dart';
 
 class HistoryVersionsRequest extends Batchable implements DriveRequest {
-  String historyVersionId;
-  String fileId;
-  String cursor;
-  int pageSize;
-  bool acknowledgeDownloadRisk;
-  HistoryVersion historyVersion;
+  String? historyVersionId;
+  String? fileId;
+  String? cursor;
+  int? pageSize;
+  bool? acknowledgeDownloadRisk;
+  HistoryVersion? historyVersion;
 
   @override
-  String fields;
+  String? fields;
 
   @override
-  String form;
+  String? form;
 
   @override
-  Map<String, dynamic> parameters;
+  Map<String, dynamic>? parameters;
 
   @override
-  bool prettyPrint;
+  bool? prettyPrint;
 
   @override
-  String quotaId;
+  String? quotaId;
 
   HistoryVersionsRequest._({
     this.historyVersionId,
-    this.historyVersion,
     this.fileId,
     this.cursor,
     this.pageSize,
@@ -53,7 +52,7 @@ class HistoryVersionsRequest extends Batchable implements DriveRequest {
     this.parameters,
     this.prettyPrint,
     this.quotaId,
-  }) : super("HistoryVersions#Unknown");
+  }) : super('HistoryVersions#Unknown');
 
   HistoryVersionsRequest.getRequest(
     this.fileId,
@@ -64,7 +63,7 @@ class HistoryVersionsRequest extends Batchable implements DriveRequest {
     this.parameters,
     this.prettyPrint,
     this.quotaId,
-  }) : super("HistoryVersions#Get");
+  }) : super('HistoryVersions#Get');
 
   HistoryVersionsRequest.delete(
     this.fileId,
@@ -74,7 +73,7 @@ class HistoryVersionsRequest extends Batchable implements DriveRequest {
     this.parameters,
     this.prettyPrint,
     this.quotaId,
-  }) : super("HistoryVersions#Delete");
+  }) : super('HistoryVersions#Delete');
 
   HistoryVersionsRequest.update(
     this.fileId,
@@ -85,7 +84,7 @@ class HistoryVersionsRequest extends Batchable implements DriveRequest {
     this.parameters,
     this.prettyPrint,
     this.quotaId,
-  }) : super("HistoryVersions#Update");
+  }) : super('HistoryVersions#Update');
 
   HistoryVersionsRequest.list(
     this.fileId, {
@@ -96,11 +95,11 @@ class HistoryVersionsRequest extends Batchable implements DriveRequest {
     this.parameters,
     this.prettyPrint,
     this.quotaId,
-  }) : super("HistoryVersions#List");
+  }) : super('HistoryVersions#List');
 
   @override
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'requestName': requestName,
       'historyVersionId': historyVersionId,
       'fileId': fileId,
@@ -113,12 +112,10 @@ class HistoryVersionsRequest extends Batchable implements DriveRequest {
       'prettyPrint': prettyPrint,
       'quotaId': quotaId,
       'historyVersion': historyVersion?.toMap()
-    }..removeWhere((k, v) => v == null);
+    }..removeWhere((String k, dynamic v) => v == null);
   }
 
   factory HistoryVersionsRequest.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return HistoryVersionsRequest._(
       historyVersionId: map['historyVersionId'],
       fileId: map['fileId'],

@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,58 +16,51 @@
 
 import 'dart:convert';
 
-import 'drive_reply.dart';
+import 'package:huawei_drive/src/model/drive_reply.dart';
 
 class DriveReplyList {
-  String category;
+  String? category;
   List<DriveReply> replies;
-  String nextCursor;
+  String? nextCursor;
 
   DriveReplyList({
     this.category,
-    this.replies,
+    this.replies = const <DriveReply>[],
     this.nextCursor,
   });
 
-  DriveReplyList clone({
-    String category,
-    List<DriveReply> replies,
-    String nextCursor,
-  }) {
-    return DriveReplyList(
-      category: category ?? this.category,
-      replies: replies ?? this.replies,
-      nextCursor: nextCursor ?? this.nextCursor,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'category': category,
-      'replies': replies?.map((x) => x?.toMap())?.toList(),
-      'nextCursor': nextCursor,
-    };
-  }
-
   factory DriveReplyList.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return DriveReplyList(
       category: map['category'],
       replies: map['replies'] == null
-          ? null
+          ? <DriveReply>[]
           : List<DriveReply>.from(
-              map['replies']?.map((x) => DriveReply.fromMap(x))),
+              map['replies']?.map(
+                (dynamic x) => DriveReply.fromMap(x),
+              ),
+            ),
       nextCursor: map['nextCursor'],
     );
   }
 
-  String toJson() => json.encode(toMap());
-
   factory DriveReplyList.fromJson(String source) =>
       DriveReplyList.fromMap(json.decode(source));
 
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'category': category,
+      'replies': replies.map((DriveReply x) => x.toMap()).toList(),
+      'nextCursor': nextCursor,
+    };
+  }
+
+  String toJson() => json.encode(toMap());
+
   @override
-  String toString() =>
-      'ReplyList(category: $category, replies: $replies, nextCursor: $nextCursor)';
+  String toString() {
+    return '$DriveReplyList('
+        'category: $category, '
+        'replies: $replies, '
+        'nextCursor: $nextCursor)';
+  }
 }

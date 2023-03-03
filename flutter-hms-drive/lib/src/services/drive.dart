@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -21,8 +21,7 @@ import 'package:huawei_drive/src/request/about_request.dart';
 import 'package:huawei_drive/src/services/batch.dart';
 import 'package:huawei_drive/src/services/export.dart';
 
-import 'changes.dart';
-import 'history_versions.dart';
+import 'package:huawei_drive/src/services/changes.dart';
 
 /// Defines the main enterence class of HUAWEI Drive Kit.
 ///
@@ -31,7 +30,7 @@ import 'history_versions.dart';
 class Drive {
   static const MethodChannel _channel = driveMethodChannel;
 
-  static final _instance = Drive._();
+  static final Drive _instance = Drive._();
 
   Drive._();
 
@@ -58,7 +57,7 @@ class Drive {
 
   /// Initializes the Drive instance for managing files.
   static Future<Drive> init(DriveCredentials driveCredentials) async {
-    await _channel.invokeMethod("Drive#Init", driveCredentials.toMap());
+    await _channel.invokeMethod('Drive#Init', driveCredentials.toMap());
     return _instance;
   }
 
@@ -66,7 +65,7 @@ class Drive {
   /// and maximum size of a file that can be uploaded by the user.
   Future<DriveAbout> about(AboutRequest request) async {
     final String result =
-        await _channel.invokeMethod("About#Get", request?.toJson());
+        await _channel.invokeMethod('About#Get', request.toJson());
     return DriveAbout.fromJson(result);
   }
 
@@ -74,13 +73,13 @@ class Drive {
   /// sending usage analytics of Drive SDK's methods to improve
   /// the service quality.
   Future<void> enableLogger() async {
-    _channel.invokeMethod("Logger#Enable");
+    _channel.invokeMethod('Logger#Enable');
   }
 
   /// This method disables the HMSLogger capability which is used for
   /// sending usage analytics of Drive SDK's methods to improve
   /// the service quality.
   Future<void> disableLogger() async {
-    _channel.invokeMethod("Logger#Disable");
+    _channel.invokeMethod('Logger#Disable');
   }
 }

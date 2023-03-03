@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -18,9 +18,9 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 class DriveFileContent {
-  String type;
-  String path;
-  Int8List byteArray;
+  String? type;
+  String? path;
+  Int8List? byteArray;
 
   DriveFileContent({
     this.type,
@@ -28,29 +28,7 @@ class DriveFileContent {
     this.byteArray,
   });
 
-  DriveFileContent clone({
-    String type,
-    String path,
-    Int8List byteArray,
-  }) {
-    return DriveFileContent(
-      type: type ?? this.type,
-      path: path ?? this.path,
-      byteArray: byteArray ?? this.byteArray,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'type': type,
-      'path': path,
-      'byteArray': byteArray,
-    };
-  }
-
   factory DriveFileContent.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return DriveFileContent(
       type: map['type'],
       path: map['path'],
@@ -59,10 +37,18 @@ class DriveFileContent {
     );
   }
 
-  String toJson() => json.encode(toMap());
-
   factory DriveFileContent.fromJson(String source) =>
       DriveFileContent.fromMap(json.decode(source));
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'type': type,
+      'path': path,
+      'byteArray': byteArray,
+    };
+  }
+
+  String toJson() => json.encode(toMap());
 
   @override
   String toString() => 'FileContent(type: $type, path: $path, arr: $byteArray)';

@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,11 +16,6 @@
 
 package com.huawei.hms.flutter.drive.common.methodenum;
 
-/**
- * Provides an interface for Enums that defines the constant method names.
- *
- * @since 5.0.0.302
- */
 public interface MethodEnum {
     /**
      * Obtains the initialized value of a MethodEnum.

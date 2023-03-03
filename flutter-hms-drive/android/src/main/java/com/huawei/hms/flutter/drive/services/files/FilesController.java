@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -24,11 +24,13 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.huawei.agconnect.LocalBrdMnger;
 import com.huawei.cloud.base.http.AbstractInputStreamContent;
 import com.huawei.cloud.base.http.ByteArrayContent;
 import com.huawei.cloud.base.http.FileContent;
 import com.huawei.cloud.base.http.HttpResponse;
 import com.huawei.cloud.base.json.gson.GsonFactory;
+import com.huawei.cloud.base.media.MediaHttpDownloader;
 import com.huawei.cloud.client.task.Task;
 import com.huawei.cloud.services.drive.Drive;
 import com.huawei.cloud.services.drive.DriveRequest;
@@ -139,16 +141,16 @@ public class FilesController {
             map.put("totalTimeElapsed", mediaHttpUploader.getTotalTimeRequired());
             map.put("state", mediaHttpUploader.getUploadState().toString());
             progressIntent.putExtra("progress", map);
-            context.sendBroadcast(progressIntent);
+            LocalBrdMnger.getInstance(context).sendBroadcast(progressIntent);
         });
     }
 
     private void setDirectDownload(final boolean isDirectDownload, final Drive.Files.Get request, final String fileName,
-        final long length) {
+        final long downloadedLength, final long totalLength) {
         // Set the download mode. By default, resumable download is used. If the file is smaller than 20 MB, set this
         // parameter to true.
         request.getMediaHttpDownloader()
-            .setContentRange(0, length - 1)
+            .setContentRange(downloadedLength, totalLength - 1)
             .setDirectDownloadEnabled(isDirectDownload)
             .setProgressListener(mediaHttpDownloader -> {
                 final HashMap<String, Object> map = new HashMap<>();
@@ -162,7 +164,7 @@ public class FilesController {
     }
 
     private long getFileSize(final String fileId) {
-        final long size = 0;
+        final long size = 0L;
         try {
             final Drive.Files.Get request = drive.files().get(fileId);
             request.setFields("size");
@@ -239,7 +241,7 @@ public class FilesController {
             requestFactory.runTaskOnBackground(result, File.class, copyRequest, SERVICE_NAME,
                 SERVICE_NAME.concat(".copy"));
         } catch (final IOException e) {
-            //Error to Flutter
+            // Error to Flutter
             DriveUtils.defaultErrorHandler(result, "Copy file error: " + e.getMessage());
         }
     }
@@ -271,7 +273,7 @@ public class FilesController {
             final FilesRequestOptions createOptions = toFilesRequest(call, true);
             boolean isDirectUpload = false;
 
-            //Creating request
+            // Creating request
             if (call.argument("fileContent") != null) {
                 final Map<String, Object> content = call.argument("fileContent");
                 if (Objects.requireNonNull(content).get("path") != null) {
@@ -309,7 +311,7 @@ public class FilesController {
             requestFactory.runTaskOnBackground(result, File.class, createRequest, SERVICE_NAME,
                 SERVICE_NAME.concat(".create"));
         } catch (final IOException e) {
-            //Error to Flutter
+            // Error to Flutter
             DriveUtils.defaultErrorHandler(result, "File create error: " + e.getMessage());
         }
     }
@@ -321,10 +323,9 @@ public class FilesController {
             final File file = toFile(requestFactory.getGson().toJson(args.get("file")));
             final FilesRequestOptions createOptions = toFilesRequest(requestFactory.getGson().toJson(args));
 
-            //Creating request
+            // Creating request
             if (args.get("fileContent") != null) {
                 DriveUtils.errorHandler(context, batchIntent, "Batching media requests is not supported");
-                return Optional.empty();
             } else {
                 // Create comment create request.
                 createRequest = requestFactory.buildRequest(FilesRequestType.CREATE, createOptions,
@@ -350,7 +351,7 @@ public class FilesController {
             requestFactory.runTaskOnBackground(result, Void.class, deleteRequest, SERVICE_NAME,
                 SERVICE_NAME.concat(".delete"));
         } catch (final IOException e) {
-            //Error to Flutter
+            // Error to Flutter
             DriveUtils.defaultErrorHandler(result, "Delete file error: " + e.getMessage());
         }
     }
@@ -381,7 +382,7 @@ public class FilesController {
             requestFactory.runTaskOnBackground(result, Void.class, emptyRecycleRequest, SERVICE_NAME,
                 SERVICE_NAME.concat(".emptyRecycle"));
         } catch (final IOException e) {
-            //Error to Flutter
+            // Error to Flutter
             DriveUtils.defaultErrorHandler(result, "Empty recycle error: " + e.getMessage());
         }
     }
@@ -409,10 +410,12 @@ public class FilesController {
             final Drive.Files.Get getRequest = requestFactory.buildRequest(FilesRequestType.GET, getOptions,
                 Drive.Files.Get.class, null, null, null);
             // Run on background and handle Flutter result.
+            MediaHttpDownloader downloader = getRequest.getMediaHttpDownloader();
+
             requestFactory.runTaskOnBackground(result, File.class, getRequest, SERVICE_NAME,
                 SERVICE_NAME.concat(".get"));
         } catch (final IOException e) {
-            //Error to Flutter
+            // Error to Flutter
             DriveUtils.defaultErrorHandler(result, "Get file error: " + e.getMessage());
         }
     }
@@ -443,7 +446,7 @@ public class FilesController {
             requestFactory.runTaskOnBackground(result, FileList.class, listRequest, SERVICE_NAME,
                 SERVICE_NAME.concat(".list"));
         } catch (final IOException e) {
-            //Error to Flutter
+            // Error to Flutter
             DriveUtils.defaultErrorHandler(result, "List files error: " + e.getMessage());
         }
     }
@@ -474,7 +477,7 @@ public class FilesController {
             final FilesRequestOptions updateOptions = toFilesRequest(call, true);
             boolean isDirectUpload = false;
 
-            //Creating request
+            // Creating request
             if (call.argument("fileContent") != null) {
                 final Map<String, Object> content = call.argument("fileContent");
                 if (Objects.requireNonNull(content).get("path") != null) {
@@ -513,7 +516,7 @@ public class FilesController {
             requestFactory.runTaskOnBackground(result, File.class, updateRequest, SERVICE_NAME,
                 SERVICE_NAME.concat(".update"));
         } catch (final IOException e) {
-            //Error to Flutter
+            // Error to Flutter
             DriveUtils.defaultErrorHandler(result, "Update file error: " + e.getMessage());
         }
     }
@@ -525,7 +528,7 @@ public class FilesController {
             final File file = toFile(requestFactory.getGson().toJson(args.get("file")));
             final FilesRequestOptions updateOptions = toFilesRequest(requestFactory.getGson().toJson(args));
 
-            //Creating request
+            // Creating request
             if (args.get("fileContent") != null) {
                 DriveUtils.errorHandler(context, batchIntent, "Batching media requests is not supported");
                 return Optional.empty();
@@ -543,7 +546,7 @@ public class FilesController {
 
     private void filesSubscribe(final MethodCall call, final Result result) {
         try {
-            //Creating request
+            // Creating request
             final Channel channel = toChannel(call);
             requestFactory.setExtraParams(channel, call);
             // Parameters
@@ -555,14 +558,14 @@ public class FilesController {
             requestFactory.runTaskOnBackground(result, Channel.class, subscribeRequest, SERVICE_NAME,
                 SERVICE_NAME.concat(".subscribe"));
         } catch (final IOException e) {
-            //Error to Flutter
+            // Error to Flutter
             DriveUtils.defaultErrorHandler(result, "Subscribe file error: " + e.getMessage());
         }
     }
 
     public Optional<Drive.Files.Subscribe> filesSubscribe(final Map<String, Object> args) {
         try {
-            //Creating request
+            // Creating request
             final Channel channel = toChannel(requestFactory.getGson().toJson(args.get("channel")));
             // Parameters
             final FilesRequestOptions subscribeOptions = toFilesRequest(requestFactory.getGson().toJson(args));
@@ -589,11 +592,11 @@ public class FilesController {
                     final Drive.Files.Get executeContentRequest = requestFactory.buildRequest(FilesRequestType.GET,
                         executeContentOptions, Drive.Files.Get.class, null, null, null);
 
-                    //Request execution
+                    // Request execution
                     final HttpResponse response = executeContentRequest.executeContent();
 
                     if (response.isSuccessStatusCode()) {
-                        //Response to Flutter
+                        // Response to Flutter
                         final JSONObject obj = new JSONObject();
                         obj.put("content", DriveUtils.convertBytesToList(IOUtils.toByteArray(response.getContent())));
                         obj.put("contentEncoding", response.getContentEncoding());
@@ -602,13 +605,13 @@ public class FilesController {
                         DriveUtils.successHandler(result, obj.toString());
                         hmsLogger.sendSingleEvent(methodName);
                     } else {
-                        //Error to Flutter
+                        // Error to Flutter
                         DriveUtils.defaultErrorHandler(result, response.getStatusMessage());
                         hmsLogger.sendSingleEvent(methodName, UNKNOWN_ERROR);
                     }
 
                 } catch (final IOException | JSONException e) {
-                    //Error to Flutter
+                    // Error to Flutter
                     DriveUtils.defaultErrorHandler(result, "File - ExecuteContent error: " + e.getMessage());
                     hmsLogger.sendSingleEvent(methodName, UNKNOWN_ERROR);
                 }
@@ -629,14 +632,14 @@ public class FilesController {
                         FilesRequestType.GET, executeContentAsInputStreamOptions, Drive.Files.Get.class, null, null,
                         null);
 
-                    //Request execution
+                    // Request execution
                     final InputStream response = executeContentAsInputStreamRequest.executeContentAsInputStream();
 
-                    //Response to Flutter
+                    // Response to Flutter
                     DriveUtils.byteArraySuccessHandler(result, IOUtils.toByteArray(response));
                     hmsLogger.sendSingleEvent(methodName);
                 } catch (final IOException e) {
-                    //Error to Flutter
+                    // Error to Flutter
                     DriveUtils.defaultErrorHandler(result,
                         "File - ExecuteContentAsInputStream error: " + e.getMessage());
                     hmsLogger.sendSingleEvent(methodName, UNKNOWN_ERROR);
@@ -661,39 +664,42 @@ public class FilesController {
                         null);
 
                     final long size = getFileSize(executeContentAndDownloadToRequest.getFileId());
-
                     final String filePath = ValueGetter.getString("path", call);
                     if (DriveUtils.isNotNullAndEmpty(filePath)) {
-                        //Request execution
+                        // Request execution
                         final java.io.File ioFile = new java.io.File(filePath);
-                        stream = new FileOutputStream(ioFile);
+                        final long currentFileLength = ioFile.length();
+
+                        // Check if file has already been downloaded, and directly return in this case
+                        if (currentFileLength == size) {
+                            DriveUtils.booleanSuccessHandler(result, true);
+                            hmsLogger.sendSingleEvent(methodName);
+                            return;
+                        }
+                        stream = new FileOutputStream(ioFile, true);
                         if (size < DIRECT_DOWNLOAD_MAX_SIZE) {
                             isDirectDownload = true;
                         }
-                        setDirectDownload(isDirectDownload, executeContentAndDownloadToRequest, ioFile.getName(), size);
+                        setDirectDownload(isDirectDownload, executeContentAndDownloadToRequest, ioFile.getName(), currentFileLength, size);
                         executeContentAndDownloadToRequest.executeContentAndDownloadTo(stream);
 
                         final HashMap<String, Object> map = new HashMap<>();
                         map.put("fileName", ioFile.getName());
                         map.put("progress", executeContentAndDownloadToRequest.getMediaHttpDownloader().getProgress());
-                        map.put("state",
-                            executeContentAndDownloadToRequest.getMediaHttpDownloader().getDownloadState().toString());
+                        map.put("state", executeContentAndDownloadToRequest.getMediaHttpDownloader().getDownloadState().toString());
                         progressIntent.putExtra("progress", map);
-                        map.put("totalTimeElapsed",
-                            executeContentAndDownloadToRequest.getMediaHttpDownloader().getTotalTimeRequired());
-                        context.sendBroadcast(progressIntent);
+                        map.put("totalTimeElapsed", executeContentAndDownloadToRequest.getMediaHttpDownloader().getTotalTimeRequired());
+                        LocalBrdMnger.getInstance(context).sendBroadcast(progressIntent);
 
                         DriveUtils.booleanSuccessHandler(result, true);
                         hmsLogger.sendSingleEvent(methodName);
                     } else {
-                        DriveUtils.defaultErrorHandler(result,
-                            "getExecuteContentAndDownloadTo failed, Please specify a file path.");
+                        DriveUtils.defaultErrorHandler(result, "getExecuteContentAndDownloadTo failed, Please specify a file path.");
                         hmsLogger.sendSingleEvent(methodName, UNKNOWN_ERROR);
                     }
                 } catch (final IOException e) {
-                    //Error to Flutter
-                    DriveUtils.defaultErrorHandler(result,
-                        "File - ExecuteContentAndDownloadTo error: " + e.getMessage());
+                    // Error to Flutter
+                    DriveUtils.defaultErrorHandler(result, "File - ExecuteContentAndDownloadTo error: " + e.getMessage());
                     hmsLogger.sendSingleEvent(methodName, UNKNOWN_ERROR);
                 } finally {
                     if (stream != null) {

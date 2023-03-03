@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,10 +16,8 @@
 
 import 'package:flutter/services.dart';
 import 'package:huawei_drive/huawei_drive.dart';
-import 'package:huawei_drive/src/request/replies_request.dart';
 
-import '../constants/constants.dart';
-import '../model/drive_reply_list.dart';
+import 'package:huawei_drive/src/constants/constants.dart';
 
 /// Defines the Replies API.
 ///
@@ -30,39 +28,41 @@ class Replies {
 
   /// Replies to a comment.
   Future<DriveReply> create(RepliesRequest request) async {
-    final String result = await _channel.invokeMethod("Replies#Create", {
-      "request": request.toJson(),
-      "reply": request.reply.toJson(),
-      "extraParams": request.reply?.paramsToSet,
+    final String result =
+        await _channel.invokeMethod('Replies#Create', <dynamic, dynamic>{
+      'request': request.toJson(),
+      'reply': request.reply?.toJson(),
+      'extraParams': request.reply?.paramsToSet,
     });
     return DriveReply.fromJson(result);
   }
 
   /// Deletes a reply to a comment.
   Future<bool> delete(RepliesRequest request) async {
-    return await _channel.invokeMethod("Replies#Delete", request.toJson());
+    return await _channel.invokeMethod('Replies#Delete', request.toJson());
   }
 
   /// Obtains a reply by ID.
   Future<DriveReply> getReply(RepliesRequest request) async {
     final String result =
-        await _channel.invokeMethod("Replies#Get", request.toJson());
+        await _channel.invokeMethod('Replies#Get', request.toJson());
     return DriveReply.fromJson(result);
   }
 
   /// Lists all replies to a comment.
   Future<DriveReplyList> list(RepliesRequest request) async {
     final String result =
-        await _channel.invokeMethod("Replies#List", request.toJson());
+        await _channel.invokeMethod('Replies#List', request.toJson());
     return DriveReplyList.fromJson(result);
   }
 
   /// Updates a reply to a comment.
   Future<DriveReply> update(RepliesRequest request) async {
-    final String result = await _channel.invokeMethod("Replies#Update", {
-      "request": request.toJson(),
-      "reply": request.reply.toJson(),
-      "extraParams": request.reply?.paramsToSet,
+    final String result =
+        await _channel.invokeMethod('Replies#Update', <dynamic, dynamic>{
+      'request': request.toJson(),
+      'reply': request.reply?.toJson(),
+      'extraParams': request.reply?.paramsToSet,
     });
     return DriveReply.fromJson(result);
   }

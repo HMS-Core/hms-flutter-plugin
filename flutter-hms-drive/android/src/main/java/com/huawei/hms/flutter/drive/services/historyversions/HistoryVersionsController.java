@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -165,10 +165,10 @@ public class HistoryVersionsController {
             public void call() {
                 optionalGet.ifPresent(get -> {
                     try {
-                        //Request execution
+                        // Request execution
                         final HttpResponse response = get.executeContent();
                         if (response.isSuccessStatusCode()) {
-                            //Response to Flutter
+                            // Response to Flutter
                             final JSONObject obj = new JSONObject();
                             obj.put("content",
                                 DriveUtils.convertBytesToList(IOUtils.toByteArray(response.getContent())));
@@ -178,7 +178,7 @@ public class HistoryVersionsController {
                             DriveUtils.successHandler(result, obj.toString());
                             hmsLogger.sendSingleEvent(methodName);
                         } else {
-                            //Error to Flutter
+                            // Error to Flutter
                             DriveUtils.errorHandler(result, response.getStatusMessage(), response.getStatusMessage(),
                                 "Error while running getExecuteContent");
                             hmsLogger.sendSingleEvent(methodName, UNKNOWN_ERROR);
@@ -202,7 +202,7 @@ public class HistoryVersionsController {
                 optionalGet.ifPresent(get -> {
                     FileOutputStream outputStream = null;
                     try {
-                        //Request execution
+                        // Request execution
                         final String filePath = ValueGetter.getString("path", call);
                         if (DriveUtils.isNotNullAndEmpty(filePath)) {
                             java.io.File path = new java.io.File(ValueGetter.getString("path", call));
@@ -241,9 +241,9 @@ public class HistoryVersionsController {
             @Override
             public void call() {
                 try {
-                    //Request execution
+                    // Request execution
                     final InputStream response = get.executeContentAsInputStream();
-                    //Response to Flutter
+                    // Response to Flutter
                     DriveUtils.byteArraySuccessHandler(result, IOUtils.toByteArray(response));
                     hmsLogger.sendSingleEvent(methodName);
                 } catch (final IOException e) {

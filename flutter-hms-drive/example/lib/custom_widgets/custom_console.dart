@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -17,9 +17,12 @@
 import 'package:flutter/material.dart';
 
 class CustomConsole extends StatelessWidget {
-  final List<String> responses;
+  final List<String?> responses;
 
-  CustomConsole({this.responses});
+  const CustomConsole({
+    Key? key,
+    this.responses = const <String>[],
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,17 +31,18 @@ class CustomConsole extends StatelessWidget {
       child: Container(
         height: 300,
         decoration: BoxDecoration(
-            border: Border.all(
-          width: 2,
-          color: Color.fromRGBO(30, 61, 89, 1),
-        )),
+          border: Border.all(
+            width: 2,
+            color: const Color.fromRGBO(30, 61, 89, 1),
+          ),
+        ),
         child: ListView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: responses.length,
-            itemBuilder: (context, index) {
-              List<String> reversedList = responses.reversed.toList();
-              return Text(" > " + reversedList[index]);
-            }),
+          itemCount: responses.length,
+          itemBuilder: (BuildContext context, int index) {
+            List<String?> reversedList = responses.reversed.toList();
+            return Text(' > ${reversedList[index]}');
+          },
+        ),
       ),
     );
   }

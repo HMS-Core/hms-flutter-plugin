@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -19,34 +19,24 @@ import 'dart:convert';
 import 'package:huawei_drive/src/model/drive_thumbnail.dart';
 
 class ContentExtras {
-  DriveThumbnail thumbnail;
+  DriveThumbnail? thumbnail;
 
   ContentExtras({
     this.thumbnail,
   });
 
-  ContentExtras clone({
-    DriveThumbnail thumbnail,
-  }) {
-    return ContentExtras(
-      thumbnail: thumbnail ?? this.thumbnail,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'thumbnail': thumbnail?.toMap(),
-    };
-  }
-
   factory ContentExtras.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return ContentExtras(
       thumbnail: map['thumbnail'] == null
           ? null
           : DriveThumbnail.fromMap(map['thumbnail']),
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'thumbnail': thumbnail?.toMap(),
+    };
   }
 
   String toJson() => json.encode(toMap());

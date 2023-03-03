@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -20,33 +20,33 @@ import 'package:huawei_drive/huawei_drive.dart';
 
 class RepliesRequest extends Batchable implements DriveRequest {
   @override
-  String fields;
+  String? fields;
 
   @override
-  String form;
+  String? form;
 
   @override
-  Map<String, dynamic> parameters;
+  Map<String, dynamic>? parameters;
 
   @override
-  bool prettyPrint;
+  bool? prettyPrint;
 
   @override
-  String quotaId;
+  String? quotaId;
 
-  bool includeDeleted;
+  bool? includeDeleted;
 
-  int pageSize;
+  int? pageSize;
 
-  String commentId;
+  String? commentId;
 
-  String cursor;
+  String? cursor;
 
-  String fileId;
+  String? fileId;
 
-  String replyId;
+  String? replyId;
 
-  DriveReply reply;
+  DriveReply? reply;
 
   RepliesRequest._({
     this.commentId,
@@ -61,7 +61,7 @@ class RepliesRequest extends Batchable implements DriveRequest {
     this.quotaId,
     this.replyId,
     this.reply,
-  }) : super("Replies#Unknown");
+  }) : super('Replies#Unknown');
 
   RepliesRequest.create(
     this.fileId,
@@ -72,7 +72,7 @@ class RepliesRequest extends Batchable implements DriveRequest {
     this.parameters,
     this.prettyPrint,
     this.quotaId,
-  }) : super("Replies#Create");
+  }) : super('Replies#Create');
 
   RepliesRequest.delete(
     this.fileId,
@@ -83,35 +83,48 @@ class RepliesRequest extends Batchable implements DriveRequest {
     this.form,
     this.prettyPrint,
     this.quotaId,
-  }) : super("Replies#Delete");
+  }) : super('Replies#Delete');
 
-  RepliesRequest.getRequest(this.fileId, this.commentId, this.replyId,
-      {this.includeDeleted,
-      this.parameters,
-      this.fields,
-      this.form,
-      this.prettyPrint,
-      this.quotaId})
-      : super("Replies#Get");
+  RepliesRequest.getRequest(
+    this.fileId,
+    this.commentId,
+    this.replyId, {
+    this.includeDeleted,
+    this.parameters,
+    this.fields,
+    this.form,
+    this.prettyPrint,
+    this.quotaId,
+  }) : super('Replies#Get');
 
-  RepliesRequest.list(this.fileId, this.commentId,
-      {this.includeDeleted,
-      this.parameters,
-      this.cursor,
-      this.fields,
-      this.form,
-      this.pageSize,
-      this.prettyPrint,
-      this.quotaId})
-      : super("Replies#List");
+  RepliesRequest.list(
+    this.fileId,
+    this.commentId, {
+    this.includeDeleted,
+    this.parameters,
+    this.cursor,
+    this.fields,
+    this.form,
+    this.pageSize,
+    this.prettyPrint,
+    this.quotaId,
+  }) : super('Replies#List');
 
-  RepliesRequest.update(this.fileId, this.commentId, this.replyId, this.reply,
-      {this.parameters, this.form, this.fields, this.prettyPrint, this.quotaId})
-      : super("Replies#Update");
+  RepliesRequest.update(
+    this.fileId,
+    this.commentId,
+    this.replyId,
+    this.reply, {
+    this.parameters,
+    this.form,
+    this.fields,
+    this.prettyPrint,
+    this.quotaId,
+  }) : super('Replies#Update');
 
   @override
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'requestName': requestName,
       'commentId': commentId,
       'cursor': cursor,
@@ -125,12 +138,10 @@ class RepliesRequest extends Batchable implements DriveRequest {
       'quotaId': quotaId,
       'replyId': replyId,
       'reply': reply?.toMap(),
-    }..removeWhere((k, v) => v == null);
+    }..removeWhere((String k, dynamic v) => v == null);
   }
 
   factory RepliesRequest.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return RepliesRequest._(
       commentId: map['commentId'],
       cursor: map['cursor'],

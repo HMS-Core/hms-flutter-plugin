@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 import 'dart:convert';
 
-import 'history_version.dart';
+import 'package:huawei_drive/src/model/history_version.dart';
 
 /// History version list class, which used for reading the list of historical file
 /// versions by pagination.
@@ -24,15 +24,15 @@ class HistoryVersionList {
   /// Resource type.
   ///
   /// The value is always `drive#historyVersionList`.
-  String category;
+  String? category;
 
   ///	Next page cursor for query.
   ///
   /// If nextCursor is empty, there is no next page.
-  String nextCursor;
+  String? nextCursor;
 
   /// List of historical file versions.
-  List<HistoryVersion> historyVersions;
+  List<HistoryVersion>? historyVersions;
 
   HistoryVersionList({
     this.category,
@@ -40,44 +40,36 @@ class HistoryVersionList {
     this.historyVersions,
   });
 
-  HistoryVersionList clone({
-    String category,
-    String nextCursor,
-    List<HistoryVersion> historyVersion,
-  }) {
-    return HistoryVersionList(
-      category: category ?? this.category,
-      nextCursor: nextCursor ?? this.nextCursor,
-      historyVersions: historyVersion ?? this.historyVersions,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'category': category,
-      'nextCursor': nextCursor,
-      'historyVersions': historyVersions?.map((x) => x?.toMap())?.toList(),
-    };
-  }
-
   factory HistoryVersionList.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
     HistoryVersionList instance = HistoryVersionList(
       category: map['category'],
       nextCursor: map['nextCursor'],
     );
     if (map['historyVersions'] != null) {
-      if (List.from(map['historyVersions']).isNotEmpty)
+      if (List<dynamic>.from(map['historyVersions']).isNotEmpty) {
         instance.historyVersions = List<HistoryVersion>.from(
-            map['historyVersions']?.map((x) => HistoryVersion.fromMap(x)));
+          map['historyVersions']?.map(
+            (dynamic x) => HistoryVersion.fromMap(x),
+          ),
+        );
+      }
     }
     return instance;
   }
 
-  String toJson() => json.encode(toMap());
-
   factory HistoryVersionList.fromJson(String source) =>
       HistoryVersionList.fromMap(json.decode(source));
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'category': category,
+      'nextCursor': nextCursor,
+      'historyVersions':
+          historyVersions?.map((HistoryVersion x) => x.toMap()).toList(),
+    };
+  }
+
+  String toJson() => json.encode(toMap());
 
   @override
   String toString() =>

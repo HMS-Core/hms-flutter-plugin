@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.util.Pair;
 
+import com.huawei.agconnect.LocalBrdMnger;
 import com.huawei.hms.flutter.drive.common.Constants;
 import com.huawei.hms.flutter.drive.services.comments.CommentsRequestOptions;
 
@@ -79,7 +80,7 @@ public final class DriveUtils {
 
     public static void errorHandler(final Context context, final Intent intent, final String error) {
         intent.putExtra("batchError", error);
-        context.sendBroadcast(intent);
+        LocalBrdMnger.getInstance(context).sendBroadcast(intent);
         intent.removeExtra("batchError");
     }
 

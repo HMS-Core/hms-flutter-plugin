@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -19,59 +19,46 @@ import 'dart:convert';
 import 'package:huawei_drive/huawei_drive.dart';
 
 class DriveFileList {
-  String category;
+  String? category;
   List<DriveFile> files;
-  String nextCursor;
-  bool searchCompleted;
+  String? nextCursor;
+  bool? searchCompleted;
 
   DriveFileList({
     this.category,
-    this.files,
+    this.files = const <DriveFile>[],
     this.nextCursor,
     this.searchCompleted,
   });
 
-  DriveFileList clone({
-    String category,
-    List<DriveFile> files,
-    String nextCursor,
-    bool searchCompleted,
-  }) {
-    return DriveFileList(
-      category: category ?? this.category,
-      files: files ?? this.files,
-      nextCursor: nextCursor ?? this.nextCursor,
-      searchCompleted: searchCompleted ?? this.searchCompleted,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'category': category,
-      'files': files?.map((x) => x?.toMap())?.toList(),
-      'nextCursor': nextCursor,
-      'searchCompleted': searchCompleted,
-    };
-  }
-
   factory DriveFileList.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return DriveFileList(
       category: map['category'],
       files: map['files'] == null
-          ? null
+          ? <DriveFile>[]
           : List<DriveFile>.from(
-              map['files']?.map((x) => DriveFile.fromMap(x))),
+              map['files']?.map(
+                (dynamic x) => DriveFile.fromMap(x),
+              ),
+            ),
       nextCursor: map['nextCursor'],
       searchCompleted: map['searchCompleted'],
     );
   }
 
-  String toJson() => json.encode(toMap());
-
   factory DriveFileList.fromJson(String source) =>
       DriveFileList.fromMap(json.decode(source));
+
+  String toJson() => json.encode(toMap());
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'category': category,
+      'files': files.map((DriveFile x) => x.toMap()).toList(),
+      'nextCursor': nextCursor,
+      'searchCompleted': searchCompleted,
+    };
+  }
 
   @override
   String toString() {

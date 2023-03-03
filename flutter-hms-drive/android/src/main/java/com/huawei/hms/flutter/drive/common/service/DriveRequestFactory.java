@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.google.gson.Gson;
+import com.huawei.agconnect.LocalBrdMnger;
 import com.huawei.cloud.base.json.GenericJson;
 import com.huawei.cloud.base.json.gson.GsonFactory;
 import com.huawei.cloud.client.task.Task;
@@ -172,7 +173,7 @@ public abstract class DriveRequestFactory implements IDriveRequest {
                 map.put("totalTimeElapsed", request.getMediaHttpUploader().getTotalTimeRequired());
                 map.put("state", request.getMediaHttpUploader().getUploadState().toString());
                 progressIntent.putExtra("progress", map);
-                context.sendBroadcast(progressIntent);
+                LocalBrdMnger.getInstance(context).sendBroadcast(progressIntent);
             }
         }
     }

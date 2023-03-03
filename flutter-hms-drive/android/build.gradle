@@ -3,9 +3,9 @@ version '1.0'
 
 buildscript {
     repositories {
-        maven { url 'https://developer.huawei.com/repo/' }
         google()
-        jcenter()
+        mavenCentral()
+        maven { url "https://developer.huawei.com/repo/" }
     }
 
     dependencies {
@@ -15,23 +15,25 @@ buildscript {
 
 rootProject.allprojects {
     repositories {
-        maven { url 'https://developer.huawei.com/repo/' }
         google()
-        jcenter()
+        mavenCentral()
+        maven { url "https://developer.huawei.com/repo/" }
     }
 }
 
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
     defaultConfig {
-        targetSdkVersion 29
         minSdkVersion 27
+        targetSdkVersion 30
     }
+
     lintOptions {
-        disable 'InvalidPackage'
+        disable "InvalidPackage"
     }
 
     compileOptions {
@@ -41,8 +43,8 @@ android {
 }
 
 dependencies {
-    implementation 'com.huawei.hms:drive:5.0.0.302'
-    implementation "com.huawei.hms:device:5.0.5.300"
-    implementation 'com.huawei.hms:stats:5.0.5.300'
-    implementation "com.google.code.gson:gson:2.8.6"
+    implementation 'com.huawei.hms:drive:5.0.0.307'
+    implementation "com.huawei.hms:device:6.6.0.300"
+    implementation 'com.huawei.hms:stats:6.6.0.300'
+    implementation "com.google.code.gson:gson:2.9.0"
 }

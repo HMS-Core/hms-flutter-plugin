@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,328 +14,92 @@
     limitations under the License.
 */
 
-import 'dart:async';
-import 'dart:convert';
-import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:huawei_account/huawei_account.dart';
 import 'package:huawei_drive/huawei_drive.dart';
-import 'custom_widgets/custom_button.dart';
-import 'custom_widgets/custom_console.dart';
+import 'package:huawei_drive_example/custom_widgets/custom_loading.dart';
+import 'package:huawei_drive_example/custom_widgets/custom_button.dart';
+import 'package:huawei_drive_example/custom_widgets/custom_console.dart';
 import 'package:path_provider/path_provider.dart';
 
 void main() {
-  runApp(MaterialApp(home: MyApp()));
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+    <DeviceOrientation>[DeviceOrientation.portraitUp],
+  );
+  runApp(
+    const MaterialApp(
+      home: HomeScreenView(),
+    ),
+  );
 }
 
-class MyApp extends StatefulWidget {
+class HomeScreenView extends StatefulWidget {
+  const HomeScreenView({Key? key}) : super(key: key);
+
   @override
-  _MyAppState createState() => _MyAppState();
+  State<HomeScreenView> createState() => _HomeScreenViewState();
 }
 
-class _MyAppState extends State<MyApp> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  String fileId;
-  List<String> responsesToDisplay = [];
-  String commentId;
-
-  RefreshCallback refreshTokenCallback;
-  HmsAuthHuaweiId _id;
-  Drive drive;
-
-  void fileIdSnackbar() {
-    _scaffoldKey.currentState.showSnackBar(new SnackBar(
-        content: new Text("FileId is empty. Please create a file.")));
-  }
-
-  void fileCommentIdSnackbar() {
-    _scaffoldKey.currentState.showSnackBar(new SnackBar(
-        content: new Text(
-            "Either file or comment id is empty. Please create a comment on created file.")));
-  }
-
-  final helper = new HmsAuthParamHelper()
-    ..setIdToken()
-    ..setAccessToken()
-    ..setAuthorizationCode()
-    ..setEmail()
-    ..setScopeList([
-      SCOPE_BASE_PROFILE,
-      SCOPE_DRIVE,
-      SCOPE_DRIVE_FILE,
-      SCOPE_DRIVE_READONLY,
-      SCOPE_DRIVE_METADATA,
-      SCOPE_DRIVE_METADATA_READONLY,
-      SCOPE_DRIVE_APPDATA,
-    ])
-    ..setProfile();
-
+class _HomeScreenViewState extends State<HomeScreenView> {
+  final List<String> _responsesToDisplay = <String>[];
+  bool _isLoading = false;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  late AccountAuthParamsHelper _helper;
+  late AccountAuthService _authService;
+  AuthAccount? _account;
+  late Drive _drive;
+  String? _fileId;
+  String? _commentId;
+  bool get userLoggedIn => _account != null;
   @override
   void initState() {
     super.initState();
+    _helper = AccountAuthParamsHelper()
+      ..setAccessToken()
+      ..setId()
+      ..setProfile()
+      ..setAssistToken()
+      ..setAuthorizationCode()
+      ..setCarrierId()
+      ..setDialogAuth()
+      ..setEmail()
+      ..setForceLogout()
+      ..setIdToken()
+      ..setMobileNumber()
+      ..setUid()
+      ..setScopeList(
+        <Scope>[
+          Scope.profile,
+          Scope.openId,
+          Scope.accountBirthday,
+          Scope.accountCountry,
+          Scope.accountMobileNumber,
+          Scope.ageRange,
+          Scope.email,
+          Scope.game
+        ],
+        extraScopeURIs: <String>[
+          scopeBaseProfile,
+          scopeDrive,
+          scopeDriveFile,
+          scopeDriveReadOnly,
+          scopeDriveMetaData,
+          scopeDriveMetaDataReadOnly,
+          scopeDriveAppData,
+        ],
+      );
+    _authService = AccountAuthManager.getService(_helper.createParams());
     signIn();
     permissionCheck();
-  }
-
-  void permissionCheck() async {
-    bool status = await HmsDrivePermissions.hasReadAndWritePermission();
-    log(status.toString(), name: "Permission Status");
-    setState(() {
-      responsesToDisplay.add("Permission Status: $status");
-    });
-  }
-
-  void requestPermissions() async {
-    bool status = await HmsDrivePermissions.requestReadAndWritePermission();
-    log(status.toString(), name: "Request Permission State");
-    setState(() {
-      responsesToDisplay.add("Request Permission State: $status");
-    });
-  }
-
-  Future<String> refreshToken() async {
-    _id = await HmsAuthService.silentSignIn(authParamHelper: helper);
-    log('RefreshToken called', name: "FlutterDEMO");
-    return _id.accessToken;
-  }
-
-  void _onBatchError(Object error) {
-    if (error is PlatformException) {
-      log("BatchError: ${jsonDecode(error.message)}");
-    }
-  }
-
-  _onBatchEvent(dynamic event) {
-    log(event.toString());
-    setState(() {
-      responsesToDisplay.add("Batch Operation - Success");
-    });
-  }
-
-  void signIn() async {
-    if (!mounted) return;
-    try {
-      _id = await HmsAuthService.signIn(authParamHelper: helper);
-      String unionId = _id.unionId;
-      RefreshTokenCallback refreshTokenCallback = refreshToken;
-      DriveCredentials deviceCredentials =
-          DriveCredentials(unionId, _id.accessToken, refreshTokenCallback);
-      drive = await Drive.init(deviceCredentials);
-      print("User: ${_id.displayName}");
-    } on Exception catch (e) {
-      print(e.toString());
-    }
-    drive.batch.onBatchResult.listen(_onBatchEvent, onError: _onBatchError);
-  }
-
-  void _getAbout() async {
-    DriveAbout about = await drive.about(AboutRequest());
-
-    log("About: $about");
-
-    setState(() {
-      responsesToDisplay.add("User Display Name: " + about.user.displayName);
-    });
-  }
-
-  void _createFile() async {
-    ByteData byteData = await rootBundle.load("assets/demoImage.jpg");
-    Int8List byteArray = byteData.buffer
-        .asInt8List(byteData.offsetInBytes, byteData.lengthInBytes);
-
-    DriveFile fileMetadata = DriveFile(
-      fileName: "createdFile.jpg",
-      mimeType: "image/jpg",
-    );
-
-    DriveFileContent fileContent = DriveFileContent(
-      type: "image/jpg",
-      byteArray: byteArray,
-    );
-
-    DriveFile createdFile = await drive.files.create(FilesRequest.create(
-      fileMetadata,
-      fileContent: fileContent,
-    ));
-
-    log("Created File: $createdFile");
-
-    setState(() {
-      responsesToDisplay.add("Created Files Name: " + createdFile.fileName);
-      fileId = createdFile.id;
-    });
-  }
-
-  void _listFiles() async {
-    DriveFileList fileList = await drive.files.list(FilesRequest.list(
-      fields: "*",
-      pageSize: 5,
-    ));
-
-    log("File List: $fileList");
-
-    List<String> fileNames = [];
-    for (int i = 0; i < fileList.files.length; i++) {
-      fileNames.add(fileList.files[i].fileName);
-    }
-
-    setState(() {
-      responsesToDisplay.add("Files on Drive: " + fileNames.toString());
-    });
-  }
-
-  void _updateFileName() async {
-    DriveFile updatedMetadata = DriveFile(fileName: "updatedFile.jpg");
-
-    DriveFile updatedFile =
-        await drive.files.update(FilesRequest.update(fileId, updatedMetadata));
-
-    log("Updated File: $updatedFile");
-
-    setState(() {
-      responsesToDisplay.add("Updated File Name: " + updatedFile.fileName);
-    });
-  }
-
-  void _downloadFile() async {
-    final directory = await getExternalStorageDirectory();
-
-    bool result = await drive.files.getContentAndDownloadTo(
-      FilesRequest.getRequest(
-        fileId,
-        fields: "*",
-      ),
-      directory.path + "/downloadedImage.jpg",
-    );
-
-    log(result.toString());
-
-    setState(() {
-      responsesToDisplay.add("Download Compelete.");
-    });
-  }
-
-  void _createComment() async {
-    DriveComment comment = DriveComment(
-      description: "This is a comment.",
-    );
-
-    DriveComment createdComment =
-        await drive.comments.create(CommentsRequest.create(fileId, comment));
-
-    log("Created Comment: $createdComment");
-
-    setState(() {
-      commentId = createdComment.id;
-      responsesToDisplay.add("Comment Added: " + createdComment.description);
-    });
-  }
-
-  void _commentList() async {
-    DriveCommentList commentList =
-        await drive.comments.list(CommentsRequest.list(fileId));
-
-    log("Comment List: $commentList");
-
-    List<String> commentDescriptions = [];
-    for (int i = 0; i < commentList.comments.length; i++) {
-      commentDescriptions.add(commentList.comments[i].description);
-    }
-
-    setState(() {
-      responsesToDisplay
-          .add("Comments on File: " + commentDescriptions.toString());
-    });
-  }
-
-  void _replyComment() async {
-    DriveReply reply = DriveReply(
-      description: "This is a reply.",
-    );
-
-    DriveReply createdReply = await drive.replies
-        .create(RepliesRequest.create(fileId, commentId, reply));
-
-    log("Created Reply: $createdReply");
-
-    setState(() {
-      responsesToDisplay.add("Reply Added: " + createdReply.description);
-    });
-  }
-
-  void _replyList() async {
-    DriveReplyList replyList =
-        await drive.replies.list(RepliesRequest.list(fileId, commentId));
-
-    log("Reply List: $replyList");
-
-    List<String> replyDescriptions = [];
-    for (int i = 0; i < replyList.replies.length; i++) {
-      replyDescriptions.add(replyList.replies[i].description);
-    }
-
-    setState(() {
-      responsesToDisplay
-          .add("Comments on File: " + replyDescriptions.toString());
-    });
-  }
-
-  void _batch() async {
-    List<Batchable> batchRequests = [
-      FilesRequest.create(
-        DriveFile(
-            fileName: "folderCreatedByBatch",
-            mimeType: "application/vnd.huawei-apps.folder"),
-      ),
-    ];
-
-    if (fileId != null) {
-      batchRequests.add(
-        CommentsRequest.create(
-            fileId,
-            DriveComment(
-              description: "This is a comment created by batch operation.",
-            )),
-      );
-    }
-
-    if (fileId != null && commentId != null) {
-      batchRequests.add(
-        RepliesRequest.create(
-            fileId,
-            commentId,
-            DriveReply(
-              description: "This is a reply created by batch operation.",
-            )),
-      );
-    }
-
-    await drive.batch.execute(BatchRequest(batchRequests));
-  }
-
-  void _deleteFile() async {
-    bool result = await drive.files.delete(FilesRequest.delete(fileId));
-
-    log(result.toString());
-
-    setState(() {
-      responsesToDisplay.add("Deleted File.");
-      commentId = null;
-      fileId = null;
-    });
-  }
-
-  void _emptyRecycle() async {
-    bool result = await drive.files.emptyRecycle(FilesRequest.emptyRecycle());
-
-    log(result.toString());
-
-    setState(() {
-      responsesToDisplay.add("Emptied Recycle Folder.");
-    });
   }
 
   @override
@@ -346,76 +110,509 @@ class _MyAppState extends State<MyApp> {
         title: const Text('Drive Kit Demo'),
         centerTitle: true,
         backgroundColor: Colors.red,
+        actions: _appBarActions(context: context),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              CustomButton(
-                onPressed: requestPermissions,
-                text: "Check Permissions",
-              ),
-              CustomButton(
-                onPressed: _getAbout,
-                text: "About",
-              ),
-              CustomButton(
-                onPressed: _createFile,
-                text: "Create File on Drive",
-              ),
-              CustomButton(
-                onPressed: _listFiles,
-                text: "List Files",
-              ),
-              CustomButton(
-                onPressed: fileId == null ? fileIdSnackbar : _updateFileName,
-                text: "Update File Name",
-              ),
-              CustomButton(
-                onPressed: fileId == null ? fileIdSnackbar : _downloadFile,
-                text: "Download File to Local Storage",
-              ),
-              CustomButton(
-                onPressed: fileId == null ? fileIdSnackbar : _createComment,
-                text: "Create Comment",
-              ),
-              CustomButton(
-                onPressed: fileId == null ? fileIdSnackbar : _commentList,
-                text: "List Comments",
-              ),
-              CustomButton(
-                onPressed: (fileId == null || commentId == null)
-                    ? fileCommentIdSnackbar
-                    : _replyComment,
-                text: "Reply the Comment",
-              ),
-              CustomButton(
-                onPressed: (fileId == null || commentId == null)
-                    ? fileCommentIdSnackbar
-                    : _replyList,
-                text: "List Replies",
-              ),
-              CustomButton(
-                onPressed: _batch,
-                text: "Batch Operations",
-              ),
-              CustomButton(
-                onPressed: fileId == null ? fileIdSnackbar : _deleteFile,
-                text: "Delete the File",
-              ),
-              CustomButton(
-                onPressed: _emptyRecycle,
-                text: "Empty Recycle Folder",
-              ),
-              CustomConsole(
-                responses: responsesToDisplay,
+      body: _body(context: context),
+    );
+  }
+
+  List<Widget> _appBarActions({
+    required BuildContext context,
+  }) {
+    return userLoggedIn
+        ? <Widget>[
+            IconButton(
+              onPressed: () async {
+                await signOut();
+              },
+              icon: const Icon(Icons.logout_outlined),
+            )
+          ]
+        : <Widget>[];
+  }
+
+  Widget _body({
+    required BuildContext context,
+  }) {
+    return Stack(
+      children: <Widget>[
+        userLoggedIn
+            ? SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      CustomButton(
+                        onPressed: permissionCheck,
+                        text: 'Check Permissions',
+                      ),
+                      CustomButton(
+                        onPressed: getAbout,
+                        text: 'About',
+                      ),
+                      CustomButton(
+                        onPressed: createFile,
+                        text: 'Create File on Drive',
+                      ),
+                      CustomButton(
+                        onPressed: listFiles,
+                        text: 'List Files',
+                      ),
+                      CustomButton(
+                        onPressed: updateFileName,
+                        text: 'Update File Name',
+                      ),
+                      CustomButton(
+                        onPressed: downloadFile,
+                        text: 'Download File to Local Storage',
+                      ),
+                      CustomButton(
+                        onPressed: createComment,
+                        text: 'Create Comment',
+                      ),
+                      CustomButton(
+                        onPressed: commentList,
+                        text: 'List Comments',
+                      ),
+                      CustomButton(
+                        onPressed: replyComment,
+                        text: 'Reply the Comment',
+                      ),
+                      CustomButton(
+                        onPressed: replyList,
+                        text: 'List Replies',
+                      ),
+                      CustomButton(
+                        onPressed: batch,
+                        text: 'Batch Operations',
+                      ),
+                      CustomButton(
+                        onPressed: deleteFile,
+                        text: 'Delete the File',
+                      ),
+                      CustomButton(
+                        onPressed: emptyRecycle,
+                        text: 'Empty Recycle Folder',
+                      ),
+                      CustomConsole(
+                        responses: _responsesToDisplay,
+                      )
+                    ],
+                  ),
+                ),
               )
-            ],
-          ),
-        ),
+            : _signInButton(onPressed: signIn),
+        _isLoading ? const CustomLoading() : const SizedBox()
+      ],
+    );
+  }
+
+  Widget _signInButton({required AsyncCallback onPressed}) {
+    return Center(
+      child: CustomButton(
+        onPressed: onPressed,
+        text: 'Sign In',
       ),
     );
   }
+
+  void showSnackBar(String message) {
+    BuildContext? context = _scaffoldKey.currentContext;
+    if (context != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+        ),
+      );
+    }
+  }
+
+  Future<void> permissionCheck() async {
+    try {
+      setLoading(true);
+
+      bool status = await HmsDrivePermissions.requestReadAndWritePermission();
+      String response = 'Request Permission State: $status';
+
+      _responsesToDisplay.add(response);
+      setLoading(false);
+    } catch (e) {
+      _displaySnackbar(_SnackbarMessages.defaultError);
+    }
+  }
+
+  Future<void> signIn() async {
+    try {
+      setLoading(true);
+
+      _account = await _authService.signIn();
+      String? unionId = _account?.unionId;
+      RefreshTokenCallback refreshTokenCallback = _refreshToken;
+      DriveCredentials deviceCredentials = DriveCredentials(
+        unionId: unionId,
+        accessToken: _account?.accessToken,
+        callback: refreshTokenCallback,
+      );
+      _drive = await Drive.init(deviceCredentials);
+      log('User: ${_account?.displayName}');
+      _drive.batch.onBatchResult.listen(_onBatchEvent, onError: _onBatchError);
+
+      setLoading(false);
+    } catch (_) {
+      _displaySnackbar(_SnackbarMessages.signInError);
+    }
+  }
+
+  Future<String?> _refreshToken() async {
+    _account = await _authService.silentSignIn();
+    return _account?.accessToken;
+  }
+
+  Future<void> getAbout() async {
+    try {
+      setLoading(true);
+      DriveAbout about = await _drive.about(AboutRequest());
+      String response = 'User Display Name: ${about.user?.displayName}';
+      _responsesToDisplay.add(response);
+      setLoading(false);
+    } catch (e) {
+      _displaySnackbar(_SnackbarMessages.defaultError);
+    }
+  }
+
+  Future<void> createFile() async {
+    try {
+      setLoading(true);
+      ByteData byteData = await rootBundle.load('assets/Snake_River_(5mb).jpg');
+      Int8List byteArray = byteData.buffer
+          .asInt8List(byteData.offsetInBytes, byteData.lengthInBytes);
+
+      DriveFile fileMetadata = DriveFile(
+        fileName: 'Snake_River.jpg',
+        mimeType: 'image/jpg',
+      );
+
+      DriveFileContent fileContent = DriveFileContent(
+        type: 'image/jpg',
+        byteArray: byteArray,
+      );
+
+      DriveFile createdFile = await _drive.files.create(
+        FilesRequest.create(
+          fileMetadata,
+          fileContent: fileContent,
+        ),
+      );
+
+      _fileId = createdFile.id;
+      String response = 'Created Files Name: ${createdFile.fileName}';
+      _responsesToDisplay.add(response);
+      setLoading(false);
+    } catch (e) {
+      _displaySnackbar(_SnackbarMessages.defaultError);
+    }
+  }
+
+  Future<void> listFiles() async {
+    try {
+      setLoading(true);
+      DriveFileList fileList = await _drive.files.list(
+        FilesRequest.list(
+          fields: '*',
+          pageSize: 5,
+        ),
+      );
+
+      List<String?> fileNames = <String?>[];
+      for (int i = 0; i < fileList.files.length; i++) {
+        log('${fileList.files[i].id} -- ${fileList.files[i].fileName}');
+        fileNames.add(fileList.files[i].fileName);
+      }
+      String response = 'Files on Drive: $fileNames';
+      _responsesToDisplay.add(response);
+      setLoading(false);
+    } catch (e) {
+      _displaySnackbar(_SnackbarMessages.defaultError);
+    }
+  }
+
+  Future<void> updateFileName() async {
+    try {
+      if (_fileId == null) {
+        _displaySnackbar(_SnackbarMessages.fileIdIsNull);
+        return;
+      }
+      setLoading(true);
+      DriveFile updatedMetadata = DriveFile(fileName: 'updatedFile.jpg');
+
+      DriveFile updatedFile = await _drive.files
+          .update(FilesRequest.update(_fileId, updatedMetadata));
+
+      String response = 'Updated File Name: ${updatedFile.fileName}';
+
+      _responsesToDisplay.add(response);
+      setLoading(false);
+    } catch (e) {
+      _displaySnackbar(_SnackbarMessages.defaultError);
+    }
+  }
+
+  Future<void> downloadFile() async {
+    try {
+      final Directory? directory = await getExternalStorageDirectory();
+      String? path = directory?.path;
+      if (path == null) {
+        _displaySnackbar(_SnackbarMessages.downloadPathIsNull);
+        return;
+      }
+
+      if (_fileId == null) {
+        _displaySnackbar(_SnackbarMessages.fileIdIsNull);
+        return;
+      }
+      setLoading(true);
+      await _drive.files.getContentAndDownloadTo(
+        FilesRequest.getRequest(
+          _fileId,
+          fields: '*',
+        ),
+        '$path/downloadedImage.jpg',
+      );
+
+      String? response = 'Download Compelete.';
+
+      _responsesToDisplay.add(response);
+      setLoading(false);
+    } catch (e) {
+      _displaySnackbar(_SnackbarMessages.defaultError);
+    }
+  }
+
+  Future<void> createComment() async {
+    try {
+      if (_fileId == null) {
+        _displaySnackbar(_SnackbarMessages.fileIdIsNull);
+        return;
+      }
+      setLoading(true);
+      DriveComment comment = DriveComment(
+        description: 'This is a comment.',
+      );
+      DriveComment createdComment = await _drive.comments
+          .create(CommentsRequest.create(_fileId, comment));
+      _commentId = createdComment.id;
+      String? response = 'Comment Added: ${createdComment.description}';
+
+      _responsesToDisplay.add(response);
+      setLoading(false);
+    } catch (e) {
+      _displaySnackbar(_SnackbarMessages.defaultError);
+    }
+  }
+
+  Future<void> commentList() async {
+    try {
+      if (_fileId == null) {
+        _displaySnackbar(_SnackbarMessages.fileIdIsNull);
+        return;
+      }
+      setLoading(true);
+      DriveCommentList commentList =
+          await _drive.comments.list(CommentsRequest.list(_fileId));
+
+      List<String?> commentDescriptions = <String?>[];
+      for (int i = 0; i < commentList.comments.length; i++) {
+        commentDescriptions.add(commentList.comments[i].description);
+      }
+      String? response = 'Comments on File: $commentDescriptions';
+      _responsesToDisplay.add(response);
+      setLoading(false);
+    } catch (e) {
+      _displaySnackbar(_SnackbarMessages.defaultError);
+    }
+  }
+
+  Future<void> replyComment() async {
+    try {
+      if (_fileId == null || _commentId == null) {
+        _displaySnackbar(_SnackbarMessages.fileCommentIdIsNull);
+        return;
+      }
+      setLoading(true);
+      DriveReply reply = DriveReply(
+        description: 'This is a reply.',
+      );
+      DriveReply createdReply = await _drive.replies
+          .create(RepliesRequest.create(_fileId, _commentId, reply));
+      String? response = 'Reply Added: ${createdReply.description}';
+      _responsesToDisplay.add(response);
+      setLoading(false);
+    } catch (e) {
+      _displaySnackbar(_SnackbarMessages.defaultError);
+    }
+  }
+
+  Future<void> replyList() async {
+    try {
+      if (_fileId == null || _commentId == null) {
+        _displaySnackbar(_SnackbarMessages.fileCommentIdIsNull);
+        return;
+      }
+      setLoading(true);
+      DriveReplyList replyList =
+          await _drive.replies.list(RepliesRequest.list(_fileId, _commentId));
+      List<String?> replyDescriptions = <String?>[];
+      for (int i = 0; i < replyList.replies.length; i++) {
+        replyDescriptions.add(replyList.replies[i].description);
+      }
+      String? response = 'Comments on File: $replyDescriptions';
+      _responsesToDisplay.add(response);
+      setLoading(false);
+    } catch (e) {
+      _displaySnackbar(_SnackbarMessages.defaultError);
+    }
+  }
+
+  Future<void> batch() async {
+    try {
+      setLoading(true);
+      List<Batchable> batchRequests = <Batchable>[
+        FilesRequest.create(
+          DriveFile(
+            fileName: 'sampleFolder',
+            mimeType: 'application/vnd.huawei-apps.folder',
+          ),
+        ),
+      ];
+
+      if (_fileId != null) {
+        log('here we go');
+        batchRequests.add(
+          CommentsRequest.create(
+            _fileId,
+            DriveComment(
+              description: 'This is a comment created by batch operation.',
+            ),
+          ),
+        );
+      }
+
+      if (_fileId != null && _commentId != null) {
+        log('here we go');
+        batchRequests.add(
+          RepliesRequest.create(
+            _fileId,
+            _commentId,
+            DriveReply(
+              description: 'This is a reply created by batch operation.',
+            ),
+          ),
+        );
+      }
+
+      await _drive.batch.execute(BatchRequest(batchRequests));
+      setLoading(false);
+    } catch (e) {
+      _displaySnackbar(_SnackbarMessages.defaultError);
+    }
+  }
+
+  Future<void> deleteFile() async {
+    try {
+      if (_fileId == null) {
+        _displaySnackbar(_SnackbarMessages.fileIdIsNull);
+        return;
+      }
+      setLoading(true);
+      bool result = await _drive.files.delete(FilesRequest.delete(_fileId));
+      if (!result) {
+        String? response = 'Could not delete file.';
+        _responsesToDisplay.add(response);
+        setLoading(false);
+        return;
+      }
+      _commentId = null;
+      _fileId = null;
+      String? response = 'Deleted File.';
+      _responsesToDisplay.add(response);
+      setLoading(false);
+    } catch (e) {
+      _displaySnackbar(_SnackbarMessages.defaultError);
+    }
+  }
+
+  Future<void> emptyRecycle() async {
+    try {
+      setLoading(true);
+      bool result =
+          await _drive.files.emptyRecycle(FilesRequest.emptyRecycle());
+      String? response;
+      if (!result) {
+        response = 'Could not make recycle folder empty';
+      }
+      response = 'Emptied Recycle Folder.';
+      _responsesToDisplay.add(response);
+      setLoading(false);
+    } catch (e) {
+      _displaySnackbar(_SnackbarMessages.defaultError);
+    }
+  }
+
+  Future<void> signOut() async {
+    try {
+      setLoading(true);
+      bool didSignOut = await _authService.signOut();
+      if (!didSignOut) {
+        String message = 'Could not sign out';
+        _displaySnackbar(message);
+        setLoading(false);
+        return;
+      }
+      bool didCancelAuth = await _authService.cancelAuthorization();
+      if (!didCancelAuth) {
+        String message = 'Could not cancel authorization';
+        _displaySnackbar(message);
+        setLoading(false);
+        return;
+      }
+      _account = null;
+      setLoading(false);
+    } catch (e) {
+      _displaySnackbar(_SnackbarMessages.defaultError);
+    }
+  }
+
+  void setLoading(bool loading) {
+    setState(() {
+      _isLoading = loading;
+    });
+  }
+
+  void _displaySnackbar(String message) {
+    setLoading(false);
+    showSnackBar(message);
+  }
+
+  void _onBatchError(Object error) {
+    if (error is PlatformException) {
+      log("BatchError: ${jsonDecode(error.message ?? "")}");
+    }
+  }
+
+  void _onBatchEvent(dynamic event) {
+    String message = 'Batch Operation - Success';
+    setState(() {
+      _responsesToDisplay.add(message);
+    });
+  }
+}
+
+extension _SnackbarMessages on HomeScreenView {
+  static const String fileIdIsNull = 'FileId is empty. Please create a file.';
+  static const String fileCommentIdIsNull =
+      'Either file or comment id is empty. Please create a comment on created file.';
+  static const String downloadPathIsNull = 'Downloads directory path is null';
+  static const String defaultError = 'Operation could not succeed';
+  static const String signInError = 'Could not sign in';
 }

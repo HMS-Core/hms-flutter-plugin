@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -19,22 +19,22 @@ import 'dart:convert';
 /// User details class.
 class DriveUser {
   /// Resource type. The value is always drive#user.
-  String category;
+  String? category;
 
   /// Display name of the user.
-  String displayName;
+  String? displayName;
 
   /// Whether a user is the current requesting user.
-  bool me;
+  bool? me;
 
   /// ID of the user's permission.
-  String permissionId;
+  String? permissionId;
 
   /// Link to the user's profile picture.
-  String profilePhotoLink;
+  String? profilePhotoLink;
 
   ///	Account of the user.
-  String userAccount;
+  String? userAccount;
 
   DriveUser({
     this.category,
@@ -45,38 +45,7 @@ class DriveUser {
     this.userAccount,
   });
 
-  DriveUser clone({
-    String category,
-    String displayName,
-    bool me,
-    String permissionId,
-    String profilePhotoLink,
-    String userAccount,
-  }) {
-    return DriveUser(
-      category: category ?? this.category,
-      displayName: displayName ?? this.displayName,
-      me: me ?? this.me,
-      permissionId: permissionId ?? this.permissionId,
-      profilePhotoLink: profilePhotoLink ?? this.profilePhotoLink,
-      userAccount: userAccount ?? this.userAccount,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'category': category,
-      'displayName': displayName,
-      'me': me,
-      'permissionId': permissionId,
-      'profilePhotoLink': profilePhotoLink,
-      'userAccount': userAccount,
-    };
-  }
-
   factory DriveUser.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return DriveUser(
       category: map['category'],
       displayName: map['displayName'],
@@ -87,10 +56,21 @@ class DriveUser {
     );
   }
 
-  String toJson() => json.encode(toMap());
-
   factory DriveUser.fromJson(String source) =>
       DriveUser.fromMap(json.decode(source));
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'category': category,
+      'displayName': displayName,
+      'me': me,
+      'permissionId': permissionId,
+      'profilePhotoLink': profilePhotoLink,
+      'userAccount': userAccount,
+    };
+  }
+
+  String toJson() => json.encode(toMap());
 
   @override
   String toString() {

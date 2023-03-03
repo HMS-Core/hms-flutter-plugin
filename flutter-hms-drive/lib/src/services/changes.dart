@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,10 +14,11 @@
     limitations under the License.
 */
 
+import 'dart:convert';
+
 import 'package:flutter/services.dart';
 import 'package:huawei_drive/src/constants/channel.dart';
 import 'package:huawei_drive/src/model/export.dart';
-import 'package:huawei_drive/src/model/start_cursor.dart';
 import 'package:huawei_drive/src/request/changes_request.dart';
 
 /// Defines the Changes API.
@@ -34,9 +35,13 @@ class Changes {
   /// Obtains a cursor.
   ///
   /// After the cursor is obtained, file change notification is enabled.
-  Future<StartCursor> getStartCursor({ChangesRequest changesRequest}) async {
+  Future<StartCursor> getStartCursor({
+    required ChangesRequest changesRequest,
+  }) async {
     final String result = await _channel.invokeMethod(
-        "Changes#GetStartCursor", changesRequest?.toJson());
+      'Changes#GetStartCursor',
+      changesRequest.toJson(),
+    );
     return StartCursor.fromJson(result);
   }
 
@@ -45,27 +50,29 @@ class Changes {
   /// If any change is detected, a callback notification is sent to the API caller.
   Future<DriveChannel> subscribe(ChangesRequest changesRequest) async {
     if (changesRequest.channel == null) {
-      throw "Please provide a channel";
-    } else if (changesRequest.cursor == null || changesRequest.cursor.isEmpty) {
-      throw "Please provide a cursor";
+      throw 'Please provide a channel';
+    } else if (changesRequest.cursor == null ||
+        (changesRequest.cursor?.isEmpty ?? true)) {
+      throw 'Please provide a cursor';
     }
 
-    final String result = await _channel.invokeMethod("Changes#Subscribe", {
-      "channel": changesRequest.channel.toJson(),
-      "request": changesRequest?.toJson(),
-      "extraParams": changesRequest.channel?.paramsToSet
+    final String result =
+        await _channel.invokeMethod('Changes#Subscribe', <dynamic, dynamic>{
+      'channel': changesRequest.channel?.toJson(),
+      'request': changesRequest.toJson(),
+      'extraParams': changesRequest.channel?.paramsToSet
     });
     return DriveChannel.fromJson(result);
   }
 
   /// Lists changes.
   Future<ChangeList> list(ChangesRequest changesRequest) async {
-    if (changesRequest.cursor == null || changesRequest.cursor.isEmpty) {
-      throw "Please provide a cursor";
+    if (changesRequest.cursor?.isEmpty ?? true) {
+      throw 'Please provide a cursor';
     }
 
     final String result =
-        await _channel.invokeMethod("Changes#List", changesRequest.toJson());
-    return ChangeList.fromJson(result);
+        await _channel.invokeMethod('Changes#List', changesRequest.toJson());
+    return ChangeList.fromMap(json.decode(result));
   }
 }

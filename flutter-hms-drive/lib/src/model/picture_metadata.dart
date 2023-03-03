@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -19,26 +19,26 @@ import 'dart:convert';
 import 'package:huawei_drive/src/model/metadata_location.dart';
 
 class PictureMetadata {
-  double aperture;
-  String cameraMake;
-  String cameraModel;
-  String colorSpace;
-  double exposureBias;
-  String exposureMode;
-  double exposureTime;
-  bool flashUsed;
-  double focalLenght;
-  int height;
-  int isoSpeed;
-  String lens;
-  MetadataLocation location;
-  double maxApertureValue;
-  String meteringMode;
-  String sensor;
-  int subjectDistance;
-  String exifTime;
-  String whiteBalance;
-  int width;
+  double? aperture;
+  String? cameraMake;
+  String? cameraModel;
+  String? colorSpace;
+  double? exposureBias;
+  String? exposureMode;
+  double? exposureTime;
+  bool? flashUsed;
+  double? focalLenght;
+  int? height;
+  int? isoSpeed;
+  String? lens;
+  MetadataLocation? location;
+  double? maxApertureValue;
+  String? meteringMode;
+  String? sensor;
+  int? subjectDistance;
+  String? exifTime;
+  String? whiteBalance;
+  int? width;
 
   PictureMetadata({
     this.aperture,
@@ -63,80 +63,7 @@ class PictureMetadata {
     this.width,
   });
 
-  PictureMetadata clone({
-    double aperture,
-    String cameraMake,
-    String cameraModel,
-    String colorSpace,
-    double exposureBias,
-    String exposureMode,
-    double exposureTime,
-    bool flashUsed,
-    double focalLenght,
-    int height,
-    int isoSpeed,
-    String lens,
-    MetadataLocation location,
-    double maxApertureValue,
-    String meteringMode,
-    String sensor,
-    int subjectDistance,
-    String exifTime,
-    String whiteBalance,
-    int width,
-  }) {
-    return PictureMetadata(
-      aperture: aperture ?? this.aperture,
-      cameraMake: cameraMake ?? this.cameraMake,
-      cameraModel: cameraModel ?? this.cameraModel,
-      colorSpace: colorSpace ?? this.colorSpace,
-      exposureBias: exposureBias ?? this.exposureBias,
-      exposureMode: exposureMode ?? this.exposureMode,
-      exposureTime: exposureTime ?? this.exposureTime,
-      flashUsed: flashUsed ?? this.flashUsed,
-      focalLenght: focalLenght ?? this.focalLenght,
-      height: height ?? this.height,
-      isoSpeed: isoSpeed ?? this.isoSpeed,
-      lens: lens ?? this.lens,
-      location: location ?? this.location,
-      maxApertureValue: maxApertureValue ?? this.maxApertureValue,
-      meteringMode: meteringMode ?? this.meteringMode,
-      sensor: sensor ?? this.sensor,
-      subjectDistance: subjectDistance ?? this.subjectDistance,
-      exifTime: exifTime ?? this.exifTime,
-      whiteBalance: whiteBalance ?? this.whiteBalance,
-      width: width ?? this.width,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'aperture': aperture,
-      'cameraMake': cameraMake,
-      'cameraModel': cameraModel,
-      'colorSpace': colorSpace,
-      'exposureBias': exposureBias,
-      'exposureMode': exposureMode,
-      'exposureTime': exposureTime,
-      'flashUsed': flashUsed,
-      'focalLenght': focalLenght,
-      'height': height,
-      'isoSpeed': isoSpeed,
-      'lens': lens,
-      'location': location?.toMap(),
-      'maxApertureValue': maxApertureValue,
-      'meteringMode': meteringMode,
-      'sensor': sensor,
-      'subjectDistance': subjectDistance,
-      'exifTime': exifTime,
-      'whiteBalance': whiteBalance,
-      'width': width,
-    };
-  }
-
   factory PictureMetadata.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return PictureMetadata(
       aperture: map['aperture'],
       cameraMake: map['cameraMake'],
@@ -163,10 +90,35 @@ class PictureMetadata {
     );
   }
 
-  String toJson() => json.encode(toMap());
-
   factory PictureMetadata.fromJson(String source) =>
       PictureMetadata.fromMap(json.decode(source));
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'aperture': aperture,
+      'cameraMake': cameraMake,
+      'cameraModel': cameraModel,
+      'colorSpace': colorSpace,
+      'exposureBias': exposureBias,
+      'exposureMode': exposureMode,
+      'exposureTime': exposureTime,
+      'flashUsed': flashUsed,
+      'focalLenght': focalLenght,
+      'height': height,
+      'isoSpeed': isoSpeed,
+      'lens': lens,
+      'location': location?.toMap(),
+      'maxApertureValue': maxApertureValue,
+      'meteringMode': meteringMode,
+      'sensor': sensor,
+      'subjectDistance': subjectDistance,
+      'exifTime': exifTime,
+      'whiteBalance': whiteBalance,
+      'width': width,
+    };
+  }
+
+  String toJson() => json.encode(toMap());
 
   @override
   String toString() {

@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -20,6 +20,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import com.huawei.hms.flutter.drive.common.Constants;
+
+import java.io.Serializable;
+
 import io.flutter.plugin.common.EventChannel;
 
 public class ProgressReceiver extends BroadcastReceiver {
@@ -31,6 +35,13 @@ public class ProgressReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
-        eventSink.success(intent.getSerializableExtra("progress"));
+        try {
+            final Serializable progress = intent.getSerializableExtra("progress");
+            if (progress != null) {
+                eventSink.success(progress);
+            }
+        } catch (Exception e) {
+            eventSink.error(Constants.UNKNOWN_ERROR, e.getMessage(), "");
+        }
     }
 }

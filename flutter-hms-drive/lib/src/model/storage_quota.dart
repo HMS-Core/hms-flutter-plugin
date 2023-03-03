@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -19,47 +19,34 @@ import 'dart:convert';
 /// Information about a user's storage quota limits and usage, in bytes.
 class StorageQuota {
   /// Storage usage of a user.
-  final int usedSpace;
+  final int? usedSpace;
 
   /// Storage usage of a user.
-  final int userCapacity;
+  final int? userCapacity;
 
   StorageQuota({
     this.usedSpace,
     this.userCapacity,
   });
 
-  StorageQuota clone({
-    int usedSpace,
-    int userCapacity,
-  }) {
-    return StorageQuota(
-      usedSpace: usedSpace ?? this.usedSpace,
-      userCapacity: userCapacity ?? this.userCapacity,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'usedSpace': usedSpace,
-      'userCapacity': userCapacity,
-    };
-  }
-
   factory StorageQuota.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return StorageQuota(
       usedSpace: map['usedSpace'] != null ? int.parse(map['usedSpace']) : null,
       userCapacity:
           map['userCapacity'] != null ? int.parse(map['userCapacity']) : null,
     );
   }
-
-  String toJson() => jsonEncode(toMap());
-
   factory StorageQuota.fromJson(String source) =>
       StorageQuota.fromMap(json.decode(source));
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'usedSpace': usedSpace,
+      'userCapacity': userCapacity,
+    };
+  }
+
+  String toJson() => jsonEncode(toMap());
 
   @override
   String toString() =>

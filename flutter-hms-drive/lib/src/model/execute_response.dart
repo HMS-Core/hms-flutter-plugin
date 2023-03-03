@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -18,10 +18,10 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 class ExecuteResponse {
-  Int8List content;
-  String contentEncoding;
-  int contentLoggingLimit;
-  String contentType;
+  Int8List? content;
+  String? contentEncoding;
+  int? contentLoggingLimit;
+  String? contentType;
 
   ExecuteResponse({
     this.content,
@@ -30,32 +30,7 @@ class ExecuteResponse {
     this.contentType,
   });
 
-  ExecuteResponse clone({
-    Int8List content,
-    String contentEncoding,
-    int contentLoggingLimit,
-    String contentType,
-  }) {
-    return ExecuteResponse(
-      content: content ?? this.content,
-      contentEncoding: contentEncoding ?? this.contentEncoding,
-      contentLoggingLimit: contentLoggingLimit ?? this.contentLoggingLimit,
-      contentType: contentType ?? this.contentType,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'content': content?.toList(),
-      'contentEncoding': contentEncoding,
-      'contentLoggingLimit': contentLoggingLimit,
-      'contentType': contentType,
-    };
-  }
-
   factory ExecuteResponse.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return ExecuteResponse(
       content: map['content'] == null
           ? null
@@ -66,10 +41,19 @@ class ExecuteResponse {
     );
   }
 
-  String toJson() => json.encode(toMap());
-
   factory ExecuteResponse.fromJson(String source) =>
       ExecuteResponse.fromMap(json.decode(source));
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'content': content?.toList(),
+      'contentEncoding': contentEncoding,
+      'contentLoggingLimit': contentLoggingLimit,
+      'contentType': contentType,
+    };
+  }
+
+  String toJson() => json.encode(toMap());
 
   @override
   String toString() {

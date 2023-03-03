@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 import 'package:huawei_drive/src/request/channels_request.dart';
 
-import '../constants/channel.dart';
+import 'package:huawei_drive/src/constants/channel.dart';
 
 /// Defines the Channels API for disabling the function of sending file change notifications through
 /// the designated channel.
@@ -28,11 +28,12 @@ class Channels {
   /// object subscribed through the [Changes.subscribe] API.
   Future<bool> stop(ChannelsRequest request) async {
     return await driveMethodChannel.invokeMethod(
-        "Channels#Stop",
-        {
-          "channel": request.channel?.toJson(),
-          "request": request?.toJson(),
-          "extraParams": request.channel?.paramsToSet
-        }..removeWhere((k, v) => v == null));
+      'Channels#Stop',
+      <dynamic, dynamic>{
+        'channel': request.channel?.toJson(),
+        'request': request.toJson(),
+        'extraParams': request.channel?.paramsToSet
+      }..removeWhere((dynamic k, dynamic v) => v == null),
+    );
   }
 }

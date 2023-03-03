@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -18,42 +18,40 @@ import 'dart:convert';
 
 import 'package:huawei_drive/huawei_drive.dart';
 
-import 'drive_user.dart';
-
 /// Metadata class for historical file versions.
 class HistoryVersion with ExtraParameter {
   /// ID of a historical file version.
-  String id;
+  String? id;
 
   /// Whether to permanently keep a historical version, even if it is not the
   /// latest version.
-  bool keepPermanent;
+  bool? keepPermanent;
 
   /// Resource type.
   ///
   /// The value is always `drive#historyVersion`.
-  String category;
+  String? category;
 
   /// Last user who modified a historical file version.
-  DriveUser lastEditor;
+  DriveUser? lastEditor;
 
   /// SHA-256 value for verifying a historical file version.
   ///
   /// This parameter may not be set on the client. If it is set, the server will
   /// use the SHA-256 value for verifying the historical file version.
-  String sha256;
+  String? sha256;
 
   /// MIME type of the file.
-  String mimeType;
+  String? mimeType;
 
   /// Time when a historical version is modified.
-  DateTime editedTime;
+  DateTime? editedTime;
 
   ///	Original file name of a historical version.
-  String originalFilename;
+  String? originalFilename;
 
   /// File size of a historical version, in bytes.
-  int size;
+  int? size;
 
   HistoryVersion({
     this.id,
@@ -67,47 +65,7 @@ class HistoryVersion with ExtraParameter {
     this.size,
   });
 
-  HistoryVersion clone({
-    String id,
-    bool keepPermanent,
-    String category,
-    DriveUser lastEditor,
-    String sha256,
-    String mimeType,
-    DateTime editedTime,
-    String originalFileName,
-    int size,
-  }) {
-    return HistoryVersion(
-      id: id ?? this.id,
-      keepPermanent: keepPermanent ?? this.keepPermanent,
-      category: category ?? this.category,
-      lastEditor: lastEditor ?? this.lastEditor,
-      sha256: sha256 ?? this.sha256,
-      mimeType: mimeType ?? this.mimeType,
-      editedTime: editedTime ?? this.editedTime,
-      originalFilename: originalFileName ?? this.originalFilename,
-      size: size ?? this.size,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'keepPermanent': keepPermanent,
-      'category': category,
-      'lastEditor': lastEditor?.toMap(),
-      'sha256': sha256,
-      'mimeType': mimeType,
-      'editedTime': editedTime?.toIso8601String(),
-      'originalFilename': originalFilename,
-      'size': size,
-    };
-  }
-
   factory HistoryVersion.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return HistoryVersion(
       id: map['id'],
       keepPermanent: map['keepPermanent'],
@@ -124,10 +82,24 @@ class HistoryVersion with ExtraParameter {
     );
   }
 
-  String toJson() => json.encode(toMap());
-
   factory HistoryVersion.fromJson(String source) =>
       HistoryVersion.fromMap(json.decode(source));
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'keepPermanent': keepPermanent,
+      'category': category,
+      'lastEditor': lastEditor?.toMap(),
+      'sha256': sha256,
+      'mimeType': mimeType,
+      'editedTime': editedTime?.toIso8601String(),
+      'originalFilename': originalFilename,
+      'size': size,
+    };
+  }
+
+  String toJson() => json.encode(toMap());
 
   @override
   String toString() {

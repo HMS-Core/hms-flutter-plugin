@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -23,11 +23,11 @@ class HmsDrivePermissions {
 
   /// Requests the read/write to external storage permission from the user.
   static Future<bool> requestReadAndWritePermission() async {
-    return _permissionChannel.invokeMethod("request");
+    return await _permissionChannel.invokeMethod('request');
   }
 
   /// Checks whether the user has given the read/write to external storage permission.
   static Future<bool> hasReadAndWritePermission() async {
-    return _permissionChannel.invokeMethod("has");
+    return await _permissionChannel.invokeMethod('has');
   }
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,34 +16,34 @@
 
 import 'dart:convert';
 
-import 'drive_file.dart';
+import 'package:huawei_drive/src/model/drive_file.dart';
 
 /// File or drive change class.
 class Change {
   ///	Change type, which can be file or drive.
-  String changeType;
+  String? changeType;
 
   /// Information about a changed file.
   ///
   /// The file field is available only when the changed file is not deleted and
   /// the value of changeType is file.
-  DriveFile file;
+  DriveFile? file;
 
   /// ID of a changed file.
-  String fileId;
+  String? fileId;
 
   /// Resource type.
   ///
   /// The value is always `drive#change`.
-  String category;
+  String? category;
 
   /// Change time, in RFC 3339 date-time format.
-  DateTime time;
+  DateTime? time;
 
   /// Indicates whether a change is removed from the change list.
   ///
   /// true if a change is removed from the change list; false otherwise.
-  bool deleted;
+  bool? deleted;
 
   Change({
     this.changeType,
@@ -54,38 +54,7 @@ class Change {
     this.deleted,
   });
 
-  Change clone({
-    String changeType,
-    DriveFile file,
-    String fileId,
-    String category,
-    DateTime time,
-    bool deleted,
-  }) {
-    return Change(
-      changeType: changeType ?? this.changeType,
-      file: file ?? this.file,
-      fileId: fileId ?? this.fileId,
-      category: category ?? this.category,
-      time: time ?? this.time,
-      deleted: deleted ?? this.deleted,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'changeType': changeType,
-      'file': file?.toMap(),
-      'fileId': fileId,
-      'category': category,
-      'time': time?.toIso8601String(),
-      'deleted': deleted,
-    };
-  }
-
   factory Change.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return Change(
       changeType: map['changeType'],
       file: map['file'] != null ? DriveFile.fromMap(map['file']) : null,
@@ -96,12 +65,29 @@ class Change {
     );
   }
 
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'changeType': changeType,
+      'file': file?.toMap(),
+      'fileId': fileId,
+      'category': category,
+      'time': time?.toIso8601String(),
+      'deleted': deleted,
+    };
+  }
+
   String toJson() => json.encode(toMap());
 
   factory Change.fromJson(String source) => Change.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'Change(changeType: $changeType, file: $file, fileId: $fileId, category: $category, time: $time, deleted: $deleted)';
+    return '$Change('
+        'changeType: $changeType,'
+        'file: $file,'
+        'fileId: $fileId,'
+        'category: $category, '
+        'time: $time, '
+        'deleted: $deleted)';
   }
 }

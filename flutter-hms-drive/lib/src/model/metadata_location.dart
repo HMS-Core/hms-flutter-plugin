@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 import 'dart:convert';
 
 class MetadataLocation {
-  double altitude;
-  double latitude;
-  double longitude;
+  double? altitude;
+  double? latitude;
+  double? longitude;
 
   MetadataLocation({
     this.altitude,
@@ -27,29 +27,7 @@ class MetadataLocation {
     this.longitude,
   });
 
-  MetadataLocation clone({
-    double altitude,
-    double latitude,
-    double longitude,
-  }) {
-    return MetadataLocation(
-      altitude: altitude ?? this.altitude,
-      latitude: latitude ?? this.latitude,
-      longitude: longitude ?? this.longitude,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'altitude': altitude,
-      'latitude': latitude,
-      'longitude': longitude,
-    };
-  }
-
   factory MetadataLocation.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return MetadataLocation(
       altitude: map['altitude'],
       latitude: map['latitude'],
@@ -57,10 +35,18 @@ class MetadataLocation {
     );
   }
 
-  String toJson() => json.encode(toMap());
-
   factory MetadataLocation.fromJson(String source) =>
       MetadataLocation.fromMap(json.decode(source));
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'altitude': altitude,
+      'latitude': latitude,
+      'longitude': longitude,
+    };
+  }
+
+  String toJson() => json.encode(toMap());
 
   @override
   String toString() =>

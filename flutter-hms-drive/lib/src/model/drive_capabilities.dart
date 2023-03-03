@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -17,22 +17,22 @@
 import 'dart:convert';
 
 class DriveCapabilities {
-  bool addChildNodePermission;
-  bool writerHasCopyPermission;
-  bool commentPermission;
-  bool copyPermission;
-  bool deletePermission;
-  bool deleteChildNodePermission;
-  bool downloadPermission;
-  bool editPermission;
-  bool listChildNodePermission;
-  bool readHistoryVersionPermission;
-  bool removeChildNodePermission;
-  bool renameFilePermission;
-  bool shareFilePermission;
-  bool recyclePermission;
-  bool recycleChildNodePermission;
-  bool unrecyclePermission;
+  bool? addChildNodePermission;
+  bool? writerHasCopyPermission;
+  bool? commentPermission;
+  bool? copyPermission;
+  bool? deletePermission;
+  bool? deleteChildNodePermission;
+  bool? downloadPermission;
+  bool? editPermission;
+  bool? listChildNodePermission;
+  bool? readHistoryVersionPermission;
+  bool? removeChildNodePermission;
+  bool? renameFilePermission;
+  bool? shareFilePermission;
+  bool? recyclePermission;
+  bool? recycleChildNodePermission;
+  bool? unrecyclePermission;
 
   DriveCapabilities({
     this.addChildNodePermission,
@@ -53,75 +53,7 @@ class DriveCapabilities {
     this.unrecyclePermission,
   });
 
-  DriveCapabilities clone({
-    bool addChildNodePermission,
-    bool writerHasCopyPermission,
-    bool commentPermission,
-    bool copyPermission,
-    bool deletePermission,
-    bool deleteChildNodePermission,
-    bool downloadPermission,
-    bool editPermission,
-    bool listChildNodePermission,
-    bool readHistoryVersionPermission,
-    bool removeChildNodePermission,
-    bool renameFilePermission,
-    bool shareFilePermission,
-    bool recyclePermission,
-    bool recycleChildNodePermission,
-    bool unrecyclePermission,
-  }) {
-    return DriveCapabilities(
-      addChildNodePermission:
-          addChildNodePermission ?? this.addChildNodePermission,
-      writerHasCopyPermission:
-          writerHasCopyPermission ?? this.writerHasCopyPermission,
-      commentPermission: commentPermission ?? this.commentPermission,
-      copyPermission: copyPermission ?? this.copyPermission,
-      deletePermission: deletePermission ?? this.deletePermission,
-      deleteChildNodePermission:
-          deleteChildNodePermission ?? this.deleteChildNodePermission,
-      downloadPermission: downloadPermission ?? this.downloadPermission,
-      editPermission: editPermission ?? this.editPermission,
-      listChildNodePermission:
-          listChildNodePermission ?? this.listChildNodePermission,
-      readHistoryVersionPermission:
-          readHistoryVersionPermission ?? this.readHistoryVersionPermission,
-      removeChildNodePermission:
-          removeChildNodePermission ?? this.removeChildNodePermission,
-      renameFilePermission: renameFilePermission ?? this.renameFilePermission,
-      shareFilePermission: shareFilePermission ?? this.shareFilePermission,
-      recyclePermission: recyclePermission ?? this.recyclePermission,
-      recycleChildNodePermission:
-          recycleChildNodePermission ?? this.recycleChildNodePermission,
-      unrecyclePermission: unrecyclePermission ?? this.unrecyclePermission,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'addChildNodePermission': addChildNodePermission,
-      'writerHasCopyPermission': writerHasCopyPermission,
-      'commentPermission': commentPermission,
-      'copyPermission': copyPermission,
-      'deletePermission': deletePermission,
-      'deleteChildNodePermission': deleteChildNodePermission,
-      'downloadPermission': downloadPermission,
-      'editPermission': editPermission,
-      'listChildNodePermission': listChildNodePermission,
-      'readHistoryVersionPermission': readHistoryVersionPermission,
-      'removeChildNodePermission': removeChildNodePermission,
-      'renameFilePermission': renameFilePermission,
-      'shareFilePermission': shareFilePermission,
-      'recyclePermission': recyclePermission,
-      'recycleChildNodePermission': recycleChildNodePermission,
-      'unrecyclePermission': unrecyclePermission,
-    };
-  }
-
   factory DriveCapabilities.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return DriveCapabilities(
       addChildNodePermission: map['addChildNodePermission'],
       writerHasCopyPermission: map['writerHasCopyPermission'],
@@ -140,6 +72,27 @@ class DriveCapabilities {
       recycleChildNodePermission: map['recycleChildNodePermission'],
       unrecyclePermission: map['unrecyclePermission'],
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'addChildNodePermission': addChildNodePermission,
+      'writerHasCopyPermission': writerHasCopyPermission,
+      'commentPermission': commentPermission,
+      'copyPermission': copyPermission,
+      'deletePermission': deletePermission,
+      'deleteChildNodePermission': deleteChildNodePermission,
+      'downloadPermission': downloadPermission,
+      'editPermission': editPermission,
+      'listChildNodePermission': listChildNodePermission,
+      'readHistoryVersionPermission': readHistoryVersionPermission,
+      'removeChildNodePermission': removeChildNodePermission,
+      'renameFilePermission': renameFilePermission,
+      'shareFilePermission': shareFilePermission,
+      'recyclePermission': recyclePermission,
+      'recycleChildNodePermission': recycleChildNodePermission,
+      'unrecyclePermission': unrecyclePermission,
+    };
   }
 
   String toJson() => json.encode(toMap());

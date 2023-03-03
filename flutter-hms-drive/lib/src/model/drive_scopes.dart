@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,14 +14,12 @@
     limitations under the License.
 */
 
-const String SCOPE_BASE_PROFILE =
-    "https://www.huawei.com/auth/account/base.profile";
-const String SCOPE_DRIVE = "https://www.huawei.com/auth/drive";
-const String SCOPE_DRIVE_FILE = "https://www.huawei.com/auth/drive.file";
-const String SCOPE_DRIVE_READONLY =
-    "https://www.huawei.com/auth/drive.readonly";
-const String SCOPE_DRIVE_METADATA =
-    "https://www.huawei.com/auth/drive.metadata";
-const String SCOPE_DRIVE_METADATA_READONLY =
-    "https://www.huawei.com/auth/drive.metadata.readonly";
-const String SCOPE_DRIVE_APPDATA = "https://www.huawei.com/auth/drive.appdata";
+const String scopeBaseProfile =
+    'https://www.huawei.com/auth/account/base.profile';
+const String scopeDrive = 'https://www.huawei.com/auth/drive';
+const String scopeDriveFile = 'https://www.huawei.com/auth/drive.file';
+const String scopeDriveReadOnly = 'https://www.huawei.com/auth/drive.readonly';
+const String scopeDriveMetaData = 'https://www.huawei.com/auth/drive.metadata';
+const String scopeDriveMetaDataReadOnly =
+    'https://www.huawei.com/auth/drive.metadata.readonly';
+const String scopeDriveAppData = 'https://www.huawei.com/auth/drive.appdata';

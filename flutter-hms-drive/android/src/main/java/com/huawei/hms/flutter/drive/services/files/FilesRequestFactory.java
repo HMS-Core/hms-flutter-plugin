@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -98,7 +98,7 @@ public class FilesRequestFactory extends DriveRequestFactory implements IFilesRe
         // Sets the base drive request options via the base drive request factory class.
         setBasicRequestOptions(request, requestOptions);
 
-        //Files related options
+        // Files related options
         setFileId(request, requestOptions.getFileId());
         setContainers(request, requestOptions.getContainers());
         setAcknowledgeDownloadRisk(request, requestOptions.getAcknowledgeDownloadRisk());

@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -19,46 +19,34 @@ import 'dart:convert';
 /// Class of file content quoted in comments.
 class QuotedContent {
   /// MIME type of the file.
-  String mimeType;
+  String? mimeType;
 
   /// Quoted content.
-  String quotedContent;
+  String? quotedContent;
 
   QuotedContent({
     this.mimeType,
     this.quotedContent,
   });
 
-  QuotedContent clone({
-    String mimetype,
-    String quotedContent,
-  }) {
-    return QuotedContent(
-      mimeType: mimeType ?? this.mimeType,
-      quotedContent: quotedContent ?? this.quotedContent,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'mimeType': mimeType,
-      'quotedContent': quotedContent,
-    };
-  }
-
   factory QuotedContent.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return QuotedContent(
       mimeType: map['mimeType'],
       quotedContent: map['quotedContent'],
     );
   }
 
-  String toJson() => json.encode(toMap());
-
   factory QuotedContent.fromJson(String source) =>
       QuotedContent.fromMap(json.decode(source));
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'mimeType': mimeType,
+      'quotedContent': quotedContent,
+    };
+  }
+
+  String toJson() => json.encode(toMap());
 
   @override
   String toString() =>

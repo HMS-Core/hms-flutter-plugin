@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,15 +16,9 @@
 
 package com.huawei.hms.flutter.drive.services.changes;
 
-import com.huawei.cloud.services.drive.Drive;
 import com.huawei.cloud.services.drive.DriveRequest;
 import com.huawei.hms.flutter.drive.common.service.IDriveRequest;
 
-/**
- * Interface that defines the options for {@link Drive.Changes} requests. Inherits from {@link IDriveRequest}.
- *
- * @since 5.0.0.302
- */
 public interface IChangesRequest extends IDriveRequest {
     /**
      * Sets cursor for the drive changes request.

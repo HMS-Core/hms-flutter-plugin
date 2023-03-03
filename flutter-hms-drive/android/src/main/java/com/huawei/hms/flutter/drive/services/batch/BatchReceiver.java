@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -33,10 +33,18 @@ public class BatchReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
-        if (intent.getStringExtra("batchError") != null) {
-            eventSink.error(Constants.UNKNOWN_ERROR, intent.getStringExtra("batchError"), "");
-        } else if (intent.getStringExtra("batchResponse") != null) {
-            eventSink.success(intent.getStringExtra("batchResponse"));
+        try {
+            final String batchError = intent.getStringExtra("batchError");
+            if (batchError != null) {
+                eventSink.error(Constants.UNKNOWN_ERROR, batchError, "");
+            } else {
+                final String batchResponse = intent.getStringExtra("batchResponse");
+                if (batchResponse != null) {
+                    eventSink.success(batchResponse);
+                }
+            }
+        } catch (Exception e) {
+            eventSink.error(Constants.UNKNOWN_ERROR, e.getMessage(), "");
         }
     }
 }

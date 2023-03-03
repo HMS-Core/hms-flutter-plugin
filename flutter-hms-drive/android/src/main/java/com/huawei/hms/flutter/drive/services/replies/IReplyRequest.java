@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,15 +16,9 @@
 
 package com.huawei.hms.flutter.drive.services.replies;
 
-import com.huawei.cloud.services.drive.Drive;
 import com.huawei.cloud.services.drive.DriveRequest;
 import com.huawei.hms.flutter.drive.services.comments.ICommentRequest;
 
-/**
- * Interface that defines the options for {@link Drive.Replies} requests. Inherits from {@link ICommentRequest}.
- *
- * @since 5.0.0.302
- */
 public interface IReplyRequest extends ICommentRequest {
     /**
      * Sets a reply ID for the drive replies request.

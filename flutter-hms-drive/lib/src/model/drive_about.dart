@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,33 +16,33 @@
 
 import 'dart:convert';
 
-import 'storage_quota.dart';
-import 'drive_user.dart';
+import 'package:huawei_drive/src/model/storage_quota.dart';
+import 'package:huawei_drive/src/model/drive_user.dart';
 
 class DriveAbout {
   /// Resource type, for example, `drive#about`.
-  final String category;
+  final String? category;
 
   /// Maximum size of a file that can be uploaded.
-  final int maxFileUploadSize;
+  final int? maxFileUploadSize;
 
   /// Maximum thumbnail size, in bytes.
-  final int maxThumbnailSize;
+  final int? maxThumbnailSize;
 
   /// Checks whether a user needs to update the security policy.
-  final bool needUpdate;
+  final bool? needUpdate;
 
   /// Storage quota limits and usage of a user,
-  final StorageQuota storageQuota;
+  final StorageQuota? storageQuota;
 
   /// Storage quota limits and usage of a user,
-  final DriveUser user;
+  final DriveUser? user;
 
   /// URL of the web page for updating the security policy.
   ///
   /// When the value of needUpdate is true, a URL is returned to the app. In this
   /// case, the app needs to call a browser to open the user authorization page.
-  final String updateUrl;
+  final String? updateUrl;
 
   DriveAbout({
     this.category,
@@ -54,41 +54,7 @@ class DriveAbout {
     this.updateUrl,
   });
 
-  DriveAbout clone({
-    String category,
-    int maxFileUploadSize,
-    int maxThumbnailSize,
-    bool needUpdate,
-    StorageQuota storageQuota,
-    DriveUser user,
-    String updateUrl,
-  }) {
-    return DriveAbout(
-      category: category ?? this.category,
-      maxFileUploadSize: maxFileUploadSize ?? this.maxFileUploadSize,
-      maxThumbnailSize: maxThumbnailSize ?? this.maxThumbnailSize,
-      needUpdate: needUpdate ?? this.needUpdate,
-      storageQuota: storageQuota ?? this.storageQuota,
-      user: user ?? this.user,
-      updateUrl: updateUrl ?? this.updateUrl,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'category': category,
-      'maxFileUploadSize': maxFileUploadSize,
-      'maxThumbnailSize': maxThumbnailSize,
-      'needUpdate': needUpdate,
-      'storageQuota': storageQuota?.toMap(),
-      'user': user?.toMap(),
-      'updateUrl': updateUrl,
-    };
-  }
-
   factory DriveAbout.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return DriveAbout(
       category: map['category'],
       maxFileUploadSize: map['maxFileUploadSize'] != null
@@ -104,11 +70,22 @@ class DriveAbout {
     );
   }
 
-  String toJson() => json.encode(toMap());
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'category': category,
+      'maxFileUploadSize': maxFileUploadSize,
+      'maxThumbnailSize': maxThumbnailSize,
+      'needUpdate': needUpdate,
+      'storageQuota': storageQuota?.toMap(),
+      'user': user?.toMap(),
+      'updateUrl': updateUrl,
+    };
+  }
 
   factory DriveAbout.fromJson(String source) =>
       DriveAbout.fromMap(json.decode(source));
 
+  String toJson() => json.encode(toMap());
   @override
   String toString() {
     return 'About(category: $category, maxFileUploadSize: $maxFileUploadSize, maxThumbnailSize: $maxThumbnailSize, needUpdate: $needUpdate, storageQuota: $storageQuota, user: $user, updateUrl: $updateUrl)';

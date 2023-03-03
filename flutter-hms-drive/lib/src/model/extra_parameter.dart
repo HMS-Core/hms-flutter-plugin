@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -15,12 +15,10 @@
 */
 
 mixin ExtraParameter {
-  Map<String, dynamic> paramsToSet;
+  Map<String, dynamic>? paramsToSet;
 
-  setParams(String fieldName, dynamic value) {
-    if (paramsToSet == null) {
-      paramsToSet = {};
-    }
-    paramsToSet[fieldName] = value;
+  void setParams(String fieldName, dynamic value) {
+    paramsToSet ??= <String, dynamic>{};
+    paramsToSet?[fieldName] = value;
   }
 }

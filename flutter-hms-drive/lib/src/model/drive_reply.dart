@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -18,36 +18,34 @@ import 'dart:convert';
 
 import 'package:huawei_drive/huawei_drive.dart';
 
-import 'drive_user.dart';
-
 /// File reply class.
 class DriveReply with ExtraParameter {
   /// Operation of replying to a parent comment.
-  String operate;
+  String? operate;
 
   /// User who creates a reply.
-  DriveUser creator;
+  DriveUser? creator;
 
   /// Reply in plain text format.
-  String description;
+  String? description;
 
   /// Reply creation time.
-  DateTime createdTime;
+  DateTime? createdTime;
 
   /// Whether a reply is deleted.
-  bool deleted;
+  bool? deleted;
 
   /// Reply in HTML format.
-  String htmlDescription;
+  String? htmlDescription;
 
   /// Reply ID.
-  String id;
+  String? id;
 
   /// Resource type.
-  String resourceType;
+  String? resourceType;
 
   /// Last modification time of a reply.
-  DateTime editedTime;
+  DateTime? editedTime;
 
   DriveReply({
     this.operate,
@@ -61,47 +59,7 @@ class DriveReply with ExtraParameter {
     this.editedTime,
   });
 
-  DriveReply clone({
-    String operate,
-    DriveUser creator,
-    String description,
-    DateTime createdTime,
-    bool deleted,
-    String htmlDescription,
-    String id,
-    String resourceType,
-    DateTime editedTime,
-  }) {
-    return DriveReply(
-      operate: operate ?? this.operate,
-      creator: creator ?? this.creator,
-      description: description ?? this.description,
-      createdTime: createdTime ?? this.createdTime,
-      deleted: deleted ?? this.deleted,
-      htmlDescription: htmlDescription ?? this.htmlDescription,
-      id: id ?? this.id,
-      resourceType: resourceType ?? this.resourceType,
-      editedTime: editedTime ?? this.editedTime,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'operate': operate,
-      'creator': creator?.toMap(),
-      'description': description,
-      'createdTime': createdTime?.toIso8601String(),
-      'deleted': deleted,
-      'htmlDescription': htmlDescription,
-      'id': id,
-      'resourceType': resourceType,
-      'editedTime': editedTime?.toIso8601String(),
-    };
-  }
-
   factory DriveReply.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return DriveReply(
       operate: map['operate'],
       creator:
@@ -119,11 +77,24 @@ class DriveReply with ExtraParameter {
     );
   }
 
-  String toJson() => json.encode(toMap());
-
   factory DriveReply.fromJson(String source) =>
       DriveReply.fromMap(json.decode(source));
 
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'operate': operate,
+      'creator': creator?.toMap(),
+      'description': description,
+      'createdTime': createdTime?.toIso8601String(),
+      'deleted': deleted,
+      'htmlDescription': htmlDescription,
+      'id': id,
+      'resourceType': resourceType,
+      'editedTime': editedTime?.toIso8601String(),
+    };
+  }
+
+  String toJson() => json.encode(toMap());
   @override
   String toString() {
     return 'Reply(operate: $operate, creator: $creator, description: $description, createdTime: $createdTime, deleted: $deleted, htmlDescription: $htmlDescription, replyID: $id, resourceType: $resourceType, editedTime: $editedTime)';

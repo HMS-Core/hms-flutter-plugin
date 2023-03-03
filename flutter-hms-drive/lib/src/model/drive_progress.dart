@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -15,12 +15,13 @@
 */
 
 import 'dart:convert';
+import 'package:collection/collection.dart';
 
 class DriveProgress {
-  String fileName;
-  double progress;
-  ProgressState state;
-  int totalTimeElapsed;
+  String? fileName;
+  double? progress;
+  ProgressState? state;
+  int? totalTimeElapsed;
 
   DriveProgress({
     this.fileName,
@@ -29,38 +30,11 @@ class DriveProgress {
     this.totalTimeElapsed,
   });
 
-  DriveProgress clone({
-    String fileName,
-    double progress,
-    ProgressState state,
-    int totalTimeElapsed,
-  }) {
-    return DriveProgress(
-      fileName: fileName ?? this.fileName,
-      progress: progress ?? this.progress,
-      state: state ?? this.state,
-      totalTimeElapsed: totalTimeElapsed ?? this.totalTimeElapsed,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'fileName': fileName,
-      'progress': progress,
-      'state': state?.toString(),
-      'totalTimeElapsed': totalTimeElapsed,
-    };
-  }
-
-  //ProgressState.fromMap(map['state'])
-
   factory DriveProgress.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
-    T enumFromString<T>(Iterable<T> values, String value) {
-      return values.firstWhere(
-          (type) => type.toString().split(".").last == value,
-          orElse: () => null);
+    T? enumFromString<T>(Iterable<T?> values, String value) {
+      return values.firstWhereOrNull(
+        (T? type) => type.toString().split('.').last == value,
+      );
     }
 
     return DriveProgress(
@@ -68,16 +42,24 @@ class DriveProgress {
       progress: map['progress'],
       state: map['state'] == null
           ? null
-          : enumFromString(ProgressState.values, map["state"]),
+          : enumFromString<ProgressState>(ProgressState.values, map['state']),
       totalTimeElapsed: map['totalTimeElapsed'],
     );
   }
 
-  String toJson() => json.encode(toMap());
-
   factory DriveProgress.fromJson(String source) =>
       DriveProgress.fromMap(json.decode(source));
 
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'fileName': fileName,
+      'progress': progress,
+      'state': state?.toString(),
+      'totalTimeElapsed': totalTimeElapsed,
+    };
+  }
+
+  String toJson() => json.encode(toMap());
   @override
   String toString() {
     return 'DriveProgress(fileName: $fileName, progress: $progress, state: $state, totalTimeElapsed: $totalTimeElapsed)';

@@ -1,5 +1,5 @@
 /*
-    Copyright 2021. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -21,10 +21,10 @@ class StartCursor {
   /// Resource type.
   ///
   /// The value is always `drive#startCursor`.
-  String category;
+  String? category;
 
   /// Cursor for the start page of file changes.
-  String cursor;
+  String? cursor;
 
   /// Default constructor.
   StartCursor({
@@ -32,37 +32,24 @@ class StartCursor {
     this.cursor,
   });
 
-  /// Clones a StartCursor object.
-  StartCursor clone({
-    String category,
-    String startCursor,
-  }) {
-    return StartCursor(
-      category: category ?? this.category,
-      cursor: startCursor ?? this.cursor,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'category': category,
-      'startCursor': cursor,
-    };
-  }
-
   factory StartCursor.fromMap(Map<String, dynamic> map) {
-    if (map == null) return null;
-
     return StartCursor(
       category: map['category'],
       cursor: map['startCursor'],
     );
   }
 
-  String toJson() => json.encode(toMap());
-
   factory StartCursor.fromJson(String source) =>
       StartCursor.fromMap(json.decode(source));
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'category': category,
+      'startCursor': cursor,
+    };
+  }
+
+  String toJson() => json.encode(toMap());
 
   @override
   String toString() => 'StartCursor(category: $category, startCursor: $cursor)';
