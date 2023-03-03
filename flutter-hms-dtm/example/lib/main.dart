@@ -1,18 +1,18 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import 'dart:async';
 import 'dart:developer' as developer;
@@ -96,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<dynamic> setCustomVariableValue() async {
     await HMSDTM.onEvent(
       'SetPantsPrice',
-      <String, dynamic>{},
+      <String, dynamic>{"discount": 10, "price": 70},
     );
     setState(() => showFourthButton = true);
   }
@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Tooltip(
-          message: 'Flutter Version: 6.6.0+300',
+          message: 'Flutter Version: 6.6.0+303',
           child: Text('HMS DTM Demo'),
         ),
       ),

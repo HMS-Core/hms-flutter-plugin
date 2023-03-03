@@ -1,9 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.huawei.hms.flutter.huawei_dtm_example">
+xmlns:tools="http://schemas.android.com/tools"
+    package="com.huawei.hms.flutter.dtm_example">
+      
    <application
-        android:label="HMS DTM Demo"
-        android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:label="drive_example"
+        android:name="${applicationName}">
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -18,8 +19,10 @@
                  to determine the Window background behind the Flutter UI. -->
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"
-              android:resource="@style/NormalTheme"
-              />
+              android:resource="@style/NormalTheme" />
+              <meta-data
+                      android:name="com.huawei.hms.client.appid"
+                      android:value="com.huawei.hms.flutter.dtm_example" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -30,8 +33,5 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        <meta-data
-            android:name="analyticskit_adsid_collection_enabled"
-            android:value="true" />
     </application>
 </manifest>
