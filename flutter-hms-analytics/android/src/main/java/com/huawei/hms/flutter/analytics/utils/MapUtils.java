@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -120,7 +120,11 @@ public final class MapUtils {
                     Log.e(TAG, "Illegal value type. Key :" + key + ", only one nested bundle structure is allowed.");
                 }
             } else if (val instanceof List) {
-                handleList(bundle, key, (List<?>) val);
+                if(((List<?>) val).size() != 0) {
+                    handleList(bundle, key, (List<?>) val);
+                } else {
+                    Log.e(TAG, "Illegal value type. Key:" + key + ", must not be empty.");
+                }
             } else {
                 throw new IllegalArgumentException(
                     "Illegal value type. Key :" + key + ", valueType : " + val.getClass().getSimpleName());

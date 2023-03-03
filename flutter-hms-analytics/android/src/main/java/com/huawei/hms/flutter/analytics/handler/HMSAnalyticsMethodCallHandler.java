@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -159,6 +159,10 @@ public class HMSAnalyticsMethodCallHandler implements MethodCallHandler {
                 analyticsModule.getInstance(methodCall, result);
                 HMSLogger.getInstance(weakContext.get()).sendSingleEvent(methodCall.method);
                 break;
+            case getDataUploadSiteInfo:
+                analyticsModule.getDataUploadSiteInfo(result);
+                HMSLogger.getInstance(weakContext.get()).sendSingleEvent(methodCall.method);
+                break;
             default:
                 result.error("platformError", "Not supported on Android platform", "");
         }
@@ -192,6 +196,7 @@ public class HMSAnalyticsMethodCallHandler implements MethodCallHandler {
         setChannel,
         setPropertyCollection,
         setCustomReferrer,
-        getInstance
+        getInstance,
+        getDataUploadSiteInfo
     }
 }

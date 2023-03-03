@@ -45,7 +45,7 @@ Please see [pub.dev](https://pub.dev/packages/huawei_analytics/install) and [App
 
 ### Additional Topics
 
-- [Enabling HUAWEI Analytics Service](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/config-agc-0000001050171095#EN-US_TOPIC_0000001050171095__section118755594146?ha_source=hms1)
+- [Enabling Huawei Analytics Service](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/config-agc-0000001050171095#EN-US_TOPIC_0000001050171095__section118755594146?ha_source=hms1)
 - Setup
   - [Android Setup](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/android-setup-0000001058644236?ha_source=hms1)
   - [iOS Setup](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/ios-setup-0000001058804234?ha_source=hms1)

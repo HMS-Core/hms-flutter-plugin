@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -253,6 +253,10 @@ public class HMSAnalyticsModule {
         result.success(null);
     }
 
+    public void getDataUploadSiteInfo(Result result) {
+        viewModel.getDataUploadSiteInfo(new HMSAnalyticsModule.HMSAnalyticsResultHandler<>(result, "getDataUploadSiteInfo", weakContext));
+    }
+
     /* Private Inner Class */
 
     private Set<ReportPolicy> mapToSetReportPolicy(Map<String, Object> reportPolicies) {
@@ -317,9 +321,9 @@ public class HMSAnalyticsModule {
      */
     private static final class HMSAnalyticsResultHandler<Object>
             implements HMSAnalyticsContract.ResultListener<Object> {
-        private Result mResult;
-        private String mMethodName;
-        private WeakReference<Context> mWeakContext;
+        private final Result mResult;
+        private final String mMethodName;
+        private final WeakReference<Context> mWeakContext;
 
         HMSAnalyticsResultHandler(final Result result, String methodName, WeakReference<Context> weakContext) {
             this.mResult = result;

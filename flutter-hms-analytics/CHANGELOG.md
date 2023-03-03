@@ -1,3 +1,10 @@
+## 6.9.0+302
+
+- Added the **getDataUploadSiteInfo** API to the HiAnalyticsInstance class to support the Global Router Service (GRS) function.
+
+- **Breaking Changes:**
+  - Modified the internal structure of the plugin. Please use import **package:huawei_analytics/huawei_analytics.dart** not to get any errors.
+
 ## 6.5.0+301
 
 - **Breaking Change:** Added the `getInstance({String routePolicy})` method. With this version `getInstance` method must be called from the application to initialize plugin in iOS platform.

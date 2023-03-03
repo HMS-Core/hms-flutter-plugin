@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -23,14 +23,6 @@ import com.huawei.hms.analytics.type.ReportPolicy;
 import java.util.Map;
 import java.util.Set;
 
-import io.flutter.plugin.common.MethodCall;
-import io.flutter.plugin.common.MethodChannel;
-
-/**
- * HMSAnalyticsContract defines a blueprint of {@link HMSAnalyticsModule} methods that will be exposed to Flutter Side.
- *
- * @since v.5.1.0
- */
 public interface HMSAnalyticsContract {
     /**
      * Defines blueprints of {@link HMSAnalyticsViewModel} methods
@@ -174,20 +166,20 @@ public interface HMSAnalyticsContract {
         void getReportPolicyThreshold(final HMSAnalyticsContract.ResultListener<Long> resultListener, ReportPolicy reportPolicyType);
 
         /**
-         * Specifies whether to enable restriction of HUAWEI Analytics.
+         * Specifies whether to enable restriction of Huawei Analytics.
          * <p>
-         * The default value is false, which indicates that HUAWEI Analytics is enabled by default.
+         * The default value is false, which indicates that Huawei Analytics is enabled by default.
          *
-         * @param isEnabled: Indicates whether to enable restriction of HUAWEI Analytics.
+         * @param isEnabled: Indicates whether to enable restriction of Huawei Analytics.
          */
         void setRestrictionEnabled(final boolean isEnabled);
 
         /**
-         * Obtains the restriction status of HUAWEI Analytics.
+         * Obtains the restriction status of Huawei Analytics.
          *
          * @param resultListener: In the success scenario, {@link HMSAnalyticsContract.ResultListener<Boolean>} instance
          *                        is returned via listener. {@param resultListener} that obtains the restriction status
-         *                        of HUAWEI Analytics.
+         *                        of Huawei Analytics.
          */
         void isRestrictionEnabled(final HMSAnalyticsContract.ResultListener<Boolean> resultListener);
 
@@ -261,6 +253,15 @@ public interface HMSAnalyticsContract {
          * Enables the debug log function and sets the minimum log level. Default log level DEBUG.
          */
         void enableLog();
+
+        /**
+         * Obtains the app instance ID from AppGallery Connect.
+         *
+         * @param resultListener: In the success scenario, {@link HMSAnalyticsContract.ResultListener<String>} instance
+         *                        is returned via listener. {@param resultListener} that obtains the processing location
+         *                        of the uploaded data.
+         */
+        void getDataUploadSiteInfo(final HMSAnalyticsContract.ResultListener<String> resultListener);
 
     }
 

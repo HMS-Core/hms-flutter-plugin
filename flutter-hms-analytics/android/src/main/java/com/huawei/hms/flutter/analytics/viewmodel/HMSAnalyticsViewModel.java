@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -29,11 +29,6 @@ import com.huawei.hms.flutter.analytics.presenter.HMSAnalyticsContract.ResultLis
 import java.util.Map;
 import java.util.Set;
 
-/**
- * HMSAnalyticsViewModel works as a mediator between {@link HMSAnalyticsContract.Presenter} .
- *
- * @since v.5.1.0
- */
 public class HMSAnalyticsViewModel implements HMSAnalyticsContract.Presenter {
 
     // HiAnalytics instance
@@ -170,6 +165,10 @@ public class HMSAnalyticsViewModel implements HMSAnalyticsContract.Presenter {
         HiAnalyticsTools.enableLog();
     }
 
+    @Override
+    public void getDataUploadSiteInfo(ResultListener<String> resultListener) {
+        resultListener.onSuccess(analyticsInstance.getDataUploadSiteInfo());
+    }
 
 }
 

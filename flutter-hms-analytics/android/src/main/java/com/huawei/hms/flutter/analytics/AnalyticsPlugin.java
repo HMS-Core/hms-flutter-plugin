@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -27,16 +27,10 @@ import java.lang.ref.WeakReference;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugin.common.PluginRegistry;
 
 public class AnalyticsPlugin implements FlutterPlugin {
     private HMSAnalyticsMethodCallHandler analyticsMethodCallHandler;
     private MethodChannel channel;
-
-    public static void registerWith(PluginRegistry.Registrar registrar) {
-        final AnalyticsPlugin instance = new AnalyticsPlugin();
-        instance.onAttachedToEngine(registrar.context(), registrar.messenger());
-    }
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {

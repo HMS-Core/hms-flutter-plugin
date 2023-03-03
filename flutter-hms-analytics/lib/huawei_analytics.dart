@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,10 +14,15 @@
     limitations under the License.
 */
 
-library huawei_analytics_lib;
+library huawei_analytics;
+
+import 'dart:async';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 
 /// Analytics Service
-export 'src/hms_analytics.dart';
+part 'src/hms_analytics.dart';
 
 /// Constants
-export 'src/constants/analytics_constants.dart';
+part 'src/constants/analytics_constants.dart';
