@@ -1,0 +1,22 @@
+name: huawei_modeling3d_example
+description: Demonstrates how to use the huawei_modeling3d plugin.
+
+environment:
+  sdk: '>=2.12.0 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  huawei_modeling3d:
+    path: ../
+  path_provider: 2.0.12
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/material_generation_images/
+    - assets/3D_reconstruction_images/

@@ -1,0 +1,54 @@
+group 'com.huawei.hms.flutter.modeling3d'
+version '1.0'
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://developer.huawei.com/repo/' }
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.6.0'
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://developer.huawei.com/repo/' }
+    }
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        minSdkVersion 26
+        targetSdkVersion 30
+    }
+
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation 'com.huawei.hms:modeling3d-material-generate:1.7.0.301'
+    implementation 'com.huawei.hms:modeling3d-object-reconstruct:1.8.0.300'
+    implementation 'com.huawei.hms:modeling3d-objectreconstruct-slam:1.7.0.301'
+    implementation 'com.huawei.hms:modeling3d-motion-capture:1.7.0.301'
+    implementation 'com.huawei.hms:modeling3d-motion-capture-model:1.7.0.301'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.6'
+    implementation 'com.huawei.hms:stats:6.6.0.300'
+}
