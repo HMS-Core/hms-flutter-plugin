@@ -1,18 +1,18 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.map.map;
 
@@ -79,11 +79,7 @@ class MapUtils {
         heatMapUtils = new HeatMapUtils(mChannel, application);
     }
 
-    void init(final HuaweiMap huaweiMap, final List<HashMap<String, Object>> initMarkers,
-        final List<HashMap<String, Object>> initPolylines, final List<HashMap<String, Object>> initPolygons,
-        final List<HashMap<String, Object>> initCircles, final List<HashMap<String, Object>> initGroundOverlays,
-        final List<HashMap<String, Object>> initTileOverlays, final List<HashMap<String, Object>> initHeatMaps,
-        final boolean markersClustering, final BinaryMessenger messenger) {
+    void init(final HuaweiMap huaweiMap, final List<HashMap<String, Object>> initMarkers, final List<HashMap<String, Object>> initPolylines, final List<HashMap<String, Object>> initPolygons, final List<HashMap<String, Object>> initCircles, final List<HashMap<String, Object>> initGroundOverlays, final List<HashMap<String, Object>> initTileOverlays, final List<HashMap<String, Object>> initHeatMaps, final boolean markersClustering, final BinaryMessenger messenger) {
         this.huaweiMap = huaweiMap;
         markersUtils.setMap(huaweiMap);
         polylineUtils.setMap(huaweiMap);
@@ -93,15 +89,10 @@ class MapUtils {
         tileOverlayUtils.setMap(huaweiMap);
         heatMapUtils.setMap(huaweiMap);
         huaweiMap.setMarkersClustering(markersClustering);
-        initComponents(initMarkers, initPolylines, initPolygons, initCircles, initGroundOverlays, initTileOverlays,
-            initHeatMaps, messenger);
+        initComponents(initMarkers, initPolylines, initPolygons, initCircles, initGroundOverlays, initTileOverlays, initHeatMaps, messenger);
     }
 
-    void initComponents(final List<HashMap<String, Object>> initMarkers,
-        final List<HashMap<String, Object>> initPolylines, final List<HashMap<String, Object>> initPolygons,
-        final List<HashMap<String, Object>> initCircles, final List<HashMap<String, Object>> initGroundOverlays,
-        final List<HashMap<String, Object>> initTileOverlays, final List<HashMap<String, Object>> initHeatMaps,
-        final BinaryMessenger messenger) {
+    void initComponents(final List<HashMap<String, Object>> initMarkers, final List<HashMap<String, Object>> initPolylines, final List<HashMap<String, Object>> initPolygons, final List<HashMap<String, Object>> initCircles, final List<HashMap<String, Object>> initGroundOverlays, final List<HashMap<String, Object>> initTileOverlays, final List<HashMap<String, Object>> initHeatMaps, final BinaryMessenger messenger) {
         this.messenger = messenger;
         initMarkers(initMarkers);
         initPolylines(initPolylines);
@@ -159,8 +150,7 @@ class MapUtils {
     void onMethodCallCamera(final MethodCall call, final MethodChannel.Result result) {
         switch (call.method) {
             case Method.CAMERA_ANIMATE: {
-                final CameraUpdate cameraUpdate = Convert.toCameraUpdate(call.argument(Param.CAMERA_UPDATE),
-                    compactness);
+                final CameraUpdate cameraUpdate = Convert.toCameraUpdate(call.argument(Param.CAMERA_UPDATE), compactness);
                 animateCamera(cameraUpdate);
                 result.success(true);
                 break;
@@ -168,9 +158,7 @@ class MapUtils {
             case Method.MAP_SET_STYLE: {
                 final String mapStyle = (String) call.arguments;
                 logger.startMethodExecutionTimer(Method.MAP_SET_STYLE);
-                final boolean mapStyleSet = mapStyle == null
-                    ? huaweiMap.setMapStyle(null)
-                    : huaweiMap.setMapStyle(new MapStyleOptions(mapStyle));
+                final boolean mapStyleSet = mapStyle == null ? huaweiMap.setMapStyle(null) : huaweiMap.setMapStyle(new MapStyleOptions(mapStyle));
                 final ArrayList<Object> mapStyleResult = new ArrayList<>();
                 mapStyleResult.add(mapStyleSet);
                 if (!mapStyleSet) {
@@ -288,6 +276,12 @@ class MapUtils {
                 logger.startMethodExecutionTimer(Method.MAP_IS_COMPASS_ENABLED);
                 result.success(huaweiMap.getUiSettings().isCompassEnabled());
                 logger.sendSingleEvent(Method.MAP_IS_COMPASS_ENABLED);
+                break;
+            }
+            case Method.MAP_IS_DARK: {
+                logger.startMethodExecutionTimer(Method.MAP_IS_DARK);
+                result.success(huaweiMap.isDark());
+                logger.sendSingleEvent(Method.MAP_IS_DARK);
                 break;
             }
             case Method.MAP_IS_MAP_TOOLBAR_ENABLED: {

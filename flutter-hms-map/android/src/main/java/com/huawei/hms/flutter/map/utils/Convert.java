@@ -1,18 +1,18 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.map.utils;
 
@@ -101,19 +101,17 @@ public class Convert {
         final Map<Float, Integer> result = new HashMap<>();
 
         for (Map.Entry<?, ?> entry : args.entrySet()) {
-            result.put(Convert.toFloatWrapper(entry.getKey()),
-                    toIntegerWrapper(Long.parseLong((String) entry.getValue())));
+            result.put(Convert.toFloatWrapper(entry.getKey()), toIntegerWrapper(Long.parseLong((String) entry.getValue())));
         }
         return result;
     }
 
-    private static Map<Float, Float> toFloatMap(final Object o){
+    private static Map<Float, Float> toFloatMap(final Object o) {
         final Map<?, ?> args = Convert.toMap(o);
         final Map<Float, Float> result = new HashMap<>();
 
         for (Map.Entry<?, ?> entry : args.entrySet()) {
-            result.put(Convert.toFloatWrapper(entry.getKey()),
-                    Convert.toFloatWrapper(entry.getValue()));
+            result.put(Convert.toFloatWrapper(entry.getKey()), Convert.toFloatWrapper(entry.getValue()));
         }
         return result;
 
@@ -155,7 +153,7 @@ public class Convert {
     public static LatLng[] toLatLngList(final Object o) {
         final List<?> data = Convert.toList(o);
         LatLng[] result = new LatLng[data.size()];
-        for(int i = 0; i<data.size(); i++){
+        for (int i = 0; i < data.size(); i++) {
             result[i] = Convert.toLatLng(data.get(i));
         }
         return result;
@@ -186,16 +184,13 @@ public class Convert {
                 }
             case Param.FROM_ASSET:
                 if (data.size() == 2) {
-                    return BitmapDescriptorFactory.fromAsset(
-                        FlutterMain.getLookupKeyForAsset(Convert.toString(data.get(1))));
+                    return BitmapDescriptorFactory.fromAsset(FlutterMain.getLookupKeyForAsset(Convert.toString(data.get(1))));
                 } else {
-                    return BitmapDescriptorFactory.fromAsset(
-                        FlutterMain.getLookupKeyForAsset(Convert.toString(data.get(1)), Convert.toString(data.get(2))));
+                    return BitmapDescriptorFactory.fromAsset(FlutterMain.getLookupKeyForAsset(Convert.toString(data.get(1)), Convert.toString(data.get(2))));
                 }
             case Param.FROM_ASSET_IMAGE:
                 if (data.size() == 3) {
-                    return BitmapDescriptorFactory.fromAsset(
-                        FlutterMain.getLookupKeyForAsset(Convert.toString(data.get(1))));
+                    return BitmapDescriptorFactory.fromAsset(FlutterMain.getLookupKeyForAsset(Convert.toString(data.get(1))));
                 } else {
                     throw new IllegalArgumentException(Param.ERROR);
                 }
@@ -237,13 +232,11 @@ public class Convert {
             case Param.NEW_LAT_LNG:
                 return CameraUpdateFactory.newLatLng(toLatLng(data.get(1)));
             case Param.NEW_LAT_LNG_BOUNDS:
-                return CameraUpdateFactory.newLatLngBounds(toLatLngBounds(data.get(1)),
-                    toPixels(data.get(2), compactness));
+                return CameraUpdateFactory.newLatLngBounds(toLatLngBounds(data.get(1)), toPixels(data.get(2), compactness));
             case Param.NEW_LAT_LNG_ZOOM:
                 return CameraUpdateFactory.newLatLngZoom(toLatLng(data.get(1)), Convert.toFloat(data.get(2)));
             case Param.SCROLL_BY:
-                return CameraUpdateFactory.scrollBy(toFinePixels(data.get(1), compactness),
-                    toFinePixels(data.get(2), compactness));
+                return CameraUpdateFactory.scrollBy(toFinePixels(data.get(1), compactness), toFinePixels(data.get(2), compactness));
             case Param.ZOOM_BY:
                 if (data.size() == 2) {
                     return CameraUpdateFactory.zoomBy(Convert.toFloat(data.get(1)));
@@ -302,8 +295,7 @@ public class Convert {
             final HashMap<List<Integer>, String> mapTypeTwo = new HashMap<>();
             for (int i = 0; i < tileProvidersData.length(); i++) {
                 final JSONObject obj = tileProvidersData.getJSONObject(i);
-                final List<Integer> set = Arrays.asList(obj.optInt(Param.X), obj.optInt(Param.Y),
-                    obj.optInt(Param.ZOOM));
+                final List<Integer> set = Arrays.asList(obj.optInt(Param.X), obj.optInt(Param.Y), obj.optInt(Param.ZOOM));
                 mapTypeTwo.put(set, obj.optString(Param.IMAGE_DATA));
             }
             tileProvider = (x, y, zoom) -> {
@@ -335,9 +327,7 @@ public class Convert {
                         final String uri = (String) obj.get(Param.URI);
                         if (uri != null) {
                             try {
-                                return new URL(uri.replace("{x}", String.valueOf(x))
-                                    .replace("{y}", String.valueOf(y))
-                                    .replace("{z}", String.valueOf(zoom)));
+                                return new URL(uri.replace("{x}", String.valueOf(x)).replace("{y}", String.valueOf(y)).replace("{z}", String.valueOf(zoom)));
                             } catch (final MalformedURLException e) {
                                 Log.w("UrlTileProvider", e.getMessage());
                                 return null;
@@ -378,8 +368,7 @@ public class Convert {
         }
     }
 
-    public static String processMarkerOptions(final Object o, final MarkerMethods call,
-        final BinaryMessenger messenger) {
+    public static String processMarkerOptions(final Object o, final MarkerMethods call, final BinaryMessenger messenger) {
         final Map<?, ?> data = Convert.toMap(o);
         final Object infoWindow = data.get(Param.INFO_WINDOW);
         if (infoWindow != null) {
@@ -465,14 +454,13 @@ public class Convert {
                 animationSet.addAnimation(processAnimationOptions(element, messenger));
             }
         } catch (final JSONException e) {
-            e.printStackTrace();
+            Log.e("Convert", e.getMessage());
         }
 
         return animationSet;
     }
 
-    public static Animation processAnimationOptions(final Object o, final BinaryMessenger messenger)
-        throws JSONException {
+    public static Animation processAnimationOptions(final Object o, final BinaryMessenger messenger) throws JSONException {
         final JSONObject data = (JSONObject) o;
 
         Animation animation = null;
@@ -496,8 +484,7 @@ public class Convert {
                 final Object toX = data.get(Param.TO_X);
                 final Object fromY = data.get(Param.FROM_Y);
                 final Object toY = data.get(Param.TO_Y);
-                animation = new ScaleAnimation(Convert.toFloat(fromX), Convert.toFloat(toX), Convert.toFloat(fromY),
-                    Convert.toFloat(toY));
+                animation = new ScaleAnimation(Convert.toFloat(fromX), Convert.toFloat(toX), Convert.toFloat(fromY), Convert.toFloat(toY));
                 break;
             case "HmsTranslateAnimation":
                 final JSONArray latLng = (JSONArray) data.get(Param.LAT_LNG);
@@ -589,6 +576,11 @@ public class Convert {
             call.setCompassEnabled(Convert.toBoolean(compassEnabled));
         }
 
+        final Object isDark = args.get(Param.IS_DARK);
+        if (isDark != null) {
+            call.setDark(Convert.toBoolean(isDark));
+        }
+
         final Object mapToolbarEnabled = args.get(Param.MAP_TOOLBAR_ENABLED);
         if (mapToolbarEnabled != null) {
             call.setMapToolbarEnabled(Convert.toBoolean(mapToolbarEnabled));
@@ -602,15 +594,13 @@ public class Convert {
         final Object minMaxZoomPreference = args.get(Param.MIN_MAX_ZOOM_PREFERENCE);
         if (minMaxZoomPreference != null) {
             final List<?> zoomPreferenceData = Convert.toList(minMaxZoomPreference);
-            call.setMinMaxZoomPreference(Convert.toFloatWrapper(zoomPreferenceData.get(0)),
-                Convert.toFloatWrapper(zoomPreferenceData.get(1)));
+            call.setMinMaxZoomPreference(Convert.toFloatWrapper(zoomPreferenceData.get(0)), Convert.toFloatWrapper(zoomPreferenceData.get(1)));
         }
 
         final Object padding = args.get(Param.PADDING);
         if (padding != null) {
             final List<?> paddingData = Convert.toList(padding);
-            call.setPadding(Convert.toFloat(paddingData.get(0)), Convert.toFloat(paddingData.get(1)),
-                Convert.toFloat(paddingData.get(2)), Convert.toFloat(paddingData.get(3)));
+            call.setPadding(Convert.toFloat(paddingData.get(0)), Convert.toFloat(paddingData.get(1)), Convert.toFloat(paddingData.get(2)), Convert.toFloat(paddingData.get(3)));
         }
 
         final Object trackCameraPosition = args.get(Param.TRACK_CAMERA_POSITION);
@@ -653,11 +643,9 @@ public class Convert {
             call.setAllGesturesEnabled(Convert.toBoolean(allGesturesEnabled));
         }
 
-        final Object isScrollGesturesEnabledDuringRotateOrZoom = args.get(
-            Param.IS_SCROLL_GESTURES_ENABLED_DURING_ROTATE_OR_ZOOM);
+        final Object isScrollGesturesEnabledDuringRotateOrZoom = args.get(Param.IS_SCROLL_GESTURES_ENABLED_DURING_ROTATE_OR_ZOOM);
         if (isScrollGesturesEnabledDuringRotateOrZoom != null) {
-            call.setScrollGesturesEnabledDuringRotateOrZoom(
-                Convert.toBoolean(isScrollGesturesEnabledDuringRotateOrZoom));
+            call.setScrollGesturesEnabledDuringRotateOrZoom(Convert.toBoolean(isScrollGesturesEnabledDuringRotateOrZoom));
         }
 
         final Object gestureScaleByMapCenter = args.get(Param.GESTURE_SCALE_BY_MAP_CENTER);
@@ -693,8 +681,7 @@ public class Convert {
         final Object logoPadding = args.get(Param.LOGO_PADDING);
         if (logoPadding != null) {
             final List<?> paddingData = Convert.toList(logoPadding);
-            call.setLogoPadding(Convert.toInt(paddingData.get(1)), Convert.toInt(paddingData.get(0)),
-                Convert.toInt(paddingData.get(3)), Convert.toInt(paddingData.get(2)));
+            call.setLogoPadding(Convert.toInt(paddingData.get(1)), Convert.toInt(paddingData.get(0)), Convert.toInt(paddingData.get(3)), Convert.toInt(paddingData.get(2)));
         }
 
         final Object previewId = args.get(Param.PREVIEW_ID);
@@ -990,7 +977,7 @@ public class Convert {
             try {
                 call.setTileProvider(Convert.toTileProvider(tileProvider));
             } catch (final JSONException e) {
-                e.printStackTrace();
+                Log.e("Convert", e.getMessage());
             }
         }
 
@@ -1022,22 +1009,22 @@ public class Convert {
         }
     }
 
-    public static String processHeatMapOptions(final Object o, final HeatMapMethods call){
+    public static String processHeatMapOptions(final Object o, final HeatMapMethods call) {
         final Map<?, ?> data = Convert.toMap(o);
 
         final Object color = data.get(Param.COLOR);
-        if (color != null ){
+        if (color != null) {
             call.setColor(Convert.toColorMap(color));
         }
 
         final Object resourceId = data.get(Param.RESOURCE_ID);
-        if (resourceId != null){
+        if (resourceId != null) {
             call.setDataSet(Convert.toInt(resourceId));
             call.setResourceId(Convert.toInt(resourceId));
         }
 
         final Object jsonData = data.get(Param.JSON_DATA);
-        if (jsonData != null){
+        if (jsonData != null) {
             call.setDataSet(Convert.toString(jsonData));
         }
 
@@ -1047,17 +1034,17 @@ public class Convert {
         }
 
         final Object intensityMap = data.get(Param.INTENSITY_MAP);
-        if(intensityMap != null){
+        if (intensityMap != null) {
             call.setIntensity(Convert.toFloatMap(intensityMap));
         }
 
         final Object opacity = data.get(Param.OPACITY);
-        if(opacity != null){
+        if (opacity != null) {
             call.setOpacity(Convert.toFloat(opacity));
         }
 
         final Object opacityMap = data.get(Param.OPACITY_MAP);
-        if (opacityMap != null){
+        if (opacityMap != null) {
             call.setOpacity(Convert.toFloatMap(opacityMap));
         }
 
@@ -1067,13 +1054,13 @@ public class Convert {
         }
 
         final Object radiusMap = data.get(Param.RADIUS_MAP);
-        if (radiusMap != null){
+        if (radiusMap != null) {
             call.setRadius(Convert.toFloatMap(radiusMap));
         }
 
         final Object radiusUnitInt = data.get(Param.RADIUS_UNIT);
-        if (radiusUnitInt != null){
-            switch (Convert.toInt(radiusUnitInt)){
+        if (radiusUnitInt != null) {
+            switch (Convert.toInt(radiusUnitInt)) {
                 case 0:
                     call.setRadiusUnit(HeatMapOptions.RadiusUnit.PIXEL);
                     break;

@@ -1,18 +1,18 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.map.map;
 
@@ -63,11 +63,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-final class MapController
-    implements MapMethods, MethodChannel.MethodCallHandler, OnMapReadyCallback, DefaultLifecycleObserver,
-    Application.ActivityLifecycleCallbacks, PlatformView, ActivityPluginBinding.OnSaveInstanceStateListener,
-    LocationSource {
-
+final class MapController implements MapMethods, MethodChannel.MethodCallHandler, OnMapReadyCallback, DefaultLifecycleObserver, Application.ActivityLifecycleCallbacks, PlatformView, ActivityPluginBinding.OnSaveInstanceStateListener, LocationSource {
     private final AtomicInteger activityState;
 
     private final MethodChannel methodChannel;
@@ -150,9 +146,7 @@ final class MapController
 
     private LocationSource.OnLocationChangedListener locationChangedListener;
 
-    MapController(final int id, final Context context, final Activity mActivity, final AtomicInteger activityState,
-        final BinaryMessenger binaryMessenger, final Application application, final Lifecycle lifecycle,
-        final PluginRegistry.Registrar registrar, final int registrarActivityHashCode, final HuaweiMapOptions options) {
+    MapController(final int id, final Context context, final Activity mActivity, final AtomicInteger activityState, final BinaryMessenger binaryMessenger, final Application application, final Lifecycle lifecycle, final PluginRegistry.Registrar registrar, final int registrarActivityHashCode, final HuaweiMapOptions options) {
         this.context = context;
         this.activityState = activityState;
         mapView = new MapView(mActivity, options);
@@ -222,15 +216,16 @@ final class MapController
     }
 
     @Override
-    public void onMethodCall(final MethodCall call, final MethodChannel.Result result) {
+    public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         switch (call.method) {
-            case Method.MAP_WAIT_FOR_MAP:
+            case Method.MAP_WAIT_FOR_MAP: {
                 if (huaweiMap != null) {
                     result.success(null);
                     return;
                 }
                 mapReadyResult = result;
                 break;
+            }
             case Method.MAP_UPDATE: {
                 Convert.processHuaweiMapOptions(call.argument(Param.OPTIONS), this);
                 logger.startMethodExecutionTimer("getCameraPosition");
@@ -277,8 +272,7 @@ final class MapController
                 break;
             }
             case Method.CAMERA_MOVE: {
-                final CameraUpdate cameraUpdate = Convert.toCameraUpdate(call.argument(Param.CAMERA_UPDATE),
-                    compactness);
+                final CameraUpdate cameraUpdate = Convert.toCameraUpdate(call.argument(Param.CAMERA_UPDATE), compactness);
                 mapUtils.moveCamera(cameraUpdate);
                 result.success(null);
                 break;
@@ -300,20 +294,22 @@ final class MapController
                 }
                 break;
             }
-            case Method.STOP_ANIMATION:
+            case Method.STOP_ANIMATION: {
                 logger.startMethodExecutionTimer(Method.STOP_ANIMATION);
                 huaweiMap.stopAnimation();
                 logger.sendSingleEvent(Method.STOP_ANIMATION);
                 break;
-            case Method.SET_LOCATION_SOURCE:
+            }
+            case Method.SET_LOCATION_SOURCE: {
                 logger.startMethodExecutionTimer(Method.SET_LOCATION_SOURCE);
                 huaweiMap.setLocationSource(this);
                 logger.sendSingleEvent(Method.SET_LOCATION_SOURCE);
                 break;
-            case Method.SET_LOCATION:
+            }
+            case Method.SET_LOCATION: {
                 logger.startMethodExecutionTimer(Method.SET_LOCATION);
-                LatLng latLng = Convert.toLatLng(call.arguments);
                 if (locationChangedListener != null) {
+                    final LatLng latLng = Convert.toLatLng(call.arguments);
                     locationChangedListener.onLocationChanged(getLocation(latLng));
                     logger.sendSingleEvent(Method.SET_LOCATION);
                 } else {
@@ -321,11 +317,13 @@ final class MapController
                     logger.sendSingleEvent(Method.SET_LOCATION, "locationSourceError");
                 }
                 break;
-            case Method.DEACTIVATE_LOC_SOURCE:
+            }
+            case Method.DEACTIVATE_LOC_SOURCE: {
                 logger.startMethodExecutionTimer(Method.DEACTIVATE_LOC_SOURCE);
                 this.deactivate();
                 logger.sendSingleEvent(Method.DEACTIVATE_LOC_SOURCE);
                 break;
+            }
             default:
                 mapUtils.onMethodCallCamera(call, result);
         }
@@ -354,13 +352,11 @@ final class MapController
         logger.sendSingleEvent("MapController-setMarkersClustering");
 
         logger.startMethodExecutionTimer("MapController-setPadding");
-        this.huaweiMap.setPadding((int) (padding.left * compactness), (int) (padding.top * compactness),
-            (int) (padding.right * compactness), (int) (padding.bottom * compactness));
+        this.huaweiMap.setPadding((int) (padding.left * compactness), (int) (padding.top * compactness), (int) (padding.right * compactness), (int) (padding.bottom * compactness));
         logger.sendSingleEvent("MapController-setPadding");
 
         logger.startMethodExecutionTimer("MapController-setScrollGesturesEnabledDuringRotateOrZoom");
-        this.huaweiMap.getUiSettings()
-            .setScrollGesturesEnabledDuringRotateOrZoom(isScrollGesturesEnabledDuringRotateOrZoom);
+        this.huaweiMap.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(isScrollGesturesEnabledDuringRotateOrZoom);
         logger.sendSingleEvent("MapController-setScrollGesturesEnabledDuringRotateOrZoom");
 
         logger.startMethodExecutionTimer("MapController-setGestureScaleByMapCenter");
@@ -376,13 +372,11 @@ final class MapController
             this.huaweiMap.getUiSettings().setMarkerClusterTextColor(clusterMarkerTextColor);
             logger.sendSingleEvent("MapController-setMarkerClusterTextColor");
         }
-
         if (clusterMarkerColor != null) {
             logger.startMethodExecutionTimer("MapController-setMarkerClusterColor");
             this.huaweiMap.getUiSettings().setMarkerClusterColor(clusterMarkerColor);
             logger.sendSingleEvent("MapController-setMarkerClusterColor");
         }
-
         if (pointToCenter != null) {
             logger.startMethodExecutionTimer("MapController-setPointToCenter");
             this.huaweiMap.setPointToCenter(pointToCenter.x, pointToCenter.y);
@@ -394,9 +388,7 @@ final class MapController
         logger.sendSingleEvent("MapController-setLogoPosition");
 
         logger.startMethodExecutionTimer("MapController-setLogoPadding");
-        huaweiMap.getUiSettings()
-            .setLogoPadding((int) (logoPadding.left * compactness), (int) (logoPadding.top * compactness),
-                (int) (logoPadding.right * compactness), (int) (logoPadding.bottom * compactness));
+        huaweiMap.getUiSettings().setLogoPadding((int) (logoPadding.left * compactness), (int) (logoPadding.top * compactness), (int) (logoPadding.right * compactness), (int) (logoPadding.bottom * compactness));
         logger.sendSingleEvent("MapController-setLogoPadding");
 
         if (mapReadyResult != null) {
@@ -404,8 +396,7 @@ final class MapController
             mapReadyResult = null;
         }
         mapListenerHandler.init(huaweiMap);
-        mapUtils.init(huaweiMap, initMarkers, initPolylines, initPolygons, initCircles, initGroundOverlays,
-            initTileOverlays, initHeatMaps, markersClustering, messenger);
+        mapUtils.init(huaweiMap, initMarkers, initPolylines, initPolygons, initCircles, initGroundOverlays, initTileOverlays, initHeatMaps, markersClustering, messenger);
         updateMyLocationSettings();
     }
 
@@ -414,7 +405,6 @@ final class MapController
         if (disposed) {
             return;
         }
-
         disposed = true;
         methodChannel.setMethodCallHandler(null);
         mapListenerHandler.setMapListener(null);
@@ -433,6 +423,13 @@ final class MapController
         logger.startMethodExecutionTimer("MapController-setCompassEnabled");
         huaweiMap.getUiSettings().setCompassEnabled(compassEnabled);
         logger.sendSingleEvent("MapController-setCompassEnabled");
+    }
+
+    @Override
+    public void setDark(boolean isDark) {
+        logger.startMethodExecutionTimer("MapController-setDark");
+        huaweiMap.setDark(isDark);
+        logger.sendSingleEvent("MapController-setDark");
     }
 
     @Override
@@ -500,10 +497,8 @@ final class MapController
         if (huaweiMap == null) {
             return;
         }
-
         logger.startMethodExecutionTimer("MapController-setPadding");
-        huaweiMap.setPadding((int) (left * compactness), (int) (top * compactness), (int) (right * compactness),
-            (int) (bottom * compactness));
+        huaweiMap.setPadding((int) (left * compactness), (int) (top * compactness), (int) (right * compactness), (int) (bottom * compactness));
         logger.sendSingleEvent("MapController-setPadding");
     }
 
@@ -519,7 +514,6 @@ final class MapController
         if (this.myLocationEnabled == myLocationEnabled) {
             return;
         }
-
         this.myLocationEnabled = myLocationEnabled;
         if (huaweiMap != null) {
             updateMyLocationSettings();
@@ -531,7 +525,6 @@ final class MapController
         if (this.myLocationButtonEnabled == myLocationButtonEnabled) {
             return;
         }
-
         this.myLocationButtonEnabled = myLocationButtonEnabled;
         if (huaweiMap != null) {
             updateMyLocationSettings();
@@ -544,7 +537,6 @@ final class MapController
         if (this.zoomControlsEnabled == zoomControlsEnabled) {
             return;
         }
-
         this.zoomControlsEnabled = zoomControlsEnabled;
         if (huaweiMap != null) {
             logger.startMethodExecutionTimer("MapController-setZoomControlsEnabled");
@@ -602,9 +594,9 @@ final class MapController
     }
 
     @Override
-    public void setHeatMaps(final List<HashMap<String, Object>> initHeatMaps){
+    public void setHeatMaps(final List<HashMap<String, Object>> initHeatMaps) {
         this.initHeatMaps = initHeatMaps;
-        if(huaweiMap != null){
+        if (huaweiMap != null) {
             mapUtils.initHeatMaps(initHeatMaps);
         }
     }
@@ -651,8 +643,7 @@ final class MapController
         this.isScrollGesturesEnabledDuringRotateOrZoom = scrollGesturesEnabledDuringRotateOrZoom;
         if (huaweiMap != null) {
             logger.startMethodExecutionTimer("MapController-setScrollGesturesEnabledDuringRotateOrZoom");
-            huaweiMap.getUiSettings()
-                .setScrollGesturesEnabledDuringRotateOrZoom(scrollGesturesEnabledDuringRotateOrZoom);
+            huaweiMap.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(scrollGesturesEnabledDuringRotateOrZoom);
             logger.sendSingleEvent("MapController-setScrollGesturesEnabledDuringRotateOrZoom");
         }
     }
@@ -686,7 +677,6 @@ final class MapController
         if (color == null) {
             return;
         }
-
         this.clusterMarkerColor = color;
         if (huaweiMap != null) {
             logger.startMethodExecutionTimer("MapController-setMarkerClusterColor");
@@ -700,7 +690,6 @@ final class MapController
         if (color == null) {
             return;
         }
-
         this.clusterMarkerTextColor = color;
         if (huaweiMap != null) {
             logger.startMethodExecutionTimer("MapController-setMarkerClusterTextColor");
@@ -722,7 +711,6 @@ final class MapController
     @Override
     public void setLogoPosition(int logoPosition) {
         this.logoPosition = logoPosition;
-
         if (huaweiMap != null) {
             logger.startMethodExecutionTimer("MapController-setLogoPosition");
             huaweiMap.getUiSettings().setLogoPosition(logoPosition);
@@ -733,12 +721,9 @@ final class MapController
     @Override
     public void setLogoPadding(int paddingStart, int paddingTop, int paddingEnd, int paddingBottom) {
         this.logoPadding = new Rect(paddingStart, paddingTop, paddingEnd, paddingBottom);
-
         if (huaweiMap != null) {
             logger.startMethodExecutionTimer("MapController-setLogoPadding");
-            huaweiMap.getUiSettings()
-                .setLogoPadding((int) (paddingStart * compactness), (int) (paddingTop * compactness),
-                    (int) (paddingEnd * compactness), (int) (paddingBottom * compactness));
+            huaweiMap.getUiSettings().setLogoPadding((int) (paddingStart * compactness), (int) (paddingTop * compactness), (int) (paddingEnd * compactness), (int) (paddingBottom * compactness));
             logger.sendSingleEvent("MapController-setLogoPadding");
         }
     }
@@ -748,7 +733,6 @@ final class MapController
         if (previewId == null) {
             return;
         }
-
         if (huaweiMap != null) {
             logger.startMethodExecutionTimer("MapController-setPreviewId");
             huaweiMap.previewId(previewId);
@@ -767,7 +751,6 @@ final class MapController
         if (styleId == null) {
             return;
         }
-
         if (huaweiMap != null) {
             logger.startMethodExecutionTimer("MapController-setStyleId");
             huaweiMap.setStyleId(styleId);
@@ -788,7 +771,6 @@ final class MapController
         if (disposed || activity.hashCode() != getActivityHashCode()) {
             return;
         }
-
         mapView.onCreate(savedInstanceState);
     }
 
@@ -797,7 +779,6 @@ final class MapController
         if (disposed || activity.hashCode() != getActivityHashCode()) {
             return;
         }
-
         mapView.onStart();
     }
 
@@ -806,7 +787,6 @@ final class MapController
         if (disposed || activity.hashCode() != getActivityHashCode()) {
             return;
         }
-
         mapView.onResume();
     }
 
@@ -815,7 +795,6 @@ final class MapController
         if (disposed || activity.hashCode() != getActivityHashCode()) {
             return;
         }
-
         mapView.onPause();
     }
 
@@ -824,7 +803,6 @@ final class MapController
         if (disposed || activity.hashCode() != getActivityHashCode()) {
             return;
         }
-
         mapView.onStop();
     }
 
@@ -833,7 +811,6 @@ final class MapController
         if (disposed || activity.hashCode() != getActivityHashCode()) {
             return;
         }
-
         mapView.onSaveInstanceState(outState);
     }
 
@@ -842,7 +819,6 @@ final class MapController
         if (disposed || activity.hashCode() != getActivityHashCode()) {
             return;
         }
-
         mapView.onDestroy();
     }
 
@@ -851,7 +827,6 @@ final class MapController
         if (disposed) {
             return;
         }
-
         mapView.onCreate(null);
     }
 
@@ -860,7 +835,6 @@ final class MapController
         if (disposed) {
             return;
         }
-
         mapView.onStart();
     }
 
@@ -869,7 +843,6 @@ final class MapController
         if (disposed) {
             return;
         }
-
         mapView.onResume();
     }
 
@@ -878,7 +851,6 @@ final class MapController
         if (disposed) {
             return;
         }
-
         mapView.onResume();
     }
 
@@ -887,7 +859,6 @@ final class MapController
         if (disposed) {
             return;
         }
-
         mapView.onStop();
     }
 
@@ -896,7 +867,6 @@ final class MapController
         if (disposed) {
             return;
         }
-
         mapView.onDestroy();
     }
 
@@ -905,16 +875,14 @@ final class MapController
         if (disposed) {
             return;
         }
-
         mapView.onCreate(bundle);
     }
 
     @Override
-    public void onSaveInstanceState(final Bundle bundle) {
+    public void onSaveInstanceState(@NonNull final Bundle bundle) {
         if (disposed) {
             return;
         }
-
         mapView.onSaveInstanceState(bundle);
     }
 

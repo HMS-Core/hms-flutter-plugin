@@ -23,7 +23,7 @@ Huawei Map Kit provides the following core capabilities:
 - **Ground Overlays**: Adding ground overlays on the map with tons of modifications.
 - **Tile Overlays**: Adding tile overlays on the map with tons of modifications.
 
-This plugin enables communication between HUAWEI MAP Kit SDK and Flutter platform. It exposes all functionality provided by HUAWEI MAP Kit SDK.
+This plugin enables communication between Huawei Map Kit SDK and Flutter platform. It exposes all functionality provided by Huawei Map Kit SDK.
 
 [Learn More](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/introduction-0000001050296908?ha_source=hms1)
 

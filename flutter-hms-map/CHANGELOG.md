@@ -1,7 +1,16 @@
+## 6.9.0+300
+
+- **Breaking Change:** Modified the internal structure of the plugin. Please use import **package:huawei_map/huawei_map.dart** not to get any errors.
+
+- Added the **setAccessToken** method to the `HuaweiMapInitializer` class.
+- Added the **routePolicy** parameter to the `HuaweiMapInitializer.initializeMap` method.
+- Added the **isDark** parameter to the `HuaweiMap` class. The parameter are used to specify whether to enable the dark mode after the map is loaded.
+- Added the **isDark** parameter to the `HuaweiMapOptions` class. The parameter are used to specify whether to enable the dark mode before the map is loaded.
+
 ## 6.5.0+301
 
 - Updated Huawei Map SDK version to 6.5.0.301.
-- [Breaking Change]  Added the requirement of calling the HuaweiMapInitializer.initializeMap API before using the latest SDK.
+- [Breaking Change] Added the requirement of calling the HuaweiMapInitializer.initializeMap API before using the latest SDK.
 - Added the Heatmap function, allowing you to add, modify, delete, and customize a heatmap layer.
 - Added the convertCoordinate and convertCoordinates API, which converts WGS84 coordinates into GCJ02 coordinates.
 

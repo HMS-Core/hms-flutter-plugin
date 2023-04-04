@@ -1,18 +1,18 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.map.constants;
 
@@ -53,6 +53,7 @@ public interface Method {
     String POLYLINES_UPDATE = "[Polylines]update";
     String CIRCLES_UPDATE = "[Circles]update";
     String MAP_IS_COMPASS_ENABLED = "[Map]isCompassEnabled";
+    String MAP_IS_DARK = "[Map]isDark";
     String MAP_IS_MAP_TOOLBAR_ENABLED = "[Map]isMapToolbarEnabled";
     String MAP_GET_MIN_MAX_ZOOM_LEVELS = "[Map]getMinMaxZoomLevels";
     String MAP_IS_ZOOM_GESTURES_ENABLED = "[Map]isZoomGesturesEnabled";
@@ -79,6 +80,7 @@ public interface Method {
     String DEACTIVATE_LOC_SOURCE = "[Map]deactivateLocationSource";
     String INITIALIZE_MAP = "[MapUtil]initializeMap";
     String SET_API_KEY = "[MapUtil]setApiKey";
+    String SET_ACCESS_TOKEN = "[MapUtil]setAccessToken";
     String HEAT_MAPS_UPDATE = "[HeatMap]update";
     String CONVERT_COORDINATE = "[MapUtil]convertCoordinate";
     String CONVERT_COORDINATES = "[MapUtil]convertCoordinates";
