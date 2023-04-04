@@ -1,4 +1,0 @@
-enum RadiusUnit {
-  pixel,
-  meter,
-}
