@@ -1,18 +1,18 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.iap;
 
@@ -109,16 +109,16 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
     }
 
     private void obtainProductInfo(@NonNull final MethodCall call, @NonNull final Result result) {
-        //Arguments from call
+        // Arguments from call
         final List<String> productIdList = call.argument("skuIds");
         final int priceType = ValueGetter.getInt("priceType", call);
 
-        //Constructing request
+        // Constructing request
         final ProductInfoReq request = new ProductInfoReq();
         request.setPriceType(priceType);
         request.setProductIds(productIdList);
 
-        //Obtain product info from IAP service
+        // Obtain product info from IAP service
         final String obtainProductInfoMethodName = "obtainProductInfo";
         hmsLogger.startMethodExecutionTimer(obtainProductInfoMethodName);
         mIapClient.obtainProductInfo(request)
@@ -129,7 +129,7 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
     }
 
     private void createPurchaseIntent(@NonNull final MethodCall call, @NonNull final Result result) {
-        //Arguments from call
+        // Arguments from call
         final String productId = ValueGetter.getString("productId", call);
         final int priceType = ValueGetter.getInt("priceType", call);
         final String developerPayload = call.argument("developerPayload") == null
@@ -142,7 +142,7 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
             ? null
             : ValueGetter.getString("signatureAlgorithm", call);
 
-        //Constructing request
+        // Constructing request
         final PurchaseIntentReq request = new PurchaseIntentReq();
         request.setProductId(productId);
         request.setPriceType(priceType);
@@ -150,7 +150,7 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
         request.setReservedInfor(reservedInfor);
         request.setSignatureAlgorithm(signatureAlgorithm);
 
-        //Create purchase intent from IAP service
+        // Create purchase intent from IAP service
         final String createPurchaseIntentMethodName = "createPurchaseIntent";
         hmsLogger.startMethodExecutionTimer(createPurchaseIntentMethodName);
         mIapClient.createPurchaseIntent(request)
@@ -162,7 +162,7 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
     }
 
     private void consumeOwnedPurchase(@NonNull final MethodCall call, @NonNull final Result result) {
-        //Arguments
+        // Arguments
         final String purchaseToken = ValueGetter.getString("purchaseToken", call);
         final String developerChallenge = call.argument("developerChallenge") == null
             ? null
@@ -171,7 +171,7 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
             ? null
             : ValueGetter.getString("signatureAlgorithm", call);
 
-        //Constructing request
+        // Constructing request
         final ConsumeOwnedPurchaseReq request = new ConsumeOwnedPurchaseReq();
         request.setDeveloperChallenge(developerChallenge);
         request.setPurchaseToken(purchaseToken);
@@ -188,7 +188,7 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
     }
 
     private void obtainOwnedPurchaseRecord(@NonNull final MethodCall call, @NonNull final Result result) {
-        //Arguments
+        // Arguments
         final int priceType = ValueGetter.getInt("priceType", call);
         final String signatureAlgorithm = call.argument("signatureAlgorithm") == null
             ? null
@@ -197,13 +197,13 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
             ? null
             : ValueGetter.getString("continuationToken", call);
 
-        //Constructing request
+        // Constructing request
         final OwnedPurchasesReq request = new OwnedPurchasesReq();
         request.setContinuationToken(continuationToken);
         request.setPriceType(priceType);
         request.setSignatureAlgorithm(signatureAlgorithm);
 
-        //Obtain record from IAP service
+        // Obtain record from IAP service
         final String obtainOwnedPurchaseRecordMethodName = "obtainOwnedPurchaseRecord";
         hmsLogger.startMethodExecutionTimer(obtainOwnedPurchaseRecordMethodName);
         mIapClient.obtainOwnedPurchaseRecord(request)
@@ -215,7 +215,7 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
     }
 
     private void obtainOwnedPurchases(@NonNull final MethodCall call, @NonNull final Result result) {
-        //Arguments
+        // Arguments
         final int priceType = ValueGetter.getInt("priceType", call);
         final String continuationToken = call.argument("continuationToken") == null
             ? null
@@ -224,13 +224,13 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
             ? null
             : ValueGetter.getString("signatureAlgorithm", call);
 
-        //Constructing request
+        // Constructing request
         final OwnedPurchasesReq request = new OwnedPurchasesReq();
         request.setContinuationToken(continuationToken);
         request.setPriceType(priceType);
         request.setSignatureAlgorithm(signatureAlgorithm);
 
-        //Obtain owned purchase from IAP service
+        // Obtain owned purchase from IAP service
         final String obtainOwnedPurchasesMethodName = "obtainOwnedPurchases";
         hmsLogger.startMethodExecutionTimer(obtainOwnedPurchasesMethodName);
         mIapClient.obtainOwnedPurchases(request)
@@ -248,16 +248,16 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
     }
 
     private void startIapActivity(@NonNull final MethodCall call, final Result result) {
-        //Arguments
+        // Arguments
         final int type = ValueGetter.getInt("type", call);
         final String productId = call.argument("productId") == null ? null : ValueGetter.getString("productId", call);
 
-        //Constructing request
+        // Constructing request
         final StartIapActivityReq request = new StartIapActivityReq();
         request.setType(type);
         request.setSubscribeProductId(productId);
 
-        //start activity using IAP service
+        // start activity using IAP service
         final String startIapActivityMethodName = "startIapActivity";
         hmsLogger.startMethodExecutionTimer(startIapActivityMethodName);
         mIapClient.startIapActivity(request)
@@ -349,6 +349,7 @@ public class MethodCallHandlerImpl implements MethodCallHandler, ActivityResultL
                         if (returnCode != 0) {
                             result.error(Errors.LOG_IN.getErrorCode(), Errors.LOG_IN.getErrorMessage(), null);
                         }
+                        result.success("LOGGED_IN");
                         break;
                     default:
                         result.error(Errors.UNKNOWN_REQUEST_CODE.getErrorCode(),

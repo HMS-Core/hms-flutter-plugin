@@ -1,20 +1,20 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+ * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
-
-import 'dart:convert' show json;
+part of huawei_iap;
 
 /// Provides a tool that parses the InAppPurchaseData string.
 class InAppPurchaseData {
@@ -140,90 +140,90 @@ class InAppPurchaseData {
   factory InAppPurchaseData.fromMap(Map<dynamic, dynamic> json) =>
       InAppPurchaseData(
         autoRenewing:
-            json["autoRenewing"] == null ? null : json["autoRenewing"],
-        orderId: json["orderId"] == null ? null : json["orderId"],
-        packageName: json["packageName"] == null ? null : json["packageName"],
+            json['autoRenewing'] == null ? null : json['autoRenewing'],
+        orderId: json['orderId'] == null ? null : json['orderId'],
+        packageName: json['packageName'] == null ? null : json['packageName'],
         applicationId:
-            json["applicationId"] == null ? null : json["applicationId"],
-        kind: json["kind"] == null ? null : json["kind"],
-        productId: json["productId"] == null ? null : json["productId"],
-        productName: json["productName"] == null ? null : json["productName"],
+            json['applicationId'] == null ? null : json['applicationId'],
+        kind: json['kind'] == null ? null : json['kind'],
+        productId: json['productId'] == null ? null : json['productId'],
+        productName: json['productName'] == null ? null : json['productName'],
         purchaseTime:
-            json["purchaseTime"] == null ? null : json["purchaseTime"],
-        purchaseTimeMillis: json["purchaseTimeMillis"] == null
+            json['purchaseTime'] == null ? null : json['purchaseTime'],
+        purchaseTimeMillis: json['purchaseTimeMillis'] == null
             ? null
-            : json["purchaseTimeMillis"],
+            : json['purchaseTimeMillis'],
         purchaseState:
-            json["purchaseState"] == null ? null : json["purchaseState"],
+            json['purchaseState'] == null ? null : json['purchaseState'],
         developerPayload:
-            json["developerPayload"] == null ? null : json["developerPayload"],
+            json['developerPayload'] == null ? null : json['developerPayload'],
         purchaseToken:
-            json["purchaseToken"] == null ? null : json["purchaseToken"],
+            json['purchaseToken'] == null ? null : json['purchaseToken'],
         consumptionState:
-            json["consumptionState"] == null ? null : json["consumptionState"],
-        confirmed: json["confirmed"] == null ? null : json["confirmed"],
-        currency: json["currency"] == null ? null : json["currency"],
-        price: json["price"] == null ? null : json["price"],
-        country: json["country"] == null ? null : json["country"],
-        payOrderId: json["payOrderId"] == null ? null : json["payOrderId"],
-        payType: json["payType"] == null ? null : json["payType"],
+            json['consumptionState'] == null ? null : json['consumptionState'],
+        confirmed: json['confirmed'] == null ? null : json['confirmed'],
+        currency: json['currency'] == null ? null : json['currency'],
+        price: json['price'] == null ? null : json['price'],
+        country: json['country'] == null ? null : json['country'],
+        payOrderId: json['payOrderId'] == null ? null : json['payOrderId'],
+        payType: json['payType'] == null ? null : json['payType'],
         purchaseType:
-            json["purchaseType"] == null ? null : json["purchaseType"],
-        lastOrderId: json["lastOrderId"] == null ? null : json["lastOrderId"],
+            json['purchaseType'] == null ? null : json['purchaseType'],
+        lastOrderId: json['lastOrderId'] == null ? null : json['lastOrderId'],
         productGroup:
-            json["productGroup"] == null ? null : json["productGroup"],
+            json['productGroup'] == null ? null : json['productGroup'],
         oriPurchaseTime:
-            json["oriPurchaseTime"] == null ? null : json["oriPurchaseTime"],
+            json['oriPurchaseTime'] == null ? null : json['oriPurchaseTime'],
         subscriptionId:
-            json["subscriptionId"] == null ? null : json["subscriptionId"],
-        quantity: json["quantity"] == null ? null : json["quantity"],
-        daysLasted: json["daysLasted"] == null ? null : json["daysLasted"],
+            json['subscriptionId'] == null ? null : json['subscriptionId'],
+        quantity: json['quantity'] == null ? null : json['quantity'],
+        daysLasted: json['daysLasted'] == null ? null : json['daysLasted'],
         numOfPeriods:
-            json["numOfPeriods"] == null ? null : json["numOfPeriods"],
+            json['numOfPeriods'] == null ? null : json['numOfPeriods'],
         numOfDiscounts:
-            json["numOfDiscounts"] == null ? null : json["numOfDiscounts"],
+            json['numOfDiscounts'] == null ? null : json['numOfDiscounts'],
         expirationDate:
-            json["expirationDate"] == null ? null : json["expirationDate"],
+            json['expirationDate'] == null ? null : json['expirationDate'],
         expirationIntent:
-            json["expirationIntent"] == null ? null : json["ExpirationIntent"],
-        retryFlag: json["retryFlag"] == null ? null : json["retryFlag"],
+            json['expirationIntent'] == null ? null : json['ExpirationIntent'],
+        retryFlag: json['retryFlag'] == null ? null : json['retryFlag'],
         introductoryFlag:
-            json["introductoryFlag"] == null ? null : json["introductoryFlag"],
-        trialFlag: json["trialFlag"] == null ? null : json["trialFlag"],
-        cancelTime: json["cancelTime"] == null ? null : json["cancelTime"],
+            json['introductoryFlag'] == null ? null : json['introductoryFlag'],
+        trialFlag: json['trialFlag'] == null ? null : json['trialFlag'],
+        cancelTime: json['cancelTime'] == null ? null : json['cancelTime'],
         cancelReason:
-            json["cancelReason"] == null ? null : json["cancelReason"],
-        appInfo: json["appInfo"] == null ? null : json["appInfo"],
+            json['cancelReason'] == null ? null : json['cancelReason'],
+        appInfo: json['appInfo'] == null ? null : json['appInfo'],
         notifyClosed:
-            json["notifyClosed"] == null ? null : json["notifyClosed"],
-        renewStatus: json["renewStatus"] == null ? null : json["renewStatus"],
-        subIsvalid: json["subIsvalid"] == null ? null : json["subIsvalid"],
-        cancelledSubKeepDays: json["cancelledSubKeepDays"] == null
+            json['notifyClosed'] == null ? null : json['notifyClosed'],
+        renewStatus: json['renewStatus'] == null ? null : json['renewStatus'],
+        subIsvalid: json['subIsvalid'] == null ? null : json['subIsvalid'],
+        cancelledSubKeepDays: json['cancelledSubKeepDays'] == null
             ? null
-            : json["cancelledSubKeepDays"],
-        developerChallenge: json["developerChallenge"] == null
+            : json['cancelledSubKeepDays'],
+        developerChallenge: json['developerChallenge'] == null
             ? null
-            : json["developerChallenge"],
-        deferFlag: json["deferFlag"] == null ? null : json["deferFlag"],
-        oriSubscriptionId: json["oriSubscriptionId"] == null
+            : json['developerChallenge'],
+        deferFlag: json['deferFlag'] == null ? null : json['deferFlag'],
+        oriSubscriptionId: json['oriSubscriptionId'] == null
             ? null
-            : json["oriSubscriptionId"],
-        cancelWay: json["cancelWay"] == null ? null : json["cancelWay"],
+            : json['oriSubscriptionId'],
+        cancelWay: json['cancelWay'] == null ? null : json['cancelWay'],
         cancellationTime:
-            json["cancellationTime"] == null ? null : json["cancellationTime"],
-        resumeTime: json["resumeTime"] == null ? null : json["resumeTime"],
-        accountFlag: json["accountFlag"] == null ? null : json["accountFlag"],
-        renewPrice: json["renewPrice"] == null ? null : json["renewPrice"],
-        priceConsentStatus: json["priceConsentStatus"] == null
+            json['cancellationTime'] == null ? null : json['cancellationTime'],
+        resumeTime: json['resumeTime'] == null ? null : json['resumeTime'],
+        accountFlag: json['accountFlag'] == null ? null : json['accountFlag'],
+        renewPrice: json['renewPrice'] == null ? null : json['renewPrice'],
+        priceConsentStatus: json['priceConsentStatus'] == null
             ? null
-            : json["priceConsentStatus"],
-        graceExpirationTime: json["graceExpirationTime"] == null
+            : json['priceConsentStatus'],
+        graceExpirationTime: json['graceExpirationTime'] == null
             ? null
-            : json["graceExpirationTime"],
+            : json['graceExpirationTime'],
       );
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'autoRenewing': autoRenewing,
       'orderId': orderId,
       'packageName': packageName,
@@ -336,55 +336,58 @@ class InAppPurchaseData {
   }
 
   @override
-  int get hashCode =>
-      autoRenewing.hashCode ^
-      orderId.hashCode ^
-      packageName.hashCode ^
-      applicationId.hashCode ^
-      kind.hashCode ^
-      productId.hashCode ^
-      productName.hashCode ^
-      purchaseTime.hashCode ^
-      purchaseTimeMillis.hashCode ^
-      purchaseState.hashCode ^
-      developerPayload.hashCode ^
-      purchaseToken.hashCode ^
-      consumptionState.hashCode ^
-      confirmed.hashCode ^
-      currency.hashCode ^
-      price.hashCode ^
-      country.hashCode ^
-      payOrderId.hashCode ^
-      payType.hashCode ^
-      purchaseType.hashCode ^
-      lastOrderId.hashCode ^
-      productGroup.hashCode ^
-      oriPurchaseTime.hashCode ^
-      subscriptionId.hashCode ^
-      quantity.hashCode ^
-      daysLasted.hashCode ^
-      numOfPeriods.hashCode ^
-      numOfDiscounts.hashCode ^
-      expirationDate.hashCode ^
-      expirationIntent.hashCode ^
-      retryFlag.hashCode ^
-      introductoryFlag.hashCode ^
-      trialFlag.hashCode ^
-      cancelTime.hashCode ^
-      cancelReason.hashCode ^
-      appInfo.hashCode ^
-      notifyClosed.hashCode ^
-      renewStatus.hashCode ^
-      subIsvalid.hashCode ^
-      cancelledSubKeepDays.hashCode ^
-      developerChallenge.hashCode ^
-      deferFlag.hashCode ^
-      oriSubscriptionId.hashCode ^
-      cancelWay.hashCode ^
-      cancellationTime.hashCode ^
-      resumeTime.hashCode ^
-      accountFlag.hashCode ^
-      renewPrice.hashCode ^
-      priceConsentStatus.hashCode ^
-      graceExpirationTime.hashCode;
+  int get hashCode => Object.hashAll(
+        <dynamic>[
+          autoRenewing,
+          orderId,
+          packageName,
+          applicationId,
+          kind,
+          productId,
+          productName,
+          purchaseTime,
+          purchaseTimeMillis,
+          purchaseState,
+          developerPayload,
+          purchaseToken,
+          consumptionState,
+          confirmed,
+          currency,
+          price,
+          country,
+          payOrderId,
+          payType,
+          purchaseType,
+          lastOrderId,
+          productGroup,
+          oriPurchaseTime,
+          subscriptionId,
+          quantity,
+          daysLasted,
+          numOfPeriods,
+          numOfDiscounts,
+          expirationDate,
+          expirationIntent,
+          retryFlag,
+          introductoryFlag,
+          trialFlag,
+          cancelTime,
+          cancelReason,
+          appInfo,
+          notifyClosed,
+          renewStatus,
+          subIsvalid,
+          cancelledSubKeepDays,
+          developerChallenge,
+          deferFlag,
+          oriSubscriptionId,
+          cancelWay,
+          cancellationTime,
+          resumeTime,
+          accountFlag,
+          renewPrice,
+          priceConsentStatus,
+          graceExpirationTime,
+        ],
+      );
 }

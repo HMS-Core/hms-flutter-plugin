@@ -14,17 +14,10 @@
  * limitations under the License.
  */
 
-package com.huawei.hms.flutter.iap_example;
+part of huawei_iap;
 
-import androidx.annotation.NonNull;
-
-import io.flutter.embedding.android.FlutterActivity;
-import io.flutter.embedding.engine.FlutterEngine;
-import io.flutter.plugins.GeneratedPluginRegistrant;
-
-public class MainActivity extends FlutterActivity {
-    @Override
-    public void configureFlutterEngine(@NonNull FlutterEngine flutterEngine) {
-        GeneratedPluginRegistrant.registerWith(flutterEngine);
-    }
+/// Algorithm that you can pass to an IapClient API.
+class SignAlgorithmConstants {
+  static const String SIGNATURE_ALGORITHM_SHA256WITHRSA_PSS =
+      'SHA256WithRSA/PSS';
 }

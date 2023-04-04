@@ -1,27 +1,27 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import 'dart:developer' show log;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show PlatformException;
-import 'package:huawei_iap/HmsIapLibrary.dart';
+import 'package:flutter/services.dart';
+import 'package:huawei_iap/huawei_iap.dart';
 
-import './utils/CustomButton.dart';
-import 'HomePage.dart';
+import 'package:huawei_iap_example/utils/CustomButton.dart';
+import 'package:huawei_iap_example/HomePage.dart';
 
 void main() => runApp(MaterialApp(home: MyApp()));
 
@@ -41,12 +41,12 @@ class _MyAppState extends State<MyApp> {
     enablePendingPurchase();
   }
 
-  enablePendingPurchase() async {
+  void enablePendingPurchase() async {
     String result = await IapClient.enablePendingPurchase();
     log(result);
   }
 
-  environmentCheck() async {
+  void environmentCheck() async {
     isEnvReadyStatus = null;
     try {
       IsEnvReadyResult response = await IapClient.isEnvReady();
@@ -63,7 +63,7 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  sandboxCheck() async {
+  void sandboxCheck() async {
     try {
       sandboxReadyStatus = null;
       IsSandboxActivatedResult response = await IapClient.isSandboxActivated();
@@ -92,28 +92,32 @@ class _MyAppState extends State<MyApp> {
           padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 8.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: [
+            children: <Widget>[
               Row(
                 mainAxisSize: MainAxisSize.min,
-                children: [
+                children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Image.asset("assets/HUAWEI_IAP_icon.png"),
+                    child: Image.asset('assets/HUAWEI_IAP_icon.png'),
                   ),
                   Column(
-                    children: [
+                    children: <Widget>[
                       Text(
-                        "Huawei",
+                        'Huawei',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
                       ),
                       Text(
-                        "In App Purchases",
+                        'In App Purchases',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
                       ),
                       Text(
-                        "Flutter Plugin Demo",
+                        'Flutter Plugin Demo',
                       )
                     ],
                   )
@@ -135,33 +139,35 @@ class _MyAppState extends State<MyApp> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "Before using HUAWEI IAP in your app, send an isEnvReady request from your app to HUAWEI IAP to check whether the currently signed-in HUAWEI ID is located in a location where HUAWEI IAP is available.",
+                  'Before using HUAWEI IAP in your app, send an isEnvReady request from your app to HUAWEI IAP to check whether the currently signed-in HUAWEI ID is located in a location where HUAWEI IAP is available.',
                   textAlign: TextAlign.center,
                 ),
               ),
               CustomButton(
                 onPressed: environmentCheck,
-                text: "Check Environment Status",
+                text: 'Check Environment Status',
               ),
               isEnvReadyStatus == null
                   ? SizedBox.shrink()
                   : Column(
-                      children: [
+                      children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            "Environment Status: " + isEnvReadyStatus!,
+                            'Environment Status: ' + isEnvReadyStatus!,
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
                         CustomButton(
                           onPressed: () {
                             Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => HomePage()));
+                              context,
+                              MaterialPageRoute<dynamic>(
+                                builder: (BuildContext context) => HomePage(),
+                              ),
+                            );
                           },
-                          text: "Products",
+                          text: 'Products',
                         )
                       ],
                     ),
@@ -174,20 +180,20 @@ class _MyAppState extends State<MyApp> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "Sandbox testing allows you to complete end-to-end testing without real payments when you connect to HUAWEI IAP for joint commissioning. You can configure test accounts in AppGallery Connect and allow these testers to perform sandbox testing.",
+                  'Sandbox testing allows you to complete end-to-end testing without real payments when you connect to HUAWEI IAP for joint commissioning. You can configure test accounts in AppGallery Connect and allow these testers to perform sandbox testing.',
                   textAlign: TextAlign.center,
                 ),
               ),
               CustomButton(
                 onPressed: sandboxCheck,
-                text: "Check Sandbox Status",
+                text: 'Check Sandbox Status',
               ),
               sandboxReadyStatus == null
                   ? SizedBox.shrink()
                   : Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        "Is Sandbox User: " + sandboxReadyStatus!,
+                        'Is Sandbox User: ' + sandboxReadyStatus!,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -205,7 +211,7 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
               CustomButton(
-                text: "Enable/Disable Hms Logger",
+                text: 'Enable/Disable Hms Logger',
                 onPressed: () {
                   if (hmsLoggerStatus) {
                     IapClient.disableLogger();

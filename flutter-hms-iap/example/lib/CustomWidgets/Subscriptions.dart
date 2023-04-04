@@ -1,26 +1,26 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import 'dart:developer' show log;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show PlatformException;
-import 'package:huawei_iap/HmsIapLibrary.dart';
+import 'package:flutter/services.dart';
+import 'package:huawei_iap/huawei_iap.dart';
 
-import '../utils/CustomButton.dart';
+import 'package:huawei_iap_example/utils/CustomButton.dart';
 
 class Subscriptions extends StatefulWidget {
   @override
@@ -28,9 +28,9 @@ class Subscriptions extends StatefulWidget {
 }
 
 class _SubscriptionsState extends State<Subscriptions> {
-  List<ProductInfo> available = [];
-  List<InAppPurchaseData> purchased = [];
-  List<InAppPurchaseData> purchasedRecord = [];
+  List<ProductInfo> available = <ProductInfo>[];
+  List<InAppPurchaseData> purchased = <InAppPurchaseData>[];
+  List<InAppPurchaseData> purchasedRecord = <InAppPurchaseData>[];
 
   @override
   void initState() {
@@ -40,12 +40,15 @@ class _SubscriptionsState extends State<Subscriptions> {
     purchaseHistory();
   }
 
-  loadProducts() async {
+  void loadProducts() async {
     try {
-      ProductInfoResult result = await IapClient.obtainProductInfo(ProductInfoReq(
+      ProductInfoResult result = await IapClient.obtainProductInfo(
+        ProductInfoReq(
           priceType: 2,
           //Make sure that the product IDs are the same as those defined in AppGallery Connect.
-          skuIds: ["subscription_1", "subscription_2"]));
+          skuIds: <String>['subscription_1', 'subscription_2'],
+        ),
+      );
       setState(() {
         available.clear();
         if (result.productInfoList != null)
@@ -62,11 +65,15 @@ class _SubscriptionsState extends State<Subscriptions> {
     }
   }
 
-  buyProduct(String productID) async {
+  void buyProduct(String productID) async {
     try {
       PurchaseResultInfo result = await IapClient.createPurchaseIntent(
-          PurchaseIntentReq(
-              priceType: 2, developerPayload: "Test", productId: productID));
+        PurchaseIntentReq(
+          priceType: 2,
+          developerPayload: 'Test',
+          productId: productID,
+        ),
+      );
       if (result.returnCode == HmsIapResults.ORDER_STATE_SUCCESS.resultCode) {
         loadProducts();
         ownedPurchases();
@@ -86,7 +93,7 @@ class _SubscriptionsState extends State<Subscriptions> {
     }
   }
 
-  ownedPurchases() async {
+  void ownedPurchases() async {
     try {
       OwnedPurchasesResult result =
           await IapClient.obtainOwnedPurchases(OwnedPurchasesReq(priceType: 2));
@@ -106,10 +113,11 @@ class _SubscriptionsState extends State<Subscriptions> {
     }
   }
 
-  purchaseHistory() async {
+  void purchaseHistory() async {
     try {
       OwnedPurchasesResult result = await IapClient.obtainOwnedPurchaseRecord(
-          OwnedPurchasesReq(priceType: 2));
+        OwnedPurchasesReq(priceType: 2),
+      );
       setState(() {
         purchasedRecord.clear();
         if (result.inAppPurchaseDataList != null)
@@ -126,10 +134,13 @@ class _SubscriptionsState extends State<Subscriptions> {
     }
   }
 
-  manageSubscriptions() async {
+  void manageSubscriptions() async {
     try {
-      await IapClient.startIapActivity(StartIapActivityReq(
-          type: StartIapActivityReq.TYPE_SUBSCRIBE_MANAGER_ACTIVITY));
+      await IapClient.startIapActivity(
+        StartIapActivityReq(
+          type: StartIapActivityReq.TYPE_SUBSCRIBE_MANAGER_ACTIVITY,
+        ),
+      );
     } on PlatformException catch (e) {
       if (e.code == HmsIapResults.ORDER_HWID_NOT_LOGIN.resultCode) {
         log(HmsIapResults.ORDER_HWID_NOT_LOGIN.resultMessage!);
@@ -148,7 +159,7 @@ class _SubscriptionsState extends State<Subscriptions> {
           Row(
             children: <Widget>[
               Text(
-                "Subscriptions",
+                'Subscriptions',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
               )
             ],
@@ -156,126 +167,133 @@ class _SubscriptionsState extends State<Subscriptions> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "Subscriptions are purchased once and renew automatically",
+              'Subscriptions are purchased once and renew automatically',
               textAlign: TextAlign.center,
             ),
           ),
           Row(
             children: <Widget>[
               Text(
-                "Purchased",
+                'Purchased',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
               )
             ],
           ),
           ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: purchased.length,
-              itemBuilder: (BuildContext ctxt, int i) {
-                return Card(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: purchased.length,
+            itemBuilder: (BuildContext ctxt, int i) {
+              return Card(
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text(
+                        purchased[i].productName ?? '',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text(purchased[i].productId ?? ''),
+                    )
+                  ],
+                ),
+              );
+            },
+          ),
+          Row(
+            children: <Widget>[
+              Text(
+                'Available',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+              )
+            ],
+          ),
+          ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: available.length,
+            itemBuilder: (BuildContext ctxt, int i) {
+              return InkWell(
+                onTap: () {
+                  if (available[i].productId != null)
+                    buyProduct(available[i].productId!);
+                  else
+                    log('Please provide valid product id.');
+                },
+                child: Card(
                   child: Column(
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: Text(
-                          purchased[i].productName ?? "",
+                          available[i].productName ?? '',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Text(purchased[i].productId ?? ""),
-                      )
-                    ],
-                  ),
-                );
-              }),
-          Row(
-            children: <Widget>[
-              Text(
-                "Available",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-              )
-            ],
-          ),
-          ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: available.length,
-              itemBuilder: (BuildContext ctxt, int i) {
-                return InkWell(
-                  onTap: () {
-                    if (available[i].productId != null)
-                      buyProduct(available[i].productId!);
-                    else
-                      log("Please provide valid product id.");
-                  },
-                  child: Card(
-                    child: Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Text(
-                            available[i].productName ?? "",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.underline),
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Text(available[i].productDesc ?? ""),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Text(available[i].price ?? ""),
-                        )
-                      ],
-                    ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(available[i].productDesc ?? ''),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(available[i].price ?? ''),
+                      )
+                    ],
                   ),
-                );
-              }),
+                ),
+              );
+            },
+          ),
           Row(
             children: <Widget>[
               Text(
-                "Purchased Record  - Last 5",
+                'Purchased Record  - Last 5',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
               )
             ],
           ),
           ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount:
-                  purchasedRecord.length >= 5 ? 5 : purchasedRecord.length,
-              itemBuilder: (BuildContext ctxt, int i) {
-                return Card(
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Text(
-                          purchasedRecord[i].productName ?? "",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline),
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: purchasedRecord.length >= 5 ? 5 : purchasedRecord.length,
+            itemBuilder: (BuildContext ctxt, int i) {
+              return Card(
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text(
+                        purchasedRecord[i].productName ?? '',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline,
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Text(purchasedRecord[i].productId ?? ""),
-                      )
-                    ],
-                  ),
-                );
-              }),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text(purchasedRecord[i].productId ?? ''),
+                    )
+                  ],
+                ),
+              );
+            },
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: CustomButton(
-                onPressed: manageSubscriptions, text: "Manage Subscriptions"),
+              onPressed: manageSubscriptions,
+              text: 'Manage Subscriptions',
+            ),
           )
         ],
       ),

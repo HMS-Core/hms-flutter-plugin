@@ -1,24 +1,24 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import 'dart:developer' show log;
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show PlatformException;
+import 'package:flutter/services.dart';
 
-import 'package:huawei_iap/HmsIapLibrary.dart';
+import 'package:huawei_iap/huawei_iap.dart';
 
 class NonConsumables extends StatefulWidget {
   @override
@@ -26,8 +26,8 @@ class NonConsumables extends StatefulWidget {
 }
 
 class _NonConsumablesState extends State<NonConsumables> {
-  List<ProductInfo> available = [];
-  List<InAppPurchaseData> purchased = [];
+  List<ProductInfo> available = <ProductInfo>[];
+  List<InAppPurchaseData> purchased = <InAppPurchaseData>[];
 
   @override
   void initState() {
@@ -36,12 +36,15 @@ class _NonConsumablesState extends State<NonConsumables> {
     ownedPurchases();
   }
 
-  loadProducts() async {
+  void loadProducts() async {
     try {
-      ProductInfoResult result = await IapClient.obtainProductInfo(ProductInfoReq(
+      ProductInfoResult result = await IapClient.obtainProductInfo(
+        ProductInfoReq(
           priceType: 1,
           //Make sure that the product IDs are the same as those defined in AppGallery Connect.
-          skuIds: ["non_consumable_1", "non_consumable_2"]));
+          skuIds: <String>['non_consumable_1', 'non_consumable_2'],
+        ),
+      );
       setState(() {
         available.clear();
         if (result.productInfoList != null)
@@ -58,10 +61,11 @@ class _NonConsumablesState extends State<NonConsumables> {
     }
   }
 
-  buyProduct(String productID) async {
+  void buyProduct(String productID) async {
     try {
       PurchaseResultInfo result = await IapClient.createPurchaseIntent(
-          PurchaseIntentReq(priceType: 1, productId: productID));
+        PurchaseIntentReq(priceType: 1, productId: productID),
+      );
       if (result.returnCode == HmsIapResults.ORDER_STATE_SUCCESS.resultCode) {
         loadProducts();
         ownedPurchases();
@@ -80,7 +84,7 @@ class _NonConsumablesState extends State<NonConsumables> {
     }
   }
 
-  ownedPurchases() async {
+  void ownedPurchases() async {
     try {
       OwnedPurchasesResult result =
           await IapClient.obtainOwnedPurchases(OwnedPurchasesReq(priceType: 1));
@@ -109,7 +113,7 @@ class _NonConsumablesState extends State<NonConsumables> {
           Row(
             children: <Widget>[
               Text(
-                "Non Consumables",
+                'Non Consumables',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
               )
             ],
@@ -117,92 +121,96 @@ class _NonConsumablesState extends State<NonConsumables> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "Non-Consumables are purchased once and do not expire or decrease.",
+              'Non-Consumables are purchased once and do not expire or decrease.',
               textAlign: TextAlign.center,
             ),
           ),
           Row(
             children: <Widget>[
               Text(
-                "Purchased",
+                'Purchased',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
               )
             ],
           ),
           ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: purchased.length,
-              itemBuilder: (BuildContext ctxt, int i) {
-                return Card(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: purchased.length,
+            itemBuilder: (BuildContext ctxt, int i) {
+              return Card(
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text(
+                        purchased[i].productName ?? '',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text(purchased[i].productId ?? ''),
+                    )
+                  ],
+                ),
+              );
+            },
+          ),
+          Row(
+            children: <Widget>[
+              Text(
+                'Available',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+              )
+            ],
+          ),
+          ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: available.length,
+            itemBuilder: (BuildContext ctxt, int i) {
+              return InkWell(
+                onTap: () {
+                  if (available[i].productId != null)
+                    buyProduct(available[i].productId!);
+                  else
+                    log('Please provide valid product id.');
+                },
+                child: Card(
                   child: Column(
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: Text(
-                          purchased[i].productName ?? "",
+                          available[i].productName ?? '',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline),
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
+                          ),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(4.0),
-                        child: Text(purchased[i].productId ?? ""),
+                        child: Text(available[i].productDesc ?? ''),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(available[i].price ?? ''),
                       )
                     ],
                   ),
-                );
-              }),
-          Row(
-            children: <Widget>[
-              Text(
-                "Available",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-              )
-            ],
+                ),
+              );
+            },
           ),
-          ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: available.length,
-              itemBuilder: (BuildContext ctxt, int i) {
-                return InkWell(
-                  onTap: () {
-                    if (available[i].productId != null)
-                      buyProduct(available[i].productId!);
-                    else
-                      log("Please provide valid product id.");
-                  },
-                  child: Card(
-                    child: Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Text(
-                            available[i].productName ?? "",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.underline),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Text(available[i].productDesc ?? ""),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Text(available[i].price ?? ""),
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              }),
           Row(
             children: <Widget>[
               Text(
-                "Purchased Record - Last 5",
+                'Purchased Record - Last 5',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
               )
             ],
@@ -211,7 +219,7 @@ class _NonConsumablesState extends State<NonConsumables> {
             child: Padding(
               padding: const EdgeInsets.all(23.0),
               child: Text(
-                "For non-consumables, this method does not return product information.",
+                'For non-consumables, this method does not return product information.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
