@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -92,6 +92,8 @@ public class ScanUtilsMethodCallHandler
         // Arguments from call
         int scanType = ValueGetter.getInt("scanType", call);
         List<Integer> additionalScanTypes = call.argument("additionalScanTypes");
+        int viewType = ValueGetter.getInt("viewType", call);
+        boolean errorCheck = ValueGetter.getBoolean("errorCheck", call);
         int[] scanTypesIntArray = null;
 
         // List<Integer> to int[]
@@ -105,7 +107,8 @@ public class ScanUtilsMethodCallHandler
         // Default view options
         HmsScanAnalyzerOptions.Creator creator = new HmsScanAnalyzerOptions.Creator();
         creator.setHmsScanTypes(scanType, scanTypesIntArray);
-        creator.setViewType(0);
+        creator.setViewType(viewType);
+        creator.setErrorCheck(errorCheck);
         HmsScanAnalyzerOptions options = creator.create();
 
         // Start scan with options
@@ -211,13 +214,16 @@ public class ScanUtilsMethodCallHandler
         }
         // Default View
         if (requestCode == REQUEST_CODE_SCAN_DEFAULT) {
-            if (pendingResult != null) {
-                HmsScan obj = data.getParcelableExtra(ScanUtil.RESULT);
-                // Sending Result
-                pendingResult.success(gson.toJson(obj));
-                HMSLogger.getInstance(mActivity.getApplicationContext())
-                    .sendSingleEvent("ScanUtilsMethodCallHandler.defaultView");
-                pendingResult = null; // reset
+            int errorCode = data.getIntExtra(ScanUtil.RESULT_CODE, ScanUtil.SUCCESS);
+            if (errorCode == ScanUtil.SUCCESS){
+                if (pendingResult != null) {
+                    HmsScan obj = data.getParcelableExtra(ScanUtil.RESULT);
+                    // Sending Result
+                    pendingResult.success(gson.toJson(obj));
+                    HMSLogger.getInstance(mActivity.getApplicationContext())
+                            .sendSingleEvent("ScanUtilsMethodCallHandler.defaultView");
+                    pendingResult = null; // reset
+                }
             }
         } else {
             pendingResult = null;

@@ -1,6 +1,6 @@
 name: huawei_scan
 description: Huawei Scan Flutter Plugin scans all major 1D and 2D barcodes as well as generates barcodes to help you quickly build barcode scanning functions into your apps.
-version: 2.8.0+300
+version: 2.10.0+301
 homepage: https://www.huawei.com
 repository: https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-scan
 
@@ -10,7 +10,7 @@ environment:
 
 dependencies:
   flutter:
-    sdk: flutter
+    sdk: flutter  
 
 dev_dependencies:
   flutter_test:

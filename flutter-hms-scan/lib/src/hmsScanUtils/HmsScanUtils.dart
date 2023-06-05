@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -18,7 +18,8 @@ part of huawei_scan;
 
 class HmsScanUtils {
   static Future<ScanResponse> startDefaultView(
-      DefaultViewRequest request) async {
+    DefaultViewRequest request,
+  ) async {
     final ScanResponse result = ScanResponse.fromJson(
       await HmsScan.instance.scanUtilsChannel.invokeMethod(
         'defaultView',

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -18,11 +18,17 @@ part of huawei_scan;
 
 class DefaultViewRequest {
   int? scanType;
+  int? viewType;
+
+  bool? errorCheck;
+
   List<int>? additionalScanTypes;
 
   DefaultViewRequest({
     this.scanType,
     this.additionalScanTypes,
+    this.viewType = 0,
+    this.errorCheck = false,
   });
 
   factory DefaultViewRequest.fromJson(String str) {
@@ -41,6 +47,8 @@ class DefaultViewRequest {
           : List<int>.from(
               json['additionalScanTypes'].map((dynamic x) => x),
             ),
+      viewType: json['viewType'],
+      errorCheck: json['errorCheck'],
     );
   }
 
@@ -48,6 +56,8 @@ class DefaultViewRequest {
     return <dynamic, dynamic>{
       'scanType': scanType,
       'additionalScanTypes': additionalScanTypes,
+      'viewType': viewType,
+      'errorCheck': errorCheck,
     };
   }
 
@@ -57,14 +67,18 @@ class DefaultViewRequest {
     if (runtimeType != other.runtimeType) return false;
     return other is DefaultViewRequest &&
         other.scanType == scanType &&
-        listEquals(other.additionalScanTypes, additionalScanTypes);
+        listEquals(other.additionalScanTypes, additionalScanTypes) &&
+        other.viewType == viewType &&
+        other.errorCheck == errorCheck;
   }
 
   @override
   int get hashCode {
-    return hashValues(
+    return Object.hash(
       scanType,
       additionalScanTypes,
+      viewType,
+      errorCheck,
     );
   }
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -83,31 +83,33 @@ class _CustomizedViewScreenState extends State<CustomizedViewScreen> {
 
   void customizedView() async {
     responseList = <ScanResponse>[];
-    await HmsCustomizedView.startCustomizedView(CustomizedViewRequest(
-      scanType: HmsScanTypes.AllScanType,
-      continuouslyScan: false,
-      isFlashAvailable: true,
-      flashOnLightChange: false,
-      enableReturnBitmap: false,
-      customizedCameraListener: (ScanResponse response) {
-        pause();
-        setState(() {
-          responseList.add(response);
-        });
-        resume();
-      },
-      customizedLifeCycleListener: (CustomizedViewEvent lifecycleStatus) {
-        debugPrint('Customized View LifeCycle Listener: $lifecycleStatus');
-        if (lifecycleStatus == CustomizedViewEvent.onStart) {
-          Future<void>.delayed(
-            const Duration(seconds: 5),
-            () async {
-              switchLightOnLightStatus();
-            },
-          );
-        }
-      },
-    ));
+    await HmsCustomizedView.startCustomizedView(
+      CustomizedViewRequest(
+        scanType: HmsScanTypes.AllScanType,
+        continuouslyScan: false,
+        isFlashAvailable: true,
+        flashOnLightChange: false,
+        enableReturnBitmap: false,
+        customizedCameraListener: (ScanResponse response) {
+          pause();
+          setState(() {
+            responseList.add(response);
+          });
+          resume();
+        },
+        customizedLifeCycleListener: (CustomizedViewEvent lifecycleStatus) {
+          debugPrint('Customized View LifeCycle Listener: $lifecycleStatus');
+          if (lifecycleStatus == CustomizedViewEvent.onStart) {
+            Future<void>.delayed(
+              const Duration(seconds: 5),
+              () async {
+                switchLightOnLightStatus();
+              },
+            );
+          }
+        },
+      ),
+    );
   }
 
   @override
@@ -121,10 +123,11 @@ class _CustomizedViewScreenState extends State<CustomizedViewScreen> {
               content: const Text('Please scan a valid barcode.'),
               actions: <Widget>[
                 ElevatedButton(
-                    child: const Text('Back'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    })
+                  child: const Text('Back'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                )
               ],
             )
           : Column(
