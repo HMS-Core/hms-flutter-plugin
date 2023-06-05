@@ -94,7 +94,7 @@ public enum Code {
     ERROR_AUTO_INITIALIZING("907122054"),
 
     /* The input parameter is incorrect. Check whether the related configuration information is correct.
-     * Example= app_id in the agconnect - services.json file;
+     * Example app_id in the agconnect-services.json file;
      * Check whether the build.gradle file is configured with the certificate signature.
      */
     ERROR_ARGUMENTS_INVALID("907135000"),
