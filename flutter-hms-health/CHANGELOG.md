@@ -1,3 +1,54 @@
+## 6.10.0+301
+
+**New Features**
+- In order to support "Periodic Breathing Sampling Events", "Aperiodic Breathing Sampling Events", "Sleep Breathing Records", " Reading Historical Data" and "Continuous Blood Glucose Data":
+  - Added the following data types to HealthDataTypes:
+    - DT_SLEEP_RESPIRATORY_DETAIL
+    - DT_SLEEP_RESPIRATORY_EVENT
+    - DT_HEALTH_RECORD_VENTILATOR
+    - DT_CGM_BLOOD_GLUCOSE
+    - POLYMERIZE_CGM_BLOOD_GLUCOSE_STATISTICS
+  - Added the following fields to HealthFields:
+    - SYS_MODE
+    - SYS_SESSION_DATE
+    - EVENT_AHI
+    - SYS_DURATION
+    - LUMIS_TIDVOL_MEDIAN
+    - LUMIS_TIDVOL
+    - LUMIS_TIDVOL_MAX
+    - CLINICAL_RESPRATE_MEDIAN
+    - CLINICAL_RESP_RATE
+    - CLINICAL_RESP_RATE_MAX
+    - LUMIS_IERATIO_MEDIAN
+    - LUMIS_IERATIO_QUANTILE
+    - LUMIS_IERATIO_MAX
+    - MASK_OFF
+    - HYPOVENTILATION_INDEX
+    - OBSTRUCTIVE_APNEA_INDEX
+    - PRESSURE_BELOW
+    - HYPOVENTILATION_EVENT_TIMES
+    - SNORING_EVENT_TIMES
+    - CENTER_APNEA_EVENT_TIMES
+    - OBSTRUCTIVE_APNEA_EVENT_TIMES
+    - AIR_FLOW_LIMIT_EVENT_TIMES
+    - MASSIVE_LEAK_EVENT_TIMES
+    - UNKNOW_EVENT_TIMES
+    - ALL_EVENT_TIMES
+  - Added the following fields to Field:
+    - SLEEP_RESPIRATORY_TYPE
+    - SLEEP_RESPIRATORY_VALUE
+    - EVENT_NAME
+  - Added the following scopes to Scope
+    - HEALTHKIT_HISTORYDATA_OPEN_WEEK
+    - HEALTHKIT_HISTORYDATA_OPEN_MONTH
+    - HEALTHKIT_HISTORYDATA_OPEN_YEAR
+- Added 50064 (HEALTH_APP_NOT_ENABLED) and 50065 (HISTORY_PERMISSIONS_INSUFFCIENT) to HiHealthStatusCodes. 
+
+**Modified Features**
+- [BREAKING CHANGE] setTimeInterval and setFieldValue methods and related fields had been removed from SampleSet. SampleSets are now native-like.
+- healthRecordId is no longer a mandatory field for HealthRecord. You still need to use the field when updating and deleting the health records.
+- Added the function of integrating the HMS Core Installer SDK to prompt users to download HMS Core (APK), ensuring that your app can normally use capabilities of HMS Core (APK).
+
 ## 6.8.0+300
 
 - Updated the value ranges of some fields of the Weight, Body Temperature, Blood Pressure, and Blood Glucose data types.

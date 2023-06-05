@@ -26,12 +26,12 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 apply plugin: 'com.huawei.agconnect'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "<package_name>"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -51,6 +51,8 @@ android {
             keyAlias "<key_alias>"
             keyPassword '<key_password>'
             storePassword '<store_password>'
+            v1SigningEnabled true
+            v2SigningEnabled true
         }
     }
 

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -151,9 +151,9 @@ class SamplePoint {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'startTime': startTime?.millisecondsSinceEpoch,
-      'endTime': endTime?.millisecondsSinceEpoch,
-      'samplingTime': samplingTime?.millisecondsSinceEpoch,
+      'startTime': startTime?.millisecondsSinceEpoch.toString(),
+      'endTime': endTime?.millisecondsSinceEpoch.toString(),
+      'samplingTime': samplingTime?.millisecondsSinceEpoch.toString(),
       'timeUnit': describeEnum(timeUnit),
       'isSampling': _isSampling,
       'fieldValue': fieldValueOptions?.toMap(),
@@ -161,7 +161,6 @@ class SamplePoint {
       'dataCollector': dataCollector?.toMap(),
       'dataType': dataType?.toMap(),
       'metadataValues': _metaDataValues,
-      //"fieldValueList": _fieldValueList,
       'pairs': pairs,
       'metadata': metadata,
     }..removeWhere((String k, dynamic v) => v == null);

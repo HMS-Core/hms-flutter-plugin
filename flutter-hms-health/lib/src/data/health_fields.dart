@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -259,5 +259,105 @@ abstract class HealthFields {
   );
   static const Field FIELD_SATURATION_LAST = Field.newFloatField(
     'saturation_last',
+  );
+
+  static const Field SYS_MODE = Field.newIntField(
+    'sysMode',
+  );
+
+  static const Field SYS_SESSION_DATE = Field.newLongField(
+    'sysSessionDate',
+  );
+
+  static const Field EVENT_AHI = Field.newFloatField(
+    'eventAhi',
+  );
+
+  static const Field SYS_DURATION = Field.newIntField(
+    'sysDuration',
+  );
+
+  static const Field LUMIS_TIDVOL_MEDIAN = Field.newFloatField(
+    'lumisTidvolMedian',
+  );
+
+  static const Field LUMIS_TIDVOL = Field.newFloatField(
+    'lumisTidvol95',
+  );
+
+  static const Field LUMIS_TIDVOL_MAX = Field.newFloatField(
+    'lumisTidvolMax',
+  );
+
+  static const Field CLINICAL_RESPRATE_MEDIAN = Field.newFloatField(
+    'clinicalRespRateMedian',
+  );
+
+  static const Field CLINICAL_RESP_RATE = Field.newFloatField(
+    'clinicalRespRate95',
+  );
+
+  static const Field CLINICAL_RESP_RATE_MAX = Field.newFloatField(
+    'clinicalRespRateMax',
+  );
+
+  static const Field LUMIS_IERATIO_MEDIAN = Field.newFloatField(
+    'lumisIeratioMedian',
+  );
+
+  static const Field LUMIS_IERATIO_QUANTILE = Field.newFloatField(
+    'lumisIeratioQuantile95',
+  );
+
+  static const Field LUMIS_IERATIO_MAX = Field.newFloatField(
+    'lumisIeratioMax',
+  );
+
+  static const Field MASK_OFF = Field.newIntField(
+    'maskOff',
+  );
+
+  static const Field HYPOVENTILATION_INDEX = Field.newFloatField(
+    'hypoventilationIndex',
+  );
+
+  static const Field OBSTRUCTIVE_APNEA_INDEX = Field.newFloatField(
+    'obstructiveApneaIndex',
+  );
+
+  static const Field PRESSURE_BELOW = Field.newFloatField(
+    'pressureBelow95',
+  );
+
+  static const Field HYPOVENTILATION_EVENT_TIMES = Field.newIntField(
+    'hypoventilationEventTimes',
+  );
+
+  static const Field SNORING_EVENT_TIMES = Field.newIntField(
+    'snoringEventTimes',
+  );
+
+  static const Field CENTER_APNEA_EVENT_TIMES = Field.newIntField(
+    'obstructiveApneaEventTimes',
+  );
+
+  static const Field OBSTRUCTIVE_APNEA_EVENT_TIMES = Field.newIntField(
+    'centerApneaEventTimes',
+  );
+
+  static const Field AIR_FLOW_LIMIT_EVENT_TIMES = Field.newIntField(
+    'airflowLimitEventTimes',
+  );
+
+  static const Field MASSIVE_LEAK_EVENT_TIMES = Field.newIntField(
+    'massiveLeakEventTimes',
+  );
+
+  static const Field UNKNOW_EVENT_TIMES = Field.newIntField(
+    'unknowEventTimes',
+  );
+
+  static const Field ALL_EVENT_TIMES = Field.newIntField(
+    'allEventTimes',
   );
 }

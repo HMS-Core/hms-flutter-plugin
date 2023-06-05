@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -246,6 +246,15 @@ abstract class HiHealthStatusCodes {
     '50061': 'Data reading or writing disabled when the screen is locked.',
     '50062': 'The app that calls the API currently is not a frontend app.',
     '50063': 'HMS Core (APK) version not supported.',
+
+    /// [Solution:] Start the Huawei Health app manually.
+    '50064':
+        'The Huawei Health app has been installed but has never been started.',
+
+    /// [Solution:] Make sure that the start time in the query parameters is
+    /// not earlier than the time of the earliest available historical data.
+    '50065':
+        'The start time in the query parameters is earlier than the time of the earliest available historical data.',
     '50300': 'Activity record running in the background.',
     '50301': 'Failed to call the renewal API.',
     '50302': 'Mandatory data types missing for activity or health records.',

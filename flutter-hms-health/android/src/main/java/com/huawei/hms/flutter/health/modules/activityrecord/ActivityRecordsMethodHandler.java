@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+ * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -50,8 +50,11 @@ import java.util.Map;
 
 public class ActivityRecordsMethodHandler implements MethodCallHandler {
     private ActivityRecordsController activityRecordsController;
+
     private DefaultActivityRecordService flutterActivityRecordsImpl;
+
     private Activity activity;
+
     private Context context;
 
     public ActivityRecordsMethodHandler(@Nullable Activity activity) {
@@ -103,7 +106,7 @@ public class ActivityRecordsMethodHandler implements MethodCallHandler {
         // Build the time range of the request object: start time and end time
         // Build the activity record request object
         ActivityRecord activityRecord = ActivityRecordUtils.toActivityRecord(Utils.getMap(call, "activityRecord"),
-                activity.getPackageName());
+            activity.getPackageName());
 
         List<SampleSet> sampleSets = new ArrayList<>();
         List<Map<String, Object>> sampleSetMaps = call.argument("sampleSets");
@@ -112,7 +115,7 @@ public class ActivityRecordsMethodHandler implements MethodCallHandler {
                 sampleSets.add(Utils.toSampleSet(sampleSetMap, result, activity.getPackageName()));
             }
             flutterActivityRecordsImpl.addActivityRecord(this.activityRecordsController, activityRecord, sampleSets,
-                    new VoidResultHelper(result, context, call.method));
+                new VoidResultHelper(result, context, call.method));
         } else {
             String errorCode = String.valueOf(HiHealthStatusCodes.INPUT_PARAM_MISSING);
             HMSLogger.getInstance(context).sendSingleEvent(call.method, errorCode);
@@ -124,21 +127,22 @@ public class ActivityRecordsMethodHandler implements MethodCallHandler {
         checkActivityRecordsController();
         if (call.arguments == null) {
             result.error(String.valueOf(HiHealthStatusCodes.INPUT_PARAM_MISSING),
-                    "Please specify a valid activity record", "");
+                "Please specify a valid activity record", "");
             return;
         }
         // Build an ActivityRecord object
         ActivityRecord activityRecord = ActivityRecordUtils.toActivityRecord((HashMap<String, Object>) call.arguments,
-                activity.getPackageName());
+            activity.getPackageName());
         // Calling beginActivity.
         flutterActivityRecordsImpl.startActivityRecord(this.activityRecordsController, activityRecord,
-                new VoidResultHelper(result, context, call.method));
+            new VoidResultHelper(result, context, call.method));
     }
 
     public void continueActivityRecord(final MethodCall call, final Result result) {
         checkActivityRecordsController();
         final String activityRecordId = (String) call.arguments;
-        flutterActivityRecordsImpl.continueActivityRecord(this.activityRecordsController, activityRecordId, new VoidResultHelper(result, context, call.method));
+        flutterActivityRecordsImpl.continueActivityRecord(this.activityRecordsController, activityRecordId,
+            new VoidResultHelper(result, context, call.method));
     }
 
     public void endActivityRecord(final MethodCall call, final Result result) {
@@ -150,7 +154,7 @@ public class ActivityRecordsMethodHandler implements MethodCallHandler {
         // Stop activity records of the current app by specifying null as the input parameter
         // Return the list of activity records that have stopped
         flutterActivityRecordsImpl.endActivityRecord(this.activityRecordsController, activityRecordId,
-                new ResultHelper<>(List.class, result, context, call.method));
+            new ResultHelper<>(List.class, result, context, call.method));
     }
 
     private void getActivityRecord(final MethodCall call, final Result result) {
@@ -161,13 +165,13 @@ public class ActivityRecordsMethodHandler implements MethodCallHandler {
 
         // Get the requested ActivityRecords
         flutterActivityRecordsImpl.getActivityRecord(this.activityRecordsController, readRequest,
-                new ResultHelper<>(ActivityRecordReply.class, result, context, call.method));
+            new ResultHelper<>(ActivityRecordReply.class, result, context, call.method));
     }
 
     public void endAllActivityRecords(final MethodCall call, final Result result) {
         checkActivityRecordsController();
         flutterActivityRecordsImpl.endActivityRecord(this.activityRecordsController, null,
-                new ResultHelper<>(List.class, result, context, call.method));
+            new ResultHelper<>(List.class, result, context, call.method));
     }
 
     public void deleteActivityRecord(final MethodCall call, final Result result) {
@@ -182,7 +186,7 @@ public class ActivityRecordsMethodHandler implements MethodCallHandler {
 
         ActivityRecordDeleteOptions opt = ActivityRecordUtils.buildDeleteOptions(reqMap);
         flutterActivityRecordsImpl.deleteActivityRecord(this.activityRecordsController, opt,
-                new VoidResultHelper(result, activity, call.method));
+            new VoidResultHelper(result, activity, call.method));
     }
 
     private void checkActivityRecordsController() {

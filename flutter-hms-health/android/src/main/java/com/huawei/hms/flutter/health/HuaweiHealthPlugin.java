@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+ * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -41,21 +41,33 @@ public class HuaweiHealthPlugin implements FlutterPlugin, ActivityAware {
     private ActivityPluginBinding mActivityBinding;
 
     private MethodChannel authMethodChannel;
+
     private MethodChannel activityRecordMethodChannel;
+
     private MethodChannel dataControllerMethodChannel;
+
     private MethodChannel settingControllerMethodChannel;
+
     private MethodChannel autoRecorderMethodChannel;
+
     private MethodChannel bleControllerMethodChannel;
+
     private MethodChannel appInfoMethodChannel;
+
     private MethodChannel healthControllerMethodChannel;
 
     private EventChannel autoRecorderEventChannel;
 
     private HealthAuthMethodHandler authMethodHandler;
+
     private ActivityRecordsMethodHandler activityRecordsMethodHandler;
+
     private DataControllerMethodHandler dataControllerMethodHandler;
+
     private SettingControllerMethodHandler settingControllerMethodHandler;
+
     private AutoRecorderMethodHandler autoRecorderMethodHandler;
+
     private HealthControllerMethodHandler healthControllerMethodHandler;
 
     @Override
@@ -96,12 +108,14 @@ public class HuaweiHealthPlugin implements FlutterPlugin, ActivityAware {
         authMethodChannel = new MethodChannel(messenger, Channel.HMS_HEALTH_AUTH_METHOD_CHANNEL);
         activityRecordMethodChannel = new MethodChannel(messenger, Channel.HMS_HEALTH_ACTIVITY_RECORDS_CHANNEL);
         dataControllerMethodChannel = new MethodChannel(messenger, Channel.HMS_HEALTH_DATA_CONTROLLER_METHOD_CHANNEL);
-        settingControllerMethodChannel = new MethodChannel(messenger, Channel.HMS_HEALTH_SETTING_CONTROLLER_METHOD_CHANNEL);
+        settingControllerMethodChannel = new MethodChannel(messenger,
+            Channel.HMS_HEALTH_SETTING_CONTROLLER_METHOD_CHANNEL);
         autoRecorderMethodChannel = new MethodChannel(messenger, Channel.HMS_HEALTH_AUTO_RECORDER_METHOD_CHANNEL);
         autoRecorderEventChannel = new EventChannel(messenger, Channel.HMS_HEALTH_AUTO_RECORDER_EVENT_CHANNEL);
         bleControllerMethodChannel = new MethodChannel(messenger, Channel.HMS_HEALTH_BLE_CONTROLLER_METHOD_CHANNEL);
         appInfoMethodChannel = new MethodChannel(messenger, Channel.HMS_HEALTH_APP_INFO_METHOD_CHANNEL);
-        healthControllerMethodChannel = new MethodChannel(messenger, Channel.HMS_HEALTH_HEALTH_CONTROLLER_METHOD_CHANNEL);
+        healthControllerMethodChannel = new MethodChannel(messenger,
+            Channel.HMS_HEALTH_HEALTH_CONTROLLER_METHOD_CHANNEL);
     }
 
     private void setHandlers() {
@@ -149,7 +163,7 @@ public class HuaweiHealthPlugin implements FlutterPlugin, ActivityAware {
             mActivityBinding = null;
         }
     }
-    
+
     private void teardownChannels() {
         authMethodChannel.setMethodCallHandler(null);
         activityRecordMethodChannel.setMethodCallHandler(null);

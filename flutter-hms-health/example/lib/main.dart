@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -156,6 +156,9 @@ class _HomeState extends State<Home> {
       Scope.HEALTHKIT_STRESS_READ,
       Scope.HEALTHKIT_OXYGEN_SATURATION_WRITE,
       Scope.HEALTHKIT_OXYGEN_SATURATION_READ,
+      Scope.HEALTHKIT_HISTORYDATA_OPEN_WEEK,
+      Scope.HEALTHKIT_HISTORYDATA_OPEN_MONTH,
+      Scope.HEALTHKIT_HISTORYDATA_OPEN_YEAR,
     ];
     try {
       AuthHuaweiId? result = await HealthAuth.signIn(scopes);
@@ -858,7 +861,6 @@ class _HomeState extends State<Home> {
     );
     debugPrint(res.authAccount?.accessToken);
   }
-
   //
   //
   // End of SettingController Methods
@@ -1064,13 +1066,48 @@ class _HomeState extends State<Home> {
       LogOptions.call,
     );
     try {
-      final DateTime startTime = DateTime(2022, 10, 11);
-      final DateTime endTime = DateTime(2022, 10, 12);
+      final DateTime startTime = DateTime(2023, 5, 11);
+      final DateTime endTime = DateTime(2023, 5, 13);
+
+      DataCollector contDataCollector = DataCollector(
+        dataStreamName: 'contDataCollector',
+        packageName: packageName,
+        dataType: DataType.POLYMERIZE_CONTINUOUS_HEART_RATE_STATISTICS,
+        dataGenerateType: DataGenerateType.DATA_TYPE_RAW,
+      );
+
+      DataCollector instDataCollector = DataCollector(
+        dataStreamName: 'instDataCollector',
+        packageName: packageName,
+        dataType: DataType.DT_INSTANTANEOUS_HEART_RATE,
+        dataGenerateType: DataGenerateType.DATA_TYPE_RAW,
+      );
+
+      List<SampleSet> subDataDetails = <SampleSet>[
+        SampleSet(instDataCollector, <SamplePoint>[
+          SamplePoint(
+            dataCollector: instDataCollector,
+          )
+            ..setTimeInterval(startTime, endTime, TimeUnit.MILLISECONDS)
+            ..setFieldValue(Field.FIELD_BPM, 88.0)
+        ])
+      ];
+
+      List<SamplePoint> subDataSummary = <SamplePoint>[
+        SamplePoint(
+          dataCollector: contDataCollector,
+        )
+          ..setTimeInterval(startTime, endTime, TimeUnit.MILLISECONDS)
+          ..setFieldValue(Field.FIELD_AVG, 90.0)
+          ..setFieldValue(Field.FIELD_MAX, 100.0)
+          ..setFieldValue(Field.FIELD_MIN, 80.0)
+          ..setFieldValue(Field.LAST, 85.0)
+      ];
+
       final HealthRecord healthRecord = HealthRecord(
         startTime: startTime,
         endTime: endTime,
         metadata: 'Data',
-        healthRecordId: 'healthRecordId0',
         dataCollector: DataCollector(
           dataStreamName: 'such as step count',
           packageName: packageName,
@@ -1078,10 +1115,13 @@ class _HomeState extends State<Home> {
           dataGenerateType: DataGenerateType.DATA_TYPE_RAW,
         ),
       )
-        ..setFieldValue(HealthFields.FIELD_THRESHOLD, 40.9)
-        ..setFieldValue(HealthFields.FIELD_MAX_HEART_RATE, 48.1)
-        ..setFieldValue(HealthFields.FIELD_MIN_HEART_RATE, 40.1)
-        ..setFieldValue(HealthFields.FIELD_AVG_HEART_RATE, 44.1);
+        ..setSubDataSummary(subDataSummary)
+        ..setSubDataDetails(subDataDetails)
+        ..setFieldValue(HealthFields.FIELD_THRESHOLD, 42.0)
+        ..setFieldValue(HealthFields.FIELD_MAX_HEART_RATE, 48.0)
+        ..setFieldValue(HealthFields.FIELD_MIN_HEART_RATE, 42.0)
+        ..setFieldValue(HealthFields.FIELD_AVG_HEART_RATE, 45.0);
+
       final String? result = await HealthRecordController.addHealthRecord(
         HealthRecordInsertOptions(
           healthRecord: healthRecord,
@@ -1110,22 +1150,25 @@ class _HomeState extends State<Home> {
       LogOptions.call,
     );
     try {
+      final DateTime startTime = DateTime(2023, 5, 11);
+      final DateTime endTime = DateTime(2023, 5, 13);
+
       HealthRecordReply result = await HealthRecordController.getHealthRecord(
         HealthRecordReadOptions(
           packageName: packageName,
         )
           ..setSubDataTypeList(
             <DataType>[
-              DataType.DT_CONTINUOUS_SLEEP,
+              DataType.DT_INSTANTANEOUS_HEART_RATE,
             ],
           )
           ..setTimeInterval(
-            DateTime.now().subtract(const Duration(days: 17)),
-            DateTime.now().subtract(const Duration(days: 2)),
+            startTime,
+            endTime,
             TimeUnit.MILLISECONDS,
           )
           ..readByDataType(
-            HealthDataTypes.DT_HEALTH_RECORD_SLEEP,
+            HealthDataTypes.DT_HEALTH_RECORD_BRADYCARDIA,
           )
           ..readHealthRecordsFromAllApps(),
       );
@@ -1133,7 +1176,7 @@ class _HomeState extends State<Home> {
         'getHealthRecord',
         _healthTextController,
         LogOptions.success,
-        result: result.toString(),
+        result: result.healthRecords[0].toJson(),
       );
     } on PlatformException catch (e) {
       log(
@@ -1158,7 +1201,6 @@ class _HomeState extends State<Home> {
         startTime: startTime,
         endTime: endTime,
         metadata: 'Data',
-        healthRecordId: 'healthRecordId0',
         dataCollector: DataCollector(
           dataStreamName: 'such as step count',
           packageName: packageName,
@@ -1173,7 +1215,7 @@ class _HomeState extends State<Home> {
       await HealthRecordController.updateHealthRecord(
         HealthRecordUpdateOptions(
           healthRecord: healthRecord,
-          healthRecordId: 'healthRecordId0',
+          healthRecordId: '<your_health_record_id>',
         ),
       );
       log(
@@ -1204,7 +1246,7 @@ class _HomeState extends State<Home> {
           endTime: DateTime.now(),
         )..setHealthRecordIds(
             <String>[
-              'healthRecordId0',
+              '<your_health_record_id>',
             ],
           ),
       );
@@ -1377,6 +1419,7 @@ class _HomeState extends State<Home> {
                   ],
                 ),
               ),
+
               // ActivityRecordsController
               expansionCard(
                 titleText: 'ActivityRecords Controller',
@@ -1504,6 +1547,7 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
+
               // Health Controller Widgets
               expansionCard(
                 titleText: 'HealthController',
