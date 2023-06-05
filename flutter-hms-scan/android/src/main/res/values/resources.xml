@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="scan_tip">Place the code within the frame</string>
+    <string name="title">Scan</string>
+</resources>
