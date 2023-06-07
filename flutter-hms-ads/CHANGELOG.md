@@ -1,3 +1,10 @@
+## 13.4.61+304
+
+- Optimized the landing page download experience.
+- Added the AdvertiserInfo class to obtain and display advertiser information, adapting the Russian advertising law.
+- Added the hasAdvertiserInfo and getAdvertiserInfo methods to the InstreamAd and NativeAd classes.
+- Added the showAdvertiserInfoDialog and hideAdvertiserInfoDialog methods to the InstreamAdViewController and NativeAdController classes.
+
 ## 13.4.58+304
 
 - Optimized the feedback function of HUAWEI Ads for users to give comments.

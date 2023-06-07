@@ -16,7 +16,28 @@
 
 part of huawei_ads;
 
-const String _NATIVE_VIEW = 'com.huawei.hms.flutter.ads/native/view';
-const String _BANNER_VIEW = 'com.huawei.hms.flutter.ads/banner/view';
-const String _INSTREAM_VIEW = 'com.huawei.hms.flutter.ads/instream/view';
-const String _VAST_VIEW = 'com.huawei.hms.flutter.ads/vast/view';
+/// Advertiser information.
+class AdvertiserInfo {
+  /// Advertiser information type.
+  final String? key;
+
+  /// Advertiser information.
+  final String? value;
+
+  /// Advertiser information sequence.
+  final int? seq;
+
+  AdvertiserInfo._({
+    required this.key,
+    required this.value,
+    required this.seq,
+  });
+
+  factory AdvertiserInfo._fromMap(Map<dynamic, dynamic> map) {
+    return AdvertiserInfo._(
+      key: map['key'],
+      value: map['value'],
+      seq: map['seq'],
+    );
+  }
+}
