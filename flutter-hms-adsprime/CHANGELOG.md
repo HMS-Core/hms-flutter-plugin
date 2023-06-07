@@ -1,3 +1,9 @@
+## 13.4.61+304
+
+- Supported silent reservation for scheduled ad download.
+- Supported keyword-based targeting in HTML5 ads.
+- Solved interstitial ad display errors in certain scenarios.
+
 ## 13.4.56+302
 
 - Optimized the feedback function of HUAWEI Ads for users to give comments.
