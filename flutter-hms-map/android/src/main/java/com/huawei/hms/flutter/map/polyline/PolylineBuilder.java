@@ -102,4 +102,14 @@ class PolylineBuilder implements PolylineMethods {
     public void setZIndex(final float zIndex) {
         polylineOptions.zIndex(zIndex);
     }
+
+    @Override
+    public void setGradient(boolean on) {
+        polylineOptions.gradient(on);
+    }
+
+    @Override
+    public void setColorValues(List<Integer> colorValues) {
+        polylineOptions.colorValues(colorValues);
+    }
 }

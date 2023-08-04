@@ -48,12 +48,19 @@ import io.flutter.plugin.common.MethodChannel.Result;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class HmsMap implements Application.ActivityLifecycleCallbacks, FlutterPlugin, ActivityAware, DefaultLifecycleObserver, MethodCallHandler {
+public class HmsMap
+    implements Application.ActivityLifecycleCallbacks, FlutterPlugin, ActivityAware, DefaultLifecycleObserver,
+    MethodCallHandler {
     public static final int CREATED = 1;
+
     public static final int STARTED = 2;
+
     public static final int RESUMED = 3;
+
     public static final int PAUSED = 4;
+
     public static final int STOPPED = 5;
+
     public static final int DESTROYED = 6;
 
     private final AtomicInteger state = new AtomicInteger(0);
@@ -82,7 +89,10 @@ public class HmsMap implements Application.ActivityLifecycleCallbacks, FlutterPl
         registrarActivityHashCode = activityPluginBinding.getActivity().hashCode();
         lifecycle = ((HiddenLifecycleReference) activityPluginBinding.getLifecycle()).getLifecycle();
         lifecycle.addObserver(this);
-        flutterPluginBinding.getPlatformViewRegistry().registerViewFactory(Channel.CHANNEL, new MapFactory(state, flutterPluginBinding.getBinaryMessenger(), activityPluginBinding.getActivity(), lifecycle, null, activityPluginBinding.getActivity().hashCode()));
+        flutterPluginBinding.getPlatformViewRegistry()
+            .registerViewFactory(Channel.CHANNEL,
+                new MapFactory(state, flutterPluginBinding.getBinaryMessenger(), activityPluginBinding.getActivity(),
+                    lifecycle, null, activityPluginBinding.getActivity().hashCode()));
     }
 
     @Override
@@ -208,29 +218,34 @@ public class HmsMap implements Application.ActivityLifecycleCallbacks, FlutterPl
             case Method.DISTANCE_CALCULATOR: {
                 if (flutterPluginBinding != null) {
                     final List<LatLng> request = Convert.toLatLngStartEnd(call.arguments);
-                    HMSLogger.getInstance(flutterPluginBinding.getApplicationContext()).startMethodExecutionTimer(Method.DISTANCE_CALCULATOR);
+                    HMSLogger.getInstance(flutterPluginBinding.getApplicationContext())
+                        .startMethodExecutionTimer(Method.DISTANCE_CALCULATOR);
                     result.success(DistanceCalculator.computeDistanceBetween(request.get(0), request.get(1)));
-                    HMSLogger.getInstance(flutterPluginBinding.getApplicationContext()).sendSingleEvent(Method.DISTANCE_CALCULATOR);
+                    HMSLogger.getInstance(flutterPluginBinding.getApplicationContext())
+                        .sendSingleEvent(Method.DISTANCE_CALCULATOR);
                 }
                 break;
             }
             case Method.INITIALIZE_MAP: {
                 if (flutterPluginBinding != null) {
                     final String routePolicy = Convert.toString(call.arguments);
-                    HMSLogger.getInstance(flutterPluginBinding.getApplicationContext()).startMethodExecutionTimer(Method.INITIALIZE_MAP);
+                    HMSLogger.getInstance(flutterPluginBinding.getApplicationContext())
+                        .startMethodExecutionTimer(Method.INITIALIZE_MAP);
                     if (routePolicy != null) {
                         MapsInitializer.initialize(flutterPluginBinding.getApplicationContext(), routePolicy);
                     } else {
                         MapsInitializer.initialize(flutterPluginBinding.getApplicationContext());
                     }
                     result.success(true);
-                    HMSLogger.getInstance(flutterPluginBinding.getApplicationContext()).sendSingleEvent(Method.INITIALIZE_MAP);
+                    HMSLogger.getInstance(flutterPluginBinding.getApplicationContext())
+                        .sendSingleEvent(Method.INITIALIZE_MAP);
                 }
                 break;
             }
             case Method.SET_API_KEY: {
                 final String apiKey = Convert.toString(call.arguments);
-                HMSLogger.getInstance(flutterPluginBinding.getApplicationContext()).startMethodExecutionTimer(Method.SET_API_KEY);
+                HMSLogger.getInstance(flutterPluginBinding.getApplicationContext())
+                    .startMethodExecutionTimer(Method.SET_API_KEY);
                 MapsInitializer.setApiKey(apiKey);
                 result.success(true);
                 HMSLogger.getInstance(flutterPluginBinding.getApplicationContext()).sendSingleEvent(Method.SET_API_KEY);
@@ -238,24 +253,30 @@ public class HmsMap implements Application.ActivityLifecycleCallbacks, FlutterPl
             }
             case Method.SET_ACCESS_TOKEN: {
                 final String accessToken = Convert.toString(call.arguments);
-                HMSLogger.getInstance(flutterPluginBinding.getApplicationContext()).startMethodExecutionTimer(Method.SET_ACCESS_TOKEN);
+                HMSLogger.getInstance(flutterPluginBinding.getApplicationContext())
+                    .startMethodExecutionTimer(Method.SET_ACCESS_TOKEN);
                 MapsInitializer.setAccessToken(accessToken);
                 result.success(true);
-                HMSLogger.getInstance(flutterPluginBinding.getApplicationContext()).sendSingleEvent(Method.SET_ACCESS_TOKEN);
+                HMSLogger.getInstance(flutterPluginBinding.getApplicationContext())
+                    .sendSingleEvent(Method.SET_ACCESS_TOKEN);
                 break;
             }
             case Method.CONVERT_COORDINATE: {
                 final LatLng latLng = Convert.toLatLng(call.arguments);
-                HMSLogger.getInstance(flutterPluginBinding.getApplicationContext()).startMethodExecutionTimer(Method.CONVERT_COORDINATE);
+                HMSLogger.getInstance(flutterPluginBinding.getApplicationContext())
+                    .startMethodExecutionTimer(Method.CONVERT_COORDINATE);
                 result.success(ToJson.latLng(new CoordinateConverter().convert(latLng)));
-                HMSLogger.getInstance(flutterPluginBinding.getApplicationContext()).sendSingleEvent(Method.CONVERT_COORDINATE);
+                HMSLogger.getInstance(flutterPluginBinding.getApplicationContext())
+                    .sendSingleEvent(Method.CONVERT_COORDINATE);
                 break;
             }
             case Method.CONVERT_COORDINATES: {
                 final LatLng[] latLngArr = Convert.toLatLngList(call.arguments);
-                HMSLogger.getInstance(flutterPluginBinding.getApplicationContext()).startMethodExecutionTimer(Method.CONVERT_COORDINATES);
+                HMSLogger.getInstance(flutterPluginBinding.getApplicationContext())
+                    .startMethodExecutionTimer(Method.CONVERT_COORDINATES);
                 result.success(ToJson.latLngList(new CoordinateConverter().convert(latLngArr)));
-                HMSLogger.getInstance(flutterPluginBinding.getApplicationContext()).sendSingleEvent(Method.CONVERT_COORDINATES);
+                HMSLogger.getInstance(flutterPluginBinding.getApplicationContext())
+                    .sendSingleEvent(Method.CONVERT_COORDINATES);
                 break;
             }
             default:

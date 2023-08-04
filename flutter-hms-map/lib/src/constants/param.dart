@@ -224,6 +224,10 @@ abstract class _Param {
 
   static const String liteMode = 'liteMode';
 
+  static const String gradient = 'gradient';
+
+  static const String colorValues = 'colorValues';
+
   // Point of Interest
 
   static const String poi = 'pointOfInterest';
@@ -332,6 +336,10 @@ abstract class _Param {
   static const String time = 'time';
 
   static const String fromMockProvider = 'fromMockProvider';
+
+  static const String myLocationStyle = 'myLocationStyle';
+
+  static const String radiusFillColor = 'radiusFillColor';
 
   // HeatMap
 

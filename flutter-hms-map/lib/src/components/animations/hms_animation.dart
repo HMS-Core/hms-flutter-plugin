@@ -16,7 +16,7 @@
 
 part of huawei_map;
 
-abstract class HmsMarkerAnimation {
+abstract class HmsAnimation {
   // Fill Mode Constants
   static const int FORWARDS = 0;
   static const int BACKWARDS = 1;
@@ -75,7 +75,7 @@ abstract class HmsMarkerAnimation {
     _methodChannel.setMethodCallHandler(_multiMethodCallHandler);
   }
 
-  HmsMarkerAnimation({
+  HmsAnimation({
     required this.animationId,
     required this.type,
     this.duration,
@@ -93,7 +93,7 @@ abstract class HmsMarkerAnimation {
     if (runtimeType != other.runtimeType) {
       return false;
     }
-    return other is HmsMarkerAnimation &&
+    return other is HmsAnimation &&
         animationId == other.animationId &&
         type == other.type &&
         duration == other.duration &&

@@ -47,19 +47,19 @@ class _MarkerDemoState extends State<MarkerDemo> {
   Marker? markerWithColor;
   Marker? markerWithImage;
 
-  HmsMarkerAlphaAnimation alphaAnimation = HmsMarkerAlphaAnimation(
+  HmsAlphaAnimation alphaAnimation = HmsAlphaAnimation(
     animationId: 'alphaAnimation',
     fromAlpha: 0.1,
     toAlpha: 1.0,
   );
 
-  HmsMarkerRotateAnimation rotateAnimation = HmsMarkerRotateAnimation(
+  HmsRotateAnimation rotateAnimation = HmsRotateAnimation(
     animationId: 'rotateAnimation',
     fromDegree: 0,
     toDegree: 360,
   );
 
-  HmsMarkerScaleAnimation scaleAnimation = HmsMarkerScaleAnimation(
+  HmsScaleAnimation scaleAnimation = HmsScaleAnimation(
     animationId: 'scaleAnimation',
     fromX: 2,
     toX: 0,
@@ -67,7 +67,7 @@ class _MarkerDemoState extends State<MarkerDemo> {
     toY: 0,
   );
 
-  HmsMarkerTranslateAnimation translateAnimation = HmsMarkerTranslateAnimation(
+  HmsTranslateAnimation translateAnimation = HmsTranslateAnimation(
     animationId: 'translateAnimation',
     target: const LatLng(41.063984, 29.033135),
   );
@@ -128,18 +128,24 @@ class _MarkerDemoState extends State<MarkerDemo> {
 
   void _addMarkers() {
     marker0 = Marker(
-      markerId: const MarkerId('marker_id_0'),
-      position: const LatLng(41.048641, 28.977033),
-      clusterable: true,
-      animationSet: <dynamic>[alphaAnimation],
-    );
+        markerId: const MarkerId('marker_id_0'),
+        position: const LatLng(41.048641, 28.977033),
+        clusterable: true,
+        animationSet: <dynamic>[alphaAnimation],
+        clickable: false,
+        onClick: () {
+          log("clicked2", name: "markerClick");
+        });
 
     marker1 = Marker(
-      markerId: const MarkerId('marker_id_1'),
-      position: const LatLng(41.059814, 28.979799),
-      clusterable: true,
-      animationSet: <dynamic>[rotateAnimation],
-    );
+        markerId: const MarkerId('marker_id_1'),
+        position: const LatLng(41.059814, 28.979799),
+        clusterable: true,
+        animationSet: <dynamic>[rotateAnimation],
+        clickable: true,
+        onClick: () {
+          log("clicked", name: "markerClick");
+        });
 
     marker2 = Marker(
       markerId: const MarkerId('marker_id_2'),

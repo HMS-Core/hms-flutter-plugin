@@ -79,7 +79,11 @@ class MapUtils {
         heatMapUtils = new HeatMapUtils(mChannel, application);
     }
 
-    void init(final HuaweiMap huaweiMap, final List<HashMap<String, Object>> initMarkers, final List<HashMap<String, Object>> initPolylines, final List<HashMap<String, Object>> initPolygons, final List<HashMap<String, Object>> initCircles, final List<HashMap<String, Object>> initGroundOverlays, final List<HashMap<String, Object>> initTileOverlays, final List<HashMap<String, Object>> initHeatMaps, final boolean markersClustering, final BinaryMessenger messenger) {
+    void init(final HuaweiMap huaweiMap, final List<HashMap<String, Object>> initMarkers,
+        final List<HashMap<String, Object>> initPolylines, final List<HashMap<String, Object>> initPolygons,
+        final List<HashMap<String, Object>> initCircles, final List<HashMap<String, Object>> initGroundOverlays,
+        final List<HashMap<String, Object>> initTileOverlays, final List<HashMap<String, Object>> initHeatMaps,
+        final boolean markersClustering, final BinaryMessenger messenger) {
         this.huaweiMap = huaweiMap;
         markersUtils.setMap(huaweiMap);
         polylineUtils.setMap(huaweiMap);
@@ -89,10 +93,15 @@ class MapUtils {
         tileOverlayUtils.setMap(huaweiMap);
         heatMapUtils.setMap(huaweiMap);
         huaweiMap.setMarkersClustering(markersClustering);
-        initComponents(initMarkers, initPolylines, initPolygons, initCircles, initGroundOverlays, initTileOverlays, initHeatMaps, messenger);
+        initComponents(initMarkers, initPolylines, initPolygons, initCircles, initGroundOverlays, initTileOverlays,
+            initHeatMaps, messenger);
     }
 
-    void initComponents(final List<HashMap<String, Object>> initMarkers, final List<HashMap<String, Object>> initPolylines, final List<HashMap<String, Object>> initPolygons, final List<HashMap<String, Object>> initCircles, final List<HashMap<String, Object>> initGroundOverlays, final List<HashMap<String, Object>> initTileOverlays, final List<HashMap<String, Object>> initHeatMaps, final BinaryMessenger messenger) {
+    void initComponents(final List<HashMap<String, Object>> initMarkers,
+        final List<HashMap<String, Object>> initPolylines, final List<HashMap<String, Object>> initPolygons,
+        final List<HashMap<String, Object>> initCircles, final List<HashMap<String, Object>> initGroundOverlays,
+        final List<HashMap<String, Object>> initTileOverlays, final List<HashMap<String, Object>> initHeatMaps,
+        final BinaryMessenger messenger) {
         this.messenger = messenger;
         initMarkers(initMarkers);
         initPolylines(initPolylines);
@@ -116,7 +125,7 @@ class MapUtils {
     }
 
     void initCircles(final List<HashMap<String, Object>> initCircles) {
-        circleUtils.insertMulti(initCircles);
+        circleUtils.insertMulti(initCircles, messenger);
     }
 
     void initGroundOverlays(final List<HashMap<String, Object>> initGroundOverlays) {
@@ -150,7 +159,8 @@ class MapUtils {
     void onMethodCallCamera(final MethodCall call, final MethodChannel.Result result) {
         switch (call.method) {
             case Method.CAMERA_ANIMATE: {
-                final CameraUpdate cameraUpdate = Convert.toCameraUpdate(call.argument(Param.CAMERA_UPDATE), compactness);
+                final CameraUpdate cameraUpdate = Convert.toCameraUpdate(call.argument(Param.CAMERA_UPDATE),
+                    compactness);
                 animateCamera(cameraUpdate);
                 result.success(true);
                 break;
@@ -158,7 +168,9 @@ class MapUtils {
             case Method.MAP_SET_STYLE: {
                 final String mapStyle = (String) call.arguments;
                 logger.startMethodExecutionTimer(Method.MAP_SET_STYLE);
-                final boolean mapStyleSet = mapStyle == null ? huaweiMap.setMapStyle(null) : huaweiMap.setMapStyle(new MapStyleOptions(mapStyle));
+                final boolean mapStyleSet = mapStyle == null
+                    ? huaweiMap.setMapStyle(null)
+                    : huaweiMap.setMapStyle(new MapStyleOptions(mapStyle));
                 final ArrayList<Object> mapStyleResult = new ArrayList<>();
                 mapStyleResult.add(mapStyleSet);
                 if (!mapStyleSet) {
@@ -197,7 +209,7 @@ class MapUtils {
                 break;
             }
             case Method.CIRCLES_UPDATE: {
-                circleUtils.insertMulti(call.argument(Param.CIRCLES_TO_INSERT));
+                circleUtils.insertMulti(call.argument(Param.CIRCLES_TO_INSERT), messenger);
                 circleUtils.updateMulti(call.argument(Param.CIRCLES_TO_UPDATE));
                 circleUtils.deleteMulti(call.argument(Param.CIRCLES_TO_DELETE));
                 result.success(true);
@@ -235,6 +247,13 @@ class MapUtils {
                 logger.startMethodExecutionTimer(Method.MARKER_START_ANIMATION);
                 markersUtils.startAnimation((String) markerId);
                 logger.sendSingleEvent(Method.MARKER_START_ANIMATION);
+                break;
+            }
+            case Method.CIRCLE_START_ANIMATION: {
+                final Object circleId = call.argument(Param.CIRCLE_ID);
+                logger.startMethodExecutionTimer(Method.CIRCLE_START_ANIMATION);
+                circleUtils.startAnimation((String) circleId);
+                logger.sendSingleEvent(Method.CIRCLE_START_ANIMATION);
                 break;
             }
             case Method.MARKERS_SHOW_INFO_WINDOW: {

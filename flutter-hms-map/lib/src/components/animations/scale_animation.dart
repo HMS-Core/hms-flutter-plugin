@@ -16,7 +16,7 @@
 
 part of huawei_map;
 
-class HmsMarkerScaleAnimation extends HmsMarkerAnimation {
+class HmsScaleAnimation extends HmsAnimation {
   double fromX;
   double toX;
   double fromY;
@@ -34,7 +34,7 @@ class HmsMarkerScaleAnimation extends HmsMarkerAnimation {
     onAnimationEnd?.call();
   }
 
-  HmsMarkerScaleAnimation({
+  HmsScaleAnimation({
     required String animationId,
     required this.fromX,
     required this.toX,
@@ -49,7 +49,7 @@ class HmsMarkerScaleAnimation extends HmsMarkerAnimation {
     this.onAnimationEnd,
   }) : super(
           animationId: animationId,
-          type: HmsMarkerAnimation.SCALE,
+          type: HmsAnimation.SCALE,
           duration: duration,
           fillMode: fillMode,
           repeatCount: repeatCount,
@@ -67,7 +67,7 @@ class HmsMarkerScaleAnimation extends HmsMarkerAnimation {
     if (runtimeType != other.runtimeType) {
       return false;
     }
-    return other is HmsMarkerScaleAnimation &&
+    return other is HmsScaleAnimation &&
         animationId == other.animationId &&
         fromX == other.fromX &&
         toX == other.toX &&

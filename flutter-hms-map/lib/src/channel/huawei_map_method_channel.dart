@@ -431,6 +431,18 @@ abstract class _HuaweiMapMethodChannel {
     );
   }
 
+  static Future<void> startAnimationOnCircle(
+    CircleId circleId, {
+    required int mapId,
+  }) {
+    return setChannel(mapId).invokeMethod<void>(
+      _Method.CircleStartAnimation,
+      <String, String>{
+        _Param.circleId: circleId.id,
+      },
+    );
+  }
+
   static Future<void> updatePolygons(
     PolygonUpdates polygonUpdates, {
     required int mapId,
@@ -564,6 +576,12 @@ abstract class _HuaweiMapMethodChannel {
     return LatLng(
       latLng[0],
       latLng[1],
+    );
+  }
+
+  static Future<double?> getScalePerPixel({required int mapId}) {
+    return setChannel(mapId).invokeMethod<double>(
+      _Method.MapGetScalePerPixel,
     );
   }
 

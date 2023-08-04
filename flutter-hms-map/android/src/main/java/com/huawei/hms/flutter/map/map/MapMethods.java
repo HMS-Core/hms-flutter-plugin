@@ -20,6 +20,7 @@ import android.graphics.Point;
 
 import com.huawei.hms.maps.model.BitmapDescriptor;
 import com.huawei.hms.maps.model.LatLngBounds;
+import com.huawei.hms.maps.model.MyLocationStyle;
 
 import java.util.HashMap;
 import java.util.List;
@@ -119,6 +120,11 @@ public interface MapMethods {
      */
     void setCompassEnabled(boolean compassEnabled);
 
+    /**
+     * Sets dark mode.
+     *
+     * @param isDark whether to enable dark mode
+     */
     void setDark(boolean isDark);
 
     /**
@@ -291,4 +297,11 @@ public interface MapMethods {
      * @param liteMode the lite mode
      */
     void setLiteMode(Boolean liteMode);
+
+    /**
+     * Sets my location style.
+     *
+     * @param myLocationStyle the my location style
+     */
+    void setMyLocationStyle(MyLocationStyle myLocationStyle);
 }

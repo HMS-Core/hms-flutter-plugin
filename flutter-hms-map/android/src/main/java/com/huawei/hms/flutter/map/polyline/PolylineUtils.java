@@ -75,7 +75,8 @@ public class PolylineUtils {
         final Polyline newPolyline = huaweiMap.addPolyline(options);
         logger.sendSingleEvent("addPolyline");
 
-        final PolylineController controller = new PolylineController(newPolyline, polylineBuilder.isClickable(), compactness);
+        final PolylineController controller = new PolylineController(newPolyline, polylineBuilder.isClickable(),
+            compactness);
         idsOnMap.put(polylineId, controller);
         ids.put(newPolyline.getId(), polylineId);
     }

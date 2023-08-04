@@ -82,6 +82,12 @@ class _PolylineDemoState extends State<PolylineDemo> {
       onClick: () {
         log('Polyline #1 clicked');
       },
+      gradient: true,
+      colorValues: <Color>[
+        Colors.red,
+        Colors.green,
+        Colors.black,
+      ],
     );
 
     setState(() {

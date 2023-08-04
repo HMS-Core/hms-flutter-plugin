@@ -81,7 +81,8 @@ public class GroundOverlayUtils {
         final GroundOverlay newGroundOverlay = huaweiMap.addGroundOverlay(options);
         logger.sendSingleEvent("addGroundOverlay");
 
-        final GroundOverlayController controller = new GroundOverlayController(newGroundOverlay, groundOverlayBuilder.isClickable());
+        final GroundOverlayController controller = new GroundOverlayController(newGroundOverlay,
+            groundOverlayBuilder.isClickable());
 
         idsOnMap.put(id, controller);
         ids.put(newGroundOverlay.getId(), id);

@@ -22,7 +22,7 @@ public interface Channel {
 
     // Plugin Method Channel
     String MAP_UTILS = "com.huawei.hms.flutter.map/mapUtils";
-    
+
     // Animation Method Channel
     String ANIMATION = "com.huawei.hms.flutter.map/animation";
 }

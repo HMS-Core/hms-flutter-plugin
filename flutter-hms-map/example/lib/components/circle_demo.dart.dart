@@ -42,9 +42,16 @@ class _CircleDemoState extends State<CircleDemo> {
 
   LatLng circleCenter1 = const LatLng(40.983208, 28.965971);
   LatLng circleCenter2 = const LatLng(41.028675, 29.025234);
+  LatLng circleCenter3 = const LatLng(40.851750922225825, 29.31384346110201);
 
   Circle? circle0;
   Circle? circle1;
+  Circle? circle2;
+
+  HmsTranslateAnimation translateAnimation = HmsTranslateAnimation(
+    animationId: 'translateAnimation',
+    target: const LatLng(41.028675, 29.025234),
+  );
 
   void _onMapCreated(HuaweiMapController controller) {
     mapController = controller;
@@ -163,10 +170,32 @@ class _CircleDemoState extends State<CircleDemo> {
       },
     );
 
+    circle2 = Circle(
+      circleId: const CircleId('circle_id_2'),
+      center: circleCenter3,
+      radius: 3000,
+      strokeColor: Colors.black,
+      strokeWidth: 1,
+      zIndex: 1,
+      visible: true,
+      clickable: true,
+      onClick: () {
+        log('Circle #2 clicked');
+      },
+      animation: translateAnimation,
+    );
+
     setState(() {
       _circles.add(circle0!);
       _circles.add(circle1!);
+      _circles.add(circle2!);
     });
+  }
+
+  void startAnimation() {
+    if (circle2 != null) {
+      mapController.startAnimationOnCircle(circle2!);
+    }
   }
 
   @override
@@ -218,6 +247,11 @@ class _CircleDemoState extends State<CircleDemo> {
                 icon: Icons.filter_tilt_shift,
                 tooltip: 'Change Stroke',
                 onPressed: _changeStrokes,
+              ),
+              CustomIconButton(
+                icon: Icons.play_arrow,
+                tooltip: 'Start Animation',
+                onPressed: startAnimation,
               ),
               CustomIconButton(
                 icon: Icons.delete,

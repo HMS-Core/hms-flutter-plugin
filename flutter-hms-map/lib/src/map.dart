@@ -176,6 +176,13 @@ class HuaweiMapController {
     );
   }
 
+  Future<void> startAnimationOnCircle(Circle circle) {
+    return _HuaweiMapMethodChannel.startAnimationOnCircle(
+      circle.circleId,
+      mapId: mapId,
+    );
+  }
+
   Future<void> animateCamera(CameraUpdate cameraUpdate) {
     return _HuaweiMapMethodChannel.animateCamera(cameraUpdate, mapId: mapId);
   }
@@ -242,6 +249,10 @@ class HuaweiMapController {
   Future<Uint8List?> takeSnapshot() {
     return _HuaweiMapMethodChannel.takeSnapshot(mapId: mapId);
   }
+
+  Future<double?> getScalePerPixel() {
+    return _HuaweiMapMethodChannel.getScalePerPixel(mapId: mapId);
+  }
 }
 
 class HuaweiMap extends StatefulWidget {
@@ -291,6 +302,7 @@ class HuaweiMap extends StatefulWidget {
   final String? styleId;
   final String? previewId;
   final bool liteMode;
+  final MyLocationStyle? myLocationStyle;
 
   final void Function(HuaweiMapController controller)? onMapCreated;
   final ArgumentCallback<int>? onCameraMoveStarted;
@@ -304,8 +316,8 @@ class HuaweiMap extends StatefulWidget {
   final ArgumentCallback<bool>? onMyLocationButtonClick;
 
   const HuaweiMap({
-    required this.initialCameraPosition,
     Key? key,
+    required this.initialCameraPosition,
     this.mapType = MapType.normal,
     this.gestureRecognizers,
     this.compassEnabled = true,
@@ -353,6 +365,7 @@ class HuaweiMap extends StatefulWidget {
     this.styleId,
     this.previewId,
     this.liteMode = false,
+    this.myLocationStyle,
   }) : super(key: key);
 
   final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;

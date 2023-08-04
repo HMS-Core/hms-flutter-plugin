@@ -24,8 +24,6 @@ import com.huawei.hms.maps.model.animation.AnimationSet;
 class MarkerBuilder implements MarkerMethods {
     private final MarkerOptions markerOptions;
 
-    private boolean clickable;
-
     private AnimationSet animationSet;
 
     MarkerBuilder() {
@@ -37,7 +35,7 @@ class MarkerBuilder implements MarkerMethods {
     }
 
     boolean isClickable() {
-        return clickable;
+        return markerOptions.isClickable();
     }
 
     public AnimationSet getAnimationSet() {
@@ -65,7 +63,7 @@ class MarkerBuilder implements MarkerMethods {
 
     @Override
     public void setClickable(final boolean clickable) {
-        this.clickable = clickable;
+        markerOptions.clickable(clickable);
     }
 
     @Override

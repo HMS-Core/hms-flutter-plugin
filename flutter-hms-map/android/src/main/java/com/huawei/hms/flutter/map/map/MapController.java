@@ -50,6 +50,7 @@ import com.huawei.hms.maps.OnMapReadyCallback;
 import com.huawei.hms.maps.model.BitmapDescriptor;
 import com.huawei.hms.maps.model.LatLng;
 import com.huawei.hms.maps.model.LatLngBounds;
+import com.huawei.hms.maps.model.MyLocationStyle;
 
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.plugin.common.BinaryMessenger;
@@ -63,7 +64,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-final class MapController implements MapMethods, MethodChannel.MethodCallHandler, OnMapReadyCallback, DefaultLifecycleObserver, Application.ActivityLifecycleCallbacks, PlatformView, ActivityPluginBinding.OnSaveInstanceStateListener, LocationSource {
+final class MapController
+    implements MapMethods, MethodChannel.MethodCallHandler, OnMapReadyCallback, DefaultLifecycleObserver,
+    Application.ActivityLifecycleCallbacks, PlatformView, ActivityPluginBinding.OnSaveInstanceStateListener,
+    LocationSource {
     private final AtomicInteger activityState;
 
     private final MethodChannel methodChannel;
@@ -122,6 +126,8 @@ final class MapController implements MapMethods, MethodChannel.MethodCallHandler
 
     private BitmapDescriptor iconDescriptor;
 
+    private MyLocationStyle myLocationStyle;
+
     private List<HashMap<String, Object>> initMarkers;
 
     private List<HashMap<String, Object>> initPolylines;
@@ -146,7 +152,9 @@ final class MapController implements MapMethods, MethodChannel.MethodCallHandler
 
     private LocationSource.OnLocationChangedListener locationChangedListener;
 
-    MapController(final int id, final Context context, final Activity mActivity, final AtomicInteger activityState, final BinaryMessenger binaryMessenger, final Application application, final Lifecycle lifecycle, final PluginRegistry.Registrar registrar, final int registrarActivityHashCode, final HuaweiMapOptions options) {
+    MapController(final int id, final Context context, final Activity mActivity, final AtomicInteger activityState,
+        final BinaryMessenger binaryMessenger, final Application application, final Lifecycle lifecycle,
+        final PluginRegistry.Registrar registrar, final int registrarActivityHashCode, final HuaweiMapOptions options) {
         this.context = context;
         this.activityState = activityState;
         mapView = new MapView(mActivity, options);
@@ -272,7 +280,8 @@ final class MapController implements MapMethods, MethodChannel.MethodCallHandler
                 break;
             }
             case Method.CAMERA_MOVE: {
-                final CameraUpdate cameraUpdate = Convert.toCameraUpdate(call.argument(Param.CAMERA_UPDATE), compactness);
+                final CameraUpdate cameraUpdate = Convert.toCameraUpdate(call.argument(Param.CAMERA_UPDATE),
+                    compactness);
                 mapUtils.moveCamera(cameraUpdate);
                 result.success(null);
                 break;
@@ -324,6 +333,17 @@ final class MapController implements MapMethods, MethodChannel.MethodCallHandler
                 logger.sendSingleEvent(Method.DEACTIVATE_LOC_SOURCE);
                 break;
             }
+            case Method.MAP_GET_SCALEPERPIXEL: {
+                logger.startMethodExecutionTimer(Method.MAP_GET_SCALEPERPIXEL);
+                if (huaweiMap != null) {
+                    result.success(huaweiMap.getScalePerPixel());
+                    logger.sendSingleEvent(Method.MAP_GET_SCALEPERPIXEL);
+                } else {
+                    result.error(Param.ERROR, Method.MAP_GET_SCALEPERPIXEL, null);
+                    logger.sendSingleEvent(Method.MAP_GET_SCALEPERPIXEL, "Couldn't get scale per pixel.");
+                }
+                break;
+            }
             default:
                 mapUtils.onMethodCallCamera(call, result);
         }
@@ -352,11 +372,13 @@ final class MapController implements MapMethods, MethodChannel.MethodCallHandler
         logger.sendSingleEvent("MapController-setMarkersClustering");
 
         logger.startMethodExecutionTimer("MapController-setPadding");
-        this.huaweiMap.setPadding((int) (padding.left * compactness), (int) (padding.top * compactness), (int) (padding.right * compactness), (int) (padding.bottom * compactness));
+        this.huaweiMap.setPadding((int) (padding.left * compactness), (int) (padding.top * compactness),
+            (int) (padding.right * compactness), (int) (padding.bottom * compactness));
         logger.sendSingleEvent("MapController-setPadding");
 
         logger.startMethodExecutionTimer("MapController-setScrollGesturesEnabledDuringRotateOrZoom");
-        this.huaweiMap.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(isScrollGesturesEnabledDuringRotateOrZoom);
+        this.huaweiMap.getUiSettings()
+            .setScrollGesturesEnabledDuringRotateOrZoom(isScrollGesturesEnabledDuringRotateOrZoom);
         logger.sendSingleEvent("MapController-setScrollGesturesEnabledDuringRotateOrZoom");
 
         logger.startMethodExecutionTimer("MapController-setGestureScaleByMapCenter");
@@ -383,12 +405,22 @@ final class MapController implements MapMethods, MethodChannel.MethodCallHandler
             logger.sendSingleEvent("MapController-setPointToCenter");
         }
 
+        Log.e("TAG", "setMyLocationStyle dis", null);
+        if (myLocationStyle != null) {
+            logger.startMethodExecutionTimer("MapController-setMyLocationStyle");
+            this.huaweiMap.setMyLocationStyle(myLocationStyle);
+            Log.e("TAG", "setMyLocationStyle ic", null);
+            logger.sendSingleEvent("MapController-setMyLocationStyle");
+        }
+
         logger.startMethodExecutionTimer("MapController-setLogoPosition");
         huaweiMap.getUiSettings().setLogoPosition(logoPosition);
         logger.sendSingleEvent("MapController-setLogoPosition");
 
         logger.startMethodExecutionTimer("MapController-setLogoPadding");
-        huaweiMap.getUiSettings().setLogoPadding((int) (logoPadding.left * compactness), (int) (logoPadding.top * compactness), (int) (logoPadding.right * compactness), (int) (logoPadding.bottom * compactness));
+        huaweiMap.getUiSettings()
+            .setLogoPadding((int) (logoPadding.left * compactness), (int) (logoPadding.top * compactness),
+                (int) (logoPadding.right * compactness), (int) (logoPadding.bottom * compactness));
         logger.sendSingleEvent("MapController-setLogoPadding");
 
         if (mapReadyResult != null) {
@@ -396,7 +428,8 @@ final class MapController implements MapMethods, MethodChannel.MethodCallHandler
             mapReadyResult = null;
         }
         mapListenerHandler.init(huaweiMap);
-        mapUtils.init(huaweiMap, initMarkers, initPolylines, initPolygons, initCircles, initGroundOverlays, initTileOverlays, initHeatMaps, markersClustering, messenger);
+        mapUtils.init(huaweiMap, initMarkers, initPolylines, initPolygons, initCircles, initGroundOverlays,
+            initTileOverlays, initHeatMaps, markersClustering, messenger);
         updateMyLocationSettings();
     }
 
@@ -498,7 +531,8 @@ final class MapController implements MapMethods, MethodChannel.MethodCallHandler
             return;
         }
         logger.startMethodExecutionTimer("MapController-setPadding");
-        huaweiMap.setPadding((int) (left * compactness), (int) (top * compactness), (int) (right * compactness), (int) (bottom * compactness));
+        huaweiMap.setPadding((int) (left * compactness), (int) (top * compactness), (int) (right * compactness),
+            (int) (bottom * compactness));
         logger.sendSingleEvent("MapController-setPadding");
     }
 
@@ -643,7 +677,8 @@ final class MapController implements MapMethods, MethodChannel.MethodCallHandler
         this.isScrollGesturesEnabledDuringRotateOrZoom = scrollGesturesEnabledDuringRotateOrZoom;
         if (huaweiMap != null) {
             logger.startMethodExecutionTimer("MapController-setScrollGesturesEnabledDuringRotateOrZoom");
-            huaweiMap.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(scrollGesturesEnabledDuringRotateOrZoom);
+            huaweiMap.getUiSettings()
+                .setScrollGesturesEnabledDuringRotateOrZoom(scrollGesturesEnabledDuringRotateOrZoom);
             logger.sendSingleEvent("MapController-setScrollGesturesEnabledDuringRotateOrZoom");
         }
     }
@@ -723,7 +758,9 @@ final class MapController implements MapMethods, MethodChannel.MethodCallHandler
         this.logoPadding = new Rect(paddingStart, paddingTop, paddingEnd, paddingBottom);
         if (huaweiMap != null) {
             logger.startMethodExecutionTimer("MapController-setLogoPadding");
-            huaweiMap.getUiSettings().setLogoPadding((int) (paddingStart * compactness), (int) (paddingTop * compactness), (int) (paddingEnd * compactness), (int) (paddingBottom * compactness));
+            huaweiMap.getUiSettings()
+                .setLogoPadding((int) (paddingStart * compactness), (int) (paddingTop * compactness),
+                    (int) (paddingEnd * compactness), (int) (paddingBottom * compactness));
             logger.sendSingleEvent("MapController-setLogoPadding");
         }
     }
@@ -755,6 +792,21 @@ final class MapController implements MapMethods, MethodChannel.MethodCallHandler
             logger.startMethodExecutionTimer("MapController-setStyleId");
             huaweiMap.setStyleId(styleId);
             logger.sendSingleEvent("MapController-setStyleId");
+        }
+    }
+
+    @Override
+    public void setMyLocationStyle(MyLocationStyle myLocationStyle) {
+        if (myLocationStyle == null) {
+            return;
+        }
+
+        this.myLocationStyle = myLocationStyle;
+
+        if (huaweiMap != null) {
+            logger.startMethodExecutionTimer("MapController-setMyLocationStyle");
+            huaweiMap.setMyLocationStyle(myLocationStyle);
+            logger.sendSingleEvent("MapController-setMyLocationStyle");
         }
     }
 

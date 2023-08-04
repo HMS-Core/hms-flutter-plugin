@@ -31,6 +31,8 @@ class Polyline {
   final int width;
   final int zIndex;
   final VoidCallback? onClick;
+  final bool gradient;
+  final List<Color> colorValues;
 
   const Polyline({
     required this.polylineId,
@@ -46,6 +48,8 @@ class Polyline {
     this.zIndex = 0,
     this.clickable = false,
     this.onClick,
+    this.gradient = false,
+    this.colorValues = const <Color>[],
   });
 
   Polyline updateCopy({
@@ -61,6 +65,8 @@ class Polyline {
     int? zIndex,
     bool? clickable,
     VoidCallback? onClick,
+    bool? gradient,
+    List<Color>? colorValues,
   }) {
     return Polyline(
       polylineId: polylineId,
@@ -76,6 +82,8 @@ class Polyline {
       zIndex: zIndex ?? this.zIndex,
       clickable: clickable ?? this.clickable,
       onClick: onClick ?? this.onClick,
+      gradient: gradient ?? this.gradient,
+      colorValues: colorValues ?? this.colorValues,
     );
   }
 
@@ -106,7 +114,9 @@ class Polyline {
         endCap == other.endCap &&
         visible == other.visible &&
         width == other.width &&
-        zIndex == other.zIndex;
+        zIndex == other.zIndex &&
+        gradient == other.gradient &&
+        colorValues == other.colorValues;
   }
 
   @override

@@ -73,7 +73,8 @@ public class PolygonUtils {
         final Polygon newPolygon = huaweiMap.addPolygon(options);
         logger.sendSingleEvent("addPolygon");
 
-        final PolygonController controller = new PolygonController(newPolygon, polygonBuilder.isClickable(), compactness);
+        final PolygonController controller = new PolygonController(newPolygon, polygonBuilder.isClickable(),
+            compactness);
         idsOnMap.put(id, controller);
         ids.put(newPolygon.getId(), id);
     }

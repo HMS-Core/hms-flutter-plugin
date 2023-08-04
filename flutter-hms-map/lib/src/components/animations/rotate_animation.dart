@@ -16,7 +16,7 @@
 
 part of huawei_map;
 
-class HmsMarkerRotateAnimation extends HmsMarkerAnimation {
+class HmsRotateAnimation extends HmsAnimation {
   double fromDegree;
   double toDegree;
   Function? onAnimationStart;
@@ -32,7 +32,7 @@ class HmsMarkerRotateAnimation extends HmsMarkerAnimation {
     onAnimationEnd?.call();
   }
 
-  HmsMarkerRotateAnimation({
+  HmsRotateAnimation({
     required String animationId,
     required this.fromDegree,
     required this.toDegree,
@@ -45,7 +45,7 @@ class HmsMarkerRotateAnimation extends HmsMarkerAnimation {
     this.onAnimationEnd,
   }) : super(
           animationId: animationId,
-          type: HmsMarkerAnimation.ROTATE,
+          type: HmsAnimation.ROTATE,
           duration: duration,
           fillMode: fillMode,
           repeatCount: repeatCount,
@@ -63,7 +63,7 @@ class HmsMarkerRotateAnimation extends HmsMarkerAnimation {
     if (runtimeType != other.runtimeType) {
       return false;
     }
-    return other is HmsMarkerRotateAnimation &&
+    return other is HmsRotateAnimation &&
         animationId == other.animationId &&
         fromDegree == other.fromDegree &&
         toDegree == other.toDegree;

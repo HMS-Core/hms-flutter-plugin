@@ -98,7 +98,9 @@ abstract class _Method {
 
   static const String SetAccessToken = '[MapUtil]setAccessToken';
 
-  // Location Source
+  static const String MapGetScalePerPixel = '[Map]getScalePerPixel';
+
+  //Location Source
   static const String SetLocationSource = '[Map]setLocationSource';
 
   static const String SetLocation = '[Map]setLocation';
@@ -106,33 +108,36 @@ abstract class _Method {
   static const String DeactivateLocationSource =
       '[Map]deactivateLocationSource';
 
-  // Ground Overlays
+  //Ground Overlays
   static const String GroundOverlayClick = '[GroundOverlay]click';
 
   static const String GroundOverlaysUpdate = '[GroundOverlays]update';
 
-  // Map Utils
+  //Map Utils
   static const String MapDistanceCalculator = '[MapUtil]distanceCalculator';
 
   static const String MapConvertCoordinate = '[MapUtil]convertCoordinate';
 
   static const String MapConvertCoordinates = '[MapUtil]convertCoordinates';
 
-  // HMS Logger
+  //HMS Logger
   static const String EnableLogger = '[MapUtil]enableLogger';
 
   static const String DisableLogger = '[MapUtil]disableLogger';
 
-  // Tile Overlay
+  //Tile Overlay
   static const String TileOverlaysUpdate = '[TileOverlays]update';
 
   static const String ClearTileCache = 'clearTileCache';
 
-  // Marker
+  //Marker
   static const String MarkerStartAnimation = 'MarkerStartAnimation';
 
   static const String MarkerIsClusterable = '[Markers]isMarkerClusterable';
 
-  // Heat Map
+  //Heat Map
   static const String HeatMapUpdate = '[HeatMap]update';
+
+  //Circle
+  static const String CircleStartAnimation = 'CircleStartAnimation';
 }

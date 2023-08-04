@@ -28,6 +28,7 @@ import com.huawei.hms.maps.model.Circle;
 import com.huawei.hms.maps.model.CircleOptions;
 
 import io.flutter.plugin.common.MethodChannel;
+import io.flutter.plugin.common.BinaryMessenger;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +38,8 @@ public class CircleUtils {
     private HuaweiMap huaweiMap;
 
     private final MethodChannel mChannel;
+
+    private BinaryMessenger messenger;
 
     private final float compactness;
 
@@ -58,7 +61,7 @@ public class CircleUtils {
         this.huaweiMap = huaweiMap;
     }
 
-    private void insert(final HashMap<String, Object> circle) {
+    private void insert(final HashMap<String, Object> circle, final BinaryMessenger messenger) {
         if (huaweiMap == null) {
             return;
         }
@@ -67,7 +70,7 @@ public class CircleUtils {
         }
 
         final CircleBuilder circleBuilder = new CircleBuilder(compactness);
-        final String circleId = Convert.processCircleOptions(circle, circleBuilder);
+        final String circleId = Convert.processCircleOptions(circle, circleBuilder, messenger);
         final CircleOptions options = circleBuilder.build();
 
         logger.startMethodExecutionTimer("addCircle");
@@ -75,17 +78,22 @@ public class CircleUtils {
         logger.sendSingleEvent("addCircle");
 
         final CircleController controller = new CircleController(newCircle, circleBuilder.isClickable(), compactness);
+        if (circleBuilder.getAnimation() != null) {
+            controller.setAnimation(circleBuilder.getAnimation());
+        }
+
         idsOnMap.put(circleId, controller);
         ids.put(newCircle.getId(), circleId);
     }
 
-    public void insertMulti(final List<HashMap<String, Object>> circlesToAdd) {
+    public void insertMulti(final List<HashMap<String, Object>> circlesToAdd, final BinaryMessenger messenger) {
+        this.messenger = messenger;
         if (circlesToAdd == null) {
             return;
         }
 
         for (final HashMap<String, Object> circleToAdd : circlesToAdd) {
-            insert(circleToAdd);
+            insert(circleToAdd, messenger);
         }
 
     }
@@ -98,7 +106,7 @@ public class CircleUtils {
         final String circleId = getId(circle);
         final CircleController circleController = idsOnMap.get(circleId);
         if (circleController != null) {
-            Convert.processCircleOptions(circle, circleController);
+            Convert.processCircleOptions(circle, circleController, messenger);
         }
     }
 
@@ -144,6 +152,13 @@ public class CircleUtils {
         final CircleController circleController = idsOnMap.get(circleId);
 
         return circleController != null && circleController.isClickable();
+    }
+
+    public void startAnimation(final String id) {
+        final CircleController circleController = idsOnMap.get(id);
+        if (circleController != null) {
+            circleController.startAnimation();
+        }
     }
 
     private static String getId(final HashMap<String, Object> circle) {

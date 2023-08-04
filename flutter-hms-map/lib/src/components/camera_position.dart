@@ -23,8 +23,8 @@ class CameraPosition {
   final double zoom;
 
   const CameraPosition({
-    required this.target,
     this.bearing = 0.0,
+    required this.target,
     this.tilt = 0.0,
     this.zoom = 0.0,
   });
