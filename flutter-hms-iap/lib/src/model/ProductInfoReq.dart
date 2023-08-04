@@ -17,14 +17,15 @@
 part of huawei_iap;
 
 /// Request information of the obtainProductInfo API.
-class ProductInfoReq {
+class ProductInfoReq extends BaseReq {
   int priceType;
   List<String> skuIds;
 
   ProductInfoReq({
     required this.priceType,
     required this.skuIds,
-  });
+    String? reservedInfor,
+  }) : super(reservedInfor: reservedInfor);
 
   factory ProductInfoReq.fromJson(String str) =>
       ProductInfoReq.fromMap(json.decode(str));
@@ -34,10 +35,15 @@ class ProductInfoReq {
   factory ProductInfoReq.fromMap(Map<String, dynamic> json) => ProductInfoReq(
         priceType: json['priceType'],
         skuIds: json['skuIds'].cast<String>(),
+        reservedInfor: json['reservedInfor'],
       );
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{'priceType': priceType, 'skuIds': skuIds};
+    return <String, dynamic>{
+      'priceType': priceType,
+      'skuIds': skuIds,
+      'reservedInfor': reservedInfor,
+    };
   }
 
   @override
@@ -47,12 +53,14 @@ class ProductInfoReq {
 
     return other is ProductInfoReq &&
         this.priceType == other.priceType &&
-        listEquals(this.skuIds, other.skuIds);
+        listEquals(this.skuIds, other.skuIds) &&
+        this.reservedInfor == other.reservedInfor;
   }
 
   @override
   int get hashCode => Object.hash(
         priceType,
         Object.hashAll(skuIds),
+        reservedInfor,
       );
 }

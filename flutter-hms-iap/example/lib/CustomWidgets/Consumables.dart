@@ -71,6 +71,7 @@ class _ConsumablesState extends State<Consumables> {
           productId: productID,
           signatureAlgorithm:
               SignAlgorithmConstants.SIGNATURE_ALGORITHM_SHA256WITHRSA_PSS,
+          reservedInfor: '{\"key1\":\"value1\",\"key2\":\"value2\"}',
         ),
       );
       if (result.returnCode == HmsIapResults.ORDER_STATE_SUCCESS.resultCode) {

@@ -17,20 +17,19 @@
 part of huawei_iap;
 
 /// Request information of the createPurchaseIntent API.
-class PurchaseIntentReq {
+class PurchaseIntentReq extends BaseReq {
   int priceType;
   String productId;
   String? developerPayload;
-  String? reservedInfor;
   String? signatureAlgorithm;
 
   PurchaseIntentReq({
     required this.priceType,
     required this.productId,
     this.developerPayload,
-    this.reservedInfor,
     this.signatureAlgorithm,
-  });
+    String? reservedInfor,
+  }) : super(reservedInfor: reservedInfor);
 
   factory PurchaseIntentReq.fromJson(String str) =>
       PurchaseIntentReq.fromMap(json.decode(str));

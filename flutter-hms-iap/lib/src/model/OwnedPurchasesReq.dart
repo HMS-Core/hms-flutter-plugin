@@ -17,7 +17,7 @@
 part of huawei_iap;
 
 /// Request information of the obtainOwnedPurchases or obtainOwnedPurchaseRecord API.
-class OwnedPurchasesReq {
+class OwnedPurchasesReq extends BaseReq {
   String? continuationToken;
   int priceType;
   String? signatureAlgorithm;
@@ -26,7 +26,8 @@ class OwnedPurchasesReq {
     required this.priceType,
     this.continuationToken,
     this.signatureAlgorithm,
-  });
+    String? reservedInfor,
+  }) : super(reservedInfor: reservedInfor);
 
   factory OwnedPurchasesReq.fromJson(String str) =>
       OwnedPurchasesReq.fromMap(json.decode(str));
@@ -40,6 +41,7 @@ class OwnedPurchasesReq {
             : json['continuationToken'],
         priceType: json['priceType'],
         signatureAlgorithm: json['signatureAlgorithm'],
+        reservedInfor: json['reservedInfor'],
       );
 
   Map<String, dynamic> toMap() {
@@ -47,6 +49,7 @@ class OwnedPurchasesReq {
       'continuationToken': continuationToken,
       'priceType': priceType,
       'signatureAlgorithm': signatureAlgorithm,
+      'reservedInfor': reservedInfor,
     };
   }
 
@@ -58,7 +61,8 @@ class OwnedPurchasesReq {
     return other is OwnedPurchasesReq &&
         this.continuationToken == other.continuationToken &&
         this.priceType == other.priceType &&
-        this.signatureAlgorithm == other.signatureAlgorithm;
+        this.signatureAlgorithm == other.signatureAlgorithm &&
+        this.reservedInfor == other.reservedInfor;
   }
 
   @override
@@ -66,5 +70,6 @@ class OwnedPurchasesReq {
         continuationToken,
         priceType,
         signatureAlgorithm,
+        reservedInfor,
       );
 }

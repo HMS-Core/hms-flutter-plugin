@@ -2,7 +2,7 @@
 /captures/
 /local.properties
 GeneratedPluginRegistrant.java
-agconnect-services.json
+app/agconnect-services.json
 **/*.keystore
 **/*.jks
 .project
