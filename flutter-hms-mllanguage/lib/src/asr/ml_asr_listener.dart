@@ -1,0 +1,52 @@
+/*
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
+
+    Licensed under the Apache License, Version 2.0 (the "License")
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        https://www.apache.org/licenses/LICENSE-2.0
+        
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
+
+part of huawei_ml_language;
+
+class MLAsrListener {
+  /// Called when an error occures while speech recognition.
+  void Function(int error, String errorMessage) onError;
+
+  /// If MLAsrConstants.FEATURE_WORDFLUX is selected,
+  /// recognition result will be returned with this function.
+  void Function(String result) onRecognizingResults;
+
+  /// If MLAsrConstants.FEATURE_ALLINONE is selected,
+  /// recognition result will be returned with this function.
+  void Function(String result)? onResults;
+
+  /// Return the original PCM stream and audio power to the user.
+  void Function(Uint8List bytes)? onVoiceDataReceived;
+
+  /// Called when the recorder starts to receive speech.
+  void Function()? onStartListening;
+
+  /// Called when user starts to speak.
+  void Function()? onStartingOfSpeech;
+
+  /// Notifies the app status change.
+  void Function(int state)? onState;
+
+  MLAsrListener({
+    required this.onRecognizingResults,
+    required this.onError,
+    this.onResults,
+    this.onVoiceDataReceived,
+    this.onStartListening,
+    this.onStartingOfSpeech,
+    this.onState,
+  });
+}
