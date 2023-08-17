@@ -26,6 +26,8 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 apply plugin: 'com.huawei.agconnect'
 
 android {
+    namespace 'com.huawei.hms.flutter.map_example'
+
     compileSdkVersion 33
 
     lintOptions {
