@@ -19,6 +19,7 @@ package com.huawei.hms.flutter.map.circle;
 import com.huawei.hms.maps.model.CircleOptions;
 import com.huawei.hms.maps.model.LatLng;
 import com.huawei.hms.maps.model.PatternItem;
+import com.huawei.hms.maps.model.animation.Animation;
 
 import java.util.List;
 
@@ -28,6 +29,12 @@ class CircleBuilder implements CircleMethods {
     private final float compactness;
 
     private boolean clickable;
+
+    private Animation animation;
+
+    public Animation getAnimation() {
+        return animation;
+    }
 
     CircleBuilder(float compactness) {
         this.circleOptions = new CircleOptions();
@@ -91,5 +98,14 @@ class CircleBuilder implements CircleMethods {
     @Override
     public void setStrokePattern(List<PatternItem> strokePattern) {
         circleOptions.strokePattern(strokePattern);
+    }
+
+    @Override
+    public void setAnimation(final Animation animation) {
+        this.animation = animation;
+    }
+
+    @Override
+    public void startAnimation() {
     }
 }

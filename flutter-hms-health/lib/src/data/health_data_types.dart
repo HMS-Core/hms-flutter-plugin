@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -399,6 +399,84 @@ abstract class HealthDataTypes {
     'https://www.huawei.com/healthkit/reproductive.write',
     <Field>[
       HealthFields.FIELD_PHYSICAL_SYMPTOMS,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  static const DataType DT_SLEEP_RESPIRATORY_DETAIL = DataType(
+    'com.huawei.sleep_respiratory_detail',
+    'https://www.huawei.com/healthkit/pulmonary.read',
+    'https://www.huawei.com/healthkit/pulmonary.write',
+    <Field>[
+      Field.SLEEP_RESPIRATORY_TYPE,
+      Field.SLEEP_RESPIRATORY_VALUE,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  static const DataType DT_SLEEP_RESPIRATORY_EVENT = DataType(
+    'com.huawei.sleep_respiratory_event',
+    'https://www.huawei.com/healthkit/pulmonary.read',
+    'https://www.huawei.com/healthkit/pulmonary.write',
+    <Field>[
+      Field.EVENT_NAME,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  static const DataType DT_HEALTH_RECORD_VENTILATOR = DataType(
+    'com.huawei.health.record.ventilator',
+    'https://www.huawei.com/healthkit/pulmonary.read',
+    'https://www.huawei.com/healthkit/pulmonary.write',
+    <Field>[
+      HealthFields.SYS_MODE,
+      HealthFields.SYS_SESSION_DATE,
+      HealthFields.EVENT_AHI,
+      HealthFields.SYS_DURATION,
+      HealthFields.LUMIS_TIDVOL_MEDIAN,
+      HealthFields.LUMIS_TIDVOL,
+      HealthFields.LUMIS_TIDVOL_MAX,
+      HealthFields.CLINICAL_RESPRATE_MEDIAN,
+      HealthFields.CLINICAL_RESP_RATE,
+      HealthFields.CLINICAL_RESP_RATE_MAX,
+      HealthFields.LUMIS_IERATIO_MEDIAN,
+      HealthFields.LUMIS_IERATIO_QUANTILE,
+      HealthFields.LUMIS_IERATIO_MAX,
+      HealthFields.MASK_OFF,
+      HealthFields.HYPOVENTILATION_INDEX,
+      HealthFields.OBSTRUCTIVE_APNEA_INDEX,
+      HealthFields.PRESSURE_BELOW,
+      HealthFields.HYPOVENTILATION_EVENT_TIMES,
+      HealthFields.SNORING_EVENT_TIMES,
+      HealthFields.CENTER_APNEA_EVENT_TIMES,
+      HealthFields.OBSTRUCTIVE_APNEA_EVENT_TIMES,
+      HealthFields.AIR_FLOW_LIMIT_EVENT_TIMES,
+      HealthFields.MASSIVE_LEAK_EVENT_TIMES,
+      HealthFields.UNKNOW_EVENT_TIMES,
+      HealthFields.ALL_EVENT_TIMES,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  static const DataType DT_CGM_BLOOD_GLUCOSE = DataType(
+    'com.huawei.cgm_blood_glucose',
+    'https://www.huawei.com/healthkit/bloodglucose.read',
+    'https://www.huawei.com/healthkit/bloodglucose.write',
+    <Field>[
+      HealthFields.FIELD_LEVEL,
+    ],
+    isPolymerizedFlag: true,
+  );
+
+  static const DataType POLYMERIZE_CGM_BLOOD_GLUCOSE_STATISTICS = DataType(
+    'com.huawei.cgm_blood_glucose.statistics',
+    'https://www.huawei.com/healthkit/bloodglucose.read',
+    'https://www.huawei.com/healthkit/bloodglucose.write',
+    <Field>[
+      Field.AVG,
+      Field.MAX,
+      Field.MIN,
+      Field.LAST,
     ],
     isPolymerizedFlag: true,
   );

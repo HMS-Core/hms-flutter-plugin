@@ -18,13 +18,14 @@ package com.huawei.hms.flutter.map.circle;
 
 import com.huawei.hms.maps.model.LatLng;
 import com.huawei.hms.maps.model.PatternItem;
+import com.huawei.hms.maps.model.animation.Animation;
 
 import java.util.List;
 
 /**
  * The interface Circle methods.
  *
- * @since v.5.3.0
+ * @since v.6.11.0
  */
 public interface CircleMethods {
 
@@ -102,4 +103,16 @@ public interface CircleMethods {
      * @param strokePattern the stroke pattern
      */
     void setStrokePattern(List<PatternItem> strokePattern);
+
+    /**
+     * Sets Animation Set.
+     *
+     * @param animation the animation set
+     */
+    void setAnimation(Animation animation);
+
+    /**
+     * Starts animation.
+     */
+    void startAnimation();
 }

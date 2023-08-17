@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+ * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -55,10 +55,15 @@ import java.util.Map;
 
 public class SettingControllerMethodHandler implements MethodCallHandler, PluginRegistry.ActivityResultListener {
     private Activity activity;
+
     private Context context;
+
     private SettingController settingController;
+
     private ConsentsController consentsController;
+
     private DefaultSettingController settingControllerImpl;
+
     private MethodChannel.Result mResult;
 
     public SettingControllerMethodHandler(@Nullable Activity activity) {
@@ -241,8 +246,8 @@ public class SettingControllerMethodHandler implements MethodCallHandler, Plugin
         final Boolean deleteData = (Boolean) call.arguments;
         final VoidResultListener voidResultListener = new VoidResultHelper(result, context, call.method);
         consentsController.cancelAuthorization(deleteData)
-                .addOnSuccessListener(voidResultListener::onSuccess)
-                .addOnFailureListener(voidResultListener::onFail);
+            .addOnSuccessListener(voidResultListener::onSuccess)
+            .addOnFailureListener(voidResultListener::onFail);
     }
 
     private void cancelAuthorizationWithScopes(final MethodCall call, final Result result) {
@@ -251,8 +256,8 @@ public class SettingControllerMethodHandler implements MethodCallHandler, Plugin
         final List<String> scopes = call.argument("scopes");
         final VoidResultListener voidResultListener = new VoidResultHelper(result, context, call.method);
         consentsController.cancelAuthorization(appId, scopes)
-                .addOnSuccessListener(voidResultListener::onSuccess)
-                .addOnFailureListener(voidResultListener::onFail);
+            .addOnSuccessListener(voidResultListener::onSuccess)
+            .addOnFailureListener(voidResultListener::onFail);
     }
 
     /**

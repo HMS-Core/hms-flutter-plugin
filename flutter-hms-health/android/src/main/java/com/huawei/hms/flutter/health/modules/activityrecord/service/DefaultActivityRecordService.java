@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+ * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,8 @@ public class DefaultActivityRecordService implements ActivityRecordService {
     private static final String TAG = ActivityRecordsConstants.ACTIVITY_RECORDS_MODULE;
 
     @Override
-    public void startActivityRecord(ActivityRecordsController activityRecordsController, ActivityRecord activityRecord, VoidResultListener listener) {
+    public void startActivityRecord(ActivityRecordsController activityRecordsController, ActivityRecord activityRecord,
+        VoidResultListener listener) {
         Log.i(TAG, "call startActivityRecord");
 
         Task<Void> beginTask = activityRecordsController.beginActivityRecord(activityRecord);
@@ -55,7 +56,8 @@ public class DefaultActivityRecordService implements ActivityRecordService {
     }
 
     @Override
-    public void continueActivityRecord(ActivityRecordsController activityRecordsController, String activityRecordId, VoidResultListener listener) {
+    public void continueActivityRecord(ActivityRecordsController activityRecordsController, String activityRecordId,
+        VoidResultListener listener) {
         Log.i(TAG, "call continueActivityRecord");
         final Task<Void> task = activityRecordsController.continueActivityRecord(activityRecordId);
         task.addOnSuccessListener(voidValue -> {
@@ -68,7 +70,8 @@ public class DefaultActivityRecordService implements ActivityRecordService {
     }
 
     @Override
-    public void endActivityRecord(ActivityRecordsController activityRecordsController, @Nullable String activityRecordId, ResultListener<List> listener) {
+    public void endActivityRecord(ActivityRecordsController activityRecordsController,
+        @Nullable String activityRecordId, ResultListener<List> listener) {
         Log.i(TAG, "call endActivityRecord");
         // Call the related method of ActivityRecordsController to stop activity records.
         // The input parameter can be the ID string of ActivityRecord or null
@@ -88,7 +91,7 @@ public class DefaultActivityRecordService implements ActivityRecordService {
 
     @Override
     public void addActivityRecord(com.huawei.hms.hihealth.ActivityRecordsController activityRecordsController,
-                                  ActivityRecord activityRecord, List<SampleSet> sampleSets, VoidResultListener listener) {
+        ActivityRecord activityRecord, List<SampleSet> sampleSets, VoidResultListener listener) {
         Log.i(TAG, "call addActivityRecord");
         // Build the activity record insert request object
         ActivityRecordInsertOptions.Builder insertOptionsBuilder = new Builder();
@@ -109,7 +112,7 @@ public class DefaultActivityRecordService implements ActivityRecordService {
 
     @Override
     public void getActivityRecord(ActivityRecordsController activityRecordsController,
-                                  ActivityRecordReadOptions readRequest, ResultListener<ActivityRecordReply> listener) {
+        ActivityRecordReadOptions readRequest, ResultListener<ActivityRecordReply> listener) {
         // Call the read method of the ActivityRecordsController to obtain activity records
         Log.i(TAG, "call getActivityRecord");
         // from the Health platform based on the conditions in the request body
@@ -125,7 +128,7 @@ public class DefaultActivityRecordService implements ActivityRecordService {
 
     @Override
     public void deleteActivityRecord(ActivityRecordsController activityRecordsController,
-                                     ActivityRecordDeleteOptions deleteOptions, VoidResultListener listener) {
+        ActivityRecordDeleteOptions deleteOptions, VoidResultListener listener) {
         Task<Void> deleteTask = activityRecordsController.deleteActivityRecord(deleteOptions);
         deleteTask.addOnSuccessListener(aVoid -> {
             Log.i("ActivityRecords", "deleteActivityRecord success");

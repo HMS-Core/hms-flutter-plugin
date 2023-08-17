@@ -1,18 +1,18 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.ads.adslite.nativead;
 
@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 
 import com.huawei.hms.ads.AdListener;
 import com.huawei.hms.ads.AdParam;
+import com.huawei.hms.ads.AdvertiserInfo;
 import com.huawei.hms.ads.nativead.DislikeAdReason;
 import com.huawei.hms.ads.nativead.NativeAd;
 import com.huawei.hms.ads.nativead.NativeAdConfiguration;
@@ -47,6 +48,7 @@ public class NativeAdController implements MethodChannel.MethodCallHandler {
     private MethodChannel channel;
     private Context context;
 
+    private HmsNativeView nativeView;
     private NativeAd nativeAd;
     private AdListener adListener;
     private NativeAd.NativeAdLoadedListener nativeAdLoadedListener;
@@ -67,6 +69,10 @@ public class NativeAdController implements MethodChannel.MethodCallHandler {
 
     void setNativeAd(NativeAd nativeAd) {
         this.nativeAd = nativeAd;
+    }
+
+    void setNativeView(HmsNativeView nativeView) {
+        this.nativeView = nativeView;
     }
 
     void setAdListener(AdListener adListener) {
@@ -125,6 +131,17 @@ public class NativeAdController implements MethodChannel.MethodCallHandler {
                 result.success(true);
                 HMSLogger.getInstance(context).sendSingleEvent("gotoWhyThisAdPage");
                 break;
+            case "hasAdvertiserInfo":
+                result.success(nativeAd.hasAdvertiserInfo());
+                break;
+            case "showAdvertiserInfoDialog":
+                nativeView.showAdvertiserInfoDialog();
+                result.success(true);
+                break;
+            case "hideAdvertiserInfoDialog":
+                nativeView.hideAdvertiserInfoDialog();
+                result.success(true);
+                break;
             default:
                 onNativeGetterMethodCall(call, result);
         }
@@ -158,6 +175,20 @@ public class NativeAdController implements MethodChannel.MethodCallHandler {
                 break;
             case "getUniqueId":
                 result.success(nativeAd.getUniqueId());
+                break;
+            case "getAdvertiserInfo":
+                List<AdvertiserInfo> advertiserInfoList = nativeAd.getAdvertiserInfo();
+                List<Map<String, Object>> list = new ArrayList<>();
+                if (advertiserInfoList != null) {
+                    for (AdvertiserInfo advertiserInfo : advertiserInfoList) {
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("key", advertiserInfo.getKey());
+                        map.put("value", advertiserInfo.getValue());
+                        map.put("seq", advertiserInfo.getSeq());
+                        list.add(map);
+                    }
+                }
+                result.success(list);
                 break;
             default:
                 onVideoMethodCall(call, result);

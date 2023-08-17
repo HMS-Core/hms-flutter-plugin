@@ -1,3 +1,14 @@
+## 3.11.0+300
+
+- **Real-time translation**:
+
+  - Additionally supported Lithuanian and Georgian.
+
+- **Text to speech**:
+
+  - Supported Russian in Russia.
+
+
 ## 3.7.0+300
 
 - Added `setUserRegion` and `getCountryCode` methods to **MLLanguageApp**.

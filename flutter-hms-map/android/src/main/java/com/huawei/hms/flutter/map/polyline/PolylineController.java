@@ -100,6 +100,16 @@ class PolylineController implements PolylineMethods {
         polyline.setZIndex(zIndex);
     }
 
+    @Override
+    public void setGradient(final boolean on) {
+        polyline.setGradient(on);
+    }
+
+    @Override
+    public void setColorValues(List<Integer> colorValues) {
+        polyline.setColorValues(colorValues);
+    }
+
     String getMapPolylineId() {
         return mapPolylineId;
     }

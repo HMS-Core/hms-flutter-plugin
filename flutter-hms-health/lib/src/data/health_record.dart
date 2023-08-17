@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ class HealthRecord {
   Map<String, dynamic> fieldValues = <String, dynamic>{};
   List<SamplePoint> subDataSummary = <SamplePoint>[];
   List<SampleSet> subDataDetails = <SampleSet>[];
-  String healthRecordId;
+  String? healthRecordId;
   final List<Map<String, dynamic>> _fieldValueList = <Map<String, dynamic>>[];
   final List<Map<String, dynamic>> _setList = <Map<String, dynamic>>[];
   final List<Map<String, dynamic>> _pointList = <Map<String, dynamic>>[];
@@ -33,7 +33,7 @@ class HealthRecord {
     required this.dataCollector,
     required this.startTime,
     required this.endTime,
-    required this.healthRecordId,
+    this.healthRecordId,
     this.metadata,
   });
 
@@ -100,13 +100,14 @@ class HealthRecord {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'startTime': startTime.millisecondsSinceEpoch,
-      'endTime': endTime.millisecondsSinceEpoch,
+      'startTime': startTime.millisecondsSinceEpoch.toString(),
+      'endTime': endTime.millisecondsSinceEpoch.toString(),
       'dataCollector': dataCollector.toMap(),
       'metadata': metadata,
       'subSummary': _pointList,
       'subDetails': _setList,
       'fields': _fieldValueList,
+      'healthRecordId': healthRecordId,
     }..removeWhere((String k, dynamic v) => v == null);
   }
 

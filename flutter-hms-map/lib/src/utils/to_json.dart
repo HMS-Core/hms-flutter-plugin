@@ -66,13 +66,13 @@ String animationSetToJson(List<dynamic> animationSet) {
     List<dynamic>.from(
       animationSet.map((dynamic e) {
         switch (e.type) {
-          case HmsMarkerAnimation.ALPHA:
+          case HmsAnimation.ALPHA:
             return alphaAnimationToJson(e);
-          case HmsMarkerAnimation.ROTATE:
+          case HmsAnimation.ROTATE:
             return rotateAnimationToJson(e);
-          case HmsMarkerAnimation.SCALE:
+          case HmsAnimation.SCALE:
             return scaleAnimationToJson(e);
-          case HmsMarkerAnimation.TRANSLATE:
+          case HmsAnimation.TRANSLATE:
             return translateAnimationToJson(e);
         }
       }),
@@ -80,9 +80,33 @@ String animationSetToJson(List<dynamic> animationSet) {
   );
 }
 
+String animationToJson(HmsAnimation animation) {
+  switch (animation.type) {
+    case HmsAnimation.ALPHA:
+      return json.encode(
+        alphaAnimationToJson(animation as HmsAlphaAnimation),
+      );
+    case HmsAnimation.ROTATE:
+      return json.encode(
+        rotateAnimationToJson(animation as HmsRotateAnimation),
+      );
+    case HmsAnimation.SCALE:
+      return json.encode(
+        scaleAnimationToJson(animation as HmsScaleAnimation),
+      );
+    case HmsAnimation.TRANSLATE:
+      return json.encode(
+        translateAnimationToJson(animation as HmsTranslateAnimation),
+      );
+  }
+  throw ArgumentError(
+    'Please provide a valid animation type.',
+  );
+}
+
 Map<String, dynamic> animationBaseToJson(
   final Map<String, dynamic> json,
-  HmsMarkerAnimation animation,
+  HmsAnimation animation,
 ) {
   addToJson(json, _Param.animationId, animation.animationId);
   addToJson(json, _Param.animationType, animation.type);
@@ -95,7 +119,7 @@ Map<String, dynamic> animationBaseToJson(
   return json;
 }
 
-Map<String, dynamic> alphaAnimationToJson(HmsMarkerAlphaAnimation animation) {
+Map<String, dynamic> alphaAnimationToJson(HmsAlphaAnimation animation) {
   Map<String, dynamic> json = <String, dynamic>{};
 
   json = animationBaseToJson(json, animation);
@@ -105,7 +129,7 @@ Map<String, dynamic> alphaAnimationToJson(HmsMarkerAlphaAnimation animation) {
   return json;
 }
 
-Map<String, dynamic> rotateAnimationToJson(HmsMarkerRotateAnimation animation) {
+Map<String, dynamic> rotateAnimationToJson(HmsRotateAnimation animation) {
   Map<String, dynamic> json = <String, dynamic>{};
 
   json = animationBaseToJson(json, animation);
@@ -115,7 +139,7 @@ Map<String, dynamic> rotateAnimationToJson(HmsMarkerRotateAnimation animation) {
   return json;
 }
 
-Map<String, dynamic> scaleAnimationToJson(HmsMarkerScaleAnimation animation) {
+Map<String, dynamic> scaleAnimationToJson(HmsScaleAnimation animation) {
   Map<String, dynamic> json = <String, dynamic>{};
 
   json = animationBaseToJson(json, animation);
@@ -128,7 +152,7 @@ Map<String, dynamic> scaleAnimationToJson(HmsMarkerScaleAnimation animation) {
 }
 
 Map<String, dynamic> translateAnimationToJson(
-  HmsMarkerTranslateAnimation animation,
+  HmsTranslateAnimation animation,
 ) {
   Map<String, dynamic> json = <String, dynamic>{};
 
@@ -157,6 +181,16 @@ dynamic polygonToJson(Polygon polygon) {
   return json;
 }
 
+List<int> colorValuesToJson(List<Color> colorValues) {
+  List<int> intColorValues = <int>[];
+
+  colorValues.forEach((element) {
+    intColorValues.add(element.value);
+  });
+
+  return intColorValues;
+}
+
 dynamic polylineToJson(Polyline polyline) {
   final Map<String, dynamic> json = <String, dynamic>{};
 
@@ -172,6 +206,8 @@ dynamic polylineToJson(Polyline polyline) {
   addToJson(json, _Param.zIndex, polyline.zIndex);
   addToJson(json, _Param.points, pointsToJson(polyline.points));
   addToJson(json, _Param.pattern, patternToJson(polyline.patterns));
+  addToJson(json, _Param.gradient, polyline.gradient);
+  addToJson(json, _Param.colorValues, colorValuesToJson(polyline.colorValues));
 
   return json;
 }
@@ -203,6 +239,11 @@ Map<String, dynamic> circleToJson(Circle circle) {
   addToJson(json, _Param.visible, circle.visible);
   addToJson(json, _Param.zIndex, circle.zIndex);
   addToJson(json, _Param.strokePattern, patternToJson(circle.strokePattern));
+  addToJson(
+    json,
+    _Param.animation,
+    circle.animation != null ? animationToJson(circle.animation!) : null,
+  );
 
   return json;
 }
@@ -357,6 +398,17 @@ Map<String, int> screenCoordinateToJson(ScreenCoordinate screenCoordinate) {
     _Param.x: screenCoordinate.x,
     _Param.y: screenCoordinate.y,
   };
+}
+
+Map<String, dynamic> myLocationStyleToJson(MyLocationStyle myLocationStle) {
+  final Map<String, dynamic> json = <String, dynamic>{};
+
+  addToJson(json, _Param.anchor, offsetToJson(myLocationStle.anchor));
+  addToJson(json, _Param.radiusFillColor, myLocationStle.radiusFillColor.value);
+  addToJson(json, _Param.icon,
+      myLocationStle.icon != null ? myLocationStle.icon!.toJson() : null);
+
+  return json;
 }
 
 Map<String, dynamic> polygonUpdatesToJson(PolygonUpdates polygonUpdates) {

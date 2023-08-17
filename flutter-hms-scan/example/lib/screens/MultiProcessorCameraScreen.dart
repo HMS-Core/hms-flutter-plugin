@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -344,7 +344,8 @@ class _MultiProcessorCameraScreenState
                           resultType:
                               scanList?.scanResponseList![index]?.scanTypeForm,
                         );
-                      })
+                      },
+                    )
                   : const SizedBox.shrink(),
               responseListWidget.isNotEmpty
                   ? ListView.builder(
@@ -358,7 +359,8 @@ class _MultiProcessorCameraScreenState
                           result: responseListWidget[index].originalValue,
                           resultType: responseListWidget[index].scanTypeForm,
                         );
-                      })
+                      },
+                    )
                   : const SizedBox.shrink(),
             ],
           ),

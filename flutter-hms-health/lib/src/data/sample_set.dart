@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -25,21 +25,12 @@ class SampleSet {
   DataCollector dataCollector;
   List<SamplePoint> samplePoints;
 
-  //List<SamplePoint> _points;
-  DateTime? _start;
-  DateTime? _end;
-  TimeUnit _timeUnit = TimeUnit.MILLISECONDS;
-
   Map<String, dynamic> pairs = <String, dynamic>{};
 
   SampleSet(
     this.dataCollector,
     this.samplePoints,
-  ) {
-    for (Field field in dataCollector.dataType?.fields ?? <Field>[]) {
-      pairs[field.name] = null;
-    }
-  }
+  );
 
   factory SampleSet.fromMap(Map<dynamic, dynamic> map) {
     return SampleSet(
@@ -54,37 +45,12 @@ class SampleSet {
     );
   }
 
-  // void addSample(SamplePoint samplePoint) {
-  //   if (samplePoint.dataCollector.dataType != this.dataCollector.dataType) {
-  //     throw 'Please add a sample point with same data type';
-  //   }
-
-  //   if (!_points.contains(samplePoint)) {
-  //     _points.add(samplePoint);
-  //   }
-  // }
-
-  void setTimeInterval(DateTime start, DateTime end, TimeUnit timeUnit) {
-    _start = start;
-    _end = end;
-    _timeUnit = timeUnit;
-  }
-
-  void setFieldValue(Field field, dynamic value) {
-    pairs[field.name] = value;
-  }
-
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'dataCollector': dataCollector.toMap(),
       'samplePoints': List<Map<String, dynamic>>.from(
         samplePoints.map((SamplePoint e) => e.toMap()),
       ),
-      'pairs': pairs,
-      'startTime': _start?.millisecondsSinceEpoch,
-      'endTime': _end?.millisecondsSinceEpoch,
-      'timeUnit': describeEnum(_timeUnit),
-      //"points": List.from(_points.map((e) => e.toMap())),
     }..removeWhere((String k, dynamic v) => v == null);
   }
 

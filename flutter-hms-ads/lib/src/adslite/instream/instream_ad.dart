@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -88,5 +88,22 @@ class InstreamAd {
     return await _channel.invokeMethod(
       'gotoWhyThisAdPage',
     );
+  }
+
+  Future<bool> hasAdvertiserInfo() async {
+    return await _channel.invokeMethod(
+      'hasAdvertiserInfo',
+    );
+  }
+
+  Future<List<AdvertiserInfo>> getAdvertiserInfo() async {
+    final List<dynamic> result = await _channel.invokeMethod(
+      'getAdvertiserInfo',
+    );
+    final List<AdvertiserInfo> list = <AdvertiserInfo>[];
+    for (dynamic map in result) {
+      list.add(AdvertiserInfo._fromMap(map as Map<dynamic, dynamic>));
+    }
+    return list;
   }
 }

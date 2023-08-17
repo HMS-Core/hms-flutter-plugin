@@ -27,13 +27,10 @@ class MarkerController implements MarkerMethods {
 
     private final String mapMarkerId;
 
-    private boolean clickable;
-
     private final boolean clusterable;
 
-    MarkerController(final Marker marker, final boolean clickable, final boolean clusterable) {
+    MarkerController(final Marker marker, final boolean clusterable) {
         this.marker = marker;
-        this.clickable = clickable;
         mapMarkerId = marker.getId();
         this.clusterable = clusterable;
     }
@@ -59,7 +56,7 @@ class MarkerController implements MarkerMethods {
 
     @Override
     public void setClickable(final boolean clickable) {
-        this.clickable = clickable;
+        marker.setClickable(clickable);
     }
 
     @Override
@@ -123,7 +120,7 @@ class MarkerController implements MarkerMethods {
     }
 
     boolean isClickable() {
-        return clickable;
+        return marker.isClickable();
     }
 
     boolean isClusterable() {

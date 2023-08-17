@@ -17,7 +17,7 @@
 part of huawei_iap;
 
 /// Request information of the consumeOwnedPurchase API.
-class ConsumeOwnedPurchaseReq {
+class ConsumeOwnedPurchaseReq extends BaseReq {
   String purchaseToken;
   String? developerChallenge;
   String? signatureAlgorithm;
@@ -26,7 +26,8 @@ class ConsumeOwnedPurchaseReq {
     required this.purchaseToken,
     this.developerChallenge,
     this.signatureAlgorithm,
-  });
+    String? reservedInfor,
+  }) : super(reservedInfor: reservedInfor);
 
   factory ConsumeOwnedPurchaseReq.fromJson(String str) =>
       ConsumeOwnedPurchaseReq.fromMap(json.decode(str));
@@ -42,6 +43,8 @@ class ConsumeOwnedPurchaseReq {
         signatureAlgorithm: json['signatureAlgorithm'] == null
             ? null
             : json['signatureAlgorithm'],
+        reservedInfor:
+            json['reservedInfor'] == null ? null : json['reservedInfor'],
       );
 
   Map<String, dynamic> toMap() {
@@ -49,6 +52,7 @@ class ConsumeOwnedPurchaseReq {
       'purchaseToken': purchaseToken,
       'developerChallenge': developerChallenge,
       'signatureAlgorithm': signatureAlgorithm,
+      'reservedInfor': reservedInfor,
     };
   }
 
@@ -60,10 +64,15 @@ class ConsumeOwnedPurchaseReq {
     return other is ConsumeOwnedPurchaseReq &&
         this.purchaseToken == other.purchaseToken &&
         this.developerChallenge == other.developerChallenge &&
-        this.signatureAlgorithm == other.signatureAlgorithm;
+        this.signatureAlgorithm == other.signatureAlgorithm &&
+        this.reservedInfor == other.reservedInfor;
   }
 
   @override
-  int get hashCode =>
-      Object.hash(purchaseToken, developerChallenge, signatureAlgorithm);
+  int get hashCode => Object.hash(
+        purchaseToken,
+        developerChallenge,
+        signatureAlgorithm,
+        reservedInfor,
+      );
 }

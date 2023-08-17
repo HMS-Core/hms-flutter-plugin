@@ -53,7 +53,8 @@ public class MapListenerHandler implements MapListener {
 
     private final HMSLogger logger;
 
-    MapListenerHandler(final int id, final MapUtils mapUtils, final MethodChannel mChannel, final Application application) {
+    MapListenerHandler(final int id, final MapUtils mapUtils, final MethodChannel mChannel,
+        final Application application) {
         this.id = id;
         this.mChannel = mChannel;
         this.mapUtils = mapUtils;

@@ -1,3 +1,8 @@
+## 6.10.0+300
+
+- Updated Push SDK to the latest version 6.10.0.300.
+- Resolved a performance-related issue.
+
 ## 6.7.0+300
 
 - Updated Push SDK to the latest version 6.7.0.300.

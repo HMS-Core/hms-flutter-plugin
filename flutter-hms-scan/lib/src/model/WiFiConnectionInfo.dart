@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -41,9 +41,10 @@ class WiFiConnectionInfo {
 
   factory WiFiConnectionInfo.fromMap(Map<String, dynamic> json) {
     return WiFiConnectionInfo(
-        password: json['password'],
-        ssidNumber: json['ssidNumber'],
-        cipherMode: json['cipherMode']?.round());
+      password: json['password'],
+      ssidNumber: json['ssidNumber'],
+      cipherMode: json['cipherMode']?.round(),
+    );
   }
 
   Map<String, dynamic> toMap() {
@@ -66,7 +67,7 @@ class WiFiConnectionInfo {
 
   @override
   int get hashCode {
-    return hashValues(
+    return Object.hash(
       password,
       ssidNumber,
       cipherMode,

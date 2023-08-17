@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * The interface Polyline methods.
  *
- * @since v.4.0.4
+ * @since v.6.11.0
  */
 public interface PolylineMethods {
 
@@ -110,4 +110,18 @@ public interface PolylineMethods {
      * @param zIndex the z index
      */
     void setZIndex(float zIndex);
+
+    /**
+     * Sets gradient.
+     *
+     * @param on the gradient
+     */
+    void setGradient(boolean on);
+
+    /**
+     * Sets color values.
+     *
+     * @param colorValues the gradient
+     */
+    void setColorValues(List<Integer> colorValues);
 }

@@ -30,6 +30,7 @@ import com.huawei.hms.maps.HuaweiMapOptions;
 import com.huawei.hms.maps.model.BitmapDescriptor;
 import com.huawei.hms.maps.model.CameraPosition;
 import com.huawei.hms.maps.model.LatLngBounds;
+import com.huawei.hms.maps.model.MyLocationStyle;
 
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.PluginRegistry;
@@ -83,6 +84,8 @@ class MapBuilder implements MapMethods {
 
     private BitmapDescriptor iconDescriptor;
 
+    private MyLocationStyle myLocationStyle;
+
     private int logoPosition;
 
     private Rect logoPadding = new Rect(0, 0, 0, 0);
@@ -93,8 +96,11 @@ class MapBuilder implements MapMethods {
         logger = HMSLogger.getInstance(application);
     }
 
-    MapController build(final int id, @NonNull final Context context, final Activity mActivity, final AtomicInteger state, final BinaryMessenger binaryMessenger, final Application application, final Lifecycle lifecycle, final PluginRegistry.Registrar registrar, final int activityHashCode) {
-        final MapController controller = new MapController(id, context, mActivity, state, binaryMessenger, application, lifecycle, registrar, activityHashCode, options);
+    MapController build(final int id, @NonNull final Context context, final Activity mActivity,
+        final AtomicInteger state, final BinaryMessenger binaryMessenger, final Application application,
+        final Lifecycle lifecycle, final PluginRegistry.Registrar registrar, final int activityHashCode) {
+        final MapController controller = new MapController(id, context, mActivity, state, binaryMessenger, application,
+            lifecycle, registrar, activityHashCode, options);
         controller.init();
         controller.setAllGesturesEnabled(allGesturesEnabled);
         controller.setScrollGesturesEnabledDuringRotateOrZoom(scrollGesturesEnabledDuringRotateOrZoom);
@@ -117,6 +123,7 @@ class MapBuilder implements MapMethods {
         controller.setClusterMarkerColor(clusterMarkerColor);
         controller.setClusterMarkerTextColor(clusterMarkerTextColor);
         controller.setClusterMarkerIcon(iconDescriptor);
+        controller.setMyLocationStyle(myLocationStyle);
         controller.setLogoPosition(logoPosition);
         controller.setLogoPadding(logoPadding.left, logoPadding.top, logoPadding.right, logoPadding.bottom);
         return controller;
@@ -311,6 +318,11 @@ class MapBuilder implements MapMethods {
     @Override
     public void setMyLocationButtonEnabled(final boolean myLocationButtonEnabled) {
         this.myLocationButtonEnabled = myLocationButtonEnabled;
+    }
+
+    @Override
+    public void setMyLocationStyle(final MyLocationStyle myLocationStyle) {
+        this.myLocationStyle = myLocationStyle;
     }
 
     @Override

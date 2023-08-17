@@ -29,6 +29,7 @@ class Circle {
   final int zIndex;
   final List<PatternItem> strokePattern;
   final VoidCallback? onClick;
+  final HmsAnimation? animation;
 
   const Circle({
     required this.circleId,
@@ -42,6 +43,7 @@ class Circle {
     this.clickable = false,
     this.onClick,
     this.strokePattern = const <PatternItem>[],
+    this.animation,
   });
 
   Circle updateCopy({
@@ -55,6 +57,7 @@ class Circle {
     bool? clickable,
     VoidCallback? onClick,
     List<PatternItem>? strokePattern,
+    List<dynamic>? animations,
   }) {
     return Circle(
       circleId: circleId,
@@ -68,6 +71,7 @@ class Circle {
       clickable: clickable ?? this.clickable,
       onClick: onClick ?? this.onClick,
       strokePattern: strokePattern ?? this.strokePattern,
+      animation: animation ?? this.animation,
     );
   }
 
@@ -95,7 +99,8 @@ class Circle {
         visible == other.visible &&
         clickable == other.clickable &&
         zIndex == other.zIndex &&
-        listEquals(strokePattern, other.strokePattern);
+        listEquals(strokePattern, other.strokePattern) &&
+        animation == other.animation;
   }
 
   @override

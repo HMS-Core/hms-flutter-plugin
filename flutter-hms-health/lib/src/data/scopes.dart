@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -70,6 +70,9 @@ class Scope {
       HEALTHKIT_STRESS_READ,
       HEALTHKIT_OXYGEN_SATURATION_WRITE,
       HEALTHKIT_OXYGEN_SATURATION_READ,
+      HEALTHKIT_HISTORYDATA_OPEN_WEEK,
+      HEALTHKIT_HISTORYDATA_OPEN_MONTH,
+      HEALTHKIT_HISTORYDATA_OPEN_YEAR,
     ];
   }
 
@@ -281,27 +284,50 @@ class Scope {
     'https://www.huawei.com/healthkit/step.realtime',
   );
 
+  /// Views the SpO2 data from Health Kit.
   static const Scope HEALTHKIT_OXYGEN_SATURATION_READ = Scope._(
     'https://www.huawei.com/healthkit/oxygensaturation.read',
   );
 
+  /// Stores the SpO2 data to Health Kit.
   static const Scope HEALTHKIT_OXYGEN_SATURATION_WRITE = Scope._(
     'https://www.huawei.com/healthkit/oxygensaturation.write',
   );
 
+  /// Views the stress data from Health Kit.
   static const Scope HEALTHKIT_STRESS_READ = Scope._(
     'https://www.huawei.com/healthkit/stress.read',
   );
 
+  /// Stores the stress data to Health Kit.
   static const Scope HEALTHKIT_STRESS_WRITE = Scope._(
     'https://www.huawei.com/healthkit/stress.write',
   );
 
+  /// Views the heart health data (such as heart rate variability and ECG)
+  /// from Health Kit.
   static const Scope HEALTHKIT_HEARTHEALTH_READ = Scope._(
     'https://www.huawei.com/healthkit/hearthealth.read',
   );
 
+  /// Stores the heart health data (such as heart rate variability and
+  /// electrocardiogram) to Health Kit.
   static const Scope HEALTHKIT_HEARTHEALTH_WRITE = Scope._(
     'https://www.huawei.com/healthkit/hearthealth.write',
+  );
+
+  /// Views data of the previous week from Health Kit.
+  static const Scope HEALTHKIT_HISTORYDATA_OPEN_WEEK = Scope._(
+    'https://www.huawei.com/healthkit/historydata.open.week',
+  );
+
+  /// Views data of the previous month from Health Kit.
+  static const Scope HEALTHKIT_HISTORYDATA_OPEN_MONTH = Scope._(
+    'https://www.huawei.com/healthkit/historydata.open.month',
+  );
+
+  /// Views data of the previous year from Health Kit.
+  static const Scope HEALTHKIT_HISTORYDATA_OPEN_YEAR = Scope._(
+    'https://www.huawei.com/healthkit/historydata.open.year',
   );
 }

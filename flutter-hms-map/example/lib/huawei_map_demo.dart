@@ -135,9 +135,13 @@ class _HuaweiMapDemoState extends State<HuaweiMapDemo> {
               left: 15,
               bottom: 75,
             ),
-            onClick: (LatLng latLng) {
+            myLocationStyle: MyLocationStyle(
+                anchor: Offset(0.5, 0.5), radiusFillColor: Colors.red),
+            onClick: (LatLng latLng) async {
               log('Map Clicked at ${latLng.lat} : ${latLng.lng}');
               if (_isLocSourceActive) mapController.setLocation(latLng);
+              double? res = await mapController.getScalePerPixel();
+              log(res.toString(), name: "getScalePerPixel");
             },
             onLongPress: (LatLng latLng) {
               log('Map LongClicked at ${latLng.lat} : ${latLng.lng}');

@@ -98,7 +98,7 @@ public interface HeatMapMethods {
      * @param resourceId the resourceId.
      */
     void setResourceId(int resourceId);
-    
+
     /**
      * Set the visible.
      *

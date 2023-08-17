@@ -186,4 +186,8 @@ public interface Param {
     String OPACITY_MAP = "opacityMap";
     String RADIUS_MAP = "radiusMap";
     String RADIUS_UNIT = "radiusUnit";
+    String MYLOCATION_STYLE = "myLocationStyle";
+    String RADIUS_FILL_COLOR = "radiusFillColor";
+    String GRADIENT = "gradient";
+    String COLOR_VALUES = "colorValues";
 }

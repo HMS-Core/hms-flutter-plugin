@@ -47,6 +47,7 @@ class HuaweiMapOptions {
   final String? styleId;
   final String? previewId;
   final bool? liteMode;
+  final MyLocationStyle? myLocationStyle;
 
   const HuaweiMapOptions({
     this.mapType,
@@ -79,6 +80,7 @@ class HuaweiMapOptions {
     this.styleId,
     this.previewId,
     this.liteMode,
+    this.myLocationStyle,
   });
 
   static HuaweiMapOptions fromWidget(HuaweiMap map) {
@@ -114,6 +116,7 @@ class HuaweiMapOptions {
       styleId: map.styleId,
       previewId: map.previewId,
       liteMode: map.liteMode,
+      myLocationStyle: map.myLocationStyle,
     );
   }
 
@@ -213,6 +216,12 @@ class HuaweiMapOptions {
     addToMap(optionsMap, _Param.styleId, styleId);
     addToMap(optionsMap, _Param.previewId, previewId);
     addToMap(optionsMap, _Param.liteMode, liteMode);
+    addToMap(
+        optionsMap,
+        _Param.myLocationStyle,
+        myLocationStyle != null
+            ? myLocationStyleToJson(myLocationStyle!)
+            : null);
 
     return optionsMap;
   }

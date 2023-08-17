@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+ * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ public interface Constants {
     String BASE_MODULE_NAME = "HMSFlutterHealth";
 
     /**
-     * Constant Variable Keys That Will be Used among RN Side.
+     * Constant Variable Keys That Will be Used among Flutter Side.
      */
     String ID_KEY = "id";
     String NAME_KEY = "name";

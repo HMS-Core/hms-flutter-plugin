@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -40,7 +40,8 @@ class _DecodeWithBitmapScreenState extends State<DecodeWithBitmapScreen> {
 
     try {
       ScanResponse response = await HmsScanUtils.decodeWithBitmap(
-          DecodeRequest(data: data, scanType: HmsScanTypes.Aztec));
+        DecodeRequest(data: data, scanType: HmsScanTypes.Aztec),
+      );
       setState(() {
         resultScan = response.originalValue;
         codeFormatScan = response.scanType;

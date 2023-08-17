@@ -102,7 +102,7 @@ class _HomePageState extends State<HomePage> {
       showResult('CustomIntentEvent: ', intentString);
       List<String> parsedString = intentString.split('://');
       if (parsedString[1] == 'app2') {
-        SchedulerBinding.instance?.addPostFrameCallback(
+        SchedulerBinding.instance.addPostFrameCallback(
           (Duration timeStamp) {
             Navigator.of(context).push(
               MaterialPageRoute<dynamic>(

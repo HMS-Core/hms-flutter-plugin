@@ -1,3 +1,9 @@
+## 6.10.0+300
+
+- Android API 33 support has been added.
+- Added the BaseReq class, which is now the base class for ConsumeOwnedPurchaseReq, OwnedPurchasesReq, ProductInfoReq, and PurchaseIntentReq.
+- Minor bug fixes.
+
 ## 6.4.0+302
 
 - **Breaking Change:** Modified the internal structure of the plugin. Please use import package:huawei_iap/huawei_iap.dart not to get any errors.

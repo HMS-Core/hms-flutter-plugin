@@ -86,7 +86,7 @@ public class MarkersUtils {
         final Marker newMarker = huaweiMap.addMarker(options);
         logger.sendSingleEvent("addMarker");
 
-        final MarkerController controller = new MarkerController(newMarker, markerBuilder.isClickable(), markerBuilder.isClusterable());
+        final MarkerController controller = new MarkerController(newMarker, markerBuilder.isClusterable());
         controller.setAnimationSet(markerBuilder.getAnimationSet());
 
         idsOnMap.put(id, controller);

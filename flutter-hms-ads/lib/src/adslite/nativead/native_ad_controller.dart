@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -90,6 +90,24 @@ class NativeAdController {
     );
   }
 
+  Future<bool> hasAdvertiserInfo() async {
+    return await _channel.invokeMethod(
+      'hasAdvertiserInfo',
+    );
+  }
+
+  Future<void> showAdvertiserInfoDialog() async {
+    return await _channel.invokeMethod(
+      'showAdvertiserInfoDialog',
+    );
+  }
+
+  Future<void> hideAdvertiserInfoDialog() async {
+    return await _channel.invokeMethod(
+      'hideAdvertiserInfoDialog',
+    );
+  }
+
   Future<bool?> isLoading() async {
     final bool? isLoading = await _channel.invokeMethod(
       'isLoading',
@@ -157,6 +175,17 @@ class NativeAdController {
       'getUniqueId',
     );
     return uniqueId;
+  }
+
+  Future<List<AdvertiserInfo>> getAdvertiserInfo() async {
+    final List<dynamic> result = await _channel.invokeMethod(
+      'getAdvertiserInfo',
+    );
+    final List<AdvertiserInfo> list = <AdvertiserInfo>[];
+    for (dynamic map in result) {
+      list.add(AdvertiserInfo._fromMap(map as Map<dynamic, dynamic>));
+    }
+    return list;
   }
 
   Future<bool?> dislikeAd(DislikeAdReason reason) {

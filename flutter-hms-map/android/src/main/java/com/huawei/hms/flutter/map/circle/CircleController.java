@@ -19,6 +19,7 @@ package com.huawei.hms.flutter.map.circle;
 import com.huawei.hms.maps.model.Circle;
 import com.huawei.hms.maps.model.LatLng;
 import com.huawei.hms.maps.model.PatternItem;
+import com.huawei.hms.maps.model.animation.Animation;
 
 import java.util.List;
 
@@ -92,6 +93,16 @@ class CircleController implements CircleMethods {
     @Override
     public void setStrokePattern(List<PatternItem> strokePattern) {
         circle.setStrokePattern(strokePattern);
+    }
+
+    @Override
+    public void setAnimation(final Animation animation) {
+        circle.setAnimation(animation);
+    }
+
+    @Override
+    public void startAnimation() {
+        circle.startAnimation();
     }
 
     String getIdOnMap() {

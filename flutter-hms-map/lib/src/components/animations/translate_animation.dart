@@ -16,7 +16,7 @@
 
 part of huawei_map;
 
-class HmsMarkerTranslateAnimation extends HmsMarkerAnimation {
+class HmsTranslateAnimation extends HmsAnimation {
   LatLng target;
   Function? onAnimationStart;
   Function? onAnimationEnd;
@@ -31,7 +31,7 @@ class HmsMarkerTranslateAnimation extends HmsMarkerAnimation {
     onAnimationEnd?.call();
   }
 
-  HmsMarkerTranslateAnimation({
+  HmsTranslateAnimation({
     required String animationId,
     required this.target,
     int duration = 250,
@@ -43,7 +43,7 @@ class HmsMarkerTranslateAnimation extends HmsMarkerAnimation {
     this.onAnimationEnd,
   }) : super(
           animationId: animationId,
-          type: HmsMarkerAnimation.TRANSLATE,
+          type: HmsAnimation.TRANSLATE,
           duration: duration,
           fillMode: fillMode,
           repeatCount: repeatCount,
@@ -61,7 +61,7 @@ class HmsMarkerTranslateAnimation extends HmsMarkerAnimation {
     if (runtimeType != other.runtimeType) {
       return false;
     }
-    return other is HmsMarkerTranslateAnimation &&
+    return other is HmsTranslateAnimation &&
         animationId == other.animationId &&
         target == other.target;
   }

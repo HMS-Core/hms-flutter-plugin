@@ -84,4 +84,6 @@ public interface Method {
     String HEAT_MAPS_UPDATE = "[HeatMap]update";
     String CONVERT_COORDINATE = "[MapUtil]convertCoordinate";
     String CONVERT_COORDINATES = "[MapUtil]convertCoordinates";
+    String CIRCLE_START_ANIMATION = "CircleStartAnimation";
+    String MAP_GET_SCALEPERPIXEL = "[Map]getScalePerPixel";
 }

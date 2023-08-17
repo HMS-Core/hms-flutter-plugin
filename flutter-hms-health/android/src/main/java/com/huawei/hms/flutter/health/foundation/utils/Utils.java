@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+ * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@ public final class Utils {
      * Returns whether key is in the Map instance or not.
      *
      * @param callMap Flutter call map instance.
-     * @param key     String key.
+     * @param key String key.
      * @return Boolean
      */
     public static synchronized boolean hasKey(final Map<String, Object> callMap, final String key) {
@@ -78,7 +78,7 @@ public final class Utils {
      * In case callMap instance has requested key, returns the String Value, in case not, returns empty string.
      *
      * @param callMap HashMap<String, Object> instance.
-     * @param key     String key value.
+     * @param key String key value.
      * @return String
      */
     public static synchronized String createEmptyStringIfNull(final Map<String, Object> callMap, final String key) {
@@ -117,18 +117,18 @@ public final class Utils {
      * Converts into {@link SampleSet} instance.
      *
      * @param sampleSetMap sampleSetMap that includes {@link SampleSet data} from the Flutter Platform.
-     * @param result       Flutter Result that resolved with fail status in case of missing parameters.
-     * @param packageName  Package name of the application.
+     * @param result Flutter Result that resolved with fail status in case of missing parameters.
+     * @param packageName Package name of the application.
      * @return SampleSet instance.
      */
     public static synchronized SampleSet toSampleSet(final Map<String, Object> sampleSetMap, final Result result,
-                                                     final String packageName) {
+        final String packageName) {
         if (sampleSetMap.get(Constants.DATA_COLLECTOR_KEY) != null) {
             DataCollector dataCollector = toDataCollector(
-                    HealthRecordUtils.fromObject(sampleSetMap.get(Constants.DATA_COLLECTOR_KEY)), packageName);
+                HealthRecordUtils.fromObject(sampleSetMap.get(Constants.DATA_COLLECTOR_KEY)), packageName);
             final SampleSet sampleSet = SampleSet.create(dataCollector);
             ArrayList<Map<String, Object>> samplePoints = HealthRecordUtils.toMapArrayList("samplePoints",
-                    sampleSetMap.get("samplePoints"));
+                sampleSetMap.get("samplePoints"));
             if (!samplePoints.isEmpty()) {
                 for (Map<String, Object> sp : samplePoints) {
                     // Build a sampling point.
@@ -153,17 +153,20 @@ public final class Utils {
             activitySummary.setPaceSummary(paceSummary);
         }
         if (Utils.hasKey(callMap, "dataSummary")) {
-            final List<SamplePoint> dataSummary = toDataSummary((ArrayList<Map<String, Object>>) callMap.get("dataSummary"), packageName);
+            final List<SamplePoint> dataSummary = toDataSummary(
+                (ArrayList<Map<String, Object>>) callMap.get("dataSummary"), packageName);
             activitySummary.setDataSummary(dataSummary);
         }
         if (Utils.hasKey(callMap, "sectionSummary")) {
-            final List<SampleSection> sectionSummary = toSectionSummary((ArrayList<Map<String, Object>>) callMap.get("sectionSummary"), packageName);
+            final List<SampleSection> sectionSummary = toSectionSummary(
+                (ArrayList<Map<String, Object>>) callMap.get("sectionSummary"), packageName);
             activitySummary.setSectionSummary(sectionSummary);
         }
         return activitySummary;
     }
 
-    public static synchronized List<SamplePoint> toDataSummary(final List<Map<String, Object>> dataSummaryList, String packageName) {
+    public static synchronized List<SamplePoint> toDataSummary(final List<Map<String, Object>> dataSummaryList,
+        String packageName) {
         final List<SamplePoint> dataSummary = new ArrayList<>();
         for (Map<String, Object> samplePointMap : dataSummaryList) {
             if (samplePointMap != null) {
@@ -174,7 +177,8 @@ public final class Utils {
         return dataSummary;
     }
 
-    public static synchronized List<SampleSection> toSectionSummary(List<Map<String, Object>> list, String packageName) {
+    public static synchronized List<SampleSection> toSectionSummary(List<Map<String, Object>> list,
+        String packageName) {
         final List<SampleSection> sectionSummary = new ArrayList<>();
         for (Map<String, Object> sampleSectionMap : list) {
             if (sampleSectionMap != null) {
@@ -209,7 +213,8 @@ public final class Utils {
         return paceSummary;
     }
 
-    public static synchronized SamplePoint toSamplePoint(final SampleSet sampleSet, final Map<String, Object> sampleSetMap) {
+    public static synchronized SamplePoint toSamplePoint(final SampleSet sampleSet,
+        final Map<String, Object> sampleSetMap) {
         Gson gson = new Gson();
         sampleSetMap.remove(Constants.DATA_COLLECTOR_KEY);
         FlutterSamplePoint flutterSamplePoint = gson.fromJson(sampleSetMap.toString(), FlutterSamplePoint.class);
@@ -218,12 +223,12 @@ public final class Utils {
         SamplePoint samplePoint;
         if (!isSampling) {
             samplePoint = sampleSet.createSamplePoint()
-                    .setTimeInterval(flutterSamplePoint.startTime, flutterSamplePoint.endTime,
-                            Utils.toTimeUnit(sampleSetMap));
+                .setTimeInterval(flutterSamplePoint.startTime, flutterSamplePoint.endTime,
+                    Utils.toTimeUnit(sampleSetMap));
         } else {
             long samplingTimeMillis = flutterSamplePoint.samplingTime;
             samplePoint = sampleSet.createSamplePoint()
-                    .setSamplingTime(samplingTimeMillis, Utils.toTimeUnit(sampleSetMap));
+                .setSamplingTime(samplingTimeMillis, Utils.toTimeUnit(sampleSetMap));
         }
         if (flutterSamplePoint.fieldValue.intValue != null) {
             samplePoint.getFieldValue(requestedField).setIntValue(flutterSamplePoint.fieldValue.intValue);
@@ -253,7 +258,8 @@ public final class Utils {
     public static synchronized SamplePoint toSamplePoint(final Map<String, Object> samplePointMap, String packageName) {
         SamplePoint.Builder samplePoint;
         if (samplePointMap.containsKey(Constants.DATA_COLLECTOR_KEY)) {
-            final Map<String, Object> dataCollectorMap = HealthRecordUtils.fromObject(samplePointMap.get(Constants.DATA_COLLECTOR_KEY));
+            final Map<String, Object> dataCollectorMap = HealthRecordUtils.fromObject(
+                samplePointMap.get(Constants.DATA_COLLECTOR_KEY));
             final DataCollector dataCollector = toDataCollector(dataCollectorMap, packageName);
             samplePoint = new SamplePoint.Builder(dataCollector);
             samplePointMap.remove(Constants.DATA_COLLECTOR_KEY);
@@ -269,7 +275,7 @@ public final class Utils {
         Field requestedField = flutterSamplePoint.fieldValue.field.getField();
         if (!flutterSamplePoint.isSampling && flutterSamplePoint.startTime != 0 && flutterSamplePoint.endTime != 0) {
             samplePoint.setTimeInterval(flutterSamplePoint.startTime, flutterSamplePoint.endTime,
-                    Utils.toTimeUnit(flutterSamplePoint.timeUnit));
+                Utils.toTimeUnit(flutterSamplePoint.timeUnit));
         } else {
             samplePoint.setSamplingTime(flutterSamplePoint.samplingTime, Utils.toTimeUnit(flutterSamplePoint.timeUnit));
         }
@@ -294,7 +300,7 @@ public final class Utils {
         }
         SamplePoint sp = samplePoint.build();
         List<Map<String, Object>> metadataList = HealthRecordUtils.toMapArrayList("metadataValues",
-                samplePointMap.get("metadataValues"));
+            samplePointMap.get("metadataValues"));
         if (!metadataList.isEmpty()) {
             for (Map<String, Object> m : metadataList) {
                 String key = (String) m.get("key");
@@ -312,16 +318,20 @@ public final class Utils {
             builder.setSectionNum(Integer.parseInt(Objects.requireNonNull(map.get("sectionNum")).toString()));
         }
         if (map.containsKey("sectionTime")) {
-            builder.setSectionTime(Long.parseLong(Objects.requireNonNull(map.get("sectionTime")).toString()), TimeUnit.MILLISECONDS);
+            builder.setSectionTime(Long.parseLong(Objects.requireNonNull(map.get("sectionTime")).toString()),
+                TimeUnit.MILLISECONDS);
         }
         if (map.containsKey("startTime")) {
-            builder.setStartTime(Long.parseLong(Objects.requireNonNull(map.get("startTime")).toString()), TimeUnit.MILLISECONDS);
+            builder.setStartTime(Long.parseLong(Objects.requireNonNull(map.get("startTime")).toString()),
+                TimeUnit.MILLISECONDS);
         }
         if (map.containsKey("endTime")) {
-            builder.setEndTime(Long.parseLong(Objects.requireNonNull(map.get("endTime")).toString()), TimeUnit.MILLISECONDS);
+            builder.setEndTime(Long.parseLong(Objects.requireNonNull(map.get("endTime")).toString()),
+                TimeUnit.MILLISECONDS);
         }
         if (map.containsKey("sectionDataList")) {
-            final ArrayList<Map<String, Object>> list = HealthRecordUtils.toMapArrayList("sectionDataList", map.get("sectionDataList"));
+            final ArrayList<Map<String, Object>> list = HealthRecordUtils.toMapArrayList("sectionDataList",
+                map.get("sectionDataList"));
             final List<SamplePoint> sectionDataList = new ArrayList<>();
             for (Map<String, Object> sectionDataMap : list) {
                 sectionDataList.add(toSamplePoint(sectionDataMap, packageName));
@@ -331,16 +341,17 @@ public final class Utils {
         return builder.build();
     }
 
-    public static synchronized DataCollector toDataCollector(final Map<String, Object> dataCollectorMap, String packageName) {
+    public static synchronized DataCollector toDataCollector(final Map<String, Object> dataCollectorMap,
+        String packageName) {
         DataCollector.Builder builder = new DataCollector.Builder();
         builder = new HmsDataCollectorBuilder(builder, dataCollectorMap, packageName).setDataStreamName()
-                .setDeviceId()
-                .setDataCollectorName()
-                .setDeviceInfo()
-                .setLocalized()
-                .setDataGenerateType()
-                .setDataType()
-                .build();
+            .setDeviceId()
+            .setDataCollectorName()
+            .setDeviceInfo()
+            .setLocalized()
+            .setDataGenerateType()
+            .setDataType()
+            .build();
         return builder.setPackageName(packageName).build();
     }
 
@@ -410,7 +421,7 @@ public final class Utils {
                 }
             }
             return new DataType(name, scopeNameRead, scopeNameWrite, "", convertedFields, isPolymerizedFlag,
-                    isSelfDefined, packageName);
+                isSelfDefined, packageName);
         }
     }
 
@@ -466,14 +477,19 @@ public final class Utils {
 
     private static class FlutterSamplePoint {
         boolean isSampling;
+
         long startTime;
+
         long endTime;
+
         long samplingTime;
+
         FieldValue fieldValue;
+
         String timeUnit;
 
         public FlutterSamplePoint(boolean isSampling, long startTime, long endTime, long samplingTime,
-                                  FieldValue fieldValue, String timeUnit) {
+            FieldValue fieldValue, String timeUnit) {
             this.isSampling = isSampling;
             this.startTime = startTime;
             this.endTime = endTime;
@@ -485,14 +501,19 @@ public final class Utils {
 
     private static class FieldValue {
         FieldData field;
+
         Integer intValue;
+
         Long longValue;
+
         Float floatValue;
+
         String stringValue;
+
         Map<String, Float> mapValue;
 
         public FieldValue(FieldData field, Integer intValue, Long longValue, Float floatValue, String stringValue,
-                          Map<String, Float> mapValue) {
+            Map<String, Float> mapValue) {
             this.field = field;
             this.intValue = intValue;
             this.longValue = longValue;
@@ -519,11 +540,13 @@ public final class Utils {
 
     private static class HmsDataCollectorBuilder {
         private DataCollector.Builder builder;
+
         private Map<String, Object> dataCollectorMap;
+
         private String packageName;
 
         HmsDataCollectorBuilder(DataCollector.Builder builder, final Map<String, Object> dataCollectorMap,
-                                String packageName) {
+            String packageName) {
             this.builder = builder;
             this.dataCollectorMap = dataCollectorMap;
             this.packageName = packageName;
@@ -553,7 +576,7 @@ public final class Utils {
         HmsDataCollectorBuilder setDeviceInfo() {
             if (Utils.hasKey(dataCollectorMap, DEVICE_INFO_KEY)) {
                 this.builder.setDeviceInfo(
-                        toObject((HashMap<String, Object>) dataCollectorMap.get(DEVICE_INFO_KEY), DeviceInfo.class));
+                    toObject((HashMap<String, Object>) dataCollectorMap.get(DEVICE_INFO_KEY), DeviceInfo.class));
             }
             return this;
         }
@@ -567,7 +590,8 @@ public final class Utils {
 
         HmsDataCollectorBuilder setDataGenerateType() {
             if (Utils.hasKey(dataCollectorMap, DATA_GENERATE_TYPE_KEY)) {
-                this.builder.setDataGenerateType((Integer) Objects.requireNonNull(dataCollectorMap.get(DATA_GENERATE_TYPE_KEY)));
+                this.builder.setDataGenerateType(
+                    (Integer) Objects.requireNonNull(dataCollectorMap.get(DATA_GENERATE_TYPE_KEY)));
             }
             return this;
         }
@@ -575,7 +599,8 @@ public final class Utils {
         HmsDataCollectorBuilder setDataType() {
             if (Utils.hasKey(dataCollectorMap, DATA_TYPE_KEY)) {
                 try {
-                    DataType dataType = toDataType(HealthRecordUtils.fromObject(dataCollectorMap.get(DATA_TYPE_KEY)), packageName);
+                    DataType dataType = toDataType(HealthRecordUtils.fromObject(dataCollectorMap.get(DATA_TYPE_KEY)),
+                        packageName);
                     this.builder.setDataType(dataType);
                     return this;
 
