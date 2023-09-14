@@ -1,3 +1,7 @@
+## 13.4.65+300
+
+- Updated Ads Prime to the latest version 13.4.65.300.
+
 ## 13.4.61+304
 
 - Supported silent reservation for scheduled ad download.
