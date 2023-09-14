@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -52,8 +52,8 @@ class HuaweiIdAuthButton extends StatelessWidget {
   final FontWeight? fontWeight;
 
   const HuaweiIdAuthButton({
-    Key? key,
     required this.onPressed,
+    Key? key,
     this.width,
     this.height,
     this.elevation,
@@ -75,12 +75,12 @@ class HuaweiIdAuthButton extends StatelessWidget {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           elevation: elevation ?? 2,
-          padding: EdgeInsets.symmetric(vertical: padding ?? 1),
-          primary: buttonColor == AuthButtonBackground.BLACK
+          backgroundColor: buttonColor == AuthButtonBackground.BLACK
               ? Colors.black
               : buttonColor == AuthButtonBackground.WHITE
                   ? Colors.white
                   : hwRed,
+          padding: EdgeInsets.symmetric(vertical: padding ?? 1),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(
               borderRadius == AuthButtonRadius.SMALL

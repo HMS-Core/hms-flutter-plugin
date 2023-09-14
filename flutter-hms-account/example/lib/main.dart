@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ class AuthScreen extends StatefulWidget {
   const AuthScreen({Key? key}) : super(key: key);
 
   @override
-  _AuthScreenState createState() => _AuthScreenState();
+  State<AuthScreen> createState() => _AuthScreenState();
 }
 
 class _AuthScreenState extends State<AuthScreen> {
@@ -68,10 +68,9 @@ class _AuthScreenState extends State<AuthScreen> {
       ),
       child: ElevatedButton(
         onPressed: callback,
-        child: Text(text.toUpperCase()),
         style: ElevatedButton.styleFrom(
-          primary: Colors.white,
-          onPrimary: Colors.black,
+          foregroundColor: Colors.black,
+          backgroundColor: Colors.white,
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(2),
@@ -81,6 +80,7 @@ class _AuthScreenState extends State<AuthScreen> {
             horizontal: 25,
           ),
         ),
+        child: Text(text.toUpperCase()),
       ),
     );
   }

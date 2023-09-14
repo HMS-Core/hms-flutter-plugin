@@ -1,3 +1,9 @@
+## 6.11.0+300
+
+- Deprecated familyName and givenName in the AuthAccount class.
+- Resolved a performance-related issue to improve the service reliability. You do not need to do anything.
+- Updated targetSdkVersion to 33, to make sure that your app can run properly on Android 13.
+
 ## 6.4.0+301
 
 - **BREAKING CHANGES**
