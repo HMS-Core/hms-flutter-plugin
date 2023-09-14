@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cl_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Button
+        android:id="@+id/demo_bt_play"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@android:color/holo_red_dark"
+        android:text="@string/demo_bt_play_video"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true" />
+
+    <CheckBox
+        android:id="@+id/demo_bt_voice"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@android:color/holo_green_dark"
+        android:layout_marginStart="20dp"
+        android:text="@string/demo_custom_view_voice"
+        android:gravity="center"
+        android:button="@null"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@id/demo_bt_play" />
+
+    <Button
+        android:id="@+id/demo_bt_full_screen"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@android:color/holo_green_dark"
+        android:layout_marginStart="20dp"
+        android:text="@string/demo_custom_full_screen"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:id="@+id/demo_bt_detail"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:text="@string/demo_custom_ad_detail"
+        android:background="@android:color/holo_blue_dark"
+        android:layout_marginEnd="62dp"
+        android:layout_alignBottom="@id/demo_bt_full_screen"
+        android:layout_alignTop="@id/demo_bt_full_screen"
+        android:layout_alignEnd="@id/demo_bt_full_screen"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="-1dp" />
+
+</RelativeLayout>
