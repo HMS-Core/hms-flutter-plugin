@@ -1,3 +1,7 @@
+## 13.4.65+300
+
+- Updated Ads to the latest version 13.4.65.300.
+
 ## 13.4.61+304
 
 - Optimized the landing page download experience.
