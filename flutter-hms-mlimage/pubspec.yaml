@@ -1,9 +1,9 @@
 name: huawei_ml_image
-description: Huawei ML Kit Language Plugin for Flutter. Provides capabilities like image classification, object detection and image super resolution.
+description: Huawei ML Kit Image Plugin for Flutter. Provides capabilities like image classification, object detection and image super resolution.
 homepage: https://www.huawei.com
 repository: https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-mlimage
 
-version: 3.7.0+300
+version: 3.11.0+300
 
 environment:
   sdk: ">=2.12.0 <3.0.0"

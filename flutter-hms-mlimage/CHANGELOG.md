@@ -1,3 +1,7 @@
+## 3.11.0+300
+
+- Updated targetSdkVersion to 31, to make sure that your app can run properly on Android 12.
+
 ## 3.7.0+300
 
 - Added `setUserRegion` and `getCountryCode` methods to MLImageApplication.
