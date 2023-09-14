@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -26,22 +26,19 @@ class ActivityIdentificationService {
   Stream<ActivityIdentificationResponse>? _onActivityIdentification;
   Stream<ActivityConversionResponse>? _onActivityConversion;
 
-  ActivityIdentificationService._create(
-    this._methodChannel,
-    this._activityIdentificationEventChannel,
-    this._activityConversionEventChannel,
-  );
-
   factory ActivityIdentificationService() {
     if (_instance == null) {
       const MethodChannel methodChannel = MethodChannel(
-          'com.huawei.flutter.location/activityidentification_methodchannel');
+        'com.huawei.flutter.location/activityidentification_methodchannel',
+      );
 
       const EventChannel activityIdentificationEventChannel = EventChannel(
-          'com.huawei.flutter.location/activityidentification_eventchannel');
+        'com.huawei.flutter.location/activityidentification_eventchannel',
+      );
 
       const EventChannel activityConversionEventChannel = EventChannel(
-          'com.huawei.flutter.location/activityconversion_eventchannel');
+        'com.huawei.flutter.location/activityconversion_eventchannel',
+      );
 
       _instance = ActivityIdentificationService._create(
         methodChannel,
@@ -52,33 +49,48 @@ class ActivityIdentificationService {
     return _instance!;
   }
 
+  ActivityIdentificationService._create(
+    this._methodChannel,
+    this._activityIdentificationEventChannel,
+    this._activityConversionEventChannel,
+  );
+
   /// Registers for activity identification updates.
   Future<int> createActivityIdentificationUpdates(
-      int detectionIntervalMillis) async {
+    int detectionIntervalMillis,
+  ) async {
     return (await _methodChannel.invokeMethod<int>(
-        'createActivityIdentificationUpdates', detectionIntervalMillis))!;
+      'createActivityIdentificationUpdates',
+      detectionIntervalMillis,
+    ))!;
   }
 
   /// Registers for activity conversion updates (entering and exit), for
   /// example, detecting user status change from walking to bicycling.
   Future<int> createActivityConversionUpdates(
-      List<ActivityConversionInfo> activityConversions) async {
+    List<ActivityConversionInfo> activityConversions,
+  ) async {
     return (await _methodChannel.invokeMethod<int>(
-        'createActivityConversionUpdates',
-        activityConversions.map((dynamic x) => x.toMap()).toList()))!;
+      'createActivityConversionUpdates',
+      activityConversions.map((dynamic x) => x.toMap()).toList(),
+    ))!;
   }
 
   /// Removes activity identification updates based on the specified
   /// request code.
   Future<void> deleteActivityIdentificationUpdates(int requestCode) async {
     return _methodChannel.invokeMethod<void>(
-        'deleteActivityIdentificationUpdates', requestCode);
+      'deleteActivityIdentificationUpdates',
+      requestCode,
+    );
   }
 
   /// Removes activity conversion updates based on the specified request code.
   Future<void> deleteActivityConversionUpdates(int requestCode) async {
     return _methodChannel.invokeMethod<void>(
-        'deleteActivityConversionUpdates', requestCode);
+      'deleteActivityConversionUpdates',
+      requestCode,
+    );
   }
 
   /// Listens for activity identification updates that come from the

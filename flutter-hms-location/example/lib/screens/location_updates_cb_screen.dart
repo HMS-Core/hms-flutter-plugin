@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:huawei_location/huawei_location.dart';
 
-import '../widgets/custom_button.dart' show Btn;
+import 'package:huawei_location_example/widgets/custom_button.dart' show Btn;
 
 class LocationUpdatesCbScreen extends StatefulWidget {
   static const String ROUTE_NAME = 'LocationUpdatesCbScreen';
@@ -60,7 +60,9 @@ class _LocationUpdatesCbScreenState extends State<LocationUpdatesCbScreen> {
     if (_callbackId == null) {
       try {
         final int callbackId = await _locationService.requestLocationUpdatesCb(
-            _locationRequest, _locationCallback);
+          _locationRequest,
+          _locationCallback,
+        );
         _callbackId = callbackId;
         _setTopText('Location updates requested successfully');
       } on PlatformException catch (e) {
@@ -68,7 +70,8 @@ class _LocationUpdatesCbScreenState extends State<LocationUpdatesCbScreen> {
       }
     } else {
       _setTopText(
-          'Already requested location updates. Try removing location updates');
+        'Already requested location updates. Try removing location updates',
+      );
     }
   }
 
@@ -138,8 +141,10 @@ class _LocationUpdatesCbScreenState extends State<LocationUpdatesCbScreen> {
               thickness: 0.1,
               color: Colors.black,
             ),
-            Btn('Request Location Updates w Callback',
-                _requestLocationUpdatesCb),
+            Btn(
+              'Request Location Updates w Callback',
+              _requestLocationUpdatesCb,
+            ),
             Btn('Remove Location Updates', _removeLocationUpdatesCb),
             Expanded(
               child: SingleChildScrollView(

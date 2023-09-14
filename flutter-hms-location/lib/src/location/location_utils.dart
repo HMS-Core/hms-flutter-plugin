@@ -16,17 +16,23 @@
 
 part of huawei_location;
 
-class HMSLogger {
+class LocationUtils {
   static const MethodChannel _methodChannel =
-      MethodChannel('com.huawei.flutter.location/hmslogger_methodchannel');
+      MethodChannel('com.huawei.flutter.location/locationutils_methodchannel');
 
-  /// Enables the HMSLogger capability.
-  static Future<void> enableLogger() async {
-    return _methodChannel.invokeMethod<void>('enableLogger');
-  }
-
-  /// Disables the HMSLogger capability.
-  static Future<void> disableLogger() async {
-    return _methodChannel.invokeMethod<void>('disableLogger');
+  Future<LonLat> convertCoord(
+    double latitude,
+    double longitude,
+    int coordType,
+  ) async {
+    final Map<dynamic, dynamic> result = await _methodChannel.invokeMethod(
+      'convertCoord',
+      <String, dynamic>{
+        'latitude': latitude,
+        'longitude': longitude,
+        'coordType': coordType,
+      },
+    );
+    return LonLat.fromMap(result);
   }
 }

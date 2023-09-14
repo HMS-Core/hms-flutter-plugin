@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ class LocationRequest {
   /// Used to request the city-level location.
   static const int PRIORITY_LOW_POWER = 104;
 
-  /// Used to request the location with the optimal accuracy without additional 
+  /// Used to request the location with the optimal accuracy without additional
   /// power consumption.
   static const int PRIORITY_NO_POWER = 105;
 
@@ -39,6 +39,15 @@ class LocationRequest {
   /// [requestLocationUpdatesEx] method.
   static const int PRIORITY_HD_ACCURACY = 200;
   static const double _FASTEST_INTERVAL_FACTOR = 6.0;
+
+  /// Used to request the indoor location and fused location.
+  static const int PRIORITY_HIGH_ACCURACY_AND_INDOOR = 400;
+
+  /// Used to request locations of the WGS84 coordinate type.
+  static const int COORDINATE_TYPE_WGS84 = 0;
+
+  /// Used to request locations of the GCJ02 coordinate type.
+  static const int COORDINATE_TYPE_GCJ02 = 1;
 
   /// Request priority.
   ///
@@ -100,20 +109,8 @@ class LocationRequest {
   late String countryCode;
   Map<String, String>? extras;
 
-  LocationRequest._create(
-    this._priority,
-    this._interval,
-    this._fastestInterval,
-    this._isFastestIntervalExplicitlySet,
-    this._expirationTime,
-    this._numUpdates,
-    this._smallestDisplacement,
-    this._maxWaitTime,
-    this.needAddress,
-    this.language,
-    this.countryCode,
-    this.extras,
-  );
+  /// The coordinate type of the current location.
+  late int coordinateType;
 
   LocationRequest() {
     _priority = PRIORITY_BALANCED_POWER_ACCURACY;
@@ -127,7 +124,24 @@ class LocationRequest {
     needAddress = false;
     language = '';
     countryCode = '';
+    coordinateType = COORDINATE_TYPE_WGS84;
   }
+
+  LocationRequest._create(
+    this._priority,
+    this._interval,
+    this._fastestInterval,
+    this._isFastestIntervalExplicitlySet,
+    this._expirationTime,
+    this._numUpdates,
+    this._smallestDisplacement,
+    this._maxWaitTime,
+    this.needAddress,
+    this.language,
+    this.countryCode,
+    this.extras,
+    this.coordinateType,
+  );
 
   int get priority => _priority;
 
@@ -220,6 +234,7 @@ class LocationRequest {
       'language': language,
       'countryCode': countryCode,
       'extras': extras,
+      'coordinateType': coordinateType,
     };
   }
 
@@ -237,6 +252,7 @@ class LocationRequest {
       map['language'],
       map['countryCode'],
       Map<String, String>.from(map['extras']),
+      map['coordinateType'],
     );
   }
 
@@ -259,7 +275,8 @@ class LocationRequest {
         ' _needAddress: $needAddress,'
         ' _language: $language, '
         '_countryCode: $countryCode, '
-        '_extras: $extras)';
+        '_extras: $extras, '
+        '_coordinateType: $coordinateType)';
   }
 
   @override
@@ -281,12 +298,13 @@ class LocationRequest {
         other.needAddress == needAddress &&
         other.language == language &&
         other.countryCode == countryCode &&
+        other.coordinateType == coordinateType &&
         mapEquals(other.extras, extras);
   }
 
   @override
   int get hashCode {
-    return hashList(
+    return Object.hashAll(
       <Object?>[
         _priority,
         _interval,
@@ -300,6 +318,7 @@ class LocationRequest {
         language,
         countryCode,
         extras,
+        coordinateType,
       ],
     );
   }

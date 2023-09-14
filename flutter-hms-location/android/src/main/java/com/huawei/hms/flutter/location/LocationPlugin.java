@@ -1,18 +1,18 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.location;
 
@@ -31,6 +31,7 @@ import com.huawei.hms.flutter.location.handlers.GeocoderMethodHandler;
 import com.huawei.hms.flutter.location.handlers.GeofenceMethodHandler;
 import com.huawei.hms.flutter.location.handlers.GeofenceStreamHandler;
 import com.huawei.hms.flutter.location.handlers.HMSLoggerMethodHandler;
+import com.huawei.hms.flutter.location.handlers.LocationUtilsMethodHandler;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -51,6 +52,8 @@ public class LocationPlugin implements FlutterPlugin, ActivityAware {
     private MethodChannel hmsLoggerMethodChannel;
 
     private MethodChannel geocoderMethodChannel;
+
+    private MethodChannel locationUtilsMethodChannel;
 
     private EventChannel mFusedLocationEventChannel;
 
@@ -78,6 +81,8 @@ public class LocationPlugin implements FlutterPlugin, ActivityAware {
 
     private GeocoderMethodHandler geocoderMethodHandler;
 
+    private LocationUtilsMethodHandler locationUtilsMethodHandler;
+
     private void initChannels(final BinaryMessenger messenger) {
         fusedLocationMethodChannel = new MethodChannel(messenger, Channel.FUSED_LOCATION_METHOD.id());
         geofenceMethodChannel = new MethodChannel(messenger, Channel.GEOFENCE_METHOD.id());
@@ -89,6 +94,7 @@ public class LocationPlugin implements FlutterPlugin, ActivityAware {
         mActivityIdentificationEventChannel = new EventChannel(messenger, Channel.ACTIVITY_IDENTIFICATION_EVENT.id());
         mActivityConversionEventChannel = new EventChannel(messenger, Channel.ACTIVITY_CONVERSION_EVENT.id());
         geocoderMethodChannel = new MethodChannel(messenger, Channel.GEOCODER_METHOD.id());
+        locationUtilsMethodChannel = new MethodChannel(messenger, Channel.LOCATION_UTILS_METHOD.id());
     }
 
     private void initStreamHandlers(final Context context) {
@@ -130,6 +136,7 @@ public class LocationPlugin implements FlutterPlugin, ActivityAware {
         mActivityIdentificationEventChannel = null;
         mActivityConversionEventChannel = null;
         geocoderMethodChannel = null;
+        locationUtilsMethodChannel = null;
     }
 
     private void onAttachedToEngine(final Context context, final BinaryMessenger messenger) {
@@ -159,6 +166,7 @@ public class LocationPlugin implements FlutterPlugin, ActivityAware {
         activityIdentificationMethodHandler = new ActivityIdentificationMethodHandler(activity);
         hmsLoggerMethodHandler = new HMSLoggerMethodHandler(activity.getApplicationContext());
         geocoderMethodHandler = new GeocoderMethodHandler(activity);
+        locationUtilsMethodHandler = new LocationUtilsMethodHandler(activity);
 
         binding.addActivityResultListener(fusedLocationMethodHandler);
 
@@ -167,6 +175,7 @@ public class LocationPlugin implements FlutterPlugin, ActivityAware {
         activityIdentificationMethodChannel.setMethodCallHandler(activityIdentificationMethodHandler);
         hmsLoggerMethodChannel.setMethodCallHandler(hmsLoggerMethodHandler);
         geocoderMethodChannel.setMethodCallHandler(geocoderMethodHandler);
+        locationUtilsMethodChannel.setMethodCallHandler(locationUtilsMethodHandler);
     }
 
     @Override
@@ -191,5 +200,6 @@ public class LocationPlugin implements FlutterPlugin, ActivityAware {
         fusedLocationMethodHandler = null;
         hmsLoggerMethodHandler = null;
         geocoderMethodHandler = null;
+        locationUtilsMethodHandler = null;
     }
 }

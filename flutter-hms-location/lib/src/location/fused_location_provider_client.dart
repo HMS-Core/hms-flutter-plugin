@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -25,6 +25,19 @@ class FusedLocationProviderClient {
 
   Stream<Location>? _onLocationData;
 
+  factory FusedLocationProviderClient() {
+    _instance ??= FusedLocationProviderClient._create(
+      const MethodChannel(
+        'com.huawei.flutter.location/fusedlocation_methodchannel',
+      ),
+      const EventChannel(
+        'com.huawei.flutter.location/fusedlocation_eventchannel',
+      ),
+      <int, LocationCallback>{},
+    );
+    return _instance!;
+  }
+
   FusedLocationProviderClient._create(
     this._methodChannel,
     this._eventChannel,
@@ -33,27 +46,21 @@ class FusedLocationProviderClient {
     _methodChannel.setMethodCallHandler(_methodCallHandler);
   }
 
-  factory FusedLocationProviderClient() {
-    _instance ??= FusedLocationProviderClient._create(
-      const MethodChannel(
-          'com.huawei.flutter.location/fusedlocation_methodchannel'),
-      const EventChannel(
-          'com.huawei.flutter.location/fusedlocation_eventchannel'),
-      <int, LocationCallback>{},
-    );
-    return _instance!;
-  }
-
   Future<void> _methodCallHandler(MethodCall methodCall) async {
     switch (methodCall.method) {
       case 'onLocationResult':
         _callbacks[methodCall.arguments['callbackId']]!.onLocationResult(
-            LocationResult.fromMap(methodCall.arguments['locationResult']));
+          LocationResult.fromMap(
+            methodCall.arguments['locationResult'],
+          ),
+        );
         break;
       case 'onLocationAvailability':
         _callbacks[methodCall.arguments['callbackId']]!.onLocationAvailability(
-            LocationAvailability.fromMap(
-                methodCall.arguments['locationAvailability']));
+          LocationAvailability.fromMap(
+            methodCall.arguments['locationAvailability'],
+          ),
+        );
         break;
       default:
         break;
@@ -62,10 +69,14 @@ class FusedLocationProviderClient {
 
   /// Checks location settings of the device.
   Future<LocationSettingsStates> checkLocationSettings(
-      LocationSettingsRequest locationSettingsRequest) async {
+    LocationSettingsRequest locationSettingsRequest,
+  ) async {
     return LocationSettingsStates.fromMap(
-        (await (_methodChannel.invokeMapMethod<String, dynamic>(
-            'checkLocationSettings', locationSettingsRequest.toMap())))!);
+      (await (_methodChannel.invokeMapMethod<String, dynamic>(
+        'checkLocationSettings',
+        locationSettingsRequest.toMap(),
+      )))!,
+    );
   }
 
   /// Obtains the available location of the last request.
@@ -73,8 +84,9 @@ class FusedLocationProviderClient {
   /// Instead of proactively requesting a location, this method uses the
   /// location cached during the last request.
   Future<Location> getLastLocation() async {
-    return Location.fromMap(await _methodChannel
-        .invokeMapMethod<String, dynamic>('getLastLocation'));
+    return Location.fromMap(
+      await _methodChannel.invokeMapMethod<String, dynamic>('getLastLocation'),
+    );
   }
 
   /// Obtains the available location of the last request, including the
@@ -82,16 +94,22 @@ class FusedLocationProviderClient {
   ///
   /// If no location is available, `null` is returned.
   Future<HWLocation> getLastLocationWithAddress(
-      LocationRequest locationRequest) async {
+    LocationRequest locationRequest,
+  ) async {
     return HWLocation.fromMap(
-        (await (_methodChannel.invokeMapMethod<String, dynamic>(
-            'getLastLocationWithAddress', locationRequest.toMap())))!);
+      (await (_methodChannel.invokeMapMethod<String, dynamic>(
+        'getLastLocationWithAddress',
+        locationRequest.toMap(),
+      )))!,
+    );
   }
 
   /// Checks whether the location data is available.
   Future<LocationAvailability> getLocationAvailability() async {
-    return LocationAvailability.fromMap((await (_methodChannel
-        .invokeMapMethod<String, dynamic>('getLocationAvailability')))!);
+    return LocationAvailability.fromMap(
+      (await (_methodChannel
+          .invokeMapMethod<String, dynamic>('getLocationAvailability')))!,
+    );
   }
 
   /// Sets whether to use the location mock mode.
@@ -109,7 +127,9 @@ class FusedLocationProviderClient {
   /// before calling this method.
   Future<void> setMockLocation(Location location) async {
     return _methodChannel.invokeMethod<void>(
-        'setMockLocation', location.toMap());
+      'setMockLocation',
+      location.toMap(),
+    );
   }
 
   /// Continuously requests location updates.
@@ -118,14 +138,20 @@ class FusedLocationProviderClient {
   /// updates.
   Future<int?> requestLocationUpdates(LocationRequest locationRequest) async {
     return _methodChannel.invokeMethod<int>(
-        'requestLocationUpdates', locationRequest.toMap());
+      'requestLocationUpdates',
+      locationRequest.toMap(),
+    );
   }
 
   /// Requests location updates using the callback.
-  Future<int> requestLocationUpdatesCb(LocationRequest locationRequest,
-      LocationCallback locationCallback) async {
+  Future<int> requestLocationUpdatesCb(
+    LocationRequest locationRequest,
+    LocationCallback locationCallback,
+  ) async {
     int callbackId = (await (_methodChannel.invokeMethod<int>(
-        'requestLocationUpdatesCb', locationRequest.toMap())))!;
+      'requestLocationUpdatesCb',
+      locationRequest.toMap(),
+    )))!;
     _callbacks.putIfAbsent(callbackId, () => locationCallback);
     return callbackId;
   }
@@ -138,12 +164,15 @@ class FusedLocationProviderClient {
   /// does not request the high-precision location, this method returns
   /// common location information similar to
   /// that returned by the [requestLocationUpdatesCb] method.
-  Future<int> requestLocationUpdatesExCb(LocationRequest locationRequest,
-      LocationCallback locationCallback) async {
+  Future<int> requestLocationUpdatesExCb(
+    LocationRequest locationRequest,
+    LocationCallback locationCallback,
+  ) async {
     int callbackId = (await (_methodChannel.invokeMethod<int>(
-        'requestLocationUpdatesExCb',
-        (locationRequest..priority = LocationRequest.PRIORITY_HD_ACCURACY)
-            .toMap())))!;
+      'requestLocationUpdatesExCb',
+      (locationRequest..priority = LocationRequest.PRIORITY_HD_ACCURACY)
+          .toMap(),
+    )))!;
     _callbacks.putIfAbsent(callbackId, () => locationCallback);
     return callbackId;
   }
@@ -151,22 +180,30 @@ class FusedLocationProviderClient {
   /// Removes location updates based on the specified request code.
   Future<void> removeLocationUpdates(int requestCode) async {
     return _methodChannel.invokeMethod<void>(
-        'removeLocationUpdates', requestCode);
+      'removeLocationUpdates',
+      requestCode,
+    );
   }
 
   /// Removes location updates based on the specified callback ID.
   Future<void> removeLocationUpdatesCb(int callbackId) async {
     await _methodChannel.invokeMethod<void>(
-        'removeLocationUpdatesCb', callbackId);
+      'removeLocationUpdatesCb',
+      callbackId,
+    );
     _callbacks.remove(callbackId);
   }
 
   /// Obtains the status information.
   Future<NavigationResult> getNavigationContextState(
-      NavigationRequest navigationRequest) async {
+    NavigationRequest navigationRequest,
+  ) async {
     return NavigationResult.fromMap(
-        (await (_methodChannel.invokeMapMethod<String, dynamic>(
-            'getNavigationContextState', navigationRequest.toMap())))!);
+      (await (_methodChannel.invokeMapMethod<String, dynamic>(
+        'getNavigationContextState',
+        navigationRequest.toMap(),
+      )))!,
+    );
   }
 
   /// Listens for location updates that come from the [requestLocationUpdates]
@@ -205,6 +242,7 @@ class FusedLocationProviderClient {
   /// Obtains the log config object.
   Future<LogConfig> getLogConfig() async {
     return LogConfig.fromMap(
-        await _methodChannel.invokeMapMethod<String, dynamic>('getLogConfig'));
+      await _methodChannel.invokeMapMethod<String, dynamic>('getLogConfig'),
+    );
   }
 }

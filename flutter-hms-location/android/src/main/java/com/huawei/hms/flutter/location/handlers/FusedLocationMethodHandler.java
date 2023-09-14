@@ -1,18 +1,18 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.location.handlers;
 
@@ -99,39 +99,39 @@ public class FusedLocationMethodHandler implements MethodChannel.MethodCallHandl
         this.result = result;
 
         settingsClient.checkLocationSettings(request)
-            .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
-            .addOnFailureListener(new LocationSettingsFailureListener(result, activity));
+                .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
+                .addOnFailureListener(new LocationSettingsFailureListener(result, activity));
     }
 
     private void getLastLocation(final MethodCall call, final MethodChannel.Result result) {
         service.getLastLocation()
-            .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
-            .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
+                .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
+                .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
     }
 
     private void getLastLocationWithAddress(final MethodCall call, final MethodChannel.Result result) {
         service.getLastLocationWithAddress(
                 LocationUtils.fromMapToLocationRequest(call.<Map<String, Object>>arguments()))
-            .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
-            .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
+                .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
+                .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
     }
 
     private void getLocationAvailability(final MethodCall call, final MethodChannel.Result result) {
         service.getLocationAvailability()
-            .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
-            .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
+                .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
+                .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
     }
 
     private void setMockMode(final MethodCall call, final MethodChannel.Result result) {
         service.setMockMode(call.<Boolean>arguments())
-            .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
-            .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
+                .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
+                .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
     }
 
     private void setMockLocation(final MethodCall call, final MethodChannel.Result result) {
         service.setMockLocation(LocationUtils.fromMapToLocation(call.arguments()))
-            .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
-            .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
+                .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
+                .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
     }
 
     private void requestLocationUpdates(final MethodCall call, final MethodChannel.Result result) {
@@ -139,9 +139,10 @@ public class FusedLocationMethodHandler implements MethodChannel.MethodCallHandl
         final LocationRequest request = LocationUtils.fromMapToLocationRequest(call.<Map<String, Object>>arguments());
 
         service.requestLocationUpdates(request, intentData.second)
-            .addOnSuccessListener(new RequestUpdatesSuccessListener(call.method, activity, result, intentData.first))
-            .addOnFailureListener(
-                new RequestUpdatesFailureListener<>(call.method, activity, result, intentData.first, requests));
+                .addOnSuccessListener(
+                        new RequestUpdatesSuccessListener(call.method, activity, result, intentData.first))
+                .addOnFailureListener(
+                        new RequestUpdatesFailureListener<>(call.method, activity, result, intentData.first, requests));
     }
 
     private void requestLocationUpdatesCb(final MethodCall call, final MethodChannel.Result result) {
@@ -149,9 +150,11 @@ public class FusedLocationMethodHandler implements MethodChannel.MethodCallHandl
         final Pair<Integer, LocationCallbackHandler> callbackData = buildCallback(call.method);
 
         service.requestLocationUpdates(request, callbackData.second, Looper.getMainLooper())
-            .addOnSuccessListener(new RequestUpdatesSuccessListener(call.method, activity, result, callbackData.first))
-            .addOnFailureListener(
-                new RequestUpdatesFailureListener<>(call.method, activity, result, callbackData.first, callbacks));
+                .addOnSuccessListener(
+                        new RequestUpdatesSuccessListener(call.method, activity, result, callbackData.first))
+                .addOnFailureListener(
+                        new RequestUpdatesFailureListener<>(call.method, activity, result, callbackData.first,
+                                callbacks));
     }
 
     private void requestLocationUpdatesExCb(final MethodCall call, final MethodChannel.Result result) {
@@ -159,9 +162,11 @@ public class FusedLocationMethodHandler implements MethodChannel.MethodCallHandl
         final Pair<Integer, LocationCallbackHandler> callbackData = buildCallback(call.method);
 
         service.requestLocationUpdatesEx(request, callbackData.second, Looper.getMainLooper())
-            .addOnSuccessListener(new RequestUpdatesSuccessListener(call.method, activity, result, callbackData.first))
-            .addOnFailureListener(
-                new RequestUpdatesFailureListener<>(call.method, activity, result, callbackData.first, callbacks));
+                .addOnSuccessListener(
+                        new RequestUpdatesSuccessListener(call.method, activity, result, callbackData.first))
+                .addOnFailureListener(
+                        new RequestUpdatesFailureListener<>(call.method, activity, result, callbackData.first,
+                                callbacks));
     }
 
     private void removeLocationUpdates(final MethodCall call, final MethodChannel.Result result) {
@@ -171,9 +176,10 @@ public class FusedLocationMethodHandler implements MethodChannel.MethodCallHandl
             result.error(Error.NON_EXISTING_REQUEST_ID.name(), Error.NON_EXISTING_REQUEST_ID.message(), null);
         } else {
             service.removeLocationUpdates(requests.get(incomingRequestCode))
-                .addOnSuccessListener(
-                    new RemoveUpdatesSuccessListener<>(call.method, activity, result, incomingRequestCode, requests))
-                .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
+                    .addOnSuccessListener(
+                            new RemoveUpdatesSuccessListener<>(call.method, activity, result, incomingRequestCode,
+                                    requests))
+                    .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
         }
     }
 
@@ -184,9 +190,9 @@ public class FusedLocationMethodHandler implements MethodChannel.MethodCallHandl
             result.error(Error.NON_EXISTING_REQUEST_ID.name(), Error.NON_EXISTING_REQUEST_ID.message(), null);
         } else {
             service.removeLocationUpdates(callbacks.get(callbackId))
-                .addOnSuccessListener(
-                    new RemoveUpdatesSuccessListener<>(call.method, activity, result, callbackId, callbacks))
-                .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
+                    .addOnSuccessListener(
+                            new RemoveUpdatesSuccessListener<>(call.method, activity, result, callbackId, callbacks))
+                    .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
         }
     }
 
@@ -194,13 +200,13 @@ public class FusedLocationMethodHandler implements MethodChannel.MethodCallHandl
         final NavigationRequest request = LocationUtils.fromMapToNavigationRequest(call.arguments());
 
         enhanceService.getNavigationState(request)
-            .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
-            .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
+                .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
+                .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
     }
 
     private void enableBackgroundLocation(final MethodCall call, final MethodChannel.Result result) {
         int hasPermission = checkSelfPermission(activity.getApplicationContext(),
-            android.Manifest.permission.FOREGROUND_SERVICE);
+                android.Manifest.permission.FOREGROUND_SERVICE);
         if (hasPermission == -1) {
             result.error("NO_PERMISSION", "App does not have FOREGROUND_SERVICE permission.", null);
         }
@@ -213,7 +219,7 @@ public class FusedLocationMethodHandler implements MethodChannel.MethodCallHandl
         int notificationId = call.argument("notificationId");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager notificationManager = (NotificationManager) activity.getApplicationContext()
-                .getSystemService(Context.NOTIFICATION_SERVICE);
+                    .getSystemService(Context.NOTIFICATION_SERVICE);
             String channelId = "com.huawei.hms.location.flutter.LOCATION_NOTIFICATION";
             NotificationChannel notificationChannel = new NotificationChannel(channelId, channelName, priority);
             notificationManager.createNotificationChannel(notificationChannel);
@@ -230,22 +236,22 @@ public class FusedLocationMethodHandler implements MethodChannel.MethodCallHandl
         }
 
         service.enableBackgroundLocation(notificationId, mNotification)
-            .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
-            .addOnFailureListener(e -> Log.e(TAG, e.getMessage()));
+                .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
+                .addOnFailureListener(e -> Log.e(TAG, e.getMessage()));
 
     }
 
     private void disableBackgroundLocation(final MethodCall call, final MethodChannel.Result result) {
         service.disableBackgroundLocation()
-            .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
-            .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
+                .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
+                .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
     }
 
     private void setLogConfig(final MethodCall call, final MethodChannel.Result result) {
         int readStorage = checkSelfPermission(activity.getApplicationContext(),
-            android.Manifest.permission.READ_EXTERNAL_STORAGE);
+                android.Manifest.permission.READ_EXTERNAL_STORAGE);
         int writeStorage = checkSelfPermission(activity.getApplicationContext(),
-            android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (readStorage == -1 && writeStorage == -1) {
             result.error("NO_PERMISSION", "App does not have storage permission.", null);
         }
@@ -272,7 +278,7 @@ public class FusedLocationMethodHandler implements MethodChannel.MethodCallHandl
 
     private Pair<Integer, LocationCallbackHandler> buildCallback(final String methodName) {
         final LocationCallbackHandler callBack = new LocationCallbackHandler(activity.getApplicationContext(),
-            methodName, ++requestCode, channel);
+                methodName, ++requestCode, channel);
         callbacks.put(requestCode, callBack);
         return Pair.create(requestCode, callBack);
     }
@@ -283,7 +289,7 @@ public class FusedLocationMethodHandler implements MethodChannel.MethodCallHandl
         intent.setAction(Action.PROCESS_LOCATION);
 
         final PendingIntent pendingIntent = PendingIntent.getBroadcast(activity.getApplicationContext(), ++requestCode,
-            intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
         requests.put(requestCode, pendingIntent);
         return Pair.create(requestCode, pendingIntent);
     }
@@ -356,13 +362,13 @@ public class FusedLocationMethodHandler implements MethodChannel.MethodCallHandl
             if (resultCode == Activity.RESULT_OK) {
                 final LocationSettingsStates states = LocationSettingsStates.fromIntent(intent);
                 HMSLogger.getInstance(activity.getApplicationContext())
-                    .sendSingleEvent("checkLocationSettings.onActivityResult");
+                        .sendSingleEvent("checkLocationSettings.onActivityResult");
                 incomingResult.success(LocationUtils.fromLocationSettingsStatesToMap(states));
             } else {
                 HMSLogger.getInstance(activity.getApplicationContext())
-                    .sendSingleEvent("checkLocationSettings" + ".onActivityResult", "-1");
+                        .sendSingleEvent("checkLocationSettings" + ".onActivityResult", "-1");
                 incomingResult.error(Error.LOCATION_SETTINGS_NOT_AVAILABLE.name(),
-                    Error.LOCATION_SETTINGS_NOT_AVAILABLE.message(), null);
+                        Error.LOCATION_SETTINGS_NOT_AVAILABLE.message(), null);
             }
         }
 

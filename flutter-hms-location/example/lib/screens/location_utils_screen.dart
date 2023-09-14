@@ -17,19 +17,18 @@
 import 'package:flutter/material.dart';
 
 import 'package:huawei_location_example/widgets/custom_button.dart' show Btn;
-import 'package:huawei_location_example/screens/get_from_location_name_screen.dart';
-import 'package:huawei_location_example/screens/get_from_location_screen.dart';
+import 'package:huawei_location_example/screens/convert_coordinate_screen.dart';
 
-class GeocoderScreen extends StatefulWidget {
-  static const String ROUTE_NAME = 'GeocoderScreen';
+class LocationUtilsScreen extends StatefulWidget {
+  static const String ROUTE_NAME = 'LocationUtilsScreen';
 
-  const GeocoderScreen({Key? key}) : super(key: key);
+  const LocationUtilsScreen({Key? key}) : super(key: key);
 
   @override
-  State<GeocoderScreen> createState() => _GeocoderScreenState();
+  State<LocationUtilsScreen> createState() => _LocationUtilsScreenState();
 }
 
-class _GeocoderScreenState extends State<GeocoderScreen> {
+class _LocationUtilsScreenState extends State<LocationUtilsScreen> {
   @override
   void initState() {
     super.initState();
@@ -39,7 +38,7 @@ class _GeocoderScreenState extends State<GeocoderScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Geocoder Screen'),
+        title: const Text('Location Utils Screen'),
       ),
       body: Container(
         padding: const EdgeInsets.all(10),
@@ -53,35 +52,20 @@ class _GeocoderScreenState extends State<GeocoderScreen> {
             Center(
               child: Column(
                 children: const <Widget>[
-                  Text('Reverse geocoding request'),
+                  Text('Obtains the coordinate type of the current location.'),
                   SizedBox(height: 15)
                 ],
               ),
             ),
-            Btn('Get From Location', () {
-              Navigator.pushNamed(
-                context,
-                GetFromLocationScreen.ROUTE_NAME,
-              );
-            }),
-            const Divider(
-              thickness: 0.1,
-              color: Colors.black,
+            Btn(
+              'Convert Coordinate',
+              () {
+                Navigator.pushNamed(
+                  context,
+                  ConvertCoordinateScreen.ROUTE_NAME,
+                );
+              },
             ),
-            Center(
-              child: Column(
-                children: const <Widget>[
-                  Text('Forward geocoding request information'),
-                  SizedBox(height: 15)
-                ],
-              ),
-            ),
-            Btn('Get From Location Name', () {
-              Navigator.pushNamed(
-                context,
-                GetFromLocationNameScreen.ROUTE_NAME,
-              );
-            }),
             const Divider(
               thickness: 0.1,
               color: Colors.black,

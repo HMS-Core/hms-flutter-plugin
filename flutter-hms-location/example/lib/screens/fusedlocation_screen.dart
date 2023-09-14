@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -18,12 +18,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:huawei_location/huawei_location.dart';
 
-import '../widgets/custom_button.dart' show Btn;
-import '../widgets/custom_row.dart' show CRow;
-import 'location_enhance_screen.dart';
-import 'location_updates_cb_screen.dart';
-import 'location_updates_ex_cb_screen.dart';
-import 'location_updates_screen.dart';
+import 'package:huawei_location_example/widgets/custom_button.dart' show Btn;
+import 'package:huawei_location_example/widgets/custom_row.dart' show CRow;
+import 'package:huawei_location_example/screens/location_enhance_screen.dart';
+import 'package:huawei_location_example/screens/location_updates_cb_screen.dart';
+import 'package:huawei_location_example/screens/location_updates_ex_cb_screen.dart';
+import 'package:huawei_location_example/screens/location_updates_screen.dart';
 
 class FusedLocationScreen extends StatefulWidget {
   static const String ROUTE_NAME = 'FusedLocationScreen';
@@ -185,9 +185,9 @@ class _FusedLocationScreenState extends State<FusedLocationScreen> {
     _setTopText();
     _logConfig = LogConfig(
       fileExpiredTime: 5,
-      fileNum: 20,
+      fileNum: 15,
       fileSize: 2,
-      logPath: '/storage/emulated/0/Android/data/com.cordova.base/log',
+      logPath: '/storage/emulated/0/Android/data/log',
     );
     try {
       await _locationService.setLogConfig(_logConfig);
@@ -249,18 +249,24 @@ class _FusedLocationScreenState extends State<FusedLocationScreen> {
                   CRow(
                     children: <Widget>[
                       Btn('getLastLocation', _getLastLocation),
-                      Btn('getLastLocationWithAddress',
-                          _getLastLocationWithAddress)
+                      Btn(
+                        'getLastLocationWithAddress',
+                        _getLastLocationWithAddress,
+                      )
                     ],
                   ),
-                  CRow(children: <Widget>[
-                    Btn('getLocationAvailability', _getLocationAvailability),
-                    Btn('setMockModeTrue', _setMockModeTrue)
-                  ]),
-                  CRow(children: <Widget>[
-                    Btn('setMockModeFalse', _setMockModeFalse),
-                    Btn('setMockLocation', _setMockLocation)
-                  ]),
+                  CRow(
+                    children: <Widget>[
+                      Btn('getLocationAvailability', _getLocationAvailability),
+                      Btn('setMockModeTrue', _setMockModeTrue)
+                    ],
+                  ),
+                  CRow(
+                    children: <Widget>[
+                      Btn('setMockModeFalse', _setMockModeFalse),
+                      Btn('setMockLocation', _setMockLocation)
+                    ],
+                  ),
                   Btn('Location Updates', () {
                     Navigator.pushNamed(
                       context,

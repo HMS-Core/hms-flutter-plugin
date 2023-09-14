@@ -21,23 +21,27 @@ import 'package:huawei_location/huawei_location.dart';
 import 'package:huawei_location_example/widgets/custom_button.dart' show Btn;
 import 'package:huawei_location_example/widgets/custom_textinput.dart';
 
-class GetFromLocationScreen extends StatefulWidget {
-  static const String ROUTE_NAME = 'GetFromLocationScreen';
+class ConvertCoordinateScreen extends StatefulWidget {
+  static const String ROUTE_NAME = 'ConvertCoordinateScreen';
 
-  const GetFromLocationScreen({Key? key}) : super(key: key);
+  const ConvertCoordinateScreen({Key? key}) : super(key: key);
 
   @override
-  State<GetFromLocationScreen> createState() => _GetFromLocationScreenState();
+  State<ConvertCoordinateScreen> createState() =>
+      _ConvertCoordinateScreenState();
 }
 
-class _GetFromLocationScreenState extends State<GetFromLocationScreen> {
+class _ConvertCoordinateScreenState extends State<ConvertCoordinateScreen> {
+  late LonLat _lonLat;
   String _bottomText = '';
-  late GetFromLocationRequest _getFromLocationRequest;
-  late Locale _locale;
-  final GeocoderService _geocoderService = GeocoderService();
-  final TextEditingController _lat = TextEditingController(text: '40');
-  final TextEditingController _lng = TextEditingController(text: '30');
-  final TextEditingController _maxResults = TextEditingController(text: '3');
+  final LocationUtils _locationUtils = LocationUtils();
+
+  final TextEditingController _latitudeTextEditingController =
+      TextEditingController(text: '0');
+  final TextEditingController _longitudeTextEditingController =
+      TextEditingController(text: '0');
+  final TextEditingController _coordTypeTextEditingController =
+      TextEditingController(text: '1');
 
   final List<FilteringTextInputFormatter> _numWithDecimalFormatter =
       <FilteringTextInputFormatter>[
@@ -51,30 +55,20 @@ class _GetFromLocationScreenState extends State<GetFromLocationScreen> {
     super.initState();
   }
 
-  void _getFromLocation() async {
+  void _convertCoordinate() async {
     _setBottomText();
-    final double latitude = double.parse(_lat.text);
-    final double longitude = double.parse(_lng.text);
-    final int maxResults = int.parse(_maxResults.text);
-
-    _getFromLocationRequest = GetFromLocationRequest(
-      latitude: latitude,
-      longitude: longitude,
-      maxResults: maxResults,
-    );
-
-    _locale = Locale(
-      language: 'en',
-      country: 'US',
-    );
+    final int coordType = int.parse(_coordTypeTextEditingController.text);
+    final double latitude = double.parse(_latitudeTextEditingController.text);
+    final double longitude = double.parse(_longitudeTextEditingController.text);
 
     try {
-      final List<HWLocation> hwLocationList =
-          await _geocoderService.getFromLocation(
-        _getFromLocationRequest,
-        _locale,
+      _lonLat = await _locationUtils.convertCoord(
+        latitude,
+        longitude,
+        coordType,
       );
-      _setBottomText(hwLocationList.toString());
+
+      _setBottomText(_lonLat.toString());
     } on PlatformException catch (e) {
       _setBottomText(e.toString());
     }
@@ -90,7 +84,7 @@ class _GetFromLocationScreenState extends State<GetFromLocationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('From Location Screen'),
+        title: const Text('Convert Coordinate Screen'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -101,8 +95,8 @@ class _GetFromLocationScreenState extends State<GetFromLocationScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   CustomTextInput(
-                    controller: _lat,
-                    labelText: 'Latitude',
+                    controller: _coordTypeTextEditingController,
+                    labelText: 'Coord Type',
                     inputFormatters: _numWithDecimalFormatter,
                     keyboardType: const TextInputType.numberWithOptions(
                       signed: true,
@@ -110,7 +104,7 @@ class _GetFromLocationScreenState extends State<GetFromLocationScreen> {
                     ),
                   ),
                   CustomTextInput(
-                    controller: _lng,
+                    controller: _longitudeTextEditingController,
                     labelText: 'Longitude',
                     inputFormatters: _numWithDecimalFormatter,
                     keyboardType: const TextInputType.numberWithOptions(
@@ -119,15 +113,15 @@ class _GetFromLocationScreenState extends State<GetFromLocationScreen> {
                     ),
                   ),
                   CustomTextInput(
-                    controller: _maxResults,
-                    labelText: 'Max Results',
+                    controller: _latitudeTextEditingController,
+                    labelText: 'Latitude',
                     inputFormatters: _numWithDecimalFormatter,
                     keyboardType: const TextInputType.numberWithOptions(
                       signed: true,
                       decimal: true,
                     ),
                   ),
-                  Btn('GET', _getFromLocation),
+                  Btn('convertCoordinate', _convertCoordinate),
                   Container(
                     padding: const EdgeInsets.only(top: 15),
                     child: Center(

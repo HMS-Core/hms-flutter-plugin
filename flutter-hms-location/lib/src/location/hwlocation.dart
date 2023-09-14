@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -112,13 +112,13 @@ class HWLocation {
   /// If no postal code is available, `null` is returned.
   String? postalCode;
 
-  /// Phone number of the landmark building (such as a store or company) at 
+  /// Phone number of the landmark building (such as a store or company) at
   /// the current location.
   ///
   /// If no phone number is available, `null` is returned.
   String? phone;
 
-  /// Website of the landmark building (such as a store or company) at 
+  /// Website of the landmark building (such as a store or company) at
   /// the current location.
   ///
   /// If no website is available, `null` is returned.
@@ -128,6 +128,9 @@ class HWLocation {
   ///
   /// If no additional information is available, `null` is returned.
   Map<String, dynamic>? extraInfo;
+
+  /// The coordinate type of the current location.
+  int? coordinateType;
 
   HWLocation({
     this.provider,
@@ -153,6 +156,7 @@ class HWLocation {
     this.phone,
     this.url,
     this.extraInfo,
+    this.coordinateType,
   });
 
   Map<String, dynamic> toMap() {
@@ -180,6 +184,7 @@ class HWLocation {
       'phone': phone,
       'url': url,
       'extraInfo': extraInfo,
+      'coordinateType': coordinateType,
     };
   }
 
@@ -207,6 +212,7 @@ class HWLocation {
       postalCode: map?['postalCode'],
       phone: map?['phone'],
       url: map?['url'],
+      coordinateType: map?['coordinateType'],
       extraInfo: Map<String, dynamic>.from(map?['extraInfo']),
     );
   }
@@ -241,7 +247,8 @@ class HWLocation {
         'postalCode: $postalCode, '
         'phone: $phone, '
         'url: $url, '
-        'extraInfo: $extraInfo)';
+        'extraInfo: $extraInfo, '
+        'coordinateType: $coordinateType)';
   }
 
   @override
@@ -272,12 +279,13 @@ class HWLocation {
         other.postalCode == postalCode &&
         other.phone == phone &&
         other.url == url &&
+        other.coordinateType == coordinateType &&
         mapEquals(other.extraInfo, extraInfo);
   }
 
   @override
   int get hashCode {
-    return hashList(
+    return Object.hashAll(
       <Object?>[
         provider,
         latitude,
@@ -302,6 +310,7 @@ class HWLocation {
         phone,
         url,
         extraInfo,
+        coordinateType,
       ],
     );
   }

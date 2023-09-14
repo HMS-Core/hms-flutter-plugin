@@ -1,18 +1,18 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.location.utils;
 
@@ -36,6 +36,7 @@ import com.huawei.hms.location.LocationSettingsStates;
 import com.huawei.hms.location.LogConfig;
 import com.huawei.hms.location.NavigationRequest;
 import com.huawei.hms.location.NavigationResult;
+import com.huawei.hms.support.api.entity.location.coordinate.LonLat;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -120,6 +121,7 @@ public interface LocationUtils {
         map.put("phone", hwLocation.getPhone());
         map.put("url", hwLocation.getUrl());
         map.put("extraInfo", hwLocation.getExtraInfo());
+        map.put("coordinateType", hwLocation.getCoordinateType());
 
         return map;
     }
@@ -248,6 +250,7 @@ public interface LocationUtils {
         result.setNeedAddress(ValueGetter.getBoolean("needAddress", map));
         result.setLanguage(ValueGetter.getString("language", map));
         result.setCountryCode(ValueGetter.getString("countryCode", map));
+        result.setCoordinateType(ValueGetter.getInt("coordinateType", map));
 
         final Map extras = ObjectUtils.cast(map.get("extras"), Map.class);
 
@@ -416,11 +419,11 @@ public interface LocationUtils {
         }
         if (map.get("smallIcon") != null) {
             int resourceId = context.getResources()
-                .getIdentifier(ValueGetter.getString("smallIcon", map), "drawable", context.getPackageName());
+                    .getIdentifier(ValueGetter.getString("smallIcon", map), "drawable", context.getPackageName());
             builder = builder.setSmallIcon(resourceId);
         } else {
             builder.setSmallIcon(
-                context.getResources().getIdentifier("ic_launcher", "mipmap", context.getPackageName()));
+                    context.getResources().getIdentifier("ic_launcher", "mipmap", context.getPackageName()));
         }
         if (map.get("largeIcon") != null) {
             Bitmap bitmap = null;
@@ -435,7 +438,7 @@ public interface LocationUtils {
             String sourceName = ValueGetter.getString("sound", map);
             int resourceId = context.getResources().getIdentifier(sourceName, "raw", context.getPackageName());
             Uri soundUri = Uri.parse(
-                String.format(Locale.ENGLISH, "android.resource://%s/%s", context.getPackageName(), resourceId));
+                    String.format(Locale.ENGLISH, "android.resource://%s/%s", context.getPackageName(), resourceId));
             builder = builder.setSound(soundUri);
         }
         if (map.get("onGoing") != null) {
@@ -461,11 +464,30 @@ public interface LocationUtils {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder.setOngoing(true)
-                .setPriority(ValueGetter.getInt("priority", map))
-                .setCategory(ValueGetter.getString("category", map))
-                .build();
+                    .setPriority(ValueGetter.getInt("priority", map))
+                    .setCategory(ValueGetter.getString("category", map))
+                    .build();
         }
 
+    }
+
+    /**
+     * Utility method
+     *
+     * @param lonLat LonLat object
+     * @return HashMap representation of LonLat object0
+     */
+    static Map<String, Object> fromLonLatToMap(LonLat lonLat) {
+        if (lonLat == null) {
+            return Collections.emptyMap();
+        }
+
+        final Map<String, Object> map = new HashMap<>();
+
+        map.put("latitude", lonLat.getLatitude());
+        map.put("longitude", lonLat.getLongitude());
+
+        return map;
     }
 
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -24,17 +24,12 @@ class GeofenceService {
 
   Stream<GeofenceData>? _onGeofenceData;
 
-  GeofenceService._create(
-    this._methodChannel,
-    this._eventChannel,
-  );
-
   factory GeofenceService() {
     if (_instance == null) {
-      const MethodChannel methodChannel = MethodChannel(
-          'com.huawei.flutter.location/geofence_methodchannel');
-      const EventChannel eventChannel = EventChannel(
-          'com.huawei.flutter.location/geofence_eventchannel');
+      const MethodChannel methodChannel =
+          MethodChannel('com.huawei.flutter.location/geofence_methodchannel');
+      const EventChannel eventChannel =
+          EventChannel('com.huawei.flutter.location/geofence_eventchannel');
 
       _instance = GeofenceService._create(
         methodChannel,
@@ -44,13 +39,20 @@ class GeofenceService {
     return _instance!;
   }
 
+  GeofenceService._create(
+    this._methodChannel,
+    this._eventChannel,
+  );
+
   /// Adds geofences.
   ///
   /// When a geofence is triggered, the [onGeofenceData] method can listen for
   /// a notification.
   Future<int> createGeofenceList(GeofenceRequest geofenceRequest) async {
     return (await _methodChannel.invokeMethod<int>(
-        'createGeofenceList', geofenceRequest.toMap()))!;
+      'createGeofenceList',
+      geofenceRequest.toMap(),
+    ))!;
   }
 
   /// Removes geofences associated with a request code.
@@ -61,15 +63,17 @@ class GeofenceService {
   /// Removes geofences by their unique IDs.
   Future<void> deleteGeofenceListWithIds(List<String> geofenceIds) async {
     return _methodChannel.invokeMethod<void>(
-        'deleteGeofenceListWithIds', geofenceIds);
+      'deleteGeofenceListWithIds',
+      geofenceIds,
+    );
   }
 
   /// Listens for geofence updates that come from the [createGeofenceList]
   /// method.
   Stream<GeofenceData>? get onGeofenceData {
     _onGeofenceData ??= _eventChannel
-          .receiveBroadcastStream()
-          .map((dynamic event) => GeofenceData.fromMap(event));
+        .receiveBroadcastStream()
+        .map((dynamic event) => GeofenceData.fromMap(event));
     return _onGeofenceData;
   }
 }

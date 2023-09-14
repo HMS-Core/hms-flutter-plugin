@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -21,8 +21,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:huawei_location/huawei_location.dart';
 
-import '../widgets/custom_button.dart';
-import '../widgets/custom_textinput.dart';
+import 'package:huawei_location_example/widgets/custom_button.dart';
+import 'package:huawei_location_example/widgets/custom_textinput.dart';
 
 class AddGeofenceScreen extends StatefulWidget {
   static const String ROUTE_NAME = 'AddGeofenceScreen';
@@ -183,96 +183,103 @@ class _AddGeofenceScreenState extends State<AddGeofenceScreen> {
         return false;
       },
       child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Add Geofence Screen'),
-          ),
-          body: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.only(top: 5),
-                  child: Text(_topText),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 60),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      CustomTextInput(
-                        controller: _lat,
-                        labelText: 'Latitude',
-                        hintText: '[-90,90]',
-                        inputFormatters: _numWithDecimalFormatter,
-                        keyboardType: const TextInputType.numberWithOptions(
-                            signed: true, decimal: true),
+        appBar: AppBar(
+          title: const Text('Add Geofence Screen'),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Container(
+                padding: const EdgeInsets.only(top: 5),
+                child: Text(_topText),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 60),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    CustomTextInput(
+                      controller: _lat,
+                      labelText: 'Latitude',
+                      hintText: '[-90,90]',
+                      inputFormatters: _numWithDecimalFormatter,
+                      keyboardType: const TextInputType.numberWithOptions(
+                        signed: true,
+                        decimal: true,
                       ),
-                      CustomTextInput(
-                        controller: _lng,
-                        labelText: 'Longitude',
-                        hintText: '[-180,180]',
-                        inputFormatters: _numWithDecimalFormatter,
-                        keyboardType: const TextInputType.numberWithOptions(
-                            signed: true, decimal: true),
+                    ),
+                    CustomTextInput(
+                      controller: _lng,
+                      labelText: 'Longitude',
+                      hintText: '[-180,180]',
+                      inputFormatters: _numWithDecimalFormatter,
+                      keyboardType: const TextInputType.numberWithOptions(
+                        signed: true,
+                        decimal: true,
                       ),
-                      CustomTextInput(
-                        controller: _rad,
-                        labelText: 'Radius',
-                        hintText: 'in meters',
-                        inputFormatters: _numWithDecimalFormatter,
-                        keyboardType: const TextInputType.numberWithOptions(
-                            signed: false, decimal: true),
+                    ),
+                    CustomTextInput(
+                      controller: _rad,
+                      labelText: 'Radius',
+                      hintText: 'in meters',
+                      inputFormatters: _numWithDecimalFormatter,
+                      keyboardType: const TextInputType.numberWithOptions(
+                        signed: false,
+                        decimal: true,
                       ),
-                      CustomTextInput(
-                        controller: _uid,
-                        labelText: 'UniqueId',
-                        keyboardType: TextInputType.text,
-                      ),
-                      CustomTextInput(
-                        controller: _conversions,
-                        labelText: 'Conversions',
-                        inputFormatters: _digitsOnlyFormatter,
-                        keyboardType: TextInputType.number,
-                      ),
-                      CustomTextInput(
-                        controller: _validTime,
-                        labelText: 'ValidTime',
-                        inputFormatters: _digitsOnlyFormatter,
-                        keyboardType: TextInputType.number,
-                      ),
-                      CustomTextInput(
-                        controller: _dwellTime,
-                        labelText: 'DwellDelayTime',
-                        inputFormatters: _digitsOnlyFormatter,
-                        keyboardType: TextInputType.number,
-                      ),
-                      CustomTextInput(
-                        controller: _notifInterval,
-                        labelText: 'NotificationInterval',
-                        inputFormatters: _digitsOnlyFormatter,
-                        keyboardType: TextInputType.number,
-                      ),
-                      Btn('Get Current Location', _requestLocationUpdates),
-                      Btn('Add Geofence', () {
-                        _addGeofence();
-                      }),
-                      Container(
-                        padding: const EdgeInsets.only(top: 15),
-                        child: Center(
-                          child: Column(
-                            children: <Widget>[
-                              Text('Geofences: $_fenceCount'),
-                              const SizedBox(height: 15),
-                              Text(_bottomText),
-                            ],
-                          ),
+                    ),
+                    CustomTextInput(
+                      controller: _uid,
+                      labelText: 'UniqueId',
+                      keyboardType: TextInputType.text,
+                    ),
+                    CustomTextInput(
+                      controller: _conversions,
+                      labelText: 'Conversions',
+                      inputFormatters: _digitsOnlyFormatter,
+                      keyboardType: TextInputType.number,
+                    ),
+                    CustomTextInput(
+                      controller: _validTime,
+                      labelText: 'ValidTime',
+                      inputFormatters: _digitsOnlyFormatter,
+                      keyboardType: TextInputType.number,
+                    ),
+                    CustomTextInput(
+                      controller: _dwellTime,
+                      labelText: 'DwellDelayTime',
+                      inputFormatters: _digitsOnlyFormatter,
+                      keyboardType: TextInputType.number,
+                    ),
+                    CustomTextInput(
+                      controller: _notifInterval,
+                      labelText: 'NotificationInterval',
+                      inputFormatters: _digitsOnlyFormatter,
+                      keyboardType: TextInputType.number,
+                    ),
+                    Btn('Get Current Location', _requestLocationUpdates),
+                    Btn('Add Geofence', () {
+                      _addGeofence();
+                    }),
+                    Container(
+                      padding: const EdgeInsets.only(top: 15),
+                      child: Center(
+                        child: Column(
+                          children: <Widget>[
+                            Text('Geofences: $_fenceCount'),
+                            const SizedBox(height: 15),
+                            Text(_bottomText),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          )),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

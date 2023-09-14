@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -62,19 +62,20 @@ class LocationSettingsStates {
   /// otherwise.
   bool gnssUsable;
 
-  LocationSettingsStates(
-      {required this.blePresent,
-      required this.bleUsable,
-      required this.gpsPresent,
-      required this.gpsUsable,
-      required this.locationPresent,
-      required this.locationUsable,
-      required this.networkLocationPresent,
-      required this.networkLocationUsable,
-      required this.hmsLocationPresent,
-      required this.hmsLocationUsable,
-      required this.gnssPresent,
-      required this.gnssUsable});
+  LocationSettingsStates({
+    required this.blePresent,
+    required this.bleUsable,
+    required this.gpsPresent,
+    required this.gpsUsable,
+    required this.locationPresent,
+    required this.locationUsable,
+    required this.networkLocationPresent,
+    required this.networkLocationUsable,
+    required this.hmsLocationPresent,
+    required this.hmsLocationUsable,
+    required this.gnssPresent,
+    required this.gnssUsable,
+  });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -155,7 +156,7 @@ class LocationSettingsStates {
 
   @override
   int get hashCode {
-    return hashList(
+    return Object.hashAll(
       <Object?>[
         blePresent,
         bleUsable,

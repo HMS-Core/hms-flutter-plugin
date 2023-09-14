@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -15,22 +15,24 @@
 */
 
 import 'package:flutter/material.dart';
+import 'package:huawei_location_example/screens/convert_coordinate_screen.dart';
 import 'package:huawei_location_example/screens/geocoder_screen.dart';
 import 'package:huawei_location_example/screens/get_from_location_screen.dart';
 import 'package:huawei_location_example/screens/high_precision_location_screen.dart';
+import 'package:huawei_location_example/screens/location_utils_screen.dart';
 
-import 'screens/activity_conversion_screen.dart';
-import 'screens/activity_identification_screen.dart';
-import 'screens/activity_screen.dart';
-import 'screens/add_geofence_screen.dart';
-import 'screens/fusedlocation_screen.dart';
-import 'screens/geofence_screen.dart';
-import 'screens/get_from_location_name_screen.dart';
-import 'screens/home_screen.dart';
-import 'screens/location_enhance_screen.dart';
-import 'screens/location_updates_cb_screen.dart';
-import 'screens/location_updates_ex_cb_screen.dart';
-import 'screens/location_updates_screen.dart';
+import 'package:huawei_location_example/screens/activity_conversion_screen.dart';
+import 'package:huawei_location_example/screens/activity_identification_screen.dart';
+import 'package:huawei_location_example/screens/activity_screen.dart';
+import 'package:huawei_location_example/screens/add_geofence_screen.dart';
+import 'package:huawei_location_example/screens/fusedlocation_screen.dart';
+import 'package:huawei_location_example/screens/geofence_screen.dart';
+import 'package:huawei_location_example/screens/get_from_location_name_screen.dart';
+import 'package:huawei_location_example/screens/home_screen.dart';
+import 'package:huawei_location_example/screens/location_enhance_screen.dart';
+import 'package:huawei_location_example/screens/location_updates_cb_screen.dart';
+import 'package:huawei_location_example/screens/location_updates_ex_cb_screen.dart';
+import 'package:huawei_location_example/screens/location_updates_screen.dart';
 
 void main() => runApp(const LocationKitDemoApp());
 
@@ -70,8 +72,11 @@ class LocationKitDemoApp extends StatelessWidget {
         GetFromLocationScreen.ROUTE_NAME: (BuildContext context) =>
             const GetFromLocationScreen(),
         GetFromLocationNameScreen.ROUTE_NAME: (BuildContext context) =>
-            const GetFromLocationNameScreen(),         
-
+            const GetFromLocationNameScreen(),
+        LocationUtilsScreen.ROUTE_NAME: (BuildContext context) =>
+            const LocationUtilsScreen(),
+        ConvertCoordinateScreen.ROUTE_NAME: (BuildContext context) =>
+            const ConvertCoordinateScreen(),
       },
     );
   }

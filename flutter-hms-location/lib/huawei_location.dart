@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ library huawei_location;
 
 import 'dart:convert';
 import 'dart:core';
-import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
@@ -50,3 +49,5 @@ part 'src/location/navigation_request.dart';
 part 'src/location/navigation_result.dart';
 part 'src/location/notification.dart';
 part 'src/logger/hmslogger.dart';
+part 'src/location/location_utils.dart';
+part 'src/location/lon_lat.dart';

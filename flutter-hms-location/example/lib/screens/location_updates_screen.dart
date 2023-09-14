@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:huawei_location/huawei_location.dart';
 
-import '../widgets/custom_button.dart' show Btn;
+import 'package:huawei_location_example/widgets/custom_button.dart' show Btn;
 
 class LocationUpdatesScreen extends StatefulWidget {
   static const String ROUTE_NAME = 'LocationUpdatesScreen';
@@ -66,7 +66,8 @@ class _LocationUpdatesScreenState extends State<LocationUpdatesScreen> {
       }
     } else {
       _setTopText(
-          'Already requested location updates. Try removing location updates');
+        'Already requested location updates. Try removing location updates',
+      );
     }
   }
 

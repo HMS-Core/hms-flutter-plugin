@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:huawei_location/huawei_location.dart';
 
-import '../widgets/custom_button.dart';
+import 'package:huawei_location_example/widgets/custom_button.dart';
 
 class ActivityConversionScreen extends StatefulWidget {
   static const String ROUTE_NAME = 'ActivityRecognitionScreen';
@@ -85,12 +85,20 @@ class _ActivityConversionScreenState extends State<ActivityConversionScreen> {
 
     for (int i = 0; i < _NUM_OF_ACTIVITY; i++) {
       if (_inStates[i]) {
-        conversions.add(ActivityConversionInfo(
-            activityType: _VALID_TYPES[i], conversionType: 0));
+        conversions.add(
+          ActivityConversionInfo(
+            activityType: _VALID_TYPES[i],
+            conversionType: 0,
+          ),
+        );
       }
       if (_outStates[i]) {
-        conversions.add(ActivityConversionInfo(
-            activityType: _VALID_TYPES[i], conversionType: 1));
+        conversions.add(
+          ActivityConversionInfo(
+            activityType: _VALID_TYPES[i],
+            conversionType: 1,
+          ),
+        );
       }
     }
     return conversions;
@@ -187,37 +195,42 @@ class _ActivityConversionScreenState extends State<ActivityConversionScreen> {
             Column(
               children: List<Widget>.generate(_NUM_OF_ACTIVITY, (int i) {
                 return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      SizedBox(
-                        width: _CONT_WIDTH1,
-                        child: Text(_ACTIVITY_TYPES[i]),
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    SizedBox(
+                      width: _CONT_WIDTH1,
+                      child: Text(_ACTIVITY_TYPES[i]),
+                    ),
+                    SizedBox(
+                      width: _CONT_WIDTH2,
+                      child: Checkbox(
+                        value: _inStates[i],
+                        onChanged: (bool? value) => setState(() {
+                          _inStates[i] = value!;
+                        }),
                       ),
-                      SizedBox(
-                        width: _CONT_WIDTH2,
-                        child: Checkbox(
-                          value: _inStates[i],
-                          onChanged: (bool? value) => setState(() {
-                            _inStates[i] = value!;
-                          }),
-                        ),
+                    ),
+                    SizedBox(
+                      width: _CONT_WIDTH3,
+                      child: Checkbox(
+                        value: _outStates[i],
+                        onChanged: (bool? value) => setState(() {
+                          _outStates[i] = value!;
+                        }),
                       ),
-                      SizedBox(
-                        width: _CONT_WIDTH3,
-                        child: Checkbox(
-                          value: _outStates[i],
-                          onChanged: (bool? value) => setState(() {
-                            _outStates[i] = value!;
-                          }),
-                        ),
-                      ),
-                    ]);
+                    ),
+                  ],
+                );
               }),
             ),
-            Btn('createActivityConversionUpdates',
-                _createActivityConversionUpdates),
-            Btn('deleteActivityConversionUpdates',
-                _deleteActivityConversionUpdates),
+            Btn(
+              'createActivityConversionUpdates',
+              _createActivityConversionUpdates,
+            ),
+            Btn(
+              'deleteActivityConversionUpdates',
+              _deleteActivityConversionUpdates,
+            ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Text(_bottomText),

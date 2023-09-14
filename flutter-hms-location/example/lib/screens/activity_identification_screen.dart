@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -21,8 +21,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:huawei_location/huawei_location.dart';
 
-import '../widgets/custom_button.dart';
-import '../widgets/custom_progressbar.dart';
+import 'package:huawei_location_example/widgets/custom_button.dart';
+import 'package:huawei_location_example/widgets/custom_progressbar.dart';
 
 class ActivityIdentificationScreen extends StatefulWidget {
   static const String ROUTE_NAME = 'ActivityIdentificationScreen';
@@ -194,82 +194,87 @@ class _ActivityIdentificationScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Activity Identification'),
+      appBar: AppBar(
+        title: const Text('Activity Identification'),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.only(top: 15, bottom: 6),
+              child: Text(_topText),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Btn(
+                    'createActivityIdentificationUpdates',
+                    _createActivityIdentificationUpdates,
+                  ),
+                  Btn(
+                    'deleteActivityIdentificationUpdates',
+                    _deleteActivityIdentificationUpdates,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(top: 15),
+                    child: Column(
+                      children: <Widget>[
+                        ProgressBar(
+                          label: 'VEHICLE[100]',
+                          value: _progressVehicle,
+                          color: Colors.redAccent,
+                        ),
+                        ProgressBar(
+                          label: 'BIKE[101]',
+                          value: _progressBike,
+                          color: Colors.black54,
+                        ),
+                        ProgressBar(
+                          label: 'FOOT[102]',
+                          value: _progressFoot,
+                          color: Colors.pinkAccent,
+                        ),
+                        ProgressBar(
+                          label: 'STILL[103]',
+                          value: _progressStill,
+                          color: Colors.red,
+                        ),
+                        ProgressBar(
+                          label: 'OTHERS[104]',
+                          value: _progressOthers,
+                          color: Colors.blueGrey,
+                        ),
+                        ProgressBar(
+                          label: 'TILTING[105]',
+                          value: _progressTilting,
+                          color: Colors.amber,
+                        ),
+                        ProgressBar(
+                          label: 'WALKING[107]',
+                          value: _progressWalking,
+                          color: Colors.deepPurple,
+                        ),
+                        ProgressBar(
+                          label: 'RUNNING[108]',
+                          value: _progressRunning,
+                          color: Colors.lightBlue,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(top: 5),
+                    child: Text(_bottomText),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Container(
-                padding: const EdgeInsets.only(top: 15, bottom: 6),
-                child: Text(_topText),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    Btn('createActivityIdentificationUpdates',
-                        _createActivityIdentificationUpdates),
-                    Btn('deleteActivityIdentificationUpdates',
-                        _deleteActivityIdentificationUpdates),
-                    Container(
-                      padding: const EdgeInsets.only(top: 15),
-                      child: Column(
-                        children: <Widget>[
-                          ProgressBar(
-                            label: 'VEHICLE[100]',
-                            value: _progressVehicle,
-                            color: Colors.redAccent,
-                          ),
-                          ProgressBar(
-                            label: 'BIKE[101]',
-                            value: _progressBike,
-                            color: Colors.black54,
-                          ),
-                          ProgressBar(
-                            label: 'FOOT[102]',
-                            value: _progressFoot,
-                            color: Colors.pinkAccent,
-                          ),
-                          ProgressBar(
-                            label: 'STILL[103]',
-                            value: _progressStill,
-                            color: Colors.red,
-                          ),
-                          ProgressBar(
-                            label: 'OTHERS[104]',
-                            value: _progressOthers,
-                            color: Colors.blueGrey,
-                          ),
-                          ProgressBar(
-                            label: 'TILTING[105]',
-                            value: _progressTilting,
-                            color: Colors.amber,
-                          ),
-                          ProgressBar(
-                            label: 'WALKING[107]',
-                            value: _progressWalking,
-                            color: Colors.deepPurple,
-                          ),
-                          ProgressBar(
-                            label: 'RUNNING[108]',
-                            value: _progressRunning,
-                            color: Colors.lightBlue,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.only(top: 5),
-                      child: Text(_bottomText),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ));
+      ),
+    );
   }
 
   @override
