@@ -1,5 +1,5 @@
 /*
-    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:huawei_hmsavailability/huawei_hmsavailability.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: HmsAvailabilityDemo(),
     );
   }
@@ -43,7 +43,9 @@ class HmsAvailabilityDemo extends StatefulWidget {
 class _HmsAvailabilityDemoState extends State<HmsAvailabilityDemo> {
   late HmsApiAvailability hmsApiAvailability;
   String _result = 'HMS availability result code: unknown';
-  List<String> _eventList = ['Availability result events will be listed'];
+  final List<String> _eventList = <String>[
+    'Availability result events will be listed'
+  ];
 
   @override
   void initState() {
@@ -98,11 +100,11 @@ class _HmsAvailabilityDemoState extends State<HmsAvailabilityDemo> {
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Color(0xff394867),
-                  onPrimary: Colors.white,
+                  backgroundColor: const Color(0xff394867),
+                  foregroundColor: Colors.white,
                 ),
-                child: const Text('Check Hms Core Availability'),
                 onPressed: _getAvailability,
+                child: const Text('Check Hms Core Availability'),
               ),
             ),
             const Divider(color: Colors.black),

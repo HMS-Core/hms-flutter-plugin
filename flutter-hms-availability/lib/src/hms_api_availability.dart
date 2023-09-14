@@ -1,5 +1,5 @@
 /*
-    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -79,7 +79,7 @@ class HmsApiAvailability {
   static const int HMS_VERSION_CODE_OD = 20601000;
 
   /// API name of the HUAWEI IAP service.
-  static const String HMS_API_NAME_IAP = "HuaweiIap.API";
+  static const String HMS_API_NAME_IAP = 'HuaweiIap.API';
 
   /// Version number of the HUAWEI IAP service.
   static const int HMS_VERSION_CODE_IAP = 20700300;
@@ -94,7 +94,7 @@ class HmsApiAvailability {
   static const int HMS_SDK_VERSION_CODE = 60400303;
 
   /// Version name of the HMS Core SDK.
-  static const String HMS_SDK_VERSION_NAME = '6.6.0.300';
+  static const String HMS_SDK_VERSION_NAME = '6.11.0.301';
 
   /// Specified parameter is null.
   static const String NULL_PARAMETER = '0011';
@@ -102,16 +102,16 @@ class HmsApiAvailability {
   /// Attempted to use [destroyStreams] method without initializing the streams
   static const String OBJECT_NOT_INITIALIZED = '0012';
 
-  final MethodChannel _methodChannel = MethodChannel(
+  final MethodChannel _methodChannel = const MethodChannel(
     'com.huawei.hms.flutter.availability/hms/method',
   );
 
   late EventChannel _eventChannel;
   AvailabilityResultListener? _listener;
-  StreamSubscription? _subscription;
+  StreamSubscription<dynamic>? _subscription;
 
   HmsApiAvailability() {
-    _eventChannel = EventChannel(
+    _eventChannel = const EventChannel(
       'com.huawei.hms.flutter.availability/hms/event',
     );
     setupStreams();
@@ -267,9 +267,11 @@ class HmsApiAvailability {
 
   void _getEvents() {
     _subscription?.cancel();
-    _subscription = _eventChannel.receiveBroadcastStream().listen((msg) {
-      AvailabilityEvent? availabilityEvent = toAvailabilityEvent(msg);
-      _listener?.call(availabilityEvent);
-    });
+    _subscription = _eventChannel.receiveBroadcastStream().listen(
+      (dynamic msg) {
+        AvailabilityEvent? availabilityEvent = toAvailabilityEvent(msg);
+        _listener?.call(availabilityEvent);
+      },
+    );
   }
 }

@@ -1,3 +1,7 @@
+## 6.11.0+301
+
+- Updated Base SDK to the latest version 6.11.0.301.
+
 ## 6.6.0+300
 
 - Updated Base SDK to the latest version 6.6.0.300.

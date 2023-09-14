@@ -7,12 +7,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  huawei_hmsavailability:
+    path: ../
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  huawei_hmsavailability:
-    path: ../
+  
 
 flutter:
   uses-material-design: true
