@@ -1,20 +1,21 @@
 /*
-    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:huawei_ml_text/huawei_ml_text.dart';
 import 'package:huawei_ml_text_example/utils/constants.dart';
 import 'package:huawei_ml_text_example/utils/utils.dart';
@@ -31,12 +32,14 @@ class BcrExample extends StatefulWidget {
 class _BcrExampleState extends State<BcrExample> with DemoMixin {
   final GlobalKey<ScaffoldState> _key = GlobalKey<ScaffoldState>();
   late MLBankcardAnalyzer _analyzer;
+  late MLCustomViewAnalyzer _customViewAnalyzer;
   Image? _image;
 
   @override
   void initState() {
     super.initState();
     _analyzer = MLBankcardAnalyzer();
+    _customViewAnalyzer = MLCustomViewAnalyzer();
   }
 
   @override
@@ -68,6 +71,14 @@ class _BcrExampleState extends State<BcrExample> with DemoMixin {
                   child: const Text(localImageText),
                 ),
               ),
+              containerElevatedButton(
+                context,
+                ElevatedButton(
+                  style: buttonStyle,
+                  onPressed: _customView,
+                  child: const Text(customViewText),
+                ),
+              ),
             ],
           ),
         ),
@@ -79,6 +90,22 @@ class _BcrExampleState extends State<BcrExample> with DemoMixin {
     final MlBankcardSettings setting = MlBankcardSettings.capture();
     try {
       final MLBankcard card = await _analyzer.asyncAnalyseFrame(setting);
+      setState(() {
+        _image = Image.memory(card.originalBitmap!);
+      });
+    } on Exception catch (e) {
+      exceptionDialog(context, e.toString());
+    }
+  }
+
+  void _customView() async {
+    final MLCustomizedViewSetting setting = MLCustomizedViewSetting(
+      resultType: MLCustomizedViewSetting.resultAll,
+      rectMode: MLCustomizedViewSetting.weakMode,
+    );
+    try {
+      final MLBankcard card =
+          await _customViewAnalyzer.startCustomizedView(setting);
       setState(() {
         _image = Image.memory(card.originalBitmap!);
       });

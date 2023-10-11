@@ -1,3 +1,7 @@
+## 3.12.0+300
+
+- Bank card recognition: Added the onBcrFailResult(MLBcrCaptureResult result) method to the CustomView.OnBcrResultCallback API.
+
 ## 3.7.0+300
 
 - Added `setUserRegion` and `getCountryCode` methods to MLTextApplication.

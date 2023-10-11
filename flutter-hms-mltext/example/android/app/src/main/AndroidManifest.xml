@@ -15,7 +15,6 @@
 
    <application
         android:label="huawei_ml_text_example"
-        android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

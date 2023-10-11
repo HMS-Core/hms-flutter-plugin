@@ -14,19 +14,28 @@
  * limitations under the License.
  */
 
-part of huawei_ml_text;
+package com.huawei.hms.flutter.mltext.utils;
 
-class MLPoint {
-  dynamic x;
-  dynamic y;
+public enum Errors {
 
-  MLPoint({
-    this.x,
-    this.y,
-  });
+    // Remote View Error
+    REMOTE_VIEW_ERROR("20", "Remote View is not initialized.");
 
-  MLPoint.fromJson(Map<dynamic, dynamic> map) {
-    x = map['x'];
-    y = map['y'];
-  }
+    private final String errorCode;
+
+    private final String errorMessage;
+
+    Errors(String errorCode, String errorMessage) {
+        this.errorCode = errorCode;
+        this.errorMessage = errorMessage;
+    }
+
+    public String getErrorCode() {
+        return errorCode;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
 }

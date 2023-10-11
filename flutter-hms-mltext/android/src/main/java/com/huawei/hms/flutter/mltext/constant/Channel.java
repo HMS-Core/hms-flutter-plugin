@@ -28,5 +28,7 @@ public interface Channel {
     String APPLICATION_CHANNEL = BASE_CHANNEL + ".application";
     String LENS_CHANNEL = BASE_CHANNEL + ".lens";
     String NO_SERVICE_WARNING = "Analyzer or engine must be initialized first!";
+    String CHANNEL_REMOTE_KEY = "channelRemoteId";
+    String CUSTOMIZED_VIEW = BASE_CHANNEL + ".customized_view";
+    String REMOTE_VIEW = BASE_CHANNEL + ".remote_view";
 }
-
