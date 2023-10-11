@@ -115,14 +115,14 @@ class HMSAnalytics {
   /// Call this method to save the push token so that you can use the audience
   /// defined by Analytics Kit to create HCM notification tasks.
   /// [note] This function is specifically used by Android Platforms.
-  @Deprecated('')
+
   Future<void> setPushToken(
     String token,
   ) async {
     await _channel.invokeMethod(
       'setPushToken',
       <String, dynamic>{
-        '': token,
+        'token': token,
       },
     );
   }

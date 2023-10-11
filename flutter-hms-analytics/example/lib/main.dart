@@ -86,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-            )
+            ),
           ],
         );
       },
@@ -115,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _setPushToken() async {
-    await hmsAnalytics.setPushToken('token');
+    await hmsAnalytics.setPushToken('<your_token>');
     _showDialog('setPushToken success');
   }
 
@@ -292,7 +292,7 @@ class _MyHomePageState extends State<MyHomePage> {
             MyBtn('Set Channel', _setChannel),
             MyBtn('Set Property Collection', _setPropertyCollection),
             MyBtn('Set Custom Referrer', _setCustomReferrer),
-            MyBtn('Get Data Upload Site Info', _getDataUploadSiteInfo)
+            MyBtn('Get Data Upload Site Info', _getDataUploadSiteInfo),
           ],
         ),
       ),

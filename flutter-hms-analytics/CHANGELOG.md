@@ -1,7 +1,11 @@
+## 6.12.0+300
+
+- Modified the **ON_MOVE_BACKGROUND_POLICY** policy as a mandatory one.
+- **Breaking Change:** Android API 33 support has been added.
+
 ## 6.9.0+302
 
 - Added the **getDataUploadSiteInfo** API to the HiAnalyticsInstance class to support the Global Router Service (GRS) function.
-
 - **Breaking Changes:**
   - Modified the internal structure of the plugin. Please use import **package:huawei_analytics/huawei_analytics.dart** not to get any errors.
 
