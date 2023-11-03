@@ -19,14 +19,15 @@ part of huawei_account;
 /// Signed-in ID information, including the ID, nickname, profile picture URI,
 /// permission, and access token.
 class AuthAccount {
+  @Deprecated('')
   String? accessToken;
   Account? account;
   String? serviceCountryCode;
   String? displayName;
   String? email;
-  @Deprecated('getFamilyName is deprecated')
+  @Deprecated('')
   String? familyName;
-  @Deprecated('getGivenName is deprecated')
+  @Deprecated('')
   String? givenName;
   int? gender;
   List<dynamic>? authorizedScopes;

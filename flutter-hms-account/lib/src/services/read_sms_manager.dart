@@ -20,7 +20,7 @@ typedef SmsListener = Function({
   String? message,
   String? errorCode,
 });
-
+@Deprecated('')
 class ReadSmsManager {
   static final MethodChannel _c = init();
   static SmsListener? _listener;

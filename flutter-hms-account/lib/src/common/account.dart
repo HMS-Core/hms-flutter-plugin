@@ -16,7 +16,7 @@
 
 part of huawei_account;
 
-/// Account object obtained from android.accounts.Account
+/// Account object obtained from `android.accounts.Account`.
 class Account {
   String? name;
   String? type;

@@ -17,6 +17,7 @@
 part of huawei_account;
 
 /// Describes the authorization request for OAuth 2.0, which affects user security.
+/// 
 /// When authorization is requested, an authorization dialog box is displayed.
 class Scope {
   static final Scope profile = Scope._('profile');

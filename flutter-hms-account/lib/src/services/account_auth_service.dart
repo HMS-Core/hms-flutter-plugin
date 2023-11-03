@@ -37,6 +37,7 @@ class AccountAuthService {
   }
 
   /// Obtains the sign-in information (or error information) about the ID that has been used to sign in to the app.
+  /// 
   /// In this process, the authorization screen is not displayed to the ID user.
   Future<AuthAccount> silentSignIn() async {
     return AuthAccount.fromMap(
@@ -64,7 +65,9 @@ class AccountAuthService {
     );
   }
 
-  /// Signs out of the current ID. The account SDK deletes the cached ID information.
+  /// Signs out of the current ID. 
+  /// 
+  /// The account SDK deletes the cached ID information.
   Future<bool> signOut() async {
     return await _c.invokeMethod(
       'signOut',

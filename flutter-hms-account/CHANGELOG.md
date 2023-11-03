@@ -1,6 +1,11 @@
+## 6.12.0+300
+
+- Deprecated `accessToken` in the `AuthAccount` class. You are advised not to use it.
+- Deprecated `ReadSmsManager` class.
+
 ## 6.11.0+300
 
-- Deprecated familyName and givenName in the AuthAccount class.
+- Deprecated `familyName` and `givenName` in the `AuthAccount` class.
 - Resolved a performance-related issue to improve the service reliability. You do not need to do anything.
 - Updated targetSdkVersion to 33, to make sure that your app can run properly on Android 13.
 
