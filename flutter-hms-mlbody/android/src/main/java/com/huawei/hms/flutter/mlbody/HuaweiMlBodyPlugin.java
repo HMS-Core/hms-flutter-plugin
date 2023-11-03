@@ -1,22 +1,23 @@
 /*
-    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-        
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.mlbody;
 
 import android.app.Activity;
+import android.util.SparseArray;
 
 import androidx.annotation.NonNull;
 
@@ -26,6 +27,7 @@ import com.huawei.hms.flutter.mlbody.handlers.Face3dMethodHandler;
 import com.huawei.hms.flutter.mlbody.handlers.FaceMethodHandler;
 import com.huawei.hms.flutter.mlbody.handlers.GestureHandler;
 import com.huawei.hms.flutter.mlbody.handlers.HandMethodHandler;
+import com.huawei.hms.flutter.mlbody.handlers.InteractiveLivenessCustomDetectionHandler;
 import com.huawei.hms.flutter.mlbody.handlers.InteractiveLivenessHandler;
 import com.huawei.hms.flutter.mlbody.handlers.LensHandler;
 import com.huawei.hms.flutter.mlbody.handlers.LivenessHandler;
@@ -40,6 +42,7 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.view.TextureRegistry;
 
 public class HuaweiMlBodyPlugin implements FlutterPlugin, ActivityAware {
+    public final static SparseArray<MethodChannel> ML_BODY_CHANNELS = new SparseArray<>();
     private FlutterPluginBinding mFlutterPluginBinding;
     private MethodChannel appChannel;
     private MethodChannel faceMethodChannel;
@@ -51,8 +54,10 @@ public class HuaweiMlBodyPlugin implements FlutterPlugin, ActivityAware {
     private MethodChannel livenessMethodChannel;
     private MethodChannel interactiveLivenessMethodChannel;
     private MethodChannel lensMethodChannel;
+    private MethodChannel customizedMethodChannel;
 
-    private void onAttachedToEngine(final BinaryMessenger messenger, final Activity activity, final TextureRegistry registry) {
+    private void onAttachedToEngine(final BinaryMessenger messenger, final Activity activity,
+            final TextureRegistry registry) {
         initChannels(messenger);
         setHandlers(activity, messenger, registry);
     }
@@ -68,6 +73,7 @@ public class HuaweiMlBodyPlugin implements FlutterPlugin, ActivityAware {
         livenessMethodChannel = new MethodChannel(messenger, Constants.LIVENESS_CHANNEL);
         interactiveLivenessMethodChannel = new MethodChannel(messenger, Constants.INTERACTIVE_LIVENESS_CHANNEL);
         lensMethodChannel = new MethodChannel(messenger, Constants.LENS_CHANNEL);
+        customizedMethodChannel = new MethodChannel(messenger, Constants.CUSTOMIIZED_CHANNEL);
     }
 
     private void setHandlers(Activity activity, BinaryMessenger messenger, TextureRegistry registry) {
@@ -81,6 +87,7 @@ public class HuaweiMlBodyPlugin implements FlutterPlugin, ActivityAware {
         livenessMethodChannel.setMethodCallHandler(new LivenessHandler(activity));
         interactiveLivenessMethodChannel.setMethodCallHandler(new InteractiveLivenessHandler(activity, messenger));
         lensMethodChannel.setMethodCallHandler(new LensHandler(activity, lensMethodChannel, registry));
+        customizedMethodChannel.setMethodCallHandler(new InteractiveLivenessCustomDetectionHandler(activity));
     }
 
     @Override
@@ -97,7 +104,8 @@ public class HuaweiMlBodyPlugin implements FlutterPlugin, ActivityAware {
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
         if (mFlutterPluginBinding != null) {
-            onAttachedToEngine(mFlutterPluginBinding.getBinaryMessenger(), binding.getActivity(), mFlutterPluginBinding.getTextureRegistry());
+            onAttachedToEngine(mFlutterPluginBinding.getBinaryMessenger(), binding.getActivity(),
+                    mFlutterPluginBinding.getTextureRegistry());
         }
     }
 
@@ -109,7 +117,8 @@ public class HuaweiMlBodyPlugin implements FlutterPlugin, ActivityAware {
     @Override
     public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
         if (mFlutterPluginBinding != null) {
-            onAttachedToEngine(mFlutterPluginBinding.getBinaryMessenger(), binding.getActivity(), mFlutterPluginBinding.getTextureRegistry());
+            onAttachedToEngine(mFlutterPluginBinding.getBinaryMessenger(), binding.getActivity(),
+                    mFlutterPluginBinding.getTextureRegistry());
         }
     }
 
@@ -124,6 +133,8 @@ public class HuaweiMlBodyPlugin implements FlutterPlugin, ActivityAware {
         livenessMethodChannel = null;
         interactiveLivenessMethodChannel = null;
         lensMethodChannel = null;
+        ML_BODY_CHANNELS.clear();
+        customizedMethodChannel = null;
     }
 
     @Override
@@ -138,5 +149,6 @@ public class HuaweiMlBodyPlugin implements FlutterPlugin, ActivityAware {
         livenessMethodChannel.setMethodCallHandler(null);
         interactiveLivenessMethodChannel.setMethodCallHandler(null);
         lensMethodChannel.setMethodCallHandler(null);
+        customizedMethodChannel.setMethodCallHandler(null);
     }
 }

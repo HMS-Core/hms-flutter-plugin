@@ -2,7 +2,7 @@ name: huawei_ml_body_example
 description: Demonstrates how to use the Huawei ML Body Plugin.
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.12.0 <4.0.0"
 
 dependencies:
   flutter:

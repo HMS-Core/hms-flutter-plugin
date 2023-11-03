@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="custom_tips">Put your face in the frame</string>
+    <string name="custom_ui">Face Detection</string>
+    <string name="status_code">Faceee</string>
+</resources>

@@ -1,18 +1,18 @@
 /*
-    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License")
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-        https://www.apache.org/licenses/LICENSE-2.0
-        
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-*/
+ * Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License")
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package com.huawei.hms.flutter.mlbody.data;
 
@@ -38,7 +38,7 @@ public final class HMSLogger {
 
     private static final String KIT = "MLBody";
     private static final String PLATFORM = "Flutter";
-    private static final String VERSION = "3.7.0.300";
+    private static final String VERSION = "3.12.0.300";
 
     private static final String SERVICE = "Cross-Platform";
 
@@ -181,7 +181,8 @@ public final class HMSLogger {
      *
      * @param eventId    Constant id of the event
      * @param methodName The name of the method called
-     * @param resultCode Code of the method's result. "0" for success, others for error
+     * @param resultCode Code of the method's result. "0" for success, others for
+     *                   error
      */
     private synchronized void sendEvent(final String eventId, final String methodName, final String resultCode) {
         if (isEnabled) {
@@ -276,10 +277,12 @@ public final class HMSLogger {
      * Prepares sing-event map according to input parameters.
      *
      * @param methodName  The name of the method called
-     * @param resultCode  Code of the method's result. "0" for success, others for error
+     * @param resultCode  Code of the method's result. "0" for success, others for
+     *                    error
      * @param currentTime Current timestamp in millisecond
      */
-    private synchronized void putToSingleEventMap(final String methodName, final String resultCode, final long currentTime) {
+    private synchronized void putToSingleEventMap(final String methodName, final String resultCode,
+            final long currentTime) {
         final long startTime = getOrDefault(startTimeMap, methodName, currentTime);
         final int costTime = (int) (currentTime - startTime);
         singleEventMap.put("apiName", methodName);
@@ -293,11 +296,12 @@ public final class HMSLogger {
      * Prepares periodic-event map according to input parameters.
      *
      * @param methodName  The name of the method called
-     * @param resultCode  Code of the method's result. "0" for success, others for error
+     * @param resultCode  Code of the method's result. "0" for success, others for
+     *                    error
      * @param currentTime Current timestamp in millisecond
      */
     private synchronized void putToPeriodicEventMap(final String methodName, final String resultCode,
-                                                    final long currentTime) {
+            final long currentTime) {
         increaseResultCodeCount(methodName, resultCode);
         increaseMapValue(methodName, allCountMap);
 
@@ -364,7 +368,8 @@ public final class HMSLogger {
      * Increases count of the given result code.
      *
      * @param methodName Name of the calling method
-     * @param resultCode Code of the method's result. "0" for success, others for error
+     * @param resultCode Code of the method's result. "0" for success, others for
+     *                   error
      */
     private synchronized void increaseResultCodeCount(final String methodName, final String resultCode) {
         final Map<String, Long> map = getOrDefault(resultCodeCountMap, methodName, new HashMap<>());
@@ -384,7 +389,8 @@ public final class HMSLogger {
     }
 
     /**
-     * Get the corresponding value of the key. If the key does not exist in the map then the default value is returned.
+     * Get the corresponding value of the key. If the key does not exist in the map
+     * then the default value is returned.
      *
      * @param map          The Map
      * @param key          Lookup key

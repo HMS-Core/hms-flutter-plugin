@@ -13,7 +13,6 @@
 
     <application
         android:label="huawei_ml_body_example"
-        android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

@@ -1,5 +1,5 @@
 /*
-    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ part 'src/request/ml_body_lens_controller.dart';
 part 'src/request/ml_face_analyzer_setting.dart';
 part 'src/request/ml_hand_keypoint_analyzer_setting.dart';
 part 'src/request/ml_skeleton_analyzer_setting.dart';
+part 'src/request/ml_custom_interactive_liveness_detection_setting.dart';
 part 'src/result/body_border.dart';
 part 'src/result/body_position.dart';
 part 'src/result/ml_3d_face.dart';
@@ -49,4 +50,8 @@ part 'src/service/ml_hand_keypoint_analyzer.dart';
 part 'src/service/ml_interactive_liveness_capture.dart';
 part 'src/service/ml_liveness_capture.dart';
 part 'src/service/ml_skeleton_analyzer.dart';
+part 'src/service/ml_custom_view_analyzer.dart';
 part 'src/ui/ml_body_lens.dart';
+part 'src/model/text_options.dart';
+part 'src/model/actions.dart';
+part 'src/model/rect.dart';

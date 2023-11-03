@@ -1,5 +1,5 @@
 /*
-    Copyright 2021-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -182,7 +182,7 @@ Widget lensControllerButton(
 PreferredSizeWidget demoAppBar(String title) {
   return AppBar(
     title: Tooltip(
-      message: 'Flutter Version: 3.7.0+300',
+      message: 'Flutter Version: 3.12.0+300',
       child: Text(title),
     ),
   );

@@ -24,12 +24,12 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion 31
+    buildToolsVersion "31.0.0"
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 30
+        targetSdkVersion 31
     }
 
     lintOptions {
@@ -44,7 +44,7 @@ android {
 
 dependencies {
     // Face Detection
-    implementation 'com.huawei.hms:ml-computer-vision-face:3.7.0.301'
+    implementation 'com.huawei.hms:ml-computer-vision-face:3.11.0.301'
     implementation 'com.huawei.hms:ml-computer-vision-face-shape-point-model:3.7.0.301'
     implementation 'com.huawei.hms:ml-computer-vision-face-emotion-model:3.7.0.301'
     implementation 'com.huawei.hms:ml-computer-vision-face-feature-model:3.7.0.301'
@@ -52,22 +52,22 @@ dependencies {
 
     // Skeleton Detection
     implementation 'com.huawei.hms:ml-computer-vision-base:3.7.0.313' // for lens engine
-    implementation 'com.huawei.hms:ml-computer-vision-skeleton:3.7.0.301'
-    implementation 'com.huawei.hms:ml-computer-vision-skeleton-model:3.7.0.301'
-    implementation 'com.huawei.hms:ml-computer-vision-yoga-model:3.7.0.301'
+    implementation 'com.huawei.hms:ml-computer-vision-skeleton:3.11.0.301'
+    implementation 'com.huawei.hms:ml-computer-vision-skeleton-model:3.11.0.301'
+    implementation 'com.huawei.hms:ml-computer-vision-yoga-model:3.11.0.301'
 
     // Static Biometric Verification
-    implementation 'com.huawei.hms:ml-computer-vision-livenessdetection:3.7.0.302'
+    implementation 'com.huawei.hms:ml-computer-vision-livenessdetection:3.11.0.301'
 
     // Interactive Biometric Verification
-    implementation 'com.huawei.hms:ml-computer-vision-interactive-livenessdetection:3.7.0.304'
+    implementation 'com.huawei.hms:ml-computer-vision-interactive-livenessdetection:3.12.0.300'
 
     // Hand Gesture Recognition
-    implementation 'com.huawei.hms:ml-computer-vision-handkeypoint:3.7.0.301'
+    implementation 'com.huawei.hms:ml-computer-vision-handkeypoint:3.11.0.301'
     implementation 'com.huawei.hms:ml-computer-vision-handkeypoint-model:3.7.0.301'
     implementation 'com.huawei.hms:ml-computer-vision-gesture-model:3.7.0.301'
 
     // Face Verification
-    implementation 'com.huawei.hms:ml-computer-vision-faceverify:3.6.0.304'
-    implementation 'com.huawei.hms:ml-computer-vision-faceverify-model:3.6.0.304'
+    implementation 'com.huawei.hms:ml-computer-vision-faceverify:3.11.0.302'
+    implementation 'com.huawei.hms:ml-computer-vision-faceverify-model:3.11.0.302'
 }

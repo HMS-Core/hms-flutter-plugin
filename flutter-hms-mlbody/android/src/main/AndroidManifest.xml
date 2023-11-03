@@ -2,4 +2,9 @@
   package="com.huawei.hms.flutter.mlbody">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <application>
+        <activity android:name="com.huawei.hms.flutter.mlbody.handlers.InteractiveLivenessCustomDetectionActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:exported="false"/>
+    </application>
 </manifest>
