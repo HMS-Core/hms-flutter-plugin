@@ -1,3 +1,8 @@
+## 6.12.0+300
+
+- **Breaking Change:** The minimum API Level minSdkVersion changed 21 . 
+- Fix issues related to Pending Intents in Android API 33.
+
 ## 6.11.0+301
 
 - Optimized the scenario where no GNSS location is returned.

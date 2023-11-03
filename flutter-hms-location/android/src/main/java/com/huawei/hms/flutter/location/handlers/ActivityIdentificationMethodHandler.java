@@ -19,6 +19,7 @@ package com.huawei.hms.flutter.location.handlers;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
@@ -111,9 +112,14 @@ public class ActivityIdentificationMethodHandler implements MethodCallHandler {
         intent.setPackage(activity.getPackageName());
         intent.setAction(action);
 
-        final PendingIntent pendingIntent = PendingIntent.getBroadcast(activity.getApplicationContext(), ++requestCode,
-            intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
+        final PendingIntent pendingIntent;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            pendingIntent = PendingIntent.getBroadcast(activity.getApplicationContext(), ++requestCode,
+                    intent, PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_MUTABLE);
+        } else {
+            pendingIntent = PendingIntent.getBroadcast(activity.getApplicationContext(), ++requestCode,
+                    intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
         requests.put(requestCode, pendingIntent);
         return Pair.create(requestCode, pendingIntent);
     }

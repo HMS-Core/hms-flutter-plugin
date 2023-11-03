@@ -28,7 +28,7 @@ android {
     buildToolsVersion "31.0.0"
 
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 33
     }
     compileOptions {
@@ -41,5 +41,5 @@ android {
 }
 
 dependencies {
-    implementation 'com.huawei.hms:location:6.11.0.301'
+    implementation 'com.huawei.hms:location:6.12.0.300'
 }
