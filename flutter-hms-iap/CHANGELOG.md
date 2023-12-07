@@ -1,3 +1,8 @@
+## 6.13.0+300
+
+- Updated Huawei In-App Purchases SDK version to 6.13.0.300.
+- Minor optimization.
+
 ## 6.10.0+300
 
 - Android API 33 support has been added.

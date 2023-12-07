@@ -2,8 +2,6 @@
   <h1 align="center">Huawei IAP Flutter Plugin</h1>
 </p>
 
-
-
 <p align="center">
   <a href="https://pub.dev/packages/huawei_iap"><img src="https://img.shields.io/pub/v/huawei_iap?style=for-the-badge" alt="pub.dev version"></a>
 </p>
