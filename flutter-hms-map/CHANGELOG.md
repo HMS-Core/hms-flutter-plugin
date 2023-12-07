@@ -1,3 +1,7 @@
+## 6.11.2+301
+
+- Updated Huawei Map SDK version to 6.11.2.301.
+
 ## 6.11.0+304
 
 - **Breaking Change:** Renamed the HmsMarkerAnimation, HmsMarkerAlphaAnimation, HmsMarkerRotateAnimation, HmsMarkerScaleAnimation and HmsMarkerTranslateAnimation classes to HmsAnimation, HmsAlphaAnimation, HmsRotateAnimation, HmsScaleAnimation and HmsTranslateAnimation respectively. 
