@@ -81,6 +81,7 @@ List<String> scanTypeStringList = <String>[
   'UPCCodeA',
   'UPCCodeE',
   'Pdf417',
+  'MultiFunctional',
 ];
 
 //Dropdown Controllers
@@ -114,6 +115,7 @@ List<int> scanTypeListBitmap = <int>[
   HmsScanTypes.UPCCodeA,
   HmsScanTypes.UPCCodeE,
   HmsScanTypes.Pdf417,
+  HmsScanTypes.MultiFunctional,
 ];
 
 List<String> scanTypeStringListBitmap = <String>[
@@ -130,6 +132,7 @@ List<String> scanTypeStringListBitmap = <String>[
   'UPCCodeA',
   'UPCCodeE',
   'Pdf417',
+  'MultiFunctional',
 ];
 
 //Scan Type Converter
@@ -161,6 +164,8 @@ String formatConverter(int? format) {
       return 'Pdf417 Code';
     case HmsScanTypes.Aztec:
       return 'Aztec Code';
+    case HmsScanTypes.MultiFunctional:
+      return 'Multi Functional Code';
     default:
       return 'Other Scan Type';
   }

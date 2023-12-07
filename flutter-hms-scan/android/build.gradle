@@ -41,9 +41,9 @@ android {
 }
 
 dependencies{
-    implementation 'com.huawei.hms:scan:2.10.0.301'
-    implementation 'com.huawei.hms:stats:6.9.0.300'
+    implementation 'com.huawei.hms:scan:2.12.0.301'
+    implementation 'com.huawei.hms:stats:6.12.0.300'
     implementation 'android.arch.lifecycle:common:1.1.1'
-    implementation 'com.google.code.gson:gson:2.9.0'
+    implementation 'com.google.code.gson:gson:2.9.1'
     implementation 'androidx.appcompat:appcompat:1.1.0'
 }

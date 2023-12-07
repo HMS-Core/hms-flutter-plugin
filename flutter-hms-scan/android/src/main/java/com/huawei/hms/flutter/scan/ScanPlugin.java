@@ -61,7 +61,7 @@ public class ScanPlugin implements FlutterPlugin, ActivityAware {
     }
 
     private void initHandlers() {
-        scanUtilsMethodCallHandler = new ScanUtilsMethodCallHandler(activity);
+        scanUtilsMethodCallHandler = new ScanUtilsMethodCallHandler(activity,scanUtilsChannel);
         multiProcessorMethodCallHandler = new MultiProcessorMethodCallHandler(activity, multiProcessorChannel);
         customizedViewMethodCallHandler = new CustomizedViewMethodCallHandler(activity, customizedViewChannel,
             remoteViewChannel);

@@ -16,6 +16,8 @@
 
 package com.huawei.hms.flutter.scan.multiprocessor;
 
+import static com.huawei.hms.flutter.scan.scanutils.ScanUtilsMethodCallHandler.SCANMODEDECODE;
+import static com.huawei.hms.flutter.scan.scanutils.ScanUtilsMethodCallHandler.SCANMODEDECODEWITHBITMAP;
 import static com.huawei.hms.flutter.scan.utils.ValueGetter.analyzerIsAvailableWithLogger;
 
 import android.app.Activity;
@@ -121,7 +123,8 @@ public class MultiProcessorActivity extends Activity {
             }
 
             // Gallery option from Flutter.
-            if (multiIntent.getExtras().getBoolean("gallery")) {
+            if (multiIntent.getExtras().getBoolean("gallery")
+                    && mode == MultiProcessorMethodCallHandler.MULTIPROCESSOR_ASYNC_CODE) {
                 galleryButton.setVisibility(View.VISIBLE);
                 setPictureScanOperation();
             }
@@ -129,8 +132,8 @@ public class MultiProcessorActivity extends Activity {
             scanResultView = findViewById(R.id.scan_result_view);
 
             mAnalyzer = new HmsScanAnalyzer.Creator(this).setHmsScanTypes(
-                Objects.requireNonNull(multiIntent.getExtras()).getInt("scanType"),
-                multiIntent.getExtras().getIntArray("additionalScanTypes")).create();
+                    Objects.requireNonNull(multiIntent.getExtras()).getInt("scanType"),
+                    multiIntent.getExtras().getIntArray("additionalScanTypes")).create();
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
@@ -184,7 +187,8 @@ public class MultiProcessorActivity extends Activity {
     @Override
     public void onBackPressed() {
         if (mode == MultiProcessorMethodCallHandler.MULTIPROCESSOR_ASYNC_CODE
-            || mode == MultiProcessorMethodCallHandler.MULTIPROCESSOR_SYNC_CODE) {
+                || mode == MultiProcessorMethodCallHandler.MULTIPROCESSOR_SYNC_CODE || mode == SCANMODEDECODE
+                || mode == SCANMODEDECODEWITHBITMAP) {
             setResult(RESULT_CANCELED);
         }
         MultiProcessorActivity.this.finish();
@@ -250,12 +254,19 @@ public class MultiProcessorActivity extends Activity {
                 boolean autoSizeText = intent.getExtras().getBoolean("autoSizeText");
                 int minTextSize = intent.getExtras().getInt("minTextSize");
                 int granularity = intent.getExtras().getInt("granularity");
+                boolean multiMode = intent.getExtras().getBoolean("multiMode");
+                int scanType = intent.getExtras().getInt("scanType");
+                int[] additionalScanTypes = intent.getExtras().getIntArray("additionalScanTypes");
+                boolean parseResult = intent.getExtras().getBoolean("parseResult");
 
-                // Handler for multi processor camera -- this is where camera continuously scan barcode.
+                // Handler for multi processor camera -- this is where camera continuously scan
+                // barcode.
                 if (mAnalyzer != null && multiProcessorChannel != null) {
                     handler = new MultiProcessorHandler(MultiProcessorActivity.this, multiProcessorChannel,
-                        mMultiProcessorCamera, mode, colorList, textColor, textSize, strokeWidth, textBackgroundColor,
-                        showText, showTextOutBounds, autoSizeText, minTextSize, granularity, mAnalyzer);
+                            mMultiProcessorCamera, mode, colorList, textColor, textSize, strokeWidth,
+                            textBackgroundColor,
+                            showText, showTextOutBounds, autoSizeText, minTextSize, granularity, mAnalyzer, multiMode,
+                            scanType, additionalScanTypes, parseResult);
                 }
             }
         } catch (IOException e) {
@@ -290,7 +301,7 @@ public class MultiProcessorActivity extends Activity {
                 @Override
                 public void onSuccess(List<HmsScan> hmsScans) {
                     if (hmsScans != null && hmsScans.size() > 0 && hmsScans.get(0) != null && !TextUtils.isEmpty(
-                        hmsScans.get(0).getOriginalValue())) {
+                            hmsScans.get(0).getOriginalValue())) {
                         mHMSLogger.sendSingleEvent("MultiProcessorActivity.decodeMultiAsync");
                         HmsScan[] infos = new HmsScan[hmsScans.size()];
                         Intent intent = new Intent();
@@ -304,12 +315,12 @@ public class MultiProcessorActivity extends Activity {
                 public void onFailure(Exception e) {
                     Log.w(TAG, e);
                     mHMSLogger.sendSingleEvent("MultiProcessorActivity.decodeMultiAsync",
-                        Errors.DECODE_MULTI_ASYNC_ON_FAILURE.getErrorCode());
+                            Errors.DECODE_MULTI_ASYNC_ON_FAILURE.getErrorCode());
                 }
             });
         } else {
             Log.e(Errors.HMS_SCAN_ANALYZER_ERROR.getErrorCode(), Errors.HMS_SCAN_ANALYZER_ERROR.getErrorMessage(),
-                null);
+                    null);
         }
     }
 
@@ -321,7 +332,7 @@ public class MultiProcessorActivity extends Activity {
             SparseArray<HmsScan> result = mAnalyzer.analyseFrame(image);
             mHMSLogger.sendSingleEvent("MultiProcessorActivity.decodeMultiSync");
             if (result != null && result.size() > 0 && result.valueAt(0) != null && !TextUtils.isEmpty(
-                result.valueAt(0).getOriginalValue())) {
+                    result.valueAt(0).getOriginalValue())) {
                 HmsScan[] info = new HmsScan[result.size()];
                 for (int index = 0; index < result.size(); index++) {
                     info[index] = result.valueAt(index);
@@ -332,11 +343,11 @@ public class MultiProcessorActivity extends Activity {
                 MultiProcessorActivity.this.finish();
             } else {
                 Log.i("Error code: " + Errors.DECODE_MULTI_SYNC_COULDNT_FIND.getErrorCode(),
-                    Errors.DECODE_MULTI_SYNC_COULDNT_FIND.getErrorMessage());
+                        Errors.DECODE_MULTI_SYNC_COULDNT_FIND.getErrorMessage());
             }
         } else {
             Log.e(Errors.HMS_SCAN_ANALYZER_ERROR.getErrorCode(), Errors.HMS_SCAN_ANALYZER_ERROR.getErrorMessage(),
-                null);
+                    null);
         }
     }
 

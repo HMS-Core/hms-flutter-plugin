@@ -86,4 +86,10 @@ class HmsScanErrors {
     errorCode: '21',
     errorMessage: 'Multi Processor Channel cannot be initialized.',
   );
+
+  //Decode
+  static const HmsScanError ScanNoDetected = HmsScanError(
+    errorCode: '4096',
+    errorMessage: 'No barcode is detected.',
+  );
 }

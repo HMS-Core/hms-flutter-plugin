@@ -43,10 +43,20 @@ class HmsScanUtils {
     return Image.memory(data);
   }
 
-  static Future<ScanResponse> decodeWithBitmap(DecodeRequest request) async {
-    final ScanResponse result = ScanResponse.fromJson(
+  static Future<ScanResponseList> decodeWithBitmap(DecodeRequest request) async {
+    final ScanResponseList result = ScanResponseList.fromJson(
       await HmsScan.instance.scanUtilsChannel.invokeMethod(
         'decodeWithBitmap',
+        request.toMap(),
+      ),
+    );
+    return result;
+  }
+
+  static Future<ScanResponseList> decode(DecodeRequest request) async {
+    final ScanResponseList result = ScanResponseList.fromJson(
+      await HmsScan.instance.scanUtilsChannel.invokeMethod(
+        'decode',
         request.toMap(),
       ),
     );

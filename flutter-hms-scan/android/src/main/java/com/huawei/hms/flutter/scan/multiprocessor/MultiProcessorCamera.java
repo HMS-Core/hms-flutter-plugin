@@ -111,7 +111,7 @@ class MultiProcessorCamera {
         public void onPreviewFrame(byte[] data, Camera camera) {
             if (handler != null) {
                 Message message = handler.obtainMessage(0, camera.getParameters().getPreviewSize().width,
-                    camera.getParameters().getPreviewSize().height, data);
+                        camera.getParameters().getPreviewSize().height, data);
                 message.sendToTarget();
                 handler = null;
             }

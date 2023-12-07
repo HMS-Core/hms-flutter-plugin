@@ -34,6 +34,7 @@ public enum Errors {
 
     // Decode With Bitmap
     DECODE_WITH_BITMAP_ERROR("17", "Please check your barcode and scan type."),
+    SCAN_NO_DETECTED(String.valueOf(ScanUtil.SCAN_NO_DETECTED), "SCAN NO DETECTED"),
 
     // Build Bitmap
     BUILD_BITMAP("18", "Barcode generation failed."),

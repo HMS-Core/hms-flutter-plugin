@@ -32,4 +32,5 @@ class HmsScanTypes {
   static const int UPCCodeE = 2048;
   static const int Pdf417 = 8;
   static const int Aztec = 2;
+  static const int MultiFunctional = 8192;
 }

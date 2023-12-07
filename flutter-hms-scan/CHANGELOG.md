@@ -1,3 +1,10 @@
+## 2.12.0+301
+
+- Added `decode(DecodeRequest request)` method to HmsScanUtils.
+- Added `photoMode`, `parseResult`, `multiMode` variables to DecodeRequest model.
+- Supported the multi-functional code by adding `MULTI_FUNCTIONAL_SCAN_TYPE` to HmsScanTypes.
+- Added `SCAN_NO_DETECTED` error type.
+
 ## 2.10.0+301
 
 - Updated Scan SDK to the latest version 2.10.0.301.

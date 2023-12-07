@@ -21,6 +21,7 @@ import 'package:huawei_scan/huawei_scan.dart';
 
 import 'package:huawei_scan_example/screens/BuildBitmapScreen.dart';
 import 'package:huawei_scan_example/screens/CustomizedViewScreen.dart';
+import 'package:huawei_scan_example/screens/DecodeScreen.dart';
 import 'package:huawei_scan_example/screens/DecodeWithBitmapScreen.dart';
 import 'package:huawei_scan_example/screens/DefaultViewScreen.dart';
 import 'package:huawei_scan_example/screens/MultiProcessorCameraScreen.dart';
@@ -190,6 +191,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     builder: (BuildContext context) {
                       return const DecodeWithBitmapScreen();
                     },
+                  ),
+                );
+              },
+            ),
+            CustomButton(
+              text: 'Decode',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<dynamic>(
+                    builder: (BuildContext context) => const DecodeScreen(),
                   ),
                 );
               },

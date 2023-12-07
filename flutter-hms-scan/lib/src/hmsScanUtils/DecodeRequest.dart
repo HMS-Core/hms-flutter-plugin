@@ -21,17 +21,25 @@ class DecodeRequest {
   String? dataString;
   int? scanType;
   List<int>? additionalScanTypes;
+  bool? photoMode;
+  bool? parseResult;
+  bool? multiMode;
 
-  DecodeRequest({
-    this.data,
-    this.scanType,
-    this.additionalScanTypes,
-  });
+  DecodeRequest(
+      {this.data,
+      this.scanType,
+      this.additionalScanTypes,
+      this.photoMode,
+      this.parseResult,
+      this.multiMode});
 
   DecodeRequest.fromJson(Map<dynamic, dynamic> json) {
     data = json['data'];
     scanType = json['scanType'];
     additionalScanTypes = json['additionalScanTypes'];
+    photoMode = json['photoMode'];
+    parseResult = json['parseResult'];
+    multiMode = json['multiMode'];
   }
 
   Map<dynamic, dynamic> toJson() {
@@ -39,6 +47,9 @@ class DecodeRequest {
     data['data'] = this.data;
     data['scanType'] = scanType;
     data['additionalScanTypes'] = additionalScanTypes;
+    data['photoMode'] = photoMode;
+    data['parseResult'] = parseResult;
+    data['multiMode'] = multiMode;
     return data;
   }
 
@@ -47,7 +58,10 @@ class DecodeRequest {
     return <dynamic, dynamic>{
       'data': dataString,
       'scanType': scanType,
-      'additionalScanTypes': additionalScanTypes
+      'additionalScanTypes': additionalScanTypes,
+      'photoMode': photoMode,
+      'parseResult': parseResult,
+      'multiMode': multiMode
     };
   }
 
@@ -59,7 +73,10 @@ class DecodeRequest {
         other.data == data &&
         other.dataString == dataString &&
         other.scanType == scanType &&
-        listEquals(other.additionalScanTypes, additionalScanTypes);
+        listEquals(other.additionalScanTypes, additionalScanTypes) &&
+        other.photoMode == photoMode &&
+        other.parseResult == parseResult &&
+        other.multiMode == multiMode;
   }
 
   @override
@@ -69,6 +86,7 @@ class DecodeRequest {
       dataString,
       scanType,
       additionalScanTypes,
+      multiMode,
     );
   }
 }

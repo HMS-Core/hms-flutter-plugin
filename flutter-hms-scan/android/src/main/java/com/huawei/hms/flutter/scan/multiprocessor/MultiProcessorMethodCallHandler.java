@@ -51,7 +51,7 @@ import io.flutter.plugin.common.PluginRegistry;
 import java.util.List;
 
 public class MultiProcessorMethodCallHandler
-    implements MethodChannel.MethodCallHandler, PluginRegistry.ActivityResultListener {
+        implements MethodChannel.MethodCallHandler, PluginRegistry.ActivityResultListener {
 
     static final int MULTIPROCESSOR_SYNC_CODE = 444;
 
@@ -166,8 +166,9 @@ public class MultiProcessorMethodCallHandler
         if (scanMode == MULTIPROCESSOR_ASYNC_CODE || scanMode == MULTIPROCESSOR_SYNC_CODE) {
             mActivity.startActivityForResult(intent, REQUEST_CODE_SCAN_MULTI);
         } else {
-            result.error(Errors.MP_CAMERA_SCAN_MODE_ERROR.getErrorCode(), Errors.MP_CAMERA_SCAN_MODE_ERROR.getErrorMessage(),
-                null);
+            result.error(Errors.MP_CAMERA_SCAN_MODE_ERROR.getErrorCode(),
+                    Errors.MP_CAMERA_SCAN_MODE_ERROR.getErrorMessage(),
+                    null);
         }
 
     }
@@ -180,7 +181,7 @@ public class MultiProcessorMethodCallHandler
         MLFrame image = MLFrame.fromBitmap(ValueGetter.bitmapForDecoders(call, "data"));
 
         if (analyzerIsAvailableWithLogger(mActivity.getApplicationContext(), analyzer,
-            "MultiProcessorMethodCallHandler")) {
+                "MultiProcessorMethodCallHandler")) {
             // Scan Results
             mHMSLogger.startMethodExecutionTimer("MultiProcessorMethodCallHandler.decodeMultiSync");
             SparseArray<HmsScan> scanResult = analyzer.analyseFrame(image);
@@ -188,7 +189,7 @@ public class MultiProcessorMethodCallHandler
 
             // Response to Flutter Side
             if (scanResult != null && scanResult.size() > 0 && scanResult.valueAt(0) != null && !TextUtils.isEmpty(
-                scanResult.valueAt(0).getOriginalValue())) {
+                    scanResult.valueAt(0).getOriginalValue())) {
                 HmsScan[] info = new HmsScan[scanResult.size()];
                 for (int index = 0; index < scanResult.size(); index++) {
                     info[index] = scanResult.valueAt(index);
@@ -196,10 +197,11 @@ public class MultiProcessorMethodCallHandler
                 result.success(gson.toJson(info));
             } else {
                 result.error(Errors.DECODE_MULTI_SYNC_COULDNT_FIND.getErrorCode(),
-                    Errors.DECODE_MULTI_SYNC_COULDNT_FIND.getErrorMessage(), null);
+                        Errors.DECODE_MULTI_SYNC_COULDNT_FIND.getErrorMessage(), null);
             }
         } else {
-            Log.e(Errors.HMS_SCAN_ANALYZER_ERROR.getErrorCode(), Errors.HMS_SCAN_ANALYZER_ERROR.getErrorMessage(), null);
+            Log.e(Errors.HMS_SCAN_ANALYZER_ERROR.getErrorCode(), Errors.HMS_SCAN_ANALYZER_ERROR.getErrorMessage(),
+                    null);
             result.error(Errors.REMOTE_VIEW_ERROR.getErrorCode(), Errors.REMOTE_VIEW_ERROR.getErrorMessage(), null);
         }
         analyzerDestroyWithLogger(mActivity.getApplicationContext(), analyzer, "MultiProcessorMethodCallHandler");
@@ -214,13 +216,13 @@ public class MultiProcessorMethodCallHandler
 
         // onSuccess and onFailure of analyzeInAsync
         if (analyzerIsAvailableWithLogger(mActivity.getApplicationContext(), analyzer,
-            "MultiProcessorMethodCallHandler")) {
+                "MultiProcessorMethodCallHandler")) {
             mHMSLogger.startMethodExecutionTimer("MultiProcessorMethodCallHandler.decodeMultiAsync");
             analyzer.analyzInAsyn(image).addOnSuccessListener(new OnSuccessListener<List<HmsScan>>() {
                 @Override
                 public void onSuccess(List<HmsScan> hmsScans) {
                     if (hmsScans != null && hmsScans.size() > 0 && hmsScans.get(0) != null && !TextUtils.isEmpty(
-                        hmsScans.get(0).getOriginalValue())) {
+                            hmsScans.get(0).getOriginalValue())) {
                         HmsScan[] infos = new HmsScan[hmsScans.size()];
                         for (int index = 0; index < hmsScans.size(); index++) {
                             infos[index] = hmsScans.get(index);
@@ -229,24 +231,25 @@ public class MultiProcessorMethodCallHandler
                         mHMSLogger.sendSingleEvent("MultiProcessorMethodCallHandler.decodeMultiAsync");
                     } else {
                         result.error(Errors.DECODE_MULTI_ASYNC_COULDNT_FIND.getErrorCode(),
-                            Errors.DECODE_MULTI_ASYNC_COULDNT_FIND.getErrorMessage(), null);
+                                Errors.DECODE_MULTI_ASYNC_COULDNT_FIND.getErrorMessage(), null);
                     }
                     analyzerDestroyWithLogger(mActivity.getApplicationContext(), analyzer,
-                        "MultiProcessorMethodCallHandler");
+                            "MultiProcessorMethodCallHandler");
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(Exception e) {
                     result.error(Errors.DECODE_MULTI_ASYNC_ON_FAILURE.getErrorCode(),
-                        Errors.DECODE_MULTI_ASYNC_ON_FAILURE.getErrorMessage(), gson.toJson(e));
+                            Errors.DECODE_MULTI_ASYNC_ON_FAILURE.getErrorMessage(), gson.toJson(e));
                     mHMSLogger.sendSingleEvent("MultiProcessorMethodCallHandler.decodeMultiAsync",
-                        Errors.DECODE_MULTI_ASYNC_ON_FAILURE.getErrorCode());
+                            Errors.DECODE_MULTI_ASYNC_ON_FAILURE.getErrorCode());
                     analyzerDestroyWithLogger(mActivity.getApplicationContext(), analyzer,
-                        "MultiProcessorMethodCallHandler");
+                            "MultiProcessorMethodCallHandler");
                 }
             });
         } else {
-            Log.e(Errors.HMS_SCAN_ANALYZER_ERROR.getErrorCode(), Errors.HMS_SCAN_ANALYZER_ERROR.getErrorMessage(), null);
+            Log.e(Errors.HMS_SCAN_ANALYZER_ERROR.getErrorCode(), Errors.HMS_SCAN_ANALYZER_ERROR.getErrorMessage(),
+                    null);
             result.error(Errors.REMOTE_VIEW_ERROR.getErrorCode(), Errors.REMOTE_VIEW_ERROR.getErrorMessage(), null);
             analyzerDestroyWithLogger(mActivity.getApplicationContext(), analyzer, "MultiProcessorMethodCallHandler");
         }
@@ -273,5 +276,3 @@ public class MultiProcessorMethodCallHandler
         return false;
     }
 }
-
-

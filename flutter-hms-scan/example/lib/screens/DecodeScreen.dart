@@ -21,27 +21,28 @@ import 'package:huawei_scan/huawei_scan.dart';
 
 import 'package:huawei_scan_example/widgets/DecodeWidget.dart';
 
-class DecodeWithBitmapScreen extends StatefulWidget {
-  const DecodeWithBitmapScreen({Key? key}) : super(key: key);
+class DecodeScreen extends StatefulWidget {
+  const DecodeScreen({Key? key}) : super(key: key);
 
   @override
-  State<DecodeWithBitmapScreen> createState() => _DecodeWithBitmapScreenState();
+  State<DecodeScreen> createState() => _DecodeScreenState();
 }
 
-class _DecodeWithBitmapScreenState extends State<DecodeWithBitmapScreen> {
+class _DecodeScreenState extends State<DecodeScreen> {
   List<ScanResponse?>? responseList;
   bool photoMode = false;
 
-  void decodeWithBitmap() async {
+  void decode() async {
     Uint8List data =
         (await rootBundle.load('assets/aztecBarcode.png')).buffer.asUint8List();
-
     try {
-      ScanResponseList response = await HmsScanUtils.decodeWithBitmap(
+      ScanResponseList response = await HmsScanUtils.decode(
         DecodeRequest(
           data: data,
           scanType: HmsScanTypes.AllScanType,
           photoMode: photoMode,
+          parseResult: true,
+          multiMode: false,
         ),
       );
       setState(() {
@@ -58,13 +59,13 @@ class _DecodeWithBitmapScreenState extends State<DecodeWithBitmapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Decode With Bitmap View'),
+        title: const Text('Decode View Screen'),
       ),
       body: DecodeBodyWidget(
         imageUrl: 'assets/aztecBarcode.png',
         customButtonName: 'Decode',
         onPressed: () {
-          decodeWithBitmap();
+          decode();
         },
         responseList: responseList,
         photoMode: photoMode,
