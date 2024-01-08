@@ -122,6 +122,12 @@ public class HmsInstreamAd implements MethodChannel.MethodCallHandler {
                 }
                 result.success(list);
                 break;
+            case "isTransparencyOpen":
+                result.success(instreamAd.isTransparencyOpen());
+                break;
+            case "transparencyTplUrl":
+                result.success(instreamAd.getTransparencyTplUrl());
+                break;
             default:
                 result.notImplemented();
         }

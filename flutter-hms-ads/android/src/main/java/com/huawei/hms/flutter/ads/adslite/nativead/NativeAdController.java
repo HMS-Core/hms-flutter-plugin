@@ -190,6 +190,12 @@ public class NativeAdController implements MethodChannel.MethodCallHandler {
                 }
                 result.success(list);
                 break;
+            case "isTransparencyOpen":
+                result.success(nativeAd.isTransparencyOpen());
+                break;
+            case "transparencyTplUrl":
+                result.success(nativeAd.getTransparencyTplUrl());
+                break;
             default:
                 onVideoMethodCall(call, result);
         }
@@ -203,7 +209,7 @@ public class NativeAdController implements MethodChannel.MethodCallHandler {
             case "hasVideo":
                 HMSLogger.getInstance(context).startMethodExecutionTimer("hasVideo");
                 boolean hasVideo = nativeAd.getVideoOperator() != null
-                && nativeAd.getVideoOperator().hasVideo();
+                        && nativeAd.getVideoOperator().hasVideo();
                 result.success(hasVideo);
                 HMSLogger.getInstance(context).sendSingleEvent("hasVideo");
                 break;
@@ -211,14 +217,14 @@ public class NativeAdController implements MethodChannel.MethodCallHandler {
                 HMSLogger.getInstance(context).startMethodExecutionTimer("isCustomOperateEnabled");
                 boolean isCustomOperateEnabled = nativeAd.getVideoOperator() != null
                         && nativeAd.getVideoOperator().isCustomizeOperateEnabled();
-                        result.success(isCustomOperateEnabled);
+                result.success(isCustomOperateEnabled);
                 HMSLogger.getInstance(context).sendSingleEvent("isCustomOperateEnabled");
                 break;
             case "isMuted":
                 HMSLogger.getInstance(context).startMethodExecutionTimer("isMuted");
                 boolean isMuted = nativeAd.getVideoOperator() != null
                         && nativeAd.getVideoOperator().isMuted();
-                        result.success(isMuted);
+                result.success(isMuted);
                 HMSLogger.getInstance(context).sendSingleEvent("isMuted");
                 break;
             case "mute":
@@ -261,7 +267,8 @@ public class NativeAdController implements MethodChannel.MethodCallHandler {
             result.success(true);
             HMSLogger.getInstance(context).sendSingleEvent("muteNativeAd");
         } else {
-            result.error(ErrorCodes.NULL_PARAM, "Video Operator or boolean parameter is null. Mute failed. | isMute : " + mute, "");
+            result.error(ErrorCodes.NULL_PARAM,
+                    "Video Operator or boolean parameter is null. Mute failed. | isMute : " + mute, "");
             HMSLogger.getInstance(context).sendSingleEvent("muteNativeAd");
         }
     }
@@ -321,8 +328,8 @@ public class NativeAdController implements MethodChannel.MethodCallHandler {
                     builder.setAdListener(adListener);
                 }
                 nativeAdLoader = builder
-                    .setNativeAdOptions(generateNativeAdConfiguration(adConfigurationMap))
-                    .build();
+                        .setNativeAdOptions(generateNativeAdConfiguration(adConfigurationMap))
+                        .build();
                 if (nativeAd == null || slotIdChanged) {
                     adParam = adParamMap;
                     loadAd();
@@ -331,7 +338,8 @@ public class NativeAdController implements MethodChannel.MethodCallHandler {
             result.success(true);
             HMSLogger.getInstance(context).sendSingleEvent("setupNativeAdController");
         } else {
-            result.error(ErrorCodes.NULL_PARAM, "adSlotId is either null or empty. Controller setup failed. | Controller id : " + id, "");
+            result.error(ErrorCodes.NULL_PARAM,
+                    "adSlotId is either null or empty. Controller setup failed. | Controller id : " + id, "");
             HMSLogger.getInstance(context).sendSingleEvent("setupNativeAdController");
         }
     }

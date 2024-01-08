@@ -37,29 +37,32 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.platform.PlatformView;
 
+import static com.huawei.hms.flutter.ads.utils.FromMap.toIntegerArrayList;
 import static com.huawei.hms.flutter.ads.utils.constants.ViewTypes.INSTREAM_VIEW;
 import static io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import static io.flutter.plugin.common.MethodChannel.Result;
 
-public class FlutterInstreamView implements PlatformView, MethodCallHandler  {
+public class FlutterInstreamView implements PlatformView, MethodCallHandler {
     private final MethodChannel methodChannel;
     private final Context context;
     private final BinaryMessenger messenger;
     private static final String TAG = "InstreamAdListener";
     private InstreamView instreamView;
 
-    FlutterInstreamView(final Context context, BinaryMessenger messenger, int id, HashMap<String, Object> creationParams) {
+    FlutterInstreamView(final Context context, BinaryMessenger messenger, int id,
+            HashMap<String, Object> creationParams) {
         this.methodChannel = new MethodChannel(messenger, INSTREAM_VIEW + "/" + id);
         this.methodChannel.setMethodCallHandler(this);
         this.context = context;
         this.messenger = messenger;
 
-        ArrayList<Integer> instreamAdIds = FromMap.toIntegerArrayList("instreamAdIds", creationParams.get("instreamAdIds"));
+        ArrayList<Integer> instreamAdIds = FromMap.toIntegerArrayList("instreamAdIds",
+                creationParams.get("instreamAdIds"));
         ArrayList<InstreamAd> instreamAds = new ArrayList<>();
 
         for (Integer instreamAdId : instreamAdIds) {
             InstreamAd ia = HmsInstreamAd.getInstreamAd(instreamAdId);
-            if(ia != null){
+            if (ia != null) {
                 instreamAds.add(ia);
             }
         }
@@ -73,7 +76,7 @@ public class FlutterInstreamView implements PlatformView, MethodCallHandler  {
             @Override
             public void onClick() {
                 HMSLogger.getInstance(context).startMethodExecutionTimer("onInstreamAdClick");
-                Log.i(TAG,"onClick");
+                Log.i(TAG, "onClick");
                 methodChannel.invokeMethod("onClick", null, null);
                 HMSLogger.getInstance(context).sendSingleEvent("onInstreamAdClick");
             }
@@ -95,7 +98,7 @@ public class FlutterInstreamView implements PlatformView, MethodCallHandler  {
     private InstreamMediaStateListener mediaStateListener = new InstreamMediaStateListener() {
         @Override
         public void onMediaProgress(int per, int playTime) {
-            Log.i(TAG,"onMediaProgress");
+            Log.i(TAG, "onMediaProgress");
             HashMap<String, Integer> args = new HashMap<>();
             args.put("per", per);
             args.put("playTime", playTime);
@@ -105,7 +108,7 @@ public class FlutterInstreamView implements PlatformView, MethodCallHandler  {
         @Override
         public void onMediaStart(int playTime) {
             HMSLogger.getInstance(context).startMethodExecutionTimer("onMediaStart");
-            Log.i(TAG,"onMediaStart");
+            Log.i(TAG, "onMediaStart");
             HashMap<String, Integer> args = new HashMap<>();
             args.put("playTime", playTime);
             methodChannel.invokeMethod("onMediaStart", args, null);
@@ -115,7 +118,7 @@ public class FlutterInstreamView implements PlatformView, MethodCallHandler  {
         @Override
         public void onMediaPause(int playTime) {
             HMSLogger.getInstance(context).startMethodExecutionTimer("onMediaPause");
-            Log.i(TAG,"onMediaPause");
+            Log.i(TAG, "onMediaPause");
             HashMap<String, Integer> args = new HashMap<>();
             args.put("playTime", playTime);
             methodChannel.invokeMethod("onMediaPause", args, null);
@@ -125,7 +128,7 @@ public class FlutterInstreamView implements PlatformView, MethodCallHandler  {
         @Override
         public void onMediaStop(int playTime) {
             HMSLogger.getInstance(context).startMethodExecutionTimer("onMediaStop");
-            Log.i(TAG,"onMediaStop");
+            Log.i(TAG, "onMediaStop");
             HashMap<String, Integer> args = new HashMap<>();
             args.put("playTime", playTime);
             methodChannel.invokeMethod("onMediaStop", args, null);
@@ -135,7 +138,7 @@ public class FlutterInstreamView implements PlatformView, MethodCallHandler  {
         @Override
         public void onMediaCompletion(int playTime) {
             HMSLogger.getInstance(context).startMethodExecutionTimer("onMediaCompletion");
-            Log.i(TAG,"onMediaCompletion");
+            Log.i(TAG, "onMediaCompletion");
             HashMap<String, Integer> args = new HashMap<>();
             args.put("playTime", playTime);
             methodChannel.invokeMethod("onMediaCompletion", args, null);
@@ -145,7 +148,7 @@ public class FlutterInstreamView implements PlatformView, MethodCallHandler  {
         @Override
         public void onMediaError(int playTime, int errorCode, int extra) {
             HMSLogger.getInstance(context).startMethodExecutionTimer("onMediaError");
-            Log.i(TAG,"onMediaError");
+            Log.i(TAG, "onMediaError");
             HashMap<String, Integer> args = new HashMap<>();
             args.put("playTime", playTime);
             args.put("errorCode", errorCode);
@@ -159,7 +162,7 @@ public class FlutterInstreamView implements PlatformView, MethodCallHandler  {
         @Override
         public void onMute() {
             HMSLogger.getInstance(context).startMethodExecutionTimer("onMute");
-            Log.i(TAG,"onMute");
+            Log.i(TAG, "onMute");
             methodChannel.invokeMethod("onMute", null, null);
             HMSLogger.getInstance(context).sendSingleEvent("onMute");
         }
@@ -167,7 +170,7 @@ public class FlutterInstreamView implements PlatformView, MethodCallHandler  {
         @Override
         public void onUnmute() {
             HMSLogger.getInstance(context).startMethodExecutionTimer("onUnMute");
-            Log.i(TAG,"onUnMute");
+            Log.i(TAG, "onUnMute");
             methodChannel.invokeMethod("onUnMute", null, null);
             HMSLogger.getInstance(context).sendSingleEvent("onUnMute");
         }
@@ -181,8 +184,8 @@ public class FlutterInstreamView implements PlatformView, MethodCallHandler  {
     @Override
     public void onMethodCall(MethodCall call, Result result) {
         HMSLogger.getInstance(context).startMethodExecutionTimer(call.method);
-        if(instreamView == null) {
-            result.error(ErrorCodes.NULL_VIEW,"InstreamView isn't created yet.", "");
+        if (instreamView == null) {
+            result.error(ErrorCodes.NULL_VIEW, "InstreamView isn't created yet.", "");
             HMSLogger.getInstance(context).sendSingleEvent(call.method, ErrorCodes.NULL_VIEW);
             return;
         }
@@ -238,6 +241,24 @@ public class FlutterInstreamView implements PlatformView, MethodCallHandler  {
                 instreamView.hideAdvertiserInfoDialog();
                 result.success(true);
                 break;
+            case "showTransparencyDialog":
+                HMSLogger.getInstance(context).startMethodExecutionTimer("instreamView.showTransparencyDialog");
+                ArrayList<Integer> arrList = toIntegerArrayList("location", call.arguments);
+                int[] location = new int[arrList.size()];
+
+                for (int i = 0; i < arrList.size(); i++) {
+                    location[i] = (arrList.get(i));
+                }
+                instreamView.showTransparencyDialog(instreamView, location);
+                HMSLogger.getInstance(context).sendSingleEvent("instreamView.showTransparencyDialog");
+                result.success(true);
+                break;
+            case "hideTransparencyDialog":
+                HMSLogger.getInstance(context).startMethodExecutionTimer("instremView.hideTransparencyDialog");
+                instreamView.hideTransparencyDialog();
+                HMSLogger.getInstance(context).sendSingleEvent("instremView.hideTransparencyDialog");
+                result.success(true);
+                break;
             default:
                 result.notImplemented();
                 return;
@@ -247,7 +268,7 @@ public class FlutterInstreamView implements PlatformView, MethodCallHandler  {
 
     @Override
     public void dispose() {
-        if(instreamView == null) {
+        if (instreamView == null) {
             return;
         }
         instreamView.removeInstreamMediaStateListener();

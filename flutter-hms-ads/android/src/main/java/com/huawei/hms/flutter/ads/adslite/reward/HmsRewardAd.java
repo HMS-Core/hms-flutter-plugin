@@ -63,8 +63,8 @@ public class HmsRewardAd {
     }
 
     void setRewardVerifyConfig(Map<String, Object> options) {
-        String userId = FromMap.toString("userId", options);
-        String data = FromMap.toString("data", options);
+        String userId = FromMap.toString("userId", options.get("userId"));
+        String data = FromMap.toString("data", options.get("data"));
         if (userId != null && data != null) {
             rewardAdInstance.setRewardVerifyConfig(
                 new RewardVerifyConfig.Builder()

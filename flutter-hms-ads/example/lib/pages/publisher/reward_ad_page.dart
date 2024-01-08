@@ -43,6 +43,10 @@ class _RewardAdPageState extends State<RewardAdPage> {
   * */
   RewardAd createAd() {
     return RewardAd(
+      rewardVerifyConfig: RewardVerifyConfig(
+        userId: "123123",
+        data: "CUSTOM_DATA_1",
+      ),
       listener: (RewardAdEvent? event, {Reward? reward, int? errorCode}) {
         debugPrint('RewardAd event : $event');
         setState(() {

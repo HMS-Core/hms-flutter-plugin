@@ -205,4 +205,17 @@ class InstreamAdViewController {
       'hideAdvertiserInfoDialog',
     );
   }
+
+  Future<void> showTransparencyDialog({List<int>? location}) async {
+    return await _channel.invokeMethod(
+      'showTransparencyDialog',
+      location,
+    );
+  }
+
+  Future<void> hideTransparencyDialog() async {
+    return await _channel.invokeMethod(
+      'hideTransparencyDialog',
+    );
+  }
 }

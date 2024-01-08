@@ -59,6 +59,7 @@ class RewardAd {
     this.data,
     @Deprecated('') this.openInHmsCore,
     this.setMobileDataAlertSwitch = true,
+    this.rewardVerifyConfig,
     RewardAdListener? listener,
   }) {
     rewardAds[id] = this;
@@ -96,6 +97,7 @@ class RewardAd {
   }) async {
     await _initAd();
     _startListening();
+
     return await Ads.instance.channelReward.invokeMethod(
       'loadRewardAd',
       <String, dynamic>{

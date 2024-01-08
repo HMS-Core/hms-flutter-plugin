@@ -71,6 +71,12 @@ class _NativeAdPageState extends State<NativeAdPage> {
 
     String? uniqueId = await controller.getUniqueId();
     debugPrint('uniqueId : $uniqueId');
+
+    String? transparencyTplUrl = await controller.transparencyTplUrl();
+    debugPrint('transparencyTplUrl : $transparencyTplUrl');
+
+    bool? isTransparencyOpen = await controller.isTransparencyOpen();
+    debugPrint('isTransparencyOpen : $isTransparencyOpen');
   }
 
   @override

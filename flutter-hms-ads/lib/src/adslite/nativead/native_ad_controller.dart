@@ -188,6 +188,18 @@ class NativeAdController {
     return list;
   }
 
+  Future<bool> isTransparencyOpen() async {
+    return await _channel.invokeMethod(
+      'isTransparencyOpen',
+    );
+  }
+
+  Future<String> transparencyTplUrl() async {
+    return await _channel.invokeMethod(
+      'transparencyTplUrl',
+    );
+  }
+
   Future<bool?> dislikeAd(DislikeAdReason reason) {
     return _channel.invokeMethod(
       'dislikeAd',
