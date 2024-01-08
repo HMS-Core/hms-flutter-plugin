@@ -74,7 +74,7 @@ public interface Constants {
      * @param fieldName The name of the field to be converted.
      * @return Field constant If the name matches, otherwise null.
      */
-    static Field toField(String fieldName) {
+    static Field toField(String fieldName, int format) {
         java.lang.reflect.Field[] declaredFields = Field.class.getDeclaredFields();
         List<java.lang.reflect.Field> staticFields = new ArrayList<>();
         for (java.lang.reflect.Field field : declaredFields) {
@@ -85,7 +85,7 @@ public interface Constants {
         for (java.lang.reflect.Field field : staticFields) {
             try {
                 Field f = (Field) field.get(null);
-                if (f.getName().equals(fieldName)) {
+                if (f.getName().equals(fieldName) && f.getFormat() == format) {
                     return f;
                 }
             } catch (IllegalAccessException e) {

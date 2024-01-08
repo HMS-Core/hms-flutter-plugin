@@ -1,3 +1,21 @@
+## 6.11.0+303
+
+**New Features**
+- Added the reloaded APIs readDailySummationList and readTodaySummationList to data_controller module to query the daily statistics of multiple data types.
+- Added the following data types to DataType:
+  - DT_DIVING_DEPTH
+  - DT_DIVING_DEPTH_STATISTICS
+  - DT_WATER_TEMPERATURE
+  - DT_WATER_TEMPERATURE_STATISTICS
+- Added the following fields to Field:
+  - TEMPERATURE
+  - DEPTH
+
+**Modified Features**
+- Changed all floating point Fields to the double type.
+- Deprecated HiHealthOptions class.
+- [BREAKING CHANGE] init method in data_controller does not take any parameter now since HiHealthOptions class is deprecated.
+
 ## 6.10.0+301
 
 **New Features**

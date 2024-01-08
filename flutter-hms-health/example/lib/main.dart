@@ -215,14 +215,31 @@ class _HomeState extends State<Home> {
             '1.0': 263.0,
           },
         ),
-        dataSummary: <SamplePoint>[],
+        dataSummary: <SamplePoint>[ 
+          SamplePoint( 
+            dataType: DataType.DT_CONTINUOUS_DISTANCE_TOTAL,
+            startTime: startTime.add(Duration(seconds: 1)),
+            endTime: endTime.subtract(Duration(seconds: 1)),
+            fieldValueOptions: FieldFloat(Field.FIELD_DISTANCE, 400),
+            timeUnit: TimeUnit.MILLISECONDS,
+          ),
+          SamplePoint(
+            dataType: DataType.POLYMERIZE_CONTINUOUS_SPEED_STATISTICS,
+            fieldValueOptions: FieldFloat(Field.FIELD_AVG, 60.0),
+            startTime: startTime.add(Duration(seconds: 1)),
+            endTime: endTime.subtract(Duration(seconds: 1)),
+            timeUnit: TimeUnit.MILLISECONDS,
+          )
+            ..setFieldValue(Field.FIELD_MIN, 40.0)
+            ..setFieldValue(Field.FIELD_MAX, 80.0),
+        ]
       ),
     );
 
     // Build the dataCollector object
     DataCollector dataCollector = DataCollector(
       dataGenerateType: DataGenerateType.DATA_TYPE_RAW,
-      dataType: DataType.DT_CONTINUOUS_STEPS_DELTA,
+      dataType: DataType.DT_INSTANTANEOUS_STEPS_RATE,
       name: 'AddActivityRecord1923',
     );
 
@@ -231,9 +248,9 @@ class _HomeState extends State<Home> {
     List<SamplePoint> samplePoints = <SamplePoint>[
       SamplePoint(
         dataCollector: dataCollector,
-        startTime: startTime,
-        endTime: endTime,
-        fieldValueOptions: FieldInt(Field.FIELD_STEPS_DELTA, 1024),
+        startTime: startTime.add(Duration(seconds: 1)),
+        endTime: endTime.subtract(Duration(seconds: 1)),
+        fieldValueOptions: FieldFloat(Field.FIELD_STEP_RATE, 10.0),
         timeUnit: TimeUnit.MILLISECONDS,
       ),
     ];
@@ -282,12 +299,12 @@ class _HomeState extends State<Home> {
 
     ActivityRecordReadOptions activityRecordReadOptions =
         ActivityRecordReadOptions(
-      activityRecordId: null,
+      activityRecordId: "ActivityRecordId0",
       activityRecordName: null,
       startTime: startTime,
       endTime: endTime,
       timeUnit: TimeUnit.MILLISECONDS,
-      // dataType: DataType.DT_CONTINUOUS_STEPS_DELTA,
+      dataType: DataType.DT_INSTANTANEOUS_STEPS_RATE,
     );
     try {
       List<ActivityRecord> result =
@@ -418,14 +435,7 @@ class _HomeState extends State<Home> {
       LogOptions.call,
     );
     try {
-      _dataController = await DataController.init(
-        <HiHealthOption>[
-          HiHealthOption(DataType.DT_CONTINUOUS_STEPS_DELTA, AccessType.read),
-          HiHealthOption(DataType.DT_CONTINUOUS_STEPS_DELTA, AccessType.write),
-          HiHealthOption(DataType.DT_INSTANTANEOUS_HEIGHT, AccessType.read),
-          HiHealthOption(DataType.DT_INSTANTANEOUS_HEIGHT, AccessType.write),
-        ],
-      );
+      _dataController = await DataController.init();
       log(
         'init',
         _dataTextController,
@@ -580,29 +590,29 @@ class _HomeState extends State<Home> {
     }
   }
 
-  /// Reads the daily summation between the dates: `2020.10.02` to `2020.12.15`
+  /// Reads the daily summation between the dates: `2020.10.02` to `2020.12.15` for multiple data types.
   /// Note that the time format is different for this method.
-  void readDailySummation() async {
+  void readDailySummationList() async {
     log(
-      'readDailySummation',
+      'readDailySummationList',
       _dataTextController,
       LogOptions.call,
     );
     try {
-      SampleSet? sampleSet = await _dataController.readDailySummation(
-        DataType.DT_CONTINUOUS_STEPS_DELTA,
+      List<SampleSet?>? sampleSets = await _dataController.readDailySummationList(
+        [DataType.DT_CONTINUOUS_STEPS_DELTA,DataType.DT_CONTINUOUS_CALORIES_BURNT],
         20201002,
         20201003,
       );
       log(
-        'readDailySummation',
+        'readDailySummationList',
         _dataTextController,
         LogOptions.success,
-        result: sampleSet.toString(),
+        result: sampleSets.toString(),
       );
     } on PlatformException catch (e) {
       log(
-        'readDailySummation',
+        'readDailySummationList',
         _dataTextController,
         LogOptions.error,
         error: e.message,
@@ -1457,8 +1467,8 @@ class _HomeState extends State<Home> {
                     onTap: () => readTodaySummation(),
                   ),
                   ListTile(
-                    title: const Text('readDailySummation'),
-                    onTap: () => readDailySummation(),
+                    title: const Text('readDailySummationList'),
+                    onTap: () => readDailySummationList(),
                   ),
                   ListTile(
                     title: const Text('insert'),

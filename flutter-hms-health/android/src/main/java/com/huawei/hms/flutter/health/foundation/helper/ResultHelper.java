@@ -77,6 +77,11 @@ public final class ResultHelper<T> implements ResultListener<T> {
             ArrayList<Map<String, Object>> resultList = new ArrayList<>(
                 ActivityRecordUtils.activityRecordReplyToMap((ActivityRecordReply) healthResult));
             this.result.success(resultList);
+        } else if (type.equals(List.class) && methodName.equals("readTodaySummationList") || methodName.equals("readDailySummationList") ) {
+            List<SampleSet> sampleSets = (List<SampleSet>) healthResult;
+            List<Map<String, Object>> resultArray = new ArrayList<>(
+                    ActivityRecordUtils.listSampleSetToMap(sampleSets));
+            this.result.success(resultArray);
         } else if (type.equals(List.class)) {
             List<ActivityRecord> activityRecords = (List<ActivityRecord>) healthResult;
             ArrayList<Map<String, Object>> resultArray = new ArrayList<>(

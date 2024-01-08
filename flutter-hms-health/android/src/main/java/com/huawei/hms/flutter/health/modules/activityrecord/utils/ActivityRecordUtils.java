@@ -337,6 +337,15 @@ public final class ActivityRecordUtils {
         return resultList;
     }
 
+    public static synchronized List<Map<String, Object>> listSampleSetToMap(
+            final List<SampleSet> sampleSets) {
+        ArrayList<Map<String, Object>> resultList = new ArrayList<>();
+        for (SampleSet sampleSet : sampleSets) {
+            resultList.add(sampleSetToMap(sampleSet));
+        }
+        return resultList;
+    }
+
     public static synchronized Map<String, Object> sampleSetToMap(final SampleSet sampleSet) {
         HashMap<String, Object> resultMap = new HashMap<>();
         resultMap.put("dataCollector", dataCollectorToMap(sampleSet.getDataCollector()));
@@ -351,10 +360,12 @@ public final class ActivityRecordUtils {
 
     public static synchronized Map<String, Object> scopeLangItemToMap(final ScopeLangItem scopeLangItem) {
         HashMap<String, Object> resultMap = new HashMap<>();
+        if (scopeLangItem != null){
         resultMap.put("appName", scopeLangItem.getAppName());
         resultMap.put("appIconPath", scopeLangItem.getAppIconPath());
         resultMap.put("authTime", scopeLangItem.getAuthTime());
         resultMap.put("url2Desc", scopeLangItem.getUrl2Desc());
+        }
         return resultMap;
     }
 

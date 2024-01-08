@@ -42,6 +42,8 @@ import com.huawei.hms.hihealth.options.DataTypeAddOptions;
 import com.huawei.hms.hihealth.options.DataTypeAddOptions.Builder;
 import com.huawei.hms.hihealth.result.HealthKitAuthResult;
 
+import org.json.JSONException;
+
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -298,8 +300,11 @@ public class SettingControllerMethodHandler implements MethodCallHandler, Plugin
     public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 8888) {
             HealthKitAuthResult result = settingController.parseHealthKitAuthResultFromIntent(data);
-            Log.i("sinan", result.toJson());
-            mResult.success(result.toJson());
+            try {
+                mResult.success(result.toJson());
+            } catch (JSONException e) {
+                Log.i("SettingCntlerHandler", e.toString());
+            }
         }
         return true;
     }

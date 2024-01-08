@@ -257,15 +257,18 @@ public final class Utils {
 
     public static synchronized SamplePoint toSamplePoint(final Map<String, Object> samplePointMap, String packageName) {
         SamplePoint.Builder samplePoint;
+        List<Field> fields;
         if (samplePointMap.containsKey(Constants.DATA_COLLECTOR_KEY)) {
             final Map<String, Object> dataCollectorMap = HealthRecordUtils.fromObject(
                 samplePointMap.get(Constants.DATA_COLLECTOR_KEY));
             final DataCollector dataCollector = toDataCollector(dataCollectorMap, packageName);
+            fields = dataCollector.getDataType().getFields();
             samplePoint = new SamplePoint.Builder(dataCollector);
             samplePointMap.remove(Constants.DATA_COLLECTOR_KEY);
         } else {
             final Map<String, Object> dataTypeMap = HealthRecordUtils.fromObject(samplePointMap.get(DATA_TYPE_KEY));
             final DataType dataType = toDataType(dataTypeMap, packageName);
+            fields = dataType.getFields();
             samplePoint = new SamplePoint.Builder(dataType);
             samplePointMap.remove(Constants.DATA_TYPE_KEY);
         }
@@ -306,6 +309,14 @@ public final class Utils {
                 String key = (String) m.get("key");
                 String value = (String) m.get("value");
                 sp.addMetadata(key, value);
+            }
+        }
+        Map<String, Object> pairMap = HealthRecordUtils.fromObject(samplePointMap.get("pairs"));
+        if (!pairMap.isEmpty()) {
+            for (Field field : fields) {
+                if (pairMap.containsKey(field.getName()) && pairMap.get(field.getName())!= null) {
+                    HealthRecordUtils.setFieldValues(sp, field, pairMap.get(field.getName()));
+                }
             }
         }
         return sp;
@@ -442,7 +453,7 @@ public final class Utils {
         if (format < 1 || format > 5) {
             throw new InvalidParameterException("Field type format is wrong!");
         }
-        field = Constants.toField(name);
+        field = Constants.toField(name,format);
         if (field == null) {
             // Constant conversion fails create a new Field.
             field = new Field(name, format);
@@ -455,7 +466,7 @@ public final class Utils {
         if (format < 1 || format > 5) {
             throw new InvalidParameterException("Field type format is wrong!");
         }
-        field = Constants.toField(name);
+        field = Constants.toField(name, format);
         if (field == null) {
             // Constant conversion fails create a new Field.
             field = new Field(name, format);

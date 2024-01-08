@@ -17,28 +17,28 @@
 part of huawei_health;
 
 abstract class HealthFields {
-  static const Field FIELD_SYSTOLIC_PRESSURE = Field.newFloatField(
+  static const Field FIELD_SYSTOLIC_PRESSURE = Field.newDoubleField(
     'systolic_pressure',
   );
-  static const Field FIELD_SYSTOLIC_PRESSURE_AVG = Field.newFloatField(
+  static const Field FIELD_SYSTOLIC_PRESSURE_AVG = Field.newDoubleField(
     'systolic_pressure_avg',
   );
-  static const Field FIELD_SYSTOLIC_PRESSURE_MIN = Field.newFloatField(
+  static const Field FIELD_SYSTOLIC_PRESSURE_MIN = Field.newDoubleField(
     'systolic_pressure_min',
   );
-  static const Field FIELD_SYSTOLIC_PRESSURE_MAX = Field.newFloatField(
+  static const Field FIELD_SYSTOLIC_PRESSURE_MAX = Field.newDoubleField(
     'systolic_pressure_max',
   );
-  static const Field FIELD_DIASTOLIC_PRESSURE = Field.newFloatField(
+  static const Field FIELD_DIASTOLIC_PRESSURE = Field.newDoubleField(
     'diastolic_pressure',
   );
-  static const Field FIELD_DIASTOLIC_PRESSURE_AVG = Field.newFloatField(
+  static const Field FIELD_DIASTOLIC_PRESSURE_AVG = Field.newDoubleField(
     'diastolic_pressure_avg',
   );
-  static const Field FIELD_DIASTOLIC_PRESSURE_MIN = Field.newFloatField(
+  static const Field FIELD_DIASTOLIC_PRESSURE_MIN = Field.newDoubleField(
     'diastolic_pressure_min',
   );
-  static const Field FIELD_DIASTOLIC_PRESSURE_MAX = Field.newFloatField(
+  static const Field FIELD_DIASTOLIC_PRESSURE_MAX = Field.newDoubleField(
     'diastolic_pressure_max',
   );
   static const Field FIELD_BODY_POSTURE = Field.newIntField(
@@ -54,10 +54,10 @@ abstract class HealthFields {
   static const int MEASURE_BODY_PART_OF_BLOOD_PRESSURE_RIGHT_WRIST = 2;
   static const int MEASURE_BODY_PART_OF_BLOOD_PRESSURE_LEFT_UPPER_ARM = 3;
   static const int MEASURE_BODY_PART_OF_BLOOD_PRESSURE_RIGHT_UPPER_ARM = 4;
-  static const Field FIELD_SPHYGMUS = Field.newFloatField(
+  static const Field FIELD_SPHYGMUS = Field.newDoubleField(
     'sphygmus',
   );
-  static const Field FIELD_LEVEL = Field.newFloatField(
+  static const Field FIELD_LEVEL = Field.newDoubleField(
     'level',
   );
   static const Field FIELD_MEASURE_TIME = Field.newIntField(
@@ -95,28 +95,28 @@ abstract class HealthFields {
   static const int SAMPLE_SOURCE_SERUM = 4;
   static const int SAMPLE_SOURCE_TEARS = 5;
   static const int SAMPLE_SOURCE_WHOLE_BLOOD = 6;
-  static const Field FIELD_SATURATION = Field.newFloatField(
+  static const Field FIELD_SATURATION = Field.newDoubleField(
     'saturation',
   );
-  static const Field FIELD_SATURATION_AVG = Field.newFloatField(
+  static const Field FIELD_SATURATION_AVG = Field.newDoubleField(
     'saturation_avg',
   );
-  static const Field FIELD_SATURATION_MIN = Field.newFloatField(
+  static const Field FIELD_SATURATION_MIN = Field.newDoubleField(
     'saturation_min',
   );
-  static const Field FIELD_SATURATION_MAX = Field.newFloatField(
+  static const Field FIELD_SATURATION_MAX = Field.newDoubleField(
     'saturation_max',
   );
-  static const Field FIELD_OXYGEN_SUPPLY_FLOW_RATE = Field.newFloatField(
+  static const Field FIELD_OXYGEN_SUPPLY_FLOW_RATE = Field.newDoubleField(
     'oxygen_supply_flow_rate',
   );
-  static const Field FIELD_OXYGEN_SUPPLY_FLOW_RATE_AVG = Field.newFloatField(
+  static const Field FIELD_OXYGEN_SUPPLY_FLOW_RATE_AVG = Field.newDoubleField(
     'oxygen_supply_flow_rate_avg',
   );
-  static const Field FIELD_OXYGEN_SUPPLY_FLOW_RATE_MIN = Field.newFloatField(
+  static const Field FIELD_OXYGEN_SUPPLY_FLOW_RATE_MIN = Field.newDoubleField(
     'oxygen_supply_flow_rate_min',
   );
-  static const Field FIELD_OXYGEN_SUPPLY_FLOW_RATE_MAX = Field.newFloatField(
+  static const Field FIELD_OXYGEN_SUPPLY_FLOW_RATE_MAX = Field.newDoubleField(
     'oxygen_supply_flow_rate_max',
   );
   static const Field FIELD_OXYGEN_THERAPY = Field.newIntField(
@@ -131,7 +131,7 @@ abstract class HealthFields {
     'spo2_measurement_approach',
   );
   static const int SPO2_MEASUREMENT_APPROACH_PULSE_OXIMETRY = 1;
-  static const Field FIELD_TEMPERATURE = Field.newFloatField(
+  static const Field FIELD_TEMPERATURE = Field.newDoubleField(
     'temperature',
   );
   static const Field FIELD_MEASURE_BODY_PART_OF_TEMPERATURE = Field.newIntField(
@@ -206,16 +206,16 @@ abstract class HealthFields {
   static const Field FIELD_GLUCOSE = Field.newIntField(
     'glucose',
   );
-  static const Field FIELD_THRESHOLD = Field.newFloatField(
+  static const Field FIELD_THRESHOLD = Field.newDoubleField(
     'threshold',
   );
-  static const Field FIELD_AVG_HEART_RATE = Field.newFloatField(
+  static const Field FIELD_AVG_HEART_RATE = Field.newDoubleField(
     'avg_heart_rate',
   );
-  static const Field FIELD_MAX_HEART_RATE = Field.newFloatField(
+  static const Field FIELD_MAX_HEART_RATE = Field.newDoubleField(
     'max_heart_rate',
   );
-  static const Field FIELD_MIN_HEART_RATE = Field.newFloatField(
+  static const Field FIELD_MIN_HEART_RATE = Field.newDoubleField(
     'min_heart_rate',
   );
   static const Field FIELD_MEASUREMENT_ANOMALY_FLAG = Field.newIntField(
@@ -245,19 +245,19 @@ abstract class HealthFields {
   static const Field FIELD_PHYSICAL_SYMPTOMS = Field.newStringField(
     'physicalSymptoms',
   );
-  static const Field FIELD_SPHYGMUS_AVG = Field.newFloatField(
+  static const Field FIELD_SPHYGMUS_AVG = Field.newDoubleField(
     'sphygmus_avg',
   );
-  static const Field FIELD_SPHYGMUS_MIN = Field.newFloatField(
+  static const Field FIELD_SPHYGMUS_MIN = Field.newDoubleField(
     'sphygmus_min',
   );
-  static const Field FIELD_SPHYGMUS_MAX = Field.newFloatField(
+  static const Field FIELD_SPHYGMUS_MAX = Field.newDoubleField(
     'sphygmus_max',
   );
-  static const Field FIELD_SPHYGMUS_LAST = Field.newFloatField(
+  static const Field FIELD_SPHYGMUS_LAST = Field.newDoubleField(
     'sphygmus_last',
   );
-  static const Field FIELD_SATURATION_LAST = Field.newFloatField(
+  static const Field FIELD_SATURATION_LAST = Field.newDoubleField(
     'saturation_last',
   );
 
@@ -269,7 +269,7 @@ abstract class HealthFields {
     'sysSessionDate',
   );
 
-  static const Field EVENT_AHI = Field.newFloatField(
+  static const Field EVENT_AHI = Field.newDoubleField(
     'eventAhi',
   );
 
@@ -277,39 +277,39 @@ abstract class HealthFields {
     'sysDuration',
   );
 
-  static const Field LUMIS_TIDVOL_MEDIAN = Field.newFloatField(
+  static const Field LUMIS_TIDVOL_MEDIAN = Field.newDoubleField(
     'lumisTidvolMedian',
   );
 
-  static const Field LUMIS_TIDVOL = Field.newFloatField(
+  static const Field LUMIS_TIDVOL = Field.newDoubleField(
     'lumisTidvol95',
   );
 
-  static const Field LUMIS_TIDVOL_MAX = Field.newFloatField(
+  static const Field LUMIS_TIDVOL_MAX = Field.newDoubleField(
     'lumisTidvolMax',
   );
 
-  static const Field CLINICAL_RESPRATE_MEDIAN = Field.newFloatField(
+  static const Field CLINICAL_RESPRATE_MEDIAN = Field.newDoubleField(
     'clinicalRespRateMedian',
   );
 
-  static const Field CLINICAL_RESP_RATE = Field.newFloatField(
+  static const Field CLINICAL_RESP_RATE = Field.newDoubleField(
     'clinicalRespRate95',
   );
 
-  static const Field CLINICAL_RESP_RATE_MAX = Field.newFloatField(
+  static const Field CLINICAL_RESP_RATE_MAX = Field.newDoubleField(
     'clinicalRespRateMax',
   );
 
-  static const Field LUMIS_IERATIO_MEDIAN = Field.newFloatField(
+  static const Field LUMIS_IERATIO_MEDIAN = Field.newDoubleField(
     'lumisIeratioMedian',
   );
 
-  static const Field LUMIS_IERATIO_QUANTILE = Field.newFloatField(
+  static const Field LUMIS_IERATIO_QUANTILE = Field.newDoubleField(
     'lumisIeratioQuantile95',
   );
 
-  static const Field LUMIS_IERATIO_MAX = Field.newFloatField(
+  static const Field LUMIS_IERATIO_MAX = Field.newDoubleField(
     'lumisIeratioMax',
   );
 
@@ -317,15 +317,15 @@ abstract class HealthFields {
     'maskOff',
   );
 
-  static const Field HYPOVENTILATION_INDEX = Field.newFloatField(
+  static const Field HYPOVENTILATION_INDEX = Field.newDoubleField(
     'hypoventilationIndex',
   );
 
-  static const Field OBSTRUCTIVE_APNEA_INDEX = Field.newFloatField(
+  static const Field OBSTRUCTIVE_APNEA_INDEX = Field.newDoubleField(
     'obstructiveApneaIndex',
   );
 
-  static const Field PRESSURE_BELOW = Field.newFloatField(
+  static const Field PRESSURE_BELOW = Field.newDoubleField(
     'pressureBelow95',
   );
 

@@ -56,6 +56,8 @@ public final class DataControllerConstants {
         READ("read"),
         READ_DAILY_SUMMATION("readDailySummation"),
         READ_TODAY_SUMMATION("readTodaySummation"),
+        READ_DAILY_SUMMATION_LIST("readDailySummationList"),
+        READ_TODAY_SUMMATION_LIST("readTodaySummationList"),
         UPDATE("update"),
         READ_LATEST_DATA("readLatestData");
 

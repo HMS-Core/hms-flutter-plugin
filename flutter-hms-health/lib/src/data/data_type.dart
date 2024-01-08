@@ -203,7 +203,46 @@ class DataType {
       Field.FIELD_DESCENT_TOTAL,
     ],
   );
+  
+static const DataType DT_DIVING_DEPTH = DataType(
+    'com.huawei.diving_depth',
+    'https://www.huawei.com/healthkit/activity.read',
+    'https://www.huawei.com/healthkit/activity.write',
+    <Field>[
+      Field.DEPTH,
+    ],
+  );
 
+  static const DataType DT_DIVING_DEPTH_STATISTICS = DataType(
+    'com.huawei.diving_depth.statistics',
+    'https://www.huawei.com/healthkit/activity.read',
+    'https://www.huawei.com/healthkit/activity.write',
+    <Field>[
+      Field.FIELD_AVG,
+      Field.FIELD_MAX,
+      Field.FIELD_MIN,
+    ],
+  );
+
+   static const DataType DT_WATER_TEMPERATURE = DataType(
+    'com.huawei.water_temperature',
+    'https://www.huawei.com/healthkit/activity.read',
+    'https://www.huawei.com/healthkit/activity.write',
+    <Field>[
+      Field.TEMPERATURE,
+    ],
+  );
+
+   static const DataType DT_WATER_TEMPERATURE_STATISTICS = DataType(
+    'com.huawei.water_temperature.statistics',
+    'https://www.huawei.com/healthkit/activity.read',
+    'https://www.huawei.com/healthkit/activity.write',
+    <Field>[
+      Field.FIELD_AVG,
+      Field.FIELD_MAX,
+      Field.FIELD_MIN,
+    ],
+  );
   static const DataType DT_INSTANTANEOUS_SKIP_SPEED = DataType(
     'com.huawei.instantaneous.skip_speed',
     'https://www.huawei.com/healthkit/activity.read',
@@ -1263,6 +1302,14 @@ class DataType {
         ),
       ),
     };
+  }
+
+  static List<Map<String, dynamic>> toMapList(List<DataType> list) {
+    List<Map<String, dynamic>> listMap = <Map<String, dynamic>>[];
+    for (DataType type in list) {
+      listMap.add(type.toMap());
+    }
+    return listMap;
   }
 
   @override

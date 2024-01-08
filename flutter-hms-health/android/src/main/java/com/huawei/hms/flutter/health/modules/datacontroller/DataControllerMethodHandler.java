@@ -103,8 +103,14 @@ public class DataControllerMethodHandler implements MethodCallHandler {
             case READ_DAILY_SUMMATION:
                 readDailySummation(call, result);
                 break;
+            case READ_DAILY_SUMMATION_LIST:
+                readDailySummationList(call, result);
+                break;
             case READ_TODAY_SUMMATION:
                 readTodaySummation(call, result);
+                break;
+            case READ_TODAY_SUMMATION_LIST:
+                readTodaySummationList(call, result);
                 break;
             case UPDATE:
                 update(call, result);
@@ -280,7 +286,24 @@ public class DataControllerMethodHandler implements MethodCallHandler {
         // Use the specified data type (DT_CONTINUOUS_STEPS_DELTA) to call the data controller to query
         // the summary data of this data type of the current day.
         defaultDataController.readToday(dataController, dataType,
-            new ResultHelper<>(SampleSet.class, result, context, call.method));
+                new ResultHelper<>(SampleSet.class, result, context, call.method));
+    }
+
+    /**
+     * Querying the Summary Fitness and Health Data of the User of the Current day for multiple data types.
+     *
+     * @param call Flutter Method Call that refers to {@link List<DataType>} instance.
+     * @param result In the success scenario, {@link List<SampleSet>} instance is returned , or Exception is returned in the
+     * failure scenario.
+     */
+    public void readTodaySummationList(final MethodCall call, final Result result) {
+        checkDataController();
+        List<DataType> dataTypes = Utils.toDataTypeList((List<Map<String, Object>>) call.arguments, activity.getPackageName());
+
+        // Use the specified data type (DT_CONTINUOUS_STEPS_DELTA) to call the data controller to query
+        // the summary data of this data type of the current day.
+        defaultDataController.readTodayList(dataController, dataTypes,
+            new ResultHelper<>(List.class, result, context, call.method));
     }
 
     /**
@@ -305,6 +328,32 @@ public class DataControllerMethodHandler implements MethodCallHandler {
         } else {
             HMSLogger.getInstance(context)
                 .sendSingleEvent(call.method, String.valueOf(HiHealthStatusCodes.INPUT_PARAM_MISSING));
+            result.error(DataControllerConstants.DATA_CONTROLLER_MODULE, "Error: Empty or wrong parameters.", "");
+        }
+    }
+
+    /**
+     * Querying the Summary Fitness and Health Data of the User of the Current day for multiple data types.
+     *
+     * @param call Flutter Method call that includes {@link List<DataType>, startTime and endTime} data.
+     * @param result In the success scenario, {@link SampleSet} instance is returned , or Exception is returned in the
+     * failure scenario.
+     */
+    public void readDailySummationList(final MethodCall call, Result result) {
+        // An 8-digit integer in the format of YYYYMMDD, for example, 20200803.
+        int startTime = Utils.getInt(call, "startTime");
+        // An 8-digit integer in the format of YYYYMMDD, for example, 20200903.
+        int endTime = Utils.getInt(call, "endTime");
+        checkDataController();
+        ArrayList<Map<String, Object>> dataTypesMap = HealthRecordUtils.toMapArrayList(DataControllerConstants.DATA_TYPE_KEY,
+                call.argument(DataControllerConstants.DATA_TYPE_KEY));
+        if (!dataTypesMap.isEmpty()) {
+            List<DataType> dataTypes = Utils.toDataTypeList(dataTypesMap, activity.getPackageName());
+            defaultDataController.readDailySummationList(dataController, dataTypes, startTime, endTime,
+                    new ResultHelper<>(List.class, result, context, call.method));
+        } else {
+            HMSLogger.getInstance(context)
+                    .sendSingleEvent(call.method, String.valueOf(HiHealthStatusCodes.INPUT_PARAM_MISSING));
             result.error(DataControllerConstants.DATA_CONTROLLER_MODULE, "Error: Empty or wrong parameters.", "");
         }
     }

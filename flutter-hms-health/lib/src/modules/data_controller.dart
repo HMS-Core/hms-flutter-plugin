@@ -27,16 +27,10 @@ class DataController {
 
   DataController._();
 
-  /// Initializes a DataController instance by a list of [HiHealthOption] objects
-  /// that define data types and read and write permissions.
-  static Future<DataController> init(
-    List<HiHealthOption> hiHealthOptions,
-  ) async {
+  /// Initializes a DataController instance.
+  static Future<DataController> init() async {
     await _channel.invokeMethod(
       'init',
-      List<Map<String, dynamic>>.from(
-        hiHealthOptions.map((HiHealthOption e) => e.toMap()),
-      ),
     );
     return _instance;
   }
@@ -112,6 +106,34 @@ class DataController {
     return SampleSet.fromMap(result);
   }
 
+  /// Reads the daily statistics of multiple data types.
+  ///
+  /// You can set the data types, start time, and end time to read the daily
+  /// statistics in the specified period. If the related data types does not
+  /// support aggregation statistics, an exception will be thrown.
+  Future<List<SampleSet?>?> readDailySummationList(
+    List<DataType> dataTypes,
+    int startTime,
+    int endTime,
+  ) async {
+    final List<dynamic>? result =
+        await _channel.invokeMethod<List<dynamic>?>(
+      'readDailySummationList',
+      <String, dynamic>{
+        'dataType': DataType.toMapList(dataTypes),
+        'startTime': startTime,
+        'endTime': endTime,
+      },
+    );
+    List<SampleSet> records = <SampleSet>[];
+    if (result != null) {
+      for (dynamic e in result) {
+        records.add(SampleSet.fromMap(e));
+      }
+    }
+    return records;
+  }
+
   /// Reads the summary data of a specified data type of the current day.
   ///
   /// If the related data type does not support aggregation statistics, an
@@ -128,6 +150,27 @@ class DataController {
       return null;
     }
     return SampleSet.fromMap(result);
+  }
+
+  /// Reads the summary data of multiple data types of the current day.
+  ///
+  /// If the related data type does not support aggregation statistics, an
+  /// exception will be thrown.
+  Future<List<SampleSet?>?> readTodaySummationList(
+    List<DataType> dataTypes,
+  ) async {
+    final List<dynamic>? result =
+        await _channel.invokeMethod<List<dynamic>?>(
+      'readTodaySummationList',
+      DataType.toMapList(dataTypes),
+    );
+   List<SampleSet> records = <SampleSet>[];
+    if (result != null) {
+      for (dynamic e in result) {
+        records.add(SampleSet.fromMap(e));
+      }
+    }
+    return records;
   }
 
   /// Updates existing data.

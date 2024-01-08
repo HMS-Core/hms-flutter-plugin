@@ -404,7 +404,7 @@ public final class HealthRecordUtils {
         return sampleSet;
     }
 
-    private static void setFieldValues(SamplePoint samplePoint, Field field, Object value) {
+    public static void setFieldValues(SamplePoint samplePoint, Field field, Object value) {
         Value val = samplePoint.getFieldValue(field);
         if (value instanceof Integer) {
             val.setIntValue((Integer) value);
