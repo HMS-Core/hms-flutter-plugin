@@ -58,11 +58,13 @@ class _InstreamAdPageBodyState extends State<InstreamAdPageBody>
   int? currentTotalTime = 0;
   String? callToActionText;
   InstreamAd? currentAd;
+  String? transparencyTplUrl;
+  bool? transparencyOpen;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     adLoader = InstreamAdLoader(
       adId: 'testy3cglm3pj0',
       totalDuration: const Duration(minutes: 1),
@@ -125,7 +127,7 @@ class _InstreamAdPageBodyState extends State<InstreamAdPageBody>
   @override
   void dispose() {
     super.dispose();
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
   }
 
   @override
@@ -176,6 +178,16 @@ class _InstreamAdPageBodyState extends State<InstreamAdPageBody>
     );
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void showTransparencyDialog() async {
+    await adViewController?.showTransparencyDialog(location: [1, 2]);
+    setState(() {});
+  }
+
+  void hideTransparencyDialog() async {
+    await adViewController?.hideTransparencyDialog();
+    setState(() {});
   }
 
   @override
@@ -273,6 +285,26 @@ class _InstreamAdPageBodyState extends State<InstreamAdPageBody>
                 ),
               ],
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  child: Text('Show Transparency'),
+                  onPressed: () async {
+                    showTransparencyDialog();
+                  },
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                ElevatedButton(
+                  child: Text('Hide Transparency'),
+                  onPressed: () async {
+                    hideTransparencyDialog();
+                  },
+                ),
+              ],
+            )
           ],
         )
       ],

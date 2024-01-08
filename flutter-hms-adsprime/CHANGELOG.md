@@ -1,3 +1,8 @@
+## 13.4.67+302
+
+- Added the `showTransparencyDialog` and `hideTransparencyDialog` methods in the `InstreamAdView` class.
+- Added the `isTransparencyOpen` and `getTransparencyTplUrl` methods in the `NativeAd` and `InstreamAd` classes.
+
 ## 13.4.65+300
 
 - Updated Ads Prime to the latest version 13.4.65.300.

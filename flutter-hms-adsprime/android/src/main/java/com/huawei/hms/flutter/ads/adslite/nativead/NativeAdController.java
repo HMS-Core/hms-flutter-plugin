@@ -159,6 +159,12 @@ public class NativeAdController implements MethodChannel.MethodCallHandler {
             case "getUniqueId":
                 result.success(nativeAd.getUniqueId());
                 break;
+            case "isTransparencyOpen":
+                result.success(nativeAd.isTransparencyOpen());
+                break;
+            case "transparencyTplUrl":
+                result.success(nativeAd.getTransparencyTplUrl());
+                break;
             default:
                 onVideoMethodCall(call, result);
         }

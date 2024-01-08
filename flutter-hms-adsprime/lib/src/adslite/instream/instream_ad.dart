@@ -89,4 +89,16 @@ class InstreamAd {
       'gotoWhyThisAdPage',
     );
   }
+
+  Future<bool> isTransparencyOpen() async {
+    return await _channel.invokeMethod(
+      'isTransparencyOpen',
+    );
+  }
+
+  Future<String> transparencyTplUrl() async {
+    return await _channel.invokeMethod(
+      'transparencyTplUrl',
+    );
+  }
 }

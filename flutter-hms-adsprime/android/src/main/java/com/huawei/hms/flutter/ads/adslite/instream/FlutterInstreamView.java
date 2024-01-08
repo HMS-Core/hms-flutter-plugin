@@ -37,6 +37,7 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.platform.PlatformView;
 
+import static com.huawei.hms.flutter.ads.utils.FromMap.toIntegerArrayList;
 import static com.huawei.hms.flutter.ads.utils.constants.ViewTypes.INSTREAM_VIEW;
 import static io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import static io.flutter.plugin.common.MethodChannel.Result;
@@ -228,6 +229,24 @@ public class FlutterInstreamView implements PlatformView, MethodCallHandler  {
                 break;
             case "unmute":
                 instreamView.unmute();
+                result.success(true);
+                break;
+            case "showTransparencyDialog":
+                HMSLogger.getInstance(context).startMethodExecutionTimer("instreamView.showTransparencyDialog");
+                ArrayList<Integer> arrList = toIntegerArrayList("location", call.arguments);
+                int[] location = new int[arrList.size()];
+
+                for (int i = 0; i < arrList.size(); i++) {
+                    location[i] = (arrList.get(i));
+                }
+                instreamView.showTransparencyDialog(instreamView, location);
+                HMSLogger.getInstance(context).sendSingleEvent("instreamView.showTransparencyDialog");
+                result.success(true);
+                break;
+            case "hideTransparencyDialog":
+                HMSLogger.getInstance(context).startMethodExecutionTimer("instremView.hideTransparencyDialog");
+                instreamView.hideTransparencyDialog();
+                HMSLogger.getInstance(context).sendSingleEvent("instremView.hideTransparencyDialog");
                 result.success(true);
                 break;
             default:

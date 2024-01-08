@@ -216,6 +216,18 @@ class NativeAdController {
     );
   }
 
+  Future<bool> isTransparencyOpen() async {
+    return await _channel.invokeMethod(
+      'isTransparencyOpen',
+    );
+  }
+
+  Future<String> transparencyTplUrl() async {
+    return await _channel.invokeMethod(
+      'transparencyTplUrl',
+    );
+  }
+
   void _startListening() {
     _listenerSub = _streamNative.receiveBroadcastStream(id).listen(
       (dynamic channelEvent) {

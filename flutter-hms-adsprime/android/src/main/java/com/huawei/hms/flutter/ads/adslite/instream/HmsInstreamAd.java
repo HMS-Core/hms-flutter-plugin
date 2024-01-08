@@ -99,6 +99,12 @@ public class HmsInstreamAd implements MethodChannel.MethodCallHandler {
             case "gotoWhyThisAdPage":
                 gotoWhyThisAdPage(result);
                 break;
+            case "isTransparencyOpen":
+                result.success(instreamAd.isTransparencyOpen());
+                break;
+            case "transparencyTplUrl":
+                result.success(instreamAd.getTransparencyTplUrl());
+                break;
             default:
                 result.notImplemented();
         }
