@@ -1,5 +1,5 @@
 /*
-    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2024. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -94,7 +94,7 @@ class HmsApiAvailability {
   static const int HMS_SDK_VERSION_CODE = 60400303;
 
   /// Version name of the HMS Core SDK.
-  static const String HMS_SDK_VERSION_NAME = '6.11.0.301';
+  static const String HMS_SDK_VERSION_NAME = '6.12.0.300';
 
   /// Specified parameter is null.
   static const String NULL_PARAMETER = '0011';
