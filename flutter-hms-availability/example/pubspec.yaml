@@ -1,0 +1,19 @@
+name: huawei_hmsavailability_example
+description: Demonstrates how to use the Huawei Hmsavailability Plugin.
+
+environment:
+  sdk: '>=2.12.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  huawei_hmsavailability:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  
+
+flutter:
+  uses-material-design: true
