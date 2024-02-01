@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ * Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -222,7 +222,7 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
                 hmsLocalNotification.getScheduledNotifications(result);
                 break;
             case getChannels:
-                hmsLocalNotification.getChannels(call, result);
+                hmsLocalNotification.getChannels(result);
                 break;
             case deleteChannel:
                 hmsLocalNotification.deleteChannel(call, result);
@@ -243,13 +243,13 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
                 hmsLocalNotification.cancelScheduledNotifications(result);
                 break;
             case cancelNotificationsWithTag:
-                hmsLocalNotification.cancelNotificationsWithTag(call);
+                hmsLocalNotification.cancelNotificationsWithTag(call, result);
                 break;
             case cancelNotificationsWithId:
-                hmsLocalNotification.cancelNotificationsWithId(call);
+                hmsLocalNotification.cancelNotificationsWithId(call, result);
                 break;
             case cancelNotificationsWithIdTag:
-                hmsLocalNotification.cancelNotificationsWithIdTag(call);
+                hmsLocalNotification.cancelNotificationsWithIdTag(call, result);
                 break;
             case getInitialIntent:
                 notificationIntentListener.getInitialIntent(result);

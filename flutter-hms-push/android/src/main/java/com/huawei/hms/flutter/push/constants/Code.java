@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ * Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -158,7 +158,10 @@ public enum Code {
     ERROR_PERMISSION_NOT_AUTHORIZED("6005"),
 
     // Interface authentication= The authorization expires.
-    ERROR_PERMISSION_EXPIRED("6006");
+    ERROR_PERMISSION_EXPIRED("6006"),
+
+    // Invalid parameter.
+    ERROR_PARAMETER_INVALID("1210");
 
 
     private String code;

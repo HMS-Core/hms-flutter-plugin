@@ -1,3 +1,7 @@
+## 6.12.0+300
+
+- To solve stability and performance problems, it is recommended that you use it integratedly. You only need to upgrade the version number, and no other code adaptation is required. 
+
 ## 6.11.0+300
 
 - Fixed stability and performance issues. 
