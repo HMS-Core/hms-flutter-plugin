@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ * Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ public class AnalyticsContentProvider extends ContentProvider {
                 return true;
             }
 
-            String routePolicy = appInfo.metaData.getString("hms_is_analytics_enabled");
+            String routePolicy = appInfo.metaData.getString("route_policy");
 
             if (Arrays.asList(routePolicyList).contains(routePolicy)) {
                 HiAnalytics.getInstance(this.getContext(), routePolicy);

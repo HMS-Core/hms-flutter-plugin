@@ -3,7 +3,7 @@ description: Huawei Analytics Kit plugin for Flutter. Analytics Kit offers you a
 homepage: https://www.huawei.com
 repository: https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-analytics
 
-version: 6.12.0+300
+version: 6.12.0+301
 
 environment:
   sdk: ">=2.12.0 <4.0.0"

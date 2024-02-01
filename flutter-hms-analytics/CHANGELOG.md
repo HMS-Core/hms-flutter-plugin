@@ -1,3 +1,7 @@
+## 6.12.0+301
+
+- Minor bug fixes.
+
 ## 6.12.0+300
 
 - Modified the **ON_MOVE_BACKGROUND_POLICY** policy as a mandatory one.
