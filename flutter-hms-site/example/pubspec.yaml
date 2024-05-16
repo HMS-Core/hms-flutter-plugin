@@ -1,0 +1,18 @@
+name: huawei_site_example
+description: Demonstrates how to use the Huawei Site Kit plugin.
+
+environment:
+  sdk: '>=2.12.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  huawei_site:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
