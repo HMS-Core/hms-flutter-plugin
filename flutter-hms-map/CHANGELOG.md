@@ -1,3 +1,7 @@
+## 6.11.2+302
+
+- Minor optimization and bug fixes.
+
 ## 6.11.2+301
 
 - Updated Huawei Map SDK version to 6.11.2.301.
