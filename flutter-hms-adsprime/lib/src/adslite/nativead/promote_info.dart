@@ -16,19 +16,28 @@
 
 part of huawei_adsprime;
 
-class AdSize {
-  final int width;
-  final int height;
+class PromoteInfo {
+  final int? promoteType;
+  final String? promoteName;
 
-  const AdSize({
-    required this.width,
-    required this.height,
-  });
+  PromoteInfo({this.promoteType, this.promoteName});
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'width': width,
-      'height': height,
+      'promoteType': promoteType,
+      'promoteName': promoteName,
     };
+  }
+
+  static PromoteInfo fromJson(Map<dynamic, dynamic> args) {
+    return PromoteInfo(
+      promoteType: args['promoteType'],
+      promoteName: args['promoteName'],
+    );
+  }
+
+  @override
+  String toString() {
+    return 'PromoteInfo {promoteType: ${promoteType.toString()}, promoteName: $promoteName}';
   }
 }

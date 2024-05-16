@@ -1,3 +1,9 @@
+## 13.4.69+302
+
+- Added the `AppInfo` class which is the return type of `getAppInfo` method.
+- Added the `PromoteInfo` class which is the return type of `getPromoteInfo` method.
+- Added the `showAppDetailPage`, `getPromoteInfo`, `getAppInfo`, `showPrivacyPolicy`, `showPermissionPage` methods to the `NativeAdController` class.
+
 ## 13.4.67+302
 
 - Added the `showTransparencyDialog` and `hideTransparencyDialog` methods in the `InstreamAdView` class.
