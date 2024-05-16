@@ -3,7 +3,7 @@ description: HUAWEI Account Kit plugin for Flutter. It enables user login proces
 homepage: https://www.huawei.com
 repository: https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-account
 
-version: 6.12.0+300
+version: 6.12.0+301
 
 environment:
   sdk: ">=2.14.0 <4.0.0"

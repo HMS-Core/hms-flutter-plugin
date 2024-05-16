@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 part of huawei_account;
 
 /// Describes the authorization request for OAuth 2.0, which affects user security.
-/// 
+///
 /// When authorization is requested, an authorization dialog box is displayed.
 class Scope {
   static final Scope profile = Scope._('profile');

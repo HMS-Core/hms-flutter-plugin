@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ class AccountAuthService {
   }
 
   /// Obtains the sign-in information (or error information) about the ID that has been used to sign in to the app.
-  /// 
+  ///
   /// In this process, the authorization screen is not displayed to the ID user.
   Future<AuthAccount> silentSignIn() async {
     return AuthAccount.fromMap(
@@ -65,8 +65,8 @@ class AccountAuthService {
     );
   }
 
-  /// Signs out of the current ID. 
-  /// 
+  /// Signs out of the current ID.
+  ///
   /// The account SDK deletes the cached ID information.
   Future<bool> signOut() async {
     return await _c.invokeMethod(

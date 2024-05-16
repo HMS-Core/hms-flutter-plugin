@@ -1,3 +1,7 @@
+## 6.12.0+301
+
+- Updated the `agcp` dependency.
+
 ## 6.12.0+300
 
 - Deprecated `accessToken` in the `AuthAccount` class. You are advised not to use it.
