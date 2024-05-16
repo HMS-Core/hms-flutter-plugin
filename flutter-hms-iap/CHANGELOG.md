@@ -1,3 +1,7 @@
+## 6.13.0+301
+
+- Minor optimization and bug fixes. 
+
 ## 6.13.0+300
 
 - Updated Huawei In-App Purchases SDK version to 6.13.0.300.
