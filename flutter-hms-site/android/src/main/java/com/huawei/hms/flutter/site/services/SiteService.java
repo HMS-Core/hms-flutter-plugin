@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package com.huawei.hms.flutter.site.services;
 import android.app.Activity;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -42,10 +43,14 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.PluginRegistry;
 
 public final class SiteService implements PluginRegistry.ActivityResultListener {
+    private static final String TAG = SiteService.class.getSimpleName();
+
     private final Activity activity;
 
     private SearchService searchService;
+
     private SearchIntent searchIntent;
+
     private MethodChannel.Result result;
 
     public SiteService(@NonNull final Activity activity) {
@@ -53,10 +58,18 @@ public final class SiteService implements PluginRegistry.ActivityResultListener 
     }
 
     public void initService(@NonNull final MethodCall call, @NonNull final MethodChannel.Result result) {
-        final String apiKey = call.arguments();
+        final String apiKey = call.argument("apiKey");
+        final String routePolicy = call.argument("routePolicy");
         if (apiKey != null && !TextUtils.isEmpty(apiKey)) {
-            searchService = SearchServiceFactory.create(activity, apiKey);
-            result.success(null);
+            if (routePolicy == null) {
+                searchService = SearchServiceFactory.create(activity, apiKey);
+                Log.i(TAG, "SearchService has been created.");
+                result.success(null);
+            } else {
+                searchService = SearchServiceFactory.create(activity, apiKey, routePolicy);
+                Log.i(TAG, "SearchService has been created and set the data storage location to: " + routePolicy);
+                result.success(null);
+            }
         } else {
             result.error("-1", "Api key cannot be null or empty", null);
         }

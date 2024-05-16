@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -21,12 +21,23 @@ class SearchService {
 
   SearchService._create(this._methodChannel);
 
-  static Future<SearchService> create(String apiKey) async {
+  /// Creates the SearchService instance.
+  ///
+  /// - `apiKey` parameter is required.
+  /// - You can set the data routing location.
+  /// The options for `routePolicy` are CN (China), DE (Germany), SG (Singapore), and RU (Russia).
+  static Future<SearchService> create({
+    required String apiKey,
+    String? routePolicy,
+  }) async {
     const MethodChannel methodChannel = MethodChannel(
       'com.huawei.hms.flutter.site/MethodChannel',
     );
     final SearchService instance = SearchService._create(methodChannel);
-    await methodChannel.invokeMethod<void>('initService', apiKey);
+    await methodChannel.invokeMethod<void>('initService', {
+      'apiKey': apiKey,
+      'routePolicy': routePolicy,
+    });
     return instance;
   }
 

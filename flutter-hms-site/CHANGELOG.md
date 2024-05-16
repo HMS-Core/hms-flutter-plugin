@@ -1,3 +1,9 @@
+## 6.5.1+302
+
+- **Breaking Change:** API 33 support has been added.
+- **Breaking Change:** Added the optional `routePolicy` parameter to the `create` method of the `SearchService` class.
+
+
 ## 6.4.0+304
 
 - Optimized the internal memory.

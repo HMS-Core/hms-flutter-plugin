@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@ class CustomButton extends StatelessWidget {
   final VoidCallback onPressed;
 
   const CustomButton({
-    Key? key,
     required this.text,
     required this.onPressed,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -33,8 +33,8 @@ class CustomButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          primary: Colors.blue,
-          onPrimary: Colors.white,
+          backgroundColor: Colors.blue,
+          foregroundColor: Colors.white,
           padding: const EdgeInsets.all(12.0),
         ),
         child: Text(

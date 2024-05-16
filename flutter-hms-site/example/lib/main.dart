@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -32,6 +32,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.blue,
+          foregroundColor: Colors.white,
+        ),
+      ),
       home: const HomeScreen(),
       routes: <String, Widget Function(BuildContext)>{
         HomeScreen.id: (BuildContext context) {

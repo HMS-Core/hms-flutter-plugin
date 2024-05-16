@@ -24,12 +24,12 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion 33
+    buildToolsVersion "31.0.0"
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 30
+        targetSdkVersion 33
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -41,7 +41,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.huawei.hms:site:6.4.0.304'
+    implementation 'com.huawei.hms:site:6.5.1.302'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation "androidx.recyclerview:recyclerview-selection:1.0.0"
