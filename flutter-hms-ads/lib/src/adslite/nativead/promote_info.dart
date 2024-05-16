@@ -16,22 +16,28 @@
 
 part of huawei_ads;
 
-class VideoConfiguration {
-  int? audioFocusType;
-  bool? customizeOperationRequested;
-  bool? startMuted;
+class PromoteInfo {
+  final int? promoteType;
+  final String? promoteName;
 
-  VideoConfiguration({
-    this.audioFocusType,
-    this.customizeOperationRequested,
-    this.startMuted,
-  });
+  PromoteInfo({this.promoteType, this.promoteName});
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'audioFocusType': audioFocusType,
-      'customizeOperationRequested': customizeOperationRequested,
-      'startMuted': startMuted,
-    }..removeWhere((_, dynamic v) => v == null);
+      'promoteType': promoteType,
+      'promoteName': promoteName,
+    };
+  }
+
+  static PromoteInfo fromJson(Map<dynamic, dynamic> args) {
+    return PromoteInfo(
+      promoteType: args['promoteType'],
+      promoteName: args['promoteName'],
+    );
+  }
+
+  @override
+  String toString() {
+    return 'PromoteInfo {promoteType: ${promoteType.toString()}, promoteName: $promoteName}';
   }
 }

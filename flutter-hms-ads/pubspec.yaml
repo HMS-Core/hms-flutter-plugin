@@ -3,7 +3,7 @@ description: Huawei Ads Kit plugin for Flutter utilizes Huawei's vast user base 
 homepage: https://www.huawei.com
 repository: https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-ads
 
-version: 13.4.67+302
+version: 13.4.69+302
 
 environment:
   sdk: ">=2.12.0 <4.0.0"

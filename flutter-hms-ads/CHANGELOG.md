@@ -1,7 +1,13 @@
+## 13.4.69+302
+
+- Added the `AppInfo` class which is the return type of `getAppInfo` method.
+- Added the `PromoteInfo` class which is the return type of `getPromoteInfo` method.
+- Added the `showAppDetailPage`, `getPromoteInfo`, `getAppInfo`, `showPrivacyPolicy`, `showPermissionPage` methods to the `NativeAdController` class.
+
 ## 13.4.67+302
 
-- Added the `showTransparencyDialog` and `hideTransparencyDialog` methods in the `InstreamAdView` class.
-- Added the `isTransparencyOpen` and `getTransparencyTplUrl` methods in the `NativeAd` and `InstreamAd` classes.
+- Added the `showTransparencyDialog` and `hideTransparencyDialog` methods to the `InstreamAdView` class.
+- Added the `isTransparencyOpen` and `getTransparencyTplUrl` methods to the `NativeAd` and `InstreamAd` classes.
 
 ## 13.4.65+300
 
@@ -11,8 +17,8 @@
 
 - Optimized the landing page download experience.
 - Added the AdvertiserInfo class to obtain and display advertiser information, adapting the Russian advertising law.
-- Added the hasAdvertiserInfo and getAdvertiserInfo methods to the InstreamAd and NativeAd classes.
-- Added the showAdvertiserInfoDialog and hideAdvertiserInfoDialog methods to the InstreamAdViewController and NativeAdController classes.
+- Added the `hasAdvertiserInfo` and `getAdvertiserInfo` methods to the `InstreamAd` and `NativeAd` classes.
+- Added the `showAdvertiserInfoDialog` and `hideAdvertiserInfoDialog` methods to the `InstreamAdViewController` and `NativeAdController` classes.
 
 ## 13.4.58+304
 
