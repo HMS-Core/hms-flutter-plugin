@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -41,6 +41,13 @@ class HMSNearby {
         'other': other.toMap(),
       },
     );
+  }
+
+  static Future<int> setAgcRegion(RegionCode code) async {
+    return await _instance._channel
+        .invokeMethod('setAgcRegion', <String, dynamic>{
+      'regionCode': code.index,
+    });
   }
 
   static Future<void> enableLogger() async {

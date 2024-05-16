@@ -1,9 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.huawei.hms.flutter.nearbyservice">
+        xmlns:tools="http://schemas.android.com/tools"
+        package="com.huawei.hms.flutter.nearbyservice">
 
     <!-- Permission to access the Internet -->
-    <uses-permission android:name="android.permission.INTERNET " />
+    <uses-permission android:name="android.permission.INTERNET" />
     <!-- Permission for HMS Logger -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -18,23 +18,32 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <!-- Permission to read external storage -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+
     <!-- Permission to write data to external storage -->
     <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
+            android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+            tools:ignore="ScopedStorage" />
 
     <!-- Bluetooth permissions -->
     <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+
+    <!-- Request legacy storage permissions on older devices -->
+    <uses-permission
+            android:name="android.permission.READ_EXTERNAL_STORAGE"
+            android:maxSdkVersion="32" />
+
     <!-- Request legacy Bluetooth permissions on older devices -->
     <uses-permission
-        android:name="android.permission.BLUETOOTH"
-        android:maxSdkVersion="30" />
+            android:name="android.permission.BLUETOOTH"
+            android:maxSdkVersion="30" />
     <uses-permission
-        android:name="android.permission.BLUETOOTH_ADMIN"
-        android:maxSdkVersion="30" />
+            android:name="android.permission.BLUETOOTH_ADMIN"
+            android:maxSdkVersion="30" />
 
     <!-- For Android 10 -->
     <application android:requestLegacyExternalStorage="true" />

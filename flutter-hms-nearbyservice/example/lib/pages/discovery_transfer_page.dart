@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -15,14 +15,12 @@
 */
 
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:huawei_nearbyservice/huawei_nearbyservice.dart';
-import 'package:huawei_nearbyservice_example/utils/constants.dart';
-import 'package:huawei_nearbyservice_example/widgets/custom_button.dart';
+import 'package:huawei_nearbyservice_example/widgets/custom_buttons.dart';
 
 class DiscoveryTransferPage extends StatelessWidget {
   const DiscoveryTransferPage({Key? key}) : super(key: key);
@@ -31,12 +29,8 @@ class DiscoveryTransferPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.redAccent,
         title: const Text(
           'Discover & Transfer',
-          style: TextStyle(
-            color: Colors.white,
-          ),
         ),
       ),
       body: const DiscoveryTransferPageContent(),
@@ -61,6 +55,7 @@ class _DiscoveryTransferPageContentState
   String _logs = 'Double tap to clear the logs.\n';
   late bool _isEstablished;
   bool _isConnected = false;
+  ScrollController _scrollController = ScrollController();
 
   void _setListeners() {
     HMSDiscoveryEngine.instance.scanOnFound!
@@ -269,7 +264,6 @@ class _DiscoveryTransferPageContentState
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Text(
               'Running with: Nearby Service $_sdkVersion\n',
-              style: Styles.textContentStyle,
             ),
           ),
           Container(
@@ -286,18 +280,22 @@ class _DiscoveryTransferPageContentState
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Text(
               'Connected: $_isConnected\n',
-              style: Styles.textContentStyle,
             ),
           ),
           Text(
             'Message: $_msg\n',
-            style: Styles.textContentStyle,
           ),
           Expanded(
             flex: 1,
             child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.grey.shade800,
+                  width: 2.0,
+                ),
+              ),
               padding: const EdgeInsets.all(20),
-              color: Colors.white,
+              margin: const EdgeInsets.symmetric(horizontal: 5.0),
               child: Center(
                 child: GestureDetector(
                   onDoubleTap: () => setState(() => _logs = ''),
@@ -311,118 +309,124 @@ class _DiscoveryTransferPageContentState
           Expanded(
             flex: 1,
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        CustomButton(
-                          text: 'Start Broadcast',
-                          onPressed: () async {
-                            _startBroadcast(context);
-                          },
-                        ),
-                        CustomButton(
-                          text: 'Stop Broadcast',
-                          onPressed: () async {
-                            _stopBroadcast(context);
-                          },
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        CustomButton(
-                          text: 'Start Scan',
-                          onPressed: () async {
-                            _startScan(context);
-                          },
-                        ),
-                        CustomButton(
-                          text: 'Stop Scan',
-                          onPressed: () async {
-                            _stopScan(context);
-                          },
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        CustomButton(
-                          text: 'Request Connect',
-                          onPressed: () async {
-                            _requestConnectEx(context);
-                          },
-                        ),
-                        CustomButton(
-                          text: 'Accept Connect',
-                          onPressed: () async {
-                            _acceptConnect(context);
-                          },
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        CustomButton(
-                          text: 'Reject Connect',
-                          onPressed: () async {
-                            _rejectConnect(context);
-                          },
-                        ),
-                        CustomButton(
-                          text: 'Disconnect',
-                          onPressed: () async {
-                            _disconnect(context);
-                          },
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        CustomButton(
-                          text: 'Send Bytes',
-                          width: 100,
-                          onPressed: () async {
-                            _sendByteData(context);
-                          },
-                        ),
-                        CustomButton(
-                          text: 'Send Stream',
-                          width: 100,
-                          onPressed: () async {
-                            _sendStreamData(context);
-                          },
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                  ],
+              padding: const EdgeInsets.only(top: 20.0),
+              child: Scrollbar(
+                controller: _scrollController,
+                trackVisibility: true,
+                thumbVisibility: true,
+                thickness: 5,
+                radius: Radius.circular(10),
+                child: SingleChildScrollView(
+                  controller: _scrollController,
+                  child: Column(
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          FlexButton(
+                            text: 'Start Broadcast',
+                            onPressed: () async {
+                              _startBroadcast(context);
+                            },
+                          ),
+                          FlexButton(
+                            text: 'Stop Broadcast',
+                            onPressed: () async {
+                              _stopBroadcast(context);
+                            },
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          FlexButton(
+                            text: 'Start Scan',
+                            onPressed: () async {
+                              _startScan(context);
+                            },
+                          ),
+                          FlexButton(
+                            text: 'Stop Scan',
+                            onPressed: () async {
+                              _stopScan(context);
+                            },
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          FlexButton(
+                            text: 'Request Connect',
+                            onPressed: () async {
+                              _requestConnectEx(context);
+                            },
+                          ),
+                          FlexButton(
+                            text: 'Accept Connect',
+                            onPressed: () async {
+                              _acceptConnect(context);
+                            },
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          FlexButton(
+                            text: 'Reject Connect',
+                            onPressed: () async {
+                              _rejectConnect(context);
+                            },
+                          ),
+                          FlexButton(
+                            text: 'Disconnect',
+                            onPressed: () async {
+                              _disconnect(context);
+                            },
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          FlexButton(
+                            text: 'Send Bytes',
+                            onPressed: () async {
+                              _sendByteData(context);
+                            },
+                          ),
+                          FlexButton(
+                            text: 'Send Stream',
+                            onPressed: () async {
+                              _sendStreamData(context);
+                            },
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -466,7 +470,6 @@ class _DiscoveryTransferPageContentState
               duration: const Duration(milliseconds: 1500),
               content: Text(
                 message,
-                style: Styles.warningTextStyle,
               ),
             )
           : SnackBar(

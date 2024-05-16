@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -23,8 +23,8 @@ public interface Channels {
     String DISCOVERY_EVENT_CHANNEL_SCAN = "com.huawei.hms.flutter.nearby.discovery/event/scan_callback";
     String TRANSFER_METHOD_CHANNEL = "com.huawei.hms.flutter.nearby.transfer/method";
     String TRANSFER_EVENT_CHANNEL = "com.huawei.hms.flutter.nearby.transfer/event";
-    String WIFI_METHOD_CHANNEL = "com.huawei.hms.flutter.nearby.wifi/method";
-    String WIFI_EVENT_CHANNEL = "com.huawei.hms.flutter.nearby.wifi/event";
     String MESSAGE_METHOD_CHANNEL = "com.huawei.hms.flutter.nearby.message/method";
     String MESSAGE_EVENT_CHANNEL = "com.huawei.hms.flutter.nearby.message/event";
+    String BEACON_METHOD_CHANNEL = "com.huawei.hms.flutter.nearby.beacon/method";
+    String BEACON_EVENT_CHANNEL = "com.huawei.hms.flutter.nearby.beacon/event";
 }

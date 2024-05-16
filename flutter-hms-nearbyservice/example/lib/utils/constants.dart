@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,33 +14,9 @@
     limitations under the License.
 */
 
-import 'package:flutter/material.dart';
-
 abstract class Routes {
   static const String menuPage = '/';
   static const String discoveryAndTransfer = '/discovery-and-transfer';
-  static const String wifi = '/wifi';
   static const String message = '/message';
-}
-
-abstract class Styles {
-  static const TextStyle menuButtonStyle = TextStyle(
-    fontSize: 17,
-  );
-  static const TextStyle controlButtonStyle = TextStyle(
-    fontSize: 17,
-  );
-  static const TextStyle warningTextStyle = TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.w500,
-    color: Colors.white,
-  );
-  static const TextStyle headerTextStyle = TextStyle(
-    fontSize: 20,
-    fontWeight: FontWeight.w800,
-    color: Colors.black,
-  );
-  static const TextStyle textContentStyle = TextStyle(
-    fontSize: 15,
-  );
+  static const String beaconScan = '/beacon-scanning';
 }

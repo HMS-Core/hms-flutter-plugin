@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ import 'package:flutter/services.dart';
 import 'package:huawei_nearbyservice_example/pages/discovery_transfer_page.dart';
 import 'package:huawei_nearbyservice_example/pages/message_page.dart';
 import 'package:huawei_nearbyservice_example/pages/nearby_menu_page.dart';
-import 'package:huawei_nearbyservice_example/pages/wifi_share_page.dart';
+import 'package:huawei_nearbyservice_example/pages/beacon_scanning_page.dart';
 import 'package:huawei_nearbyservice_example/utils/constants.dart';
 
 void main() async {
@@ -48,13 +48,31 @@ class HmsNearbyDemo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        appBarTheme: AppBarTheme(
+          color: Colors.blue,
+          elevation: 0.0,
+          iconTheme: IconThemeData(color: Colors.white),
+          titleTextStyle: TextStyle(
+            fontSize: 22.0,
+            color: Colors.white,
+          ),
+        ),
+        buttonTheme: ButtonThemeData(
+          buttonColor: Colors.blue,
+          textTheme: ButtonTextTheme.primary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+        ),
+      ),
       initialRoute: Routes.menuPage,
       routes: <String, WidgetBuilder>{
         '/': (BuildContext context) => const NearbyMenuPage(),
         Routes.discoveryAndTransfer: (BuildContext context) =>
             const DiscoveryTransferPage(),
-        Routes.wifi: (BuildContext context) => const WifiSharePage(),
         Routes.message: (BuildContext context) => const MessagingPage(),
+        Routes.beaconScan: (BuildContext context) => const BeaconScanningPage(),
       },
     );
   }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import com.huawei.hms.flutter.nearbyservice.beacon.BeaconMethodHandler;
 import com.huawei.hms.flutter.nearbyservice.discovery.DiscoveryMethodHandler;
 import com.huawei.hms.flutter.nearbyservice.logger.HMSLogger;
 import com.huawei.hms.flutter.nearbyservice.message.MessageMethodHandler;
@@ -30,9 +31,9 @@ import com.huawei.hms.flutter.nearbyservice.utils.HmsHelper;
 import com.huawei.hms.flutter.nearbyservice.utils.ToMap;
 import com.huawei.hms.flutter.nearbyservice.utils.constants.Channels;
 import com.huawei.hms.flutter.nearbyservice.utils.constants.ErrorCodes;
-import com.huawei.hms.flutter.nearbyservice.wifi.WifiShareMethodHandler;
 import com.huawei.hms.nearby.Nearby;
 import com.huawei.hms.nearby.NearbyApiContext;
+import com.huawei.hms.nearby.common.RegionCode;
 import com.huawei.hms.nearby.message.Message;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
@@ -49,22 +50,36 @@ import java.util.Map;
 
 public class HuaweiNearbyServicePlugin implements FlutterPlugin, MethodCallHandler, ActivityAware {
     private Context context;
+
     private FlutterPluginBinding flutterPluginBinding;
 
     private MethodChannel channel;
+
     private MethodChannel discoveryMethodChannel;
+
     private EventChannel discoveryEventChannelConnect;
+
     private EventChannel discoveryEventChannelScan;
+
     private MethodChannel transferMethodChannel;
+
     private EventChannel transferEventChannel;
-    private MethodChannel wifiMethodChannel;
-    private EventChannel wifiEventChannel;
+
     private MethodChannel messageMethodChannel;
+
     private EventChannel messageEventChannel;
+
+    private MethodChannel beaconMethodChannel;
+
+    private EventChannel beaconEventChannel;
+
     private DiscoveryMethodHandler discoveryMethodHandler;
+
     private TransferMethodHandler transferMethodHandler;
-    private WifiShareMethodHandler wifiMethodHandler;
+
     private MessageMethodHandler messageMethodHandler;
+
+    private BeaconMethodHandler beaconMethodHandler;
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
@@ -109,25 +124,27 @@ public class HuaweiNearbyServicePlugin implements FlutterPlugin, MethodCallHandl
         discoveryEventChannelScan = new EventChannel(messenger, Channels.DISCOVERY_EVENT_CHANNEL_SCAN);
         transferMethodChannel = new MethodChannel(messenger, Channels.TRANSFER_METHOD_CHANNEL);
         transferEventChannel = new EventChannel(messenger, Channels.TRANSFER_EVENT_CHANNEL);
-        wifiMethodChannel = new MethodChannel(messenger, Channels.WIFI_METHOD_CHANNEL);
-        wifiEventChannel = new EventChannel(messenger, Channels.WIFI_EVENT_CHANNEL);
         messageMethodChannel = new MethodChannel(messenger, Channels.MESSAGE_METHOD_CHANNEL);
         messageEventChannel = new EventChannel(messenger, Channels.MESSAGE_EVENT_CHANNEL);
+        beaconMethodChannel = new MethodChannel(messenger, Channels.BEACON_METHOD_CHANNEL);
+        beaconEventChannel = new EventChannel(messenger, Channels.BEACON_EVENT_CHANNEL);
+
     }
 
     private void initHandlers(Activity activity) {
-        discoveryMethodHandler = new DiscoveryMethodHandler(discoveryEventChannelConnect, discoveryEventChannelScan, transferEventChannel, activity);
+        discoveryMethodHandler = new DiscoveryMethodHandler(discoveryEventChannelConnect, discoveryEventChannelScan,
+            transferEventChannel, activity);
         transferMethodHandler = new TransferMethodHandler(activity);
-        wifiMethodHandler = new WifiShareMethodHandler(wifiEventChannel, activity);
         messageMethodHandler = new MessageMethodHandler(messageMethodChannel, messageEventChannel, activity);
+        beaconMethodHandler = new BeaconMethodHandler(beaconEventChannel, activity);
     }
 
     private void setHandlers() {
         channel.setMethodCallHandler(this);
         discoveryMethodChannel.setMethodCallHandler(discoveryMethodHandler);
         transferMethodChannel.setMethodCallHandler(transferMethodHandler);
-        wifiMethodChannel.setMethodCallHandler(wifiMethodHandler);
         messageMethodChannel.setMethodCallHandler(messageMethodHandler);
+        beaconMethodChannel.setMethodCallHandler(beaconMethodHandler);
     }
 
     private void resetHandlers() {
@@ -135,13 +152,14 @@ public class HuaweiNearbyServicePlugin implements FlutterPlugin, MethodCallHandl
         discoveryMethodChannel.setMethodCallHandler(null);
         transferMethodChannel.setMethodCallHandler(null);
         messageMethodChannel.setMethodCallHandler(null);
+        beaconMethodChannel.setMethodCallHandler(null);
     }
 
     private void removeHandlers() {
         discoveryMethodHandler = null;
         transferMethodHandler = null;
-        wifiMethodHandler = null;
         messageMethodHandler = null;
+        beaconMethodHandler = null;
     }
 
     private void removeChannels() {
@@ -151,10 +169,10 @@ public class HuaweiNearbyServicePlugin implements FlutterPlugin, MethodCallHandl
         discoveryEventChannelScan = null;
         transferMethodChannel = null;
         transferEventChannel = null;
-        wifiMethodChannel = null;
-        wifiEventChannel = null;
         messageMethodChannel = null;
         messageEventChannel = null;
+        beaconMethodChannel = null;
+        beaconEventChannel = null;
     }
 
     @Override
@@ -181,6 +199,13 @@ public class HuaweiNearbyServicePlugin implements FlutterPlugin, MethodCallHandl
                 final Message other = HmsHelper.createMessage(ToMap.fromObject(otherMap));
                 result.success(object != null && object.equals(other));
                 break;
+            case "setAgcRegion":
+                Object regionCodeObj = call.argument("regionCode");
+                if (regionCodeObj instanceof Integer) {
+                    final RegionCode code = intToEnum((Integer) regionCodeObj);
+                    result.success(Nearby.setAgcRegion(context, code));
+                }
+                break;
             case "enableLogger":
                 HMSLogger.getInstance(context).enableLogger();
                 result.success(true);
@@ -195,5 +220,14 @@ public class HuaweiNearbyServicePlugin implements FlutterPlugin, MethodCallHandl
                 return;
         }
         HMSLogger.getInstance(context).sendSingleEvent(call.method);
+    }
+
+    public RegionCode intToEnum(int value) {
+        for (RegionCode code : RegionCode.values()) {
+            if (code.ordinal() == value) {
+                return code;
+            }
+        }
+        throw new IllegalArgumentException("Invalid integer value for enum: " + value);
     }
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -258,8 +259,13 @@ public class MessageMethodHandler implements MethodChannel.MethodCallHandler {
         intent.setPackage(activity.getPackageName());
         intent.setAction(PENDING_MESSAGE_ACTION);
 
-        pendingMsgIntent = PendingIntent.getBroadcast(activity.getApplicationContext(), 0, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            pendingMsgIntent = PendingIntent.getBroadcast(activity.getApplicationContext(), 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
+        } else {
+            pendingMsgIntent = PendingIntent.getBroadcast(activity.getApplicationContext(), 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        }
         activity.getApplicationContext().registerReceiver(broadcastReceiver, new IntentFilter(PENDING_MESSAGE_ACTION));
 
         Task<Void> pendingTask;

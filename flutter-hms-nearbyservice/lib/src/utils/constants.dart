@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -60,12 +60,16 @@ class NearbyStatus {
       NearbyStatus(8017, 'STATUS_MISSING_PERMISSION_BLUETOOTH_ADMIN');
   static const NearbyStatus missingPermissionChangeWifiState =
       NearbyStatus(8018, 'STATUS_MISSING_PERMISSION_CHANGE_WIFI_STATE');
-  static const NearbyStatus missingPermissionRecordAudio =
-      NearbyStatus(8019, 'STATUS_MISSING_PERMISSION_RECORD_AUDIO');
   static const NearbyStatus missingSettingLocationOn =
       NearbyStatus(8020, 'STATUS_MISSING_SETTING_LOCATION_ON');
   static const NearbyStatus airplaneModeMustBeOff =
       NearbyStatus(8021, 'STATUS_AIRPLANE_MODE_MUST_BE_OFF');
+  static const NearbyStatus missingPermissionBluetoothScan =
+      NearbyStatus(8023, 'STATUS_MISSING_PERMISSION_BLUETOOTH_SCAN');
+  static const NearbyStatus missingPermissionBluetoothAdvertise =
+      NearbyStatus(8024, 'STATUS_MISSING_PERMISSION_BLUETOOTH_ADVERTISE');
+  static const NearbyStatus missingPermissionBluetoothConnect =
+      NearbyStatus(8025, 'STATUS_MISSING_PERMISSION_BLUETOOTH_CONNECT');
   static const NearbyStatus messageAppUnregistered =
       NearbyStatus(8050, 'STATUS_MESSAGE_APP_UNREGISTERED');
   static const NearbyStatus messageAppQuotaLimited =
@@ -74,8 +78,8 @@ class NearbyStatus {
       NearbyStatus(8052, 'STATUS_MESSAGE_BLE_BROADCASTING_UNSUPPORTED');
   static const NearbyStatus messageBleScanningUnsupported =
       NearbyStatus(8053, 'STATUS_MESSAGE_BLE_SCANNING_UNSUPPORTED');
-  static const NearbyStatus messageBluetoothOff =
-      NearbyStatus(8054, 'STATUS_MESSAGE_BLUETOOTH_OFF');
+  static const NearbyStatus bluetoothOff =
+      NearbyStatus(8054, 'STATUS_BLUETOOTH_OFF');
   static const NearbyStatus messageWrongContext =
       NearbyStatus(8055, 'STATUS_MESSAGE_WRONG_CONTEXT');
   static const NearbyStatus messageNotAllow =
@@ -90,29 +94,35 @@ class NearbyStatus {
       NearbyStatus(8060, 'STATUS_INTERNAL_ERROR');
   static const NearbyStatus findingModeError =
       NearbyStatus(8061, 'STATUS_FINDING_MODE_ERROR');
-  static const NearbyStatus messageTaskAlreadyInProcessing =
-      NearbyStatus(8062, 'STATUS_MESSAGE_TASK_ALREADY_IN_PROCESSING');
   static const NearbyStatus missingPermissionFileReadWrite =
       NearbyStatus(8063, 'STATUS_MISSING_PERMISSION_FILE_READ_WRITE');
   static const NearbyStatus missingPermissionInterrnet =
       NearbyStatus(8064, 'STATUS_MISSING_PERMISSION_INTERNET');
-  static const NearbyStatus wifiShareUserAuthFail =
-      NearbyStatus(8065, 'STATUS_WIFI_SHARE_USER_AUTH_FAIL');
-  static const NearbyStatus wifiShareWifiClosed =
-      NearbyStatus(8066, 'STATUS_WIFI_SHARE_WIFI_CLOSED');
-  static const NearbyStatus wifiConnectFail =
-      NearbyStatus(8067, 'STATUS_WIFI_CONNECT_FAIL');
-  static const NearbyStatus wifiNotSupportShare =
-      NearbyStatus(8068, 'STATUS_WIFI_NOT_SUPPORT_SHARE');
   static const NearbyStatus wifiMustBeEnabled =
       NearbyStatus(8069, 'STATUS_WIFI_MUST_BE_ENABLED');
   static const NearbyStatus androidHmsRestricted =
       NearbyStatus(8070, 'STATUS_ANDROID_HMS_RESTRICTED');
+  static const NearbyStatus notSetCloudPolicy =
+      NearbyStatus(8071, 'STATUS_NOT_SET_CLOUD_POLICY');
+  static const NearbyStatus selectCloudPolicyIsAuto =
+      NearbyStatus(8072, 'STATUS_SELECT_CLOUD_POLICY_IS_AUTO');
+  static const NearbyStatus beaconFilterSumExceedLimit =
+      NearbyStatus(8073, 'STATUS_BEACON_FILTER_SUM_EXCEED_LIMIT');
+  static const NearbyStatus singleAppBeaconFilterExceedLimit =
+      NearbyStatus(8074, 'STATUS_SINGLE_APP_BEACON_FILTER_EXCEED_LIMIT');
+  static const NearbyStatus beaconTaskNotFound =
+      NearbyStatus(8075, 'STATUS_BEACON_TASK_NOT_FOUND');
+  static const NearbyStatus beaconTaskRegistered =
+      NearbyStatus(8076, 'STATUS_BEACON_TASK_REGISTERED');
 
   static NearbyStatus getStatus(int code) {
     switch (code) {
       case 0:
         return NearbyStatus.success;
+      case -1:
+        return NearbyStatus.failure;
+      case -2:
+        return NearbyStatus.unknown;
       case 8001:
         return NearbyStatus.apiDisorder;
       case 8002:
@@ -149,12 +159,16 @@ class NearbyStatus {
         return NearbyStatus.missingPermissionBluetoothAdmin;
       case 8018:
         return NearbyStatus.missingPermissionChangeWifiState;
-      case 8019:
-        return NearbyStatus.missingPermissionRecordAudio;
       case 8020:
         return NearbyStatus.missingSettingLocationOn;
       case 8021:
         return NearbyStatus.airplaneModeMustBeOff;
+      case 8023:
+        return NearbyStatus.missingPermissionBluetoothScan;
+      case 8024:
+        return NearbyStatus.missingPermissionBluetoothAdvertise;
+      case 8025:
+        return NearbyStatus.missingPermissionBluetoothConnect;
       case 8050:
         return NearbyStatus.messageAppUnregistered;
       case 8051:
@@ -164,7 +178,7 @@ class NearbyStatus {
       case 8053:
         return NearbyStatus.messageBleScanningUnsupported;
       case 8054:
-        return NearbyStatus.messageBluetoothOff;
+        return NearbyStatus.bluetoothOff;
       case 8055:
         return NearbyStatus.messageWrongContext;
       case 8056:
@@ -179,26 +193,26 @@ class NearbyStatus {
         return NearbyStatus.internalError;
       case 8061:
         return NearbyStatus.findingModeError;
-      case 8062:
-        return NearbyStatus.messageTaskAlreadyInProcessing;
       case 8063:
         return NearbyStatus.missingPermissionFileReadWrite;
       case 8064:
         return NearbyStatus.missingPermissionInterrnet;
-      case 8065:
-        return NearbyStatus.wifiShareUserAuthFail;
-      case 8066:
-        return NearbyStatus.wifiShareWifiClosed;
-      case 8067:
-        return NearbyStatus.wifiConnectFail;
-      case 8068:
-        return NearbyStatus.wifiNotSupportShare;
       case 8069:
         return NearbyStatus.wifiMustBeEnabled;
       case 8070:
         return NearbyStatus.androidHmsRestricted;
-      case -1:
-        return NearbyStatus.failure;
+      case 8071:
+        return NearbyStatus.notSetCloudPolicy;
+      case 8072:
+        return NearbyStatus.selectCloudPolicyIsAuto;
+      case 8073:
+        return NearbyStatus.beaconFilterSumExceedLimit;
+      case 8074:
+        return NearbyStatus.singleAppBeaconFilterExceedLimit;
+      case 8075:
+        return NearbyStatus.beaconTaskNotFound;
+      case 8076:
+        return NearbyStatus.beaconTaskRegistered;
       default:
         debugPrint('Unknown status code: $code');
         return NearbyStatus.unknown;

@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -34,7 +34,6 @@ import com.huawei.hms.nearby.message.Message;
 import com.huawei.hms.nearby.message.MessagePicker;
 import com.huawei.hms.nearby.message.PutOption;
 import com.huawei.hms.nearby.transfer.Data;
-import com.huawei.hms.nearby.wifishare.WifiSharePolicy;
 
 import io.flutter.plugin.common.MethodChannel;
 
@@ -238,29 +237,6 @@ public class HmsHelper {
             builder.setDistanceType(distanceType);
         }
         return builder.build();
-    }
-
-    public static WifiSharePolicy getWifiSharePolicy(Map<String, Object> policyMap) {
-        if (policyMap.isEmpty()) {
-            Log.e(TAG, "getWifiSharePolicy | WifiSharePolicy is null or empty.");
-            return null;
-        }
-
-        Integer mode = FromMap.toInteger("mode", policyMap.get("mode"));
-        if (mode == null) {
-            Log.e(TAG, "getWifiSharePolicy | WifiSharePolicy mode is null.");
-            return null;
-        }
-
-        switch (mode) {
-            case 1:
-                return WifiSharePolicy.POLICY_SHARE;
-            case 2:
-                return WifiSharePolicy.POLICY_SET;
-            default:
-                Log.w(TAG, "Unknown policy.");
-                return null;
-        }
     }
 
     private static Policy getPolicy(Map<String, Object> policyMap) {

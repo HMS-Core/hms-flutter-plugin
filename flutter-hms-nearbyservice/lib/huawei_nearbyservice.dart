@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 library huawei_nearbyservice;
 
 import 'dart:async';
-import 'dart:typed_data';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -41,6 +41,5 @@ part 'src/transfer/classes.dart';
 part 'src/transfer/hms_transfer_engine.dart';
 part 'src/utils/channels.dart';
 part 'src/utils/constants.dart';
-part 'src/wifi_share/callback/response.dart';
-part 'src/wifi_share/hms_wifi_share_engine.dart';
-part 'src/wifi_share/wifi_share_policy.dart';
+part 'src/beacon/hms_beacon_engine.dart';
+part 'src/beacon/classes.dart';

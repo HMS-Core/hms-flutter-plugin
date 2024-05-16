@@ -1,3 +1,11 @@
+## 6.12.1+310
+
+- **Breaking Change:** Wifi Service has been removed.
+- **Breaking Change:** API 33 support has been added.
+- Added `registerScanTask`, `unRegisterScanTask`, `getRawBeaconConditions` and `getBeaconMsgConditions` methods.
+- Added `getBeaconBroadcastStream` listener.
+- Added `setAgcRegion` method with its enum class `RegionCode`.
+
 ## 6.4.0+300
 
 - **Breaking Change:** With this release, `NearbyPermissionHandler` has been removed. You are expected to handle required permissions on your own. You can learn more about the required permissions from our [official documentations](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/dev-process-0000001073825475?ha_source=hms1)

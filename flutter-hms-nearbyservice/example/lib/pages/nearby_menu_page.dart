@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:huawei_nearbyservice_example/utils/constants.dart';
+import 'package:huawei_nearbyservice_example/widgets/custom_buttons.dart';
 
 class NearbyMenuPage extends StatefulWidget {
   const NearbyMenuPage({Key? key}) : super(key: key);
@@ -54,47 +55,38 @@ class _NearbyMenuPageState extends State<NearbyMenuPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.redAccent,
         title: const Center(
           child: Text(
             'Huawei Nearby Service Demo',
-            style: TextStyle(
-              color: Colors.white,
-            ),
           ),
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          TextButton(
-            child: const Text(
-              'Discovery and Transfer',
-              style: Styles.menuButtonStyle,
+      body: Container(
+        padding: EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            CustomButton(
+              text: 'Discovery and Transfer',
+              onPressed: () {
+                Navigator.pushNamed(context, Routes.discoveryAndTransfer);
+              },
             ),
-            onPressed: () {
-              Navigator.pushNamed(context, Routes.discoveryAndTransfer);
-            },
-          ),
-          TextButton(
-            child: const Text(
-              'Wifi Sharing',
-              style: Styles.menuButtonStyle,
+            CustomButton(
+              text: 'Messaging',
+              onPressed: () {
+                Navigator.pushNamed(context, Routes.message);
+              },
             ),
-            onPressed: () {
-              Navigator.pushNamed(context, Routes.wifi);
-            },
-          ),
-          TextButton(
-            child: const Text(
-              'Messaging',
-              style: Styles.menuButtonStyle,
+            CustomButton(
+              text: 'Registering a Beacon Scanning Task (Beta)',
+              onPressed: () async {
+                Navigator.pushNamed(context, Routes.beaconScan);
+              },
             ),
-            onPressed: () {
-              Navigator.pushNamed(context, Routes.message);
-            },
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

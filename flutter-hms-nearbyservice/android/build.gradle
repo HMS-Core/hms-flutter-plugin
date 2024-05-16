@@ -24,8 +24,8 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion 33
+    buildToolsVersion "31.0.0"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -34,7 +34,7 @@ android {
 
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 33
     }
 
     lintOptions {
@@ -43,5 +43,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.huawei.hms:nearby:6.4.0.300'
+    implementation 'com.huawei.hms:nearby:6.12.1.310'
+    implementation "com.huawei.hms:base:6.12.0.300"
 }

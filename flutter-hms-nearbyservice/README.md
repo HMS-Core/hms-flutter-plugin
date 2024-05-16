@@ -6,11 +6,7 @@
   <a href="https://pub.dev/packages/huawei_nearbyservice"><img src="https://img.shields.io/pub/v/huawei_nearbyservice?style=for-the-badge" alt="pub.dev version"></a>
 </p>
 
----
-
-## Introduction
-
-Nearby Data Communication allows devices to easily discover nearby devices and set up communication with them using technologies such as Bluetooth and Wi-Fi. The plugin provides Nearby Connection, Nearby Message, and Nearby Wi-Fi Sharing APIs provided by the **HUAWEI Nearby Service SDK**.
+Nearby Data Communication allows devices to easily discover nearby devices and set up communication with them using technologies such as Bluetooth and Wi-Fi. The plugin provides Nearby Connection and Nearby Message APIs provided by the **HUAWEI Nearby Service SDK**.
 
 - Nearby Connection
 
@@ -20,23 +16,25 @@ Nearby Data Communication allows devices to easily discover nearby devices and s
 
     Allows message publishing and subscription between nearby devices that are connected to the Internet. A subscriber (app) can obtain the message content from the cloud service based on the sharing code broadcast by a publisher (beacon or another app).
 
-- Nearby Wi-Fi Sharing
+## Installation
 
-    Provides the Wi-Fi configuration sharing function to help users connect their own or friends' smart devices to the Wi-Fi network in one-click mode.
-[Learn More](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides-V1/introduction-0000001074107546-V1?ha_source=hms1)
-
-## Installing the Plugin
-
-Add dependencies to the pubspec.yaml file of the Flutter project.
-huawei_nearbyservice:
-Run the following command on the Terminal page or click Pub get in Android Studio to add dependencies.
-flutter pub get
-For more details, please refer to [Getting Started with Flutter](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides-V1/prepare-dev-env-0000001074265856-V1?ha_source=hms1)
+Please see [pub.dev](https://pub.dev/packages/huawei_nearbyservice/install) and [AppGallery Connect Configuration](https://developer.huawei.com/consumer/en/doc/HMS-Plugin-Guides/config-agc-0000001074425474-V1?ha_source=hms1).
 
 ## Development Guide
 
-- [Guides](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/dev-process-0000001073825475?ha_source=hms1)
+- [Quick Start](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/dev-process-0000001073825475?ha_source=hms1)
 - [Reference](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-References/overview-0000001074428872?ha_source=hms1)
+
+## Questions or Issues
+
+If you have questions about how to use HMS samples, try the following options:
+
+- [Stack Overflow](https://stackoverflow.com/questions/tagged/huawei-mobile-services) is the best place for any programming questions. Be sure to tag your question with **huawei-mobile-services**.
+- [Github](https://github.com/HMS-Core/hms-flutter-plugin) is the official repository for these plugins, You can open an issue or submit your ideas.
+- [Huawei Developer Forum](https://forums.developer.huawei.com/forumPortal/en/home?fid=0101187876626530001&ha_source=hms1) HMS Core Module is great for general questions, or seeking recommendations and opinions.
+- [Huawei Developer Docs](https://developer.huawei.com/consumer/en/doc/overview/HMS-Core-Plugin?ha_source=hms1) is place to official documentation for all HMS Core Kits, you can find detailed documentations in there.
+
+If you run into a bug in our samples, please submit an issue to the [GitHub repository](https://github.com/HMS-Core/hms-flutter-plugin).
 
 ## License
 

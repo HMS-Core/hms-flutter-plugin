@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -15,14 +15,12 @@
 */
 
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:huawei_nearbyservice/huawei_nearbyservice.dart';
-import 'package:huawei_nearbyservice_example/utils/constants.dart';
-import 'package:huawei_nearbyservice_example/widgets/custom_button.dart';
+import 'package:huawei_nearbyservice_example/widgets/custom_buttons.dart';
 
 class MessagingPage extends StatefulWidget {
   const MessagingPage({Key? key}) : super(key: key);
@@ -36,12 +34,8 @@ class _MessagingPageState extends State<MessagingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.redAccent,
         title: const Text(
           'Messaging',
-          style: TextStyle(
-            color: Colors.white,
-          ),
         ),
       ),
       body: const MessagingPageContent(),
@@ -188,7 +182,6 @@ class _MessagingPageContentState extends State<MessagingPageContent> {
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: Text(
             'Running with: Nearby Service $_sdkVersion\n',
-            style: Styles.textContentStyle,
           ),
         ),
         Container(
@@ -203,13 +196,18 @@ class _MessagingPageContentState extends State<MessagingPageContent> {
         ),
         Text(
           'Message: $_receivedMsg\n',
-          style: Styles.textContentStyle,
         ),
         Expanded(
           flex: 1,
           child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.grey.shade800,
+                width: 2.0,
+              ),
+            ),
             padding: const EdgeInsets.all(20),
-            color: Colors.white,
+            margin: const EdgeInsets.symmetric(horizontal: 5.0),
             child: Center(
               child: GestureDetector(
                 onDoubleTap: () => setState(() => _logs = ''),
@@ -231,13 +229,13 @@ class _MessagingPageContentState extends State<MessagingPageContent> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      CustomButton(
+                      FlexButton(
                         text: 'Put',
                         onPressed: () async {
                           _put();
                         },
                       ),
-                      CustomButton(
+                      FlexButton(
                         text: 'Unput',
                         onPressed: () async {
                           _unput(context);
@@ -252,13 +250,13 @@ class _MessagingPageContentState extends State<MessagingPageContent> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      CustomButton(
+                      FlexButton(
                         text: 'Get',
                         onPressed: () async {
                           _get(context);
                         },
                       ),
-                      CustomButton(
+                      FlexButton(
                         text: 'Unget',
                         onPressed: () async {
                           _unget(context);
@@ -273,18 +271,14 @@ class _MessagingPageContentState extends State<MessagingPageContent> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      CustomButton(
+                      FlexButton(
                         text: 'Register status callback',
-                        width: 100,
-                        height: 60,
                         onPressed: () async {
                           _registerStatusCallback(context);
                         },
                       ),
-                      CustomButton(
+                      FlexButton(
                         text: 'Unregister status callback',
-                        width: 100,
-                        height: 60,
                         onPressed: () async {
                           _unregisterStatusCallback(context);
                         },
@@ -366,7 +360,6 @@ class _MessagingPageContentState extends State<MessagingPageContent> {
               duration: const Duration(milliseconds: 1500),
               content: Text(
                 message,
-                style: Styles.warningTextStyle,
               ),
             )
           : SnackBar(
