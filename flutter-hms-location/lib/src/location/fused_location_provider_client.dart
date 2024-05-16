@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ * Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -65,6 +65,11 @@ class FusedLocationProviderClient {
       default:
         break;
     }
+  }
+
+  /// Initializes the `Fused Location` service.
+  Future<void> initFusedLocationService() async {
+    await _methodChannel.invokeMethod<void>('initFusedLocationService');
   }
 
   /// Checks location settings of the device.

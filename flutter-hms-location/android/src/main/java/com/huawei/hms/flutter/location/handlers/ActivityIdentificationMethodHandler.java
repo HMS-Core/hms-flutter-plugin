@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ * Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
@@ -45,22 +46,34 @@ import java.util.List;
 import java.util.Map;
 
 public class ActivityIdentificationMethodHandler implements MethodCallHandler {
+    private static final String TAG = ActivityIdentificationMethodHandler.class.getSimpleName();
+
     private final Activity activity;
 
     private final Map<Integer, PendingIntent> requests;
 
-    private final ActivityIdentificationService service;
+    private ActivityIdentificationService service;
 
     private int requestCode = 0;
 
     public ActivityIdentificationMethodHandler(final Activity activity) {
         this.activity = activity;
-        service = ActivityIdentification.getService(activity);
         requests = new HashMap<>();
+    }
+
+    private void initActivityIdentificationService(final Result result) {
+        service = ActivityIdentification.getService(activity);
+        Log.i(TAG, "Activity Identification Service has been initialized.");
+        result.success(null);
     }
 
     private void createActivityIdentificationUpdates(final MethodCall call, final Result result) {
         final Pair<Integer, PendingIntent> intentData = buildPendingIntent(Action.PROCESS_IDENTIFICATION);
+
+        if (service == null) {
+            result.error("-1", Error.ACTIVITY_IDENTIFICATION_NOT_INITIALIZED.message(), null);
+            return;
+        }
 
         service.createActivityIdentificationUpdates(call.<Integer>arguments(), intentData.second)
             .addOnSuccessListener(new RequestUpdatesSuccessListener(call.method, activity, result, intentData.first))
@@ -74,6 +87,11 @@ public class ActivityIdentificationMethodHandler implements MethodCallHandler {
         final ActivityConversionRequest request
             = ActivityUtils.fromActivityConversionInfoListToActivityConversionRequest(args);
 
+        if (service == null) {
+            result.error("-1", Error.ACTIVITY_IDENTIFICATION_NOT_INITIALIZED.message(), null);
+            return;
+        }
+
         service.createActivityConversionUpdates(request, intentData.second)
             .addOnSuccessListener(new RequestUpdatesSuccessListener(call.method, activity, result, intentData.first))
             .addOnFailureListener(
@@ -86,6 +104,11 @@ public class ActivityIdentificationMethodHandler implements MethodCallHandler {
         if (!requests.containsKey(incomingRequestCode)) {
             result.error(Error.NON_EXISTING_REQUEST_ID.name(), Error.NON_EXISTING_REQUEST_ID.message(), null);
         } else {
+            if (service == null) {
+                result.error("-1", Error.ACTIVITY_IDENTIFICATION_NOT_INITIALIZED.message(), null);
+                return;
+            }
+
             service.deleteActivityIdentificationUpdates(requests.get(incomingRequestCode))
                 .addOnSuccessListener(
                     new RemoveUpdatesSuccessListener<>(call.method, activity, result, incomingRequestCode, requests))
@@ -99,6 +122,11 @@ public class ActivityIdentificationMethodHandler implements MethodCallHandler {
         if (!requests.containsKey(incomingRequestCode)) {
             result.error(Error.NON_EXISTING_REQUEST_ID.name(), Error.NON_EXISTING_REQUEST_ID.message(), null);
         } else {
+            if (service == null) {
+                result.error("-1", Error.ACTIVITY_IDENTIFICATION_NOT_INITIALIZED.message(), null);
+                return;
+            }
+
             service.deleteActivityConversionUpdates(requests.get(incomingRequestCode))
                 .addOnSuccessListener(
                     new RemoveUpdatesSuccessListener<>(call.method, activity, result, incomingRequestCode, requests))
@@ -114,11 +142,11 @@ public class ActivityIdentificationMethodHandler implements MethodCallHandler {
 
         final PendingIntent pendingIntent;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            pendingIntent = PendingIntent.getBroadcast(activity.getApplicationContext(), ++requestCode,
-                    intent, PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_MUTABLE);
+            pendingIntent = PendingIntent.getBroadcast(activity.getApplicationContext(), ++requestCode, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
         } else {
-            pendingIntent = PendingIntent.getBroadcast(activity.getApplicationContext(), ++requestCode,
-                    intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            pendingIntent = PendingIntent.getBroadcast(activity.getApplicationContext(), ++requestCode, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
         }
         requests.put(requestCode, pendingIntent);
         return Pair.create(requestCode, pendingIntent);
@@ -129,6 +157,9 @@ public class ActivityIdentificationMethodHandler implements MethodCallHandler {
         HMSLogger.getInstance(activity).startMethodExecutionTimer(call.method);
 
         switch (call.method) {
+            case "initActivityIdentificationService":
+                initActivityIdentificationService(result);
+                break;
             case "createActivityIdentificationUpdates":
                 createActivityIdentificationUpdates(call, result);
                 break;

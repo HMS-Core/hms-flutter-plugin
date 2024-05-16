@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ * Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,6 @@ class GetFromLocationScreen extends StatefulWidget {
 class _GetFromLocationScreenState extends State<GetFromLocationScreen> {
   String _bottomText = '';
   late GetFromLocationRequest _getFromLocationRequest;
-  late Locale _locale;
   final GeocoderService _geocoderService = GeocoderService();
   final TextEditingController _lat = TextEditingController(text: '40');
   final TextEditingController _lng = TextEditingController(text: '30');
@@ -63,16 +62,10 @@ class _GetFromLocationScreenState extends State<GetFromLocationScreen> {
       maxResults: maxResults,
     );
 
-    _locale = Locale(
-      language: 'en',
-      country: 'US',
-    );
-
     try {
       final List<HWLocation> hwLocationList =
           await _geocoderService.getFromLocation(
         _getFromLocationRequest,
-        _locale,
       );
       _setBottomText(hwLocationList.toString());
     } on PlatformException catch (e) {

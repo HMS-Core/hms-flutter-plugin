@@ -1,3 +1,19 @@
+## 6.12.0+302
+
+- Minor optimization and bug fixes.
+
+## 6.12.0+301
+
+**Breaking Changes:** 
+- Starting from this version, you first need to initialize the services to use their features.
+  - Added `initFusedLocationService()` method to `FusedLocationProviderClient`.
+  - Added `initActivityIdentificationService()` method to `ActivityIdentificationService`.
+  - Added `initGeofenceService()` method to `GeofenceService`.
+  - Added `initGeocoderService(Locale locale)` method to `GeocoderService`.  
+  - Removed `Locale` parameter from `getFromLocation` and `getFromLocationName` methods. 
+
+> For more information, please visit the [API References](https://developer.huawei.com/consumer/en/doc/HMS-Plugin-References/overview-0000001057833710-V1?ha_source=hms1) document.
+
 ## 6.12.0+300
 
 - **Breaking Change:** The minimum API Level minSdkVersion changed 21 . 

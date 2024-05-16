@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ * Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
@@ -46,9 +47,11 @@ import java.util.List;
 import java.util.Map;
 
 public class GeofenceMethodHandler implements MethodCallHandler {
+    private static final String TAG = GeofenceMethodHandler.class.getSimpleName();
+
     private final Activity activity;
 
-    private final GeofenceService service;
+    private GeofenceService service;
 
     private final Map<Integer, PendingIntent> requests;
 
@@ -56,13 +59,23 @@ public class GeofenceMethodHandler implements MethodCallHandler {
 
     public GeofenceMethodHandler(final Activity activity) {
         this.activity = activity;
-        service = LocationServices.getGeofenceService(activity);
         requests = new HashMap<>();
+    }
+
+    private void initGeofenceService(Result result) {
+        service = LocationServices.getGeofenceService(activity);
+        Log.i(TAG, "Geofence Service has been initialized.");
+        result.success(null);
     }
 
     private void createGeofenceList(@NonNull final MethodCall call, @NonNull final Result result) {
         final GeofenceRequest geofenceRequest = GeofenceUtils.fromMapToGeofenceRequest(call.arguments());
         final Pair<Integer, PendingIntent> intentData = buildGeofenceIntent();
+
+        if (service == null) {
+            result.error("-1", Error.GEOFENCE_SERVICE_NOT_INITIALIZED.message(), null);
+            return;
+        }
 
         service.createGeofenceList(geofenceRequest, intentData.second)
             .addOnSuccessListener(new RequestUpdatesSuccessListener(call.method, activity, result, intentData.first))
@@ -76,6 +89,10 @@ public class GeofenceMethodHandler implements MethodCallHandler {
         if (!requests.containsKey(incomingRequestCode)) {
             result.error(Error.NON_EXISTING_REQUEST_ID.name(), Error.NON_EXISTING_REQUEST_ID.message(), null);
         } else {
+            if (service == null) {
+                result.error("-1", Error.GEOFENCE_SERVICE_NOT_INITIALIZED.message(), null);
+                return;
+            }
             service.deleteGeofenceList(requests.get(incomingRequestCode))
                 .addOnSuccessListener(
                     new RemoveUpdatesSuccessListener<>(call.method, activity, result, incomingRequestCode, requests))
@@ -84,6 +101,11 @@ public class GeofenceMethodHandler implements MethodCallHandler {
     }
 
     private void deleteGeofenceListWithIds(@NonNull final MethodCall call, @NonNull final Result result) {
+        if (service == null) {
+            result.error("-1", Error.GEOFENCE_SERVICE_NOT_INITIALIZED.message(), null);
+            return;
+        }
+
         service.deleteGeofenceList(call.<List<String>>arguments())
             .addOnSuccessListener(new DefaultSuccessListener<>(call.method, activity, result))
             .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
@@ -95,11 +117,11 @@ public class GeofenceMethodHandler implements MethodCallHandler {
         intent.setAction(Action.PROCESS_GEOFENCE);
         final PendingIntent pendingIntent;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            pendingIntent = PendingIntent.getBroadcast(activity.getApplicationContext(), ++requestCode,
-                    intent, PendingIntent.FLAG_UPDATE_CURRENT|PendingIntent.FLAG_MUTABLE);
+            pendingIntent = PendingIntent.getBroadcast(activity.getApplicationContext(), ++requestCode, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
         } else {
-            pendingIntent = PendingIntent.getBroadcast(activity.getApplicationContext(), ++requestCode,
-                    intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            pendingIntent = PendingIntent.getBroadcast(activity.getApplicationContext(), ++requestCode, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
         }
         requests.put(requestCode, pendingIntent);
         return Pair.create(requestCode, pendingIntent);
@@ -110,6 +132,9 @@ public class GeofenceMethodHandler implements MethodCallHandler {
         HMSLogger.getInstance(activity.getApplicationContext()).startMethodExecutionTimer(call.method);
 
         switch (call.method) {
+            case "initGeofenceService":
+                initGeofenceService(result);
+                break;
             case "createGeofenceList":
                 createGeofenceList(call, result);
                 break;

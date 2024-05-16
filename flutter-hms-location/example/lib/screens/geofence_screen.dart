@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ * Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -54,6 +54,7 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
     super.initState();
     _fenceCount = _geofenceList.length;
     _geofenceListText = _geofenceIdList.toString();
+    _initGeofenceService();
     _streamSubscription = _geofenceService.onGeofenceData!.listen(
       (GeofenceData data) {
         _appendToBottomText(
@@ -71,6 +72,15 @@ class _GeofenceScreenState extends State<GeofenceScreen> {
 
     // You can learn more about the required permissions from our official documentations.
     // https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/dev-process-0000001089376648?ha_source=hms1
+  }
+
+  void _initGeofenceService() async {
+    try {
+      await _geofenceService.initGeofenceService();
+      _setTopText('Geofence Service has been initialized.');
+    } on PlatformException catch (e) {
+      _setBottomText(e.toString());
+    }
   }
 
   void _createGeofenceList() async {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ * Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,11 @@
 package com.huawei.hms.flutter.location.handlers;
 
 import android.app.Activity;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.huawei.hms.flutter.location.constants.Error;
 import com.huawei.hms.flutter.location.listeners.DefaultFailureListener;
 import com.huawei.hms.flutter.location.logger.HMSLogger;
 import com.huawei.hms.flutter.location.utils.GeocoderUtils;
@@ -39,49 +41,63 @@ import java.util.Locale;
 import java.util.Map;
 
 public class GeocoderMethodHandler implements MethodCallHandler {
+    private static final String TAG = GeocoderMethodHandler.class.getSimpleName();
 
     private final Activity activity;
+
+    private GeocoderService geocoderService;
 
     public GeocoderMethodHandler(final Activity activity) {
         this.activity = activity;
     }
 
-    private void getFromLocation(final MethodCall call, final MethodChannel.Result result) {
+    private void initGeocoderService(final MethodCall call, final MethodChannel.Result result) {
         Map localeMap = call.argument("locale");
         Locale locale = GeocoderUtils.fromMapToLocale(localeMap);
+        geocoderService = LocationServices.getGeocoderService(activity, locale);
+        Log.i(TAG, "Geocoder Service has been initialized.");
+        result.success(null);
+    }
+
+    private void getFromLocation(final MethodCall call, final MethodChannel.Result result) {
 
         Map requestMap = call.argument("getFromLocationRequest");
-
-        GeocoderService geocoderService = LocationServices.getGeocoderService(activity, locale);
         GetFromLocationRequest getFromLocationRequest = GeocoderUtils.fromMapToGetFromLocationRequest(requestMap);
-        geocoderService.getFromLocation(getFromLocationRequest)
-                .addOnSuccessListener((List<HWLocation> hwLocations) -> {
-                    result.success(LocationUtils.fromHWLocationListToMap(hwLocations));
-                })
-                .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
+
+        if (geocoderService == null) {
+            result.error("-1", Error.GEOCODER_SERVICE_NOT_INITIALIZED.message(), null);
+            return;
+        }
+
+        geocoderService.getFromLocation(getFromLocationRequest).addOnSuccessListener((List<HWLocation> hwLocations) -> {
+            result.success(LocationUtils.fromHWLocationListToMap(hwLocations));
+        }).addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
 
     }
 
     private void getFromLocationName(final MethodCall call, final MethodChannel.Result result) {
-        Map localeMap = call.argument("locale");
-        Locale locale = GeocoderUtils.fromMapToLocale(localeMap);
-
         Map requestMap = call.argument("getFromLocationNameRequest");
-
-        GeocoderService geocoderService = LocationServices.getGeocoderService(activity, locale);
         GetFromLocationNameRequest getFromLocationNameRequest = GeocoderUtils.fromMapToGetFromLocationNameRequest(
-                requestMap);
+            requestMap);
+
+        if (geocoderService == null) {
+            result.error("-1", Error.GEOCODER_SERVICE_NOT_INITIALIZED.message(), null);
+            return;
+        }
         geocoderService.getFromLocationName(getFromLocationNameRequest)
-                .addOnSuccessListener((List<HWLocation> hwLocations) -> {
-                    result.success(LocationUtils.fromHWLocationListToMap(hwLocations));
-                })
-                .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
+            .addOnSuccessListener((List<HWLocation> hwLocations) -> {
+                result.success(LocationUtils.fromHWLocationListToMap(hwLocations));
+            })
+            .addOnFailureListener(new DefaultFailureListener(call.method, activity, result));
     }
 
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         HMSLogger.getInstance(activity.getApplicationContext()).startMethodExecutionTimer(call.method);
         switch (call.method) {
+            case "initGeocoderService":
+                initGeocoderService(call, result);
+                break;
             case "getFromLocation":
                 getFromLocation(call, result);
                 break;

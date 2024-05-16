@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ * Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -31,8 +31,8 @@ class Btn extends StatelessWidget {
     return ElevatedButton(
       onPressed: _onPressed,
       style: ElevatedButton.styleFrom(
-        primary: Colors.blueGrey,
-        onPrimary: Colors.white,
+        backgroundColor: Colors.blueGrey,
+        foregroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 10),
       ),
       child: Text(

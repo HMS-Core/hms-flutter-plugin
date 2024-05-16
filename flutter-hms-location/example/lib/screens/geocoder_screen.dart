@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ * Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:huawei_location/huawei_location.dart';
 
 import 'package:huawei_location_example/widgets/custom_button.dart' show Btn;
 import 'package:huawei_location_example/screens/get_from_location_name_screen.dart';
@@ -30,9 +31,18 @@ class GeocoderScreen extends StatefulWidget {
 }
 
 class _GeocoderScreenState extends State<GeocoderScreen> {
+  final GeocoderService _geocoderService = GeocoderService();
   @override
   void initState() {
+    _initGeocoderService();
     super.initState();
+  }
+
+  _initGeocoderService() async {
+    await _geocoderService.initGeocoderService(Locale(
+      language: 'en',
+      country: 'US',
+    ));
   }
 
   @override

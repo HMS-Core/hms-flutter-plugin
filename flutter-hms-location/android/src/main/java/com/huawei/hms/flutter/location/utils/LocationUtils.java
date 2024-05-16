@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ * Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -430,7 +430,7 @@ public interface LocationUtils {
             try {
                 bitmap = BitmapFactory.decodeStream(context.getAssets().open(ValueGetter.getString("largeIcon", map)));
             } catch (IOException | OutOfMemoryError e) {
-                Log.d(LocationUtils.class.getSimpleName(), e.getLocalizedMessage());
+                Log.i("Bitmap", "An error occured, please try again.");
             }
             builder = builder.setLargeIcon(bitmap);
         }

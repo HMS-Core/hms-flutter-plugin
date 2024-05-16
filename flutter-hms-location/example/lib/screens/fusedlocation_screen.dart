@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ * Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -61,6 +61,15 @@ class _FusedLocationScreenState extends State<FusedLocationScreen> {
 
     // You can learn more about the required permissions from our official documentations.
     // https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/dev-process-0000001089376648?ha_source=hms1
+  }
+
+  void _initFusedLocationService() async {
+    try {
+      await _locationService.initFusedLocationService();
+      _setTopText('Fused Location Service has been initialized.');
+    } on PlatformException catch (e) {
+      _setBottomText(e.toString());
+    }
   }
 
   void _checkLocationSettings() async {
@@ -245,12 +254,13 @@ class _FusedLocationScreenState extends State<FusedLocationScreen> {
                     thickness: 0.1,
                     color: Colors.black,
                   ),
+                  Btn('Init Fused Location', _initFusedLocationService),
                   Btn('checkLocationSettings', _checkLocationSettings),
                   CRow(
                     children: <Widget>[
                       Btn('getLastLocation', _getLastLocation),
                       Btn(
-                        'getLastLocationWithAddress',
+                        'getLastLocation\nWithAddress',
                         _getLastLocationWithAddress,
                       )
                     ],

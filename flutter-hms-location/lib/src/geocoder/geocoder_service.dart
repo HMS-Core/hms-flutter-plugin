@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023. Huawei Technologies Co., Ltd. All rights reserved.
+ * Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License")
  * you may not use this file except in compliance with the License.
@@ -36,16 +36,24 @@ class GeocoderService {
     this._methodChannel,
   );
 
+  /// Initializes the `Geocoder` Service.
+  Future<void> initGeocoderService(Locale locale) async {
+    await _methodChannel.invokeMethod<void>(
+      'initGeocoderService',
+      <String, dynamic>{
+        'locale': locale.toMap(),
+      },
+    );
+  }
+
   /// Requests reverse geocoding.
   Future<List<HWLocation>> getFromLocation(
     GetFromLocationRequest getFromLocationRequest,
-    Locale locale,
   ) async {
     final dynamic response = await _methodChannel.invokeMethod(
       'getFromLocation',
       <String, dynamic>{
-        'getFromLocationRequest': getFromLocationRequest.toMap(),
-        'locale': locale.toMap(),
+        'getFromLocationRequest': getFromLocationRequest.toMap()
       },
     );
     return List<HWLocation>.from(
@@ -57,14 +65,11 @@ class GeocoderService {
 
   /// Requests forward geocoding.
   Future<List<HWLocation>> getFromLocationName(
-    GetFromLocationNameRequest getFromLocationNameRequest,
-    Locale locale,
-  ) async {
+      GetFromLocationNameRequest getFromLocationNameRequest) async {
     final dynamic response = await _methodChannel.invokeMethod(
       'getFromLocationName',
       <String, dynamic>{
         'getFromLocationNameRequest': getFromLocationNameRequest.toMap(),
-        'locale': locale.toMap(),
       },
     );
     return List<HWLocation>.from(
