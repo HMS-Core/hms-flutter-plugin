@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -36,19 +36,23 @@ class BarrierClientDemo extends StatefulWidget {
 
 class _BarrierClientDemoState extends State<BarrierClientDemo> {
   bool isQueried = false;
-  bool permissions = false;
   StreamSubscription<dynamic>? subscription;
   List<String> responses = <String>[];
   List<int> capabilityList = <int>[];
 
-  bool? locationPermission;
-  bool? backgroundLocationPermission;
-  bool? activityRecognitionPermission;
-
   @override
   void initState() {
     super.initState();
-    checkPermissions();
+    _requestPermission();
+  }
+
+  // TODO: Please implement your own 'Permission Handler'.
+  void _requestPermission() async {
+    // Huawei Awareness needs some permissions to work properly.
+    // You are expected to handle these permissions to use required features.
+
+    // You can learn more about the required permissions from our official documentations.
+    // https://developer.huawei.com/consumer/en/doc/HMS-Plugin-Guides/dev-process-0000001074588370-V1?ha_source=hms1
   }
 
   void queryCapabilities() async {
@@ -59,48 +63,6 @@ class _BarrierClientDemoState extends State<BarrierClientDemo> {
       isQueried = true;
       log(capabilityList.toString(), name: 'Supported Capability Codes');
     });
-  }
-
-  void checkPermissions() async {
-    locationPermission = await AwarenessUtilsClient.hasLocationPermission();
-    backgroundLocationPermission =
-        await AwarenessUtilsClient.hasBackgroundLocationPermission();
-    activityRecognitionPermission =
-        await AwarenessUtilsClient.hasActivityRecognitionPermission();
-    if (locationPermission! &&
-        backgroundLocationPermission! &&
-        activityRecognitionPermission!) {
-      setState(() {
-        permissions = true;
-      });
-    }
-  }
-
-  void requestPermissions() async {
-    if (locationPermission == false) {
-      bool status = await AwarenessUtilsClient.requestLocationPermission();
-      setState(() {
-        locationPermission = status;
-      });
-    }
-
-    if (backgroundLocationPermission == false) {
-      bool status =
-          await AwarenessUtilsClient.requestBackgroundLocationPermission();
-      setState(() {
-        locationPermission = status;
-      });
-    }
-
-    if (activityRecognitionPermission == false) {
-      bool status =
-          await AwarenessUtilsClient.requestActivityRecognitionPermission();
-      setState(() {
-        locationPermission = status;
-      });
-
-      checkPermissions();
-    }
   }
 
   void queryBarriers() async {
@@ -329,7 +291,7 @@ class _BarrierClientDemoState extends State<BarrierClientDemo> {
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          isQueried && permissions
+          isQueried
               ? const SizedBox.shrink()
               : Column(
                   mainAxisSize: MainAxisSize.max,
@@ -360,30 +322,9 @@ class _BarrierClientDemoState extends State<BarrierClientDemo> {
                     CustomButton(
                         onPressed: queryCapabilities,
                         text: 'Query Capabilities'),
-                    permissions
-                        ? const SizedBox.shrink()
-                        : Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              const Padding(
-                                padding: EdgeInsets.all(25.0),
-                                child: Text(
-                                  'Also, users should grant Location, Background Location and Activity Recognition permissions to fully benefit from Huawei Awareness Kit.',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Color.fromRGBO(30, 61, 89, 1),
-                                  ),
-                                ),
-                              ),
-                              CustomButton(
-                                  onPressed: requestPermissions,
-                                  text: 'Request Permissions'),
-                            ],
-                          ),
                   ],
                 ),
-          isQueried && permissions
+          isQueried
               ? Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(

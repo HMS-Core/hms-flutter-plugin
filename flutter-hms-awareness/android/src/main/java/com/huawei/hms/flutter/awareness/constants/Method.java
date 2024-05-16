@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -49,10 +49,4 @@ public interface Method {
     // Awareness Utils Client Methods
     String ENABLE_LOGGER = "enableLogger";
     String DISABLE_LOGGER = "disableLogger";
-    String HAS_LOCATION_PERMISSION = "hasLocationPermission";
-    String HAS_BACKGROUND_LOCATION_PERMISSION = "hasBackgroundLocationPermission";
-    String HAS_ACTIVITY_RECOGNITION_PERMISSION = "hasActivityRecognitionPermission";
-    String REQUEST_LOCATION_PERMISSION = "requestLocationPermission";
-    String REQUEST_BACKGROUND_LOCATION_PERMISSION = "requestBackgroundLocationPermission";
-    String REQUEST_ACTIVITY_RECOGNITION_PERMISSION = "requestActivityRecognitionPermission";
 }

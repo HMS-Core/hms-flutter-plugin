@@ -2,7 +2,7 @@ name: huawei_awareness_example
 description: Demonstrates how to use the HUAWEI Awareness plugin.
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.12.0 <4.0.0"
 
 dependencies:
   flutter:

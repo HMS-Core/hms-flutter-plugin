@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ import com.huawei.hms.flutter.awareness.barriers.BarrierMethodCallHandler;
 import com.huawei.hms.flutter.awareness.barriers.BarrierStreamHandler;
 import com.huawei.hms.flutter.awareness.capture.CaptureMethodCallHandler;
 import com.huawei.hms.flutter.awareness.constants.Channel;
-import com.huawei.hms.flutter.awareness.permission.PermissionMethodCallHandler;
 import com.huawei.hms.flutter.awareness.utils.AwarenessUtilsMethodCallHandler;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
@@ -35,7 +34,6 @@ import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.EventChannel.StreamHandler;
 import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 public class AwarenessPlugin implements FlutterPlugin, ActivityAware {
 
@@ -51,15 +49,11 @@ public class AwarenessPlugin implements FlutterPlugin, ActivityAware {
     private MethodChannel utilsChannel;
     private AwarenessUtilsMethodCallHandler utilsHandler;
 
-    private MethodChannel permissionChannel;
-    private PermissionMethodCallHandler permissionHandler;
-
     private void initChannels(final BinaryMessenger messenger) {
         captureChannel = new MethodChannel(messenger, Channel.CAPTURE_CHANNEL);
         barrierChannel = new MethodChannel(messenger, Channel.BARRIER_CHANNEL);
         barrierListenerChannel = new EventChannel(messenger, Channel.BARRIER_LISTENER_CHANNEL);
         utilsChannel = new MethodChannel(messenger, Channel.UTILS_CHANNEL);
-        permissionChannel = new MethodChannel(messenger, Channel.PERMISSION_CHANNEL);
     }
 
     private void initHandlers(final Context context) {
@@ -81,7 +75,6 @@ public class AwarenessPlugin implements FlutterPlugin, ActivityAware {
         barrierChannel.setMethodCallHandler(null);
         barrierListenerChannel.setStreamHandler(null);
         utilsChannel.setMethodCallHandler(null);
-        permissionChannel.setMethodCallHandler(null);
     }
 
     private void removeHandlers() {
@@ -89,7 +82,6 @@ public class AwarenessPlugin implements FlutterPlugin, ActivityAware {
         barrierHandler = null;
         barrierListenerHandler = null;
         utilsHandler = null;
-        permissionHandler = null;
     }
 
     private void removeChannels() {
@@ -97,7 +89,6 @@ public class AwarenessPlugin implements FlutterPlugin, ActivityAware {
         barrierChannel = null;
         barrierListenerChannel = null;
         utilsChannel = null;
-        permissionChannel = null;
     }
 
     private void onAttachedToEngine(@NonNull final BinaryMessenger messenger, final Context context) {
@@ -120,9 +111,6 @@ public class AwarenessPlugin implements FlutterPlugin, ActivityAware {
     public void onAttachedToActivity(@NonNull final ActivityPluginBinding binding) {
         final Activity activity = binding.getActivity();
 
-        permissionHandler = new PermissionMethodCallHandler(activity);
-        binding.addRequestPermissionsResultListener(permissionHandler);
-        permissionChannel.setMethodCallHandler(permissionHandler);
     }
 
     @Override
@@ -137,7 +125,6 @@ public class AwarenessPlugin implements FlutterPlugin, ActivityAware {
 
     @Override
     public void onDetachedFromActivity() {
-        permissionHandler = null;
         resetHandlers();
         removeHandlers();
     }

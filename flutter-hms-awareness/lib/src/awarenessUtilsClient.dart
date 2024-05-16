@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2022. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -20,44 +20,11 @@ class AwarenessUtilsClient {
   static const MethodChannel _utilsChannel =
       MethodChannel(_Channel.awarenessUtilsChannel);
 
-  static const MethodChannel _permissionChannel =
-      MethodChannel(_Channel.awarenessPermissionCahnnel);
-
   static Future<void> enableLogger() async {
     await _utilsChannel.invokeMethod(_Method.enableLogger);
   }
 
   static Future<void> disableLogger() async {
     await _utilsChannel.invokeMethod(_Method.disableLogger);
-  }
-
-  static Future<bool> hasLocationPermission() async {
-    return (await _permissionChannel
-        .invokeMethod(_Method.hasLocationPermission))!;
-  }
-
-  static Future<bool> hasBackgroundLocationPermission() async {
-    return (await _permissionChannel
-        .invokeMethod(_Method.hasBackgroundLocationPermission))!;
-  }
-
-  static Future<bool> hasActivityRecognitionPermission() async {
-    return (await _permissionChannel
-        .invokeMethod(_Method.hasActivityRecognitionPermission))!;
-  }
-
-  static Future<bool> requestLocationPermission() async {
-    return (await _permissionChannel
-        .invokeMethod(_Method.requestLocationPermission))!;
-  }
-
-  static Future<bool> requestBackgroundLocationPermission() async {
-    return (await _permissionChannel
-        .invokeMethod(_Method.requestBackgroundLocationPermission))!;
-  }
-
-  static Future<bool> requestActivityRecognitionPermission() async {
-    return (await _permissionChannel
-        .invokeMethod(_Method.requestActivityRecognitionPermission));
   }
 }

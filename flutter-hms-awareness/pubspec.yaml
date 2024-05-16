@@ -1,11 +1,11 @@
 name: huawei_awareness
 description: HUAWEI Awareness Kit provides your app with the ability to obtain contextual information including users' time, location, behavior, ambient light, weather, and nearby beacons.
-version: 3.1.0+302
+version: 3.8.0+300
 homepage: https://www.huawei.com
 repository: https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-awareness
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.12.0 <4.0.0"
   flutter: ">=1.20.0"
 
 dependencies:
