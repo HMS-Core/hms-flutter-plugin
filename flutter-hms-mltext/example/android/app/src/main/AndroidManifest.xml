@@ -14,7 +14,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
    <application
-        android:label="huawei_ml_text_example"
+        android:label="HMS ML Text Demo"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

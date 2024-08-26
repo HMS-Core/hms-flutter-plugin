@@ -1,5 +1,5 @@
 /*
-    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2024. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_ml_text;
+part of '../../huawei_ml_text.dart';
 
 class MLTextLensController {
   static const int backLens = 0;
@@ -46,7 +46,7 @@ class MLTextLensController {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'lensType': lensType ?? backLens,
-      'analyzerType': describeEnum(transaction),
+      'analyzerType': transaction.name,
       'applyFps': applyFps ?? 30.0,
       'automaticFocus': automaticFocus ?? true,
       'flashMode': flashMode ?? flashModeAuto,

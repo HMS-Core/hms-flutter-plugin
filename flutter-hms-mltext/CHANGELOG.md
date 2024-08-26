@@ -1,3 +1,7 @@
+## 3.12.0+301
+
+- Dart improvements.
+
 ## 3.12.0+300
 
 - Bank card recognition: Added the onBcrFailResult(MLBcrCaptureResult result) method to the CustomView.OnBcrResultCallback API.
