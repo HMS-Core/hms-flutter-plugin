@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-part of huawei_location;
+part of '../../huawei_location.dart';
 
 class LocationResult {
   /// Available locations, which are sorted from oldest to newest.

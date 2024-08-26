@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-part of huawei_location;
+part of '../../huawei_location.dart';
 
 class Location {
   /// Location provider, such as network location, GNSS, Wi-Fi, and Bluetooth.

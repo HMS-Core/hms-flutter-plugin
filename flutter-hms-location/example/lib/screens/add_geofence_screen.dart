@@ -171,16 +171,18 @@ class _AddGeofenceScreenState extends State<AddGeofenceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pop(
-          context,
-          <String, List<Object>>{
-            'geofenceList': _geofenceList,
-            'geofenceIdList': _geofenceIdList,
-          },
-        );
-        return false;
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop) {
+        if (!didPop) {
+          Navigator.pop(
+            context,
+            <String, List<Object>>{
+              'geofenceList': _geofenceList,
+              'geofenceIdList': _geofenceIdList,
+            },
+          );
+        }
       },
       child: Scaffold(
         appBar: AppBar(

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-part of huawei_location;
+part of '../../huawei_location.dart';
 
 class Geofence {
   /// A user enters the geofence.

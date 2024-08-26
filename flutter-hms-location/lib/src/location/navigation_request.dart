@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-part of huawei_location;
+part of '../../huawei_location.dart';
 
 class NavigationRequest {
   /// Used to request the device navigation status.
