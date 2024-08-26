@@ -14,17 +14,20 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// Encapsulates bound attribute.
 class CameraTargetBounds {
+  /// Rectangular area defined using a pair of [longitude] and [latitude].
   final LatLngBounds? bounds;
 
+  /// Unbounded camera bounds.
   static const CameraTargetBounds unbounded = CameraTargetBounds(null);
 
   const CameraTargetBounds(this.bounds);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }

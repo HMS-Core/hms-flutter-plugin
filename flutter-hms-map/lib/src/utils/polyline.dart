@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
 Map<PolylineId, Polyline> polylineToMap(Iterable<Polyline> polylines) {
   return Map<PolylineId, Polyline>.fromEntries(

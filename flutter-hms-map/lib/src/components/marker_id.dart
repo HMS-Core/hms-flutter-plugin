@@ -14,12 +14,15 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// Represents an immutable marker ID.
 @immutable
 class MarkerId {
+  /// Unique marker ID.
   final String id;
 
+  /// Creates a [MarkerId] object.
   const MarkerId(this.id);
 
   @override

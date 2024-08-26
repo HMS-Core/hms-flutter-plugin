@@ -14,12 +14,20 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../../huawei_map.dart';
 
+/// Controls the animation rotation.
 class HmsRotateAnimation extends HmsAnimation {
+  /// Initial angle.
   double fromDegree;
+
+  /// Target angle.
   double toDegree;
+
+  /// Function to be executed when an animation starts.
   Function? onAnimationStart;
+
+  /// Function to be executed when an animation ends.
   Function? onAnimationEnd;
 
   @override
@@ -32,6 +40,7 @@ class HmsRotateAnimation extends HmsAnimation {
     onAnimationEnd?.call();
   }
 
+  /// Creates an [HmsRotateAnimation] object.
   HmsRotateAnimation({
     required String animationId,
     required this.fromDegree,

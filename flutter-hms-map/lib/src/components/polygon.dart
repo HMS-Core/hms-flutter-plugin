@@ -14,24 +14,53 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// Defines a polygon on a map.
 @immutable
 class Polygon {
+  /// Unique polygon ID.
   final PolygonId polygonId;
+
+  /// Indicates whether a polygon is tappable.
   final bool clickable;
+
+  /// Fill color.
   final Color fillColor;
+
+  /// Indicates whether to draw each segment of a polygon as a geodesic.
+  ///
+  /// The options are `true` (yes) and `false` (no).
   final bool geodesic;
+
+  /// Vertex coordinate set.
   final List<LatLng> points;
+
+  /// Visibility of a polygon.
   final bool visible;
+
+  /// Stroke color.
   final Color strokeColor;
+
+  /// Stroke width of a polygon's outline.
   final int strokeWidth;
+
+  /// Z-index of a polygon, which indicates the overlapping order of the polygon.
   final int zIndex;
+
+  /// Function to be executed when a polygon is tapped.
   final VoidCallback? onClick;
+
+  /// Holes in a polygon.
   final List<List<LatLng>> holes;
+
+  /// Joint type of a polygon.
   final JointType strokeJointType;
+
+  /// Stroke pattern of a polygon's outline.
   final List<PatternItem> strokePattern;
 
+  /// Creates a [Polygon] object.
   const Polygon({
     required this.polygonId,
     required this.points,
@@ -48,6 +77,7 @@ class Polygon {
     this.strokePattern = const <PatternItem>[],
   });
 
+  /// Copies a [Polygon] object and updates the specified attributes.
   Polygon updateCopy({
     List<LatLng>? points,
     bool? geodesic,
@@ -79,6 +109,7 @@ class Polygon {
     );
   }
 
+  /// Clones a [Polygon] object.
   Polygon clone() {
     return updateCopy(
       points: List<LatLng>.of(points),

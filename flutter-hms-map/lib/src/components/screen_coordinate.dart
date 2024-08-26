@@ -14,13 +14,18 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// Encapsulates x and y attributes.
 @immutable
 class ScreenCoordinate {
+  /// X value.
   final int x;
+
+  /// Y value.
   final int y;
 
+  /// Creates a [ScreenCoordinate] object.
   const ScreenCoordinate({
     required this.x,
     required this.y,

@@ -14,16 +14,31 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// Defines an information window that shows up when a [Marker] is tapped.
 class InfoWindow {
+  /// Title of a [Marker].
+  ///
+  /// By default, the title is empty.
   final String? title;
+
+  /// Snippet of a [Marker].
   final String? snippet;
+
+  /// Offset of an information window.
   final Offset anchor;
+
+  /// Function to be executed when an information window is tapped.
   final VoidCallback? onClick;
+
+  /// Function to be executed when an information window is long tapped.
   final VoidCallback? onLongClick;
+
+  /// Function to be executed when an information window is closed.
   final VoidCallback? onClose;
 
+  /// Empty information window.
   static const InfoWindow noText = InfoWindow();
 
   const InfoWindow({
@@ -35,6 +50,7 @@ class InfoWindow {
     this.onClose,
   });
 
+  /// Copies an existing [InfoWindow] object and updates the specified attributes.
   InfoWindow updateCopy({
     String? title,
     String? snippet,

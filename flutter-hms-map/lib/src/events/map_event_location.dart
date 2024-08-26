@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
 class MapEventLocation<T> extends MapEvent<T> {
   final Location location;

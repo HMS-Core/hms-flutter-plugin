@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
 typedef CameraPositionCallback = void Function(CameraPosition position);
 typedef ArgumentCallback<T> = void Function(T argument);

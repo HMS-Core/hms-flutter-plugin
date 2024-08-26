@@ -14,10 +14,16 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// Map types, which are enumerated values.
 enum MapType {
+  /// Empty map.
   none,
+
+  /// Basic map.
   normal,
+
+  /// Terrain map.
   terrain,
 }

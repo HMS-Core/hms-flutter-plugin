@@ -14,12 +14,15 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// Represents an immutable polygon ID.
 @immutable
 class PolylineId {
+  /// Unique polygon ID.
   final String id;
 
+  /// Creates a [PolygonId] object.
   const PolylineId(this.id);
 
   @override

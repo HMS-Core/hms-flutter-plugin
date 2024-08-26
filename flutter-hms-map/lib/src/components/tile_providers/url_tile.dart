@@ -14,11 +14,14 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../../huawei_map.dart';
 
+/// Provides tile images for [TileOverlay] from URL.
 class UrlTile {
+  /// URL of the image to be used at the specified tile coordinates.
   String uri;
 
+  /// Creates a [UrlTile] object.
   UrlTile({
     required this.uri,
   });

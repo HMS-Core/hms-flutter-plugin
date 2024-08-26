@@ -14,23 +14,50 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// Defines a circle on a map.
 @immutable
 class Circle {
+  /// Unique circle ID.
   final CircleId circleId;
+
+  /// Indicates whether a circle is tappable.
   final bool clickable;
+
+  /// Fill color.
   final Color fillColor;
+
+  /// [Longitude] and [latitude] of the center of a circle.
   final LatLng center;
+
+  /// Radius of a circle.
   final double radius;
+
+  /// Stroke color.
   final Color strokeColor;
+
+  /// Stroke width of a circle's outline.
   final int strokeWidth;
+
+  /// Visibility of a circle.
   final bool visible;
+
+  /// Z-index of a circle, which indicates the overlapping order of the circle.
   final int zIndex;
+
+  /// Stroke pattern of a circle's outline.
   final List<PatternItem> strokePattern;
+
+  /// Function to be executed when a circle is tapped.
   final VoidCallback? onClick;
+
+  /// Animation for a circle.
+  ///
+  /// Only [HmsTranslateAnimation] is supported.
   final HmsAnimation? animation;
 
+  /// Creates a [Circle] object.
   const Circle({
     required this.circleId,
     required this.center,
@@ -46,6 +73,7 @@ class Circle {
     this.animation,
   });
 
+  /// Copies a [Circle] object and updates the specified attributes
   Circle updateCopy({
     LatLng? center,
     double? radius,
@@ -75,6 +103,7 @@ class Circle {
     );
   }
 
+  /// Clones a [Circle] object.
   Circle clone() {
     return updateCopy(
       strokePattern: List<PatternItem>.of(strokePattern),

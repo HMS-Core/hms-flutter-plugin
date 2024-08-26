@@ -14,9 +14,13 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// Enumeration class for heatmap radius units.
 enum RadiusUnit {
+  /// Radius unit as pixel.
   pixel,
+
+  /// Radius unit as meter.
   meter,
 }

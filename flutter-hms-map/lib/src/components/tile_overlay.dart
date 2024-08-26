@@ -14,17 +14,39 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// A tile overlay is a set of images to be displayed on a map.
+///
+/// It can be transparent and enable you to add new functions to an existing map.
 @immutable
 class TileOverlay {
+  /// Unique Tile Overlay ID.
   final TileOverlayId tileOverlayId;
+
+  /// Indicates whether a tile overlay fades in.
   final bool? fadeIn;
+
+  /// Transparency of a tile overlay.
   final double? transparency;
+
+  /// Indicates whether a tile overlay is visible.
+  ///
+  /// If the tile overlay is invisible, it will not be drawn but all other states will be preserved.
+  /// By default, a tile overlay is visible.
   final bool? visible;
+
+  /// Z-index of a tile overlay.
+  ///
+  /// The z-index indicates the overlapping order of a tile overlay.
+  /// A tile overlay with a larger z-index overlaps that with a smaller z-index.
+  /// Tile overlays with the same z-index overlap each other in a random order.
   final double? zIndex;
+
+  /// Provider of a tile overlay.
   final dynamic tileProvider;
 
+  /// Creates a [TileOverlay] object.
   const TileOverlay({
     required this.tileOverlayId,
     required this.tileProvider,
@@ -34,6 +56,7 @@ class TileOverlay {
     this.zIndex,
   });
 
+  /// Copies a [TileOverlay] object and updates the specified attributes.
   TileOverlay updateCopy({
     dynamic tileProvider,
     bool? fadeIn,
@@ -51,6 +74,7 @@ class TileOverlay {
     );
   }
 
+  /// Clones a [TileOverlay] object.
   TileOverlay clone() => updateCopy();
 
   @override

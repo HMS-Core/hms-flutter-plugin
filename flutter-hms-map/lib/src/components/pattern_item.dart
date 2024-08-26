@@ -14,18 +14,22 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// Describes the stroke pattern of a polyline.
 @immutable
 class PatternItem {
   final dynamic _type;
 
+  /// Dot type.
   static const PatternItem dot = PatternItem._(<dynamic>[_Param.dot]);
 
+  /// Obtains a dash-type [PatternItem] object with a specified [length].
   static PatternItem dash(double length) {
     return PatternItem._(<dynamic>[_Param.dash, length]);
   }
 
+  /// Obtains a gap-type [PatternItem] object with a specified [length].
   static PatternItem gap(double length) {
     return PatternItem._(<dynamic>[_Param.gap, length]);
   }

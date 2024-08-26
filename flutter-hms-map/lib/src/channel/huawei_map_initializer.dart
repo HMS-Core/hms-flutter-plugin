@@ -14,8 +14,9 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// To use certain functions before obtaining a map, use this class to initialize the Map SDK.
 abstract class HuaweiMapInitializer {
   static const MethodChannel _c = MethodChannel(_mapUtilChannel);
 

@@ -14,14 +14,23 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../../huawei_map.dart';
 
+/// Provides tile images for [TileOverlay].
 class Tile {
+  /// X value.
   int x;
+
+  /// Y value.
   int y;
+
+  /// Zoom level.
   int zoom;
+
+  /// Uint8List image data.
   Uint8List imageData;
 
+  /// Creates a [Tile] object.
   Tile({
     required this.x,
     required this.y,

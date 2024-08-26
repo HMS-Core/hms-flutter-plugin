@@ -14,18 +14,27 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// Defines a cap that is applied at the start or end vertex of a [Polyline].
 @immutable
 class Cap {
   final dynamic _json;
 
   const Cap._(this._json);
 
+  /// Sets the start or end vertex of a polyline to the square type.
   static const Cap squareCap = Cap._(<dynamic>['squareCap']);
+
+  /// Defines a cap that is squared off exactly at the start or end vertex of a polyline.
   static const Cap buttCap = Cap._(<dynamic>['buttCap']);
+
+  /// Represents a semicircle with a radius equal to a half of the stroke width.
+  ///
+  /// The semicircle will be centered at the start or end vertex of a polyline.
   static const Cap roundCap = Cap._(<dynamic>['roundCap']);
 
+  /// Constructs a cap with a bitmap overlay that is centered at the start or end vertex of a [Polyline], orientated to the direction of the line's first or last edge, and scaled with respect to the line's stroke width.
   static Cap customCapFromBitmap(
     BitmapDescriptor bitmapDescriptor, {
     double refWidth = 10,

@@ -14,12 +14,15 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// Represents an immutable tile overlay ID.
 @immutable
 class TileOverlayId {
+  /// Unique tile overlay ID.
   final String id;
 
+  /// Creates a [TileOverlayId] object.
   const TileOverlayId(this.id);
 
   @override

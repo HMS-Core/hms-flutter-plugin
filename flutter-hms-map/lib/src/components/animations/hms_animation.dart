@@ -14,28 +14,55 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../../huawei_map.dart';
 
 abstract class HmsAnimation {
   // Fill Mode Constants
+  /// The last frame is displayed after the animation ends.
   static const int FORWARDS = 0;
+
+  /// The first frame is displayed after the animation ends.
   static const int BACKWARDS = 1;
 
   // Repeat Mode Constants
+  /// The animation is replayed infinitely.
   static const int INFINITE = -1;
+
+  /// The animation is replayed from the start after it ends.
   static const int RESTART = 1;
+
+  /// The animation is replayed from the end in reverse order after it ends.
   static const int REVERSE = 2;
 
   // Interpolator Constants
+  /// Linear interpolator.
   static const int LINEAR = 0;
+
+  /// Accelerate interpolator.
   static const int ACCELERATE = 1;
+
+  /// Anticipate interpolator.
   static const int ANTICIPATE = 2;
+
+  /// Bounce interpolator.
   static const int BOUNCE = 3;
+
+  /// Decelerate interpolator.
   static const int DECELERATE = 4;
+
+  /// Overshoot interpolator.
   static const int OVERSHOOT = 5;
+
+  /// Accelerate decelerate interpolator.
   static const int ACCELERATE_DECELERATE = 6;
+
+  /// Fast out linear in interpolator.
   static const int FAST_OUT_LINEAR_IN = 7;
+
+  /// Fast out slow in interpolator.
   static const int FAST_OUT_SLOW_IN = 8;
+
+  /// Linear out slow in interpolator.
   static const int LINEAR_OUT_SLOW_IN = 9;
 
   // Animation Type Constants
@@ -44,12 +71,27 @@ abstract class HmsAnimation {
   static const String SCALE = 'HmsScaleAnimation';
   static const String TRANSLATE = 'HmsTranslateAnimation';
 
+  /// Unique animation ID.
   String animationId;
+
+  /// Animation type.
   String type;
+
+  /// Animation duration.
   int? duration;
+
+  /// Status after the animation ends.
   int? fillMode;
+
+  /// Number of times that an animation is replayed.
   int? repeatCount;
+
+  /// Animation replay mode.
+  ///
+  /// By default, the animation is replayed from the start.
   int? repeatMode;
+
+  /// Animation interpolator.
   int? interpolator;
 
   void abstractOnAnimStart();

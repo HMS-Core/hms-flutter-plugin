@@ -25,16 +25,16 @@ Huawei Map Kit provides the following core capabilities:
 
 This plugin enables communication between Huawei Map Kit SDK and Flutter platform. It exposes all functionality provided by Huawei Map Kit SDK.
 
-[Learn More](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/introduction-0000001050296908?ha_source=hms1)
+[Learn More](https://developer.huawei.com/consumer/en/doc/HMS-Plugin-Guides/introduction-0000001050296908-V1?ha_source=hms1)
 
 ## Installation
 
-Please see [pub.dev](https://pub.dev/packages/huawei_map/install) and [AppGallery Connect Configuration](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/config-agc-0000001050296920?ha_source=hms1).
+Please see [pub.dev](https://pub.dev/packages/huawei_map/install) and [AppGallery Connect Configuration](https://developer.huawei.com/consumer/en/doc/HMS-Plugin-Guides/config-agc-0000001050296920-V1?ha_source=hms1).
 
 ## Documentation
 
-- [Quick Start](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/createmap-0000001050190759?ha_source=hms1)
-- [Reference](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-References/overview-0000001051586849?ha_source=hms1)
+- [Quick Start](https://developer.huawei.com/consumer/en/doc/HMS-Plugin-Guides/createmap-0000001050190759-V1?ha_source=hms1)
+- [Reference](https://developer.huawei.com/consumer/en/doc/HMS-Plugin-References/overview-0000001051586849-V1?ha_source=hms1)
 
 ## Questions or Issues
 

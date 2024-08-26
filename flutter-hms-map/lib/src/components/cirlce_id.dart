@@ -14,12 +14,15 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// Represents an immutable circle ID.
 @immutable
 class CircleId {
+  /// Unique circle ID.
   final String id;
 
+  /// Creates a [CircleId] object.
   const CircleId(this.id);
 
   @override

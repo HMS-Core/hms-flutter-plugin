@@ -14,12 +14,15 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// Represents an immutable ground overlay ID.
 @immutable
 class GroundOverlayId {
+  /// Unique ground overlay ID.
   final String id;
 
+  /// Creates a [GroundOverlayId] object.
   const GroundOverlayId(this.id);
 
   @override

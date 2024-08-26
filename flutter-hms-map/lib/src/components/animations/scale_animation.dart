@@ -14,14 +14,26 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../../huawei_map.dart';
 
+/// Controls the animation scale.
 class HmsScaleAnimation extends HmsAnimation {
+  /// Horizontal scale ratio when the animation starts.
   double fromX;
+
+  /// Horizontal scale ratio when the animation ends.
   double toX;
+
+  /// Vertical scale ratio when the animation starts.
   double fromY;
+
+  /// Vertical scale ratio when the animation ends.
   double toY;
+
+  /// Function to be executed when an animation starts.
   Function? onAnimationStart;
+
+  /// Function to be executed when an animation ends.
   Function? onAnimationEnd;
 
   @override
@@ -34,6 +46,7 @@ class HmsScaleAnimation extends HmsAnimation {
     onAnimationEnd?.call();
   }
 
+  /// Creates an [HmScaleAnimation] object.
   HmsScaleAnimation({
     required String animationId,
     required this.fromX,

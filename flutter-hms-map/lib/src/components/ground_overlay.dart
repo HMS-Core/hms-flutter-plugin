@@ -14,24 +14,57 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// Defines an image on the map.
 @immutable
 class GroundOverlay {
+  /// Unique Ground Overlay ID.
   final GroundOverlayId groundOverlayId;
+
+  /// Bearing of a ground overlay, in degrees clockwise from north.
   final double bearing;
+
+  /// Indicates whether a ground overlay is tappable.
   final bool clickable;
+
+  /// Width of a ground overlay, in meters.
   final double width;
+
+  /// Height of a ground overlay, in meters.
   final double height;
+
+  /// Image of a ground overlay.
   final BitmapDescriptor imageDescriptor;
+
+  /// Position of a ground overlay.
   final LatLng? position;
+
+  /// Bounds of a ground overlay.
   final LatLngBounds? bounds;
+
+  /// Anchor of a ground overlay.
   final Offset anchor;
+
+  /// Transparency of a ground overlay.
   final double transparency;
+
+  /// Indicates whether a ground overlay is visible.
+  ///
+  /// If the ground overlay is invisible, it will not be drawn but all other states will be preserved.
   final bool visible;
+
+  /// Z-index of a ground overlay.
+  ///
+  /// The z-index indicates the overlapping order of a ground overlay.
+  /// A ground overlay with a larger z-index overlaps that with a smaller z-index.
+  /// Ground overlays with the same z-index overlap each other in a random order.
   final double zIndex;
+
+  /// Function to be executed when a ground overlay is tapped.
   final VoidCallback? onClick;
 
+  /// Creates a [GroundOverlay] object.
   const GroundOverlay({
     required this.groundOverlayId,
     required this.width,
@@ -48,6 +81,7 @@ class GroundOverlay {
     this.onClick,
   });
 
+  /// Copies a [GroundOverlay] object and updates the specified attributes.
   GroundOverlay updateCopy({
     double? bearing,
     bool? clickable,
@@ -79,6 +113,7 @@ class GroundOverlay {
     );
   }
 
+  /// Clones a [GroundOverlay] object.
   GroundOverlay clone() => updateCopy();
 
   @override

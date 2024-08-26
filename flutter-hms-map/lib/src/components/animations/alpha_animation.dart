@@ -14,12 +14,23 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../../huawei_map.dart';
 
+/// Controls the transparency.
+///
+/// The transparency value range is [0,1].
+/// The value `1` indicates opaque.
 class HmsAlphaAnimation extends HmsAnimation {
+  /// Initial transparency.
   double fromAlpha;
+
+  /// Target transparency.
   double toAlpha;
+
+  /// Function to be executed when an animation starts.
   Function? onAnimationStart;
+
+  /// Function to be executed when an animation ends.
   Function? onAnimationEnd;
 
   @override
@@ -32,6 +43,7 @@ class HmsAlphaAnimation extends HmsAnimation {
     onAnimationEnd?.call();
   }
 
+  /// Creates an [HmsAlphaAnimation] object.
   HmsAlphaAnimation({
     required String animationId,
     required this.fromAlpha,

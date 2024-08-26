@@ -3,7 +3,7 @@ description: Huawei Map Kit plugin for Flutter. Huawei Map Kit, provides standar
 homepage: https://www.huawei.com
 repository: https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-map
 
-version: 6.11.2+302
+version: 6.11.2+303
 
 environment:
   sdk: ">=2.14.0 <4.0.0"
