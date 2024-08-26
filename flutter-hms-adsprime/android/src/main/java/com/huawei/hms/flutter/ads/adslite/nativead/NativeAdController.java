@@ -24,6 +24,7 @@ import androidx.annotation.NonNull;
 import com.huawei.hms.ads.AdListener;
 import com.huawei.hms.ads.AdParam;
 import com.huawei.hms.ads.AppInfo;
+import com.huawei.hms.ads.BiddingInfo;
 import com.huawei.hms.ads.nativead.DislikeAdReason;
 import com.huawei.hms.ads.nativead.NativeAd;
 import com.huawei.hms.ads.nativead.NativeAdConfiguration;
@@ -63,6 +64,8 @@ public class NativeAdController implements MethodChannel.MethodCallHandler {
     private String adSlotId;
 
     private Map<String, Object> adParam;
+
+    public static Map<String, Object> videoConfigurationMap;
 
     NativeAdController(String id, MethodChannel channel, Context context) {
         this.id = id;
@@ -145,6 +148,17 @@ public class NativeAdController implements MethodChannel.MethodCallHandler {
                     Log.e(TAG, e.getMessage());
                     HMSLogger.getInstance(context).sendSingleEvent("showAppDetailPage", ErrorCodes.INNER);
                     result.error(ErrorCodes.INNER, "showAppDetailPage failed.", e.getMessage());
+                }
+                break;
+            case "getBiddingInfo":
+                HMSLogger.getInstance(context).startMethodExecutionTimer("getBiddingInfo");
+                BiddingInfo biddingInfo = nativeAd.getBiddingInfo();
+                if (biddingInfo == null) {
+                    HMSLogger.getInstance(context).sendSingleEvent("getBiddingInfo", "-1");
+                    result.error("-1", "BiddingInfo is null.", "");
+                } else {
+                    HMSLogger.getInstance(context).sendSingleEvent("getBiddingInfo");
+                    result.success(ToMap.fromBiddingInfo(biddingInfo));
                 }
                 break;
             case "getPromoteInfo":
@@ -361,6 +375,7 @@ public class NativeAdController implements MethodChannel.MethodCallHandler {
         boolean slotIdChanged = slotId != null && slotId.equals(this.adSlotId);
         Map<String, Object> adParamMap = ToMap.fromObject(call.argument("adParam"));
         Map<String, Object> adConfigurationMap = ToMap.fromObject(call.argument("adConfiguration"));
+        videoConfigurationMap = ToMap.fromObject(adConfigurationMap.get("videoConfiguration"));
         if (slotId != null && !slotId.isEmpty()) {
             if (slotIdChanged) {
                 adSlotId = slotId;

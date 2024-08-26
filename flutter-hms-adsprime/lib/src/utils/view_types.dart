@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_adsprime;
+part of '../../huawei_adsprime.dart';
 
 const String _NATIVE_VIEW = 'com.huawei.hms.flutter.ads/native/view';
 const String _BANNER_VIEW = 'com.huawei.hms.flutter.ads/banner/view';

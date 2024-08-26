@@ -14,28 +14,79 @@
     limitations under the License.
 */
 
-part of huawei_adsprime;
+part of '../../huawei_adsprime.dart';
 
 class AdParam {
+  /// User gender.
+  ///
+  /// `Constant value: 0` Unknown
+  ///
+  /// `Constant value: 1` Male
+  ///
+  /// `Constant value: 2` Female
   int? gender;
+
+  /// The maximum transaction timeout interval (including the network delay), in milliseconds.
+  int? tMax;
+
+  /// Code of the country/region to which an app belongs.
   String? countryCode;
+
+  /// Creative type of a native ad.
   List<DetailedCreativeType>? detailedCreativeTypeList;
+
+  /// Content bundle.
   String? contentBundle;
+
+  /// Location
   Location? location;
+
+  /// Child-directed setting, setting directed to users under the age of consent, and ad content rating.
+  ///
+  /// The [RequestOptions] object has its own properties which provide additional settings.
   late RequestOptions requestOptions;
+
+  Map<String, dynamic>? _setBiddingParamMap;
+
+  Map<String, dynamic>? _addBiddingParamMap;
 
   AdParam({
     this.gender,
+    this.tMax,
     this.countryCode,
     this.detailedCreativeTypeList,
     this.contentBundle,
     this.location,
     RequestOptions? options,
-  }) : requestOptions = options ?? RequestOptions();
+  }) {
+    requestOptions = options ?? RequestOptions();
+  }
+
+  int get id => hashCode;
+
+  AdParam addBiddingParamMap(String slotId, BiddingParam biddingParam) {
+    _addBiddingParamMap = {
+      "slotId": slotId,
+      "biddingParam": biddingParam.toJson()
+    };
+    return this;
+  }
+
+  AdParam setBiddingParamMap(Map<String, BiddingParam> biddingParamMap) {
+    Map<String, dynamic> paramMap = {};
+
+    biddingParamMap.forEach((key, value) {
+      paramMap[key] = value.toJson();
+    });
+
+    this._setBiddingParamMap = paramMap;
+    return this;
+  }
 
   Map<String, dynamic> _toMap() {
     return <String, dynamic>{
       'gender': gender,
+      'tMax': tMax,
       'countryCode': countryCode,
       'detailedCreativeTypeList': detailedCreativeTypeList
           ?.map((DetailedCreativeType e) => e.value)
@@ -44,12 +95,15 @@ class AdParam {
       'locationProvider': location?.provider,
       'locationLatitude': location?.latitude,
       'locationLongitude': location?.longitude,
+      'addBiddingParamMap': _addBiddingParamMap,
+      'setBiddingParamMap': _setBiddingParamMap,
       ...requestOptions._toMap(),
     };
   }
 }
 
 class Location {
+  /// Provider. Default value is empty string.
   final String provider;
   final double latitude;
   final double longitude;

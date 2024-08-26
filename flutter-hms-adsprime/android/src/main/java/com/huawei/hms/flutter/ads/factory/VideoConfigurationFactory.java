@@ -36,7 +36,8 @@ public class VideoConfigurationFactory {
             builder.setAudioFocusType(audioFocusType);
         }
 
-        Boolean customizeOperationRequested = FromMap.toBoolean("customizeOperationRequested", videoConfigurationMap.get("customizeOperationRequested"));
+        Boolean customizeOperationRequested = FromMap.toBoolean("customizeOperationRequested",
+            videoConfigurationMap.get("customizeOperationRequested"));
         if (videoConfigurationMap.get("customizeOperationRequested") != null) {
             builder.setCustomizeOperateRequested(customizeOperationRequested);
         }
@@ -44,6 +45,11 @@ public class VideoConfigurationFactory {
         Boolean startMuted = FromMap.toBoolean("startMuted", videoConfigurationMap.get("startMuted"));
         if (videoConfigurationMap.get("startMuted") != null) {
             builder.setStartMuted(startMuted);
+        }
+
+        Integer autoPlayNetwork = FromMap.toInteger("autoPlayNetwork", videoConfigurationMap.get("autoPlayNetwork"));
+        if (autoPlayNetwork != null) {
+            builder.setAutoPlayNetwork(autoPlayNetwork);
         }
 
         return builder.build();

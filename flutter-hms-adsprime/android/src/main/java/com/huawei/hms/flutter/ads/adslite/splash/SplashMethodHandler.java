@@ -24,6 +24,7 @@ import androidx.annotation.NonNull;
 
 import java.util.Map;
 
+import com.huawei.hms.ads.BiddingInfo;
 import com.huawei.hms.ads.splash.SplashView;
 import com.huawei.hms.flutter.ads.factory.EventChannelFactory;
 import com.huawei.hms.flutter.ads.logger.HMSLogger;
@@ -39,7 +40,9 @@ import io.flutter.plugin.common.MethodChannel.Result;
 
 public class SplashMethodHandler implements MethodChannel.MethodCallHandler {
     private final BinaryMessenger messenger;
+
     private final Activity activity;
+
     private final Context context;
 
     public SplashMethodHandler(final BinaryMessenger messenger, final Activity activity, Context context) {
@@ -75,6 +78,9 @@ public class SplashMethodHandler implements MethodChannel.MethodCallHandler {
             case "pauseAd":
                 pauseAd(call, result);
                 break;
+            case "getBiddingInfo":
+                getBiddingInfo(call, result);
+                break;
             default:
                 result.notImplemented();
         }
@@ -92,7 +98,8 @@ public class SplashMethodHandler implements MethodChannel.MethodCallHandler {
         }
 
         if (adSlotId == null || adSlotId.isEmpty()) {
-            result.error(ErrorCodes.NULL_PARAM, "adSlotId is either null or empty. Load preparation failed. | Ad id : " + id, "");
+            result.error(ErrorCodes.NULL_PARAM,
+                "adSlotId is either null or empty. Load preparation failed. | Ad id : " + id, "");
             HMSLogger.getInstance(context).sendSingleEvent("prepareSplashAd", ErrorCodes.NULL_PARAM);
             return;
         }
@@ -119,15 +126,8 @@ public class SplashMethodHandler implements MethodChannel.MethodCallHandler {
         Integer audioFocusType = FromMap.toInteger("audioFocusType", call.argument("audioFocusType"));
         Double margin = FromMap.toDouble("topMargin", call.argument("topMargin"));
 
-        splash.prepareForLoad(
-            adSlotId,
-            orientation != null ? orientation : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT,
-            margin,
-            type,
-            adParam,
-            resources,
-            audioFocusType,
-            result);
+        splash.prepareForLoad(adSlotId, orientation != null ? orientation : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT,
+            margin, type, adParam, resources, audioFocusType, result);
     }
 
     private void loadSplashAd(MethodCall call, Result result) {
@@ -143,7 +143,8 @@ public class SplashMethodHandler implements MethodChannel.MethodCallHandler {
         if (splash.isLoading()) {
             splash.loadAd();
         } else {
-            result.error(ErrorCodes.LOAD_FAILED, "Ad is either null or not in loading state. Load failed. | Ad id : " + id, "");
+            result.error(ErrorCodes.LOAD_FAILED,
+                "Ad is either null or not in loading state. Load failed. | Ad id : " + id, "");
             HMSLogger.getInstance(context).sendSingleEvent("loadSplashAd", ErrorCodes.LOAD_FAILED);
         }
         result.success(true);
@@ -162,14 +163,26 @@ public class SplashMethodHandler implements MethodChannel.MethodCallHandler {
         Map<String, Object> adParam = ToMap.fromObject(call.argument("adParam"));
         Integer orientation = FromMap.toInteger("orientation", call.argument("orientation"));
 
-        Splash.preloadAd(
-            activity,
-            adSlotId,
-            orientation != null ? orientation : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT,
-            adParam,
-            result);
-            result.success(true);
+        Splash.preloadAd(activity, adSlotId,
+            orientation != null ? orientation : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT, adParam, result);
+        result.success(true);
         HMSLogger.getInstance(context).sendSingleEvent("preloadSplashAd");
+    }
+
+    private void getBiddingInfo(MethodCall call, Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("getBiddingInfo");
+        Integer id = FromMap.toInteger("id", call.argument("id"));
+        Splash splash = Splash.get(id);
+        SplashView splashView = splash == null ? null : splash.getSplashView();
+        BiddingInfo biddingInfo = splashView == null ? null : splashView.getBiddingInfo();
+
+        if (biddingInfo == null) {
+            HMSLogger.getInstance(context).sendSingleEvent("getBiddingInfo", ErrorCodes.NOT_FOUND);
+            result.error(ErrorCodes.NOT_FOUND, "Bidding Info is null", "");
+        } else {
+            HMSLogger.getInstance(context).sendSingleEvent("getBiddingInfo");
+            result.success(ToMap.fromBiddingInfo(biddingInfo));
+        }
     }
 
     private void isAdLoaded(MethodCall call, Result result) {
@@ -188,7 +201,8 @@ public class SplashMethodHandler implements MethodChannel.MethodCallHandler {
             result.success(adView != null && adView.isLoaded());
             HMSLogger.getInstance(context).sendSingleEvent("isSplashAdLoaded");
         } else {
-            result.error(ErrorCodes.INVALID_PARAM, "Ad type parameter is invalid. isAdLoaded failed. | Ad id : " + id, "");
+            result.error(ErrorCodes.INVALID_PARAM, "Ad type parameter is invalid. isAdLoaded failed. | Ad id : " + id,
+                "");
             HMSLogger.getInstance(context).sendSingleEvent("isSplashAdLoaded", ErrorCodes.INVALID_PARAM);
         }
     }
@@ -223,7 +237,8 @@ public class SplashMethodHandler implements MethodChannel.MethodCallHandler {
             result.success(splash.getSplashView() != null && splash.getSplashView().isLoading());
             HMSLogger.getInstance(context).sendSingleEvent("isSplashAdLoading");
         } else {
-            result.error(ErrorCodes.INVALID_PARAM, "Ad type parameter is invalid. isAdLoading failed. | Ad id : " + id, "");
+            result.error(ErrorCodes.INVALID_PARAM, "Ad type parameter is invalid. isAdLoading failed. | Ad id : " + id,
+                "");
             HMSLogger.getInstance(context).sendSingleEvent("isSplashAdLoading", ErrorCodes.INVALID_PARAM);
         }
     }

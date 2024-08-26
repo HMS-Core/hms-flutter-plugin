@@ -14,10 +14,13 @@
     limitations under the License.
 */
 
-part of huawei_adsprime;
+part of '../../../huawei_adsprime.dart';
 
 class InstreamAdView extends StatelessWidget {
+  /// Roll ads to display.
   final List<InstreamAd> instreamAds;
+
+  /// Controller for [InstreamAdView].
   final InstreamAdViewController? controller;
 
   const InstreamAdView({
@@ -41,15 +44,35 @@ class InstreamAdView extends StatelessWidget {
 
 class InstreamAdViewController {
   late MethodChannel _channel;
+
+  /// Called when a roll ad is clicked.
   final Function? onClick;
+
+  /// Called when a roll ad is switched to another.
   final Function(InstreamAd?)? onSegmentMediaChange;
+
+  /// Called when a roll ad is being played.
   final Function(int? per, int? playTime)? onMediaProgress;
+
+  /// Called when a roll ad starts to play.
   final Function(int? playTime)? onMediaStart;
+
+  /// Called when a roll ad is paused.
   final Function(int? playTime)? onMediaPause;
+
+  /// Called when a roll ad is stopped.
   final Function(int? playTime)? onMediaStop;
+
+  /// Called when the playback of a roll ad is complete.
   final Function(int? playTime)? onMediaCompletion;
+
+  /// Called when a roll ad encounters an error during playback.
   final Function(int? playTime, int? errorCode, int? extra)? onMediaError;
+
+  /// Called when a roll ad is muted.
   final Function? onMute;
+
+  /// Called when a roll ad is unmuted.
   final Function? onUnMute;
 
   final Function(int adId)? onInstreamAdViewCreated;
@@ -128,72 +151,104 @@ class InstreamAdViewController {
     onInstreamAdViewCreated?.call(id);
   }
 
+  /// Destroys a roll ad.
   Future<bool?> destroy() async {
     return await _channel.invokeMethod(
       'destroy',
     );
   }
 
+  /// Checks whether an ad is being played.
   Future<bool?> isPlaying() async {
     return await _channel.invokeMethod(
       'isPlaying',
     );
   }
 
+  /// Mutes a roll ad.
   Future<bool?> mute() async {
     return await _channel.invokeMethod(
       'mute',
     );
   }
 
+  /// Closes a roll ad.
   Future<bool?> onClose() async {
     return await _channel.invokeMethod(
       'onClose',
     );
   }
 
+  /// Pauses a roll ad.
   Future<bool?> pause() async {
     return await _channel.invokeMethod(
       'pause',
     );
   }
 
+  /// Plays a roll ad.
   Future<bool?> play() async {
     return await _channel.invokeMethod(
       'play',
     );
   }
 
+  /// Removes [MediaChangeListener].
+  ///
+  ///  Media change related callbacks are not called after this execution.
   Future<bool?> removeInstreamMediaChangeListener() async {
     return await _channel.invokeMethod(
       'removeInstreamMediaChangeListener',
     );
   }
 
+  /// Removes [MediaStateListener].
+  ///
+  ///  Media state related callbacks are not called after this execution.
   Future<bool?> removeInstreamMediaStateListener() async {
     return await _channel.invokeMethod(
       'removeInstreamMediaStateListener',
     );
   }
 
+  /// Removes [MediaMuteListener].
+  ///
+  /// Media mute related callbacks are not called after this execution.
   Future<bool?> removeMediaMuteListener() async {
     return await _channel.invokeMethod(
       'removeMediaMuteListener',
     );
   }
 
+  /// Stops a roll ad.
   Future<bool?> stop() async {
     return await _channel.invokeMethod(
       'stop',
     );
   }
 
+  /// Unmutes a roll ad.
   Future<bool?> unmute() async {
     return await _channel.invokeMethod(
       'unmute',
     );
   }
 
+  /// Shows advertiser info dialog.
+  Future<void> showAdvertiserInfoDialog() async {
+    return await _channel.invokeMethod(
+      'showAdvertiserInfoDialog',
+    );
+  }
+
+  /// Hides advertiser info dialog.
+  Future<void> hideAdvertiserInfoDialog() async {
+    return await _channel.invokeMethod(
+      'hideAdvertiserInfoDialog',
+    );
+  }
+
+  /// Shows the ad transparency dialog box.
   Future<void> showTransparencyDialog({List<int>? location}) async {
     return await _channel.invokeMethod(
       'showTransparencyDialog',
@@ -201,6 +256,7 @@ class InstreamAdViewController {
     );
   }
 
+  /// Hides the ad transparency dialog box.
   Future<void> hideTransparencyDialog() async {
     return await _channel.invokeMethod(
       'hideTransparencyDialog',

@@ -21,6 +21,8 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import com.huawei.hms.ads.BiddingInfo;
+import com.huawei.hms.ads.InterstitialAd;
 import com.huawei.hms.flutter.ads.adslite.reward.RewardStreamHandler;
 import com.huawei.hms.flutter.ads.factory.EventChannelFactory;
 import com.huawei.hms.flutter.ads.logger.HMSLogger;
@@ -67,6 +69,9 @@ public class InterstitialMethodHandler implements MethodChannel.MethodCallHandle
                 break;
             case "isAdLoading":
                 isAdLoading(call, result);
+                break;
+            case "getBiddingInfo":
+                getBiddingInfo(call, result);
                 break;
             default:
                 result.notImplemented();
@@ -143,6 +148,21 @@ public class InterstitialMethodHandler implements MethodChannel.MethodCallHandle
         interstitialAd.show();
         result.success(true);
         HMSLogger.getInstance(context).sendSingleEvent("showInterstitialAd");
+    }
+
+    private void getBiddingInfo(MethodCall call, Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("getBiddingInfo");
+        Integer id = FromMap.toInteger("id", call.argument("id"));
+        Interstitial interstitial = Interstitial.get(id);
+        InterstitialAd interstitialAd = interstitial == null ? null : interstitial.getInterstitialAd();
+        BiddingInfo biddingInfo = interstitialAd == null ? null : interstitialAd.getBiddingInfo();
+        if (biddingInfo == null) {
+            HMSLogger.getInstance(context).sendSingleEvent("getBiddingInfo", ErrorCodes.NOT_FOUND);
+            result.error(ErrorCodes.NOT_FOUND, "No ad for given id", "");
+        } else {
+            HMSLogger.getInstance(context).sendSingleEvent("getBiddingInfo");
+            result.success(ToMap.fromBiddingInfo(biddingInfo));
+        }
     }
 
     private void isAdLoaded(MethodCall call, Result result) {

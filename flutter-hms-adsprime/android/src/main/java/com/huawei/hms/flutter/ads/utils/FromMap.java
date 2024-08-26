@@ -19,17 +19,25 @@ package com.huawei.hms.flutter.ads.utils;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.huawei.hms.ads.BiddingParam;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class FromMap {
     private static final String TAG = "FromMap";
+
     private static final String INT = "int";
+
     private static final String INT_LIST = "intList";
+
     private static final String STRING = "String";
+
     private static final String STRING_LIST = "StringList";
+
     private static final String BOOL = "bool";
+
     private static final String BOOL_LIST = "boolList";
 
     public static String toString(String key, Object value) {
@@ -40,7 +48,7 @@ public class FromMap {
         return (String) value;
     }
 
-    private static ArrayList<String> toStringArrayList(String key, Object value) {
+    public static ArrayList<String> toStringArrayList(String key, Object value) {
         ArrayList<String> arrList = new ArrayList<>();
         if (value instanceof ArrayList) {
             Object[] objArr = ((ArrayList) value).toArray();
@@ -160,7 +168,7 @@ public class FromMap {
         return bundle;
     }
 
-    public static HashMap<String, Object> toHashMap(String key, Object value){
+    public static HashMap<String, Object> toHashMap(String key, Object value) {
         if (!(value instanceof HashMap)) {
             Log.w(TAG, "toMap | HashMap<String, Object> value expected for " + key);
             return null;
@@ -168,7 +176,8 @@ public class FromMap {
         return (HashMap<String, Object>) value;
     }
 
-    private static void addSingle(String type, Map<String, Object> item, Map.Entry<String, Object> entry, Bundle bundle) {
+    private static void addSingle(String type, Map<String, Object> item, Map.Entry<String, Object> entry,
+        Bundle bundle) {
         Integer i;
         String s;
         Boolean b;
@@ -223,5 +232,21 @@ public class FromMap {
                 Log.w(TAG, "addList | int, string, or bool expected.");
                 break;
         }
+    }
+
+    public static BiddingParam toBiddingParam(Map<String, Object> map) {
+        if (map == null) {
+            return null;
+        }
+
+        BiddingParam.Builder builder = new BiddingParam.Builder();
+        builder.setBidFloor(FromMap.toDouble("bidFloor", map.get("bidFloor")) == null
+                ? null
+                : FromMap.toDouble("bidFloor", map.get("bidFloor")).floatValue())
+            .setBidFloorCur(FromMap.toString("bidFloorCur", map.get("bidFloorCur")))
+            .setBpkgName(FromMap.toStringArrayList("bpkgName", map.get("bpkgName")));
+
+        return builder.build();
+
     }
 }

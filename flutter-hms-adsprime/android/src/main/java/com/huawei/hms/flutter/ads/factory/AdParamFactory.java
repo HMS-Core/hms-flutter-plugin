@@ -20,14 +20,19 @@ import android.location.Location;
 import android.util.Log;
 
 import com.huawei.hms.ads.AdParam;
+import com.huawei.hms.ads.BiddingParam;
 import com.huawei.hms.flutter.ads.utils.FromMap;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class AdParamFactory {
     private static final String TAG = "AdParamFactory";
+
     private final Map<String, Object> adParamMap;
+
+    private AdParam.Builder builder;
 
     public AdParamFactory(Map<String, Object> adParamMap) {
         this.adParamMap = adParamMap;
@@ -35,14 +40,17 @@ public class AdParamFactory {
 
     public AdParam createAdParam() {
         Log.i(TAG, "Create ad param begin");
-        AdParam.Builder builder = new AdParam.Builder();
+        builder = new AdParam.Builder();
         if (adParamMap == null) {
             return builder.build();
         }
         Integer gender = FromMap.toInteger("gender", adParamMap.get("gender"));
-        String adContentClassification = FromMap.toString("adContentClassification", adParamMap.get("adContentClassification"));
-        Integer tagForChildProtection = FromMap.toInteger("tagForChildProtection", adParamMap.get("tagForChildProtection"));
-        Integer tagForUnderAgeOfPromise = FromMap.toInteger("tagForUnderAgeOfPromise", adParamMap.get("tagForUnderAgeOfPromise"));
+        String adContentClassification = FromMap.toString("adContentClassification",
+            adParamMap.get("adContentClassification"));
+        Integer tagForChildProtection = FromMap.toInteger("tagForChildProtection",
+            adParamMap.get("tagForChildProtection"));
+        Integer tagForUnderAgeOfPromise = FromMap.toInteger("tagForUnderAgeOfPromise",
+            adParamMap.get("tagForUnderAgeOfPromise"));
         Integer nonPersonalizedAd = FromMap.toInteger("nonPersonalizedAd", adParamMap.get("nonPersonalizedAd"));
         String appCountry = FromMap.toString("appCountry", adParamMap.get("appCountry"));
         String appLang = FromMap.toString("appLang", adParamMap.get("appLang"));
@@ -52,8 +60,41 @@ public class AdParamFactory {
         Double locationLatitude = FromMap.toDouble("locationLatitude", adParamMap.get("locationLatitude"));
         Double locationLongitude = FromMap.toDouble("locationLongitude", adParamMap.get("locationLongitude"));
         String consent = FromMap.toString("consent", adParamMap.get("consent"));
-        ArrayList<Integer> detailedCreativeTypeList = FromMap.toIntegerArrayList("detailedCreativeTypeList", adParamMap.get("detailedCreativeTypeList"));
+        ArrayList<Integer> detailedCreativeTypeList = FromMap.toIntegerArrayList("detailedCreativeTypeList",
+            adParamMap.get("detailedCreativeTypeList"));
         boolean requestLocation = FromMap.toBoolean("requestLocation", adParamMap.get("requestLocation"));
+        Integer tMax = FromMap.toInteger("tMax", adParamMap.get("tMax"));
+        Map<String, Object> addBiddingParamMap = FromMap.toHashMap("addBiddingParamMap",
+            adParamMap.get("addBiddingParamMap"));
+        Map<String, Object> setBiddingParamMap = FromMap.toHashMap("setBiddingParamMap",
+            adParamMap.get("setBiddingParamMap"));
+        String slotId;
+
+        if (tMax != null) {
+            builder.setTMax(tMax);
+        }
+
+        if (addBiddingParamMap != null) {
+            slotId = (String) addBiddingParamMap.get("slotId");
+            Log.i(TAG, "slot id is " + slotId);
+            BiddingParam bp = FromMap.toBiddingParam((Map<String, Object>) addBiddingParamMap.get("biddingParam"));
+
+            builder.addBiddingParamMap(slotId, bp);
+            Log.i(TAG, "add bidding param map");
+        }
+
+        if (setBiddingParamMap != null) {
+            Map<String, BiddingParam> paramMap = new HashMap<String, BiddingParam>();
+
+            for (String key : setBiddingParamMap.keySet()) {
+                BiddingParam bp = FromMap.toBiddingParam(FromMap.toHashMap(key, setBiddingParamMap.get(key)));
+                paramMap.put(key, bp);
+            }
+
+            builder.setBiddingParamMap(paramMap);
+            Log.i(TAG, "setBiddingParamMap" + paramMap);
+
+        }
 
         if (gender != null && (gender >= 0 && gender < 3)) {
             Log.i(TAG, "set gender");

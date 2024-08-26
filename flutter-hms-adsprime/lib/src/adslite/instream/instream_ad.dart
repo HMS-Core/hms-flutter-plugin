@@ -14,88 +14,110 @@
     limitations under the License.
 */
 
-part of huawei_adsprime;
+part of '../../../huawei_adsprime.dart';
 
 class InstreamAd {
+  /// Identifier for a platform channel, which is used by the plugin.
   final int id;
+
   final MethodChannel _channel;
 
   InstreamAd({
     required this.id,
   }) : _channel = MethodChannel('$_INSTREAM_METHOD_CHANNEL/AD/$id');
 
+  /// Returns real-time bidding data.
+  Future<BiddingInfo?> getBiddingInfo() async {
+    return BiddingInfo.fromJson(await Ads.instance.channelBanner.invokeMethod(
+      'getBiddingInfo',
+    ));
+  }
+
+  /// Obtains ad source text.
   Future<String?> getAdSource() async {
     return await _channel.invokeMethod(
       'getAdSource',
     );
   }
 
+  /// Obtains the text to be displayed on a button.
   Future<String?> getCallToAction() async {
     return await _channel.invokeMethod(
       'getCallToAction',
     );
   }
 
+  /// Obtains ad duration, in milliseconds.
   Future<int?> getDuration() async {
     return await _channel.invokeMethod(
       'getDuration',
     );
   }
 
+  /// Obtains the URL of the `Why this ad` page.
   Future<String?> getWhyThisAd() async {
     return await _channel.invokeMethod(
       'getWhyThisAd',
     );
   }
 
+  /// Obtains the ad sign.
   Future<String?> getAdSign() async {
     return await _channel.invokeMethod(
       'getAdSign',
     );
   }
 
+  /// Checks whether an ad is clicked.
   Future<bool?> isClicked() async {
     return await _channel.invokeMethod(
       'isClicked',
     );
   }
 
+  /// Checks whether an ad is expired.
   Future<bool?> isExpired() async {
     return await _channel.invokeMethod(
       'isExpired',
     );
   }
 
+  /// Checks whether an ad is an image ad.
   Future<bool?> isImageAd() async {
     return await _channel.invokeMethod(
       'isImageAd',
     );
   }
 
+  /// Checks whether an ad is displayed.
   Future<bool?> isShown() async {
     return await _channel.invokeMethod(
       'isShown',
     );
   }
 
+  /// Checks whether an ad is a video ad.
   Future<bool?> isVideoAd() async {
     return await _channel.invokeMethod(
       'isVideoAd',
     );
   }
 
+  /// Goes to the `Why this ad` page.
   Future<bool?> gotoWhyThisAdPage() async {
     return await _channel.invokeMethod(
       'gotoWhyThisAdPage',
     );
   }
 
+  /// Indicates whether ad transparency information is displayed.
   Future<bool> isTransparencyOpen() async {
     return await _channel.invokeMethod(
       'isTransparencyOpen',
     );
   }
 
+  /// Obtains the redirection URL of the ad transparency information.
   Future<String> transparencyTplUrl() async {
     return await _channel.invokeMethod(
       'transparencyTplUrl',

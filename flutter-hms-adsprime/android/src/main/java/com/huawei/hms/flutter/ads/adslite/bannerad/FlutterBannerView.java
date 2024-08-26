@@ -22,6 +22,7 @@ import android.view.View;
 
 import com.huawei.hms.ads.AdParam;
 import com.huawei.hms.ads.BannerAdSize;
+import com.huawei.hms.ads.BiddingInfo;
 import com.huawei.hms.ads.banner.BannerView;
 import com.huawei.hms.flutter.ads.factory.AdParamFactory;
 import com.huawei.hms.flutter.ads.logger.HMSLogger;
@@ -41,10 +42,13 @@ import static com.huawei.hms.flutter.ads.utils.constants.ViewTypes.BANNER_VIEW;
 import static io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import static io.flutter.plugin.common.MethodChannel.Result;
 
-public class FlutterBannerView implements PlatformView, MethodCallHandler  {
+public class FlutterBannerView implements PlatformView, MethodCallHandler {
     private final MethodChannel methodChannel;
+
     private BannerView bannerView;
+
     private Map<String, Object> adParamMap;
+
     private final Context context;
 
     FlutterBannerView(Context context, BinaryMessenger messenger, int id, HashMap<String, Object> creationParams) {
@@ -58,7 +62,7 @@ public class FlutterBannerView implements PlatformView, MethodCallHandler  {
         BannerAdSize bannerAdSize = getBannerAdSize(FromMap.toString("bannerSize", creationParams.get("bannerSize")));
         String color = FromMap.toString("backgroundColor", creationParams.get("backgroundColor"));
         Integer refreshTime = FromMap.toInteger("refreshTime", creationParams.get("refreshTime"));
-        boolean loadOnStart =  FromMap.toBoolean("loadOnStart", creationParams.get("loadOnStart"));
+        boolean loadOnStart = FromMap.toBoolean("loadOnStart", creationParams.get("loadOnStart"));
         adParamMap = ToMap.fromObject(creationParams.get("adParam"));
 
         bannerView = new BannerView(context);
@@ -66,13 +70,13 @@ public class FlutterBannerView implements PlatformView, MethodCallHandler  {
         bannerView.setVisibility(View.VISIBLE);
         bannerView.setAdId(adId);
         bannerView.setBannerAdSize(bannerAdSize);
-        if(refreshTime != null) {
+        if (refreshTime != null) {
             bannerView.setBannerRefresh(refreshTime);
         }
-        if(color != null) {
+        if (color != null) {
             bannerView.setBackgroundColor(Color.parseColor(color));
         }
-        if(loadOnStart){
+        if (loadOnStart) {
             loadAd();
         }
     }
@@ -106,8 +110,8 @@ public class FlutterBannerView implements PlatformView, MethodCallHandler  {
         }
     }
 
-    private void loadAd(){
-        if(bannerView == null) {
+    private void loadAd() {
+        if (bannerView == null) {
             return;
         }
         AdParamFactory factory = new AdParamFactory(adParamMap);
@@ -123,8 +127,8 @@ public class FlutterBannerView implements PlatformView, MethodCallHandler  {
     @Override
     public void onMethodCall(MethodCall call, Result result) {
         HMSLogger.getInstance(context).startMethodExecutionTimer(call.method);
-        if(bannerView == null) {
-            result.error(ErrorCodes.NULL_VIEW,"BannerView isn't created yet.", "");
+        if (bannerView == null) {
+            result.error(ErrorCodes.NULL_VIEW, "BannerView isn't created yet.", "");
             HMSLogger.getInstance(context).sendSingleEvent(call.method, ErrorCodes.NULL_VIEW);
             return;
         }
@@ -144,6 +148,17 @@ public class FlutterBannerView implements PlatformView, MethodCallHandler  {
             case "isLoading":
                 result.success(bannerView.isLoading());
                 break;
+            case "getBiddingInfo":
+                HMSLogger.getInstance(context).startMethodExecutionTimer("getBiddingInfo");
+                BiddingInfo biddingInfo = bannerView.getBiddingInfo();
+                if (biddingInfo == null) {
+                    HMSLogger.getInstance(context).sendSingleEvent("getBiddingInfo", "-1");
+                    result.error("-1", "BiddingInfo is null.", "");
+                } else {
+                    HMSLogger.getInstance(context).sendSingleEvent("getBiddingInfo");
+                    result.success(ToMap.fromBiddingInfo(biddingInfo));
+                }
+                break;
             default:
                 result.notImplemented();
         }
@@ -152,7 +167,7 @@ public class FlutterBannerView implements PlatformView, MethodCallHandler  {
 
     @Override
     public void dispose() {
-        if(bannerView == null) {
+        if (bannerView == null) {
             return;
         }
         bannerView.destroy();

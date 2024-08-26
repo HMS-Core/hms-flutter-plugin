@@ -25,6 +25,8 @@ import 'package:flutter/services.dart';
 
 part 'src/adslite/ad_param.dart';
 part 'src/adslite/ad_size.dart';
+part 'src/adslite/bidding_info.dart';
+part 'src/adslite/bidding_param.dart';
 part 'src/adslite/banner/banner_ad.dart';
 part 'src/adslite/banner/banner_ad_size.dart';
 part 'src/adslite/banner/banner_view.dart';

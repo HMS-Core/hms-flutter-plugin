@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_adsprime;
+part of '../../huawei_adsprime.dart';
 
 class VastAdView extends StatelessWidget {
   final LinearAdSlot linearAdSlot;

@@ -21,6 +21,7 @@ import android.content.Context;
 import android.util.Log;
 import android.util.SparseArray;
 
+import com.huawei.hms.ads.BiddingInfo;
 import com.huawei.hms.ads.reward.Reward;
 import com.huawei.hms.ads.reward.RewardAd;
 import com.huawei.hms.ads.reward.RewardAdListener;
@@ -36,15 +37,23 @@ import io.flutter.plugin.common.EventChannel;
 
 public class HmsRewardAd {
     private static final String TAG = "HmsRewardAd";
+
     private static SparseArray<HmsRewardAd> allRewardAds = new SparseArray<>();
 
     private final RewardAd rewardAdInstance;
+
     private RewardAdListener rewardAdListener;
+
     private final int id;
+
     private String status;
+
     private EventChannel.EventSink event;
+
     private final boolean openInHmsCore;
+
     private final Activity activity;
+
     private final Context context;
 
     HmsRewardAd(int id, boolean openInHmsCore, Activity activity, Context context) {
@@ -58,7 +67,7 @@ public class HmsRewardAd {
         setStatus(AdStatus.CREATED);
     }
 
-    public void setEvent(EventChannel.EventSink event){
+    public void setEvent(EventChannel.EventSink event) {
         this.event = event;
     }
 
@@ -67,11 +76,7 @@ public class HmsRewardAd {
         String data = FromMap.toString("data", options);
         if (userId != null && data != null) {
             rewardAdInstance.setRewardVerifyConfig(
-                new RewardVerifyConfig.Builder()
-                    .setUserId(userId)
-                    .setData(data)
-                    .build()
-            );
+                new RewardVerifyConfig.Builder().setUserId(userId).setData(data).build());
         }
     }
 
@@ -79,8 +84,12 @@ public class HmsRewardAd {
         this.rewardAdListener = rewardAdListener;
     }
 
-    void setMobileDataAlertSwitch(boolean alertSwitch){
+    void setMobileDataAlertSwitch(boolean alertSwitch) {
         this.rewardAdInstance.setMobileDataAlertSwitch(alertSwitch);
+    }
+
+    public BiddingInfo getBiddingInfo() {
+        return rewardAdInstance.getBiddingInfo();
     }
 
     boolean isPreparing() {
@@ -129,7 +138,8 @@ public class HmsRewardAd {
 
     void loadAd(String adSlotId, Map<String, Object> adParam) {
         setStatus(AdStatus.LOADING);
-        rewardAdInstance.setRewardAdListener(rewardAdListener != null ? rewardAdListener : new RewardAdDefaultListener(context, this));
+        rewardAdInstance.setRewardAdListener(
+            rewardAdListener != null ? rewardAdListener : new RewardAdDefaultListener(context, this));
         AdParamFactory factory = new AdParamFactory(adParam);
         rewardAdInstance.loadAd(adSlotId, factory.createAdParam());
     }
@@ -144,7 +154,7 @@ public class HmsRewardAd {
             Log.e(TAG, "Reward ad is not loaded!");
             return;
         }
-        if(openInHmsCore){
+        if (openInHmsCore) {
             rewardAdInstance.show();
         } else {
             HmsRewardAdStatusListener rewardAdStatusListener = new HmsRewardAdStatusListener(this, event, context);
@@ -177,6 +187,7 @@ public class HmsRewardAd {
 
     static class RewardAdDefaultListener implements RewardAdListener {
         private final Context context;
+
         HmsRewardAd hmsRewardAd;
 
         RewardAdDefaultListener(Context context, HmsRewardAd hmsRewardAd) {
@@ -210,21 +221,27 @@ public class HmsRewardAd {
         }
 
         @Override
-        public void onRewarded(Reward reward) { }
+        public void onRewarded(Reward reward) {
+        }
 
         @Override
-        public void onRewardAdClosed() { }
+        public void onRewardAdClosed() {
+        }
 
         @Override
-        public void onRewardAdLeftApp() { }
+        public void onRewardAdLeftApp() {
+        }
 
         @Override
-        public void onRewardAdOpened() { }
+        public void onRewardAdOpened() {
+        }
 
         @Override
-        public void onRewardAdCompleted() { }
+        public void onRewardAdCompleted() {
+        }
 
         @Override
-        public void onRewardAdStarted() { }
+        public void onRewardAdStarted() {
+        }
     }
 }

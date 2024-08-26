@@ -13,15 +13,15 @@ This plugin enables communication between Huawei AdsPrime SDK and Flutter platfo
 - **Publisher Service**: Huawei AdsPrime Publisher Service utilizes Huawei's vast user base and extensive data capabilities to deliver targeted, high quality ad content to users. With this service, your app will be able to generate revenues while bringing your users content which is relevant to them.
 - **Identifier Service**: Huawei AdsPrime Kit provides the open advertising identifier (OAID) for advertisers to deliver personalized ads and attribute conversions.
 
-[Learn More](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/publisher-service-0000001050196431?ha_source=hms1)
+[Learn More](https://developer.huawei.com/consumer/en/doc/HMS-Plugin-Guides-V1/client-dev-0000001050310506-V1?ha_source=hms1)
 
 ## Installation
 
-Please see [pub.dev](https://pub.dev/packages/huawei_adsprime/install) and [AppGallery Connect Configuration](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/guide-agc-overview-0000001077885952?ha_source=hms1).
+Please see [pub.dev](https://pub.dev/packages/huawei_adsprime/install) and [AppGallery Connect Configuration](https://developer.huawei.com/consumer/en/doc/HMS-Plugin-Guides/config-agc-0000001050310544-V1?ha_source=hms1).
 
 ## Documentation
 
-- [Quick Start](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides-V1/banner-ads-0000001050436805?ha_source=hms1)
+- [Quick Start](https://developer.huawei.com/consumer/en/doc/HMS-Plugin-Guides-V1/client-dev-0000001050310506-V1?ha_source=hms1)
 - [Reference](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-References-V1/overview-0000001051055789-V1?ha_source=hms1)
 
 ## Questions or Issues
@@ -37,4 +37,4 @@ If you run into a bug in our samples, please submit an issue to the [GitHub repo
 
 ## License
 
-Huawei AdsPrime Kit Flutter Plugin is licensed under [Apache 2.0 license](LICENSE) 
+Huawei AdsPrime Kit Flutter Plugin is licensed under [Apache 2.0 license](LICENSE). 

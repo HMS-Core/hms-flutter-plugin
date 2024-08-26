@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_adsprime;
+part of '../../../huawei_adsprime.dart';
 
 class BannerAdSize extends AdSize {
   static const BannerAdSize s360x57 = BannerAdSize(width: 360, height: 57);
@@ -44,6 +44,7 @@ class BannerAdSize extends AdSize {
     required int height,
   }) : super(width: width, height: height);
 
+  /// Obtains the ad width, in pixels. If it fails to be obtained, `–1` is returned.
   Future<int?> get getWidthPx async {
     return Ads.instance.channel.invokeMethod(
       'bannerSize-getWidthPx',
@@ -51,6 +52,7 @@ class BannerAdSize extends AdSize {
     );
   }
 
+  /// Obtains the ad height, in pixels. If it fails to be obtained, `–1` is returned.
   Future<int?> get getHeightPx async {
     return Ads.instance.channel.invokeMethod(
       'bannerSize-getHeightPx',
@@ -58,10 +60,16 @@ class BannerAdSize extends AdSize {
     );
   }
 
+  /// Checks whether an adaptive height is used.
   bool get isAutoHeightSize => super.height == -2;
+
+  /// Checks whether a dynamic size is used.
   bool get isDynamicSize => super.width == -3 && super.height == -4;
+
+  /// Checks whether a full-screen width is used.
   bool get isFullWidthSize => super.width == -1;
 
+  /// Creates a banner ad size based on the current device orientation and a custom width.
   static Future<BannerAdSize> getCurrentDirectionBannerSize(int width) async {
     Map<dynamic, dynamic> bannerJson = await Ads.instance.channel.invokeMethod(
       'getCurrentDirectionBannerSize',
@@ -72,6 +80,7 @@ class BannerAdSize extends AdSize {
     return fromJson(bannerJson);
   }
 
+  /// Creates a banner ad size based on a custom width in landscape orientation.
   static Future<BannerAdSize> getLandscapeBannerSize(int width) async {
     Map<dynamic, dynamic> bannerJson = await Ads.instance.channel.invokeMethod(
       'getLandscapeBannerSize',
@@ -82,6 +91,7 @@ class BannerAdSize extends AdSize {
     return fromJson(bannerJson);
   }
 
+  /// Creates a banner ad size based on a custom width in portrait orientation.
   static Future<BannerAdSize> getPortraitBannerSize(int width) async {
     Map<dynamic, dynamic> bannerJson = await Ads.instance.channel.invokeMethod(
       'getPortraitBannerSize',

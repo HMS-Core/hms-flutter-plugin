@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_adsprime;
+part of '../../huawei_adsprime.dart';
 
 class Bundle {
   static const String _int = 'int';
