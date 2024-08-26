@@ -37,6 +37,7 @@ import io.flutter.plugin.common.MethodChannel.Result;
  */
 public class FlutterHmsMessaging {
     private final HMSLogger hmsLogger;
+
     private final Context context;
 
     public FlutterHmsMessaging(@NonNull Context context) {

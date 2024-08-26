@@ -29,6 +29,7 @@ import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber;
 import com.facebook.imagepipeline.image.CloseableImage;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
+
 import com.huawei.hms.flutter.push.constants.LocalNotification;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -40,9 +41,9 @@ public class HmsLocalNotificationPicturesLoader {
         /**
          * call Method
          *
-         * @param largeIconImage  : Bitmap
+         * @param largeIconImage : Bitmap
          * @param bigPictureImage : Bitmap
-         * @param result          : Flutter Result
+         * @param result : Flutter Result
          */
         void call(Bitmap largeIconImage, Bitmap bigPictureImage, MethodChannel.Result result);
     }
@@ -50,9 +51,11 @@ public class HmsLocalNotificationPicturesLoader {
     private volatile AtomicInteger count = new AtomicInteger(0);
 
     private Bitmap largeIconImage;
+
     private Bitmap bigPictureImage;
 
     private Callback callback;
+
     private MethodChannel.Result flutterResult;
 
     public HmsLocalNotificationPicturesLoader(Callback callback) {
@@ -107,18 +110,17 @@ public class HmsLocalNotificationPicturesLoader {
     }
 
     private void download(Context context, Uri uri, BaseBitmapDataSubscriber subscriber) {
-        ImageRequest imageRequest = ImageRequestBuilder
-                .newBuilderWithSource(uri)
-                .setLowestPermittedRequestLevel(ImageRequest.RequestLevel.FULL_FETCH)
-                .setRequestPriority(Priority.HIGH)
-                .build();
+        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithSource(uri)
+            .setLowestPermittedRequestLevel(ImageRequest.RequestLevel.FULL_FETCH)
+            .setRequestPriority(Priority.HIGH)
+            .build();
 
         if (!Fresco.hasBeenInitialized()) {
             Fresco.initialize(context);
         }
 
-        DataSource<CloseableReference<CloseableImage>> dataSource
-                = Fresco.getImagePipeline().fetchDecodedImage(imageRequest, context);
+        DataSource<CloseableReference<CloseableImage>> dataSource = Fresco.getImagePipeline()
+            .fetchDecodedImage(imageRequest, context);
 
         dataSource.subscribe(subscriber, CallerThreadExecutor.getInstance());
     }

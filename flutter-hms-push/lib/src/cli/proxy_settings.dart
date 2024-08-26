@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_push;
+part of '../../huawei_push.dart';
 
 /// A class provided by the aggregation capability package for setting basic attributes.
 abstract class ProxySettings {

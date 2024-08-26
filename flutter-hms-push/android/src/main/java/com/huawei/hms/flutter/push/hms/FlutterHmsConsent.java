@@ -28,7 +28,9 @@ import io.flutter.plugin.common.MethodChannel.Result;
 
 public class FlutterHmsConsent {
     private static final String TAG = FlutterHmsConsent.class.getSimpleName();
+
     private final HMSLogger hmsLogger;
+
     private final Context context;
 
     public FlutterHmsConsent(@NonNull Context context) {
@@ -45,7 +47,8 @@ public class FlutterHmsConsent {
                     result.success(Code.RESULT_SUCCESS.code());
                 } else {
                     hmsLogger.sendSingleEvent("consentOn", Code.RESULT_UNKNOWN.code());
-                    result.error(Code.RESULT_UNKNOWN.code(), task.getException().getMessage(), task.getException().getCause());
+                    result.error(Code.RESULT_UNKNOWN.code(), task.getException().getMessage(),
+                        task.getException().getCause());
                 }
             });
         } catch (Exception e) {
@@ -63,7 +66,8 @@ public class FlutterHmsConsent {
                     result.success(Code.RESULT_SUCCESS.code());
                 } else {
                     hmsLogger.sendSingleEvent("consentOff", Code.RESULT_UNKNOWN.code());
-                    result.error(Code.RESULT_UNKNOWN.code(), task.getException().getMessage(), task.getException().getCause());
+                    result.error(Code.RESULT_UNKNOWN.code(), task.getException().getMessage(),
+                        task.getException().getCause());
                 }
             });
         } catch (Exception e) {

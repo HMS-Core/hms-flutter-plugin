@@ -35,8 +35,8 @@ public class HmsLocalNotificationScheduledPublisher extends BroadcastReceiver {
     private void handleLocalNotification(Context context, Bundle bundle) {
         NotificationConfigUtils.configId(bundle);
         Application applicationContext = (Application) context.getApplicationContext();
-        HmsLocalNotificationController hmsLocalNotificationController =
-                new HmsLocalNotificationController(applicationContext);
+        HmsLocalNotificationController hmsLocalNotificationController = new HmsLocalNotificationController(
+            applicationContext);
         hmsLocalNotificationController.localNotificationNow(bundle, null);
     }
 }

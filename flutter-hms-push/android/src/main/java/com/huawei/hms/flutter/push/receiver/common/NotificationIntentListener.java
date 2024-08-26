@@ -45,7 +45,9 @@ import java.util.Map;
  */
 public class NotificationIntentListener implements NewIntentListener {
     private static Map<String, Object> initialNotification;
+
     private String initialIntent;
+
     private final Context context;
 
     public NotificationIntentListener(Context context) {

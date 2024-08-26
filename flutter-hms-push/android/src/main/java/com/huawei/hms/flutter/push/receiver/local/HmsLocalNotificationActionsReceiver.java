@@ -46,7 +46,8 @@ public class HmsLocalNotificationActionsReceiver extends BroadcastReceiver {
             return;
         }
 
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(
+            Context.NOTIFICATION_SERVICE);
         if (notificationManager == null) {
             return;
         }
@@ -63,14 +64,12 @@ public class HmsLocalNotificationActionsReceiver extends BroadcastReceiver {
         }
 
         if (BundleUtils.getB(bundle, NotificationConstants.INVOKE_APP, true)) {
-            HmsLocalNotificationController hmsLocalNotificationController = new HmsLocalNotificationController(context.getApplicationContext());
+            HmsLocalNotificationController hmsLocalNotificationController = new HmsLocalNotificationController(
+                context.getApplicationContext());
             hmsLocalNotificationController.invokeApp(bundle);
         } else {
-            Utils.sendIntent(
-                    context,
-                    PushIntent.LOCAL_NOTIFICATION_CLICK_ACTION,
-                    PushIntent.LOCAL_NOTIFICATION_CLICK,
-                    BundleUtils.convertJSON(bundle));
+            Utils.sendIntent(context, PushIntent.LOCAL_NOTIFICATION_CLICK_ACTION, PushIntent.LOCAL_NOTIFICATION_CLICK,
+                BundleUtils.convertJSON(bundle));
         }
     }
 }

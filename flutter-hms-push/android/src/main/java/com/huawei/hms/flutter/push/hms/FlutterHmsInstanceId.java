@@ -47,7 +47,9 @@ import java.util.Map;
  */
 public class FlutterHmsInstanceId {
     private static final String TAG = FlutterHmsInstanceId.class.getSimpleName();
+
     private final HMSLogger hmsLogger;
+
     private final Context context;
 
     public FlutterHmsInstanceId(Context context) {
@@ -114,7 +116,8 @@ public class FlutterHmsInstanceId {
                         hmsLogger.sendSingleEvent("getToken");
                         resolution.send();
                     } catch (PendingIntent.CanceledException ex) {
-                        HMSLogger.getInstance(PluginContext.getContext()).sendSingleEvent("onTokenError", ex.getMessage());
+                        HMSLogger.getInstance(PluginContext.getContext())
+                            .sendSingleEvent("onTokenError", ex.getMessage());
                     }
                 }
                 Intent resolutionIntent = e.getResolutionIntent();

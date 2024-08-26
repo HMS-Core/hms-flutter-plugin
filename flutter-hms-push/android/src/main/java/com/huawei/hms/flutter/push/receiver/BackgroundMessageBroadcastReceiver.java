@@ -26,7 +26,8 @@ import com.huawei.hms.flutter.push.backgroundmessaging.BackgroundMessagingServic
 public class BackgroundMessageBroadcastReceiver extends BroadcastReceiver {
     private static final String TAG = BackgroundMessageBroadcastReceiver.class.getSimpleName();
 
-    public static final String BACKGROUND_REMOTE_MESSAGE = "com.huawei.hms.flutter.push.receiver.BACKGROUND_REMOTE_MESSAGE";
+    public static final String BACKGROUND_REMOTE_MESSAGE
+        = "com.huawei.hms.flutter.push.receiver.BACKGROUND_REMOTE_MESSAGE";
 
     @Override
     public void onReceive(Context context, final Intent intent) {

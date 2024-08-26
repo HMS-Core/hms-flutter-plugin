@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_push;
+part of '../../huawei_push.dart';
 
 abstract class HMSLocalNotificationAttr {
   static const String ID = 'id';

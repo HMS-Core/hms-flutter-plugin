@@ -29,6 +29,7 @@ import java.util.Objects;
 
 public class FlutterHmsProfile {
     private final Context context;
+
     private final HMSLogger hmsLogger;
 
     public FlutterHmsProfile(Context context) {

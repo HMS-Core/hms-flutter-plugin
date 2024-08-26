@@ -1,3 +1,12 @@
+## 6.12.0+302
+
+- Fixed stability and performance issues.
+  > You are advised to use this version. To use it, you only need to update the version number and do not need to modify any code for adaptation.
+
+## 6.12.0+301
+
+- Minor optimization.
+
 ## 6.12.0+300
 
 - To solve stability and performance problems, it is recommended that you use it integratedly. You only need to upgrade the version number, and no other code adaptation is required. 
