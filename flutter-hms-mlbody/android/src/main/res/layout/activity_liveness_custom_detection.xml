@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <FrameLayout
+        android:id="@+id/surface_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/tool_bar"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="#FFFFFF">
+
+        <ImageView
+            android:id="@+id/img_back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_back" />
+
+        <TextView
+            android:id="@+id/img_back_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="24dp"
+            android:layout_toEndOf="@+id/img_back"
+            android:fontFamily="HWtext-65ST"
+            android:gravity="center_vertical"
+            android:text="@string/custom_ui"
+            android:textColor="#000000"
+            android:textSize="20dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tool_bar">
+        <TextView
+            android:id="@+id/tips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="HWtext-55ST"
+            android:gravity="center"
+            android:text="@string/custom_tips"
+            android:textColor="#000000"
+            android:textSize="16dp" />
+        <TextView
+            android:id="@+id/status_code"
+            android:layout_below="@id/tips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="HWtext-55ST"
+            android:gravity="center"
+            android:text="@string/status_code"
+            android:textColor="#000000"
+            android:textSize="16dp" />
+    </RelativeLayout>
+
+</RelativeLayout>
