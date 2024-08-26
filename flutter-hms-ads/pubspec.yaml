@@ -1,0 +1,25 @@
+name: huawei_ads
+description: Huawei Ads Kit plugin for Flutter utilizes Huawei's vast user base and extensive data capabilities to deliver targeted, high quality ad content to users.
+homepage: https://www.huawei.com
+repository: https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-ads
+
+version: 13.4.72+300
+
+environment:
+  sdk: ">=2.12.0 <4.0.0"
+  flutter: ">=1.20.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.huawei.hms.flutter.ads
+        pluginClass: HmsAdsPlugin
