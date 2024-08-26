@@ -16,19 +16,41 @@
 
 part of '../../huawei_ads.dart';
 
-class AdSize {
-  final int width;
-  final int height;
+class BiddingInfo {
+  /// Creative bid amount
+  final double? price;
 
-  const AdSize({
-    required this.width,
-    required this.height,
+  /// Currency of the creative bid, for example, CNY and USD.
+  final String? currency;
+
+  /// Bidding success notification URL
+  final String? nUrl;
+
+  /// URL used to notify Huawei of its bidding failure and the success of another vendor
+  final String? lUrl;
+
+  BiddingInfo({
+    this.price,
+    this.currency,
+    this.nUrl,
+    this.lUrl,
   });
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'width': width,
-      'height': height,
+      'price': price,
+      'currency': currency,
+      'nUrl': nUrl,
+      'lUrl': lUrl,
     };
+  }
+
+  static BiddingInfo fromJson(Map<String, dynamic> args) {
+    return BiddingInfo(
+      price: args['price'],
+      currency: args['currency'],
+      nUrl: args['nUrl'],
+      lUrl: args['lUrl'],
+    );
   }
 }

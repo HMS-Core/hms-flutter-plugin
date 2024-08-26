@@ -1,3 +1,12 @@
+## 13.4.72+300
+
+- Added the `autoPlayNetwork` property to the `VideoConfiguration` class.
+- Added the `AutoPlayNetwork` enum.
+- Added the `getBiddingInfo` method to the to the `NativeAd`, `InstreamAd`, `RewardAd`, `InterstitialAd`, `InstreamAd`, `BannerAd` and `SplashAd`  classes.
+- Added the `tMax` property to the `AdParam` and `RequestOptions` classes.
+- Added the `addBiddingParamMap` and `setBiddingParamMap` methods to the `AdParam` and `RequestOptions` classes.
+- Added the `BiddingParam` and `BiddingInfo` classes.
+
 ## 13.4.69+302
 
 - Added the `AppInfo` class which is the return type of `getAppInfo` method.
@@ -79,3 +88,4 @@
 ## 13.4.32
 
 - Initial release.
+

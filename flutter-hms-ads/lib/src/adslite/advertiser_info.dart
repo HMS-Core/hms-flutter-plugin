@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_ads;
+part of '../../huawei_ads.dart';
 
 /// Advertiser information.
 class AdvertiserInfo {

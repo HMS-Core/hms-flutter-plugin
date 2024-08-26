@@ -14,12 +14,14 @@
     limitations under the License.
 */
 
-part of huawei_ads;
+part of '../../../huawei_ads.dart';
 
 class DislikeAdReason {
+  /// Contains the reason why a user dislikes an ad.
   final String _description;
 
   const DislikeAdReason(this._description);
 
+  /// Reason why a user dislikes an ad.
   String get getDescription => _description;
 }

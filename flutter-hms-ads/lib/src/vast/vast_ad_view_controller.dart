@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_ads;
+part of '../../huawei_ads.dart';
 
 class VastAdViewController {
   late MethodChannel _channel;

@@ -54,8 +54,10 @@ public abstract class VastUtils {
         configuration.setMaxRedirectWrapperLimit((Integer) Objects.requireNonNull(map.get("maxRedirectWrapperLimit")));
         configuration.setTest((Boolean) Objects.requireNonNull(map.get("isTest")));
         configuration.setVastEventRetryBatchSize((Integer) Objects.requireNonNull(map.get("vastEventRetryBatchSize")));
-        configuration.setVastEventRetryIntervalSeconds((Integer) Objects.requireNonNull(map.get("vastEventRetryIntervalSeconds")));
-        configuration.setVastEventRetryUploadTimes((Integer) Objects.requireNonNull(map.get("vastEventRetryUploadTimes")));
+        configuration.setVastEventRetryIntervalSeconds(
+            (Integer) Objects.requireNonNull(map.get("vastEventRetryIntervalSeconds")));
+        configuration.setVastEventRetryUploadTimes(
+            (Integer) Objects.requireNonNull(map.get("vastEventRetryUploadTimes")));
         return configuration;
     }
 
@@ -86,9 +88,11 @@ public abstract class VastUtils {
         linearAdSlot.setSlotId((String) Objects.requireNonNull(map.get("slotId")));
         linearAdSlot.setTotalDuration((int) Objects.requireNonNull(map.get("totalDuration")));
         if (map.get("width") != null && map.get("height") != null) {
-            linearAdSlot.setSize((int) Objects.requireNonNull(map.get("width")), (int) Objects.requireNonNull(map.get("height")));
+            linearAdSlot.setSize((int) Objects.requireNonNull(map.get("width")),
+                (int) Objects.requireNonNull(map.get("height")));
         }
-        linearAdSlot.setRequestOptions(requestOptionsFromMap((Map<String, Object>) Objects.requireNonNull(map.get("requestOptions"))));
+        linearAdSlot.setRequestOptions(
+            requestOptionsFromMap((Map<String, Object>) Objects.requireNonNull(map.get("requestOptions"))));
         linearAdSlot.setOrientation((int) Objects.requireNonNull(map.get("orientation")));
         if (map.get("maxAdPods") != null) {
             linearAdSlot.setMaxAdPods((int) Objects.requireNonNull(map.get("maxAdPods")));

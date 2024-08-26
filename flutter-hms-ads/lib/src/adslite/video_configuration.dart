@@ -14,24 +14,60 @@
     limitations under the License.
 */
 
-part of huawei_ads;
+part of '../../huawei_ads.dart';
 
 class VideoConfiguration {
-  int? audioFocusType;
+  /// Audio focus type.
+  AudioFocusType? audioFocusType;
+
+  /// Indicates whether to use a custom video control for a video ad.
+  ///
+  /// After the setting, you can check the value of the `customizeOperationRequested` field for verification. Then, using the [VideoOperator] class, you can call `play()`, `pause()`, and `mute(bool)` methods to control video ad playback.
   bool? customizeOperationRequested;
+
+  /// Indicates whether to mute a video initially.
+  ///
+  /// `True` is returned if a video is initially muted; `false` otherwise.
   bool? startMuted;
+
+  /// Type of the network allowed for automatic video playback.
+  AutoPlayNetwork? autoPlayNetwork;
 
   VideoConfiguration({
     this.audioFocusType,
     this.customizeOperationRequested,
     this.startMuted,
+    this.autoPlayNetwork,
   });
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'audioFocusType': audioFocusType,
+      'audioFocusType': audioFocusType?.index,
       'customizeOperationRequested': customizeOperationRequested,
       'startMuted': startMuted,
+      'autoPlayNetwork': autoPlayNetwork?.index,
     }..removeWhere((_, dynamic v) => v == null);
   }
+}
+
+enum AutoPlayNetwork {
+  /// Allowed only on Wi-Fi
+  wifiOnly,
+
+  /// Allowed on both Wi-Fi and mobile data
+  bothWifiAndData,
+
+  /// Forbidden regardless of the network type
+  forbidAutoPlay,
+}
+
+enum AudioFocusType {
+  /// Obtains the audio focus when a video is played, no matter whether the video is muted
+  gainAudioFocusAll,
+
+  /// Does not obtain the audio focus when a video is played, no matter whether the video is muted.
+  notGainAudioFocusWhenMute,
+
+  /// Obtains the audio focus only when a video is played without being muted.
+  notGainAudioFocusAll,
 }

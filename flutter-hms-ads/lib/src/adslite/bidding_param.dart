@@ -16,19 +16,36 @@
 
 part of '../../huawei_ads.dart';
 
-class AdSize {
-  final int width;
-  final int height;
+class BiddingParam {
+  /// Floor bid for an ad unit.
+  double? bidFloor;
 
-  const AdSize({
-    required this.width,
-    required this.height,
+  /// Currency used by the ad unit floor bid.
+  String? bidFloorCur;
+
+  /// App packages that are prohibited from delivering ads through real-time bidding ad units.
+  List<String>? bpkgName;
+
+  BiddingParam({
+    this.bidFloor,
+    this.bidFloorCur,
+    this.bpkgName,
   });
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'width': width,
-      'height': height,
+      'bidFloor': bidFloor,
+      'bidFloorCur': bidFloorCur,
+      'bpkgName': bpkgName,
     };
+  }
+
+  static BiddingParam fromJson(Map<String, dynamic> json) {
+    return BiddingParam(
+      bidFloor: json['bidFloor'],
+      bidFloorCur: json['bidFloorCur'],
+      bpkgName:
+          json['bpkgName'] != null ? List<String>.from(json['bpkgName']) : null,
+    );
   }
 }

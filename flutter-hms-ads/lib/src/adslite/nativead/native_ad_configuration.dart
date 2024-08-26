@@ -14,16 +14,31 @@
     limitations under the License.
 */
 
-part of huawei_ads;
+part of '../../../huawei_ads.dart';
 
 class NativeAdConfiguration {
+  /// Size of a native ad.
   AdSize? adSize;
+
+  /// NativeAdChoicesPosition of an AdChoices icon.
   NativeAdChoicesPosition? choicesPosition;
+
+  /// Orientation of an ad image.
   int? mediaDirection;
+
+  /// Aspect ratio of an ad image.
   int? mediaAspect;
+
+  /// Indicates whether to customize the function of not displaying the ad.
   bool? requestCustomDislikeAd;
+
+  /// Indicates whether multiple ad images are requested.
   bool? requestMultiImages;
+
+  /// Indicates whether the SDK is allowed to download native ad images.
   bool? returnUrlsForImages;
+
+  /// Obtains video configuration.
   VideoConfiguration? videoConfiguration;
 
   NativeAdConfiguration({

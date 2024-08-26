@@ -24,8 +24,10 @@ import android.util.SparseArray;
 import androidx.annotation.NonNull;
 
 import com.huawei.hms.ads.AdvertiserInfo;
+import com.huawei.hms.ads.BiddingInfo;
 import com.huawei.hms.ads.instreamad.InstreamAd;
 import com.huawei.hms.flutter.ads.logger.HMSLogger;
+import com.huawei.hms.flutter.ads.utils.ToMap;
 import com.huawei.hms.flutter.ads.utils.constants.Channels;
 import com.huawei.hms.flutter.ads.utils.constants.ErrorCodes;
 
@@ -42,9 +44,13 @@ import java.util.Map;
 
 public class HmsInstreamAd implements MethodChannel.MethodCallHandler {
     private static SparseArray<HmsInstreamAd> allInstreamAds = new SparseArray<>();
+
     private static final String TAG = "Instream";
+
     private InstreamAd instreamAd;
+
     private Context context;
+
     private MethodChannel methodChannel;
 
     HmsInstreamAd(int id, Context context, BinaryMessenger messenger, InstreamAd instreamAd) {
@@ -107,6 +113,17 @@ public class HmsInstreamAd implements MethodChannel.MethodCallHandler {
                 break;
             case "hasAdvertiserInfo":
                 result.success(instreamAd.hasAdvertiserInfo());
+                break;
+            case "getBiddingInfo":
+                HMSLogger.getInstance(context).startMethodExecutionTimer("getBiddingInfo");
+                BiddingInfo biddingInfo = instreamAd.getBiddingInfo();
+                if (biddingInfo == null) {
+                    HMSLogger.getInstance(context).sendSingleEvent("getBiddingInfo", "-1");
+                    result.error("-1", "BiddingInfo is null.", "");
+                } else {
+                    HMSLogger.getInstance(context).sendSingleEvent("getBiddingInfo");
+                    result.success(ToMap.fromBiddingInfo(biddingInfo));
+                }
                 break;
             case "getAdvertiserInfo":
                 List<AdvertiserInfo> advertiserInfoList = instreamAd.getAdvertiserInfo();

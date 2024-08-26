@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_ads;
+part of '../../../huawei_ads.dart';
 
 class InterstitialAd {
   static final Map<int, InterstitialAd?> interstitialAds =
@@ -25,9 +25,17 @@ class InterstitialAd {
   int get rId => _rId.hashCode;
 
   static const String _adType = 'Interstitial';
+
+  /// Ad slot ID.
   String adSlotId;
+
+  /// Ad request parameters.
   AdParam adParam;
+
+  /// Listener function for ad events.
   AdListener? _listener;
+
+  /// Listener function for rewarded ad events.
   RewardAdListener? _rewardAdListener;
   late EventChannel _streamInterstitial;
   late EventChannel _streamReward;
@@ -48,6 +56,13 @@ class InterstitialAd {
     _rewardAdListener = rewardAdListener;
   }
 
+  /// Returns real-time bidding data.
+  Future<BiddingInfo?> getBiddingInfo() async {
+    return BiddingInfo.fromJson(await Ads.instance.channelBanner.invokeMethod(
+      'getBiddingInfo',
+    ));
+  }
+
   Future<bool?> _initAd() async {
     return await Ads.instance.channelInterstitial.invokeMethod(
       'initInterstitialAd',
@@ -59,6 +74,7 @@ class InterstitialAd {
     );
   }
 
+  /// Loads an ad.
   Future<bool?> loadAd() async {
     await _initAd();
     _startListening();
@@ -73,18 +89,23 @@ class InterstitialAd {
     );
   }
 
+  /// Sets an ad listener.
   set setAdListener(AdListener listener) {
     _listener = listener;
   }
 
+  /// Obtains an ad listener.
   AdListener? get getAdListener => _listener;
 
+  /// Sets a rewarded ad listener for an interstitial ad.
   set setRewardAdListener(RewardAdListener rewardAdListener) {
     _rewardAdListener = rewardAdListener;
   }
 
+  /// Obtains a rewarded ad listener for an interstitial ad.
   RewardAdListener? get getRewardAdListener => _rewardAdListener;
 
+  /// Checks whether an ad is being loaded.
   Future<bool?> isLoading() async {
     return await Ads.instance.channelInterstitial.invokeMethod(
       'isAdLoading',
@@ -96,6 +117,7 @@ class InterstitialAd {
     );
   }
 
+  /// Checks whether an ad has been loaded.
   Future<bool?> isLoaded() async {
     return await Ads.instance.channelInterstitial.invokeMethod(
       'isAdLoaded',
@@ -106,6 +128,7 @@ class InterstitialAd {
     );
   }
 
+  /// Displays an ad.
   Future<bool?> show() async {
     final bool? result = await Ads.instance.channelInterstitial.invokeMethod(
       'showInterstitialAd',
@@ -117,6 +140,7 @@ class InterstitialAd {
     return result;
   }
 
+  /// Destroys an ad.
   Future<bool?> destroy() async {
     interstitialAds[id] = null;
     final bool? result = await Ads.instance.channelInterstitial.invokeMethod(

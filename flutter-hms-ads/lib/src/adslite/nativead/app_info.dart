@@ -14,17 +14,34 @@
     limitations under the License.
 */
 
-part of huawei_ads;
+part of '../../../huawei_ads.dart';
 
 class AppInfo {
+  /// App name.
   final String? appName;
+
+  /// App description.
   final String? appDesc;
+
+  /// App icon URL.
   final String? iconUrl;
+
+  /// App package name.
   final String? packageName;
+
+  /// Privacy link.
   final String? privacyLink;
+
+  /// HTML5 address of the app permission declaration page.
   final String? permissionUrl;
+
+  /// HTML5 address of the app details page.
   final String? appDetailUrl;
+
+  /// App version number (similar to 4.52.0).
   final String? versionName;
+
+  /// App developer information.
   final String? developerName;
 
   AppInfo({
