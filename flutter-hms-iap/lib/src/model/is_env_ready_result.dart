@@ -14,15 +14,29 @@
  * limitations under the License.
  */
 
-part of huawei_iap;
+part of '../../huawei_iap.dart';
 
 /// Information returned when isEnvReady is successfully called.
 class IsEnvReadyResult {
+  /// Result code.
+  ///
+  /// - `'0'`: The country or region of the signed-in HUAWEI ID supports HUAWEI IAP.
   String? returnCode;
+
+  /// [Status] object that contains the task processing result.
   Status? status;
+
+  /// Carrier ID.
+  ///
+  /// This field returns the carrier ID for apps on AppTouch, while returning a null value for apps on AppGallery.
   String? carrierId;
+
+  /// Code of the country or region where the currently signed-in account is located.
+  ///
+  /// This field returns the country or region code for apps on AppTouch, while returning a null value for apps on AppGallery.
   String? country;
 
+  /// Creates an [IsEnvReadyResult] object.
   IsEnvReadyResult({
     this.returnCode,
     this.status,
@@ -30,6 +44,7 @@ class IsEnvReadyResult {
     this.country,
   });
 
+  /// Creates an [IsEnvReadyResult] object from a JSON string.
   factory IsEnvReadyResult.fromJson(String str) =>
       IsEnvReadyResult.fromMap(json.decode(str));
 

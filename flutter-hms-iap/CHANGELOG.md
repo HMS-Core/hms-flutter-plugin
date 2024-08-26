@@ -1,3 +1,7 @@
+## 6.13.0+302
+
+- Dart improvements.
+
 ## 6.13.0+301
 
 - Minor optimization and bug fixes. 

@@ -14,18 +14,34 @@
  * limitations under the License.
  */
 
-part of huawei_iap;
+part of '../../huawei_iap.dart';
 
 /// Information returned when the consumeOwnedPurchase API is successfully called.
 class ConsumeOwnedPurchaseResult {
+  /// [ConsumePurchaseData] object that contains consumption result data.
   ConsumePurchaseData? consumePurchaseData;
+
+  /// Signature string generated after consumption data is signed using a private payment key.
+  ///
+  /// The signature algorithm is SHA256withRSA.
   String? dataSignature;
+
+  /// Error description in the result code.
   String? errMsg;
+
+  /// Result code.
   String? returnCode;
+
+  /// Status object that contains the task processing result.
   Status? status;
+
+  /// Signature algorithm.
   String? signatureAlgorithm;
+
+  /// Unparsed JSON string of response.
   String rawValue;
 
+  /// Creates a [ConsumeOwnedPurchaseResult] object.
   ConsumeOwnedPurchaseResult({
     required this.rawValue,
     this.consumePurchaseData,
@@ -36,6 +52,7 @@ class ConsumeOwnedPurchaseResult {
     this.signatureAlgorithm,
   });
 
+  /// Creates a [ConsumeOwnedPurchaseResult] object from a JSON string.
   factory ConsumeOwnedPurchaseResult.fromJson(String source) =>
       ConsumeOwnedPurchaseResult.fromMap(source);
 

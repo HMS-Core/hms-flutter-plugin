@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-part of huawei_iap;
+part of '../../huawei_iap.dart';
 
-abstract class BaseReq {
-  String? reservedInfor;
-
-  BaseReq({required this.reservedInfor});
+/// Algorithm that you can pass to an IapClient API.
+class SignAlgorithmConstants {
+  /// SHA256WithRSA/PSS algorithm.
+  static const String SIGNATURE_ALGORITHM_SHA256WITHRSA_PSS =
+      'SHA256WithRSA/PSS';
 }

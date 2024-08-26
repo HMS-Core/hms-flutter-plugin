@@ -14,15 +14,37 @@
  * limitations under the License.
  */
 
-part of huawei_iap;
+part of '../../huawei_iap.dart';
 
 /// Request information of the createPurchaseIntent API.
 class PurchaseIntentReq extends BaseReq {
+  ///   /// Product type.
+  ///
+  /// - `0`: Consumable
+  /// - `1`: Non-consumable
+  /// - `2`: Auto-renewable subscription
   int priceType;
+
+  /// ID of a product to be paid.
+  ///
+  /// The product ID is the same as that you set when configuring product information in AppGallery Connect.
   String productId;
+
+  /// Information stored on the merchant side.
+  ///
+  /// If this parameter is set to a value, the value will be returned in the callback result to the app after successful payment.
+  ///
+  /// The value length of this parameter is within (0, 128).
   String? developerPayload;
+
+  /// Signature algorithm, which is optional.
+  ///
+  /// If a signature algorithm is passed, IAP will use it to sign consumption result data.
+  ///
+  /// Currently, the value can only be `SIGNATURE_ALGORITHM_SHA256WITHRSA_PSS`, which indicates the SHA256WithRSA/PSS algorithm.
   String? signatureAlgorithm;
 
+  /// Creates a [PurchaseIntentReq] object.
   PurchaseIntentReq({
     required this.priceType,
     required this.productId,
@@ -31,6 +53,7 @@ class PurchaseIntentReq extends BaseReq {
     String? reservedInfor,
   }) : super(reservedInfor: reservedInfor);
 
+  /// Creates a [PurchaseIntentReq] object from a JSON string.
   factory PurchaseIntentReq.fromJson(String str) =>
       PurchaseIntentReq.fromMap(json.decode(str));
 

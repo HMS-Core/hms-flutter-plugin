@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-part of huawei_iap;
+part of '../huawei_iap.dart';
 
+/// Represents a result class for [HmsIapResults].
 class HmsIapResult {
+  /// Result code.
   final String resultCode;
+
+  /// Result message.
   final String? resultMessage;
 
+  /// Creates a [HmsIapResult] object.
   const HmsIapResult({
     required this.resultCode,
     this.resultMessage,
@@ -27,7 +32,7 @@ class HmsIapResult {
 }
 
 class HmsIapResults {
-  /// Results from Plugin
+  // Results from Plugin
   static const HmsIapResult LOG_IN_ERROR = const HmsIapResult(
     resultCode: 'ERR_CAN_NOT_LOG_IN',
     resultMessage: 'Can not log in.',
@@ -84,7 +89,7 @@ class HmsIapResults {
     resultMessage: 'There is no resolution for error.',
   );
 
-  /// OrderStatusCodes from Huawei IAP
+  // OrderStatusCodes from Huawei IAP
   static const HmsIapResult ORDER_STATE_SUCCESS = const HmsIapResult(
     resultCode: '0',
     resultMessage: 'Success',

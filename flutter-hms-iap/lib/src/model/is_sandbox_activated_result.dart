@@ -14,18 +14,34 @@
  * limitations under the License.
  */
 
-part of huawei_iap;
+part of '../../huawei_iap.dart';
 
 /// Information returned when the isSandboxActivated API is successfully called.
 class IsSandboxActivatedResult {
+  /// Result code description.
   String? errMsg;
+
+  /// Indicates whether the APK version meets the requirements of sandbox testing.
   bool? isSandboxApk;
+
+  /// Indicates whether a sandbox testing account is used.
   bool? isSandboxUser;
+
+  /// Result code.
+  ///
+  /// - `'0'`: Success.
   String? returnCode;
+
+  /// Information about the app version that is last released on HUAWEI AppGallery.
   String? versionFrMarket;
+
+  /// App version information.
   String? versionInApk;
+
+  /// [Status] object that contains the task processing result.
   Status? status;
 
+  /// Creates an [IsSandboxActivatedResult] object.
   IsSandboxActivatedResult({
     this.errMsg,
     this.isSandboxApk,
@@ -36,6 +52,7 @@ class IsSandboxActivatedResult {
     this.status,
   });
 
+  /// Creates an [IsSandboxActivatedResult] object from a JSON string.
   factory IsSandboxActivatedResult.fromJson(String str) =>
       IsSandboxActivatedResult.fromMap(json.decode(str));
 

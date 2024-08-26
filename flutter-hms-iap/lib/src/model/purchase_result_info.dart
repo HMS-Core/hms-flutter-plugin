@@ -14,17 +14,38 @@
  * limitations under the License.
  */
 
-part of huawei_iap;
+part of '../../huawei_iap.dart';
 
 /// Payment result information.
 class PurchaseResultInfo {
+  /// Result code.
+  ///
+  /// - `'0'`: The payment is successful.
+  /// - Other values: The payment fails.
   String? returnCode;
+
+  /// [InAppPurchaseData] object that contains purchase order details.
   InAppPurchaseData? inAppPurchaseData;
+
+  /// Signature string generated after purchase data is signed using a private payment key.
+  ///
+  /// The signature algorithm is SHA256withRSA. After the payment is successful, the app needs to perform signature verification on the string of inAppPurchaseData using the payment public key.
   String? inAppDataSignature;
+
+  /// Result code description.
   String? errMsg;
+
+  /// Signature algorithm.
+  ///
+  /// Once you passed a signature algorithm, call this parameter to get this algorithm and use it to verify consumption result data. If no signature algorithm was passed, use the default SHA256WithRSA algorithm for the verification.
+  ///
+  /// If you only get a null value after the call of signatureAlgorithm, SHA256WithRSA will be used for the verification by default.
   String? signatureAlgorithm;
+
+  /// Unparsed JSON string of response.
   String rawValue;
 
+  /// Creates a [PurchaseResultInfo] object.
   PurchaseResultInfo({
     required this.rawValue,
     this.inAppDataSignature,
@@ -34,6 +55,7 @@ class PurchaseResultInfo {
     this.signatureAlgorithm,
   });
 
+  /// Creates a [PurchaseResultInfo] object from a JSON string.
   factory PurchaseResultInfo.fromJson(String str) =>
       PurchaseResultInfo.fromMap(str);
 

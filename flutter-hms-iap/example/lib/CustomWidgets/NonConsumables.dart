@@ -41,7 +41,7 @@ class _NonConsumablesState extends State<NonConsumables> {
       ProductInfoResult result = await IapClient.obtainProductInfo(
         ProductInfoReq(
           priceType: 1,
-          //Make sure that the product IDs are the same as those defined in AppGallery Connect.
+          // Make sure that the product IDs are the same as those defined in AppGallery Connect.
           skuIds: <String>['non_consumable_1', 'non_consumable_2'],
         ),
       );

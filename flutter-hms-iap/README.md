@@ -25,16 +25,16 @@ Huawei IAP provides the following core capabilities you need to quickly build ap
 
 This plugin enables communication between HUAWEI IAP Kit SDK and Flutter platform. It exposes all functionality provided by HUAWEI IAP Kit SDK.
 
-[Learn More](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/introduction-0000001051001685?ha_source=hms1)
+[Learn More](https://developer.huawei.com/consumer/en/doc/HMS-Plugin-Guides/introduction-0000001051001685-V1?ha_source=hms1)
 
 ## Installation
 
-Please see [pub.dev](https://pub.dev/packages/huawei_iap/install) and [AppGallery Connect Configuration](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/config-agc-0000001051001687?ha_source=hms1).
+Please see [pub.dev](https://pub.dev/packages/huawei_iap/install) and [AppGallery Connect Configuration](https://developer.huawei.com/consumer/en/doc/HMS-Plugin-Guides/config-agc-0000001051001687-V1?ha_source=hms1).
 
 ## Documentation
 
-- [Quick Start](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-Guides/client-dev-guide-0000001051001691?ha_source=hms1)
-- [Reference](https://developer.huawei.com/consumer/en/doc/development/HMS-Plugin-References/overview-0000001051005695?ha_source=hms1)
+- [Quick Start](https://developer.huawei.com/consumer/en/doc/HMS-Plugin-Guides/client-dev-guide-0000001051001691-V1?ha_source=hms1)
+- [Reference](https://developer.huawei.com/consumer/en/doc/HMS-Plugin-References/overview-0000001051005695-V1?ha_source=hms1)
 
 ## Questions or Issues
 
@@ -50,4 +50,4 @@ If you run into a bug in our samples, please submit an issue to the [GitHub repo
 
 ## License
 
-Huawei IAP Flutter Plugin is licensed under [Apache 2.0 license](LICENSE)
+Huawei IAP Flutter Plugin is licensed under [Apache 2.0 license](LICENSE).

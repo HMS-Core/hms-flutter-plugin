@@ -14,19 +14,32 @@
  * limitations under the License.
  */
 
-part of huawei_iap;
+part of '../../huawei_iap.dart';
 
+/// Task processing result.
 class Status {
+  /// Status code.
+  ///
+  /// - `0`: Success
+  /// - `1`: Failure
+  /// - `404`: No resource found
+  /// - `500`: Internal error
   int? statusCode;
+
+  /// Status description.
   String? statusMessage;
+
+  /// Task processing result.
   Status? status;
 
+  /// Creates a [Status] object.
   Status({
     this.statusCode,
     this.statusMessage,
     this.status,
   });
 
+  /// Creates a [Status] object from a JSON string.
   factory Status.fromJson(String str) => Status.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());

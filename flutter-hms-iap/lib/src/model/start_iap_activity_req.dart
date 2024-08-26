@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-part of huawei_iap;
+part of '../../huawei_iap.dart';
 
 /// Request information of the startIapActivity API.
 class StartIapActivityReq {
@@ -24,14 +24,22 @@ class StartIapActivityReq {
   ///Redirects your app to the subscription editing screen of HUAWEI IAP.
   static const int TYPE_SUBSCRIBE_EDIT_ACTIVITY = 3;
 
+  /// Type of the screen to be redirected to.
+  ///
+  /// - `2`: Subscription management screen.
+  /// - `3`: Subscription editing screen.
   int type;
+
+  /// ID of a subscription.
   String? productId;
 
+  /// Creates a [StartIapActivityReq] object.
   StartIapActivityReq({
     required this.type,
     this.productId,
   });
 
+  /// Creates a [StartIapActivityReq] object from a JSON string.
   factory StartIapActivityReq.fromJson(String str) =>
       StartIapActivityReq.fromMap(json.decode(str));
 

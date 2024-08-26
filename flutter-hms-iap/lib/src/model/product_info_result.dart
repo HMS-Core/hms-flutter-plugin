@@ -14,15 +14,25 @@
  * limitations under the License.
  */
 
-part of huawei_iap;
+part of '../../huawei_iap.dart';
 
 /// Information returned when the obtainProductInfo API is successfully called.
 class ProductInfoResult {
+  /// Result code description
   String? errMsg;
+
+  /// List of found products.
   List<ProductInfo>? productInfoList;
+
+  /// Result code.
+  ///
+  /// - `0`: The query is successful.
   String? returnCode;
+
+  /// [Status] object that contains the task processing result.
   Status? status;
 
+  /// Creates a [ProductInfoResult] object.
   ProductInfoResult({
     this.errMsg,
     this.productInfoList,
@@ -30,6 +40,7 @@ class ProductInfoResult {
     this.status,
   });
 
+  /// Creates a [ProductInfoResult] object from a JSON string.
   factory ProductInfoResult.fromJson(String str) =>
       ProductInfoResult.fromMap(json.decode(str));
 

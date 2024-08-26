@@ -14,41 +14,45 @@
  * limitations under the License.
  */
 
-part of huawei_iap;
+part of '../../huawei_iap.dart';
 
-/// Request information of the obtainOwnedPurchases or obtainOwnedPurchaseRecord API.
-class OwnedPurchasesReq extends BaseReq {
-  String? continuationToken;
+/// Request information of the obtainProductInfo API.
+class ProductInfoReq extends BaseReq {
+  /// Product type.
+  ///
+  /// - `0`: Consumable
+  /// - `1`: Non-consumable
+  /// - `2`: Auto-renewable subscription
   int priceType;
-  String? signatureAlgorithm;
 
-  OwnedPurchasesReq({
+  /// ID list of products to be queried. Each product ID must exist and be unique in the current app.
+  ///
+  /// The product ID is the same as that you set when configuring product information in AppGallery Connect.
+  List<String> skuIds;
+
+  /// Creates a [ProductInfoReq] object.
+  ProductInfoReq({
     required this.priceType,
-    this.continuationToken,
-    this.signatureAlgorithm,
+    required this.skuIds,
     String? reservedInfor,
   }) : super(reservedInfor: reservedInfor);
 
-  factory OwnedPurchasesReq.fromJson(String str) =>
-      OwnedPurchasesReq.fromMap(json.decode(str));
+  /// Creates a [ProductInfoReq] object from a JSON string.
+  factory ProductInfoReq.fromJson(String str) =>
+      ProductInfoReq.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory OwnedPurchasesReq.fromMap(Map<String, dynamic> json) =>
-      OwnedPurchasesReq(
-        continuationToken: json['continuationToken'] == null
-            ? null
-            : json['continuationToken'],
+  factory ProductInfoReq.fromMap(Map<String, dynamic> json) => ProductInfoReq(
         priceType: json['priceType'],
-        signatureAlgorithm: json['signatureAlgorithm'],
+        skuIds: json['skuIds'].cast<String>(),
         reservedInfor: json['reservedInfor'],
       );
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'continuationToken': continuationToken,
       'priceType': priceType,
-      'signatureAlgorithm': signatureAlgorithm,
+      'skuIds': skuIds,
       'reservedInfor': reservedInfor,
     };
   }
@@ -58,18 +62,16 @@ class OwnedPurchasesReq extends BaseReq {
     if (identical(this, other)) return true;
     if (this.runtimeType != other.runtimeType) return false;
 
-    return other is OwnedPurchasesReq &&
-        this.continuationToken == other.continuationToken &&
+    return other is ProductInfoReq &&
         this.priceType == other.priceType &&
-        this.signatureAlgorithm == other.signatureAlgorithm &&
+        listEquals(this.skuIds, other.skuIds) &&
         this.reservedInfor == other.reservedInfor;
   }
 
   @override
   int get hashCode => Object.hash(
-        continuationToken,
         priceType,
-        signatureAlgorithm,
+        Object.hashAll(skuIds),
         reservedInfor,
       );
 }
