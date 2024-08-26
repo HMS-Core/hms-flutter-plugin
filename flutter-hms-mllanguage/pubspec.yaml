@@ -3,10 +3,10 @@ description: Huawei ML Kit Language Plugin for Flutter. Provides capabilities li
 homepage: https://www.huawei.com
 repository: https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-mllanguage
 
-version: 3.11.0+300
+version: 3.12.0+300
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.12.0 <4.0.0"
   flutter: ">=1.20.0"
 
 dependencies:
