@@ -51,17 +51,14 @@ public class MapFactory extends PlatformViewFactory {
 
     private final Lifecycle lifecycle;
 
-    private final PluginRegistry.Registrar registrar;
-
     public MapFactory(final AtomicInteger state, final BinaryMessenger binaryMessenger, final Activity mActivity,
-        final Lifecycle lifecycle, final PluginRegistry.Registrar registrar, final int activityHashCode) {
+        final Lifecycle lifecycle, final int activityHashCode) {
         super(StandardMessageCodec.INSTANCE);
         mActivityState = state;
         this.binaryMessenger = binaryMessenger;
         this.application = mActivity.getApplication();
         this.activityHashCode = activityHashCode;
         this.lifecycle = lifecycle;
-        this.registrar = registrar;
         this.mActivity = mActivity;
     }
 
@@ -96,7 +93,6 @@ public class MapFactory extends PlatformViewFactory {
         if (params.containsKey(Param.HEAT_MAPS_TO_INSERT)) {
             builder.setHeatMaps((List<HashMap<String, Object>>) params.get(Param.HEAT_MAPS_TO_INSERT));
         }
-        return builder.build(id, context, mActivity, mActivityState, binaryMessenger, application, lifecycle, registrar,
-            activityHashCode);
+        return builder.build(id, context, mActivity, mActivityState, binaryMessenger, application, lifecycle, activityHashCode);
     }
 }
