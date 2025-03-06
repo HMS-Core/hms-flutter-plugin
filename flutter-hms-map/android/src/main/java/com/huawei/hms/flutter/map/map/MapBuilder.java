@@ -33,7 +33,6 @@ import com.huawei.hms.maps.model.LatLngBounds;
 import com.huawei.hms.maps.model.MyLocationStyle;
 
 import io.flutter.plugin.common.BinaryMessenger;
-import io.flutter.plugin.common.PluginRegistry;
 
 import java.util.HashMap;
 import java.util.List;
@@ -98,9 +97,9 @@ class MapBuilder implements MapMethods {
 
     MapController build(final int id, @NonNull final Context context, final Activity mActivity,
         final AtomicInteger state, final BinaryMessenger binaryMessenger, final Application application,
-        final Lifecycle lifecycle, final PluginRegistry.Registrar registrar, final int activityHashCode) {
+        final Lifecycle lifecycle, final int activityHashCode) {
         final MapController controller = new MapController(id, context, mActivity, state, binaryMessenger, application,
-            lifecycle, registrar, activityHashCode, options);
+            lifecycle, activityHashCode, options);
         controller.init();
         controller.setAllGesturesEnabled(allGesturesEnabled);
         controller.setScrollGesturesEnabledDuringRotateOrZoom(scrollGesturesEnabledDuringRotateOrZoom);
