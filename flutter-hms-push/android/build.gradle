@@ -24,6 +24,7 @@ rootProject.allprojects {
 apply plugin: "com.android.library"
 
 android {
+    namespace "com.huawei.hms.flutter.push"
     compileSdkVersion 33
     buildToolsVersion '31.0.0'
 
