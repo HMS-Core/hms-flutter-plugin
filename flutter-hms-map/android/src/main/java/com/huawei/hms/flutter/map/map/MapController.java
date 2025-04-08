@@ -82,8 +82,6 @@ final class MapController
 
     private final Application mApplication;
 
-    private final PluginRegistry.Registrar registrar;
-
     private final MapView mapView;
 
     private HuaweiMap huaweiMap;
@@ -154,7 +152,7 @@ final class MapController
 
     MapController(final int id, final Context context, final Activity mActivity, final AtomicInteger activityState,
         final BinaryMessenger binaryMessenger, final Application application, final Lifecycle lifecycle,
-        final PluginRegistry.Registrar registrar, final int registrarActivityHashCode, final HuaweiMapOptions options) {
+        final int registrarActivityHashCode, final HuaweiMapOptions options) {
         this.context = context;
         this.activityState = activityState;
         mapView = new MapView(mActivity, options);
@@ -164,7 +162,6 @@ final class MapController
         methodChannel.setMethodCallHandler(this);
         mApplication = application;
         this.lifecycle = lifecycle;
-        this.registrar = registrar;
         activityHashCode = registrarActivityHashCode;
         mapUtils = new MapUtils(methodChannel, compactness, application);
         mapListenerHandler = new MapListenerHandler(id, mapUtils, methodChannel, application);
@@ -952,22 +949,10 @@ final class MapController
     }
 
     private int getActivityHashCode() {
-        if (registrar != null) {
-            Activity activity = registrar.activity();
-            if (activity != null) {
-                return activity.hashCode();
-            }
-        }
         return activityHashCode;
     }
 
     private Application getApplication() {
-        if (registrar != null) {
-            Activity activity = registrar.activity();
-            if (activity != null) {
-                return activity.getApplication();
-            }
-        }
         return mApplication;
     }
 
