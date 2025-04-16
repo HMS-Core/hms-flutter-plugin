@@ -14,29 +14,44 @@
     limitations under the License.
 */
 
-part of huawei_adsprime;
+part of '../../huawei_adsprime.dart';
 
 class InstallReferrerClient {
-  static final Map<int, InstallReferrerClient> allReferrers =
-      <int, InstallReferrerClient>{};
-
-  int get id => hashCode;
-
-  final ReferrerCallMode _callMode = ReferrerCallMode.sdk;
+  /// Indicates whether to use the test mode. Set it to `true` for testing.
   bool? _test = false;
+
+  /// Listener function for install referrer state events.
   InstallReferrerStateListener? stateListener;
+
   ReferrerDetails? _referrerDetails;
 
   InstallReferrerClient({
     this.stateListener,
     bool? test,
+    String? installChannel,
   }) {
     _test = test;
     allReferrers[id] = this;
+    _installChannel = installChannel ?? _installChannel;
   }
 
+  int get id => hashCode;
+
+  final ReferrerCallMode _callMode = ReferrerCallMode.sdk;
+
+  String? _installChannel = 'This is test install channel';
+
+  static final Map<int, InstallReferrerClient> allReferrers =
+      <int, InstallReferrerClient>{};
+
+  /// Sets whether to run the service in test mode.
   set setTest(bool test) => _test = test;
 
+  /// Sets channel information.
+  set setInstallChannel(String installChannel) =>
+      _installChannel = installChannel;
+
+  /// Starts to connect to the install referrer service.
   void startConnection([bool? isTest]) {
     Ads.instance.channelReferrer.invokeMethod(
       'referrerStartConnection',
@@ -48,6 +63,7 @@ class InstallReferrerClient {
     );
   }
 
+  /// Ends the service connection and releases all occupied resources.
   void endConnection() {
     Ads.instance.channelReferrer.invokeMethod(
       'referrerEndConnection',
@@ -58,6 +74,7 @@ class InstallReferrerClient {
     );
   }
 
+  /// Checks whether the service connection is ready.
   Future<bool?> isReady() {
     return Ads.instance.channelReferrer.invokeMethod(
       'referrerIsReady',
@@ -68,12 +85,14 @@ class InstallReferrerClient {
     );
   }
 
+  /// Obtains install referrer information.
   Future<ReferrerDetails?> get getInstallReferrer async {
     dynamic referrer = await Ads.instance.channelReferrer.invokeMethod(
       'getInstallReferrer',
       <String, dynamic>{
         'id': id,
         'callMode': describeEnum(_callMode),
+        'installChannel': _installChannel,
       },
     );
     if (referrer != null) {
@@ -89,6 +108,10 @@ class InstallReferrerClient {
       bundle.putInt(
         ReferrerDetails.keyInstallBeginTimeStamp,
         referrer[ReferrerDetails.keyInstallBeginTimeStamp],
+      );
+      bundle.putString(
+        ReferrerDetails.keyInstallChannel,
+        referrer[ReferrerDetails.keyInstallChannel],
       );
       _referrerDetails = ReferrerDetails(bundle);
     }
@@ -153,22 +176,39 @@ class InstallReferrerClient {
   };
 }
 
+/// Function type defined for listening to install referrer state events.
 typedef InstallReferrerStateListener = void Function(
   InstallReferrerStateEvent? event, {
   ReferrerResponse? responseCode,
 });
 
+/// Enumerated object that represents the events of install referrer connections.
 enum InstallReferrerStateEvent {
+  /// Service connection is complete.
   setupFinished,
+
+  /// Service connection is closed.
   connectionClosed,
+
+  /// Connection is lost and the service is disconnected.
   disconnected,
 }
 
+/// Enumerated object that represents install referrer result codes.
 enum ReferrerResponse {
+  /// Failed to connect to the service.
   disconnected,
+
+  /// Connected to the service successfully.
   ok,
+
+  /// The service does not exist.
   unavailable,
+
+  /// The service is not supported.
   featureNotSupported,
+
+  /// A call error occurred.
   developerError,
 }
 

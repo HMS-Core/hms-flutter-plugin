@@ -14,12 +14,15 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// Represents an immutable heatmap ID.
 @immutable
 class HeatMapId {
+  /// Unique heatmap ID.
   final String id;
 
+  /// Creates a [HeatMapId] object.
   const HeatMapId(this.id);
 
   @override

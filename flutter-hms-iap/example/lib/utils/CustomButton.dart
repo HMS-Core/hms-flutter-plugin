@@ -29,18 +29,27 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ButtonStyle(
-        shape: MaterialStateProperty.all(
+        shape: WidgetStateProperty.all(
           RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(30.0)),
+            borderRadius: BorderRadius.all(
+              Radius.circular(30.0),
+            ),
           ),
         ),
-        backgroundColor: MaterialStateProperty.all(Colors.red),
-        textStyle: MaterialStateProperty.all(TextStyle(color: Colors.white)),
-        padding: MaterialStateProperty.all(EdgeInsets.all(12.0)),
+        backgroundColor: WidgetStateProperty.all(Colors.red),
+        textStyle: WidgetStateProperty.all(
+          TextStyle(color: Colors.white),
+        ),
+        padding: WidgetStateProperty.all(
+          EdgeInsets.all(12.0),
+        ),
       ),
       onPressed: onPressed,
       child: Text(
         text,
+        style: TextStyle(
+          color: Colors.white,
+        ),
       ),
     );
   }

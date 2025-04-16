@@ -3,7 +3,7 @@ description: Huawei ML Kit Body Plugin for Flutter. Provides capabilities like f
 homepage: https://www.huawei.com
 repository: https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-mlbody
 
-version: 3.12.0+300
+version: 3.12.0+301
 
 environment:
   sdk: ">=2.12.0 <4.0.0"

@@ -1,3 +1,7 @@
+## 3.12.0+300
+
+- Minor optimization.
+
 ## 3.11.0+300
 
 - **Real-time translation**:

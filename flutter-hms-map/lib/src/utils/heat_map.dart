@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
 Map<HeatMapId, HeatMap> heatMapToMap(Iterable<HeatMap> heatMaps) {
   return Map<HeatMapId, HeatMap>.fromEntries(

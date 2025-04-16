@@ -14,17 +14,23 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// Defines a rectangular area using a pair of [longitude] and [latitude].
 class LatLngBounds {
+  /// Coordinates of the southwest corner of the bound.
   final LatLng southwest;
+
+  /// Coordinates of the northeast corner of the bound.
   final LatLng northeast;
 
+  /// Creates a [LatLngBounds] object.
   const LatLngBounds({
     required this.southwest,
     required this.northeast,
   });
 
+  /// Creates a [LatLngBounds] object from a map.
   static LatLngBounds fromList(dynamic json) {
     return LatLngBounds(
       southwest: LatLng.fromJson(json[0]),
@@ -32,6 +38,7 @@ class LatLngBounds {
     );
   }
 
+  /// Checks whether a [LatLngBounds] object contains a specified location.
   bool contains(LatLng point) {
     return _containsLatitude(point.lat) && _containsLongitude(point.lng);
   }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-part of huawei_location;
+part of '../../huawei_location.dart';
 
 class GeofenceService {
   static GeofenceService? _instance;

@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_adsprime;
+part of '../../huawei_adsprime.dart';
 
 class RequestOptions {
   /// Maximum ad content rating.
@@ -45,6 +45,12 @@ class RequestOptions {
   /// Whether location information is requested.
   bool? requestLocation;
 
+  /// Sets the parameters for a real-time bidding ad unit.
+  Map<String, dynamic>? _setBiddingParamMap;
+
+  /// Sets the parameters for a real-time bidding ad unit.
+  Map<String, dynamic>? _addBiddingParamMap;
+
   RequestOptions({
     this.adContentClassification,
     this.tagForUnderAgeOfPromise,
@@ -54,7 +60,25 @@ class RequestOptions {
     this.appLang,
     this.consent,
     this.requestLocation = true,
-  });
+  }) {}
+
+  int get id => hashCode;
+
+  RequestOptions addBiddingParamMap(String slotId, BiddingParam param) {
+    _addBiddingParamMap = {'slotId': slotId, 'biddingParam': param.toJson()};
+    return this;
+  }
+
+  RequestOptions setBiddingParamMap(Map<String, BiddingParam> biddingParamMap) {
+    Map<String, dynamic> paramMap = {};
+
+    biddingParamMap.forEach((key, value) {
+      paramMap[key] = value.toJson();
+    });
+
+    this._setBiddingParamMap = paramMap;
+    return this;
+  }
 
   static RequestOptions _fromMap(Map<dynamic, dynamic> map) {
     return RequestOptions(
@@ -85,6 +109,8 @@ class RequestOptions {
       'appLang': appLang,
       'consent': consent,
       'requestLocation': requestLocation,
+      'addBiddingParamMap': _addBiddingParamMap,
+      'setBiddingParamMap': _setBiddingParamMap,
     }..removeWhere((_, dynamic v) => v == null);
   }
 }

@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../huawei_map.dart';
 
 class HuaweiMapController {
   final int mapId;
@@ -162,6 +162,7 @@ class HuaweiMapController {
     return _HuaweiMapMethodChannel.updateHeatMaps(heatMapUpdates, mapId: mapId);
   }
 
+  /// Clears the cache of a tile overlay.
   Future<void> clearTileCache(TileOverlay tileOverlay) {
     return _HuaweiMapMethodChannel.clearTileCache(
       tileOverlay.tileOverlayId,
@@ -169,6 +170,7 @@ class HuaweiMapController {
     );
   }
 
+  /// Starts the animation of a marker.
   Future<void> startAnimationOnMarker(Marker marker) {
     return _HuaweiMapMethodChannel.startAnimationOnMarker(
       marker.markerId,
@@ -176,6 +178,7 @@ class HuaweiMapController {
     );
   }
 
+  /// Starts the animation of a circle.
   Future<void> startAnimationOnCircle(Circle circle) {
     return _HuaweiMapMethodChannel.startAnimationOnCircle(
       circle.circleId,
@@ -183,54 +186,79 @@ class HuaweiMapController {
     );
   }
 
+  /// Updates the camera position in animation mode.
   Future<void> animateCamera(CameraUpdate cameraUpdate) {
     return _HuaweiMapMethodChannel.animateCamera(cameraUpdate, mapId: mapId);
   }
 
+  /// Stops the current animation of the camera.
+  ///
+  /// When this method is called, the camera stops moving immediately and remains in that position.
   Future<void> stopAnimation() {
     return _HuaweiMapMethodChannel.stopAnimation(mapId: mapId);
   }
 
+  /// Updates the camera position.
+  ///
+  /// The movement is instantaneous.
   Future<void> moveCamera(CameraUpdate cameraUpdate) {
     return _HuaweiMapMethodChannel.moveCamera(cameraUpdate, mapId: mapId);
   }
 
+  /// Sets the map style.
   Future<void> setMapStyle(String mapStyle) {
     return _HuaweiMapMethodChannel.setMapStyle(mapStyle, mapId: mapId);
   }
 
+  /// Sets location for location source.
   Future<void> setLocation(LatLng latLng) {
     return _HuaweiMapMethodChannel.setLocation(latLng, mapId: mapId);
   }
 
+  /// Sets the location source for the my-location layer.
   Future<void> setLocationSource() {
     return _HuaweiMapMethodChannel.setLocationSource(mapId: mapId);
   }
 
+  /// Deactivates location source.
   Future<void> deactivateLocationSource() {
     return _HuaweiMapMethodChannel.deactivateLocationSource(mapId: mapId);
   }
 
+  /// Obtains the visible region after conversion between the screen coordinates and longitude/latitude coordinates.
   Future<LatLngBounds> getVisibleRegion() {
     return _HuaweiMapMethodChannel.getVisibleRegion(mapId: mapId);
   }
 
+  /// Obtains a location on the screen corresponding to the specified longitude/latitude coordinates.
+  ///
+  /// The location on the screen is specified in screen pixels (instead of display pixels) relative to the top left corner of the map (instead of the top left corner of the screen).
   Future<ScreenCoordinate> getScreenCoordinate(LatLng latLng) {
     return _HuaweiMapMethodChannel.getScreenCoordinate(latLng, mapId: mapId);
   }
 
+  /// Obtains the longitude and latitude of a location on the screen.
+  ///
+  /// The location on the screen is specified in screen pixels (instead of display pixels) relative to the top left corner of the map (instead of the top left corner of the screen).
   Future<LatLng> getLatLng(ScreenCoordinate screenCoordinate) {
     return _HuaweiMapMethodChannel.getLatLng(screenCoordinate, mapId: mapId);
   }
 
+  /// Displays an information window for a marker.
   Future<void> showMarkerInfoWindow(MarkerId markerId) {
     return _HuaweiMapMethodChannel.showMarkerInfoWindow(markerId, mapId: mapId);
   }
 
+  /// Hides the information window that is displayed for a marker.
+  ///
+  /// This method is invalid for invisible markers.
   Future<void> hideMarkerInfoWindow(MarkerId markerId) {
     return _HuaweiMapMethodChannel.hideMarkerInfoWindow(markerId, mapId: mapId);
   }
 
+  /// Checks whether an information window is currently displayed for a marker.
+  ///
+  /// This method will not consider whether the information window is actually visible on the screen.
   Future<bool?> isMarkerInfoWindowShown(MarkerId markerId) {
     return _HuaweiMapMethodChannel.isMarkerInfoWindowShown(
       markerId,
@@ -238,81 +266,208 @@ class HuaweiMapController {
     );
   }
 
+  /// Checks whether a marker can be clustered.
   Future<bool?> isMarkerClusterable(MarkerId markerId) {
     return _HuaweiMapMethodChannel.isMarkerClusterable(markerId, mapId: mapId);
   }
 
+  /// Obtains zoom level of a map.
   Future<double?> getZoomLevel() {
     return _HuaweiMapMethodChannel.getZoomLevel(mapId: mapId);
   }
 
+  /// Takes a snapshot of a map.
   Future<Uint8List?> takeSnapshot() {
     return _HuaweiMapMethodChannel.takeSnapshot(mapId: mapId);
   }
 
+  /// Obtains the length of one pixel point on the map at the current zoom level, in meters.
   Future<double?> getScalePerPixel() {
     return _HuaweiMapMethodChannel.getScalePerPixel(mapId: mapId);
   }
 }
 
 class HuaweiMap extends StatefulWidget {
+  /// Non-gesture animation started in response to a user operation.
   static const int REASON_API_ANIMATON = 2;
+
+  /// An animation started by the developer.
   static const int REASON_DEVELOPER_ANIMATION = 3;
+
+  /// An animation started in response to user gestures on a map.
   static const int REASON_GESTURE = 1;
 
+  /// Lower left logo and copyright position.
   static const int LOWER_LEFT = 8388691;
+
+  /// Lower right logo and copyright position.
   static const int LOWER_RIGHT = 8388693;
+
+  /// Upper left logo and copyright position.
   static const int UPPER_LEFT = 8388659;
+
+  /// Lower right logo and copyright position.
   static const int UPPER_RIGHT = 8388661;
 
+  /// Initial camera position for a map.
   final CameraPosition initialCameraPosition;
+
+  /// Indicates whether to the compass is enabled for a map.
   final bool compassEnabled;
+
+  /// Indicates whether to enable the dark mode.
+  ///
+  /// After the dark mode is enabled, popups displayed after the map logo is tapped, indoor map controls, and privacy agreement popups will be displayed in dark mode.
   final bool isDark;
+
+  /// Indicates whether the toolbar is enabled for a map.
   final bool mapToolbarEnabled;
+
+  /// [LatLngBounds] object to constrain the camera target so that the camera target does not move outside the bounds when a user scrolls the map.
   final CameraTargetBounds cameraTargetBounds;
+
+  /// Map type.
   final MapType mapType;
+
+  /// Preferred minimum and maximum zoom levels of the camera.
   final MinMaxZoomPreference minMaxZoomPreference;
+
+  /// Indicates whether rotate gestures are enabled for a map.
   final bool rotateGesturesEnabled;
+
+  /// Indicates whether scroll gestures are enabled for a map.
   final bool scrollGesturesEnabled;
+
+  /// Indicates whether the zoom function is enabled for the camera.
   final bool zoomControlsEnabled;
+
+  /// Indicates whether zoom gestures are enabled for a map.
   final bool zoomGesturesEnabled;
+
+  /// Indicates whether tilt gestures are enabled for a map.
   final bool tiltGesturesEnabled;
+
+  /// Padding on a map.
   final EdgeInsets padding;
+
+  /// Markers on a map.
+  ///
+  /// Marker icons are displayed at specified positions on the map.
   final Set<Marker> markers;
+
+  /// Polygons on a map.
   final Set<Polygon> polygons;
+
+  /// Polylines on a map.
   final Set<Polyline> polylines;
+
+  /// Circles on a map.
+  ///
+  /// The longitude and latitude of the center and the radius are specified for the circle to indicate the surrounding area of a location.
   final Set<Circle> circles;
+
+  /// Images on a map.
   final Set<GroundOverlay> groundOverlays;
+
+  /// Tile overlays to a map.
   final Set<TileOverlay> tileOverlays;
+
+  /// Heatmaps on a map.
   final Set<HeatMap> heatMaps;
+
+  /// Indicates whether the my-location layer is enabled.
+  ///
+  /// If the my-location layer is enabled and the location is available, the layer constantly draws the user's current location and bearing and displays the UI controls for the user to interact with their location.
+  ///
+  /// To use the my-location layer function, you must apply for the `ACCESS_COARSE_LOCATION` or `ACCESS_FINE_LOCATION` permissions.
   final bool myLocationEnabled;
+
+  /// Indicates whether the my-location icon is enabled for a map.
   final bool myLocationButtonEnabled;
+
+  /// Indicates whether the traffic status layer is enabled.
   final bool trafficEnabled;
+
+  /// Indicates whether the 3D building layer is enabled.
   final bool buildingsEnabled;
+
+  /// Indicates whether a marker can be clustered.
   final bool markersClusteringEnabled;
+
+  /// Indicates whether to enable all gestures for a map.
   final bool? allGesturesEnabled;
+
+  /// Indicates whether scroll gestures are enabled during rotation or zooming.
   final bool isScrollGesturesEnabledDuringRotateOrZoom;
+
+  /// Sets whether a fixed screen center can be passed for zooming.
+  ///
+  /// - If so, the map will be zoomed based on the passed fixed screen center.
+  /// - If not, the map will be zoomed based on the tap point on the screen. You can call the `pointToCenter` field to set the screen center coordinates.
   final bool gestureScaleByMapCenter;
+
+  /// Sets a fixed screen center for zooming.
   final ScreenCoordinate? pointToCenter;
+
+  /// Sets the color of the default cluster marker.
   final Color? clusterMarkerColor;
+
+  /// Sets the text color of the custom cluster marker.
   final Color? clusterMarkerTextColor;
+
+  /// Sets the icon of the custom cluster marker.
   final BitmapDescriptor? clusterIconDescriptor;
+
+  /// Sets the position of the Petal Maps logo.
   final int logoPosition;
+
+  /// Sets the padding between the map camera region edges and the logo.
   final EdgeInsets logoPadding;
+
+  /// Sets a style ID.
+  ///
+  /// A style ID uniquely identifies a style. After creating a map, you can call this method to change the map style to a custom style.
   final String? styleId;
+
+  /// Sets a preview ID.
+  ///
+  /// The preview ID is regenerated for a custom style when the style is edited. You can call this method to check the custom style effect after creating a map.
   final String? previewId;
+
+  /// Indicates whether the lite mode is enabled for a map.
   final bool liteMode;
+
+  /// Sets the my-location icon style.
   final MyLocationStyle? myLocationStyle;
 
+  /// Function to be called when a map is created.
   final void Function(HuaweiMapController controller)? onMapCreated;
+
+  /// Function to be called when a camera move started.
   final ArgumentCallback<int>? onCameraMoveStarted;
+
+  /// Function to be called when a camera moved.
   final CameraPositionCallback? onCameraMove;
+
+  /// Function to be called when a camera is idle.
   final VoidCallback? onCameraIdle;
+
+  /// A listener to listen for the stop of camera movement or the interruption of camera movement due to a new animation.
   final VoidCallback? onCameraMoveCanceled;
+
+  /// Function to be called when map is clicked.
   final ArgumentCallback<LatLng>? onClick;
+
+  /// Function to be called when a map is long clicked.
   final ArgumentCallback<LatLng>? onLongPress;
+
+  /// Function to be called when a POI is tapped.
   final ArgumentCallback<PointOfInterest>? onPoiClick;
+
+  /// Function to be called when my-location dot is tapped.
   final ArgumentCallback<Location>? onMyLocationClick;
+
+  /// Function to be called when my-location icon is tapped.
   final ArgumentCallback<bool>? onMyLocationButtonClick;
 
   const HuaweiMap({

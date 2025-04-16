@@ -105,14 +105,16 @@ public class FlutterHmsMessageService extends HmsMessageService {
         super.onTokenError(e, bundle);
         if (PluginContext.getContext() != null) {
             if (e instanceof ResolvableApiException) {
-                HMSLogger.getInstance(PluginContext.getContext()).sendSingleEvent("onTokenError", String.valueOf(((ResolvableApiException) e).getStatusCode()));
+                HMSLogger.getInstance(PluginContext.getContext())
+                    .sendSingleEvent("onTokenError", String.valueOf(((ResolvableApiException) e).getStatusCode()));
                 PendingIntent resolution = ((ResolvableApiException) e).getResolution();
                 if (resolution != null) {
                     try {
                         HMSLogger.getInstance(PluginContext.getContext()).sendSingleEvent("onTokenError");
                         resolution.send();
                     } catch (PendingIntent.CanceledException ex1) {
-                        HMSLogger.getInstance(PluginContext.getContext()).sendSingleEvent("onTokenError", ex1.getMessage());
+                        HMSLogger.getInstance(PluginContext.getContext())
+                            .sendSingleEvent("onTokenError", ex1.getMessage());
                     }
                 }
                 Intent resolutionIntent = ((ResolvableApiException) e).getResolutionIntent();

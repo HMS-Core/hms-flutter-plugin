@@ -26,8 +26,9 @@ import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 
-public class InstreamMethodHandler implements MethodChannel.MethodCallHandler  {
+public class InstreamMethodHandler implements MethodChannel.MethodCallHandler {
     private final BinaryMessenger messenger;
+
     private final Context context;
 
     public InstreamMethodHandler(final BinaryMessenger messenger, final Context context) {
@@ -46,7 +47,7 @@ public class InstreamMethodHandler implements MethodChannel.MethodCallHandler  {
         }
     }
 
-    private void initInstreamLoader(MethodCall call, MethodChannel.Result result){
+    private void initInstreamLoader(MethodCall call, MethodChannel.Result result) {
         Integer id = FromMap.toInteger("id", call.argument("id"));
         String adId = FromMap.toString("adId", call.argument("adId"));
         Integer totalDuration = FromMap.toInteger("totalDuration", call.argument("totalDuration"));

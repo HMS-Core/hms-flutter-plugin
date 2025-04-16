@@ -1,3 +1,7 @@
+## 3.12.0+301
+
+- Dart improvements.
+
 ## 3.12.0+300
 
 - Added the Customized Scanning Action section for the Interactive Biometric Verification service, and added error code USER_ DEFINED_ACTIONS_INVALID and method setActionArray(int[]actionArray, int num, boolean isRandomable).

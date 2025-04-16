@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-part of huawei_location;
+part of '../../huawei_location.dart';
 
 class ActivityIdentificationResponse {
   /// Time of the identification, in milliseconds since January 1, 1970.

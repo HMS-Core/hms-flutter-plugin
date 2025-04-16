@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
 const String _mapChannel = 'com.huawei.hms.flutter.map/map';
 const String _mapUtilChannel = 'com.huawei.hms.flutter.map/mapUtils';

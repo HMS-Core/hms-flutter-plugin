@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_adsprime;
+part of '../../../huawei_adsprime.dart';
 
 class _Key {
   static const String visibility = 'visibility';
@@ -24,6 +24,7 @@ class _Key {
   static const String bgColor = 'backgroundColor';
 }
 
+/// Enumerated object that represents the available font weights and styles for text.
 enum NativeFontWeight {
   normal,
   bold,

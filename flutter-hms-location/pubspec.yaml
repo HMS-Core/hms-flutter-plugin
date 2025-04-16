@@ -3,7 +3,7 @@ description: HUAWEI Flutter Location Kit plugin combines the Global Navigation S
 homepage: https://www.huawei.com
 repository: https://github.com/HMS-Core/hms-flutter-plugin/tree/master/flutter-hms-location
 
-version: 6.12.0+302
+version: 6.12.0+303
 
 environment:
   sdk: '>=2.14.0 <4.0.0'

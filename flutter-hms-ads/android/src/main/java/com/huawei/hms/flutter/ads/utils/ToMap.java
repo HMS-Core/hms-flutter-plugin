@@ -16,6 +16,7 @@
 
 package com.huawei.hms.flutter.ads.utils;
 
+import com.huawei.hms.ads.BiddingInfo;
 import com.huawei.hms.ads.consent.bean.AdProvider;
 
 import java.util.ArrayList;
@@ -55,6 +56,15 @@ public class ToMap {
             mapList.add(adProvider(provider));
         }
         return mapList;
+    }
+
+    public static Map<String, Object> fromBiddingInfo(BiddingInfo biddingInfo) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("price", biddingInfo.getPrice());
+        map.put("currency", biddingInfo.getCur());
+        map.put("nUrl", biddingInfo.getNurl());
+        map.put("lUrl", biddingInfo.getLurl());
+        return map;
     }
 
     private static Map<String, Object> adProvider(AdProvider adProvider) {

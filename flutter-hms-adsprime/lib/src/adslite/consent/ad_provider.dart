@@ -14,12 +14,19 @@
     limitations under the License.
 */
 
-part of huawei_adsprime;
+part of '../../../huawei_adsprime.dart';
 
 class AdProvider {
+  /// Ad provider ID.
   String? id;
+
+  /// Ad provider name.
   String? name;
+
+  /// Service area information.
   String? serviceArea;
+
+  /// Privacy policy URL.
   String? privacyPolicyUrl;
 
   AdProvider({
@@ -29,6 +36,7 @@ class AdProvider {
     this.privacyPolicyUrl,
   });
 
+  /// Checks whether an ad provider object is valid.
   bool isValid() {
     return id != null &&
         id!.isNotEmpty &&

@@ -14,21 +14,35 @@
     limitations under the License.
 */
 
-part of huawei_ads;
+part of '../../../huawei_ads.dart';
+
+/// A function type defined for ad dislike events.
+///
+/// Ads that a user dislikes will not be displayed anymore.
+typedef DislikeAdListener = void Function(AdEvent? event);
+
+typedef NativeAdStateListener = void Function(NativeAdLoadState state);
 
 class NativeAdController {
-  int get id => hashCode;
-
   late MethodChannel _channel;
   late EventChannel _streamNative;
   late NativeAdStateListener loadListener;
+
+  /// Configurations for the ad.
   NativeAdConfiguration? _adConfiguration;
+
+  /// Ad request parameters.
   AdParam? _adParam;
+
+  /// Listener function for ad events.
   AdListener? listener;
+
+  /// Listener function for ad dislike events.
+  ///
+  ///  Ads that a user dislikes will not be displayed anymore.
   DislikeAdListener? dislikeListener;
   VideoOperator? _videoOperator;
   StreamSubscription<dynamic>? _listenerSub;
-
   NativeAdController({
     this.listener,
     this.dislikeListener,
@@ -49,19 +63,290 @@ class NativeAdController {
     );
   }
 
-  NativeAdConfiguration get _configuration {
-    return _adConfiguration ?? NativeAdConfiguration();
-  }
-
   AdParam get adParam {
     return _adParam ?? AdParam();
   }
 
-  Future<dynamic> _onMethodCall(MethodCall call) async {
-    if ('onAdLoading' == call.method) {
-      loadListener(NativeAdLoadState.loading);
+  int get id => hashCode;
+
+  NativeAdConfiguration get _configuration {
+    return _adConfiguration ?? NativeAdConfiguration();
+  }
+
+  /// Destroys an ad object.
+  Future<bool?> destroy() {
+    _listenerSub?.cancel();
+    return Ads.instance.channel.invokeMethod(
+      'destroyNativeAdController',
+      <String, dynamic>{
+        'id': id,
+      },
+    );
+  }
+
+  /// Does not display the current ad.
+  ///
+  /// When this method is called, the current ad is closed.
+  ///
+  /// `Sample code:`
+  /// ```dart
+  /// NativeAdController controller = NativeAdController();
+  /// // Use controller in NativeAd Widget...
+  /// NativeAd( adSlotId: _testAdSlotId, controller: controller)
+  /// await controller.dislikeAd(DislikeAdReason());
+  /// ```
+  Future<bool?> dislikeAd(DislikeAdReason reason) {
+    return _channel.invokeMethod(
+      'dislikeAd',
+      <String, dynamic>{
+        'reason': reason.getDescription,
+      },
+    );
+  }
+
+  /// Obtains the sign of an ad.
+  Future<String?> getAdSign() async {
+    final String? adSign = await _channel.invokeMethod(
+      'getAdSign',
+    );
+    return adSign;
+  }
+
+  /// Obtains an ad source.
+  Future<String?> getAdSource() async {
+    final String? source = await _channel.invokeMethod(
+      'getAdSource',
+    );
+    return source;
+  }
+
+  /// Obtains the advertiser information.
+  Future<List<AdvertiserInfo>> getAdvertiserInfo() async {
+    final List<dynamic> result = await _channel.invokeMethod(
+      'getAdvertiserInfo',
+    );
+    final List<AdvertiserInfo> list = <AdvertiserInfo>[];
+    for (dynamic map in result) {
+      list.add(AdvertiserInfo._fromMap(map as Map<dynamic, dynamic>));
     }
-    return Future<dynamic>.value(null);
+    return list;
+  }
+
+  /// Obtains the information about the promoted app
+  Future<AppInfo> getAppInfo() async {
+    return AppInfo.fromJson(await _channel.invokeMethod('getAppInfo'));
+  }
+
+  /// Obtains the text to be displayed on a button.
+  ///
+  /// For example, `View Details` or `Install`.
+  ///
+  /// `Sample code:`
+  /// ```dart
+  /// NativeAdController controller = NativeAdController();
+  /// // Use controller in NativeAd Widget...
+  /// NativeAd( adSlotId: _testAdSlotId, controller: controller)
+  /// String? callToAction = await controller.getCallToAction();
+  /// ```
+  Future<String?> getCallToAction() async {
+    final String? callToAction = await _channel.invokeMethod(
+      'getCallToAction',
+    );
+    return callToAction;
+  }
+
+  /// Obtains the description of an ad.
+  Future<String?> getDescription() async {
+    final String? description = await _channel.invokeMethod(
+      'getDescription',
+    );
+    return description;
+  }
+
+  /// Obtains reasons why an ad is disliked.
+  Future<List<DislikeAdReason>> getDislikeAdReasons() async {
+    final List<String>? reasonsList = await _channel.invokeMethod(
+      'getDislikeReasons',
+    );
+    final List<DislikeAdReason> responseList = <DislikeAdReason>[];
+    for (String reason in (reasonsList ?? <String>[])) {
+      responseList.add(DislikeAdReason(reason));
+    }
+    return responseList;
+  }
+
+  /// Obtains the promotion object.
+  Future<PromoteInfo> getPromoteInfo() async {
+    return PromoteInfo.fromJson(await _channel.invokeMethod('getPromoteInfo'));
+  }
+
+  /// Returns real-time bidding data.
+  Future<BiddingInfo?> getBiddingInfo() async {
+    return BiddingInfo.fromJson(await _channel.invokeMethod('getBiddingInfo'));
+  }
+
+  /// Obtains the title of an ad.
+  ///
+  /// `Sample code:`
+  /// ```dart
+  /// NativeAdController controller = NativeAdController();
+  /// // Use controller in NativeAd Widget...
+  /// NativeAd( adSlotId: _testAdSlotId, controller: controller)
+  /// String? title = await controller.getTitle();
+  /// ```
+  Future<String?> getTitle() async {
+    final String? title = await _channel.invokeMethod(
+      'getTitle',
+    );
+    return title;
+  }
+
+  Future<String?> getUniqueId() async {
+    final String? uniqueId = await _channel.invokeMethod(
+      'getUniqueId',
+    );
+    return uniqueId;
+  }
+
+  /// Obtains the video controller of an ad.
+  Future<VideoOperator?> getVideoOperator() async {
+    final bool hasOperator = await (_channel.invokeMethod(
+      'getVideoOperator',
+    ));
+    if (hasOperator) _videoOperator = VideoOperator(_channel);
+    return _videoOperator;
+  }
+
+  /// Obtains the URL of the `Why this ad` page.
+  Future<String?> getWhyThisAd() async {
+    final String? whyThisAd = await _channel.invokeMethod(
+      'getWhyThisAd',
+    );
+    return whyThisAd;
+  }
+
+  /// Goes to the page explaining why an ad is displayed.
+  void gotoWhyThisAdPage() {
+    _channel.invokeMethod(
+      'gotoWhyThisAdPage',
+    );
+  }
+
+  /// Checks whether advertiser information is delivered for the current ad.
+  Future<bool> hasAdvertiserInfo() async {
+    return await _channel.invokeMethod(
+      'hasAdvertiserInfo',
+    );
+  }
+
+  /// Hides the advertiser information dialog box.
+  Future<void> hideAdvertiserInfoDialog() async {
+    return await _channel.invokeMethod(
+      'hideAdvertiserInfoDialog',
+    );
+  }
+
+  /// Checks whether custom tap gestures are enabled.
+  ///
+  /// `Sample code:`
+  /// ```dart
+  /// NativeAdController controller = NativeAdController();
+  /// // Use controller in NativeAd Widget...
+  /// NativeAd( adSlotId: _testAdSlotId, controller: controller)
+  /// bool? allowed = await controller.isCustomClickAllowed();
+  /// ```
+  Future<bool?> isCustomClickAllowed() async {
+    final bool? isAllowed = await _channel.invokeMethod(
+      'isCustomClickAllowed',
+    );
+    return isAllowed;
+  }
+
+  /// Checks whether custom tap gestures are enabled.
+  ///
+  /// `Sample code:`
+  /// ```dart
+  /// NativeAdController controller = NativeAdController();
+  /// // Use controller in NativeAd Widget...
+  /// NativeAd( adSlotId: _testAdSlotId, controller: controller)
+  /// bool? enabled = await controller.isCustomDislikeThisAdEnabled();
+  /// ```
+  Future<bool?> isCustomDislikeThisAdEnabled() async {
+    final bool? isEnabled = await _channel.invokeMethod(
+      'isCustomDislikeThisAdEnabled',
+    );
+    return isEnabled;
+  }
+
+  /// Checks whether an ad is being loaded.
+  ///
+  /// `Sample code:`
+  /// ```dart
+  /// NativeAdController controller = NativeAdController();
+  /// // Use controller in NativeAd Widget...
+  /// NativeAd( adSlotId: _testAdSlotId, controller: controller)
+  /// bool? loading = await controller.isLoading();
+  /// ```
+  Future<bool?> isLoading() async {
+    final bool? isLoading = await _channel.invokeMethod(
+      'isLoading',
+    );
+    return isLoading;
+  }
+
+  /// Indicates whether ad transparency information is displayed.
+  ///
+  /// `Sample code:`
+  /// ```dart
+  /// NativeAdController controller = NativeAdController();
+  /// // Use controller in NativeAd Widget...
+  /// NativeAd( adSlotId: _testAdSlotId, controller: controller)
+  /// String? transparencyTplUrl = await controller.transparencyTplUrl();
+  /// ```
+  Future<bool> isTransparencyOpen() async {
+    return await _channel.invokeMethod(
+      'isTransparencyOpen',
+    );
+  }
+
+  /// Indicates that the method has finished execution.
+  ///
+  /// `Sample code:`
+  /// ```dart
+  /// NativeAdController controller = NativeAdController();
+  /// // Use controller in NativeAd Widget...
+  /// NativeAd( adSlotId: _testAdSlotId, controller: controller)
+  /// await controller.recordClickEvent();
+  /// ```
+  Future<bool?> recordClickEvent() {
+    return _channel.invokeMethod(
+      'recordClickEvent',
+    );
+  }
+
+  /// Reports an ad impression.
+  Future<bool?> recordImpressionEvent(Bundle bundle) {
+    return _channel.invokeMethod(
+      'recordImpressionEvent',
+      bundle.bundle,
+    );
+  }
+
+  /// Checks whether an ad is being loaded.
+  ///
+  /// `Sample code:`
+  /// ```dart
+  /// NativeAdController controller = NativeAdController();
+
+  /// // Use controller in NativeAd Widget...
+  /// NativeAd( adSlotId: _testAdSlotId, controller: controller)
+
+  ///controller.setAllowCustomClick();
+  /// ```
+  void setAllowCustomClick() {
+    _channel.invokeMethod(
+      'setAllowCustomClick',
+    );
   }
 
   void setup(String adSlotId) {
@@ -76,146 +361,36 @@ class NativeAdController {
     );
   }
 
-  Future<VideoOperator?> getVideoOperator() async {
-    final bool hasOperator = await (_channel.invokeMethod(
-      'getVideoOperator',
-    ));
-    if (hasOperator) _videoOperator = VideoOperator(_channel);
-    return _videoOperator;
-  }
-
-  void gotoWhyThisAdPage() {
-    _channel.invokeMethod(
-      'gotoWhyThisAdPage',
-    );
-  }
-
-  Future<bool> hasAdvertiserInfo() async {
-    return await _channel.invokeMethod(
-      'hasAdvertiserInfo',
-    );
-  }
-
+  /// Displays the advertiser information dialog box.
   Future<void> showAdvertiserInfoDialog() async {
     return await _channel.invokeMethod(
       'showAdvertiserInfoDialog',
     );
   }
 
-  Future<void> hideAdvertiserInfoDialog() async {
-    return await _channel.invokeMethod(
-      'hideAdvertiserInfoDialog',
-    );
+  /// Shows the introduction page of the promoted app.
+  Future<void> showAppDetailPage() async {
+    await _channel.invokeMethod('showAppDetailPage');
   }
 
-  Future<bool?> isLoading() async {
-    final bool? isLoading = await _channel.invokeMethod(
-      'isLoading',
-    );
-    return isLoading;
+  /// Shows the app permission list.
+  Future<void> showPermissionPage() async {
+    await _channel.invokeMethod('showPermissionPage');
   }
 
-  void setAllowCustomClick() {
-    _channel.invokeMethod(
-      'setAllowCustomClick',
-    );
+  /// Shows the privacy policy of the app.
+  Future<void> showPrivacyPolicy() async {
+    await _channel.invokeMethod('showPrivacyPolicy');
   }
 
-  Future<bool?> isCustomClickAllowed() async {
-    final bool? isAllowed = await _channel.invokeMethod(
-      'isCustomClickAllowed',
-    );
-    return isAllowed;
-  }
-
-  Future<String?> getAdSource() async {
-    final String? source = await _channel.invokeMethod(
-      'getAdSource',
-    );
-    return source;
-  }
-
-  Future<String?> getDescription() async {
-    final String? description = await _channel.invokeMethod(
-      'getDescription',
-    );
-    return description;
-  }
-
-  Future<String?> getCallToAction() async {
-    final String? callToAction = await _channel.invokeMethod(
-      'getCallToAction',
-    );
-    return callToAction;
-  }
-
-  Future<String?> getTitle() async {
-    final String? title = await _channel.invokeMethod(
-      'getTitle',
-    );
-    return title;
-  }
-
-  Future<String?> getAdSign() async {
-    final String? adSign = await _channel.invokeMethod(
-      'getAdSign',
-    );
-    return adSign;
-  }
-
-  Future<String?> getWhyThisAd() async {
-    final String? whyThisAd = await _channel.invokeMethod(
-      'getWhyThisAd',
-    );
-    return whyThisAd;
-  }
-
-  Future<String?> getUniqueId() async {
-    final String? uniqueId = await _channel.invokeMethod(
-      'getUniqueId',
-    );
-    return uniqueId;
-  }
-
-  Future<List<AdvertiserInfo>> getAdvertiserInfo() async {
-    final List<dynamic> result = await _channel.invokeMethod(
-      'getAdvertiserInfo',
-    );
-    final List<AdvertiserInfo> list = <AdvertiserInfo>[];
-    for (dynamic map in result) {
-      list.add(AdvertiserInfo._fromMap(map as Map<dynamic, dynamic>));
-    }
-    return list;
-  }
-
-  Future<bool> isTransparencyOpen() async {
-    return await _channel.invokeMethod(
-      'isTransparencyOpen',
-    );
-  }
-
+  /// Obtains the redirection URL.
   Future<String> transparencyTplUrl() async {
     return await _channel.invokeMethod(
       'transparencyTplUrl',
     );
   }
 
-  Future<bool?> dislikeAd(DislikeAdReason reason) {
-    return _channel.invokeMethod(
-      'dislikeAd',
-      <String, dynamic>{
-        'reason': reason.getDescription,
-      },
-    );
-  }
-
-  Future<bool?> isCustomDislikeThisAdEnabled() async {
-    final bool? isEnabled = await _channel.invokeMethod(
-      'isCustomDislikeThisAdEnabled',
-    );
-    return isEnabled;
-  }
-
+  /// Reports a tap.
   Future<bool?> triggerClick(Bundle bundle) {
     return _channel.invokeMethod(
       'triggerClick',
@@ -223,58 +398,11 @@ class NativeAdController {
     );
   }
 
-  Future<bool?> recordClickEvent() {
-    return _channel.invokeMethod(
-      'recordClickEvent',
-    );
-  }
-
-  Future<bool?> recordImpressionEvent(Bundle bundle) {
-    return _channel.invokeMethod(
-      'recordImpressionEvent',
-      bundle.bundle,
-    );
-  }
-
-  Future<List<DislikeAdReason>> getDislikeAdReasons() async {
-    final List<String>? reasonsList = await _channel.invokeMethod(
-      'getDislikeReasons',
-    );
-    final List<DislikeAdReason> responseList = <DislikeAdReason>[];
-    for (String reason in (reasonsList ?? <String>[])) {
-      responseList.add(DislikeAdReason(reason));
+  Future<dynamic> _onMethodCall(MethodCall call) async {
+    if ('onAdLoading' == call.method) {
+      loadListener(NativeAdLoadState.loading);
     }
-    return responseList;
-  }
-
-  Future<void> showAppDetailPage() async {
-    await _channel.invokeMethod('showAppDetailPage');
-  }
-
-  Future<PromoteInfo> getPromoteInfo() async {
-    return PromoteInfo.fromJson(await _channel.invokeMethod('getPromoteInfo'));
-  }
-
-  Future<AppInfo> getAppInfo() async {
-    return AppInfo.fromJson(await _channel.invokeMethod('getAppInfo'));
-  }
-
-  Future<void> showPrivacyPolicy() async {
-    await _channel.invokeMethod('showPrivacyPolicy');
-  }
-
-  Future<void> showPermissionPage() async {
-    await _channel.invokeMethod('showPermissionPage');
-  }
-
-  Future<bool?> destroy() {
-    _listenerSub?.cancel();
-    return Ads.instance.channel.invokeMethod(
-      'destroyNativeAdController',
-      <String, dynamic>{
-        'id': id,
-      },
-    );
+    return Future<dynamic>.value(null);
   }
 
   void _startListening() {
@@ -322,7 +450,3 @@ enum NativeAdLoadState {
   loaded,
   failed,
 }
-
-typedef NativeAdStateListener = void Function(NativeAdLoadState state);
-
-typedef DislikeAdListener = void Function(AdEvent? event);

@@ -14,23 +14,27 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// Entry class for Map Kit utilities.
 abstract class HuaweiMapUtils {
   static const MethodChannel _c = MethodChannel(_mapUtilChannel);
 
+  /// Disables HMSLogger.
   static Future<void> disableLogger() async {
     _c.invokeMethod(
       _Method.DisableLogger,
     );
   }
 
+  /// Enables HMSLogger.
   static Future<void> enableLogger() async {
     _c.invokeMethod(
       _Method.EnableLogger,
     );
   }
 
+  /// Calculates the distance between two coordinate points.
   static Future<double?> distanceCalculator({
     required LatLng start,
     required LatLng end,
@@ -41,6 +45,7 @@ abstract class HuaweiMapUtils {
     );
   }
 
+  /// Converts a single set of WGS84 coordinate to GCJ02 coordinate.
   static Future<LatLng> convertCoordinate(LatLng latLng) async {
     return LatLng.fromJson(
       await _c.invokeMethod(
@@ -50,6 +55,7 @@ abstract class HuaweiMapUtils {
     );
   }
 
+  /// Converts multiple sets of WGS84 coordinates to GCJ02 coordinates.
   static Future<List<LatLng>> convertCoordinates(List<LatLng> latLngs) async {
     final List<List<double>> args = <List<double>>[];
     for (LatLng element in latLngs) {

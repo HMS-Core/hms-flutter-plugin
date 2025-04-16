@@ -33,6 +33,7 @@ import java.util.HashMap;
 
 public class HmsLocalNotification {
     private static final String TAG = HmsLocalNotification.class.getSimpleName();
+
     private final HmsLocalNotificationController hmsLocalNotificationController;
 
     public HmsLocalNotification(Context context) {
@@ -72,7 +73,7 @@ public class HmsLocalNotification {
             ArrayList<String> notifications = hmsLocalNotificationController.getNotifications(result);
             result.success(notifications);
         } else {
-            result.error("UNKNOWN","API Level must be over 23 to use getNotifications method","");
+            result.error("UNKNOWN", "API Level must be over 23 to use getNotifications method", "");
         }
     }
 
@@ -125,7 +126,7 @@ public class HmsLocalNotification {
             hmsLocalNotificationController.cancelNotificationsWithTag(tag);
             result.success(null);
         } else {
-            result.error("UNKNOWN","API Level must be over 23 to use cancelNotificationsWithTag method","");
+            result.error("UNKNOWN", "API Level must be over 23 to use cancelNotificationsWithTag method", "");
         }
     }
 

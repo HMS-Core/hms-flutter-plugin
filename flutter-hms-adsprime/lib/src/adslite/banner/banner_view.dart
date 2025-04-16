@@ -14,16 +14,30 @@
     limitations under the License.
 */
 
-part of huawei_adsprime;
+part of '../../../huawei_adsprime.dart';
 
 class BannerView extends StatelessWidget {
+  /// Ad slot ID.
   final String adSlotId;
+
+  /// Size of a banner ad. (The default value is [s320x50] in BannerAdSize.)
   final BannerAdSize size;
+
+  /// Background color of a banner ad.
   final Color? backgroundColor;
+
+  /// Refresh duration of a banner ad.
   final Duration? refreshDuration;
+
+  /// Indicates whether a banner should be loaded after Platform View creation.
+  ///
+  /// (The default value is `true`. If there is no [BannerViewController] specified, this value is ignored and overriden to `true`.)
   final bool loadOnStart;
+
+  /// Ad parameters.
   final AdParam? adParam;
 
+  /// Controller for listening ad events and operate functions over a banner ad.
   final BannerViewController? controller;
 
   const BannerView({
@@ -138,8 +152,11 @@ class BannerView extends StatelessWidget {
 
 class BannerViewController {
   late MethodChannel _channel;
+
+  /// Listener for ad events.
   final AdListener? listener;
 
+  /// Called when [BannerView] is created.
   final Function? onBannerViewCreated;
 
   BannerViewController({
@@ -180,24 +197,35 @@ class BannerViewController {
     });
   }
 
+  /// Returns real-time bidding data.
+  Future<BiddingInfo?> getBiddingInfo() async {
+    return BiddingInfo.fromJson(await Ads.instance.channelBanner.invokeMethod(
+      'getBiddingInfo',
+    ));
+  }
+
+  /// Pauses a banner ad.
   Future<bool?> pause() async {
     return await _channel.invokeMethod(
       'pause',
     );
   }
 
+  /// Resumes a banner ad.
   Future<bool?> resume() async {
     return await _channel.invokeMethod(
       'resume',
     );
   }
 
+  /// Loads a banner ad when [loadOnStart] is set to `false` on [BannerView].
   Future<bool?> loadAd() async {
     return await _channel.invokeMethod(
       'loadAd',
     );
   }
 
+  /// Loading status of a banner ad.
   Future<bool?> isLoading() async {
     return await _channel.invokeMethod(
       'isLoading',

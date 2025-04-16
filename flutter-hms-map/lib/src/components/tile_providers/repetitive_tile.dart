@@ -14,12 +14,17 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../../huawei_map.dart';
 
+/// Provides repetitive tile images for [TileOverlay].
 class RepetitiveTile {
+  /// Uint8List image data.
   Uint8List imageData;
+
+  /// Zoom levels of repetition.
   List<int> zoom;
 
+  /// Creates a [RepetitiveTile] object.
   RepetitiveTile({
     required this.imageData,
     required this.zoom,

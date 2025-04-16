@@ -14,16 +14,26 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// Defines the [longitude] and [latitude], in degrees.
 class LatLng {
+  /// Latitude.
+  ///
+  /// The value ranges from –90 to 90.
   final double lat;
+
+  /// Longitude.
+  ///
+  /// The value ranges from –180 to 180 (excluded).
   final double lng;
 
+  /// Creates a [LatLng] object.
   const LatLng(double latitude, double longitude)
       : lat = (latitude < -90.0 ? -90.0 : (90.0 < latitude ? 90.0 : latitude)),
         lng = (longitude + 180.0) % 360.0 - 180.0;
 
+  /// Creates a [LatLng] object from a map.
   static LatLng fromJson(dynamic json) {
     return LatLng(json[0], json[1]);
   }

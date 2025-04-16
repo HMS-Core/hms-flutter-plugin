@@ -46,6 +46,11 @@ public class VideoConfigurationFactory {
             builder.setStartMuted(startMuted);
         }
 
+        Integer autoPlayNetwork = FromMap.toInteger("autoPlayNetwork", videoConfigurationMap.get("autoPlayNetwork"));
+        if(autoPlayNetwork != null) {
+            builder.setAutoPlayNetwork(autoPlayNetwork);
+        }
+
         return builder.build();
     }
 }

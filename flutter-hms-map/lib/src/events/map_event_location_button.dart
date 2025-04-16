@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
 class MapEventLocationButton<T> extends MapEvent<T> {
   final bool onMyLocationButtonClicked;

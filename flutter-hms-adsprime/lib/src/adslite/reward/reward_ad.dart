@@ -14,10 +14,13 @@
     limitations under the License.
 */
 
-part of huawei_adsprime;
+part of '../../../huawei_adsprime.dart';
 
 class Reward {
+  /// Name of a reward item.
   final String? name;
+
+  /// Number of reward items.
   final int? amount;
 
   const Reward({
@@ -42,14 +45,22 @@ class Reward {
 
 class RewardAd {
   static final Map<int, RewardAd> rewardAds = <int, RewardAd>{};
-  int get id => hashCode;
 
-  static const String _adType = 'Reward';
+  /// User ID.
   String? userId;
+
+  /// Custom data.
   String? data;
-  bool? openInHmsCore;
+
+  /// Sets whether to remind users of mobile data usage in a pop-up upon video playback or app download.
+  ///
+  /// If `alertSwitch` is not set, the default value true is used, indicating that the pop-up will be displayed.
   bool? setMobileDataAlertSwitch;
+
+  /// Server-side verification parameters.
   RewardVerifyConfig? rewardVerifyConfig;
+
+  bool? openInHmsCore;
   RewardAdListener? _listener;
   late EventChannel _streamReward;
   StreamSubscription<dynamic>? _listenerSub;
@@ -59,6 +70,7 @@ class RewardAd {
     this.data,
     @Deprecated('') this.openInHmsCore,
     this.setMobileDataAlertSwitch = true,
+    this.rewardVerifyConfig,
     RewardAdListener? listener,
   }) {
     rewardAds[id] = this;
@@ -66,8 +78,21 @@ class RewardAd {
     _listener = listener;
   }
 
+  int get id => hashCode;
+
+  static const String _adType = 'Reward';
+
+  /// Obtains a rewarded ad listener.
   RewardAdListener? get getRewardAdListener => _listener;
 
+  /// Returns real-time bidding data.
+  Future<BiddingInfo?> getBiddingInfo() async {
+    return BiddingInfo.fromJson(await Ads.instance.channelBanner.invokeMethod(
+      'getBiddingInfo',
+    ));
+  }
+
+  /// Obtains reward item information.
   Future<Reward> getReward() async {
     final Map<dynamic, dynamic> args =
         await Ads.instance.channelReward.invokeMethod(
@@ -90,12 +115,14 @@ class RewardAd {
     );
   }
 
+  /// Requests a rewarded ad.
   Future<bool?> loadAd({
     required String adSlotId,
     required AdParam adParam,
   }) async {
     await _initAd();
     _startListening();
+
     return await Ads.instance.channelReward.invokeMethod(
       'loadRewardAd',
       <String, dynamic>{
@@ -110,6 +137,7 @@ class RewardAd {
     );
   }
 
+  /// Checks whether a rewarded ad has been loaded.
   Future<bool?> isLoaded() async {
     return await Ads.instance.channelReward.invokeMethod(
       'isAdLoaded',
@@ -120,6 +148,7 @@ class RewardAd {
     );
   }
 
+  /// Displays a rewarded ad.
   Future<bool?> show() async {
     return await Ads.instance.channelReward.invokeMethod(
       'showRewardAd',
@@ -129,6 +158,7 @@ class RewardAd {
     );
   }
 
+  /// Pauses a rewarded ad.
   Future<bool?> pause() async {
     return await Ads.instance.channelReward.invokeMethod(
       'pauseAd',
@@ -139,6 +169,7 @@ class RewardAd {
     );
   }
 
+  /// Resumes a rewarded ad.
   Future<bool?> resume() async {
     return await Ads.instance.channelReward.invokeMethod(
       'resumeAd',
@@ -149,6 +180,7 @@ class RewardAd {
     );
   }
 
+  /// Destroys a rewarded ad.
   Future<bool?> destroy() async {
     return await Ads.instance.channelReward.invokeMethod(
       'destroyAd',
@@ -203,19 +235,36 @@ class RewardAd {
   };
 }
 
+///  Function type defined for listening to rewarded ad events.
 typedef RewardAdListener = void Function(
   RewardAdEvent? event, {
   Reward? reward,
   int? errorCode,
 });
 
+/// Enumerated object that represents the events of rewarded ads.
 enum RewardAdEvent {
+  /// A rewarded ad is successfully loaded.
   loaded,
+
+  /// A rewarded ad fails to be loaded.
   failedToLoad,
+
+  /// A rewarded ad is opened.
   opened,
+
+  /// An ad leaves an app.
   leftApp,
+
+  /// A rewarded ad is closed.
   closed,
+
+  /// A reward item is provided when rewarded ad playback is complete.
   rewarded,
+
+  /// A rewarded ad starts to be played.
   started,
+
+  /// Rewarded ad playback is complete.
   completed,
 }

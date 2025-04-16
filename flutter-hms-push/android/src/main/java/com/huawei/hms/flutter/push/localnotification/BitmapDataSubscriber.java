@@ -25,10 +25,12 @@ import com.facebook.common.references.CloseableReference;
 import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber;
 import com.facebook.imagepipeline.image.CloseableImage;
 import com.facebook.datasource.DataSource;
+
 import com.huawei.hms.flutter.push.constants.LocalNotification;
 
 public class BitmapDataSubscriber extends BaseBitmapDataSubscriber {
     private HmsLocalNotificationPicturesLoader hmsLocalNotificationPicturesLoader;
+
     private LocalNotification.Bitmap bitmapType;
 
     public BitmapDataSubscriber(HmsLocalNotificationPicturesLoader loader, LocalNotification.Bitmap bitmapType) {

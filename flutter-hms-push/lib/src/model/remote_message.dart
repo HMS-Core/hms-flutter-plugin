@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_push;
+part of '../../huawei_push.dart';
 
 class RemoteMessage {
   static const String INSTANCE_ID_SCOPE = 'HCM';

@@ -25,6 +25,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.huawei.hms.ads.BannerAdSize;
+import com.huawei.hms.ads.BiddingParam;
 import com.huawei.hms.ads.HwAds;
 import com.huawei.hms.ads.RequestOptions;
 import com.huawei.hms.ads.identifier.AdIdVerifyException;
@@ -74,30 +75,51 @@ import io.flutter.plugin.platform.PlatformViewRegistry;
 
 public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHandler {
     private static final String TAG = "HUAWEI_ADS_PRIME_PLUGIN";
+
     private Activity activity;
+
     private Context context;
+
     private MethodChannel methodChannel;
+
     private BinaryMessenger messenger;
+
     private FlutterPluginBinding flutterPluginBinding;
 
     private EventChannel consentEventChannel;
+
     private MethodChannel splashMethodChannel;
+
     private MethodChannel bannerMethodChannel;
+
     private MethodChannel rewardMethodChannel;
+
     private MethodChannel interstitialMethodChannel;
+
     private MethodChannel instreamMethodChannel;
+
     private MethodChannel vastMethodChannel;
+
     private MethodChannel referrerMethodChannel;
+
     private MethodChannel consentMethodChannel;
 
     private SplashMethodHandler splashMethodHandler;
+
     private BannerMethodHandler bannerMethodHandler;
+
     private RewardMethodHandler rewardMethodHandler;
+
     private InterstitialMethodHandler interstitialMethodHandler;
+
     private InstreamMethodHandler instreamMethodHandler;
+
     private VastMethodHandler vastMethodHandler;
+
     private InstallReferrerMethodHandler installReferrerMethodHandler;
+
     private ConsentMethodHandler consentMethodHandler;
+
     private EventChannel.StreamHandler consentStreamHandler;
 
     @Override
@@ -119,14 +141,18 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
         if (flutterPluginBinding != null) {
             PlatformViewRegistry registry = flutterPluginBinding.getPlatformViewRegistry();
             registry.registerViewFactory(ViewTypes.NATIVE_VIEW, new NativeAdPlatformViewFactory(binding.getActivity()));
-            registry.registerViewFactory(ViewTypes.BANNER_VIEW, new BannerViewFactory(flutterPluginBinding.getBinaryMessenger()));
-            registry.registerViewFactory(ViewTypes.INSTREAM_VIEW, new InstreamViewFactory(flutterPluginBinding.getBinaryMessenger()));
-            registry.registerViewFactory(ViewTypes.VAST_VIEW, new VastViewFactory(binding.getActivity(), flutterPluginBinding.getBinaryMessenger()));
+            registry.registerViewFactory(ViewTypes.BANNER_VIEW,
+                new BannerViewFactory(flutterPluginBinding.getBinaryMessenger()));
+            registry.registerViewFactory(ViewTypes.INSTREAM_VIEW,
+                new InstreamViewFactory(flutterPluginBinding.getBinaryMessenger()));
+            registry.registerViewFactory(ViewTypes.VAST_VIEW,
+                new VastViewFactory(binding.getActivity(), flutterPluginBinding.getBinaryMessenger()));
 
             this.activity = binding.getActivity();
             this.context = flutterPluginBinding.getApplicationContext();
             this.messenger = flutterPluginBinding.getBinaryMessenger();
-            this.methodChannel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), Channels.LIBRARY_METHOD_CHANNEL);
+            this.methodChannel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(),
+                Channels.LIBRARY_METHOD_CHANNEL);
             this.methodChannel.setMethodCallHandler(this);
 
             initAdChannels(flutterPluginBinding.getBinaryMessenger());
@@ -399,7 +425,8 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
             result.success(ToMap.fromArgs("width", bannerAdSize.getWidth(), "height", bannerAdSize.getHeight()));
             HMSLogger.getInstance(context).sendSingleEvent("getCurrentDirectionBannerSize");
         } else {
-            result.error(ErrorCodes.NULL_PARAM, "Null parameter provided for the method. getCurrentDirectionBannerSize failed.", "");
+            result.error(ErrorCodes.NULL_PARAM,
+                "Null parameter provided for the method. getCurrentDirectionBannerSize failed.", "");
             HMSLogger.getInstance(context).sendSingleEvent("getCurrentDirectionBannerSize", ErrorCodes.NULL_PARAM);
         }
     }
@@ -414,7 +441,8 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
             result.success(ToMap.fromArgs("width", bannerAdSize.getWidth(), "height", bannerAdSize.getHeight()));
             HMSLogger.getInstance(context).sendSingleEvent("getLandScapeBannerSize");
         } else {
-            result.error(ErrorCodes.NULL_PARAM, "Null parameter provided for the method. getLandScapeBannerSize failed.", "");
+            result.error(ErrorCodes.NULL_PARAM,
+                "Null parameter provided for the method. getLandScapeBannerSize failed.", "");
             HMSLogger.getInstance(context).sendSingleEvent("getLandScapeBannerSize", ErrorCodes.NULL_PARAM);
         }
     }
@@ -428,7 +456,8 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
             result.success(ToMap.fromArgs("width", bannerAdSize.getWidth(), "height", bannerAdSize.getHeight()));
             HMSLogger.getInstance(context).sendSingleEvent("getPortraitBannerSize");
         } else {
-            result.error(ErrorCodes.NULL_PARAM, "Null parameter provided for the method. getPortraitBannerSize failed.", "");
+            result.error(ErrorCodes.NULL_PARAM, "Null parameter provided for the method. getPortraitBannerSize failed.",
+                "");
             HMSLogger.getInstance(context).sendSingleEvent("getPortraitBannerSize", ErrorCodes.NULL_PARAM);
         }
     }
@@ -468,23 +497,48 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
 
     private void setRequestOptions(MethodCall call, Result result) {
         HMSLogger.getInstance(context).startMethodExecutionTimer("setRequestOptions");
-        String adContentClassification = FromMap.toString("adContentClassification", call.argument("adContentClassification"));
+        String adContentClassification = FromMap.toString("adContentClassification",
+            call.argument("adContentClassification"));
         Integer tagForUnderAge = FromMap.toInteger("tagForUnderAgeOfPromise", call.argument("tagForUnderAgeOfPromise"));
-        Integer tagForChildProtection = FromMap.toInteger("tagForChildProtection", call.argument("tagForChildProtection"));
+        Integer tagForChildProtection = FromMap.toInteger("tagForChildProtection",
+            call.argument("tagForChildProtection"));
         Integer nonPersonalizedAd = FromMap.toInteger("nonPersonalizedAd", call.argument("nonPersonalizedAd"));
         String appCountry = FromMap.toString("appCountry", call.argument("appCountry"));
         String appLang = FromMap.toString("appLang", call.argument("appLang"));
         boolean requestLocation = FromMap.toBoolean("requestLocation", call.argument("requestLocation"));
+        Integer tMax = FromMap.toInteger("tMax", call.argument("tMax"));
 
-        RequestOptions options = new RequestOptions().toBuilder()
+        Map<String, Object> addBiddingParamMap = FromMap.toHashMap("addBiddingParamMap",
+            call.argument("addBiddingParamMap"));
+        HashMap<String, Object> setBiddingParamMap = FromMap.toHashMap("setBiddingParamMap",
+            call.argument("setBiddingParamMap"));
+        BiddingParam param = FromMap.toBiddingParam(call.argument("biddingParam"));
+
+        RequestOptions.Builder reqBuilder = new RequestOptions().toBuilder()
             .setAdContentClassification(adContentClassification)
             .setTagForUnderAgeOfPromise(tagForUnderAge)
             .setTagForChildProtection(tagForChildProtection)
             .setNonPersonalizedAd(nonPersonalizedAd)
             .setAppCountry(appCountry)
             .setAppLang(appLang)
-            .setRequestLocation(requestLocation)
-            .build();
+            .setTMax(tMax)
+            .setRequestLocation(requestLocation);
+
+        if (addBiddingParamMap != null) {
+            String slotId = (String) addBiddingParamMap.get("slotId");
+            BiddingParam bp = FromMap.toBiddingParam((Map<String, Object>) addBiddingParamMap.get("biddingParam"));
+            reqBuilder.addBiddingParamMap(slotId, bp);
+        }
+        if (setBiddingParamMap != null) {
+            Map<String, BiddingParam> paramMap = new HashMap<String, BiddingParam>();
+
+            for (String key : setBiddingParamMap.keySet()) {
+                BiddingParam bp = FromMap.toBiddingParam(FromMap.toHashMap(key, setBiddingParamMap.get(key)));
+                paramMap.put(key, bp);
+            }
+            reqBuilder.setBiddingParamMap(paramMap);
+        }
+        RequestOptions options = reqBuilder.build();
 
         HwAds.setRequestOptions(options);
         Log.i(TAG, "Request Options set");
@@ -601,13 +655,15 @@ public class HmsAdsPlugin implements FlutterPlugin, ActivityAware, MethodCallHan
             result.success(true);
             HMSLogger.getInstance(context).sendSingleEvent("destroyNativeAdController");
         } else {
-            result.error(ErrorCodes.NOT_FOUND, "No controller for provided id. Destroy controller failed. | Controller id : " + id, "");
+            result.error(ErrorCodes.NOT_FOUND,
+                "No controller for provided id. Destroy controller failed. | Controller id : " + id, "");
             HMSLogger.getInstance(context).sendSingleEvent("destroyNativeAdController", ErrorCodes.NOT_FOUND);
         }
     }
 
     class VerifyAdIdThread extends Thread {
         private MethodCall call;
+
         private MethodChannel.Result result;
 
         VerifyAdIdThread(MethodCall call, MethodChannel.Result result) {

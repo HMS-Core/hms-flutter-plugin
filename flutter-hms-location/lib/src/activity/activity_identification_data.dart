@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-part of huawei_location;
+part of '../../huawei_location.dart';
 
 class ActivityIdentificationData {
   /// The device is in a vehicle, such as a car.

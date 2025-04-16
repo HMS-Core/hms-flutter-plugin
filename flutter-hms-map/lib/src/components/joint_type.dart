@@ -14,15 +14,24 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// Defines the joint type for a [Polyline].
 @immutable
 class JointType {
+  /// Type of the joint.
+  ///
+  /// The options include `0`, `1`, and `2`.
   final int type;
 
   const JointType._(this.type);
 
+  /// Default type.
   static const JointType mitered = JointType._(0);
+
+  /// Flat bevel.
   static const JointType bevel = JointType._(1);
+
+  /// Round.
   static const JointType round = JointType._(2);
 }

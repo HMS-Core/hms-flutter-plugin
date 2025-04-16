@@ -14,14 +14,24 @@
     limitations under the License.
 */
 
-part of huawei_adsprime;
+part of '../../../huawei_adsprime.dart';
 
 class InstreamAdLoader {
   late MethodChannel _channel;
+
+  /// Roll ad ID.
   String adId;
+
+  /// Total maximum duration for requested roll ads.
   final Duration totalDuration;
+
+  /// Maximum number of roll ads.
   final int? maxCount;
+
+  /// Callback for retireving loaded ads.
   final Function(List<InstreamAd>)? onAdLoaded;
+
+  /// Callback for possible errors during ad loading.
   final Function(int? errorCode)? onAdFailed;
 
   InstreamAdLoader({
@@ -61,6 +71,7 @@ class InstreamAdLoader {
     });
   }
 
+  /// Starts ad loading with an [AdParam] object.
   Future<bool?> loadAd({AdParam? adParam}) async {
     return await _channel.invokeMethod(
       'loadAd',
@@ -70,6 +81,7 @@ class InstreamAdLoader {
     );
   }
 
+  /// Returns the ad loading progress.
   Future<bool?> isLoading() async {
     return await _channel.invokeMethod(
       'isLoading',

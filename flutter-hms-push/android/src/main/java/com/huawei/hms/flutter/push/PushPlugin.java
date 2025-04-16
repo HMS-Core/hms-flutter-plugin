@@ -69,15 +69,25 @@ import io.flutter.plugin.common.MethodChannel.Result;
 
 public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAware {
     private static final String TAG = "HmsFlutterPush";
+
     private MethodChannel channel;
+
     private Context context;
+
     private HmsLocalNotification hmsLocalNotification;
+
     private NotificationIntentListener notificationIntentListener;
+
     private FlutterHmsInstanceId hmsInstanceId;
+
     private FlutterHmsMessaging hmsMessaging;
+
     private FlutterHmsProfile hmsProfile;
+
     private FlutterHmsConsent hmsConsent;
+
     private Activity activity;
+
     private final List<EventChannel> eventChannels = new ArrayList<>();
 
     @Override
@@ -98,31 +108,31 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
     private void setStreamHandlers(BinaryMessenger messenger) {
         Map<String, EventChannel.StreamHandler> streams = new ConcurrentHashMap<>();
         streams.put(Channel.TOKEN_CHANNEL.id(),
-                new DefaultStreamHandler(context, TokenReceiver::new, PushIntent.TOKEN_INTENT_ACTION));
+            new DefaultStreamHandler(context, TokenReceiver::new, PushIntent.TOKEN_INTENT_ACTION));
 
         streams.put(Channel.MULTI_SENDER_TOKEN_CHANNEL.id(),
-                new DefaultStreamHandler(context, MultiSenderTokenReceiver::new,
-                        PushIntent.MULTI_SENDER_TOKEN_INTENT_ACTION));
+            new DefaultStreamHandler(context, MultiSenderTokenReceiver::new,
+                PushIntent.MULTI_SENDER_TOKEN_INTENT_ACTION));
 
         streams.put(Channel.REMOTE_MESSAGE_RECEIVE_CHANNEL.id(),
-                new DefaultStreamHandler(context, RemoteDataMessageReceiver::new,
-                        PushIntent.REMOTE_DATA_MESSAGE_INTENT_ACTION));
+            new DefaultStreamHandler(context, RemoteDataMessageReceiver::new,
+                PushIntent.REMOTE_DATA_MESSAGE_INTENT_ACTION));
 
         streams.put(Channel.REMOTE_MESSAGE_SEND_STATUS_CHANNEL.id(),
-                new DefaultStreamHandler(context, RemoteMessageSentDeliveredReceiver::new,
-                        PushIntent.REMOTE_MESSAGE_SENT_DELIVERED_ACTION));
+            new DefaultStreamHandler(context, RemoteMessageSentDeliveredReceiver::new,
+                PushIntent.REMOTE_MESSAGE_SENT_DELIVERED_ACTION));
 
         // For sending remote message notification's custom intent Uri events
         streams.put(Channel.REMOTE_MESSAGE_NOTIFICATION_INTENT_CHANNEL.id(),
-                new DefaultStreamHandler(context, RemoteMessageNotificationIntentReceiver::new,
-                        PushIntent.REMOTE_MESSAGE_NOTIFICATION_INTENT_ACTION));
+            new DefaultStreamHandler(context, RemoteMessageNotificationIntentReceiver::new,
+                PushIntent.REMOTE_MESSAGE_NOTIFICATION_INTENT_ACTION));
 
         streams.put(Channel.NOTIFICATION_OPEN_CHANNEL.id(),
-                new DefaultStreamHandler(context, NotificationOpenEventReceiver::new, PushIntent.NOTIFICATION_OPEN_ACTION));
+            new DefaultStreamHandler(context, NotificationOpenEventReceiver::new, PushIntent.NOTIFICATION_OPEN_ACTION));
 
         streams.put(Channel.LOCAL_NOTIFICATION_CLICK_CHANNEL.id(),
-                new DefaultStreamHandler(context, LocalNotificationClickEventReceiver::new,
-                        PushIntent.LOCAL_NOTIFICATION_CLICK_ACTION));
+            new DefaultStreamHandler(context, LocalNotificationClickEventReceiver::new,
+                PushIntent.LOCAL_NOTIFICATION_CLICK_ACTION));
 
         for (Map.Entry<String, EventChannel.StreamHandler> entry : streams.entrySet()) {
             EventChannel eventChannel = new EventChannel(messenger, entry.getKey());
@@ -177,7 +187,7 @@ public class PushPlugin implements FlutterPlugin, MethodCallHandler, ActivityAwa
                 break;
             case consentOff:
                 hmsConsent.consentOff(result);
-                break;        
+                break;
             default:
                 onMethodCallToken(call, result);
         }

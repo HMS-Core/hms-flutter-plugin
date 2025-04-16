@@ -1,5 +1,5 @@
 /*
-    Copyright 2021-2023. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2021-2024. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -39,10 +39,11 @@ Widget recognitionButton(
     child: ElevatedButton(
       style: ElevatedButton.styleFrom(
         elevation: 0,
-        backgroundColor: color ?? const Color(0xff6ddccf),
+        backgroundColor: color ?? const Color(0xFF3C4279),
         foregroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(vertical: 14),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(4))),
       ),
       onPressed: callback,
       child: Text(text ?? 'Start Recognition'),
@@ -57,7 +58,9 @@ Widget resultBox(String name, dynamic value) {
     margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
     decoration: BoxDecoration(
       color: const Color(0xffdbe2ef).withOpacity(.6),
-      borderRadius: BorderRadius.circular(4),
+      borderRadius: const BorderRadius.all(
+        Radius.circular(4),
+      ),
     ),
     child: RichText(
       text: TextSpan(
@@ -117,7 +120,7 @@ class CustomGridElement extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey.withOpacity(.5)),
             color: page != null ? Colors.white : Colors.white,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

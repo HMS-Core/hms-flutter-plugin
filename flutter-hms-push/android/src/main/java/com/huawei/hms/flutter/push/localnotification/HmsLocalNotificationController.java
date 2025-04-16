@@ -208,7 +208,7 @@ public class HmsLocalNotificationController {
             String channelId = Core.NOTIFICATION_CHANNEL_ID + "-" + importance;
 
             NotificationCompat.Builder notification = new NotificationCompat.Builder(context, "").setChannelId(
-                channelId)
+                    channelId)
                 .setContentTitle(title)
                 .setTicker(BundleUtils.get(bundle, NotificationConstants.TICKER))
                 .setVisibility(visibility)

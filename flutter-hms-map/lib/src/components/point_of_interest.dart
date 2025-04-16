@@ -14,19 +14,27 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// An object that contains attributes about a tapped POI.
 class PointOfInterest {
+  /// Position of a POI.
   final LatLng? latLng;
+
+  /// Name of a POI.
   final String? name;
+
+  /// ID of a POI.
   final String? placeId;
 
+  /// Creates a [PointOfInterest] object.
   const PointOfInterest({
     this.latLng,
     this.name,
     this.placeId,
   });
 
+  /// Creates a [PointOfInterest] object from a map.
   static PointOfInterest fromMap(Map<String, dynamic> map) {
     return PointOfInterest(
       latLng: map[_Param.latLng] == null
@@ -46,7 +54,7 @@ class PointOfInterest {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }

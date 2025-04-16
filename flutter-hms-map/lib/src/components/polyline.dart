@@ -14,24 +14,64 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// Defines a polyline on a map.
 @immutable
 class Polyline {
+  /// Unique polyline ID.
   final PolylineId polylineId;
+
+  /// Indicates whether a polyline is tappable.
   final bool clickable;
+
+  /// Stroke color.
   final Color color;
+
+  /// Indicates whether to draw each segment of a polyline as a geodesic.
+  ///
+  /// The options are `true` (yes) and `false` (no).
   final bool geodesic;
+
+  /// [JointType] of all vertices of a polyline, except the start and end vertices.
   final JointType jointType;
+
+  /// Stroke pattern of a polyline.
+  ///
+  /// The default value is `null`, indicating that the stroke pattern is solid.
   final List<PatternItem> patterns;
+
+  /// Vertices of a polyline.
+  ///
+  /// Line segments are drawn between consecutive points.
+  /// A polyline is not closed by default.
+  /// To form a closed polyline, the start and end vertices must be the same.
   final List<LatLng> points;
+
+  /// Start vertex of a polyline.
   final Cap startCap;
+
+  /// End vertex of a polyline.
   final Cap endCap;
+
+  /// Visibility of a polyline.
   final bool visible;
+
+  /// Stroke width of a polyline.
   final int width;
+
+  /// Z-index of a polyline, which indicates the overlapping order of the polyline.
   final int zIndex;
+
+  /// Function to be executed when a polyline is tapped.
   final VoidCallback? onClick;
+
+  /// Indicates whether a polyline is gradient.
+  ///
+  /// Default value is `false`.
   final bool gradient;
+
+  /// Colors of different segments of a polyline.
   final List<Color> colorValues;
 
   const Polyline({
@@ -52,6 +92,7 @@ class Polyline {
     this.colorValues = const <Color>[],
   });
 
+  /// Copies a [Polyline] object and updates the specified attributes.
   Polyline updateCopy({
     List<LatLng>? points,
     bool? geodesic,
@@ -87,6 +128,7 @@ class Polyline {
     );
   }
 
+  /// Clones a [Polyline] object.
   Polyline clone() {
     return updateCopy(
       patterns: List<PatternItem>.of(patterns),

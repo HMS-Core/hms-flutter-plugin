@@ -69,8 +69,9 @@ public class NotificationConfigUtils {
         int resourceId;
         String value = BundleUtils.get(bundle, NotificationConstants.SMALL_ICON);
 
-        resourceId = value != null ? res.getIdentifier(value, Core.Resource.MIPMAP, packageName)
-                : res.getIdentifier(Core.Resource.NOTIFICATION, Core.Resource.MIPMAP, packageName);
+        resourceId = value != null
+            ? res.getIdentifier(value, Core.Resource.MIPMAP, packageName)
+            : res.getIdentifier(Core.Resource.NOTIFICATION, Core.Resource.MIPMAP, packageName);
 
         if (resourceId == 0) {
             resourceId = res.getIdentifier(Core.Resource.LAUNCHER, Core.Resource.MIPMAP, packageName);

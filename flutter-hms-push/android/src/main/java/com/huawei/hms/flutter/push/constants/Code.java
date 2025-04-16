@@ -163,7 +163,6 @@ public enum Code {
     // Invalid parameter.
     ERROR_PARAMETER_INVALID("1210");
 
-
     private String code;
 
     Code(String code) {

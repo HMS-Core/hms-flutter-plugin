@@ -23,7 +23,17 @@ import 'package:huawei_iap/huawei_iap.dart';
 import 'package:huawei_iap_example/utils/CustomButton.dart';
 import 'package:huawei_iap_example/HomePage.dart';
 
-void main() => runApp(MaterialApp(home: MyApp()));
+void main() => runApp(
+      MaterialApp(
+        theme: ThemeData(
+          appBarTheme: AppBarTheme(
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white,
+          ),
+        ),
+        home: MyApp(),
+      ),
+    );
 
 class MyApp extends StatefulWidget {
   @override
@@ -85,7 +95,6 @@ class _MyAppState extends State<MyApp> {
       appBar: AppBar(
         title: const Text('Huawei IAP Demo'),
         centerTitle: true,
-        backgroundColor: Colors.red,
       ),
       body: SingleChildScrollView(
         child: Padding(

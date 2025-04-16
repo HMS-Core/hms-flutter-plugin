@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-part of huawei_location;
+part of '../../huawei_location.dart';
 
 /// Request information of the consumeOwnedPurchase API.
 class LonLat {

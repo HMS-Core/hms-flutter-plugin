@@ -51,7 +51,7 @@ dependencies {
     implementation 'com.huawei.hms:ml-computer-vision-face-3d-model:3.7.0.301'
 
     // Skeleton Detection
-    implementation 'com.huawei.hms:ml-computer-vision-base:3.7.0.313' // for lens engine
+    implementation 'com.huawei.hms:ml-computer-vision-base:3.11.0.301' // for lens engine
     implementation 'com.huawei.hms:ml-computer-vision-skeleton:3.11.0.301'
     implementation 'com.huawei.hms:ml-computer-vision-skeleton-model:3.11.0.301'
     implementation 'com.huawei.hms:ml-computer-vision-yoga-model:3.11.0.301'

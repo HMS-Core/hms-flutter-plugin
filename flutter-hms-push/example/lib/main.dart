@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
   late TextEditingController topicTextController;
 
   final EdgeInsets padding = const EdgeInsets.symmetric(
-    vertical: 1.0,
+    vertical: 5,
     horizontal: 16,
   );
 
@@ -433,13 +433,11 @@ class _HomePageState extends State<HomePage> {
                   5,
                   () => turnOnPush(),
                   'TurnOnPush',
-                  fontSize: 20,
                 ),
                 expandedButton(
                   5,
                   () => turnOffPush(),
                   'TurnOffPush',
-                  fontSize: 20,
                 ),
               ],
             ),
@@ -471,13 +469,11 @@ class _HomePageState extends State<HomePage> {
                   5,
                   () => Push.getToken(''),
                   'GetToken',
-                  fontSize: 20,
                 ),
                 expandedButton(
                   5,
                   () => getCreationTime(),
                   'GetCreationTime',
-                  fontSize: 20,
                 ),
               ],
             ),
@@ -487,16 +483,15 @@ class _HomePageState extends State<HomePage> {
                   5,
                   () => deleteToken(),
                   'DeleteToken',
-                  fontSize: 20,
                 ),
                 expandedButton(
                   5,
                   () => deleteAAID(),
                   'DeleteAAID',
-                  fontSize: 20,
                 ),
               ],
             ),
+            const Divider(thickness: .5),
             Padding(
               padding: padding,
               child: TextField(
@@ -506,13 +501,13 @@ class _HomePageState extends State<HomePage> {
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.blueAccent,
-                      width: 3.0,
+                      width: 1.0,
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: Colors.blueGrey,
-                      width: 3.0,
+                      color: Colors.black,
+                      width: 1.0,
                     ),
                   ),
                   hintText: 'Topic Name',
@@ -525,13 +520,11 @@ class _HomePageState extends State<HomePage> {
                   5,
                   () => subscribe(),
                   'Subscribe',
-                  fontSize: 20,
                 ),
                 expandedButton(
                   5,
                   () => unsubscribe(),
                   'UnSubscribe',
-                  fontSize: 20,
                 ),
               ],
             ),
@@ -541,13 +534,11 @@ class _HomePageState extends State<HomePage> {
                   5,
                   () => disableAutoInit(),
                   'Disable AutoInit',
-                  fontSize: 20,
                 ),
                 expandedButton(
                   5,
                   () => enableAutoInit(),
                   'Enable AutoInit',
-                  fontSize: 20,
                 ),
               ],
             ),
@@ -557,13 +548,11 @@ class _HomePageState extends State<HomePage> {
                   5,
                   () => isAutoInitEnabled(),
                   'IsAutoInitEnabled',
-                  fontSize: 20,
                 ),
                 expandedButton(
                   5,
                   () => sendRemoteMsg(),
                   'sendRemoteMessage',
-                  fontSize: 20,
                 ),
               ],
             ),
@@ -573,13 +562,11 @@ class _HomePageState extends State<HomePage> {
                   6,
                   () => getInitialNotification(),
                   'getInitialNotification',
-                  fontSize: 16,
                 ),
                 expandedButton(
                   6,
                   () => getInitialIntent(),
                   'getInitialIntent',
-                  fontSize: 16,
                 ),
               ],
             ),
@@ -589,13 +576,11 @@ class _HomePageState extends State<HomePage> {
                   5,
                   () => consentOn(),
                   'consentOn',
-                  fontSize: 20,
                 ),
                 expandedButton(
                   5,
                   () => consentOff(),
                   'consentOff',
-                  fontSize: 20,
                 ),
               ],
             ),
@@ -605,7 +590,6 @@ class _HomePageState extends State<HomePage> {
                   5,
                   () => clearLog(),
                   'Clear Log',
-                  fontSize: 20,
                 ),
               ],
             ),
@@ -615,10 +599,10 @@ class _HomePageState extends State<HomePage> {
                   5,
                   () => getAgConnectValues(),
                   'Get agconnect values',
-                  fontSize: 20,
                 ),
               ],
             ),
+            const SizedBox(height: 5),
             Padding(
               padding: padding,
               child: TextField(
@@ -630,13 +614,13 @@ class _HomePageState extends State<HomePage> {
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.blueAccent,
-                      width: 3.0,
+                      width: 1.0,
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: Colors.blueGrey,
-                      width: 3.0,
+                      color: Colors.black,
+                      width: 1.0,
                     ),
                   ),
                 ),
@@ -1078,7 +1062,7 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
             ),
             enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(
-                color: Colors.blueGrey,
+                color: Colors.black,
                 width: 1.0,
               ),
             ),
@@ -1346,32 +1330,33 @@ class _LocalNotificationPageState extends State<LocalNotificationPage> {
             ],
           ),
           Padding(
-            padding: padding.copyWith(top: 10.0, bottom: 10.0),
-            child: const Divider(height: 1.0, thickness: 2.0),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            child: const Divider(height: 1.0, thickness: 1.0),
           ),
           Padding(
             padding: padding,
             child: TextField(
               controller: logTextController,
               keyboardType: TextInputType.multiline,
-              maxLines: 15,
               readOnly: true,
+              maxLines: 15,
               decoration: const InputDecoration(
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.blueAccent,
-                    width: 3.0,
+                    width: 1.0,
                   ),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: Colors.blueGrey,
-                    width: 3.0,
+                    color: Colors.black,
+                    width: 1.0,
                   ),
                 ),
               ),
             ),
           ),
+          const SizedBox(height: 32),
         ],
       ),
     );
@@ -1437,7 +1422,7 @@ class _MultiSenderPageState extends State<MultiSenderPage> {
             ),
             enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(
-                color: Colors.blueGrey,
+                color: Colors.black,
                 width: 1.0,
               ),
             ),
@@ -1707,11 +1692,7 @@ class _MultiSenderPageState extends State<MultiSenderPage> {
             ],
           ),
           Padding(
-            padding: padding.copyWith(top: 10.0, bottom: 10.0),
-            child: const Divider(height: 1.0, thickness: 2.0),
-          ),
-          Padding(
-            padding: padding,
+            padding: const EdgeInsets.all(10),
             child: TextField(
               controller: logTextController,
               keyboardType: TextInputType.multiline,
@@ -1721,18 +1702,19 @@ class _MultiSenderPageState extends State<MultiSenderPage> {
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
                     color: Colors.blueAccent,
-                    width: 3.0,
+                    width: 1.0,
                   ),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(
-                    color: Colors.blueGrey,
-                    width: 3.0,
+                    color: Colors.black,
+                    width: 1.0,
                   ),
                 ),
               ),
             ),
           ),
+          const SizedBox(height: 16),
         ],
       ),
     );

@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_ads;
+part of '../../huawei_ads.dart';
 
 const String _LIBRARY_METHOD_CHANNEL = 'com.huawei.hms.flutter.ads/method';
 const String _SPLASH_EVENT_CHANNEL = 'com.huawei.hms.flutter.ads/splash/event';

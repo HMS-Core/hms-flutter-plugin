@@ -221,9 +221,7 @@ public class NotificationAttributes {
                 NotificationConstants.ALLOW_WHILE_IDLE);
             dontNotifyInForeground = json.has(NotificationConstants.DONT_NOTIFY_IN_FOREGROUND) && json.getBoolean(
                 NotificationConstants.DONT_NOTIFY_IN_FOREGROUND);
-            data = json.has(NotificationConstants.DATA)
-                ? json.get(NotificationConstants.DATA).toString()
-                : null;
+            data = json.has(NotificationConstants.DATA) ? json.get(NotificationConstants.DATA).toString() : null;
         } catch (IllegalStateException | JSONException | NumberFormatException | NullPointerException e) {
             throw new IllegalStateException(Code.RESULT_ERROR.code(), e);
         }

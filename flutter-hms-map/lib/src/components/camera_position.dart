@@ -14,14 +14,23 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// Encapsulates all camera attributes.
 class CameraPosition {
+  /// Direction that the camera is pointing in.
   final double bearing;
+
+  /// Longitude and latitude of the location that the camera is pointing at.
   final LatLng target;
+
+  /// Angle of the camera from the nadir (directly facing the Earth's surface).
   final double tilt;
+
+  /// Zoom level near the center of the screen.
   final double zoom;
 
+  /// Creates a [CameraPosition] object.
   const CameraPosition({
     this.bearing = 0.0,
     required this.target,
@@ -38,6 +47,7 @@ class CameraPosition {
     };
   }
 
+  /// Creates a [CameraPosition] object from a map.
   static CameraPosition fromMap(dynamic json) {
     return CameraPosition(
       bearing: json[_Param.bearing],
@@ -48,7 +58,7 @@ class CameraPosition {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }

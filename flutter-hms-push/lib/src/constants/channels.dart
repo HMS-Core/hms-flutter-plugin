@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_push;
+part of '../../huawei_push.dart';
 
 const MethodChannel _methodChannel = MethodChannel(
   'com.huawei.flutter.push/method',

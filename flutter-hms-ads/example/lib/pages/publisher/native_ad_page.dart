@@ -33,13 +33,30 @@ class _NativeAdPageState extends State<NativeAdPage> {
   String logs = 'Double tap to clear the logs.\n\n';
 
   NativeAdController createVideoAdController() {
-    NativeAdController controller = NativeAdController();
+    NativeAdController controller = NativeAdController(
+      adParam: AdParam(tMax: 500).addBiddingParamMap(
+        _videoTestAdSlotId,
+        BiddingParam(),
+      ),
+      adConfiguration: NativeAdConfiguration(
+        configuration: VideoConfiguration(
+          startMuted: true,
+          autoPlayNetwork: AutoPlayNetwork.bothWifiAndData,
+        ),
+      ),
+    );
+
     controller.listener = (AdEvent event, {int? errorCode}) {
       if (event == AdEvent.loaded) {
         testNative(controller);
       }
     };
     return controller;
+  }
+
+  Future<void> getBiddingInfo(NativeAdController controller) async {
+    BiddingInfo? biddingInfo = await controller.getBiddingInfo();
+    debugPrint('getBiddingInfo : ${biddingInfo.toString()}');
   }
 
   void testNative(NativeAdController controller) async {
@@ -98,6 +115,7 @@ class _NativeAdPageState extends State<NativeAdPage> {
         ),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Expanded(
             flex: 3,
@@ -106,6 +124,31 @@ class _NativeAdPageState extends State<NativeAdPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
+                    // Container(
+                    //   padding: const EdgeInsets.symmetric(vertical: 20),
+                    //   color: Colors.pinkAccent,
+                    //   child: const Center(
+                    //     child: Text(
+                    //       'My Ad',
+                    //       style: Styles.headerTextStyle,
+                    //     ),
+                    //   ),
+                    // ),
+                    // Container(
+                    //   color: Colors.blueAccent,
+                    //   height: 300,
+                    //   margin: const EdgeInsets.only(bottom: 20.0),
+                    //   child: NativeAd(
+                    //     adSlotId: _imageTestAdSlotId,
+                    //     controller: defaultController(),
+                    //     type: NativeAdType.video,
+                    //     styles: NativeStyles()
+                    //       ..setTitle(fontWeight: NativeFontWeight.boldItalic)
+                    //       ..setCallToAction(fontSize: 8)
+                    //       ..setFlag(fontSize: 10)
+                    //       ..setSource(fontSize: 11),
+                    //   ),
+                    // ),
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       color: Colors.black12,
@@ -117,9 +160,9 @@ class _NativeAdPageState extends State<NativeAdPage> {
                       ),
                     ),
                     Container(
-                      height: 330,
+                      height: 450,
                       padding: const EdgeInsets.symmetric(horizontal: 10),
-                      margin: const EdgeInsets.only(bottom: 20.0),
+                      margin: const EdgeInsets.only(bottom: 40.0),
                       child: NativeAd(
                         adSlotId: _imageTestAdSlotId,
                         controller: NativeAdController(

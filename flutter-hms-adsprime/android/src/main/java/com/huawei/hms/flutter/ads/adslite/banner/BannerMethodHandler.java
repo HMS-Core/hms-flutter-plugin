@@ -22,6 +22,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.huawei.hms.ads.BannerAdSize;
+import com.huawei.hms.ads.BiddingInfo;
 import com.huawei.hms.flutter.ads.factory.EventChannelFactory;
 import com.huawei.hms.flutter.ads.logger.HMSLogger;
 import com.huawei.hms.flutter.ads.utils.FromMap;
@@ -39,7 +40,9 @@ import io.flutter.plugin.common.MethodChannel.Result;
 
 public class BannerMethodHandler implements MethodChannel.MethodCallHandler {
     private final BinaryMessenger messenger;
+
     private final Activity activity;
+
     private final Context context;
 
     public BannerMethodHandler(final BinaryMessenger messenger, final Activity activity, final Context context) {
@@ -72,6 +75,9 @@ public class BannerMethodHandler implements MethodChannel.MethodCallHandler {
             case "resumeAd":
                 resumeAd(call, result);
                 break;
+            case "getBiddingInfo":
+                getBiddingInfo(call, result);
+                break;
             default:
                 result.notImplemented();
         }
@@ -100,11 +106,14 @@ public class BannerMethodHandler implements MethodChannel.MethodCallHandler {
         EventChannelFactory.setup(id, new BannerStreamHandler(context));
 
         BannerAdSize adSize;
-        if (width == BannerAdSize.BANNER_SIZE_SMART.getWidth() && height == BannerAdSize.BANNER_SIZE_SMART.getHeight()) {
+        if (width == BannerAdSize.BANNER_SIZE_SMART.getWidth()
+            && height == BannerAdSize.BANNER_SIZE_SMART.getHeight()) {
             adSize = BannerAdSize.BANNER_SIZE_SMART;
-        } else if (width == BannerAdSize.BANNER_SIZE_DYNAMIC.getWidth() && height == BannerAdSize.BANNER_SIZE_DYNAMIC.getHeight()) {
+        } else if (width == BannerAdSize.BANNER_SIZE_DYNAMIC.getWidth()
+            && height == BannerAdSize.BANNER_SIZE_DYNAMIC.getHeight()) {
             adSize = BannerAdSize.BANNER_SIZE_DYNAMIC;
-        } else if (width == BannerAdSize.BANNER_SIZE_ADVANCED.getWidth() && height == BannerAdSize.BANNER_SIZE_ADVANCED.getHeight()) {
+        } else if (width == BannerAdSize.BANNER_SIZE_ADVANCED.getWidth()
+            && height == BannerAdSize.BANNER_SIZE_ADVANCED.getHeight()) {
             adSize = BannerAdSize.BANNER_SIZE_ADVANCED;
         } else {
             adSize = new BannerAdSize(width, height);
@@ -147,6 +156,21 @@ public class BannerMethodHandler implements MethodChannel.MethodCallHandler {
         banner.loadAd(adSlotId, adParam);
         result.success(true);
         HMSLogger.getInstance(context).sendSingleEvent("loadBannerAd");
+    }
+
+    private void getBiddingInfo(MethodCall call, Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("getBiddingInfo");
+        Integer id = FromMap.toInteger("id", call.argument("id"));
+        Banner bannerAd = Banner.get(id);
+
+        BiddingInfo biddingInfo = bannerAd != null ? bannerAd.getBannerView().getBiddingInfo() : null;
+        if (biddingInfo == null) {
+            result.error(ErrorCodes.NOT_FOUND, "Bidding Info is null", "");
+            HMSLogger.getInstance(context).sendSingleEvent("getBiddingInfo", ErrorCodes.NOT_FOUND);
+        } else {
+            HMSLogger.getInstance(context).sendSingleEvent("getBiddingInfo");
+            result.success(ToMap.fromBiddingInfo(biddingInfo));
+        }
     }
 
     private void showBannerAd(MethodCall call, Result result) {
@@ -192,7 +216,8 @@ public class BannerMethodHandler implements MethodChannel.MethodCallHandler {
         String adType = FromMap.toString("adType", call.argument("adType"));
         Banner banner = Banner.get(id);
         if (id == null || banner == null) {
-            result.error(ErrorCodes.NULL_PARAM, "Null parameter provided for the method. isAdLoading failed. | Ad id : " + id, "");
+            result.error(ErrorCodes.NULL_PARAM,
+                "Null parameter provided for the method. isAdLoading failed. | Ad id : " + id, "");
             HMSLogger.getInstance(context).sendSingleEvent("isBannerAdLoading", ErrorCodes.NULL_PARAM);
             return;
         }
@@ -201,7 +226,8 @@ public class BannerMethodHandler implements MethodChannel.MethodCallHandler {
             result.success(banner.isLoading());
             HMSLogger.getInstance(context).sendSingleEvent("isBannerAdLoading");
         } else {
-            result.error(ErrorCodes.INVALID_PARAM, "Ad type parameter is invalid. isAdLoading failed. | Ad id : " + id, "");
+            result.error(ErrorCodes.INVALID_PARAM, "Ad type parameter is invalid. isAdLoading failed. | Ad id : " + id,
+                "");
             HMSLogger.getInstance(context).sendSingleEvent("isBannerAdLoading", ErrorCodes.INVALID_PARAM);
         }
     }

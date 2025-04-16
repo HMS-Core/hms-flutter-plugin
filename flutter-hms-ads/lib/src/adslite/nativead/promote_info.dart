@@ -14,10 +14,19 @@
     limitations under the License.
 */
 
-part of huawei_ads;
+part of '../../../huawei_ads.dart';
 
 class PromoteInfo {
+  /// Promotion subtype.
+  ///
+  /// * `1`: Quick app.
+  /// * `2`: WeChat mini-program.
   final int? promoteType;
+
+  /// Name of the promoted entity.
+  ///
+  /// `NOTICE:`
+  /// The value is URL-encoded. Your app needs to decode it before using it.
   final String? promoteName;
 
   PromoteInfo({this.promoteType, this.promoteName});
@@ -36,6 +45,7 @@ class PromoteInfo {
     );
   }
 
+  /// Converts [PromoteInfo] object into a String.
   @override
   String toString() {
     return 'PromoteInfo {promoteType: ${promoteType.toString()}, promoteName: $promoteName}';

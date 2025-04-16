@@ -14,11 +14,17 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../../huawei_map.dart';
 
+/// Controls the animation movement.
 class HmsTranslateAnimation extends HmsAnimation {
+  /// Target movement position.
   LatLng target;
+
+  /// Function to be executed when an animation starts.
   Function? onAnimationStart;
+
+  /// Function to be executed when an animation ends.
   Function? onAnimationEnd;
 
   @override
@@ -31,6 +37,7 @@ class HmsTranslateAnimation extends HmsAnimation {
     onAnimationEnd?.call();
   }
 
+  /// Creates an [HmsTranslateAnimation] object.
   HmsTranslateAnimation({
     required String animationId,
     required this.target,

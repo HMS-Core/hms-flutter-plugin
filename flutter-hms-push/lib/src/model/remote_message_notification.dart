@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_push;
+part of '../../huawei_push.dart';
 
 class RemoteMessageNotification {
   static const String _TITLE = 'title';

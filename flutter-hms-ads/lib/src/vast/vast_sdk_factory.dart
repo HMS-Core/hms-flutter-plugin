@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_ads;
+part of '../../huawei_ads.dart';
 
 abstract class VastSdkFactory {
   /// Initializes the HUAWEI VAST SDK.

@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_ads;
+part of '../../huawei_ads.dart';
 
 class VideoOperator {
   // This has to be a method channel of a native ad controller.

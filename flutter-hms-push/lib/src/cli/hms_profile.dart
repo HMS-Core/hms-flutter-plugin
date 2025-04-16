@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_push;
+part of '../../huawei_push.dart';
 
 /// A class for checking whether to display messages for the user based on the account.
 ///

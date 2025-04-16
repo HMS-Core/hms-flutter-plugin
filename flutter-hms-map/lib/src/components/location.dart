@@ -14,21 +14,44 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// An object that contains attributes about a location.
 class Location {
+  /// Latitude, in degrees.
   double? latitude;
+
+  /// Longitude, in degrees.
   double? longitude;
+
+  /// Altitude if available, in meters above the WGS 84 reference ellipsoid.
   double? altitude;
+
+  /// Speed if it is available, in meters/second over ground.
   double? speed;
+
+  /// Bearing, in degrees.
   double? bearing;
+
+  /// Estimated horizontal accuracy of this location, radial, in meters.
   double? accuracy;
+
+  /// Estimated vertical accuracy of this location, in meters.
   double? verticalAccuracyMeters;
+
+  /// Estimated bearing accuracy of this location, in degrees.
   double? bearingAccuracyDegrees;
+
+  /// Estimated speed accuracy of this location, in meters per second.
   double? speedAccuracyMetersPerSecond;
+
+  /// Time in milliseconds since January 1, 1970.
   int? time;
+
+  /// Location provider status.
   bool? fromMockProvider;
 
+  /// Creates a [Location] object.
   Location({
     this.latitude,
     this.longitude,
@@ -43,6 +66,7 @@ class Location {
     this.fromMockProvider,
   });
 
+  /// Creates a [Location] object from a map.
   static Location fromMap(Map<dynamic, dynamic> map) {
     return Location(
       latitude: map[_Param.latitude]?.toDouble(),
@@ -77,7 +101,7 @@ class Location {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }

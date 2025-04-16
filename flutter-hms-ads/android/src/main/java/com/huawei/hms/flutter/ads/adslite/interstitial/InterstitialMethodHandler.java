@@ -21,6 +21,8 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import com.huawei.hms.ads.BiddingInfo;
+import com.huawei.hms.ads.InterstitialAd;
 import com.huawei.hms.flutter.ads.adslite.reward.RewardStreamHandler;
 import com.huawei.hms.flutter.ads.factory.EventChannelFactory;
 import com.huawei.hms.flutter.ads.logger.HMSLogger;
@@ -38,7 +40,9 @@ import io.flutter.plugin.common.MethodChannel.Result;
 
 public class InterstitialMethodHandler implements MethodChannel.MethodCallHandler {
     private final BinaryMessenger messenger;
+
     private final Activity activity;
+
     private final Context context;
 
     public InterstitialMethodHandler(final BinaryMessenger messenger, final Activity activity, final Context context) {
@@ -68,8 +72,26 @@ public class InterstitialMethodHandler implements MethodChannel.MethodCallHandle
             case "isAdLoading":
                 isAdLoading(call, result);
                 break;
+            case "getBiddingInfo":
+                getBiddingInfo(call, result);
+                break;
             default:
                 result.notImplemented();
+        }
+    }
+
+    private void getBiddingInfo(MethodCall call, Result result) {
+        HMSLogger.getInstance(context).startMethodExecutionTimer("getBiddingInfo");
+        Integer id = FromMap.toInteger("id", call.argument("id"));
+        Interstitial interstitial = Interstitial.get(id);
+        InterstitialAd interstitialAd = interstitial == null ? null : interstitial.getInterstitialAd();
+        BiddingInfo biddingInfo = interstitialAd == null ? null : interstitialAd.getBiddingInfo();
+        if (biddingInfo == null) {
+            HMSLogger.getInstance(context).sendSingleEvent("getBiddingInfo", ErrorCodes.NOT_FOUND);
+            result.error(ErrorCodes.NOT_FOUND, "No ad for given id", "");
+        } else {
+            HMSLogger.getInstance(context).sendSingleEvent("getBiddingInfo");
+            result.success(ToMap.fromBiddingInfo(biddingInfo));
         }
     }
 
@@ -160,7 +182,8 @@ public class InterstitialMethodHandler implements MethodChannel.MethodCallHandle
             result.success(interstitial.isLoaded());
             HMSLogger.getInstance(context).sendSingleEvent("isInterstitialAdLoaded");
         } else {
-            result.error(ErrorCodes.INVALID_PARAM, "Ad type parameter is invalid. isAdLoaded failed. | Ad id : " + id, "");
+            result.error(ErrorCodes.INVALID_PARAM, "Ad type parameter is invalid. isAdLoaded failed. | Ad id : " + id,
+                "");
             HMSLogger.getInstance(context).sendSingleEvent("isInterstitialAdLoaded", ErrorCodes.INVALID_PARAM);
         }
     }
@@ -194,7 +217,8 @@ public class InterstitialMethodHandler implements MethodChannel.MethodCallHandle
         String adType = FromMap.toString("adType", call.argument("adType"));
         Interstitial interstitial = Interstitial.get(id);
         if (id == null || interstitial == null) {
-            result.error(ErrorCodes.NULL_PARAM, "Null parameter provided for the method. isAdLoading failed. | Ad id : " + id, "");
+            result.error(ErrorCodes.NULL_PARAM,
+                "Null parameter provided for the method. isAdLoading failed. | Ad id : " + id, "");
             HMSLogger.getInstance(context).sendSingleEvent("isInterstitialAdLoading", ErrorCodes.NULL_PARAM);
             return;
         }
@@ -203,7 +227,8 @@ public class InterstitialMethodHandler implements MethodChannel.MethodCallHandle
             result.success(interstitial.isLoading());
             HMSLogger.getInstance(context).sendSingleEvent("isInterstitialAdLoading");
         } else {
-            result.error(ErrorCodes.INVALID_PARAM, "Ad type parameter is invalid. isAdLoading failed. | Ad id : " + id, "");
+            result.error(ErrorCodes.INVALID_PARAM, "Ad type parameter is invalid. isAdLoading failed. | Ad id : " + id,
+                "");
             HMSLogger.getInstance(context).sendSingleEvent("isInterstitialAdLoading", ErrorCodes.INVALID_PARAM);
         }
     }

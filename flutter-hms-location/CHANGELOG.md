@@ -1,3 +1,7 @@
+## 6.12.0+303
+
+- Minor optimization and bug fixes.
+
 ## 6.12.0+302
 
 - Minor optimization and bug fixes.

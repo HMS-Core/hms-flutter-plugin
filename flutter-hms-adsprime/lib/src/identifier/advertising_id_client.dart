@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_adsprime;
+part of '../../huawei_adsprime.dart';
 
 class AdvertisingIdClient {
   static Future<AdvertisingIdClientInfo> getAdvertisingIdInfo() async {

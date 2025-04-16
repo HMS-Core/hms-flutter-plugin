@@ -14,14 +14,21 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// Sets the my-location icon style.
 @immutable
 class MyLocationStyle {
+  /// The anchor of the my-location icon.
   final Offset anchor;
+
+  /// The fill color of the my-location icon.
   final Color radiusFillColor;
+
+  /// The my-location icon.
   final BitmapDescriptor? icon;
 
+  /// Creates a [MyLocationStyle] object.
   const MyLocationStyle({
     required this.anchor,
     required this.radiusFillColor,

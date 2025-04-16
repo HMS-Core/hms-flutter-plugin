@@ -14,18 +14,23 @@
     limitations under the License.
 */
 
-part of huawei_map;
+part of '../../huawei_map.dart';
 
+/// Encapsulates attributes for setting the minimum and maximum zoom levels.
 class MinMaxZoomPreference {
+  /// Minimum zoom level.
   final double minZoom;
+
+  /// Maximum zoom level.
   final double maxZoom;
 
+  /// Unbounded zoom preference.
   static const MinMaxZoomPreference unbounded = MinMaxZoomPreference(3, 20);
 
   const MinMaxZoomPreference(this.minZoom, this.maxZoom);
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) {
       return true;
     }
