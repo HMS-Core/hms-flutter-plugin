@@ -1,3 +1,8 @@
+plugins {
+    id "com.android.application"
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file("local.properties")
 if (localPropertiesFile.exists()) {
@@ -21,17 +26,17 @@ if (flutterVersionName == null) {
     flutterVersionName = "1.0"
 }
 
-apply plugin: "com.android.application"
-apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
-apply plugin: "com.huawei.agconnect"
-
 android {
-    compileSdkVersion 33
+    if (project.android.hasProperty("namespace")) {
+        namespace 'com.huawei.hms.flutter.push_example'
+    }
+
+    compileSdkVersion flutter.compileSdkVersion
 
     defaultConfig {
-        applicationId "<package_name>"
-        minSdkVersion 21
-        targetSdkVersion 33
+        applicationId "com.huawei.hms.flutter.push_example"
+        minSdk = flutter.minSdkVersion
+        targetSdk = flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -41,8 +46,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     signingConfigs {
