@@ -25,12 +25,12 @@ apply plugin: "com.android.library"
 
 android {
     namespace  'com.huawei.hms.flutter.push'
-    compileSdkVersion 33
+    compileSdkVersion 35
     buildToolsVersion '31.0.0'
 
     defaultConfig {
         minSdkVersion 23
-        targetSdkVersion 33
+        targetSdkVersion 35
     }
 
     lintOptions {
