@@ -9,7 +9,7 @@ dependencies:
     sdk: flutter
   huawei_ml_language:
     path: ../
-  file_picker: 4.1.3
+  file_picker: ^8.0.0
 
 dev_dependencies:
   flutter_test:
