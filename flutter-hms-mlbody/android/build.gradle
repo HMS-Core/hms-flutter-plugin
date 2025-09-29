@@ -27,6 +27,10 @@ android {
     compileSdkVersion 31
     buildToolsVersion "31.0.0"
 
+    if (project.android.hasProperty("namespace")) {
+        namespace 'com.huawei.hms.flutter.mlbody'
+    }
+
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 31

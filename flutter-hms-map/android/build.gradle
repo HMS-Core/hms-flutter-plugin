@@ -38,6 +38,10 @@ android {
     compileSdkVersion 34
     buildToolsVersion "34.0.0"
 
+    if (project.android.hasProperty("namespace")) {
+        namespace 'com.huawei.hms.flutter.map'
+    }
+
     defaultConfig {
         minSdkVersion 20
         targetSdkVersion 34
