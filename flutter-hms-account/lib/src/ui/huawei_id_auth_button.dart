@@ -1,5 +1,5 @@
 /*
-    Copyright 2020-2024. Huawei Technologies Co., Ltd. All rights reserved.
+    Copyright 2020-2025. Huawei Technologies Co., Ltd. All rights reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License")
     you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-part of huawei_account;
+part of '../../huawei_account.dart';
 
 enum AuthButtonTheme {
   FULL_TITLE,
@@ -50,6 +50,7 @@ class HuaweiIdAuthButton extends StatelessWidget {
   final Color? textColor;
   final double? fontSize;
   final FontWeight? fontWeight;
+  final String? buttonTitle;
 
   const HuaweiIdAuthButton({
     required this.onPressed,
@@ -64,6 +65,7 @@ class HuaweiIdAuthButton extends StatelessWidget {
     this.textColor,
     this.theme,
     this.padding,
+    this.buttonTitle,
   }) : super(key: key);
 
   @override
@@ -109,12 +111,10 @@ class HuaweiIdAuthButton extends StatelessWidget {
             theme == AuthButtonTheme.NO_TITLE
                 ? const SizedBox()
                 : Text(
-                    'Sign in with HUAWEI ID',
+                    buttonTitle ?? 'Sign in with HUAWEI ID',
                     style: TextStyle(
                       color: textColor ??
-                          (buttonColor == AuthButtonBackground.WHITE
-                              ? Colors.black
-                              : Colors.white),
+                          (buttonColor == AuthButtonBackground.WHITE ? Colors.black : Colors.white),
                       fontSize: fontSize ?? 17,
                       letterSpacing: .5,
                       fontWeight: fontWeight ?? FontWeight.bold,

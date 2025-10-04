@@ -1,3 +1,12 @@
+## 6.12.0.303
+
+- **Breaking Change:** Migrated to declerative gradle.
+- `buttonTitle` parameter is added to `HuaweiIdAuthButton` 
+
+## 6.12.0+302
+
+- Dart improvements
+
 ## 6.12.0+301
 
 - Updated the `agcp` dependency.
