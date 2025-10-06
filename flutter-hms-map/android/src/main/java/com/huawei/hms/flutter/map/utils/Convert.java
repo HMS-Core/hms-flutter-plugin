@@ -74,7 +74,8 @@ import com.huawei.hms.maps.model.animation.TranslateAnimation;
 
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodChannel;
-import io.flutter.view.FlutterMain;
+// import io.flutter.embedding.engine.FlutterInjector;
+// import io.flutter.embedding.engine.loader.FlutterLoader;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -197,15 +198,15 @@ public class Convert {
             case Param.FROM_ASSET:
                 if (data.size() == 2) {
                     return BitmapDescriptorFactory.fromAsset(
-                        FlutterMain.getLookupKeyForAsset(Convert.toString(data.get(1))));
+                        Convert.toString(data.get(1)).replaceFirst("^/", ""));
                 } else {
                     return BitmapDescriptorFactory.fromAsset(
-                        FlutterMain.getLookupKeyForAsset(Convert.toString(data.get(1)), Convert.toString(data.get(2))));
+                        Convert.toString(data.get(1)).replaceFirst("^/", "") + "/" + Convert.toString(data.get(2)));
                 }
             case Param.FROM_ASSET_IMAGE:
                 if (data.size() == 3) {
                     return BitmapDescriptorFactory.fromAsset(
-                        FlutterMain.getLookupKeyForAsset(Convert.toString(data.get(1))));
+                        Convert.toString(data.get(1)).replaceFirst("^/", ""));
                 } else {
                     throw new IllegalArgumentException(Param.ERROR);
                 }
