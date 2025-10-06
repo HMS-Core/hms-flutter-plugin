@@ -1,3 +1,7 @@
+## 6.12.0.304
+
+- Updated The package attribute in AndroidManifest.xml is deprecated in AGP 7.0+ and causes build failures.
+
 ## 6.12.0.303
 
 - **Breaking Change:** Migrated to declerative gradle.
