@@ -9,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.3.2'
+        classpath 'com.android.tools.build:gradle:3.6.0'
     }
 }
 
@@ -24,12 +24,16 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    namespace "com.huawei.hms.flutter.mllanguage"
-    compileSdkVersion 35
+    compileSdkVersion 33
+    buildToolsVersion "31.0.0"
+
+    if (project.android.hasProperty("namespace")) {
+        namespace 'com.huawei.hms.flutter.mllanguage'
+    }
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 35
+        minSdkVersion 19
+        targetSdkVersion 33
     }
 
     lintOptions {

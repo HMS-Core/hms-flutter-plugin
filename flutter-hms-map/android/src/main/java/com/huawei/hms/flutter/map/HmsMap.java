@@ -92,7 +92,7 @@ public class HmsMap
         flutterPluginBinding.getPlatformViewRegistry()
             .registerViewFactory(Channel.CHANNEL,
                 new MapFactory(state, flutterPluginBinding.getBinaryMessenger(), activityPluginBinding.getActivity(),
-                    lifecycle, activityPluginBinding));
+                    lifecycle, activityPluginBinding.getActivity().hashCode()));
     }
 
     @Override

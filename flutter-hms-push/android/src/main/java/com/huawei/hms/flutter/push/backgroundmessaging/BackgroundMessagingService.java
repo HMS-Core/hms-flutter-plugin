@@ -24,8 +24,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.JobIntentService;
 
-import io.flutter.plugin.common.PluginRegistry.PluginRegistrantCallback;
-
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,11 +40,6 @@ public class BackgroundMessagingService extends JobIntentService {
 
     private synchronized void setBackgroundRunner(FlutterBackgroundRunner bgRunner) {
         BackgroundMessagingService.backgroundRunner = bgRunner;
-    }
-
-    // For Backwards Compatibility with V1 Plugin registration.
-    public static void setPluginRegistrantCallback(final PluginRegistrantCallback callback) {
-        FlutterBackgroundRunner.setPluginRegistrantCallback(callback);
     }
 
     public static void setUserCallback(final Context context, final long userCallback) {

@@ -26,6 +26,11 @@ apply plugin: 'com.android.library'
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
+
+    if (project.android.hasProperty("namespace")) {
+        namespace 'com.huawei.hms.flutter.pushfcm'
+    }
+
     defaultConfig {
         minSdkVersion 17
         targetSdkVersion 30
