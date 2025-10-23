@@ -121,7 +121,6 @@ public interface LocationUtils {
         map.put("phone", hwLocation.getPhone());
         map.put("url", hwLocation.getUrl());
         map.put("extraInfo", hwLocation.getExtraInfo());
-        map.put("coordinateType", hwLocation.getCoordinateType());
 
         return map;
     }
@@ -250,7 +249,6 @@ public interface LocationUtils {
         result.setNeedAddress(ValueGetter.getBoolean("needAddress", map));
         result.setLanguage(ValueGetter.getString("language", map));
         result.setCountryCode(ValueGetter.getString("countryCode", map));
-        result.setCoordinateType(ValueGetter.getInt("coordinateType", map));
 
         final Map extras = ObjectUtils.cast(map.get("extras"), Map.class);
 

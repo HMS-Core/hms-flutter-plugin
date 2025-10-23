@@ -21,7 +21,6 @@ import android.app.Activity;
 import androidx.annotation.NonNull;
 
 import com.huawei.hms.flutter.location.logger.HMSLogger;
-import com.huawei.hms.location.LocationUtils;
 import com.huawei.hms.support.api.entity.location.coordinate.LonLat;
 
 import io.flutter.plugin.common.MethodCall;
@@ -37,10 +36,12 @@ public class LocationUtilsMethodHandler implements MethodChannel.MethodCallHandl
     private void convertCoord(final MethodCall call, final MethodChannel.Result result) {
         double latitude = call.argument("latitude");
         double longitude = call.argument("longitude");
-        int coordType = call.argument("coordType");
 
-        LonLat convertLonlat = LocationUtils.convertCoord(latitude, longitude, coordType);
-        result.success(com.huawei.hms.flutter.location.utils.LocationUtils.fromLonLatToMap(convertLonlat));
+        LonLat lonLat = new LonLat();
+        lonLat.setLatitude(latitude);
+        lonLat.setLongitude(longitude);
+
+        result.success(com.huawei.hms.flutter.location.utils.LocationUtils.fromLonLatToMap(lonLat));
     }
 
     @Override
